@@ -1,0 +1,62 @@
+<html>
+<head>
+	<script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+	<link rel="stylesheet" href="assets/styles/trialAuxFrame.css">
+</head>
+
+<body>
+
+	<h2>Privacy Policy for JondaX Trial Platform</h2>
+	
+	<h3>1. Introduction</h3>
+	<p>
+	This Privacy Policy explains how Jonda Health collects, uses, and protects your personal information 
+	when you use the JondaX trial platform. 
+	By accessing the Platform, you agree to this policy.</p>
+	
+	<h3>2. Personal Information We Collect</h3>
+	<p>
+	During the trial, we collect certain personal information such as your name, email address, and company details.
+	 This information is used only to manage your trial account and communicate with you regarding the Platform.</p>
+	
+	<h3>3. Uploaded Data</h3>
+	<p>
+	You may upload anonymized data during the trial. You are responsible for ensuring that the data is anonymized and that 
+	you have the right to upload it. Jonda Health does not review or anonymize data on your behalf. The data is used solely 
+	for the purpose of demonstrating the capabilities of the JondaX platform.</p>
+	
+	<h3>4. Data Processing Location</h3>
+	<p>
+	All data uploaded to the Platform will be processed within Singapore. Non-digital files may take up to 24 hours to process. 
+	We ensure compliance with global data privacy laws, including the PDPA in Singapore, GDPR, and HIPAA where applicable.</p>
+	
+	<h3>5. Data Retention and Deletion</h3>
+	<p>
+	All personal information and uploaded data will be deleted within 30 days after the trial ends. If you delete your account 
+	during the trial, all associated data will be immediately deleted. We do not retain any data beyond the trial period.</p>
+	
+	<h3>6. Data Security</h3>
+	<p>We implement strict security measures to protect your personal information and uploaded data. Jonda Health complies with 
+	applicable privacy regulations to ensure your data is handled securely and confidentially.</p>
+	
+	<h3>7. Your Responsibility</h3>
+	<p>You are responsible for ensuring that any data you upload is properly anonymized and that you have the necessary 
+	rights to use it. Jonda Health will not be liable for any misuse or improper handling of data that is not anonymized as required.</p>
+	
+	<h3>8. Intellectual Property</h3>
+	<p>
+	All intellectual property rights related to the Platform, including software, design, and materials, are owned by 
+	Jonda Health. Your use of the Platform during the trial does not grant you any rights to our intellectual property.</p>
+	
+	<h3>9. Changes to the Privacy Policy</h3>
+	<p>Jonda Health may update this Privacy Policy from time to time. Any changes will be posted on the Platform, and your continued 
+	use of the Platform will be considered acceptance of those changes.</p>
+	
+	<h3>10. Contact Information</h3>
+	<p>
+	For questions about your privacy or the data we collect, please contact our Data Protection Officer at <b>daniel@jonda.health</b>. 
+	For general inquiries, you can also contact us at <b>support@jonda.health</b>.</p>
+
+
+</body>
+</html>

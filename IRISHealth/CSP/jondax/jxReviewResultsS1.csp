@@ -1,0 +1,350 @@
+<html>
+    <head>
+        <script language="cache" runat="server">d HEAD1^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/jxReviewResultsS1.css" />
+    </head>
+    <body onload="jInitMe()">
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png" />
+                </div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <div class="instruct-area">
+                        <div class="main-title">
+                            <h1>Step 1: Transcription Results</h1>
+                            <button class="pink-btn" onclick="proceedToNextStep()">Next <img src="./assets/images/rightArrow.png" alt="Right Arrow"></button>
+                        </div>
+                        <p>Instructions: orem ipsum dolor sit amet. Est nihil eaque At culpa maiores ut omnis mollitia sed magnam repellendus 33 quia
+                            veritatis est tempora perspiciatis. Qui distinctio ullam aut cumque quia et adipisci tenetur! </p>
+                    </div>
+                    <div class="result-review">
+                        <div id="canvas-container" class="file">
+                            <div class="pdf-menu">
+                                <div id="navigation-controls">
+                                    <input id="current-page" value="1" type="number" onkeypress="changePage(event)" onblur="changePage(event)" onfocus="this.select()" onmouseup="return false"/>/<div id="total-page">0</div>
+                                </div>
+                                <div id="zoom-controls">  
+                                    <button id="zoom-out" onclick="zoomOut()">-</button>
+                                    <input id="zoom-level" value="100%" type="text" onkeypress="changeZoom(event)" onblur="changeZoom(event)" onfocus="this.select()" onmouseup="return false"/>
+                                    <button id="zoom-in" onclick="zoomIn()">+</button>
+                                </div>
+                                <button id="new-tab-btn" onclick="window.open('./assets/PDF.pdf');">Open in a new tab</button>
+                            </div>
+                            <canvas id="pdf-renderer"></canvas>
+                        </div>
+                        <div class="result">
+                            <div class="result-header">
+                                <div class="title">
+                                    <h2><span id="cName">Client Name</span> | <span id="tName">Template Name</span></h2> 
+                                </div>
+                                <div class="report-type">
+                                    <h2>Report Type:</h2>
+                                    <div id="report-btn" class="dropdown report" onclick="toggleSelectReport(event)">Blood Test <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                </div>
+                            </div>
+                            <div class="result-table">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Test Name</th>
+                                            <th>Result</th>
+                                            <th>Unit</th>
+                                            <th>Lower<br>Range</th>
+                                            <th>Upper<br>Range</th>
+                                            <th>-</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="date"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="20-07-2023"></td>
+                                            <td class="test-name issue"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="Creatinine"></td>
+                                            <td class="result-value"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="68"></td>
+                                            <td class="unit"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="umol/L"></td>
+                                            <td class="l-range"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="35"></td>
+                                            <td class="u-range"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="91"></td>
+                                            <td><img class="duplicate-icon" src="./assets/images/duplicate.png" alt="Duplicate"> <img src="./assets/images/delete.png" alt="Delete"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="date"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="20-07-2023"></td>
+                                            <td class="test-name"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="eGFR"></td>
+                                            <td class="result-value"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="97"></td>
+                                            <td class="unit issue"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="mL/min"></td>
+                                            <td class="l-range"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="60"></td>
+                                            <td class="u-range"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="-"></td>
+                                            <td><img class="duplicate-icon" src="./assets/images/duplicate.png" alt="Duplicate"> <img src="./assets/images/delete.png" alt="Delete"></td>
+                                        </tr>
+                                        <tr class="deleted">
+                                            <td class="date"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="20-07-2023" disabled></td>
+                                            <td class="test-name"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="eGFR" disabled></td>
+                                            <td class="result-value"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="97" disabled></td>
+                                            <td class="unit issue"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="mL/min"></td>
+                                            <td class="l-range"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="60" disabled></td>
+                                            <td class="u-range"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="-" disabled></td>
+                                            <td><img class="duplicate-icon" src="./assets/images/duplicateGrey.png" alt="Duplicate"> <img src="./assets/images/undoDelete.png" alt="Delete"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="date"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="20-07-2023"></td>
+                                            <td class="test-name"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="AST"></td>
+                                            <td class="result-value"><input autocomplete="off" class="edited" type="text" onkeyup="dataChange(event)" value="25"></td>
+                                            <td class="unit"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="IU/L"></td>
+                                            <td class="l-range"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="0"></td>
+                                            <td class="u-range"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="40"></td>
+                                            <td><img class="duplicate-icon" src="./assets/images/duplicate.png" alt="Duplicate"> <img src="./assets/images/delete.png" alt="Delete"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="date"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="20-07-2023"></td>
+                                            <td class="test-name"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="ALT"></td>
+                                            <td class="result-value"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="16"></td>
+                                            <td class="unit"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="IU/L"></td>
+                                            <td class="l-range"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="3"></td>
+                                            <td class="u-range"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value="40"></td>
+                                            <td><img class="duplicate-icon" src="./assets/images/duplicate.png" alt="Duplicate"> <img src="./assets/images/delete.png" alt="Delete"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="date"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value=""></td>
+                                            <td class="test-name"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value=""></td>
+                                            <td class="result-value"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value=""></td>
+                                            <td class="unit"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value=""></td>
+                                            <td class="l-range"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value=""></td>
+                                            <td class="u-range"><input autocomplete="off" type="text" onkeyup="dataChange(event)" value=""></td>
+                                            <td><img class="duplicate-icon" src="./assets/images/duplicate.png" alt="Duplicate"> <img src="./assets/images/delete.png" alt="Delete"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="blue-btn">Add row</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="report-select" class="collapse-field">
+            <div class="collapse">
+                <div class="item">
+                    <div class="round">
+                        <input autocomplete="off" name="report" id="C1" type="checkbox" value="Blood Test" checked>
+                        <label for="C1"></label>
+                    </div>
+                    <p>Blood Test</p>
+                </div>
+                <div class="item">
+                    <div class="round">
+                        <input autocomplete="off" name="report" id="C2" type="checkbox" value="Clinical Notes">
+                        <label for="C2"></label>
+                    </div>
+                    <p>Clinical Notes</p>
+                </div>
+                <div class="item">
+                    <div class="round">
+                        <input autocomplete="off" name="report" id="C3" type="checkbox" value="Radiology">
+                        <label for="C3"></label>
+                    </div>
+                    <p>Radiology</p>
+                </div><div class="item">
+                    <div class="round">
+                        <input autocomplete="off" name="report" id="C4" type="checkbox" value="Histopathology">
+                        <label for="C4"></label>
+                    </div>
+                    <p>Histopathology</p>
+                </div>
+                <div class="item">
+                    <div class="round">
+                        <input autocomplete="off" name="report" id="C5" type="checkbox" value="Prescription">
+                        <label for="C5"></label>
+                    </div>
+                    <p>Prescription</p>
+                </div>
+                <div class="item" onclick="openPopup1()">
+                    <div class="round">
+                        <input autocomplete="off" name="report" id="C6" type="checkbox" value="Other">
+                        <label for="C6"></label>
+                    </div>
+                    <p>Other</p>
+                </div>
+                <button onclick="closeReportSelect()">Confirm</button>
+            </div>
+        </div>
+        <div id="popup1" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="Signup Success">
+                <h4>Are you sure this is not <br> a blood result?</h4>
+                <p>As this file is not a blood result,<br> it will not be processed and the client will be notified.</p>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="alert('Not a blood result')">Confirm</button>
+                    <button class="pink-btn" onclick="removePopup1()">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup2" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="Signup Success">
+                <h4>Are you sure you want to proceed to Step 2?</h4>
+                <p>Make sure to double check all fields before continuing to next step.</p>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="window.open('./jxReviewResultsS2.csp','_self')">Confirm</button>
+                    <button class="pink-btn" onclick="removePopup2()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+        <script src="./assets/js/pdf.min.js"></script>
+    </body>
+    <script type="text/javascript">
+        C1=self.C1;C2=self.C2;C3=self.C3;C4=self.C4;C5=self.C5;C6=self.C6;
+        let reportSelect = document.getElementById("report-select");
+        let reportBtn = document.getElementById("report-btn");
+        let dropDownText = " <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'>"
+        let popup1= document.getElementById("popup1")
+        let popup2 = document.getElementById("popup2")
+        function jInitMe(){
+	        #server(..cInitMe())#
+        }
+        function toggleSelectReport(e){
+            let elemPosition = e.target.getBoundingClientRect();
+            reportSelect.style.top = elemPosition.top + 28 + "px";
+            reportSelect.style.right = window.innerWidth - elemPosition.right + 15 + "px";
+            setTimeout(()=>{
+                reportSelect.classList.toggle("active");
+            },100)
+        }
+        function closeReportSelect(){
+            let checkCount=$("#report-select input:checkbox:checked").length;
+            if(checkCount > 1){
+                reportBtn.innerHTML = "Multiple" + dropDownText;
+            }
+            else if(checkCount==0){
+                reportBtn.innerHTML = "None Selected" + dropDownText;
+            }
+            else{
+                reportBtn.innerHTML = $("#report-select input:checkbox:checked")[0].value + dropDownText;
+            }
+            reportSelect.classList.remove("active");
+        }
+        function openPopup1(){
+            setTimeout(()=>{
+                popup1.classList.remove("inactive")
+            },100);
+        }
+        function removePopup1(){
+            popup1.classList.add("inactive");
+            C6.checked=false;
+        }
+        function dataChange(e){
+            e.target.parentElement.classList.add("edited");
+        }
+        function proceedToNextStep(){
+            setTimeout(()=>{
+                popup2.classList.remove("inactive");
+            },100)
+        }
+        function removePopup2(){
+            popup2.classList.add("inactive");
+        }
+        document.addEventListener("click",(e)=>{
+            if(e.target.closest(".popup-dialog")==null){
+                removePopup1();
+                removePopup2();
+            }
+            if(e.target.closest("#report-select") == null && e.target.closest("#report-btn") == null && e.target.closest(".popup-dialog") == null){
+                closeReportSelect();
+            }
+        })
+        var myState = {
+            pdf: null,
+            currentPage: 1,
+            zoom:1
+        }
+        pdfjsLib.getDocument('./assets/PDF.pdf').then((pdf) => {
+            myState.pdf = pdf;
+            document.getElementById("total-page").innerHTML=myState.pdf._pdfInfo.numPages;
+            render();
+        });
+        function render() {
+            let canvasContainer = document.getElementById("canvas-container");
+            myState.pdf.getPage(myState.currentPage).then((page) => {
+                
+                var canvas = document.getElementById("pdf-renderer");
+                var ctx = canvas.getContext('2d');
+
+                var viewport = page.getViewport(1);
+                var scale = canvasContainer.clientWidth / viewport.width * myState.zoom;
+                viewport = page.getViewport(scale);
+                if(canvasContainer.clientHeight<viewport.height){
+	                viewport = page.getViewport(1);
+	                scale = (canvasContainer.clientWidth - 5) / viewport.width * myState.zoom;
+	                viewport = page.getViewport(scale);
+                }
+
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+         
+                page.render({
+                    canvasContext: ctx,
+                    viewport: viewport
+                });
+            });
+        }
+        const changePage = (e) => {
+            if(myState.pdf == null) return;
+            // Get key code 
+            var code = (e.keyCode ? e.keyCode : e.which);
+            // If key code matches that of the Enter key 
+            if(code == 13 || code==0) {
+                var desiredPage = document.getElementById('current-page').valueAsNumber;
+                                 
+                if(desiredPage >= 1 && desiredPage <= myState.pdf._pdfInfo.numPages) {
+                    myState.currentPage = desiredPage;
+                    document.getElementById("current-page").value = desiredPage;
+                    render();
+                }
+                else{
+                    document.getElementById("current-page").value = myState.currentPage;
+                }
+            }
+        }
+        const zoomIn = (e) => {
+            if(myState.pdf == null) return;
+            let zoomLevel = document.getElementById("zoom-level");
+            zoomLevel.value = parseInt(zoomLevel.value.split("%")[0])+10+"%";
+            myState.zoom+=0.1;
+            render();
+        }
+        const zoomOut = (e) => {
+            if(myState.pdf == null) return;
+            let zoomLevel = document.getElementById("zoom-level");
+            zoomLevel.value = parseInt(zoomLevel.value.split("%")[0])-10+"%";
+            myState.zoom-=0.1;
+            render();
+        };
+        const changeZoom = (e) =>{
+            // Get key code 
+            var code = (e.keyCode ? e.keyCode : e.which);
+            // If key code matches that of the Enter key 
+            if(code == 13 || code==0) {
+                let zoom = parseInt(e.target.value);
+                if(isNaN(zoom)){
+                    e.target.value=myState.zoom*100+"%";
+                }
+                else{
+                    e.target.value=zoom+"%";
+                    myState.zoom=zoom/100;
+                    render();
+                }
+            }
+        }
+    </script>
+<script language="cache" method="cInitMe">
+	d INIT^WSP999
+</script>
+</html>

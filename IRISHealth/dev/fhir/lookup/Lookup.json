@@ -1,0 +1,3400 @@
+{
+	"SDA3" : {
+		"vR4" : {
+			"HS.SDA3.Alert:Status" : {
+				"event-status|4.0.1" : {
+					"A" : "in-progress",
+					"C" : "unknown"
+				}
+			},
+			"HS.SDA3.Allergy:Status" : {
+				"allergyintolerance-clinical|4.0.1" : {
+					"A" : "active",
+					"I" : "inactive",
+					"R" : "resolved"
+				}
+			},
+			"HS.SDA3.Appointment:Status" : {
+				"appointmentstatus|4.0.1" : {
+					"BOOKED" : "booked",
+					"Booked" : "booked",
+					"CANCELLED" : "cancelled",
+					"Cancelled" : "cancelled",
+					"DC" : "cancelled",
+					"booked" : "booked",
+					"cancelled" : "cancelled"
+				}
+			},
+			"HS.SDA3.Blob:FileType" : {
+				"mimetypes|4.0.1" : {
+					"DOC" : "application/msword",
+					"PDF" : "application/pdf",
+					"RTF" : "application/rtf",
+					"TXT" : "text/plain"
+				}
+			},
+			"HS.SDA3.CarePlan:Status" : {
+				"request-status|4.0.1" : {
+					"A" : "active"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.AddressUse" : {
+				"address-use|4.0.1" : {
+					"billing" : "billing",
+					"home" : "home",
+					"old" : "old",
+					"temp" : "temp",
+					"work" : "work"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.AdministrationStatus" : {
+				"medication-admin-status|4.0.1" : {
+					"CP" : "completed",
+					"NA" : "stopped",
+					"PA" : "on-hold",
+					"RE" : "stopped"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.AllergyCategory" : {
+				"allergy-intolerance-category|4.0.1" : {
+					"AA" : "environment",
+					"DA" : "medication",
+					"Drug" : "medication",
+					"DrugAllergy" : "medication",
+					"EA" : "environment",
+					"Environment" : "environment",
+					"EnvironmentalAllergy" : "environment",
+					"FA" : "food",
+					"Food" : "food",
+					"FoodAllergy" : "food",
+					"LA" : "environment",
+					"Medication" : "medication",
+					"PA" : "environment",
+					"drug" : "medication",
+					"environment" : "environment",
+					"food" : "food",
+					"medication" : "medication"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.Certainty" : {
+				"allergyintolerance-verification|4.0.1" : {
+					"Confirmed" : "confirmed",
+					"Likely" : "unconfirmed",
+					"Suspected" : "unconfirmed",
+					"Unlikely" : "unconfirmed",
+					"confirmed" : "confirmed",
+					"entered-in-error" : "entered-in-error",
+					"likely" : "unconfirmed",
+					"unlikely" : "unconfirmed"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.ContactType" : {
+				"patient-contactrelationship" : {
+					"C" : "C",
+					"E" : "E",
+					"I" : "I",
+					"N" : "N",
+					"S" : "S",
+					"U" : "U"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.Currency" : {
+				"currencies|4.0.1" : {
+					"AED": "United Arab Emirates dirham",
+					"AFN": "Afghan afghani",
+					"ALL": "Albanian lek",
+					"AMD": "Armenian dram",
+					"ANG": "Netherlands Antillean guilder",
+					"AOA": "Angolan kwanza",
+					"ARS": "Argentine peso",
+					"AUD": "Australian dollar",
+					"AWG": "Aruban florin",
+					"AZN": "Azerbaijani manat",
+					"BAM": "Bosnia and Herzegovina convertible mark",
+					"BBD": "Barbados dollar",
+					"BDT": "Bangladeshi taka",
+					"BGN": "Bulgarian lev",
+					"BHD": "Bahraini dinar",
+					"BIF": "Burundian franc",
+					"BMD": "Bermudian dollar",
+					"BND": "Brunei dollar",
+					"BOB": "Boliviano",
+					"BOV": "Bolivian Mvdol (funds code)",
+					"BRL": "Brazilian real",
+					"BSD": "Bahamian dollar",
+					"BTN": "Bhutanese ngultrum",
+					"BWP": "Botswana pula",
+					"BYN": "Belarusian ruble",
+					"BZD": "Belize dollar",
+					"CAD": "Canadian dollar",
+					"CDF": "Congolese franc",
+					"CHE": "WIR Euro (complementary currency)",
+					"CHF": "Swiss franc",
+					"CHW": "WIR Franc (complementary currency)",
+					"CLF": "Unidad de Fomento (funds code)",
+					"CLP": "Chilean peso",
+					"CNY": "Renminbi (Chinese) yuan[8]",
+					"COP": "Colombian peso",
+					"COU": "Unidad de Valor Real (UVR) (funds code)[9]",
+					"CRC": "Costa Rican colon",
+					"CUC": "Cuban convertible peso",
+					"CUP": "Cuban peso",
+					"CVE": "Cape Verde escudo",
+					"CZK": "Czech koruna",
+					"DJF": "Djiboutian franc",
+					"DKK": "Danish krone",
+					"DOP": "Dominican peso",
+					"DZD": "Algerian dinar",
+					"EGP": "Egyptian pound",
+					"ERN": "Eritrean nakfa",
+					"ETB": "Ethiopian birr",
+					"EUR": "Euro",
+					"FJD": "Fiji dollar",
+					"FKP": "Falkland Islands pound",
+					"GBP": "Pound sterling",
+					"GEL": "Georgian lari",
+					"GGP": "Guernsey Pound",
+					"GHS": "Ghanaian cedi",
+					"GIP": "Gibraltar pound",
+					"GMD": "Gambian dalasi",
+					"GNF": "Guinean franc",
+					"GTQ": "Guatemalan quetzal",
+					"GYD": "Guyanese dollar",
+					"HKD": "Hong Kong dollar",
+					"HNL": "Honduran lempira",
+					"HRK": "Croatian kuna",
+					"HTG": "Haitian gourde",
+					"HUF": "Hungarian forint",
+					"IDR": "Indonesian rupiah",
+					"ILS": "Israeli new shekel",
+					"IMP": "Isle of Man Pound",
+					"INR": "Indian rupee",
+					"IQD": "Iraqi dinar",
+					"IRR": "Iranian rial",
+					"ISK": "Icelandic króna",
+					"JEP": "Jersey Pound",
+					"JMD": "Jamaican dollar",
+					"JOD": "Jordanian dinar",
+					"JPY": "Japanese yen",
+					"KES": "Kenyan shilling",
+					"KGS": "Kyrgyzstani som",
+					"KHR": "Cambodian riel",
+					"KMF": "Comoro franc",
+					"KPW": "North Korean won",
+					"KRW": "South Korean won",
+					"KWD": "Kuwaiti dinar",
+					"KYD": "Cayman Islands dollar",
+					"KZT": "Kazakhstani tenge",
+					"LAK": "Lao kip",
+					"LBP": "Lebanese pound",
+					"LKR": "Sri Lankan rupee",
+					"LRD": "Liberian dollar",
+					"LSL": "Lesotho loti",
+					"LYD": "Libyan dinar",
+					"MAD": "Moroccan dirham",
+					"MDL": "Moldovan leu",
+					"MGA": "Malagasy ariary",
+					"MKD": "Macedonian denar",
+					"MMK": "Myanmar kyat",
+					"MNT": "Mongolian tögrög",
+					"MOP": "Macanese pataca",
+					"MRU": "Mauritanian ouguiya",
+					"MUR": "Mauritian rupee",
+					"MVR": "Maldivian rufiyaa",
+					"MWK": "Malawian kwacha",
+					"MXN": "Mexican peso",
+					"MXV": "Mexican Unidad de Inversion (UDI) (funds code)",
+					"MYR": "Malaysian ringgit",
+					"MZN": "Mozambican metical",
+					"NAD": "Namibian dollar",
+					"NGN": "Nigerian naira",
+					"NIO": "Nicaraguan córdoba",
+					"NOK": "Norwegian krone",
+					"NPR": "Nepalese rupee",
+					"NZD": "New Zealand dollar",
+					"OMR": "Omani rial",
+					"PAB": "Panamanian balboa",
+					"PEN": "Peruvian Sol",
+					"PGK": "Papua New Guinean kina",
+					"PHP": "Philippine piso[13]",
+					"PKR": "Pakistani rupee",
+					"PLN": "Polish złoty",
+					"PYG": "Paraguayan guaraní",
+					"QAR": "Qatari riyal",
+					"RON": "Romanian leu",
+					"RSD": "Serbian dinar",
+					"RUB": "Russian ruble",
+					"RWF": "Rwandan franc",
+					"SAR": "Saudi riyal",
+					"SBD": "Solomon Islands dollar",
+					"SCR": "Seychelles rupee",
+					"SDG": "Sudanese pound",
+					"SEK": "Swedish krona/kronor",
+					"SGD": "Singapore dollar",
+					"SHP": "Saint Helena pound",
+					"SLL": "Sierra Leonean leone",
+					"SOS": "Somali shilling",
+					"SRD": "Surinamese dollar",
+					"SSP": "South Sudanese pound",
+					"STN": "São Tomé and Príncipe dobra",
+					"SVC": "Salvadoran colón",
+					"SYP": "Syrian pound",
+					"SZL": "Swazi lilangeni",
+					"THB": "Thai baht",
+					"TJS": "Tajikistani somoni",
+					"TMT": "Turkmenistan manat",
+					"TND": "Tunisian dinar",
+					"TOP": "Tongan paʻanga",
+					"TRY": "Turkish lira",
+					"TTD": "Trinidad and Tobago dollar",
+					"TVD": "Tuvalu Dollar",
+					"TWD": "New Taiwan dollar",
+					"TZS": "Tanzanian shilling",
+					"UAH": "Ukrainian hryvnia",
+					"UGX": "Ugandan shilling",
+					"USD": "United States dollar",
+					"USN": "United States dollar (next day) (funds code)",
+					"UYI": "Uruguay Peso en Unidades Indexadas (URUIURUI) (funds code)",
+					"UYU": "Uruguayan peso",
+					"UZS": "Uzbekistan som",
+					"VEF": "Venezuelan bolívar",
+					"VND": "Vietnamese đồng",
+					"VUV": "Vanuatu vatu",
+					"WST": "Samoan tala",
+					"XAF": "CFA franc BEAC",
+					"XAG": "Silver (one troy ounce)",
+					"XAU": "Gold (one troy ounce)",
+					"XBA": "European Composite Unit (EURCO) (bond market unit)",
+					"XBB": "European Monetary Unit (E.M.U.-6) (bond market unit)",
+					"XBC": "European Unit of Account 9 (E.U.A.-9) (bond market unit)",
+					"XBD": "European Unit of Account 17 (E.U.A.-17) (bond market unit)",
+					"XCD": "East Caribbean dollar",
+					"XDR": "Special drawing rights",
+					"XOF": "CFA franc BCEAO",
+					"XPD": "Palladium (one troy ounce)",
+					"XPF": "CFP franc (franc Pacifique)",
+					"XPT": "Platinum (one troy ounce)",
+					"XSU": "SUCRE",
+					"XTS": "Code reserved for testing purposes",
+					"XUA": "ADB Unit of Account",
+					"XXX": "No currency",
+					"YER": "Yemeni rial",
+					"ZAR": "South African rand",
+					"ZMW": "Zambian kwacha",
+					"ZWL": "Zimbabwean dollar A/10"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.DiagnosisStatus" : {
+				"condition-clinical|4.0.1" : {
+					"7087005" : "active",
+					"55561003" : "active",
+					"73425007" : "inactive",
+					"90734009" : "active",
+					"255227004" : "recurrence",
+					"410516002" : "active",
+					"413322009" : "resolved",
+					"415684004" : "active",
+					"A" : "active"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.DocumentCompletionStatus" : {
+				"composition-status|4.0.1" : {
+					"AU" : "final",
+					"Authenticated" : "final",
+					"DI" : "preliminary",
+					"DO" : "final",
+					"IN" : "preliminary",
+					"IP" : "preliminary",
+					"In Progress" : "preliminary",
+					"Incomplete" : "preliminary",
+					"LA" : "final",
+					"PA" : "preliminary"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.DocumentStatus" : {
+				"document-reference-status|4.0.1" : {
+					"AV" : "current",
+					"CA" : "entered-in-error",
+					"OB" : "superseded",
+					"UN" : "entered-in-error"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.Frequency" : {
+				"timing-abbreviation" : {
+					"12xd" : "Q2H",
+					"1xmon" : "MO",
+					"1xw" : "WK",
+					"24xd" : "Q1H",
+					"6xd" : "Q4H",
+					"8xd" : "Q3H",
+					"qam" : "AM",
+					"qdam" : "AM",
+					"qdpm" : "PM",
+					"qh" : "Q1H",
+					"qhs" : "BED",
+					"qpm" : "PM"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.Gender" : {
+				"administrative-gender|4.0.1" : {
+					"F" : "female",
+					"FEMALE" : "female",
+					"Female" : "female",
+					"M" : "male",
+					"MALE" : "male",
+					"Male" : "male",
+					"NOT SPECIFIED" : "unknown",
+					"NS" : "unknown",
+					"Not Specified" : "unknown",
+					"Not specified" : "unknown",
+					"O" : "other",
+					"OTHER" : "other",
+					"Other" : "other",
+					"U" : "unknown",
+					"UNKNOWN" : "unknown",
+					"Unknown" : "unknown",
+					"female" : "female",
+					"male" : "male",
+					"not specified" : "unknown",
+					"other" : "other",
+					"unknown" : "unknown"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.GenderIdentity" : {
+				"gender-identity" : {
+					"407376001" : "407376001",
+					"407377005" : "407377005",
+					"446131000124102" : "446131000124102",
+					"446141000124107" : "446141000124107",
+					"446151000124109" : "446151000124109",
+					"ASKU" : "ASKU",
+					"F" : "446141000124107",
+					"M" : "446151000124109",
+					"OTH" : "OTH",
+					"UN" : "OTH",
+					"female" : "446141000124107",
+					"male" : "446151000124109",
+					"non-binary" : "446131000124102",
+					"non-disclose" : "ASKU",
+					"other" : "OTH",
+					"transgender-female" : "407376001",
+					"transgender-male" : "407377005"
+				},
+				"gender-identity-descriptions" : {
+					"407376001" : "Male-to-Female (MTF)/Transgender Female/Trans Woman",
+					"407377005" : "Female-to-Male (FTM)/Transgender Male/Trans Man",
+					"446131000124102" : "Genderqueer, neither exclusively male nor female",
+					"446141000124107" : "Female",
+					"446151000124109" : "Male",
+					"ASKU" : "Choose not to disclose",
+					"OTH" : "Additional gender category or other, please specify"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.HealthConcernStatus" : {
+				"condition-clinical|4.0.1" : {
+					"aborted" : "inactive",
+					"active" : "active",
+					"completed" : "resolved",
+					"suspended" : "inactive"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.MaritalStatus" : {
+				"marital-status" : {
+					"A" : "L",
+					"B" : "U",
+					"C" : "U",
+					"D" : "D",
+					"E" : "L",
+					"G" : "U",
+					"I" : "I",
+					"M" : "M",
+					"N" : "A",
+					"O" : "UNK",
+					"P" : "T",
+					"R" : "T",
+					"S" : "U",
+					"T" : "UNK",
+					"U" : "UNK",
+					"W" : "W"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.Order": {
+				"ServiceRequest:category": {
+					"96156": "sdoh",
+					"96160": "sdoh",
+					"96161": "sdoh",
+					"97802": "sdoh",
+					"97803": "sdoh",
+					"97804": "sdoh",
+					"1759002": "sdoh",
+					"18781004": "sdoh",
+					"49919000": "sdoh",
+					"61310001": "sdoh",
+					"103699006": "sdoh",
+					"171002009": "sdoh",
+					"183524004": "sdoh",
+					"183583007": "sdoh",
+					"183851006": "sdoh",
+					"183866009": "sdoh",
+					"228615008": "sdoh",
+					"243747004": "sdoh",
+					"306136006": "sdoh",
+					"306226009": "sdoh",
+					"306227000": "sdoh",
+					"306252003": "sdoh",
+					"306291008": "sdoh",
+					"308440001": "sdoh",
+					"308459004": "sdoh",
+					"308477009": "sdoh",
+					"313082002": "sdoh",
+					"313083007": "sdoh",
+					"385767005": "sdoh",
+					"390866009": "sdoh",
+					"444543005": "sdoh",
+					"445075008": "sdoh",
+					"473207004": "sdoh",
+					"703978000": "sdoh",
+					"710824005": "sdoh",
+					"710825006": "sdoh",
+					"710914003": "sdoh",
+					"710925007": "sdoh",
+					"711069006": "sdoh",
+					"711281004": "sdoh",
+					"713109004": "sdoh",
+					"716730006": "sdoh",
+					"716732003": "sdoh",
+					"716733008": "sdoh",
+					"1002223009": "sdoh",
+					"1002224003": "sdoh",
+					"1002225002": "sdoh",
+					"1004109000": "sdoh",
+					"1004110005": "sdoh",
+					"1148446004": "sdoh",
+					"1148447008": "sdoh",
+					"1148812007": "sdoh",
+					"1148813002": "sdoh",
+					"1148814008": "sdoh",
+					"1148815009": "sdoh",
+					"1148817001": "sdoh",
+					"1148818006": "sdoh",
+					"1148823006": "sdoh",
+					"1156869006": "sdoh",
+					"1162436000": "sdoh",
+					"1162437009": "sdoh",
+					"1172623006": "sdoh",
+					"1186920000": "sdoh",
+					"1230284006": "sdoh",
+					"1230285007": "sdoh",
+					"1230338004": "sdoh",
+					"1230339007": "sdoh",
+					"1230365006": "sdoh",
+					"1254701003": "sdoh",
+					"1254702005": "sdoh",
+					"1254703000": "sdoh",
+					"1254704006": "sdoh",
+					"1254705007": "sdoh",
+					"1254706008": "sdoh",
+					"1254707004": "sdoh",
+					"1254708009": "sdoh",
+					"1254709001": "sdoh",
+					"1254710006": "sdoh",
+					"1255510004": "sdoh",
+					"1255511000": "sdoh",
+					"1255512007": "sdoh",
+					"1255513002": "sdoh",
+					"1256108000": "sdoh",
+					"1256109008": "sdoh",
+					"1256111004": "sdoh",
+					"1256112006": "sdoh",
+					"1256113001": "sdoh",
+					"1258899008": "sdoh",
+					"1258900003": "sdoh",
+					"1258901004": "sdoh",
+					"1258902006": "sdoh",
+					"1258903001": "sdoh",
+					"1258924006": "sdoh",
+					"1258925007": "sdoh",
+					"1259018009": "sdoh",
+					"1259019001": "sdoh",
+					"1259020007": "sdoh",
+					"1259021006": "sdoh",
+					"1259977006": "sdoh",
+					"1259979009": "sdoh",
+					"1259991000": "sdoh",
+					"1259992007": "sdoh",
+					"1268662008": "sdoh",
+					"1268663003": "sdoh",
+					"1268664009": "sdoh",
+					"1268686005": "sdoh",
+					"1268691006": "sdoh",
+					"1268692004": "sdoh",
+					"1268693009": "sdoh",
+					"1268694003": "sdoh",
+					"1268695002": "sdoh",
+					"1268726004": "sdoh",
+					"1268727008": "sdoh",
+					"1268728003": "sdoh",
+					"1269403001": "sdoh",
+					"1269404007": "sdoh",
+					"1281853006": "sdoh",
+					"1281854000": "sdoh",
+					"1281860000": "sdoh",
+					"428471000124108": "sdoh",
+					"431531000124101": "sdoh",
+					"441041000124100": "sdoh",
+					"441201000124108": "sdoh",
+					"441231000124100": "sdoh",
+					"441241000124105": "sdoh",
+					"441251000124107": "sdoh",
+					"441261000124109": "sdoh",
+					"441271000124102": "sdoh",
+					"441281000124104": "sdoh",
+					"441291000124101": "sdoh",
+					"441301000124100": "sdoh",
+					"441311000124102": "sdoh",
+					"441321000124105": "sdoh",
+					"441331000124108": "sdoh",
+					"441341000124103": "sdoh",
+					"441351000124101": "sdoh",
+					"442021000124100": "sdoh",
+					"445291000124103": "sdoh",
+					"445301000124102": "sdoh",
+					"445641000124105": "sdoh",
+					"461481000124109": "sdoh",
+					"462481000124102": "sdoh",
+					"462491000124104": "sdoh",
+					"464001000124109": "sdoh",
+					"464011000124107": "sdoh",
+					"464021000124104": "sdoh",
+					"464031000124101": "sdoh",
+					"464041000124106": "sdoh",
+					"464051000124108": "sdoh",
+					"464061000124105": "sdoh",
+					"464071000124103": "sdoh",
+					"464081000124100": "sdoh",
+					"464091000124102": "sdoh",
+					"464101000124108": "sdoh",
+					"464111000124106": "sdoh",
+					"464121000124103": "sdoh",
+					"464131000124100": "sdoh",
+					"464141000124105": "sdoh",
+					"464151000124107": "sdoh",
+					"464161000124109": "sdoh",
+					"464171000124102": "sdoh",
+					"464181000124104": "sdoh",
+					"464191000124101": "sdoh",
+					"464201000124103": "sdoh",
+					"464211000124100": "sdoh",
+					"464221000124108": "sdoh",
+					"464231000124106": "sdoh",
+					"464241000124101": "sdoh",
+					"464251000124104": "sdoh",
+					"464261000124102": "sdoh",
+					"464271000124109": "sdoh",
+					"464281000124107": "sdoh",
+					"464291000124105": "sdoh",
+					"464301000124106": "sdoh",
+					"464311000124109": "sdoh",
+					"464321000124101": "sdoh",
+					"464331000124103": "sdoh",
+					"464341000124108": "sdoh",
+					"464351000124105": "sdoh",
+					"464361000124107": "sdoh",
+					"464371000124100": "sdoh",
+					"464381000124102": "sdoh",
+					"464401000124102": "sdoh",
+					"464411000124104": "sdoh",
+					"464421000124107": "sdoh",
+					"464431000124105": "sdoh",
+					"464611000124102": "sdoh",
+					"464621000124105": "sdoh",
+					"464631000124108": "sdoh",
+					"464641000124103": "sdoh",
+					"464651000124101": "sdoh",
+					"464661000124104": "sdoh",
+					"464671000124106": "sdoh",
+					"464681000124109": "sdoh",
+					"464691000124107": "sdoh",
+					"464701000124107": "sdoh",
+					"464721000124102": "sdoh",
+					"467591000124102": "sdoh",
+					"467601000124105": "sdoh",
+					"467611000124108": "sdoh",
+					"467621000124100": "sdoh",
+					"467631000124102": "sdoh",
+					"467641000124107": "sdoh",
+					"467651000124109": "sdoh",
+					"467661000124106": "sdoh",
+					"467671000124104": "sdoh",
+					"467681000124101": "sdoh",
+					"467691000124103": "sdoh",
+					"467711000124100": "sdoh",
+					"467721000124108": "sdoh",
+					"467731000124106": "sdoh",
+					"467741000124101": "sdoh",
+					"467751000124104": "sdoh",
+					"467761000124102": "sdoh",
+					"467771000124109": "sdoh",
+					"467781000124107": "sdoh",
+					"467791000124105": "sdoh",
+					"467801000124106": "sdoh",
+					"467811000124109": "sdoh",
+					"467821000124101": "sdoh",
+					"468401000124109": "sdoh",
+					"470231000124107": "sdoh",
+					"470241000124102": "sdoh",
+					"470261000124103": "sdoh",
+					"470281000124108": "sdoh",
+					"470291000124106": "sdoh",
+					"470301000124107": "sdoh",
+					"470311000124105": "sdoh",
+					"470321000124102": "sdoh",
+					"470431000124106": "sdoh",
+					"470441000124101": "sdoh",
+					"470451000124104": "sdoh",
+					"470461000124102": "sdoh",
+					"470471000124109": "sdoh",
+					"470481000124107": "sdoh",
+					"470491000124105": "sdoh",
+					"470501000124102": "sdoh",
+					"470581000124106": "sdoh",
+					"470591000124109": "sdoh",
+					"470601000124101": "sdoh",
+					"470611000124103": "sdoh",
+					"470781000124104": "sdoh",
+					"470791000124101": "sdoh",
+					"470801000124100": "sdoh",
+					"470811000124102": "sdoh",
+					"470821000124105": "sdoh",
+					"470831000124108": "sdoh",
+					"470841000124103": "sdoh",
+					"471021000124108": "sdoh",
+					"471031000124106": "sdoh",
+					"471041000124101": "sdoh",
+					"471051000124104": "sdoh",
+					"471061000124102": "sdoh",
+					"471071000124109": "sdoh",
+					"471081000124107": "sdoh",
+					"471091000124105": "sdoh",
+					"471101000124104": "sdoh",
+					"471111000124101": "sdoh",
+					"471121000124109": "sdoh",
+					"471131000124107": "sdoh",
+					"472021000124101": "sdoh",
+					"472031000124103": "sdoh",
+					"472041000124108": "sdoh",
+					"472051000124105": "sdoh",
+					"472081000124102": "sdoh",
+					"472091000124104": "sdoh",
+					"472101000124105": "sdoh",
+					"472111000124108": "sdoh",
+					"472121000124100": "sdoh",
+					"472131000124102": "sdoh",
+					"472141000124107": "sdoh",
+					"472151000124109": "sdoh",
+					"472161000124106": "sdoh",
+					"472191000124103": "sdoh",
+					"472201000124100": "sdoh",
+					"472211000124102": "sdoh",
+					"472221000124105": "sdoh",
+					"472231000124108": "sdoh",
+					"472241000124103": "sdoh",
+					"472251000124101": "sdoh",
+					"472261000124104": "sdoh",
+					"472271000124106": "sdoh",
+					"472281000124109": "sdoh",
+					"472291000124107": "sdoh",
+					"472301000124108": "sdoh",
+					"472311000124106": "sdoh",
+					"472321000124103": "sdoh",
+					"472331000124100": "sdoh",
+					"472341000124105": "sdoh",
+					"472351000124107": "sdoh",
+					"472361000124109": "sdoh",
+					"472371000124102": "sdoh",
+					"472381000124104": "sdoh",
+					"480791000124106": "sdoh",
+					"480801000124107": "sdoh",
+					"480811000124105": "sdoh",
+					"480821000124102": "sdoh",
+					"480831000124104": "sdoh",
+					"480841000124109": "sdoh",
+					"480851000124106": "sdoh",
+					"480861000124108": "sdoh",
+					"480871000124101": "sdoh",
+					"480881000124103": "sdoh",
+					"480891000124100": "sdoh",
+					"480901000124101": "sdoh",
+					"480911000124103": "sdoh",
+					"480921000124106": "sdoh",
+					"480931000124109": "sdoh",
+					"480941000124104": "sdoh",
+					"480951000124102": "sdoh",
+					"480961000124100": "sdoh",
+					"480971000124107": "sdoh",
+					"480981000124105": "sdoh",
+					"551041000124105": "sdoh",
+					"551051000124107": "sdoh",
+					"551061000124109": "sdoh",
+					"551071000124102": "sdoh",
+					"551081000124104": "sdoh",
+					"551091000124101": "sdoh",
+					"551101000124107": "sdoh",
+					"551111000124105": "sdoh",
+					"551121000124102": "sdoh",
+					"551141000124109": "sdoh",
+					"551161000124108": "sdoh",
+					"551191000124100": "sdoh",
+					"551201000124102": "sdoh",
+					"551211000124104": "sdoh",
+					"551221000124107": "sdoh",
+					"551231000124105": "sdoh",
+					"551241000124100": "sdoh",
+					"551251000124103": "sdoh",
+					"551261000124101": "sdoh",
+					"551271000124108": "sdoh",
+					"551281000124106": "sdoh",
+					"551291000124109": "sdoh",
+					"551301000124105": "sdoh",
+					"551311000124108": "sdoh",
+					"551321000124100": "sdoh",
+					"551331000124102": "sdoh",
+					"551341000124107": "sdoh",
+					"551351000124109": "sdoh",
+					"551361000124106": "sdoh",
+					"551371000124104": "sdoh",
+					"551381000124101": "sdoh",
+					"551391000124103": "sdoh",
+					"551401000124101": "sdoh",
+					"551411000124103": "sdoh",
+					"551421000124106": "sdoh",
+					"551431000124109": "sdoh",
+					"581041000124102": "sdoh",
+					"610961000124100": "sdoh",
+					"610971000124107": "sdoh",
+					"610981000124105": "sdoh",
+					"610991000124108": "sdoh",
+					"611001000124109": "sdoh",
+					"611011000124107": "sdoh",
+					"611021000124104": "sdoh",
+					"611031000124101": "sdoh",
+					"611041000124106": "sdoh",
+					"611051000124108": "sdoh",
+					"611061000124105": "sdoh",
+					"611071000124103": "sdoh",
+					"611081000124100": "sdoh",
+					"611091000124102": "sdoh",
+					"611101000124108": "sdoh",
+					"611111000124106": "sdoh",
+					"611121000124103": "sdoh",
+					"611281000124107": "sdoh",
+					"611291000124105": "sdoh",
+					"611301000124106": "sdoh",
+					"611311000124109": "sdoh",
+					"611321000124101": "sdoh",
+					"611331000124103": "sdoh",
+					"611341000124108": "sdoh",
+					"611351000124105": "sdoh",
+					"611361000124107": "sdoh",
+					"611371000124100": "sdoh",
+					"611381000124102": "sdoh",
+					"611391000124104": "sdoh",
+					"611401000124102": "sdoh",
+					"611411000124104": "sdoh",
+					"611421000124107": "sdoh",
+					"611431000124105": "sdoh",
+					"611441000124100": "sdoh",
+					"611451000124103": "sdoh",
+					"621321000124105": "sdoh",
+					"621331000124108": "sdoh",
+					"621341000124103": "sdoh",
+					"621351000124101": "sdoh",
+					"621361000124104": "sdoh",
+					"621371000124106": "sdoh",
+					"621381000124109": "sdoh",
+					"621391000124107": "sdoh",
+					"621401000124109": "sdoh",
+					"621411000124107": "sdoh",
+					"621421000124104": "sdoh",
+					"621431000124101": "sdoh",
+					"621441000124106": "sdoh",
+					"621451000124108": "sdoh",
+					"621461000124105": "sdoh",
+					"621471000124103": "sdoh",
+					"621481000124100": "sdoh",
+					"651011000124100": "sdoh",
+					"651031000124106": "sdoh",
+					"651101000124104": "sdoh",
+					"651111000124101": "sdoh",
+					"651121000124109": "sdoh",
+					"651131000124107": "sdoh",
+					"651141000124102": "sdoh",
+					"651151000124100": "sdoh",
+					"651161000124103": "sdoh",
+					"651171000124105": "sdoh",
+					"651181000124108": "sdoh",
+					"651191000124106": "sdoh",
+					"651201000124109": "sdoh",
+					"651211000124107": "sdoh",
+					"651221000124104": "sdoh",
+					"651231000124101": "sdoh",
+					"651241000124106": "sdoh",
+					"651251000124108": "sdoh",
+					"651261000124105": "sdoh",
+					"651271000124103": "sdoh",
+					"651281000124100": "sdoh",
+					"651291000124102": "sdoh",
+					"651301000124101": "sdoh",
+					"651311000124103": "sdoh",
+					"651321000124106": "sdoh",
+					"651331000124109": "sdoh",
+					"651341000124104": "sdoh",
+					"651351000124102": "sdoh",
+					"651361000124100": "sdoh",
+					"651371000124107": "sdoh",
+					"651381000124105": "sdoh",
+					"651391000124108": "sdoh",
+					"651401000124105": "sdoh",
+					"651411000124108": "sdoh",
+					"651421000124100": "sdoh",
+					"651431000124102": "sdoh",
+					"651441000124107": "sdoh",
+					"651451000124109": "sdoh",
+					"651461000124106": "sdoh",
+					"661031000124102": "sdoh",
+					"661041000124107": "sdoh",
+					"661051000124109": "sdoh",
+					"661061000124106": "sdoh",
+					"661071000124104": "sdoh",
+					"661081000124101": "sdoh",
+					"661091000124103": "sdoh",
+					"661101000124109": "sdoh",
+					"661111000124107": "sdoh",
+					"661121000124104": "sdoh",
+					"661131000124101": "sdoh",
+					"661141000124106": "sdoh",
+					"661151000124108": "sdoh",
+					"661161000124105": "sdoh",
+					"661171000124103": "sdoh",
+					"661181000124100": "sdoh",
+					"661191000124102": "sdoh",
+					"661201000124104": "sdoh",
+					"661211000124101": "sdoh",
+					"661221000124109": "sdoh",
+					"661231000124107": "sdoh",
+					"661241000124102": "sdoh",
+					"661251000124100": "sdoh",
+					"661261000124103": "sdoh",
+					"661271000124105": "sdoh",
+					"661281000124108": "sdoh",
+					"661291000124106": "sdoh",
+					"661301000124107": "sdoh",
+					"661311000124105": "sdoh",
+					"661321000124102": "sdoh",
+					"661331000124104": "sdoh",
+					"661341000124109": "sdoh",
+					"661351000124106": "sdoh",
+					"661361000124108": "sdoh",
+					"661371000124101": "sdoh",
+					"661381000124103": "sdoh",
+					"661391000124100": "sdoh",
+					"661401000124103": "sdoh",
+					"661411000124100": "sdoh",
+					"661421000124108": "sdoh",
+					"661431000124106": "sdoh",
+					"661441000124101": "sdoh",
+					"661451000124104": "sdoh",
+					"661461000124102": "sdoh",
+					"661471000124109": "sdoh",
+					"661481000124107": "sdoh",
+					"661491000124105": "sdoh",
+					"661501000124102": "sdoh",
+					"661511000124104": "sdoh",
+					"661521000124107": "sdoh",
+					"661531000124105": "sdoh",
+					"661541000124100": "sdoh",
+					"661551000124103": "sdoh",
+					"661561000124101": "sdoh",
+					"661571000124108": "sdoh",
+					"661581000124106": "sdoh",
+					"661591000124109": "sdoh",
+					"661771000124102": "sdoh",
+					"661781000124104": "sdoh",
+					"661791000124101": "sdoh",
+					"661801000124100": "sdoh",
+					"661811000124102": "sdoh",
+					"661821000124105": "sdoh",
+					"661831000124108": "sdoh",
+					"661841000124103": "sdoh",
+					"661851000124101": "sdoh",
+					"661861000124104": "sdoh",
+					"661871000124106": "sdoh",
+					"661881000124109": "sdoh",
+					"661891000124107": "sdoh",
+					"661901000124106": "sdoh",
+					"661911000124109": "sdoh",
+					"661921000124101": "sdoh",
+					"661931000124103": "sdoh",
+					"661941000124108": "sdoh",
+					"661951000124105": "sdoh",
+					"661961000124107": "sdoh",
+					"661971000124100": "sdoh",
+					"661981000124102": "sdoh",
+					"661991000124104": "sdoh",
+					"662001000124102": "sdoh",
+					"662041000124100": "sdoh",
+					"662051000124103": "sdoh",
+					"662061000124101": "sdoh",
+					"662071000124108": "sdoh",
+					"662081000124106": "sdoh",
+					"662091000124109": "sdoh",
+					"662101000124103": "sdoh",
+					"662111000124100": "sdoh",
+					"662121000124108": "sdoh",
+					"662131000124106": "sdoh",
+					"662141000124101": "sdoh",
+					"662151000124104": "sdoh",
+					"662161000124102": "sdoh",
+					"662171000124109": "sdoh",
+					"662181000124107": "sdoh",
+					"662191000124105": "sdoh",
+					"662201000124108": "sdoh",
+					"662211000124106": "sdoh",
+					"662221000124103": "sdoh",
+					"662231000124100": "sdoh",
+					"662241000124105": "sdoh",
+					"662251000124107": "sdoh",
+					"662261000124109": "sdoh",
+					"662271000124102": "sdoh",
+					"662281000124104": "sdoh",
+					"662291000124101": "sdoh",
+					"662301000124100": "sdoh",
+					"662311000124102": "sdoh",
+					"662321000124105": "sdoh",
+					"662331000124108": "sdoh",
+					"662341000124103": "sdoh",
+					"662351000124101": "sdoh",
+					"662361000124104": "sdoh",
+					"662371000124106": "sdoh",
+					"662381000124109": "sdoh",
+					"662391000124107": "sdoh",
+					"662401000124109": "sdoh",
+					"662411000124107": "sdoh",
+					"662421000124104": "sdoh",
+					"662431000124101": "sdoh",
+					"662441000124106": "sdoh",
+					"662451000124108": "sdoh",
+					"662461000124105": "sdoh",
+					"662471000124103": "sdoh",
+					"662481000124100": "sdoh",
+					"662491000124102": "sdoh",
+					"662501000124105": "sdoh",
+					"662511000124108": "sdoh",
+					"662521000124100": "sdoh",
+					"662531000124102": "sdoh",
+					"662541000124107": "sdoh",
+					"662551000124109": "sdoh",
+					"662561000124106": "sdoh",
+					"662571000124104": "sdoh",
+					"662581000124101": "sdoh",
+					"662591000124103": "sdoh",
+					"662601000124106": "sdoh",
+					"662611000124109": "sdoh",
+					"662621000124101": "sdoh",
+					"662631000124103": "sdoh",
+					"662641000124108": "sdoh",
+					"662651000124105": "sdoh",
+					"662661000124107": "sdoh",
+					"662671000124100": "sdoh",
+					"662681000124102": "sdoh",
+					"662691000124104": "sdoh",
+					"662701000124104": "sdoh",
+					"662711000124101": "sdoh",
+					"662721000124109": "sdoh",
+					"662731000124107": "sdoh",
+					"662741000124102": "sdoh",
+					"662751000124100": "sdoh",
+					"662761000124103": "sdoh",
+					"662771000124105": "sdoh",
+					"662781000124108": "sdoh",
+					"662791000124106": "sdoh",
+					"662801000124107": "sdoh",
+					"662811000124105": "sdoh",
+					"662821000124102": "sdoh",
+					"662841000124109": "sdoh",
+					"662851000124106": "sdoh",
+					"662861000124108": "sdoh",
+					"662871000124101": "sdoh",
+					"662881000124103": "sdoh",
+					"662891000124100": "sdoh",
+					"662901000124101": "sdoh",
+					"662911000124103": "sdoh",
+					"662921000124106": "sdoh",
+					"662931000124109": "sdoh",
+					"662941000124104": "sdoh",
+					"662951000124102": "sdoh",
+					"662961000124100": "sdoh",
+					"662971000124107": "sdoh",
+					"662981000124105": "sdoh",
+					"662991000124108": "sdoh",
+					"663001000124109": "sdoh",
+					"663011000124107": "sdoh",
+					"663021000124104": "sdoh",
+					"663031000124101": "sdoh",
+					"663041000124106": "sdoh",
+					"663051000124108": "sdoh",
+					"663061000124105": "sdoh",
+					"663071000124103": "sdoh",
+					"663081000124100": "sdoh",
+					"663091000124102": "sdoh",
+					"663101000124108": "sdoh",
+					"663111000124106": "sdoh",
+					"663121000124103": "sdoh",
+					"663131000124100": "sdoh",
+					"663141000124105": "sdoh",
+					"663151000124107": "sdoh",
+					"663161000124109": "sdoh",
+					"663171000124102": "sdoh",
+					"663181000124104": "sdoh",
+					"663191000124101": "sdoh",
+					"663201000124103": "sdoh",
+					"663211000124100": "sdoh",
+					"663221000124108": "sdoh",
+					"663231000124106": "sdoh",
+					"663241000124101": "sdoh",
+					"663251000124104": "sdoh",
+					"663261000124102": "sdoh",
+					"663271000124109": "sdoh",
+					"663281000124107": "sdoh",
+					"663291000124105": "sdoh",
+					"663301000124106": "sdoh",
+					"663311000124109": "sdoh",
+					"663321000124101": "sdoh",
+					"663331000124103": "sdoh",
+					"663341000124108": "sdoh",
+					"663351000124105": "sdoh",
+					"663361000124107": "sdoh",
+					"663371000124100": "sdoh",
+					"663381000124102": "sdoh",
+					"663391000124104": "sdoh",
+					"663401000124102": "sdoh",
+					"663411000124104": "sdoh",
+					"663421000124107": "sdoh",
+					"663431000124105": "sdoh",
+					"663441000124100": "sdoh",
+					"670991000124102": "sdoh",
+					"671001000124101": "sdoh",
+					"671011000124103": "sdoh",
+					"671021000124106": "sdoh",
+					"671031000124109": "sdoh",
+					"671041000124104": "sdoh",
+					"671051000124102": "sdoh",
+					"671061000124100": "sdoh",
+					"671071000124107": "sdoh",
+					"671081000124105": "sdoh",
+					"671091000124108": "sdoh",
+					"671121000124107": "sdoh",
+					"671291000124100": "sdoh",
+					"671301000124104": "sdoh",
+					"671341000124102": "sdoh",
+					"S5170": "sdoh",
+					"S9470": "sdoh"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.PatientStatusAtLocation" : {
+				"encounter-location-status|4.0.1" : {
+					"active" : "active",
+					"completed" : "completed",
+					"planned" : "planned",
+					"reserved" : "reserved"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.Priority" : {
+				"request-priority|4.0.1" : {
+					"A" : "asap",
+					"ASAP" : "asap",
+					"Asap" : "asap",
+					"N" : "routine",
+					"R" : "routine",
+					"ROUTINE" : "routine",
+					"Routine" : "routine",
+					"S" : "stat",
+					"STAT" : "stat",
+					"Stat" : "stat",
+					"T" : "stat",
+					"URGENT" : "urgent",
+					"Urgent" : "urgent",
+					"asap" : "asap",
+					"routine" : "routine",
+					"stat" : "stat",
+					"urgent" : "urgent"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.Relationship" : {
+				"subscriber-relationship" : {
+					"CHD" : "child",
+					"OTH" : "other",
+					"PAR" : "parent",
+					"SEL" : "self",
+					"SPO" : "spouse"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.Severity" : {
+				"reaction-event-severity|4.0.1" : {
+					"Life-threatening" : "severe",
+					"MI" : "mild",
+					"MO" : "moderate",
+					"Mild" : "mild",
+					"Moderate" : "moderate",
+					"SV" : "severe",
+					"Severe" : "severe",
+					"mild" : "mild",
+					"moderate" : "moderate",
+					"severe" : "severe"
+				}
+			},
+			"HS.SDA3.Document:FileType" : {
+				"mimetypes|4.0.1" : {
+					"DOC" : "application/msword",
+					"PDF" : "application/pdf",
+					"RTF" : "application/rtf",
+					"TXT" : "text/plain"
+				}
+			},
+			"HS.SDA3.Encounter:EncounterType" : {
+				"v3-ActEncounterCode" : {
+					"E" : "EMER",
+					"I" : "IMP",
+					"O" : "AMB",
+					"P" : "PRENC"
+				}
+			},
+			"HS.SDA3.FamilyHistory:Status" : {
+				"history-status|4.0.1" : {
+					"A" : "completed",
+					"I" : "entered-in-error"
+				}
+			},
+			"HS.SDA3.HealthConcern" : {
+				"condition-code" : {
+					"32911000" : "http://snomed.info/sct",
+					"73438004" : "http://snomed.info/sct",
+					"73595000" : "http://snomed.info/sct",
+					"95929000" : "http://snomed.info/sct",
+					"95933007" : "http://snomed.info/sct",
+					"105411000" : "http://snomed.info/sct",
+					"105529008" : "http://snomed.info/sct",
+					"105531004" : "http://snomed.info/sct",
+					"105532006" : "http://snomed.info/sct",
+					"105535008" : "http://snomed.info/sct",
+					"129698004" : "http://snomed.info/sct",
+					"129832003" : "http://snomed.info/sct",
+					"160695008" : "http://snomed.info/sct",
+					"160696009" : "http://snomed.info/sct",
+					"160726006" : "http://snomed.info/sct",
+					"160727002" : "http://snomed.info/sct",
+					"160899000" : "http://snomed.info/sct",
+					"160900005" : "http://snomed.info/sct",
+					"224255009" : "http://snomed.info/sct",
+					"224974006" : "http://snomed.info/sct",
+					"267076002" : "http://snomed.info/sct",
+					"412732008" : "http://snomed.info/sct",
+					"418150003" : "http://snomed.info/sct",
+					"419951006" : "http://snomed.info/sct",
+					"420180008" : "http://snomed.info/sct",
+					"422611005" : "http://snomed.info/sct",
+					"422650009" : "http://snomed.info/sct",
+					"422786001" : "http://snomed.info/sct",
+					"423315002" : "http://snomed.info/sct",
+					"423798004" : "http://snomed.info/sct",
+					"424582000" : "http://snomed.info/sct",
+					"424629004" : "http://snomed.info/sct",
+					"425022003" : "http://snomed.info/sct",
+					"441879005" : "http://snomed.info/sct",
+					"442347009" : "http://snomed.info/sct",
+					"697957000" : "http://snomed.info/sct",
+					"704349002" : "http://snomed.info/sct",
+					"704489009" : "http://snomed.info/sct",
+					"706872008" : "http://snomed.info/sct",
+					"706874009" : "http://snomed.info/sct",
+					"706875005" : "http://snomed.info/sct",
+					"706892001" : "http://snomed.info/sct",
+					"706893006" : "http://snomed.info/sct",
+					"707087005" : "http://snomed.info/sct",
+					"713458007" : "http://snomed.info/sct",
+					"713820002" : "http://snomed.info/sct",
+					"715046004" : "http://snomed.info/sct",
+					"720411002" : "http://snomed.info/sct",
+					"720428004" : "http://snomed.info/sct",
+					"720741001" : "http://snomed.info/sct",
+					"733423003" : "http://snomed.info/sct",
+					"733817003" : "http://snomed.info/sct",
+					"736769008" : "http://snomed.info/sct",
+					"741062008" : "http://snomed.info/sct",
+					"871869008" : "http://snomed.info/sct",
+					"1155680000" : "http://snomed.info/sct",
+					"1156191002" : "http://snomed.info/sct",
+					"1156192009" : "http://snomed.info/sct",
+					"1156193004" : "http://snomed.info/sct",
+					"1156194005" : "http://snomed.info/sct",
+					"1156195006" : "http://snomed.info/sct",
+					"1156196007" : "http://snomed.info/sct",
+					"1162585007" : "http://snomed.info/sct",
+					"1184686008" : "http://snomed.info/sct",
+					"1184687004" : "http://snomed.info/sct",
+					"1184702004" : "http://snomed.info/sct",
+					"1186610007" : "http://snomed.info/sct",
+					"1187272007" : "http://snomed.info/sct",
+					"1187600006" : "http://snomed.info/sct",
+					"1187601005" : "http://snomed.info/sct",
+					"1187605001" : "http://snomed.info/sct",
+					"1187607009" : "http://snomed.info/sct",
+					"1187610002" : "http://snomed.info/sct",
+					"1193534004" : "http://snomed.info/sct",
+					"1197631001" : "http://snomed.info/sct",
+					"1197632008" : "http://snomed.info/sct",
+					"1197634009" : "http://snomed.info/sct",
+					"1197636006" : "http://snomed.info/sct",
+					"1197637002" : "http://snomed.info/sct",
+					"1197640002" : "http://snomed.info/sct",
+					"1197641003" : "http://snomed.info/sct",
+					"1197645007" : "http://snomed.info/sct",
+					"1197646008" : "http://snomed.info/sct",
+					"1197647004" : "http://snomed.info/sct",
+					"1230283000" : "http://snomed.info/sct",
+					"5311000175103" : "http://snomed.info/sct",
+					"5371000175108" : "http://snomed.info/sct",
+					"5521000175101" : "http://snomed.info/sct",
+					"5731000175109" : "http://snomed.info/sct",
+					"22761000175104" : "http://snomed.info/sct",
+					"22791000175108" : "http://snomed.info/sct",
+					"288671000119101" : "http://snomed.info/sct",
+					"288681000119103" : "http://snomed.info/sct",
+					"293611000119101" : "http://snomed.info/sct",
+					"445071000124105" : "http://snomed.info/sct",
+					"445281000124101" : "http://snomed.info/sct",
+					"454061000124102" : "http://snomed.info/sct",
+					"459601000124108" : "http://snomed.info/sct",
+					"459611000124106" : "http://snomed.info/sct",
+					"459901000124103" : "http://snomed.info/sct",
+					"470911000124109" : "http://snomed.info/sct",
+					"470941000124108" : "http://snomed.info/sct",
+					"470951000124105" : "http://snomed.info/sct",
+					"471981000124106" : "http://snomed.info/sct",
+					"471991000124109" : "http://snomed.info/sct",
+					"472001000124106" : "http://snomed.info/sct",
+					"551441000124104" : "http://snomed.info/sct",
+					"551451000124102" : "http://snomed.info/sct",
+					"551461000124100" : "http://snomed.info/sct",
+					"551471000124107" : "http://snomed.info/sct",
+					"551481000124105" : "http://snomed.info/sct",
+					"551491000124108" : "http://snomed.info/sct",
+					"551501000124100" : "http://snomed.info/sct",
+					"551511000124102" : "http://snomed.info/sct",
+					"551531000124108" : "http://snomed.info/sct",
+					"551541000124103" : "http://snomed.info/sct",
+					"551551000124101" : "http://snomed.info/sct",
+					"551561000124104" : "http://snomed.info/sct",
+					"551571000124106" : "http://snomed.info/sct",
+					"551581000124109" : "http://snomed.info/sct",
+					"551591000124107" : "http://snomed.info/sct",
+					"551601000124104" : "http://snomed.info/sct",
+					"551651000124100" : "http://snomed.info/sct",
+					"551691000124106" : "http://snomed.info/sct",
+					"551701000124106" : "http://snomed.info/sct",
+					"551711000124109" : "http://snomed.info/sct",
+					"551721000124101" : "http://snomed.info/sct",
+					"551731000124103" : "http://snomed.info/sct",
+					"551741000124108" : "http://snomed.info/sct",
+					"551751000124105" : "http://snomed.info/sct",
+					"551761000124107" : "http://snomed.info/sct",
+					"611131000124100" : "http://snomed.info/sct",
+					"611141000124105" : "http://snomed.info/sct",
+					"611151000124107" : "http://snomed.info/sct",
+					"611161000124109" : "http://snomed.info/sct",
+					"611191000124101" : "http://snomed.info/sct",
+					"611201000124103" : "http://snomed.info/sct",
+					"611531000124109" : "http://snomed.info/sct",
+					"611551000124102" : "http://snomed.info/sct",
+					"12242911000119107" : "http://snomed.info/sct",
+					"12399491000119102" : "http://snomed.info/sct",
+					"12399531000119102" : "http://snomed.info/sct",
+					"15912911000119102" : "http://snomed.info/sct",
+					"E63.9" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.01XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.01XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.01XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.11XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.11XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.11XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.12XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.12XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.12XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.21XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.21XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.21XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.22XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.22XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.22XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.31XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.31XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.31XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.32XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.32XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.32XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.91XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.91XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T74.91XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.01XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.01XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.01XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.11XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.11XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.11XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.12XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.12XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.12XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.21XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.21XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.21XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.22XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.22XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.22XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.31XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.31XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.31XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.32XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.32XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.32XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.91XA" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.91XD" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"T76.91XS" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Y07.01" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Y07.02" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Y07.03" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Y07.04" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z55.5" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z55.8" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z56.0" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z59.00" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z59.01" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z59.02" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z59.1" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z59.41" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z59.48" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z59.811" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z59.812" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z59.819" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z59.82" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z59.86" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z59.87" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z60.2" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z60.4" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z60.8" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z63.8" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z65.9" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z71.88" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z73.3" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z91.11" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z91.110" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z91.120" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z91.190" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z91.410" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z91.411" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z91.412" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z91.419" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z91.82" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z91.89" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z91.A10" : "http://hl7.org/fhir/sid/icd-10-cm",
+					"Z91.A20" : "http://hl7.org/fhir/sid/icd-10-cm"
+				}
+			},
+			"HS.SDA3.Intervention:Status" : {
+				"care-plan-activity-status|4.0.1" : {
+					"C" : "completed",
+					"I" : "unknown"
+				}
+			},
+			"HS.SDA3.LabOrder:Status" : {
+				"diagnostic-report-status|4.0.1" : {
+					"A" : "partial",
+					"C" : "cancelled",
+					"CA" : "cancelled",
+					"CM" : "final",
+					"D" : "cancelled",
+					"DC" : "cancelled",
+					"E" : "final",
+					"ER" : "cancelled",
+					"H" : "partial",
+					"HD" : "partial",
+					"I" : "cancelled",
+					"IP" : "partial",
+					"K" : "corrected",
+					"O" : "partial",
+					"R" : "entered-in-error",
+					"RP" : "entered-in-error",
+					"SC" : "partial",
+					"V" : "final"
+				},
+				"request-status|4.0.1" : {
+					"A" : "active",
+					"C" : "revoked",
+					"CA" : "revoked",
+					"CM" : "active",
+					"D" : "revoked",
+					"DC" : "revoked",
+					"E" : "active",
+					"ER" : "revoked",
+					"H" : "on-hold",
+					"HD" : "on-hold",
+					"I" : "entered-in-error",
+					"IP" : "active",
+					"R" : "entered-in-error",
+					"RP" : "entered-in-error",
+					"SC" : "active",
+					"V" : "active"
+				}
+			},
+			"HS.SDA3.LabResultItem:TestItemStatus" : {
+				"observation-status|4.0.1" : {
+					"C" : "amended",
+					"D" : "entered-in-error",
+					"F" : "final",
+					"I" : "registered",
+					"K" : "amended",
+					"N" : "registered",
+					"O" : "preliminary",
+					"P" : "preliminary",
+					"R" : "preliminary",
+					"S" : "preliminary",
+					"U" : "final",
+					"W" : "entered-in-error",
+					"X" : "unknown"
+				}
+			},
+			"HS.SDA3.MedicalExplanationOfBenefit:Context" : {
+				"Resource:meta.profile" : {
+					"inpatient" : "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-ExplanationOfBenefit-Inpatient-Institutional",
+					"outpatient" : "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-ExplanationOfBenefit-Outpatient-Institutional",
+					"professional-nonclinician" : "http://hl7.org/fhir/us/carin-bb/StructureDefinition/C4BB-ExplanationOfBenefit-Professional-NonClinician"
+				}
+			},
+			"HS.SDA3.Medication:Status" : {
+				"medication-statement-status|4.0.1" : {
+					"A" : "active",
+					"CM" : "completed",
+					"D" : "stopped",
+					"DC" : "stopped",
+					"E" : "completed",
+					"ER" : "stopped",
+					"H" : "on-hold",
+					"HD" : "on-hold",
+					"I" : "entered-in-error",
+					"IP" : "active",
+					"P" : "active",
+					"PO" : "active",
+					"Q" : "active",
+					"S" : "active",
+					"SC" : "active",
+					"U" : "active",
+					"V" : "completed"
+				},
+				"medicationdispense-status|4.0.1" : {
+					"A" : "in-progress",
+					"C" : "stopped",
+					"CA" : "stopped",
+					"CM" : "completed",
+					"D" : "stopped",
+					"DC" : "stopped",
+					"E" : "completed",
+					"ER" : "stopped",
+					"H" : "on-hold",
+					"HD" : "on-hold",
+					"I" : "entered-in-error",
+					"IP" : "in-progress",
+					"P" : "in-progress",
+					"PO" : "in-progress",
+					"Q" : "in-progress",
+					"R" : "stopped",
+					"RP" : "stopped",
+					"S" : "in-progress",
+					"SC" : "in-progress",
+					"U" : "in-progress",
+					"V" : "completed"
+				},
+				"medicationrequest-status|4.0.1" : {
+					"A" : "active",
+					"C" : "cancelled",
+					"CA" : "cancelled",
+					"CM" : "completed",
+					"D" : "stopped",
+					"DC" : "stopped",
+					"E" : "completed",
+					"ER" : "stopped",
+					"H" : "on-hold",
+					"HD" : "on-hold",
+					"I" : "entered-in-error",
+					"IP" : "active",
+					"P" : "active",
+					"PO" : "active",
+					"Q" : "active",
+					"R" : "cancelled",
+					"RP" : "cancelled",
+					"S" : "active",
+					"SC" : "active",
+					"U" : "active",
+					"V" : "completed"
+				}
+			},
+			"HS.SDA3.Name:Type" : {
+				"name-use|4.0.1" : {
+					"Alias" : "anonymous",
+					"Birth" : "official",
+					"Display" : "usual",
+					"Legal" : "official",
+					"License" : "official",
+					"Maiden" : "maiden",
+					"Nickname" : "nickname",
+					"Previous" : "old"
+				}
+			},
+			"HS.SDA3.Observation:Status" : {
+				"observation-status|4.0.1" : {
+					"C" : "amended",
+					"D" : "entered-in-error",
+					"F" : "final",
+					"I" : "registered",
+					"K" : "amended",
+					"N" : "registered",
+					"O" : "preliminary",
+					"P" : "preliminary",
+					"R" : "preliminary",
+					"S" : "preliminary",
+					"U" : "final",
+					"W" : "entered-in-error",
+					"X" : "unknown"
+				}
+			},
+			"HS.SDA3.OtherOrder:Status" : {
+				"diagnostic-report-status|4.0.1" : {
+					"A" : "partial",
+					"C" : "cancelled",
+					"CA" : "cancelled",
+					"CM" : "final",
+					"D" : "cancelled",
+					"DC" : "cancelled",
+					"E" : "final",
+					"ER" : "cancelled",
+					"H" : "partial",
+					"HD" : "partial",
+					"I" : "cancelled",
+					"IP" : "partial",
+					"K" : "corrected",
+					"O" : "partial",
+					"R" : "entered-in-error",
+					"RP" : "entered-in-error",
+					"SC" : "partial",
+					"V" : "final"
+				},
+				"request-status|4.0.1" : {
+					"A" : "active",
+					"C" : "revoked",
+					"CA" : "revoked",
+					"CM" : "active",
+					"D" : "revoked",
+					"DC" : "revoked",
+					"E" : "active",
+					"ER" : "revoked",
+					"H" : "on-hold",
+					"HD" : "on-hold",
+					"I" : "entered-in-error",
+					"IP" : "active",
+					"R" : "entered-in-error",
+					"RP" : "entered-in-error",
+					"SC" : "active",
+					"V" : "active"
+				}
+			},
+			"HS.SDA3.PatientNumber:NumberType" : {
+				"identifier-type" : {
+					"DL" : "DL",
+					"MRN" : "MR",
+					"PPN" : "PPN",
+					"SSN" : "SB"
+				}
+			},
+			"HS.SDA3.QuestionnaireResponse:Status" : {
+				"questionnaire-answers-status|4.0.1" : {
+					"IP" : "in-progress",
+					"C" : "completed",
+					"A" : "amended",
+					"E" : "entered-in-error",
+					"S" : "stopped"
+				}
+			},
+			"HS.SDA3.RadOrder:Status" : {
+				"diagnostic-report-status|4.0.1" : {
+					"A" : "partial",
+					"C" : "cancelled",
+					"CA" : "cancelled",
+					"CM" : "final",
+					"COR" : "corrected",
+					"D" : "cancelled",
+					"DC" : "cancelled",
+					"E" : "final",
+					"ENT" : "partial",
+					"ER" : "cancelled",
+					"FIN" : "final",
+					"H" : "partial",
+					"HD" : "partial",
+					"I" : "cancelled",
+					"IP" : "partial",
+					"K" : "corrected",
+					"O" : "partial",
+					"R" : "entered-in-error",
+					"RP" : "entered-in-error",
+					"SC" : "partial",
+					"V" : "final"
+				},
+				"request-status|4.0.1" : {
+					"A" : "active",
+					"C" : "revoked",
+					"CA" : "revoked",
+					"CM" : "active",
+					"D" : "revoked",
+					"DC" : "revoked",
+					"E" : "active",
+					"ER" : "revoked",
+					"H" : "on-hold",
+					"HD" : "on-hold",
+					"I" : "entered-in-error",
+					"IP" : "active",
+					"R" : "entered-in-error",
+					"RP" : "entered-in-error",
+					"SC" : "active",
+					"V" : "active"
+				}
+			},
+			"HS.SDA3.Referral:ReferralStatus" : {
+				"request-status|4.0.1" : {
+					"A" : "active",
+					"C" : "completed",
+					"D" : "draft",
+					"E" : "entered-in-error",
+					"OH" : "on-hold",
+					"R" : "revoked",
+					"UNK" : "unknown"
+				}
+			},
+			"HS.SDA3.Result:FileType" : {
+				"media-type" : {
+					"GIF" : "video",
+					"JPEG" : "image",
+					"MOV" : "video",
+					"MP3" : "audio",
+					"MP4" : "video",
+					"PNG" : "image",
+					"WAV" : "audio",
+					"WMV" : "video"
+				}
+			},
+			"HS.SDA3.Result:ResultStatus" : {
+				"diagnostic-report-status|4.0.1" : {
+					"A" : "preliminary",
+					"C" : "corrected",
+					"F" : "final",
+					"I" : "registered",
+					"K" : "corrected",
+					"O" : "registered",
+					"P" : "preliminary",
+					"R" : "preliminary",
+					"S" : "registered",
+					"X" : "cancelled"
+				},
+				"event-status|4.0.1" : {
+					"A" : "in-progress",
+					"C" : "completed",
+					"F" : "completed",
+					"I" : "preparation",
+					"K" : "completed",
+					"O" : "preparation",
+					"P" : "in-progress",
+					"R" : "in-progress",
+					"S" : "preparation",
+					"X" : "stopped"
+				},
+				"observation-status|4.0.1" : {
+					"A" : "preliminary",
+					"C" : "corrected",
+					"F" : "final",
+					"I" : "registered",
+					"K" : "corrected",
+					"O" : "registered",
+					"P" : "preliminary",
+					"R" : "preliminary",
+					"S" : "registered",
+					"X" : "cancelled"
+				}
+			},
+			"HS.SDA3.SocialDeterminant:Status" : {
+				"observation-status|4.0.1" : {
+					"A" : "final",
+					"C" : "corrected",
+					"E" : "entered-in-error",
+					"I" : "cancelled",
+					"M" : "amended",
+					"P" : "preliminary",
+					"R" : "registered"
+				}
+			},
+			"HS.SDA3.SocialHistory:Status" : {
+				"observation-status|4.0.1" : {
+					"A" : "final",
+					"C" : "corrected",
+					"E" : "entered-in-error",
+					"I" : "cancelled",
+					"M" : "amended",
+					"P" : "preliminary",
+					"R" : "registered"
+				}
+			},
+			"HS.SDA3.Survey:Status" : {
+				"observation-status|4.0.1" : {
+					"A" : "final",
+					"C" : "corrected",
+					"E" : "entered-in-error",
+					"I" : "cancelled",
+					"M" : "amended",
+					"P" : "preliminary",
+					"R" : "registered"
+				}
+			},
+			"HS.SDA3.Vaccination:Status" : {
+				"immunization-status|4.0.1" : {
+					"C" : "entered-in-error",
+					"CA" : "entered-in-error",
+					"CM" : "completed",
+					"E" : "completed",
+					"I" : "entered-in-error",
+					"V" : "completed"
+				}
+			}
+		},
+		"vSTU3" : {
+			"HS.SDA3.Alert:Status" : {
+				"event-status" : {
+					"A" : "in-progress",
+					"C" : "unknown",
+					"I" : "aborted"
+				}
+			},
+			"HS.SDA3.Allergy:Status" : {
+				"allergy-clinical-status" : {
+					"A" : "active",
+					"I" : "inactive",
+					"R" : "resolved"
+				}
+			},
+			"HS.SDA3.Appointment:Status" : {
+				"appointmentstatus" : {
+					"BOOKED" : "booked",
+					"Booked" : "booked",
+					"CANCELLED" : "cancelled",
+					"Cancelled" : "cancelled",
+					"DC" : "cancelled",
+					"booked" : "booked",
+					"cancelled" : "cancelled"
+				}
+			},
+			"HS.SDA3.Blob:FileType" : {
+				"MimeType RFC 4289" : {
+					"DOC" : "application/msword",
+					"PDF" : "application/pdf",
+					"RTF" : "application/rtf",
+					"TXT" : "text/plain"
+				}
+			},
+			"HS.SDA3.CarePlan:Status" : {
+				"care-plan-status" : {
+					"A" : "active",
+					"I" : "cancelled"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.AdministrationStatus" : {
+				"medication-admin-status" : {
+					"CP" : "completed",
+					"NA" : "stopped",
+					"PA" : "on-hold",
+					"RE" : "stopped"
+				},
+				"medication-statement-taken" : {
+					"CP" : "y",
+					"NA" : "n",
+					"PA" : "unk",
+					"RE" : "n"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.AllergyCategory" : {
+				"allergy-intolerance-category" : {
+					"AA" : "environment",
+					"DA" : "medication",
+					"Drug" : "medication",
+					"DrugAllergy" : "medication",
+					"EA" : "environment",
+					"Environment" : "environment",
+					"EnvironmentalAllergy" : "environment",
+					"FA" : "food",
+					"Food" : "food",
+					"FoodAllergy" : "food",
+					"LA" : "environment",
+					"Medication" : "medication",
+					"PA" : "environment",
+					"drug" : "medication",
+					"environment" : "environment",
+					"food" : "food",
+					"medication" : "medication"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.Certainty" : {
+				"allergy-verification-status" : {
+					"Confirmed" : "confirmed",
+					"Likely" : "unconfirmed",
+					"Suspected" : "unconfirmed",
+					"Unlikely" : "unconfirmed",
+					"confirmed" : "confirmed",
+					"entered-in-error" : "entered-in-error",
+					"likely" : "unconfirmed",
+					"unlikely" : "unconfirmed"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.ContactType" : {
+				"v2-0131" : {
+					"C" : "C",
+					"E" : "E",
+					"I" : "I",
+					"N" : "N",
+					"O" : "O",
+					"S" : "S",
+					"U" : "U"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.DeviceStatus" : {
+				"device-status" : {
+					"available" : "active",
+					"entered-in-error" : "entered-in-error",
+					"not-available" : "inactive",
+					"unknown" : "unknown"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.DiagnosisStatus" : {
+				"condition-clinical" : {
+					"7087005" : "active",
+					"55561003" : "active",
+					"73425007" : "inactive",
+					"90734009" : "active",
+					"255227004" : "recurrence",
+					"410516002" : "active",
+					"413322009" : "resolved",
+					"415684004" : "active",
+					"A" : "active"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.DocumentCompletionStatus" : {
+				"composition-status" : {
+					"AU" : "final",
+					"Authenticated" : "final",
+					"DI" : "preliminary",
+					"DO" : "final",
+					"IN" : "preliminary",
+					"IP" : "preliminary",
+					"In Progress" : "preliminary",
+					"Incomplete" : "preliminary",
+					"LA" : "final",
+					"PA" : "preliminary"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.DocumentStatus" : {
+				"document-reference-status" : {
+					"AV" : "current",
+					"CA" : "entered-in-error",
+					"OB" : "superseded",
+					"UN" : "entered-in-error"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.Frequency" : {
+				"timing-abbreviation" : {
+					"12xd" : "Q2H",
+					"1xmon" : "MO",
+					"1xw" : "WK",
+					"24xd" : "Q1H",
+					"6xd" : "Q4H",
+					"8xd" : "Q3H",
+					"qam" : "AM",
+					"qdam" : "AM",
+					"qdpm" : "PM",
+					"qh" : "Q1H",
+					"qhs" : "BED",
+					"qpm" : "PM"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.Gender" : {
+				"administrative-gender" : {
+					"F" : "female",
+					"FEMALE" : "female",
+					"Female" : "female",
+					"M" : "male",
+					"MALE" : "male",
+					"Male" : "male",
+					"NOT SPECIFIED" : "unknown",
+					"NS" : "unknown",
+					"Not Specified" : "unknown",
+					"Not specified" : "unknown",
+					"O" : "other",
+					"OTHER" : "other",
+					"Other" : "other",
+					"U" : "unknown",
+					"UNKNOWN" : "unknown",
+					"Unknown" : "unknown",
+					"female" : "female",
+					"male" : "male",
+					"not specified" : "unknown",
+					"other" : "other",
+					"unknown" : "unknown"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.GenderIdentity" : {
+				"gender-identity" : {
+					"407376001" : "407376001",
+					"407377005" : "407377005",
+					"446131000124102" : "446131000124102",
+					"446141000124107" : "446141000124107",
+					"446151000124109" : "446151000124109",
+					"ASKU" : "ASKU",
+					"F" : "446141000124107",
+					"M" : "446151000124109",
+					"OTH" : "OTH",
+					"UN" : "OTH",
+					"female" : "446141000124107",
+					"male" : "446151000124109",
+					"non-binary" : "446131000124102",
+					"non-disclose" : "ASKU",
+					"other" : "OTH",
+					"transgender-female" : "407376001",
+					"transgender-male" : "407377005"
+				},
+				"gender-identity-descriptions" : {
+					"407376001" : "Male-to-Female (MTF)/Transgender Female/Trans Woman",
+					"407377005" : "Female-to-Male (FTM)/Transgender Male/Trans Man",
+					"446131000124102" : "Genderqueer, neither exclusively male nor female",
+					"446141000124107" : "Female",
+					"446151000124109" : "Male",
+					"ASKU" : "Choose not to disclose",
+					"OTH" : "Additional gender category or other, please specify"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.HealthConcernStatus" : {
+				"condition-clinical" : {
+					"aborted" : "inactive",
+					"active" : "active",
+					"completed" : "resolved",
+					"suspended" : "inactive"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.MaritalStatus" : {
+				"marital-status" : {
+					"A" : "L",
+					"B" : "U",
+					"C" : "U",
+					"D" : "D",
+					"E" : "L",
+					"G" : "U",
+					"I" : "I",
+					"M" : "M",
+					"N" : "A",
+					"O" : "UNK",
+					"P" : "T",
+					"R" : "T",
+					"S" : "U",
+					"T" : "UNK",
+					"U" : "UNK",
+					"W" : "W"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.Priority" : {
+				"medication-request-priority" : {
+					"A" : "asap",
+					"ASAP" : "asap",
+					"Asap" : "asap",
+					"N" : "routine",
+					"R" : "routine",
+					"ROUTINE" : "routine",
+					"Routine" : "routine",
+					"S" : "stat",
+					"STAT" : "stat",
+					"Stat" : "stat",
+					"T" : "stat",
+					"URGENT" : "urgent",
+					"Urgent" : "urgent",
+					"asap" : "asap",
+					"routine" : "routine",
+					"stat" : "stat",
+					"urgent" : "urgent"
+				},
+				"request-priority" : {
+					"A" : "asap",
+					"ASAP" : "asap",
+					"Asap" : "asap",
+					"N" : "routine",
+					"R" : "routine",
+					"ROUTINE" : "routine",
+					"Routine" : "routine",
+					"S" : "stat",
+					"STAT" : "stat",
+					"Stat" : "stat",
+					"T" : "stat",
+					"URGENT" : "urgent",
+					"Urgent" : "urgent",
+					"asap" : "asap",
+					"routine" : "routine",
+					"stat" : "stat",
+					"urgent" : "urgent"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.ProcedureStatus" : {
+				"event-status" : {
+					"preparation" : "preparation",
+					"in-progress" : "in-progress",
+					"suspended" : "suspended",
+					"aborted" : "aborted",
+					"completed" : "completed",
+					"entered-in-error" : "entered-in-error",
+					"unknown" : "unknown"
+				}
+			},
+			"HS.SDA3.CodeTableDetail.Severity" : {
+				"reaction-event-severity" : {
+					"Life-threatening" : "severe",
+					"MI" : "mild",
+					"MO" : "moderate",
+					"Mild" : "mild",
+					"Moderate" : "moderate",
+					"SV" : "severe",
+					"Severe" : "severe",
+					"mild" : "mild",
+					"moderate" : "moderate",
+					"severe" : "severe"
+				}
+			},
+			"HS.SDA3.Diagnosis:VerificationStatus" : {
+				"condition-ver-status" : {
+					"confirmed" : "confirmed",
+					"differential" : "differential",
+					"entered-in-error" : "entered-in-error",
+					"provisional" : "provisional",
+					"refuted" : "refuted",
+					"unconfirmed" : "unconfirmed"
+				}
+			},
+			"HS.SDA3.Document:FileType" : {
+				"MimeType RFC 4289" : {
+					"DOC" : "application/msword",
+					"PDF" : "application/pdf",
+					"RTF" : "application/rtf",
+					"TXT" : "text/plain"
+				}
+			},
+			"HS.SDA3.Encounter:EncounterType" : {
+				"v3-ActEncounterCode" : {
+					"E" : "EMER",
+					"I" : "IMP",
+					"O" : "AMB",
+					"P" : "PRENC"
+				}
+			},
+			"HS.SDA3.FamilyHistory:Status" : {
+				"history-status" : {
+					"A" : "completed",
+					"I" : "entered-in-error"
+				}
+			},
+			"HS.SDA3.Intervention:Status" : {
+				"care-plan-activity-status" : {
+					"C" : "completed",
+					"I" : "unknown"
+				}
+			},
+			"HS.SDA3.LabOrder:Status" : {
+				"diagnostic-report-status" : {
+					"A" : "partial",
+					"C" : "cancelled",
+					"CA" : "cancelled",
+					"CM" : "final",
+					"D" : "cancelled",
+					"DC" : "cancelled",
+					"E" : "final",
+					"ER" : "cancelled",
+					"H" : "partial",
+					"HD" : "partial",
+					"I" : "cancelled",
+					"IP" : "partial",
+					"K" : "corrected",
+					"O" : "partial",
+					"R" : "entered-in-error",
+					"RP" : "entered-in-error",
+					"SC" : "partial",
+					"V" : "final"
+				},
+				"request-status" : {
+					"A" : "active",
+					"C" : "cancelled",
+					"CA" : "cancelled",
+					"CM" : "active",
+					"D" : "cancelled",
+					"DC" : "cancelled",
+					"E" : "active",
+					"ER" : "cancelled",
+					"H" : "suspended",
+					"HD" : "suspended",
+					"I" : "entered-in-error",
+					"IP" : "active",
+					"R" : "entered-in-error",
+					"RP" : "entered-in-error",
+					"SC" : "active",
+					"V" : "active"
+				}
+			},
+			"HS.SDA3.LabResultItem:TestItemStatus" : {
+				"observation-status" : {
+					"C" : "amended",
+					"D" : "entered-in-error",
+					"F" : "final",
+					"I" : "registered",
+					"K" : "amended",
+					"N" : "registered",
+					"O" : "preliminary",
+					"P" : "preliminary",
+					"R" : "preliminary",
+					"S" : "preliminary",
+					"U" : "final",
+					"W" : "entered-in-error",
+					"X" : "unknown"
+				}
+			},
+			"HS.SDA3.Medication:Status" : {
+				"medication-dispense-status" : {
+					"A" : "in-progress",
+					"C" : "stopped",
+					"CA" : "stopped",
+					"CM" : "completed",
+					"D" : "stopped",
+					"DC" : "stopped",
+					"E" : "completed",
+					"ER" : "stopped",
+					"H" : "on-hold",
+					"HD" : "on-hold",
+					"I" : "entered-in-error",
+					"IP" : "in-progress",
+					"P" : "in-progress",
+					"PO" : "in-progress",
+					"Q" : "in-progress",
+					"R" : "stopped",
+					"RP" : "stopped",
+					"S" : "in-progress",
+					"SC" : "in-progress",
+					"U" : "in-progress",
+					"V" : "completed"
+				},
+				"medication-request-status" : {
+					"A" : "active",
+					"C" : "cancelled",
+					"CA" : "cancelled",
+					"CM" : "completed",
+					"D" : "stopped",
+					"DC" : "stopped",
+					"E" : "completed",
+					"ER" : "stopped",
+					"H" : "on-hold",
+					"HD" : "on-hold",
+					"I" : "entered-in-error",
+					"IP" : "active",
+					"P" : "active",
+					"PO" : "active",
+					"Q" : "active",
+					"R" : "cancelled",
+					"RP" : "cancelled",
+					"S" : "active",
+					"SC" : "active",
+					"U" : "active",
+					"V" : "completed"
+				},
+				"medication-statement-status" : {
+					"A" : "active",
+					"C" : "stopped",
+					"CA" : "stopped",
+					"CM" : "completed",
+					"D" : "stopped",
+					"DC" : "stopped",
+					"E" : "completed",
+					"ER" : "stopped",
+					"H" : "on-hold",
+					"HD" : "on-hold",
+					"I" : "entered-in-error",
+					"IP" : "active",
+					"P" : "active",
+					"PO" : "active",
+					"Q" : "active",
+					"R" : "stopped",
+					"RP" : "stopped",
+					"S" : "active",
+					"SC" : "active",
+					"U" : "active",
+					"V" : "completed"
+				}
+			},
+			"HS.SDA3.Name:Type" : {
+				"name-use" : {
+					"Alias" : "anonymous",
+					"Birth" : "official",
+					"Display" : "usual",
+					"Legal" : "official",
+					"License" : "official",
+					"Maiden" : "maiden",
+					"Nickname" : "nickname",
+					"Previous" : "old"
+				}
+			},
+			"HS.SDA3.OtherOrder:Status" : {
+				"diagnostic-report-status" : {
+					"A" : "partial",
+					"C" : "cancelled",
+					"CA" : "cancelled",
+					"CM" : "final",
+					"D" : "cancelled",
+					"DC" : "cancelled",
+					"E" : "final",
+					"ER" : "cancelled",
+					"H" : "partial",
+					"HD" : "partial",
+					"I" : "cancelled",
+					"IP" : "partial",
+					"K" : "corrected",
+					"O" : "partial",
+					"R" : "entered-in-error",
+					"RP" : "entered-in-error",
+					"SC" : "partial",
+					"V" : "final"
+				},
+				"request-status" : {
+					"A" : "active",
+					"C" : "cancelled",
+					"CA" : "cancelled",
+					"CM" : "active",
+					"D" : "cancelled",
+					"DC" : "cancelled",
+					"E" : "active",
+					"ER" : "cancelled",
+					"H" : "suspended",
+					"HD" : "suspended",
+					"I" : "entered-in-error",
+					"IP" : "active",
+					"R" : "entered-in-error",
+					"RP" : "entered-in-error",
+					"SC" : "active",
+					"V" : "active"
+				}
+			},
+			"HS.SDA3.PatientNumber:NumberType" : {
+				"identifier-type" : {
+					"DL" : "DL",
+					"MRN" : "MR",
+					"PPN" : "PPN",
+					"SSN" : "SB"
+				}
+			},
+			"HS.SDA3.RadOrder:Status" : {
+				"diagnostic-report-status" : {
+					"A" : "partial",
+					"C" : "cancelled",
+					"CA" : "cancelled",
+					"CM" : "final",
+					"COR" : "corrected",
+					"D" : "cancelled",
+					"DC" : "cancelled",
+					"E" : "final",
+					"ENT" : "partial",
+					"ER" : "cancelled",
+					"FIN" : "final",
+					"H" : "partial",
+					"HD" : "partial",
+					"I" : "cancelled",
+					"IP" : "partial",
+					"K" : "corrected",
+					"O" : "partial",
+					"R" : "entered-in-error",
+					"RP" : "entered-in-error",
+					"SC" : "partial",
+					"V" : "final"
+				},
+				"request-status" : {
+					"A" : "active",
+					"C" : "cancelled",
+					"CA" : "cancelled",
+					"CM" : "active",
+					"D" : "cancelled",
+					"DC" : "cancelled",
+					"E" : "active",
+					"ER" : "cancelled",
+					"H" : "suspended",
+					"HD" : "suspended",
+					"I" : "entered-in-error",
+					"IP" : "active",
+					"R" : "entered-in-error",
+					"RP" : "entered-in-error",
+					"SC" : "active",
+					"V" : "active"
+				}
+			},
+			"HS.SDA3.Result:FileType" : {
+				"digital-media-type" : {
+					"GIF" : "video",
+					"JPEG" : "photo",
+					"MOV" : "video",
+					"MP3" : "audio",
+					"MP4" : "video",
+					"PNG" : "photo",
+					"WAV" : "audio",
+					"WMV" : "video"
+				}
+			},
+			"HS.SDA3.Result:ResultStatus" : {
+				"diagnostic-report-status" : {
+					"A" : "preliminary",
+					"C" : "corrected",
+					"F" : "final",
+					"I" : "registered",
+					"K" : "corrected",
+					"O" : "registered",
+					"P" : "preliminary",
+					"R" : "preliminary",
+					"S" : "registered",
+					"X" : "cancelled"
+				},
+				"observation-status" : {
+					"A" : "preliminary",
+					"C" : "corrected",
+					"F" : "final",
+					"I" : "registered",
+					"K" : "corrected",
+					"O" : "registered",
+					"P" : "preliminary",
+					"R" : "preliminary",
+					"S" : "registered",
+					"X" : "cancelled"
+				}
+			},
+			"HS.SDA3.Result:ResultType" : {
+				"MimeType RFC 4289" : {
+					"DOC" : "application/msword",
+					"PDF" : "application/pdf",
+					"RTF" : "application/rtf",
+					"TXT" : "text/plain"
+				}
+			},
+			"HS.SDA3.SocialDeterminant:Status" : {
+				"observation-status" : {
+					"A" : "final",
+					"I" : "cancelled"
+				}
+			},
+			"HS.SDA3.SocialHistory:Status" : {
+				"observation-status" : {
+					"A" : "final",
+					"I" : "cancelled"
+				}
+			},
+			"HS.SDA3.Vaccination:Status" : {
+				"immunization-status" : {
+					"C" : "entered-in-error",
+					"CA" : "entered-in-error",
+					"CM" : "completed",
+					"E" : "completed",
+					"I" : "entered-in-error",
+					"V" : "completed"
+				}
+			}
+		}
+	},
+	"vR4" : {
+		"SDA3" : {
+			"administrative-gender|4.0.1" : {
+				"HS.SDA3.CodeTableDetail.Gender" : {
+					"female" : "F",
+					"male" : "M",
+					"other" : "O",
+					"unknown" : "U"
+				}
+			},
+			"allergy-intolerance-category|4.0.1" : {
+				"HS.SDA3.CodeTableDetail.AllergyCategory" : {
+					"environment" : "EA",
+					"food" : "FA",
+					"medication" : "DA"
+				}
+			},
+			"allergyintolerance-clinical|4.0.1" : {
+				"HS.SDA3.Allergy:Status" : {
+					"active" : "A",
+					"inactive" : "I",
+					"resolved" : "R"
+				}
+			},
+			"allergyintolerance-verification|4.0.1" : {
+				"HS.SDA3.CodeTableDetail.Certainty" : {
+					"confirmed" : "Confirmed",
+					"entered-in-error" : "entered-in-error",
+					"unconfirmed" : "Suspected"
+				}
+			},
+			"appointmentstatus|4.0.1" : {
+				"HS.SDA3.Appointment:Status" : {
+					"booked" : "BOOKED",
+					"cancelled" : "CANCELLED"
+				}
+			},
+			"care-plan-activity-status|4.0.1" : {
+				"HS.SDA3.Intervention:Status" : {
+					"active" : "A",
+					"completed" : "C",
+					"unknown" : "I"
+				}
+			},
+			"composition-status|4.0.1" : {
+				"HS.SDA3.CodeTableDetail.DocumentCompletionStatus" : {
+					"final" : "AU",
+					"preliminary" : "IP"
+				}
+			},
+			"condition-clinical|4.0.1" : {
+				"HS.SDA3.CodeTableDetail.DiagnosisStatus" : {
+					"active" : "55561003",
+					"inactive" : "73425007",
+					"recurrence" : "255227004",
+					"resolved" : "413322009"
+				},
+				"HS.SDA3.CodeTableDetail.HealthConcernStatus" : {
+					"active" : "active",
+					"inactive" : "suspended",
+					"recurrence" : "active",
+					"remission" : "suspended",
+					"resolved" : "completed"
+				}
+			},
+			"device-status|4.0.1" : {
+				"HS.SDA3.Device:Status" : {
+					"active" : "available",
+					"entered-in-error" : "entered-in-error",
+					"inactive" : "not-available",
+					"unknown" : "unknown"
+				}
+			},
+			"diagnostic-report-status|4.0.1" : {
+				"HS.SDA3.LabOrder:Status" : {
+					"amended" : "K",
+					"appended" : "K",
+					"cancelled" : "C",
+					"corrected" : "K",
+					"entered-in-error" : "R",
+					"final" : "E",
+					"partial" : "IP",
+					"preliminary" : "IP",
+					"registered" : "IP"
+				},
+				"HS.SDA3.OtherOrder:Status" : {
+					"amended" : "K",
+					"appended" : "K",
+					"cancelled" : "C",
+					"corrected" : "K",
+					"entered-in-error" : "R",
+					"final" : "E",
+					"partial" : "IP",
+					"preliminary" : "IP",
+					"registered" : "IP"
+				},
+				"HS.SDA3.RadOrder:Status" : {
+					"amended" : "K",
+					"appended" : "K",
+					"cancelled" : "C",
+					"corrected" : "K",
+					"entered-in-error" : "R",
+					"final" : "E",
+					"partial" : "IP",
+					"preliminary" : "IP",
+					"registered" : "IP"
+				}
+			},
+			"document-reference-status|4.0.1" : {
+				"HS.SDA3.CodeTableDetail.DocumentStatus" : {
+					"current" : "AV",
+					"entered-in=error" : "UN",
+					"superseded" : "OB"
+				}
+			},
+			"event-status|4.0.1" : {
+				"HS.SDA3.Alert:Status" : {
+					"in-progress" : "A",
+					"unknown" : "C"
+				},
+				"HS.SDA3.Procedure:Status" : {
+					"preparation" : "preparation",
+					"in-progress" : "in-progress",
+					"not-done" : "not-done",
+					"on-hold" : "on-hold",
+					"stopped" : "stopped",
+					"completed" : "completed",
+					"entered-in-error" : "entered-in-error",
+					"unknown" : "unknown"
+				},
+				"HS.SDA3.Result:ResultStatus" : {
+					"completed" : "F",
+					"entered-in-error" : "X",
+					"in-progress" : "P",
+					"not-done" : "X",
+					"on-hold" : "P",
+					"preparation" : "I",
+					"stopped" : "X"
+				}
+			},
+			"history-status|4.0.1" : {
+				"HS.SDA3.FamilyHistory:Status" : {
+					"completed" : "A",
+					"entered-in-error" : "I",
+					"health-unknown" : "I",
+					"partial" : "A"
+				}
+			},
+			"identifier-type" : {
+				"HS.SDA3.PatientNumber:NumberType" : {
+					"MR" : "MRN"
+				}
+			},
+			"immunization-status|4.0.1" : {
+				"HS.SDA3.Vaccination:Status" : {
+					"completed" : "E",
+					"entered-in-error" : "C"
+				}
+			},
+			"marital-status" : {
+				"HS.SDA3.CodeTableDetail.MaritalStatus" : {
+					"A" : "N",
+					"D" : "D",
+					"I" : "I",
+					"L" : "A",
+					"M" : "M",
+					"P" : "O",
+					"S" : "U",
+					"T" : "P",
+					"U" : "B",
+					"UNK" : "U",
+					"W" : "W"
+				}
+			},
+			"medication-admin-status|4.0.1" : {
+				"HS.SDA3.CodeTableDetail.AdministrationStatus" : {
+					"completed" : "CP",
+					"on-hold" : "PA",
+					"stopped" : "NA"
+				}
+			},
+			"medication-dispense-status|4.0.1" : {
+				"HS.SDA3.Medication:Status" : {
+					"completed" : "E",
+					"entered-in-error" : "I",
+					"in-progress" : "IP",
+					"on-hold" : "H",
+					"stopped" : "C"
+				}
+			},
+			"medication-request-status|4.0.1" : {
+				"HS.SDA3.Medication:Status" : {
+					"active" : "IP",
+					"cancelled" : "C",
+					"completed" : "E",
+					"entered-in-error" : "I",
+					"oh-hold" : "H",
+					"stopped" : "D"
+				}
+			},
+			"medication-statement-status|4.0.1" : {
+				"HS.SDA3.Medication:Status" : {
+					"active" : "IP",
+					"completed" : "E",
+					"entered-in-error" : "I",
+					"on-hold" : "H",
+					"stopped" : "D"
+				}
+			},
+			"mimetypes|4.0.1" : {
+				"HS.SDA3.Blob:FileType" : {
+					"application/msword" : "DOC",
+					"application/pdf" : "PDF",
+					"application/rtf" : "RTF",
+					"text/plain" : "TXT"
+				},
+				"HS.SDA3.Document:FileType" : {
+					"application/msword" : "DOC",
+					"application/pdf" : "PDF",
+					"application/rtf" : "RTF",
+					"text/plain" : "TXT"
+				},
+				"HS.SDA3.Result:ResultType" : {
+					"application/msword" : "DOC",
+					"application/pdf" : "PDF",
+					"application/rtf" : "RTF",
+					"text/plain" : "TXT"
+				}
+			},
+			"name-use|4.0.1" : {
+				"HS.SDA3.Name:Type" : {
+					"anonymous" : "Alias",
+					"maiden" : "Maiden",
+					"nickname" : "Nickname",
+					"official" : "Legal",
+					"old" : "Previous",
+					"usual" : "Display"
+				}
+			},
+			"observation-status|4.0.1" : {
+				"HS.SDA3.LabOrder:Status" : {
+					"cancelled" : "C",
+					"corrected" : "K",
+					"entered-in-error" : "R",
+					"final" : "E",
+					"partial" : "IP",
+					"preliminary" : "IP",
+					"registered" : "IP"
+				},
+				"HS.SDA3.LabResultItem:TestItemStatus" : {
+					"amended" : "K",
+					"entered-in-error" : "D",
+					"final" : "F",
+					"preliminary" : "P",
+					"registered" : "N",
+					"unknown" : "X"
+				},
+				"HS.SDA3.Result:ResultStatus" : {
+					"amended" : "C",
+					"cancelled" : "X",
+					"corrected" : "C",
+					"final" : "F",
+					"preliminary" : "P",
+					"registered" : "I"
+				},
+				"HS.SDA3.SocialDeterminant:Status" : {
+					"amended" : "M",
+					"cancelled" : "I",
+					"corrected" : "C",
+					"entered-in-error" : "E",
+					"final" : "A",
+					"preliminary" : "P",
+					"registered" : "R"
+				},
+				"HS.SDA3.SocialHistory:Status" : {
+					"amended" : "M",
+					"cancelled" : "I",
+					"corrected" : "C",
+					"entered-in-error" : "E",
+					"final" : "A",
+					"preliminary" : "P",
+					"registered" : "R"
+				},
+				"HS.SDA3.Survey:Status" : {
+					"amended" : "M",
+					"cancelled" : "I",
+					"corrected" : "C",
+					"entered-in-error" : "E",
+					"final" : "A",
+					"preliminary" : "P",
+					"registered" : "R"
+				}
+			},
+			"patient-contactrelationship" : {
+				"HS.SDA3.CodeTableDetail.ContactType" : {
+					"C" : "C",
+					"E" : "E",
+					"EP" : "C",
+					"I" : "I",
+					"N" : "N",
+					"O" : "O",
+					"PR" : "O",
+					"S" : "S",
+					"U" : "U"
+				}
+			},
+			"questionnaire-answers-status|4.0.1" : {
+				"HS.SDA3.QuestionnaireResponse:Status" : {
+					"in-progress": "IP",
+					"completed": "C" ,
+					"amended": "A" ,
+					"entered-in-error": "E",
+					"stopped": "S"
+				}
+			},
+			"reaction-event-severity|4.0.1" : {
+				"HS.SDA3.CodeTableDetail.Severity" : {
+					"mild" : "MI",
+					"moderate" : "MO",
+					"severe" : "SV"
+				}
+			},
+			"request-priority|4.0.1" : {
+				"HS.SDA3.CodeTableDetail.Priority" : {
+					"asap" : "A",
+					"routine" : "R",
+					"stat" : "S",
+					"urgent" : "Urgent"
+				}
+			},
+			"request-status|4.0.1" : {
+				"HS.SDA3.LabOrder:Status" : {
+					"active" : "V",
+					"draft" : "IP",
+					"entered-in-error" : "R",
+					"on-hold" : "H",
+					"revoked" : "C"
+				},
+				"HS.SDA3.OtherOrder:Status" : {
+					"active" : "V",
+					"draft" : "IP",
+					"entered-in-error" : "R",
+					"on-hold" : "H",
+					"revoked" : "C"
+				},
+				"HS.SDA3.RadOrder:Status" : {
+					"active" : "V",
+					"draft" : "IP",
+					"entered-in-error" : "R",
+					"on-hold" : "H",
+					"revoked" : "C"
+				},
+				"HS.SDA3.Referral:ReferralStatus" : {
+					"active" : "A",
+					"completed" : "C",
+					"draft" : "D",
+					"entered-in-error" : "E",
+					"on-hold" : "OH",
+					"revoked" : "R",
+					"unknown" : "UNK"
+				}
+			},
+			"us-core-servicerequest-category|5.0.1" : {
+				"ServiceRequest.Category" : {
+					"108252007" : "LabOrder",
+					"363679005" : "RadOrder",
+					"386053000" : "Referral",
+					"387713003" : "Referral",
+					"409063005" : "Referral",
+					"409073007" : "Referral",
+					"410606002" : "Referral",
+					"sdoh" : "Referral"
+				}
+			},
+			"v3-ActEncounterCode" : {
+				"HS.SDA3.Encounter:EncounterType" : {
+					"AMB" : "O",
+					"EMER" : "E",
+					"IMP" : "I",
+					"PRENC" : "P"
+				}
+			}
+		}
+	},
+	"vSTU3" : {
+		"SDA3" : {
+			"MimeType RFC 4289" : {
+				"HS.SDA3.Blob:FileType" : {
+					"application/msword" : "DOC",
+					"application/pdf" : "PDF",
+					"application/rtf" : "RTF",
+					"text/plain" : "TXT"
+				},
+				"HS.SDA3.Document:FileType" : {
+					"application/msword" : "DOC",
+					"application/pdf" : "PDF",
+					"application/rtf" : "RTF",
+					"text/plain" : "TXT"
+				},
+				"HS.SDA3.Result:ResultType" : {
+					"application/msword" : "DOC",
+					"application/pdf" : "PDF",
+					"application/rtf" : "RTF",
+					"text/plain" : "TXT"
+				}
+			},
+			"administrative-gender" : {
+				"HS.SDA3.CodeTableDetail.Gender" : {
+					"female" : "F",
+					"male" : "M",
+					"other" : "O",
+					"unknown" : "U"
+				}
+			},
+			"allergy-clinical-status" : {
+				"HS.SDA3.Allergy:Status" : {
+					"active" : "A",
+					"inactive" : "I",
+					"resolved" : "R"
+				}
+			},
+			"allergy-intolerance-category" : {
+				"HS.SDA3.CodeTableDetail.AllergyCategory" : {
+					"environment" : "EA",
+					"food" : "FA",
+					"medication" : "DA"
+				}
+			},
+			"allergy-verification-status" : {
+				"HS.SDA3.CodeTableDetail.Certainty" : {
+					"confirmed" : "Confirmed",
+					"entered-in-error" : "entered-in-error",
+					"unconfirmed" : "Suspected"
+				}
+			},
+			"appointmentstatus" : {
+				"HS.SDA3.Appointment:Status" : {
+					"booked" : "BOOKED",
+					"cancelled" : "CANCELLED"
+				}
+			},
+			"care-plan-activity-status" : {
+				"HS.SDA3.Intervention:Status" : {
+					"active" : "A",
+					"completed" : "C",
+					"unknown" : "I"
+				}
+			},
+			"care-plan-status" : {
+				"HS.SDA3.CarePlan:Status" : {
+					"active" : "A",
+					"cancelled" : "I"
+				}
+			},
+			"composition-status" : {
+				"HS.SDA3.CodeTableDetail.DocumentCompletionStatus" : {
+					"final" : "AU",
+					"preliminary" : "IP"
+				}
+			},
+			"condition-clinical" : {
+				"HS.SDA3.CodeTableDetail.DiagnosisStatus" : {
+					"active" : "55561003",
+					"inactive" : "73425007",
+					"recurrence" : "255227004",
+					"resolved" : "413322009"
+				},
+				"HS.SDA3.CodeTableDetail.HealthConcernStatus" : {
+					"active" : "active",
+					"inactive" : "suspended",
+					"recurrence" : "active",
+					"remission" : "suspended",
+					"resolved" : "completed"
+				}
+			},
+			"condition-ver-status" : {
+				"HS.SDA3.Diagnosis:VerificationStatus" : {
+					"confirmed" : "confirmed",
+					"differential" : "differential",
+					"entered-in-error" : "entered-in-error",
+					"provisional" : "provisional",
+					"refuted" : "refuted",
+					"unconfirmed" : "unconfirmed"
+				}
+			},
+			"device-status" : {
+				"HS.SDA3.Device:Status" : {
+					"active" : "available",
+					"entered-in-error" : "entered-in-error",
+					"inactive" : "not-available",
+					"unknown" : "unknown"
+				}
+			},
+			"diagnostic-report-status" : {
+				"HS.SDA3.LabOrder:Status" : {
+					"amended" : "K",
+					"appended" : "K",
+					"cancelled" : "C",
+					"corrected" : "K",
+					"entered-in-error" : "R",
+					"final" : "E",
+					"partial" : "IP",
+					"preliminary" : "IP",
+					"registered" : "IP"
+				},
+				"HS.SDA3.OtherOrder:Status" : {
+					"amended" : "K",
+					"appended" : "K",
+					"cancelled" : "C",
+					"corrected" : "K",
+					"entered-in-error" : "R",
+					"final" : "E",
+					"partial" : "IP",
+					"preliminary" : "IP",
+					"registered" : "IP"
+				},
+				"HS.SDA3.RadOrder:Status" : {
+					"amended" : "K",
+					"appended" : "K",
+					"cancelled" : "C",
+					"corrected" : "K",
+					"entered-in-error" : "R",
+					"final" : "E",
+					"partial" : "IP",
+					"preliminary" : "IP",
+					"registered" : "IP"
+				}
+			},
+			"document-reference-status" : {
+				"HS.SDA3.CodeTableDetail.DocumentStatus" : {
+					"current" : "AV",
+					"entered-in=error" : "UN",
+					"superseded" : "OB"
+				}
+			},
+			"event-status" : {
+				"HS.SDA3.Alert:Status" : {
+					"aborted" : "I",
+					"in-progress" : "A",
+					"unknown" : "C"
+				},
+				"HS.SDA3.Procedure:Status" : {
+					"preparation" : "preparation",
+					"in-progress" : "in-progress",
+					"suspended" : "suspended",
+					"aborted" : "aborted",
+					"completed" : "completed",
+					"entered-in-error" : "entered-in-error",
+					"unknown" : "unknown"
+				}
+			},
+			"history-status" : {
+				"HS.SDA3.FamilyHistory:Status" : {
+					"completed" : "A",
+					"entered-in-error" : "I",
+					"health-unknown" : "I",
+					"partial" : "A"
+				}
+			},
+			"identifier-type" : {
+				"HS.SDA3.PatientNumber:NumberType" : {
+					"MR" : "MRN"
+				}
+			},
+			"immunization-status" : {
+				"HS.SDA3.Vaccination:Status" : {
+					"completed" : "E",
+					"entered-in-error" : "C"
+				}
+			},
+			"marital-status" : {
+				"HS.SDA3.CodeTableDetail.MaritalStatus" : {
+					"A" : "N",
+					"D" : "D",
+					"I" : "I",
+					"L" : "A",
+					"M" : "M",
+					"P" : "O",
+					"S" : "U",
+					"T" : "P",
+					"U" : "B",
+					"UNK" : "U",
+					"W" : "W"
+				}
+			},
+			"medication-admin-status" : {
+				"HS.SDA3.CodeTableDetail.AdministrationStatus" : {
+					"completed" : "CP",
+					"on-hold" : "PA",
+					"stopped" : "NA"
+				}
+			},
+			"medication-dispense-status" : {
+				"HS.SDA3.Medication:Status" : {
+					"completed" : "E",
+					"entered-in-error" : "I",
+					"in-progress" : "IP",
+					"on-hold" : "H",
+					"stopped" : "C"
+				}
+			},
+			"medication-request-priority" : {
+				"HS.SDA3.CodeTableDetail.Priority" : {
+					"asap" : "A",
+					"routine" : "R",
+					"stat" : "S",
+					"urgent" : "Urgent"
+				}
+			},
+			"medication-request-status" : {
+				"HS.SDA3.Medication:Status" : {
+					"active" : "IP",
+					"cancelled" : "C",
+					"completed" : "E",
+					"entered-in-error" : "I",
+					"on-hold" : "H",
+					"stopped" : "D"
+				}
+			},
+			"medication-statement-status" : {
+				"HS.SDA3.Medication:Status" : {
+					"active" : "IP",
+					"completed" : "E",
+					"entered-in-error" : "I",
+					"on-hold" : "H",
+					"stopped" : "D"
+				}
+			},
+			"name-use" : {
+				"HS.SDA3.Name:Type" : {
+					"anonymous" : "Alias",
+					"maiden" : "Maiden",
+					"nickname" : "Nickname",
+					"official" : "Legal",
+					"old" : "Previous",
+					"usual" : "Display"
+				}
+			},
+			"observation-status" : {
+				"HS.SDA3.LabResultItem:TestItemStatus" : {
+					"amended" : "K",
+					"entered-in-error" : "D",
+					"final" : "F",
+					"preliminary" : "P",
+					"registered" : "N",
+					"unknown" : "X"
+				},
+				"HS.SDA3.Result:ResultStatus" : {
+					"amended" : "C",
+					"cancelled" : "X",
+					"corrected" : "C",
+					"final" : "F",
+					"preliminary" : "P",
+					"registered" : "I"
+				},
+				"HS.SDA3.SocialHistory:Status" : {
+					"cancelled" : "I",
+					"final" : "A"
+				}
+			},
+			"reaction-event-severity" : {
+				"HS.SDA3.CodeTableDetail.Severity" : {
+					"mild" : "MI",
+					"moderate" : "MO",
+					"severe" : "SV"
+				}
+			},
+			"request-priority" : {
+				"HS.SDA3.CodeTableDetail.Priority" : {
+					"asap" : "A",
+					"routine" : "R",
+					"stat" : "S",
+					"urgent" : "Urgent"
+				}
+			},
+			"request-status" : {
+				"HS.SDA3.LabOrder:Status" : {
+					"active" : "V",
+					"cancelled" : "C",
+					"draft" : "IP",
+					"entered-in-error" : "R",
+					"suspended" : "H"
+				},
+				"HS.SDA3.OtherOrder:Status" : {
+					"active" : "V",
+					"cancelled" : "C",
+					"draft" : "IP",
+					"entered-in-error" : "R",
+					"suspended" : "H"
+				},
+				"HS.SDA3.RadOrder:Status" : {
+					"active" : "V",
+					"cancelled" : "C",
+					"draft" : "IP",
+					"entered-in-error" : "R",
+					"suspended" : "H"
+				}
+			},
+			"v2-0131" : {
+				"HS.SDA3.CodeTableDetail.ContactType" : {
+					"C" : "C",
+					"E" : "E",
+					"EP" : "C",
+					"I" : "I",
+					"N" : "N",
+					"O" : "O",
+					"PR" : "O",
+					"S" : "S",
+					"U" : "U"
+				}
+			},
+			"v3-ActEncounterCode" : {
+				"HS.SDA3.Encounter:EncounterType" : {
+					"AMB" : "O",
+					"EMER" : "E",
+					"IMP" : "I",
+					"PRENC" : "P"
+				}
+			}
+		},
+		"vDSTU2" : {
+			"allergy-intolerance-category" : {
+				"allergy-intolerance-category" : {
+					"biologic" : "other",
+					"environment" : "environment",
+					"food" : "food",
+					"medication" : "medication"
+				}
+			},
+			"allergy-intolerance-criticality" : {
+				"allergy-intolerance-criticality" : {
+					"high" : "CRITH",
+					"low" : "CRITL",
+					"unable-to-assess" : "CRITU"
+				}
+			},
+			"appointmentstatus" : {
+				"appointmentstatus" : {
+					"arrived" : "arrived",
+					"booked" : "booked",
+					"cancelled" : "cancelled",
+					"fulfilled" : "fulfilled",
+					"noshow" : "noshow",
+					"pending" : "pending",
+					"proposed" : "proposed"
+				}
+			},
+			"care-plan-activity-status" : {
+				"care-plan-activity-status" : {
+					"cancelled" : "cancelled",
+					"completed" : "completed",
+					"in-progress" : "in-progress",
+					"not-started" : "not-started",
+					"on-hold" : "on-hold",
+					"scheduled" : "scheduled"
+				}
+			},
+			"care-plan-status" : {
+				"care-plan-status" : {
+					"active" : "active",
+					"cancelled" : "cancelled",
+					"completed" : "completed",
+					"draft" : "draft"
+				}
+			},
+			"claim-type" : {
+				"claim-type-link" : {
+					"institutional" : "institutional",
+					"oral" : "oral",
+					"pharmacy" : "pharmacy",
+					"professional" : "professional",
+					"vision" : "vision"
+				}
+			},
+			"claim-use" : {
+				"claim-use-link" : {
+					"complete" : "complete",
+					"exploratory" : "exploratory",
+					"other" : "other",
+					"proposed" : "proposed"
+				}
+			},
+			"composition-status" : {
+				"composition-status" : {
+					"amended" : "amended",
+					"entered-in-error" : "entered-in-error",
+					"final" : "final",
+					"preliminary" : "preliminary"
+				}
+			},
+			"condition-clinical" : {
+				"condition-clinical" : {
+					"active" : "active",
+					"recurrence" : "relapse",
+					"remission" : "remission",
+					"resolved" : "resolved"
+				}
+			},
+			"contact-point-system" : {
+				"contact-point-system" : {
+					"email" : "email",
+					"fax" : "fax",
+					"other" : "other",
+					"pager" : "pager",
+					"phone" : "phone",
+					"sms" : "other",
+					"url" : "other"
+				}
+			},
+			"device-status" : {
+				"devicestatus" : {
+					"active" : "available",
+					"entered-in-error" : "entered-in-error",
+					"inactive" : "not-available"
+				}
+			},
+			"diagnostic-report-status" : {
+				"diagnostic-report-status" : {
+					"appended" : "appended",
+					"cancelled" : "cancelled",
+					"corrected" : "corrected",
+					"entered-in-error" : "entered-in-error",
+					"final" : "final",
+					"partial" : "partial",
+					"registered" : "registered"
+				}
+			},
+			"encounter-status" : {
+				"encounter-state" : {
+					"arrived" : "arrived",
+					"cancelled" : "cancelled",
+					"finished" : "finished",
+					"in-progress" : "in-progress",
+					"onleave" : "onleave",
+					"planned" : "planned"
+				}
+			},
+			"event-status" : {
+				"communication-status" : {
+					"completed" : "completed",
+					"in-progress" : "in-progress",
+					"suspended" : "suspended"
+				},
+				"procedure-status" : {
+					"aborted" : "aborted",
+					"completed" : "completed",
+					"entered-in-error" : "entered-in-error",
+					"in-progress" : "in-progress"
+				}
+			},
+			"event-timing" : {
+				"event-timing" : {
+					"AC" : "AC",
+					"ACD" : "ACD",
+					"ACM" : "ACM",
+					"C" : "C",
+					"CD" : "CD",
+					"CM" : "CM",
+					"CV" : "CV",
+					"HS" : "HS",
+					"PC" : "PC",
+					"PCD" : "PCD",
+					"PCM" : "PCM",
+					"PCV" : "PCV",
+					"WAKE" : "WAKE"
+				}
+			},
+			"goal-status" : {
+				"goal-status" : {
+					"accepted" : "accepted",
+					"achieved" : "achieved",
+					"cancelled" : "cancelled",
+					"in-progress" : "in-progress",
+					"on-hold" : "on-hold",
+					"planned" : "planned",
+					"proposed" : "proposed",
+					"rejected" : "rejected",
+					"sustaining" : "sustaining"
+				}
+			},
+			"immunization-status" : {
+				"medication-admin-status" : {
+					"completed" : "completed",
+					"entered-in-error" : "entered-in-error"
+				}
+			},
+			"link-type" : {
+				"link-type" : {
+					"refer" : "refer",
+					"replaced-by" : "replace",
+					"seealso" : "seealso"
+				}
+			},
+			"medication-admin-status" : {
+				"medication-admin-status" : {
+					"completed" : "completed",
+					"entered-in-error" : "entered-in-error",
+					"in-progress" : "in-progress",
+					"on-hold" : "on-hold",
+					"stopped" : "stopped"
+				}
+			},
+			"medication-dispense-status" : {
+				"medication-dispense-status" : {
+					"completed" : "completed",
+					"entered-in-error" : "entered-in-error",
+					"in-progress" : "in-progress",
+					"on-hold" : "on-hold",
+					"stopped" : "stopped"
+				}
+			},
+			"medication-request-status" : {
+				"medication-order-status" : {
+					"active" : "active",
+					"completed" : "completed",
+					"draft" : "draft",
+					"entered-in-error" : "entered-in-error",
+					"on-hold" : "on-hold",
+					"stopped" : "stopped"
+				}
+			},
+			"observation-status" : {
+				"observation-status" : {
+					"amended" : "amended",
+					"cancelled" : "cancelled",
+					"entered-in-error" : "entered-in-error",
+					"final" : "final",
+					"preliminary" : "preliminary",
+					"registered" : "registered",
+					"unknown" : "unknown"
+				}
+			},
+			"request-priority" : {
+				"diagnostic-order-priority" : {
+					"asap" : "asap",
+					"routine" : "routine",
+					"stat" : "stat",
+					"urgent" : "urgent"
+				}
+			},
+			"request-status" : {
+				"referral-status" : {
+					"active" : "active",
+					"cancelled" : "cancelled",
+					"completed" : "completed",
+					"draft" : "draft",
+					"requested" : "requested"
+				}
+			},
+			"v3-ActEncounterCode" : {
+				"encounter-class" : {
+					"ACUTE" : "inpatient",
+					"AMB" : "ambulatory",
+					"EMER" : "emergency",
+					"FLD" : "field",
+					"HH" : "home",
+					"IMP" : "inpatient",
+					"NONAC" : "inpatient",
+					"VR" : "virtual"
+				}
+			},
+			"v3-ConfidentialityClassification" : {
+				"v3-Confidentiality" : {
+					"L" : "L",
+					"M" : "M",
+					"N" : "N",
+					"R" : "R",
+					"U" : "U",
+					"V" : "V"
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,72 @@
+<manifest alg="2" build="2018.0.0.379" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="intersystems.com" resolutions="1x" timestamp="1515683796970">
+  <folder name="css">
+    <file name="site_global.css" crc="38352384"/>
+    <file name="gettingstarted.css" crc="4191999173" ref="gettingstarted"/>
+    <file name="nomq_gettingstarted.css" crc="424802946" ref="gettingstarted"/>
+    <file name="index.css" crc="3888374150" ref="index"/>
+    <file name="nomq_index.css" crc="3970448598" ref="index"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:gettingstarted"/>
+    <file name="museutils.js" crc="3803043152" ref="index:gettingstarted"/>
+    <file name="whatinput.js" crc="86476730" ref="index:gettingstarted"/>
+    <file name="museconfig.js" crc="4153641093" ref="index:gettingstarted"/>
+    <file name="jquery.watch.js" crc="99325471" ref="index:gettingstarted"/>
+    <file name="jquery.museresponsive.js" crc="3955820958" ref="index:gettingstarted"/>
+    <file name="require.js" crc="4157109226" ref="index:gettingstarted"/>
+  </folder>
+  <folder name="images">
+    <file name="ics-logo.svg" crc="155752920" seo="true" ref="index:gettingstarted">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="gettingstarted" alt=""/>
+      <caption webpage="gettingstarted" alt=""/>
+    </file>
+    <file name="ics-logo_poster_.png" crc="3808281902" ref="index"/>
+    <file name="iris.svg" crc="3986208070" seo="true" ref="index:gettingstarted">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="gettingstarted" alt=""/>
+      <caption webpage="gettingstarted" alt=""/>
+    </file>
+    <file name="iris_poster_.png" crc="394657961" ref="index"/>
+    <file name="documentation.svg" crc="492375597" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="documentation_poster_.png" crc="129535582" ref="index"/>
+    <file name="platform.svg" crc="298898105" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="platform_poster_.png" crc="4249429136" ref="index"/>
+    <file name="blank.gif" crc="4208392903" ref="index:gettingstarted"/>
+    <file name="documentation2.svg" crc="4222808869" seo="true" ref="gettingstarted">
+      <caption webpage="gettingstarted" alt=""/>
+      <caption webpage="gettingstarted" alt=""/>
+    </file>
+    <file name="documentation_poster_2.png" crc="22865890" ref="gettingstarted"/>
+    <file name="website.svg" crc="3928138426" seo="true" ref="gettingstarted">
+      <caption webpage="gettingstarted" alt=""/>
+      <caption webpage="gettingstarted" alt=""/>
+    </file>
+    <file name="website_poster_.png" crc="4133531429" ref="gettingstarted"/>
+    <file name="support.svg" crc="4187541394" seo="true" ref="gettingstarted">
+      <caption webpage="gettingstarted" alt=""/>
+      <caption webpage="gettingstarted" alt=""/>
+    </file>
+    <file name="support_poster_.png" crc="4069608658" ref="gettingstarted"/>
+    <file name="classroom2.svg" crc="510397429" seo="true" ref="gettingstarted">
+      <caption webpage="gettingstarted" alt=""/>
+      <caption webpage="gettingstarted" alt=""/>
+    </file>
+    <file name="classroom2_poster_.png" crc="4115415315" ref="gettingstarted"/>
+    <file name="dc2.svg" crc="4152658739" seo="true" ref="gettingstarted">
+      <caption webpage="gettingstarted" alt=""/>
+      <caption webpage="gettingstarted" alt=""/>
+    </file>
+    <file name="dc2_poster_.png" crc="3779658716" ref="gettingstarted"/>
+  </folder>
+  <file name="index.html" crc="197623360" seo="true" mt="1515683749322" redirect="true"/>
+  <file name="gettingstarted.html" crc="332894459" seo="true" mt="1515682648729" redirect="true"/>
+</manifest>

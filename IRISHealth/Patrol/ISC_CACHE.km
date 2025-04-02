@@ -1,0 +1,264 @@
+!PATROLV3.4.00 BB8A36609A1B9B96DE75A54F87B7AABD
+!++
+!
+! PATROL Session Knowledge Module
+!
+!--
+
+
+VERSION 1.35
+
+APPLICATIONS = { 
+  { NAME = "ISC_CACHE",
+	ACTIVE = True,
+	SECURITY = False,
+	PROPAGATE_STATE = True,
+	CREATE_ICON = False,
+	SUSPEND_GLOBAL_PARAMS = False,
+	SHOWINST = False,
+	DISCOVERY_TIME = 0,
+	DISCOVERY = PSL,
+	PRE_DISCOVERY_TEXT =  1029177545 "if (!exists(\"/ISC_CACHE/CACHE\")) {\
+\
+    tapp = get(\"/appType\");\
+\
+    if (tapp == \"NT\") {\
+    	regbuff = internal(\"GetRegistrySubkeys SOFTWARE\\\\InterSystems\\\\IRIS\\\\Configurations\");\
+    	if (lines(regbuff) == 0) {\
+	    set(\"active\",0);\
+    	}\
+    	else {\
+	    create(\"/ISC_CACHE/CACHE\",\"ISC_CACHE\",OK);\
+	    set(\"active\",2);\
+    	}\
+    }\
+\
+    # Check for Unix or VMS					RFD055+\
+    if (!index(\"!NT!OS2!\",\"!\".tapp.\"!\")) {		\
+    #								RFD055-\
+    	regbuff = system(\"iris list\");\
+    	if (!index(regbuff,\"Configuration\")) {\
+	    set(\"active\",0);\
+    	}\
+    	else {\
+	    create(\"/ISC_CACHE/CACHE\",\"ISC_CACHE\",OK);\
+	    set(\"active\",2);\
+    	}\
+    }\
+\
+}",
+	DISCOVERY_TEXT =  1029177545 "# Discover all Cache configs and create instances\
+# print(\"\\nDiscovery starts ...\");\
+\
+tapp = get(\"/appType\");\
+\
+if (tapp == \"NT\") {\
+    # Get configs from the registry\
+    regbuff = internal(\"GetRegistrySubkeys SOFTWARE\\\\InterSystems\\\\IRIS\\\\Configurations\");\
+    #print(\"\\nRegistry configs = \",regbuff);\
+    tlines = lines(regbuff) + 1;\
+    cline = 0;\
+    while (tlines--) {\
+    	wconfig = trim(nthlinef(regbuff,cline++),\"\\n\");\
+    	wdir = ntharg(internal(\"GetRegistryValue \\\"SOFTWARE\\\\InterSystems\\\\IRIS\\\\Configurations\\\\\".wconfig.\"\\\\Directory\\\"\"),\"2\",\"=\");\
+\
+    	# Verify new config - check for patrol.dat in manager directory\
+	if ( !exists(\"/ISC_CACHE_CONFIG/\".wconfig) && file(wdir.\"/mgr/patrol.dat\") ) {\
+\
+	    print(\"\\nISC_Cache Info: Discovered config \",wconfig,\" in directory \",wdir);\
+	    # Create the config instances\
+	    create(\"/ISC_CACHE_CONFIG/\".wconfig,\"ISC_Config_\".wconfig,OK,\"\",\"/ISC_CACHE/CACHE\");\
+\
+	    # For each created instance, create it's children\
+	    create(\"/ISC_CACHE_OVERVIEW/OVERVIEW_\".wconfig,\"ISC_Overview\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_GLOBAL/GLOBAL_\".wconfig,\"ISC_Global\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_ROUTINE/ROUTINE_\".wconfig,\"ISC_Routine\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_DISK/DISK_\".wconfig,\"ISC_DiskActivity\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_NETWORK/NETWORK_\".wconfig,\"ISC_Network\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_OTHER/OTHER_\".wconfig,\"ISC_Other\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+\
+	    # Store directory and init proc sort\
+	    set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_Directory\", wdir);\
+	    set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_ProcSort\",1);\
+    	}\
+    }\
+}\
+\
+\
+if (!index(\"!NT!OS2!\",\"!\".tapp.\"!\")) {\
+\
+    # Get configs from iris\
+    cfglist = system(\"iris list\");\
+    #print(\"\\nConfigs from 'iris list' = \",cfglist);\
+    tlines = lines(cfglist);\
+    cline = 1;\
+\
+    while (cline < tlines) {	\
+	wtmp = trim(nthlinef(cfglist,cline),\"\\n\");\
+	# Look for 'Configuration' keyword\
+	if (index(wtmp,\"Configuration\")) {\
+	    wconfig = substr(wtmp,index(wtmp,\"'\")+1,length(wtmp));\
+	    wconfig = substr(wconfig,1,index(wconfig,\"'\")-1);\
+	}\
+	# Look for 'directory'\
+	if (index(wtmp,\"directory:\")) {\
+	    wdir = substr(wtmp,index(wtmp,\":\")+2,length(wtmp));\
+	} else {\
+	    cline++;\
+	    next;\
+	}\
+	wpfile = (tapp == \"VMS\") ? substr(wdir,1,length(wdir)-1).\".mgr]patrol.dat\" : wdir.\"/mgr/patrol.dat\";\
+	# print(\"\\nISC_Cache Info: auto-discover config \",wconfig,\", directory \",wdir,\", file \",wpfile);\
+\
+    	# Verify new config - check for patrol.dat in manager directory\
+	if ( !exists(\"/ISC_CACHE_CONFIG/\".wconfig) && file(wpfile) ) {\
+\
+	    print(\"\\nISC_Cache Info: Discovered config \",wconfig,\" in directory \",wdir);\
+	    # Create the config instances\
+	    create(\"/ISC_CACHE_CONFIG/\".wconfig,\"ISC_Config_\".wconfig,OK,\"\",\"/ISC_CACHE/CACHE\");\
+\
+	    # For each created instance, create it's children\
+	    create(\"/ISC_CACHE_OVERVIEW/OVERVIEW_\".wconfig,\"ISC_Overview\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_GLOBAL/GLOBAL_\".wconfig,\"ISC_Global\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_ROUTINE/ROUTINE_\".wconfig,\"ISC_Routine\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_DISK/DISK_\".wconfig,\"ISC_DiskActivity\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_NETWORK/NETWORK_\".wconfig,\"ISC_Network\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_OTHER/OTHER_\".wconfig,\"ISC_Other\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+\
+	    # Store directory and init proc sort\
+	    set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_Directory\", wdir);\
+	    set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_ProcSort\",1);\
+	\
+    	}\
+	cline++;\
+    }\
+}",
+	OK_PICTURE = "database_ok.bmp",
+	COMMANDS = {
+		{ NAME = "Add Configuration", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  987702079 "rsp=response(\"Add Configuration\",60,\"h=900,w=700,o=OK\",\
+    \"12\\nConfiguration Name\",\
+    \"12\\nInstall Directory\");\
+#print(\"\\nresponse = \",rsp);\
+\
+if (int(nthlinef(rsp,1)) == 1) {\
+\
+    wconfig = trim(nthlinef(rsp,2),\"\\n\");\
+    wdir = trim(nthlinef(rsp,3),\"\\n\");\
+    #print(\"\\n Creating config \",wconfig,\" in \",wdir);\
+\
+    # Create the config instances\
+    create(\"/ISC_CACHE_CONFIG/\".wconfig,\"ISC_Config_\".wconfig,OK,\"\",\"/ISC_CACHE/CACHE\");\
+\
+    # For each created instance, create it's children\
+    create(\"/ISC_CACHE_OVERVIEW/OVERVIEW_\".wconfig,\"ISC_Overview\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+    create(\"/ISC_CACHE_GLOBAL/GLOBAL_\".wconfig,\"ISC_Global\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+    create(\"/ISC_CACHE_ROUTINE/ROUTINE_\".wconfig,\"ISC_Routine\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+    create(\"/ISC_CACHE_DISK/DISK_\".wconfig,\"ISC_DiskActivity\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+    create(\"/ISC_CACHE_NETWORK/NETWORK_\".wconfig,\"ISC_Network\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+    create(\"/ISC_CACHE_OTHER/OTHER_\".wconfig,\"ISC_Other\",OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+\
+    # Store directory\
+    set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_Directory\",wdir);\
+\
+    print(\"\\nISC_Cache-Info: Config \",wconfig,\" created for directory \",wdir);\
+}"}
+				}
+		},
+		{ NAME = "Discover", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1029264822 "# Discover all Cache configs and create instances\
+\
+tapp = get(\"/appType\");\
+\
+if (tapp == \"NT\") {\
+    # Get configs from the registry\
+    regbuff = internal(\"GetRegistrySubkeys SOFTWARE\\\\InterSystems\\\\IRIS\\\\Configurations\");\
+    #print(\"\\nRegistry configs = \",regbuff);\
+    tlines = lines(regbuff) + 1;\
+    cline = 0;\
+    while (tlines--) {\
+    	wconfig = trim(nthlinef(regbuff,cline++),\"\\n\");\
+    	wdir = ntharg(internal(\"GetRegistryValue \\\"SOFTWARE\\\\InterSystems\\\\IRIS\\\\Configurations\\\\\".wconfig.\"\\\\Directory\\\"\"),\"2\",\"=\");\
+    	print(\"\\nISC_Cache Info: Discovered config \",wconfig,\" in directory \",wdir);\
+\
+    	# Verify config - check for patrol.dat in manager directory\
+	if ( !exists(\"/ISC_CACHE_CONFIG/\".wconfig) && file(wdir.\"/mgr/patrol.dat\") ) {\
+\
+	    # Create the config instances\
+	    create(\"/ISC_CACHE_CONFIG/\".wconfig,\"ISC_Config_\".wconfig,OK,\"\",\"/ISC_CACHE/CACHE\");\
+\
+	    # For each created instance, create it's children\
+	    create(\"/ISC_CACHE_OVERVIEW/OVERVIEW_\".wconfig,\"ISC_Overview_\".wconfig,OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_GLOBAL/GLOBAL_\".wconfig,\"ISC_Global_\".wconfig,OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_ROUTINE/ROUTINE_\".wconfig,\"ISC_Routine_\".wconfig,OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_DISK/DISK_\".wconfig,\"ISC_DiskActivity_\".wconfig,OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_NETWORK/NETWORK_\".wconfig,\"ISC_Network_\".wconfig,OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_OTHER/OTHER_\".wconfig,\"ISC_OtherIO_\".wconfig,OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+\
+	    # Store directory and init proc sort\
+	    set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_Directory\", wdir);\
+	    set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_ProcSort\",1);\
+    	}\
+    	else { print(\"\\nISC_Cache-Error: No patrol.dat found for config \",wconfig); }\
+    }\
+}\
+\
+if (!index(\"!NT!OS2!\",\"!\".tapp.\"!\")) {\
+    # Get configs from iris\
+    cfglist = system(\"iris list\");\
+    #print(\"\\nConfigs from 'iris list' = \",cfglist);\
+    tlines = lines(cfglist);\
+    cline = 1;\
+\
+    while (cline < tlines) {	\
+	wtmp = trim(nthlinef(cfglist,cline),\"\\n\");\
+	# Look for 'Configuration' keyword\
+	if (index(wtmp,\"Configuration\")) {\
+	    wconfig = substr(wtmp,index(wtmp,\"'\")+1,length(wtmp));\
+	    wconfig = substr(wconfig,1,index(wconfig,\"'\")-1);\
+	}\
+	# Look for 'directory'\
+	if (index(wtmp,\"directory:\")) {\
+	    wdir = substr(wtmp,index(wtmp,\":\")+2,length(wtmp));\
+	} else {\
+	    cline++;\
+	    next;\
+	}\
+	wpfile = (tapp == \"VMS\") ? substr(wdir,1,length(wdir)-1).\".mgr]patrol.dat\" : wdir.\"/mgr/patrol.dat\";\
+	# print(\"\\nISC_Cache Info: discover config \",wconfig,\", directory \",wdir,\", file \",wpfile);\
+	\
+    	# Verify new config - check for patrol.dat in manager directory\
+	if ( !exists(\"/ISC_CACHE_CONFIG/\".wconfig) && file(wpfile) ) {\
+\
+	    print(\"\\nISC_Cache Info: Discovered config \",wconfig,\" in directory \",wdir);\
+	    # Create the config instances\
+	    create(\"/ISC_CACHE_CONFIG/\".wconfig,\"ISC_Config_\".wconfig,OK,\"\",\"/ISC_CACHE/CACHE\");\
+\
+	    # For each created instance, create it's children\
+	    create(\"/ISC_CACHE_OVERVIEW/OVERVIEW_\".wconfig,\"ISC_Overview_\".wconfig,OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_GLOBAL/GLOBAL_\".wconfig,\"ISC_Global_\".wconfig,OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_ROUTINE/ROUTINE_\".wconfig,\"ISC_Routine_\".wconfig,OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_DISK/DISK_\".wconfig,\"ISC_DiskActivity_\".wconfig,OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_NETWORK/NETWORK_\".wconfig,\"ISC_Network_\".wconfig,OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+	    create(\"/ISC_CACHE_OTHER/OTHER_\".wconfig,\"ISC_OtherIO_\".wconfig,OK,\"\",\"/ISC_CACHE_CONFIG/\".wconfig);\
+\
+	    # Store directory and init proc sort\
+	    set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_Directory\", wdir);\
+	    set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_ProcSort\",1);\
+    	}\
+    	else { print(\"\\nISC_Cache-Error: No patrol.dat found for config \",wconfig,\" in \",wdir); }\
+\
+        cline++;\
+    }\
+}"}
+				}
+		}
+
+	}
+  }
+}
+!28334

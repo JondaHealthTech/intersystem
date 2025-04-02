@@ -1,0 +1,29 @@
+<!--
+utilities: RuleSet browser
+-->
+
+<AutoPage domain="Ensemble" pagename="Business Rules" parentpage="UtilEnsHome.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Available Business Rules</Text>
+</Pane>
+
+<Pane name="Detail" type="CSPX.EnsRuleTablePane">
+	<Text>There are multiple rule definitions available (under the same name but different effective date-time ranges) for this business process. Please select the one you wish to view:</Text>
+	<Query>Ens.Rule.RuleDefinition:EnumerateSameNameRules</Query>
+	<ShowZebra>true</ShowZebra>
+	<AutoRefresh>false</AutoRefresh>
+	<Sortable>true</Sortable>
+	<HiddenColumns>ID,Type</HiddenColumns>
+
+	<Actions>
+		<Action href="UtilEnsRuleEditor.csp?READONLY=1" name="$A">
+			<Caption>View</Caption>
+			<Popup>View this Rule Definition.</Popup>
+			<IDValues>{ID},{Type}</IDValues>
+		</Action>
+	</Actions>
+
+</Pane>
+
+</AutoPage>

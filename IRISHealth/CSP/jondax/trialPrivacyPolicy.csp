@@ -1,0 +1,82 @@
+<html>
+<head>
+<!--<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+		q 1
+		</script>-->
+<script language="cache" runat="server">d HEAD1^WSP999</script>
+<link rel="stylesheet" href="assets/styles/trialAuxFrame.css">
+</head>
+
+<body>
+
+	<h2>Terms of Use for JondaX Trial Platform</h2>
+	
+	<h3>1. Introduction</h3>
+		<p>
+		Welcome to the JondaX trial platform ("Platform"). By using this Platform, you agree to these Terms of Service. 
+		Please read them carefully. 
+		If you do not agree with these terms, you will not be able to access or use the Platform.
+		</p>
+	
+	<h3>2. Trial Period</h3>
+		<p>The trial period allows users to experience the JondaX platform for 30 days. 
+		During the trial, you can upload data and select preferred output standards from the limited options available. 
+		Please note that the full platform offers more flexibility, but the trial is designed to showcase core 
+		functionalities only.</p>
+	<h3>3. Personal Information Collection</h3>
+		<p>When you sign up for the trial, we collect personal information, including your name, email address, and company details. 
+		This data is collected for the purpose of managing your account and communicating with you during the trial. Your personal 
+		information will not be shared with third parties and will only be used for these limited purposes.
+		</p>
+	<h3>4. User-Uploaded Data</h3>
+		<p>
+		During the trial, you may upload anonymized data. You are solely responsible for ensuring that the data is properly 
+		anonymized and that you have the right to use the data for the trial. Jonda Health will not be liable for any issues 
+		arising from improperly anonymized data.
+		</p>
+	<h3>5. Data Processing and Retention</h3>
+		<p>
+		Uploaded data will be processed in Singapore. Processing of non-digital formats may take up to 24 hours. After the 
+		trial ends, all account data and any processed data will be deleted within 30 days. If you choose to delete your account 
+		during the trial, your data will be immediately erased.
+		</p>
+	<h3>6. Limited Output Options</h3>
+		<p>
+		The output standards available during the trial are limited compared to the full platform. These options are provided 
+		for demonstration purposes, and the trial is intended to showcase the basic functionality of JondaX.
+		</p>
+	<h3>7. No Commercial Use</h3>
+		<p>The JondaX trial platform is for evaluation and demonstration purposes only and may not be used for any commercial or 
+		production purposes. By using the trial, you agree not to use the platform to process data for any commercial gain or use 
+		it in any business or operational environment.
+		</p>
+	<h3>8. Data Security</h3>
+		<p>
+		We are committed to protecting your data and comply with global data protection regulations, including Singapore?s PDPA, 
+		GDPR, and HIPAA where applicable. All uploaded data will be deleted after the trial period.
+		</p>
+	<h3>9. Limitation of Liability</h3>
+		<p>
+		Jonda Health is not responsible for any errors, delays, or inaccuracies in the data produced during the trial. The 
+		Platform is provided "as is" without warranties of any kind. By using the Platform, you acknowledge that the trial is for 
+		demonstration purposes only and agree that Jonda Health will not be liable for any damages arising from the use of the 
+		trial platform.</p>
+	<h3>10. Intellectual Property and Copyright</h3>
+		<p>
+		All content and materials on the Platform, including software, logos, trademarks, design, and text, are owned by 
+		Jonda Health and protected by intellectual property laws. You are granted a limited, non-transferable license to use 
+		the Platform solely for the trial period. You may not copy, distribute, modify, reverse-engineer, or create derivative 
+		works from any part of the Platform without Jonda Health?s permission.
+		</p>
+	<h3>11. Governing Law</h3>
+		<p>
+		These Terms of Service are governed by the laws of Singapore. Any disputes arising out of or relating to these terms 
+		will be subject to the exclusive jurisdiction of the courts of Singapore.
+		</p>
+	<h3>12. Contact Information</h3>
+		<p>If you have any questions or need support, please reach out to us at <b>support@jonda.health</b>.</p>
+
+
+</body>
+</html>

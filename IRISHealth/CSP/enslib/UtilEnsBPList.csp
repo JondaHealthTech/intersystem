@@ -1,0 +1,40 @@
+<!--
+Utilities: Business Process list
+-->
+<AutoPage domain="Ensemble" pagename="Business Processes" parentpage="UtilEnsHome.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Business Processes</Text>
+</Pane>
+
+<Pane name="Navigator" extends="UtilEnsHome.csp" />
+
+<Pane name="Detail" type="CSPX.EnsBPListTablePane">
+	<Text>Defined Business Processes:</Text>
+	<Sortable>true</Sortable>
+	<ShowZebra>true</ShowZebra>
+	
+	<Actions>
+		<Action href="UtilEnsBPDefinition.csp" name="$A">
+			<Caption>Definition</Caption>
+			<Popup>View the definition of this Business Process.</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+
+		<Action href="UtilEnsBPInstances.csp" name="$B">
+			<Caption>Instances</Caption>
+			<Popup>View instances of this Business Process.</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+
+		<Action href="UtilEnsRuleLog.csp" name="$C">
+			<Caption>RuleLog</Caption>
+			<Popup>View the rule log for this RuleSet.</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+
+	</Actions>
+	
+</Pane>
+
+</AutoPage>

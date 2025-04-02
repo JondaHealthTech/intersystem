@@ -1,0 +1,53 @@
+# This file defines the X12 Schema studio assist database
+
+# Define the prefix mapping
+!prefix-mapping:x12sd:http://www.intersystems.com/x12sd
+
+# Set the default namespace to x12sd
+!default-namespace:http://www.intersystems.com/x12sd
+
+# Set the default prefix for element defintions that follow
+!default-prefix:x12sd
+
+/#Category
+
+Category|name
+Category|description
+Category|std
+Category/#DocumentStructure
+Category/#SegmentStructure
+Category/#CompositeStructure
+
+DocumentStructure|name
+DocumentStructure|definition
+DocumentStructure|description
+DocumentStructure|altdesc
+DocumentStructure|purpose
+
+SegmentStructure|name
+SegmentStructure|description
+SegmentStructure/#SegmentSubStructure
+
+SegmentSubStructure|piece
+SegmentSubStructure|description
+SegmentSubStructure|datatype
+SegmentSubStructure|minlength
+SegmentSubStructure|maxlength
+SegmentSubStructure|repeatcount
+SegmentSubStructure|required
+SegmentSubStructure|elemid
+SegmentSubStructure|altdesc
+
+CompositeStructure|name
+CompositeStructure|description
+CompositeStructure/#CompositeSubStructure
+
+CompositeSubStructure|piece
+CompositeSubStructure|description
+CompositeSubStructure|datatype
+CompositeSubStructure|minlength
+CompositeSubStructure|maxlength
+CompositeSubStructure|repeatcount
+CompositeSubStructure|required
+CompositeSubStructure|elemid
+CompositeSubStructure|altdesc

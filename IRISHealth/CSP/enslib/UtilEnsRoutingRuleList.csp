@@ -1,0 +1,566 @@
+<html>
+<head>
+
+<!-- Popup list window used by Routing Rules Editor -->
+
+<!--
+-->
+
+<title><csp:text Domain="RuleEditor" TextId="EnsValueSelector">Selector</csp:text></title>
+
+<style>
+
+body {
+	background: #DDEEFF;
+	margin: 0px;
+	font-family: verdana;
+}
+
+#results {
+	width: 100%;
+	height: 21.0em;
+	overflow: auto;
+	border: 1px solid black;
+	font-size: 0.8em;
+}
+
+.item {
+	padding-left: 5px;
+	width: 100%;
+	cursor: pointer;
+	background: white;
+	border-bottom: 1px solid gray;
+}
+
+.itemHover {
+	padding-left: 5px;
+	width: 100%;
+	cursor: pointer;
+	background: yellow;
+	border-bottom: 1px solid gray;
+}
+
+.itemSelected {
+	padding-left: 5px;
+	width: 100%;
+	cursor: pointer;
+	color: white;
+	background: darkblue;
+	border-bottom: 1px solid gray;
+}
+
+div.main {
+	margin: 3px;
+}
+
+div.msg {
+	color: darkblue;
+	font-weight: bold;
+}
+
+table.layout {
+}
+
+table.layout th {
+	text-align: left;
+}
+
+h1 {
+	border-bottom: 1px black solid;
+	padding: 5px;
+	width: 110%;
+	filter:
+		progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#4040FF', EndColorStr='#000000')
+}
+
+div.title {
+	width: 100%;
+	font-size: 0.8em;
+	font-family: "Lucida Sans Unicode" "Courier New";
+	font-weight: bold;
+	color: yellow;
+	filter:
+		progid:DXImageTransform.Microsoft.dropShadow(color=#404040, OffX=2, OffY=2, Positive=2);
+}
+
+div.text1	{
+	font-size: 0.8em; 
+}
+
+div.text1:first-letter {
+	font-size: 1.0em;
+}
+
+span.guibutton {
+	color: black;
+	font-weight: bold;
+}
+
+div.btnbar {
+	width: 100%;
+	text-align: right;
+}
+
+/* default value displayed in input */
+.defaultValue {
+	background: #DDDDDD;
+}
+
+.ResetBtn {
+	font-size: 7pt;
+	vertical-align: top;
+}
+
+</style>
+
+<script language="CACHE" runat="SERVER">
+
+	// get request parms
+	Set tHOST = $G(%request.Data("HOST",1))
+	Set tMODE = $G(%request.Data("MODE",1))
+	Set tVALUE = $G(%request.Data("VALUE",1))
+	Set tMULTISELECT = +$G(%request.Data("MULTISELECT",1))
+	Set tMSGCLASS = $G(%request.Data("MSGCLASS",1))
+	Set tCATEGORY = $G(%request.Data("MSGCATEGORY",1))
+	Set tDOCTYPE = $G(%request.Data("DOCTYPE",1))
+	Set tVBASEPROP = $G(%request.Data("VBASEPROP",1))
+
+	#; strip property from VDOc context property object virtual property
+	Set tOriginalValue=tVALUE
+	Set:"vdocPropPath"=tMODE&&(tVALUE[".{") tVBASEPROP=$P(tVALUE,".{"), tVALUE=$P(tVALUE,".{",2), $E(tVALUE,$L(tVALUE))="", tOriginalValue=tVALUE, tVALUE=##class(csp.utilensruleopedit).stripIndices(tVALUE)
+
+	If "vdocType"=tMODE && (""=tCATEGORY) && (""'=$P(tVALUE,":")) && (""=$P(tVALUE,":",2)) && ##class(%Dictionary.CompiledClass).%ExistsId(tMSGCLASS) {
+		#; Use partial input value as category restriction if present
+		Set tCATEGORY=$P(tVALUE,":")  Set:tVALUE=tDOCTYPE tDOCTYPE=""
+	}
+	Set tPROD = $G(^Ens.Configuration("csp","LastProduction"))
+
+	If tMODE = "source" Set msgMain = $$$TextHTML("Select a source name from the list below. When complete, press OK.","RuleEditor")
+	Else  If tMODE = "target" Set msgMain = $$$TextHTML("Select a target name from the list below. When complete, press OK.","RuleEditor")
+	Else  If tMODE = "transform" Set msgMain = $$$TextHTML("Select a Data Transformation class from the list below. When complete, press OK.","RuleEditor")
+	Else  If tMODE = "msgClass" Set msgMain = $$$TextHTML("Select a Message class from the list below. When complete, press OK.","RuleEditor")
+	Else  If tMODE = "vdocClass" Set msgMain = $$$TextHTML("Select a Virtual Document (VDoc) class from the list below. When complete, press OK.","RuleEditor")
+	Else  If tMODE = "searchtableClass" Set msgMain = $$$TextHTML("Select a VDoc SearchTable class from the list below. When complete, press OK.","RuleEditor")
+	Else  If tMODE = "vdocCategory" Set msgMain = $$$TextHTML("Select a virtual document category from the list below. When complete, press OK.","RuleEditor")
+	Else  If tMODE = "vdocType" Set msgMain = $$$TextHTML("Select one or more virtual document types from the list below. When complete, press OK.","RuleEditor")
+	Else  If tMODE = "vdocPropPath" Set msgMain = $$$TextHTML("Select a VDoc property path from the list below. When complete, press OK.","RuleEditor")
+	Else  If tMODE = "searchProp" Set msgMain = $$$TextHTML("Select a VDoc SearchTable searchable virtual property name from the list below. When complete, press OK.","RuleEditor")
+	Else  If tMODE = "objProp" Set msgMain = $$$TextHTML("Select an object property from the list below. When complete, press OK.","RuleEditor")
+	Else  If tMODE = "vdocSegType" Set msgMain = $$$TextHTML("Select a category and segment from the list below. When complete, press OK.","RuleEditor")
+	Else  If tMODE = "vdocSegField" Set msgMain = $$$TextHTML("Select a segment field from the list below. When complete, press OK.","RuleEditor")
+	Else  Set msgMain = $$$TextHTML("Select an item from the list below. When complete, press OK.","RuleEditor")
+
+	Set msgProduction = $$$LocalizeText("Ensemble","Production","Production")
+
+	Set btnOK = $$$LocalizeText("Ensemble","OK","OK")
+	Set btnCancel = $$$LocalizeText("Ensemble","Cancel","Cancel")
+</script>
+
+<script language="JavaScript">
+
+// if true, multiple items can be selected
+var isMultiSelect = #($S(tMULTISELECT:"true",1:"false"))#;
+
+var currItem = new Object(); // set of selected items
+
+function pageOnLoad()
+{
+	return true;
+}
+
+function giveFocusToInput(id)
+{
+	var control = self.document.getElementById(id);
+	if (control && !control.disabled) {
+		control.focus();
+		if (control.type == 'text') {
+			control.select();
+		}
+	}
+
+	return true;
+}
+
+function selectItem(id)
+{
+	var div;
+	if (isMultiSelect) {
+		// unselect if item is pressed again
+		if (id != null && currItem[id]) {
+			div = self.document.getElementById(id);
+			div.className = 'item';
+			delete currItem[id];
+			return;
+		}
+	}
+	else {
+		// ignore reselect
+		if (id != null && currItem[id]) {
+			return;
+		}
+
+		// unselect old item(s)
+		for (var i in currItem) {
+			if (currItem[i]) {
+				div = self.document.getElementById(i);
+				div.className = 'item';
+				delete currItem[i];
+			}
+		}
+	}
+	// select new item
+	currItem[id] = true;
+	div = self.document.getElementById(id);
+	div.className = 'itemSelected';
+}
+
+// update contents of list based on new value
+function filterProductionList(select)
+{
+	// loop over displayed items
+	var div;
+	var item = 1;
+	var count = 0;
+	while (null!=(div = self.document.getElementById("item_" + (item++)))) {
+		var prodName = div.getAttribute('prodName');
+		if (prodName == select.value) {
+			div.style.display = '';
+			count++;
+		}
+		else {
+			div.style.display = 'none';
+		}
+	}
+	
+	var empty = self.document.getElementById('empty');
+	if (0 != count) {
+		empty.style.display = 'none';
+	}
+	else {
+		empty.style.display = '';
+	}
+}
+
+// mouse over
+function mover(id)
+{
+	if (!currItem[id]) {
+		var div = self.document.getElementById(id);
+		div.className = 'itemHover';
+	}
+}
+
+// mouse out
+function mout(id)
+{
+	if (!currItem[id]) {
+		var div = self.document.getElementById(id);
+		div.className = 'item';
+	}
+}
+
+function btnOK()
+{
+	var div, value = '';
+
+	var selected = false;
+	var multiselected = false;
+	for (var id in currItem) {
+		if (currItem[id]) { 
+			if (selected) multiselected=true;
+			selected = true;
+			div = self.document.getElementById(id);
+			value += (value=='' ? '' :',') + div.getAttribute('itemName');
+		}
+	}
+	if ((!selected && !isMultiSelect) || value=='#(tVALUE)#') {
+		value = '#(tOriginalValue)#';
+	}
+	if (('#(tMODE)#'=='vdocPropPath') && (''!='#(tVBASEPROP)#')) {
+		value = '#(tVBASEPROP)#.{' + value + '}';
+	}
+	if (window.dialogArguments && window.dialogArguments.setAttrFromPopup) {
+		window.dialogArguments.setAttrFromPopup('#(tMODE)#',value);
+	} else {
+		alert("Unable to return value '+value+' to calling page.");
+	}
+	window.close();
+	return true;
+}
+
+function btnCancel()
+{
+	window.close();
+	return true;
+}
+
+</script>
+
+</head>
+
+<body onload="pageOnLoad();">
+<csp:class includes="EnsUI">
+<h1><div class="title">#($$$Text("Value Selector","RuleEditor"))#</div></h1>
+<div class="main">
+<form name="theForm">
+
+<div class="text1">#(msgMain)#
+<csp:if condition='$L(tMSGCLASS)&&(0=(tMODE="msgClass"))'>
+<br>(Message class&nbsp;=&nbsp;<i>'#(tMSGCLASS)#'</i>
+<csp:if condition='$L(tDOCTYPE)&&(0=(tMODE="vdocType"))'>
+, #($S(tMODE["vdocSeg":"SegType",1:"DocType"))#&nbsp;=&nbsp;<i>'#(tDOCTYPE)#'</i>
+</csp:if>
+<csp:if condition="$L(tCATEGORY)">
+, Category&nbsp;=&nbsp;<i>'#(tCATEGORY)#'</i>
+</csp:if>
+)
+</csp:if>
+</div>
+<hr>
+<table id="theTable" width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr><td width="100%">Loading...</td></tr></table>
+<script language="CACHE" runat="SERVER">
+	#; show filter, if there is one
+	Do %response.Flush()
+	&html<<table class="layout" width="100%" border="0" cellpadding="2" cellspacing="0">
+	<tr><td width="100%">
+	<div id="filter">>
+
+	If $Case(tMODE,"source":1, "target":1, :0) {
+		#; show productions
+		&html<<span style="color: darkblue; font-size: 0.8em;">#(msgProduction)#:</span>&nbsp;<select onchange="filterProductionList(this);"><option value="">--choose a production-->
+		Set tOK = ..GetList(.tList,"production","","")
+		If (tOK) {
+			Set tKey="" For { Set tKey=$O(tList(tKey),1,tVal)  Quit:""=tKey
+				Set tItem = $ZCVT(tVal,"O","HTML")
+				&html<<option #($S(tItem=tPROD:"selected",1:""))# value="#(tItem)#">#(tItem)#>
+			}
+		}
+		&html<</select><br>>
+	}
+</script>
+</div>
+
+<div id="results">
+<script language="CACHE" runat="SERVER">
+	Set tMsg = ""
+	Kill tList
+
+	// build list of incoming values
+	If (tMULTISELECT) {
+		For p =1:1:$L(tVALUE,",") {
+			If ($P(tVALUE,",",p) '= "") {
+				Set tValueList($P(tVALUE,",",p)) = ""
+			}
+		}
+	}
+	ElseIf (tVALUE'="") {
+		Set tValueList(tVALUE) = ""
+	}
+	
+	If $Case(tMODE, "vdocType":1, "vdocCategory":1, "vdocPropPath":1, :0) {
+		#; make sure we are a VDoc
+		If ('##class(Ens.VDoc.Utils).IsVirtualDocument(tMSGCLASS)) {
+			Set tMsg = $ZCVT($$$FormatText($$$Text("The class %1 is not a virtual document class","RuleEditor"),tMSGCLASS),"O","HTML")
+		}
+	} ElseIf tMODE="searchProp" {
+		#; make sure we are a SearchTable
+		If ('##class(%Dictionary.CompiledClass).%ExistsId(tMSGCLASS)||'$zobjclassmethod(tMSGCLASS,"%Extends","Ens.VDoc.SearchTable")) {
+			Set tMsg = $ZCVT($$$FormatText($$$Text("The class %1 is not a virtual document SearchTable class","RuleEditor"),tMSGCLASS),"O","HTML")
+		}
+	}
+
+	If (tMsg '= "") {
+		&html<<div class="msg">#(tMsg)#</div>>
+	}
+	Else {
+		// get list of items
+		
+		If ..GetList(.tList, tMODE, tMSGCLASS, tCATEGORY) {
+			Set tRow=0,tKey="" For { Set tKey=$O(tList(tKey),1,tVal)  Quit:""=tKey  Set tRow=tRow+1
+				#; pull out production name, if present
+				If (tVal [ "||") && $Case(tMODE,"source":1, "target":1, :0) {
+					Set tProdName = $P(tVal,"||",1), tItemName = $P(tVal,"||",2)
+					Set tStyle = $S(tProdName=tPROD:"", 1:"style=""display:none;""")
+				} Else {
+					Set tProdName = ""
+					Set tItemName = tVal
+					Set tStyle = ""
+				}
+				If ((tItemName'="") && $D(tValueList(tItemName)) && (tStyle="")) {
+					Set tCls = "itemSelected"
+					Write "<script language=""javascript"">",!
+					Write "currItem['","item_" _ tRow,"'] = true;",!
+					Write "<","/script>",!
+				} Else {
+					Set tCls = "item"
+				}
+				Set tItemName = $ZCVT(tItemName,"O","HTML")
+				&html<<div #(tStyle)# prodName="#($ZCVT(tProdName,"O","HTML"))#" itemName="#(tItemName)#" class="#(tCls)#" id="item_#(tRow)#" onclick="selectItem('item_#(tRow)#');" ondblclick="selectItem('item_#(tRow)#'); btnOK();" onmouseover="mover('item_#(tRow)#');" onmouseout="mout('item_#(tRow)#');">#(tItemName)#</div>>
+			}
+			Set tmsg = $$$Text("Empty","RuleEditor")
+			&html<<div style="display:none;" id="empty">&nbsp;<i>#(tmsg)#</i></div>>
+		} Else {
+			&html<<div>#($ZCVT($$$FormatText($$$Text("No query found for: %1","RuleEditor"),tMODE),"O","HTML"))#</div>>
+		}
+	}
+	// Finished loading
+	Write "<script language=""javascript"">",!
+	Write "document.all.theTable.rows[0].cells(0).innerText=''",!
+	Write "<","/script>",!
+</script>
+</div>
+</td></tr></table>
+
+<hr>
+<div class="btnbar">
+<input type="button" class="btn" id="ok" name="OK" value=" #(btnOK)# " onclick="btnOK();">&nbsp;
+<input type="button" class="btn" name="CANCEL" value=" #(btnCancel)# " onclick="btnCancel();">
+</div>
+</form>
+
+</div>
+</body>
+
+<script method="GetList" language="CACHE" runat="SERVER" arguments="pList,pMode,pMsgClass,pDocCategory" returnType="%Boolean">
+#include Ensemble
+	// get list of results to display
+	Set tRS = $$$NULLOREF, tOK=1, tAlpha=0
+
+	Set tRS = ##class(%ResultSet).%New()
+	If (pMode = "msgClass") {
+		Set tRS.ClassName = "%Dictionary.ClassDefinition"
+		Set tRS.QueryName = "SubclassOf"
+		Do tRS.Execute("Ens.Util.MessageBodyMethods")
+	}
+	ElseIf (pMode = "vdocClass") {
+		Set tRS.ClassName = "Ens.VDoc.Interface"
+		Set tRS.QueryName = "EnumerateVDocs"
+		Do tRS.Execute()
+	}
+	ElseIf (pMode = "searchtableClass") {
+		Set tRS.ClassName = "%Dictionary.ClassDefinition"
+		Set tRS.QueryName = "SubclassOf"
+		Do tRS.Execute("Ens.VDoc.SearchTable")
+	}
+	ElseIf (pMode = "source") {
+		Set tRS.ClassName = "Ens.Config.Production"
+		Set tRS.QueryName = "EnumerateConfigItems"
+		Do tRS.Execute()
+		Set tAlpha=1
+	}
+	ElseIf (pMode = "target") {
+		Set tRS.ClassName = "Ens.Config.Production"
+		Set tRS.QueryName = "EnumerateConfigItems"
+		Do tRS.Execute(,-$$$eHostTypeService)
+	}
+	ElseIf (pMode = "production") {
+		// show productions
+		Set tSC = tRS.Prepare("SELECT Name FROM Ens_Config.Production ORDER BY Name")
+		Do tRS.Execute()
+	}
+	ElseIf (pMode = "instance") {
+		Set tSC = tRS.Prepare("SELECT ID FROM "_tMSGCLASS)
+		Do tRS.Execute()
+	}
+	ElseIf (pMode = "vdocType") {
+		Set tRS.ClassName = pMsgClass
+		Set tRS.QueryName = "EnumerateDocTypes"
+		Do tRS.Execute(tCATEGORY)
+		Set tAlpha=1
+	}
+	ElseIf (pMode = "vdocCategory") {
+		Set tRS.ClassName = pMsgClass
+		Set tRS.QueryName = "EnumerateTypeCategories"
+		Do tRS.Execute()
+		Set tAlpha=1
+	}
+	ElseIf (pMode = "vdocSegType") {
+		Set tRS.ClassName = pMsgClass
+		Set tRS.QueryName = "EnumerateSegTypes"
+		Do tRS.Execute(tDOCTYPE,0)
+		Set tAlpha=1
+	}
+	ElseIf (pMode = "vdocSegField") {
+		Set tRS.ClassName = pMsgClass
+		Set tRS.QueryName = "EnumerateSegTypes"
+		Do tRS.Execute(tDOCTYPE)
+	}
+	ElseIf (pMode = "transform") {
+		Set tRS.ClassName = "%Dictionary.ClassDefinition"
+		Set tRS.QueryName = "SubclassOf"
+		Do tRS.Execute("Ens.DataTransform")
+	}
+	ElseIf (pMode = "vdocPropPath") {
+		Set tRS.ClassName = "Ens.VDoc.Utils"
+		Set tRS.QueryName = "EnumerateDocContents"
+		Do tRS.Execute(pMsgClass,"source",tDOCTYPE,,0)
+	}
+	ElseIf (pMode = "objProp") {
+		Set tRS.ClassName = "Ens.VDoc.Utils"
+		Set tRS.QueryName = "EnumerateDocContents"
+		Do tRS.Execute(pMsgClass,"source",,,0,1)
+	}
+	ElseIf (pMode = "searchProp") {
+		Set tRS.ClassName = "Ens.VDoc.SearchTableGenerator"
+		Set tRS.QueryName = "EnumerateSearchProps"
+		Do tRS.Execute(pMsgClass)
+	}
+	Else {
+		Set tOK=0
+	}
+
+	If '$IsObject(tRS) {
+		Set tOK=0
+	}
+	Else {
+		Set tRow=0  While (tRS.Next() && (tRow < 10000)) { Set tRow=tRow+1
+			If (..Filter(pMode,tRS)) {
+				Set tVal = tRS.GetData(1)
+				Set tVal = $Case(pMode
+							, "source": $G(tRS.Data("Production")) _ "||" _ tVal
+							, "target": $G(tRS.Data("Production")) _ "||" _ tVal
+							#; Strip Category from DocType if we started with a Category (and it wasn't just a hint we got from the input value)
+							, "vdocType": $S(tVal[":"&&(tCATEGORY=$P(tVal,":"))&&'(tCATEGORY=$P(tVALUE,":")&&(""=$P(tVALUE,":",2))):$P(tVal,":",2), 1:tVal)
+							, "vdocSegType": tVal_"  ("_$G(tRS.Data("Description"))_")"
+							, "vdocSegField": $P(tVal,":",2)_$G(tRS.Data("Field"))
+							, :tVal)
+				Set:""'=tVal pList($S(tAlpha:" "_$ZCVT($TR(tVal,":"," "),"U"), 1:tRow)) = tVal
+			}
+		}
+	}
+	Quit tOK
+</script>
+
+
+<script method="Filter" language="CACHE" runat="SERVER" arguments="pMode,pRS" returnType="%Boolean">
+	// test if a row should be displayed based on mode
+	Set tRet = 1
+	Set $ZT = "Trap"
+
+	If (pMode = "msgClass") {
+		// skip % classes
+		Set tName = $G(pRS.Data("Name"))
+		Set tRet = $E(tName)'="%"
+		Set:'##class(%Dictionary.CompiledClass).%ExistsId(tName)||'$zobjclassmethod(tName,"%Extends","%Library.RegisteredObject") tRet=0
+	} ElseIf (pMode = "transform") {
+		Set tName=$G(pRS.Data("Name"))
+		If $Case(tName,"Ens.DataTransform":1,"Ens.DataTransformDTL":1,:0) { Set tRet=0 }
+		Else {
+			Set tSrcClass=$zobjclassmethod(tName,"GetSourceType")
+			Set:""=tSrcClass||$zobjclassmethod(tSrcClass,"%Extends",tMSGCLASS) tRet=0
+		}
+	} ElseIf ("Class"=$E(pMode,*-4,*)) {
+		Set tName=$G(pRS.Data("Name"))
+		Set:""'=tName&&$$$comClassKeyGet(tName,$$$cCLASSabstract) tRet=0
+	}
+:Done
+	Quit tRet
+
+:Trap
+	Set $ZT=""
+	Quit 0
+
+</script>
+
+</html>

@@ -1,0 +1,68 @@
+<AutoPageENS domain="Ensemble" parentpage="UtilEnsHome.csp" pagename="EDI and HL7 Manager" title="@Ensemble:EDIManager@EDI and HL7 Manager">
+<html>
+<head>
+<title>EDI / HL7  Manager</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+<style>
+
+table.EDIMenu {
+	background: white;
+	border: 1px black solid;
+}
+
+table.EDIMenu td {
+	border-bottom: 1px gray solid;
+}
+
+table.EDIMenu td a {
+	text-decoration: none;
+}
+
+table.EDIMenu td a:visited {
+	text-decoration: none;
+	color: black;
+}
+
+table.EDIMenu td a:hover {
+	text-decoration: none;
+	color: red;
+}
+
+</style>
+</head>
+<body>
+
+<div class="Text1">
+ #($$$TextHTML("Choose an EDI / HL7 task from the list below"))#<br>
+ #($$$TextHTML("Each row contains links to management functions for a particular family of Electronic Data Interchange document types"))#
+</div>
+
+<div style="margin-left: 40px;">
+<table class="EDIMenu" border="1" cellpadding="5" cellspacing="0">
+<script language=Cache runat=server>
+
+	Set rs=##class(%ResultSet).%New("%Dictionary.ClassDefinition:SubclassOf")
+	Do rs.Execute("Ens.VDoc.Interface")
+	For { Quit:'rs.Next()  Set tClassname=rs.Data("Name")  Continue:'##class(%Dictionary.CompiledClass).%ExistsId(tClassname)
+		If $zobjclassmethod(tClassname,"GetManagerLinks",.tLinks1) {
+			Merge tLinks($G(tLinks1(0,"name"),tClassname))=tLinks1  Kill tLinks1
+		}
+	}
+	Set tClassname="" For { Set tClassname=$O(tLinks(tClassname))  Quit:""=tClassname
+		Set iCol="" For { Set iCol=$O(tLinks(tClassname,iCol))  Quit:""=iCol
+			If 0=iCol {
+				Set tDesc=$G(tLinks(tClassname,0,"desc")), tPage=$G(tLinks(tClassname,0,"page"))
+				&html<<tr><td align='center'><b#($S(""=tPage:"",1:"><a href='"_$S("http://"=$E(tPage,1,$L("http://")):tPage_"' target='_blank",1:..Link(tPage))_"'")_$S(""=tDesc:"",1:" title='"_$ZCVT(tDesc,"O","HTML")_"'"))#>#($ZCVT(tLinks(tClassname,0,"name"),"O","HTML"))#</b>#($S(""=tPage:"",1:"</a>"))#</td>>
+			} Else {
+				&html<<td><a href='#(..Link(tLinks(tClassname,iCol,"page")))#' title='#($ZCVT($G(tLinks(tClassname,iCol,"desc")),"O","HTML"))#'>#($ZCVT(tLinks(tClassname,iCol,"name"),"O","HTML"))#</a></td>>
+			}
+		}
+		&html<</tr>>
+	}
+	Kill tLinks
+</script>
+</table>
+</div>
+
+</body>
+</html>

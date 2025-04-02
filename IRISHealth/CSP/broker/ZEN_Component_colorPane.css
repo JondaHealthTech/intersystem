@@ -1,0 +1,37 @@
+/* @class="%ZEN.Component.colorPane" */
+table.colorPane {
+	background: silver;
+	border: 1px solid black;
+	font-family: arial;
+	font-size: 0.8em;
+	padding: 1px;
+}
+
+table.colorPane td {
+	padding: 0px;
+}
+
+.colorPaneRotator {
+	border: 1px black solid;
+	cursor: pointer;
+}
+
+.colorPaneCell {
+	border: 1px silver solid;
+	cursor: pointer;
+}
+
+.colorPaneCellSelected1 {
+	border: 1px green solid;
+	cursor: pointer;
+}
+.colorPaneCellSelected2 {
+	border: 1px red solid;
+	cursor: pointer;
+}
+.colorPaneCellSelected3 {
+	border: 1px blue solid;
+	cursor: pointer;
+}
+
+/* EOF */

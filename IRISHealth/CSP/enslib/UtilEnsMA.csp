@@ -1,0 +1,61 @@
+<!--
+
+Maintenance Home Page
+
+-->
+
+<AutoPage domain="Ensemble" pagename="Maintenance"  parentpage="UtilEnsHome.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Maintenance</Text>
+</Pane>
+
+<Pane name="Navigator" type="%CSP.Util.NavigatorPane">
+	<Commands>
+		<Action href="UtilEnsHome.csp">
+			<Caption>Home</Caption>
+		</Action>
+		
+		<Action href="UtilEnsSesSuspended.csp">
+			<Caption>Suspended Messages</Caption>
+		</Action>
+
+		<Action href="UtilEnsMAPurge.csp">
+			<Caption>Purge Management Data</Caption>
+		</Action>
+		
+		<Action href="UtilEnsCredentials.csp">
+			<Caption>Credentials</Caption>
+		</Action>
+
+		<Action href="CSPX.Portal.ArchiveManager.cls">
+			<Caption>Local Archive Manager</Caption>
+		</Action>
+
+		<Action href="CSPX.Portal.LookupSettings.cls">
+			<Caption>Lookup Settings</Caption>
+		</Action>
+
+		<Action href="CSPX.Portal.DICOMSettings.cls" 
+			condition="##class(%EnsembleMgr).IsDICOMInstalled() hidden">
+			<Caption>DICOM Settings</Caption>
+		</Action>
+		
+		<Action href="CSPX.Portal.DefaultSettings.cls">
+			<Caption>Default Settings</Caption>
+		</Action>
+
+		<Action href="UtilEnsFindMsgBank.csp">
+			<Caption>Enterprise Message Bank</Caption>
+		</Action>
+		
+	</Commands>
+
+</Pane>
+<Pane name="Detail" type="%CSP.Util.FormPane">
+	<Text>Choose a function you want to perform from the menu.</Text>
+	<FormClass>CSPX.EnsMAHomeForm</FormClass>
+	<Align>left</Align>
+</Pane>
+
+</AutoPage>

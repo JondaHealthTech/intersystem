@@ -1,0 +1,20 @@
+<!--
+Workflow: List of role for specific user
+-->
+
+<AutoPage domain="Ensemble" pagename="Workflow Roles" parentpage="WFUsers.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Roles for User</Text>
+</Pane>
+
+<Pane name="Info" type="%CSP.Util.TablePane">
+	<Text>The user {$ID1} belongs to the following roles.</Text>
+	<Query>EnsLib.Workflow.Engine:ListRolesForUser</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>true</ShowZebra>
+	<ShowRowNumbers>true</ShowRowNumbers>
+	<AutoRefresh>false</AutoRefresh>
+</Pane>
+
+</AutoPage>

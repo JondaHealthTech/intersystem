@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="nojs html css_verticalspacer" lang="en-US">
+ <head>
+
+  <meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
+  <meta name="generator" content="2018.0.0.379"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <script type="text/javascript">
+   // Update the 'nojs'/'js' class on the html node
+document.documentElement.className = document.documentElement.className.replace(/\bnojs\b/g, 'js');
+
+// Check that all required assets are uploaded and up-to-date
+if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required":["museutils.js", "museconfig.js", "jquery.watch.js", "jquery.museresponsive.js", "require.js", "gettingstarted.css"], "outOfDate":[]};
+</script>
+
+  <title>Getting Started with InterSystems IRIS</title>
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="css/site_global.css?crc=38352384"/>
+  <link rel="stylesheet" type="text/css" href="css/gettingstarted.css?crc=4191999173" id="pagesheet"/>
+  <!-- IE-only CSS -->
+  <!--[if lt IE 9]>
+  <link rel="stylesheet" type="text/css" href="css/nomq_gettingstarted.css?crc=424802946" id="nomq_pagesheet"/>
+  <![endif]-->
+  <!-- JS includes -->
+  <script src="https://use.typekit.net/ik/_XBb78CeC-CA6jFu3Rti4VNUt_1JiH6NW8oNzGTfKrIfeGqgfFedCMbPH2qUFD6uFDiLFQIkZAm8jQ9UwcIoFQIaFDSUZQJD5Q8qF2q3jhJX5Qw-5fG0-AoXZW4DpWFXZAuDOcFzdPUTd1s8S1FoSas8dWw0jhNlOYiaikoTd1s8S1FoSas8dWw0jhNlJ6Zkdh4ziev7fbKApsMMeMb6MqGIQWmDZZMguVxiX69.js" type="text/javascript"></script>
+  <!-- Other scripts -->
+  <script type="text/javascript">
+   try {Typekit.load();} catch(e) {}
+</script>
+   </head>
+ <body class="always_vert_scroll">
+
+  <div class="breakpoint active" id="bp_infinity" data-min-width="794"><!-- responsive breakpoint node -->
+   <div class="clearfix borderbox" id="page"><!-- group -->
+    <div class="clearfix grpelem" id="pu4886-4"><!-- group -->
+     <div id="u4886-4-wrapper" class="shared_content" data-content-guid="u4886-4-wrapper_content">
+      <div class="clearfix" id="u4886-4" data-muse-temp-textContainer-sizePolicy="true" data-muse-temp-textContainer-pinning="true"><!-- content -->
+       <div id="u4886-3">
+        <h1 id="u4886-2">Getting Started with InterSystems IRIS Data Platform<sup class="Character-Style-2-Superscript" id="u4890-2">TM</sup><span class="Character-Style-2-18" id="u4890-3"></h1>
+       </div>
+      </div>
+     </div>
+     <div class="browser_width" id="u4882-18-bw">
+      <div class="Negative-Link-Style2 clearfix" id="u4882-18" data-muse-temp-textContainer-sizePolicy="true" data-muse-temp-textContainer-pinning="true"><!-- content -->
+       <p id="u4882-16"><span id="u4882" class="shared_content" data-content-guid="u4882_content">© 1996-2019 InterSystems Corporation, Cambridge, MA. </span><a class="nonblock shared_content" href="https://www.intersystems.com/noticesterms-conditions/" data-content-guid="u4882-16_1_content"><span id="u4882-2">Notices/Term &amp; Conditions</span></a><span id="u4882-4" class="shared_content" data-content-guid="u4882-4_content">.</span><span id="u4882-5" class="shared_content" data-content-guid="u4882-5_content"> All Rights Reserved.</span><span id="u4882-6" class="shared_content" data-content-guid="u4882-6_content"> </span><a class="nonblock shared_content" href="https://www.intersystems.com/privacy-policy/" data-content-guid="u4882-16_5_content"><span id="u4882-7">Privacy Policy</span></a><span id="u4882-9" class="shared_content" data-content-guid="u4882-9_content"> </span><a class="nonblock shared_content" href="https://www.intersystems.com/guarantee/" data-content-guid="u4882-16_7_content"><span id="u4882-10">Guarantee</span></a><span id="u4882-12" class="shared_content" data-content-guid="u4882-12_content"> </span><a class="nonblock shared_content" href="https://www.intersystems.com/section-508/" data-content-guid="u4882-16_9_content"><span id="u4882-13">Section 508</span></a><span id="u4882-15"></span></p>
+      </div>
+     </div>
+     <div class="browser_width shared_content" id="u4887-bw" data-content-guid="u4887-bw_content">
+      <div id="u4887"><!-- simple frame --></div>
+     </div>
+     <a class="nonblock nontext clip_frame" id="u4884" href="https://www.intersystems.com/"><!-- svg --><img class="svg temp_no_img_src" id="u4885" data-orig-src="images/ics-logo.svg?crc=155752920" width="254" height="72" alt="" data-mu-svgfallback="images/ics-logo_poster_.png?crc=3808281902" src="images/blank.gif?crc=4208392903"/></a>
+     <a class="nonblock nontext clearfix shared_content" id="u4883-4" href="https://docs.intersystems.com" data-muse-temp-textContainer-sizePolicy="true" data-muse-temp-textContainer-pinning="true" data-content-guid="u4883-4_content"><!-- content --><p>Home</p></a>
+    </div>
+    <div class="clearfix grpelem" id="ppu4909"><!-- column -->
+     <div class="clearfix colelem" id="pu4909"><!-- group -->
+      <div class="browser_width grpelem" id="u4909-bw">
+       <div id="u4909" class="shared_content" data-content-guid="u4909_content"><!-- simple frame --></div>
+      </div>
+      <div class="browser_width grpelem shared_content" id="u4908-bw" data-content-guid="u4908-bw_content">
+       <div id="u4908"><!-- group -->
+        <div class="clearfix" id="u4908_align_to_page">
+         <div class="clip_frame grpelem" id="u4903" data-sizePolicy="fixed" data-pintopage="page_fixedCenter"><!-- svg -->
+          <img class="svg temp_no_img_src" id="u4904" data-orig-src="images/iris.svg?crc=3986208070" width="127" height="127" alt="" data-mu-svgfallback="images/iris_poster_.png?crc=394657961" src="images/blank.gif?crc=4208392903"/>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="browser_width colelem" id="u4890-9-bw">
+      <div class="clearfix shared_content" id="u4890-9" data-muse-temp-textContainer-sizePolicy="true" data-muse-temp-textContainer-pinning="true" data-content-guid="u4890-9_content"><!-- content -->
+       <div class="Negative-Link-Style" id="u4890-8">
+        <p id="u4890-7"><span class="Character-Style-2-18" id="u4890">The resources listed below will help you to get started.</span></p>
+       </div>
+      </div>
+     </div>
+     <div class="clearfix colelem shared_content" id="pu4900-8" data-content-guid="pu4900-8_content"><!-- group -->
+      <div class="clearfix grpelem" id="u4900-8" data-muse-temp-textContainer-sizePolicy="true" data-muse-temp-textContainer-pinning="true"><!-- content -->
+       <div id="u4900-7">
+        <p id="u4900-3"><a class="nonblock" href="https://docs.intersystems.com" target="_blank"><span id="u4900">InterSystems Online Documentation</span></a></p>
+        <p id="u4900-4">&nbsp;</p>
+        <p id="u4900-6">Overviews, first look documents, and detailed reference information for InterSystems IRIS Data Platform</p>
+       </div>
+      </div>
+      <div class="clip_frame grpelem" id="u4905" data-sizePolicy="fixed" data-pintopage="page_fixedCenter"><!-- svg -->
+       <img class="svg temp_no_img_src" id="u4906" data-orig-src="images/documentation2.svg?crc=4222808869" width="99" height="99" alt="" data-mu-svgfallback="images/documentation_poster_2.png?crc=22865890" src="images/blank.gif?crc=4208392903"/>
+      </div>
+     </div>
+     <div class="clearfix colelem" id="pu4901"><!-- group -->
+      <div class="clip_frame grpelem" id="u4901" data-sizePolicy="fixed" data-pintopage="page_fixedCenter"><!-- svg -->
+       <img class="svg temp_no_img_src" id="u4902" data-orig-src="images/website.svg?crc=3928138426" width="106" height="106" alt="" data-mu-svgfallback="images/website_poster_.png?crc=4133531429" src="images/blank.gif?crc=4208392903"/>
+      </div>
+      <div class="clearfix grpelem shared_content" id="u4899-8" data-muse-temp-textContainer-sizePolicy="true" data-muse-temp-textContainer-pinning="true" data-content-guid="u4899-8_content"><!-- content -->
+       <div id="u4899-7">
+        <p id="u4899-3"><a class="nonblock" href="https://learning.intersystems.com/" target="_blank"><span id="u4899">InterSystems Online Learning Site</span></a></p>
+        <p id="u4899-4">&nbsp;</p>
+        <p id="u4891-6">Online courses, learning paths, videos, and more for InterSystems IRIS Data Platform and other InterSystems products</p>
+       </div>
+      </div>
+     </div>
+     <div class="clearfix colelem" id="pu4896-8"><!-- group -->
+      <div class="clearfix grpelem shared_content" id="u4896-8" data-muse-temp-textContainer-sizePolicy="true" data-muse-temp-textContainer-pinning="true" data-content-guid="u4896-8_content"><!-- content -->
+       <div id="u4896-7">
+        <p id="u4896-3"><a class="nonblock" href="https://www.intersystems.com/support-learning/support/" target="_blank"><span id="u4896">InterSystems Support</span></a></p>
+        <p id="u4896-4">&nbsp;</p>
+        <p id="u4896-6">Information about the InterSystems Worldwide Response Center, our world-class expert technical assistance</p>
+       </div>
+      </div>
+      <div class="clip_frame grpelem" id="u4892" data-sizePolicy="fixed" data-pintopage="page_fixedCenter"><!-- svg -->
+       <img class="svg temp_no_img_src" id="u4893" data-orig-src="images/support.svg?crc=4187541394" width="90" height="90" alt="" data-mu-svgfallback="images/support_poster_.png?crc=4069608658" src="images/blank.gif?crc=4208392903"/>
+      </div>
+     </div>
+     <div class="clearfix colelem" id="pu4897"><!-- group -->
+      <div class="clip_frame grpelem" id="u4897" data-sizePolicy="fixed" data-pintopage="page_fixedCenter"><!-- svg -->
+       <img class="svg temp_no_img_src" id="u4898" data-orig-src="images/classroom2.svg?crc=510397429" width="106" height="106" alt="" data-mu-svgfallback="images/classroom2_poster_.png?crc=4115415315" src="images/blank.gif?crc=4208392903"/>
+      </div>
+      <div class="clearfix grpelem shared_content" id="u4891-8" data-muse-temp-textContainer-sizePolicy="true" data-muse-temp-textContainer-pinning="true" data-content-guid="u4891-8_content"><!-- content -->
+       <div id="u4891-7">
+        <p id="u4891-3"><a class="nonblock" href="https://www.intersystems.com/support-learning/learning-services/classroom-learning/" target="_blank"><span id="u4891">InterSystems Classroom Training</span></a></p>
+        <p id="u4891-4">&nbsp;</p>
+        <p id="u4891-6">Information about available classroom training for InterSystems products</p>
+       </div>
+      </div>
+     </div>
+     <div class="clearfix colelem shared_content" id="pu4889-8" data-content-guid="pu4889-8_content"><!-- group -->
+      <div class="clearfix grpelem" id="u4889-8" data-muse-temp-textContainer-sizePolicy="true" data-muse-temp-textContainer-pinning="true"><!-- content -->
+       <div id="u4889-7">
+        <p id="u4889-3"><a class="nonblock" href="https://community.intersystems.com" target="_blank"><span id="u4889">Developer Community</span></a></p>
+        <p id="u4889-4">&nbsp;</p>
+        <p id="u4889-6">Articles, questions and answers, and sample code shared by our partners, customers, and employees</p>
+       </div>
+      </div>
+      <div class="clip_frame grpelem" id="u4894" data-sizePolicy="fixed" data-pintopage="page_fixedCenter"><!-- svg -->
+       <img class="svg temp_no_img_src" id="u4895" data-orig-src="images/dc2.svg?crc=4152658739" width="106" height="106" alt="" data-mu-svgfallback="images/dc2_poster_.png?crc=3779658716" src="images/blank.gif?crc=4208392903"/>
+      </div>
+     </div>
+    </div>
+    <div class="verticalspacer shared_content" data-offset-top="980" data-content-above-spacer="1056" data-content-below-spacer="75" data-sizePolicy="fixed" data-pintopage="page_fixedLeft" data-content-guid="page_2_content"></div>
+   </div>
+  </div>
+  <div class="breakpoint" id="bp_793" data-max-width="793"><!-- responsive breakpoint node -->
+   <div class="clearfix borderbox temp_no_id" data-orig-id="page"><!-- group -->
+    <div class="clearfix grpelem temp_no_id" data-orig-id="pu4886-4"><!-- group -->
+     <span class="placeholder" data-placeholder-for="u4886-4-wrapper_content"><!-- placeholder node --></span>
+     <div class="browser_width temp_no_id" data-orig-id="u4882-18-bw">
+      <div class="Negative-Link-Style2 clearfix temp_no_id" data-muse-temp-textContainer-sizePolicy="true" data-muse-temp-textContainer-pinning="true" data-orig-id="u4882-18"><!-- content -->
+       <p class="temp_no_id" data-orig-id="u4882-16"><span class="placeholder" data-placeholder-for="u4882_content"><!-- placeholder node --></span><span class="nonblock placeholder" data-placeholder-for="u4882-16_1_content"><!-- placeholder node --></span><span class="placeholder" data-placeholder-for="u4882-4_content"><!-- placeholder node --></span><span class="placeholder" data-placeholder-for="u4882-5_content"><!-- placeholder node --></span><span class="placeholder" data-placeholder-for="u4882-6_content"><!-- placeholder node --></span><span class="nonblock placeholder" data-placeholder-for="u4882-16_5_content"><!-- placeholder node --></span><span class="placeholder" data-placeholder-for="u4882-9_content"><!-- placeholder node --></span><span class="nonblock placeholder" data-placeholder-for="u4882-16_7_content"><!-- placeholder node --></span><span class="placeholder" data-placeholder-for="u4882-12_content"><!-- placeholder node --></span><span class="nonblock placeholder" data-placeholder-for="u4882-16_9_content"><!-- placeholder node --></span></p>
+      </div>
+     </div>
+     <span class="browser_width placeholder" data-placeholder-for="u4887-bw_content"><!-- placeholder node --></span>
+     <a class="nonblock nontext clip_frame temp_no_id" href="https://www.intersystems.com/" data-orig-id="u4884"><!-- svg --><img class="svg temp_no_id temp_no_img_src" data-orig-src="images/ics-logo.svg?crc=155752920" width="242" height="69" alt="" data-mu-svgfallback="images/ics-logo_poster_.png?crc=3808281902" data-orig-id="u4885" src="images/blank.gif?crc=4208392903"/></a>
+     <span class="nonblock nontext clearfix placeholder" data-placeholder-for="u4883-4_content"><!-- placeholder node --></span>
+    </div>
+    <div class="clearfix grpelem temp_no_id" data-orig-id="ppu4909"><!-- column -->
+     <div class="clearfix colelem temp_no_id" data-orig-id="pu4909"><!-- group -->
+      <span class="grpelem placeholder" data-placeholder-for="u4909_content"><!-- placeholder node --></span>
+      <span class="browser_width grpelem placeholder" data-placeholder-for="u4908-bw_content"><!-- placeholder node --></span>
+     </div>
+     <span class="clearfix colelem placeholder" data-placeholder-for="u4890-9_content"><!-- placeholder node --></span>
+     <span class="clearfix colelem placeholder" data-placeholder-for="pu4900-8_content"><!-- placeholder node --></span>
+     <div class="clearfix colelem temp_no_id" data-orig-id="pu4901"><!-- group -->
+      <div class="clip_frame grpelem temp_no_id" data-sizePolicy="fixed" data-pintopage="page_fixedCenter" data-orig-id="u4901"><!-- svg -->
+       <img class="svg temp_no_id temp_no_img_src" data-orig-src="images/website.svg?crc=3928138426" width="115" height="115" alt="" data-mu-svgfallback="images/website_poster_.png?crc=4133531429" data-orig-id="u4902" src="images/blank.gif?crc=4208392903"/>
+      </div>
+      <span class="clearfix grpelem placeholder" data-placeholder-for="u4899-8_content"><!-- placeholder node --></span>
+     </div>
+     <div class="clearfix colelem temp_no_id" data-orig-id="pu4896-8"><!-- group -->
+      <span class="clearfix grpelem placeholder" data-placeholder-for="u4896-8_content"><!-- placeholder node --></span>
+      <div class="clip_frame grpelem temp_no_id" data-sizePolicy="fixed" data-pintopage="page_fixedCenter" data-orig-id="u4892"><!-- svg -->
+       <img class="svg temp_no_id temp_no_img_src" data-orig-src="images/support.svg?crc=4187541394" width="89" height="89" alt="" data-mu-svgfallback="images/support_poster_.png?crc=4069608658" data-orig-id="u4893" src="images/blank.gif?crc=4208392903"/>
+      </div>
+     </div>
+     <div class="clearfix colelem temp_no_id" data-orig-id="pu4897"><!-- group -->
+      <div class="clip_frame grpelem temp_no_id" data-sizePolicy="fixed" data-pintopage="page_fixedCenter" data-orig-id="u4897"><!-- svg -->
+       <img class="svg temp_no_id temp_no_img_src" data-orig-src="images/classroom2.svg?crc=510397429" width="109" height="109" alt="" data-mu-svgfallback="images/classroom2_poster_.png?crc=4115415315" data-orig-id="u4898" src="images/blank.gif?crc=4208392903"/>
+      </div>
+      <span class="clearfix grpelem placeholder" data-placeholder-for="u4891-8_content"><!-- placeholder node --></span>
+     </div>
+     <span class="clearfix colelem placeholder" data-placeholder-for="pu4889-8_content"><!-- placeholder node --></span>
+    </div>
+    <span class="verticalspacer placeholder" data-placeholder-for="page_2_content"><!-- placeholder node --></span>
+   </div>
+  </div>
+  <!-- Other scripts -->
+  <script type="text/javascript">
+   // Decide weather to suppress missing file error or not based on preference setting
+var suppressMissingFileError = false
+</script>
+  <script type="text/javascript">
+   window.Muse.assets.check=function(d){if(!window.Muse.assets.checked){window.Muse.assets.checked=!0;var b={},c=function(a,b){if(window.getComputedStyle){var c=window.getComputedStyle(a,null);return c&&c.getPropertyValue(b)||c&&c[b]||""}if(document.documentElement.currentStyle)return(c=a.currentStyle)&&c[b]||a.style&&a.style[b]||"";return""},a=function(a){if(a.match(/^rgb/))return a=a.replace(/\s+/g,"").match(/([\d\,]+)/gi)[0].split(","),(parseInt(a[0])<<16)+(parseInt(a[1])<<8)+parseInt(a[2]);if(a.match(/^\#/))return parseInt(a.substr(1),
+16);return 0},g=function(g){for(var f=document.getElementsByTagName("link"),h=0;h<f.length;h++)if("text/css"==f[h].type){var i=(f[h].href||"").match(/\/?css\/([\w\-]+\.css)\?crc=(\d+)/);if(!i||!i[1]||!i[2])break;b[i[1]]=i[2]}f=document.createElement("div");f.className="version";f.style.cssText="display:none; width:1px; height:1px;";document.getElementsByTagName("body")[0].appendChild(f);for(h=0;h<Muse.assets.required.length;){var i=Muse.assets.required[h],l=i.match(/([\w\-\.]+)\.(\w+)$/),k=l&&l[1]?
+l[1]:null,l=l&&l[2]?l[2]:null;switch(l.toLowerCase()){case "css":k=k.replace(/\W/gi,"_").replace(/^([^a-z])/gi,"_$1");f.className+=" "+k;k=a(c(f,"color"));l=a(c(f,"backgroundColor"));k!=0||l!=0?(Muse.assets.required.splice(h,1),"undefined"!=typeof b[i]&&(k!=b[i]>>>24||l!=(b[i]&16777215))&&Muse.assets.outOfDate.push(i)):h++;f.className="version";break;case "js":h++;break;default:throw Error("Unsupported file type: "+l);}}d?d().jquery!="1.8.3"&&Muse.assets.outOfDate.push("jquery-1.8.3.min.js"):Muse.assets.required.push("jquery-1.8.3.min.js");
+f.parentNode.removeChild(f);if(Muse.assets.outOfDate.length||Muse.assets.required.length)f="Some files on the server may be missing or incorrect. Clear browser cache and try again. If the problem persists please contact website author.",g&&Muse.assets.outOfDate.length&&(f+="\nOut of date: "+Muse.assets.outOfDate.join(",")),g&&Muse.assets.required.length&&(f+="\nMissing: "+Muse.assets.required.join(",")),suppressMissingFileError?(f+="\nUse SuppressMissingFileError key in AppPrefs.xml to show missing file error pop up.",console.log(f)):alert(f)};location&&location.search&&location.search.match&&location.search.match(/muse_debug/gi)?
+setTimeout(function(){g(!0)},5E3):g()}};
+var muse_init=function(){require.config({baseUrl:""});require(["jquery","museutils","whatinput","jquery.watch","jquery.museresponsive"],function(d){var $ = d;$(document).ready(function(){try{
+window.Muse.assets.check($);/* body */
+Muse.Utils.transformMarkupToFixBrowserProblemsPreInit();/* body */
+Muse.Utils.prepHyperlinks(true);/* body */
+Muse.Utils.resizeHeight('.browser_width');/* resize height */
+Muse.Utils.requestAnimationFrame(function() { $('body').addClass('initialized'); });/* mark body as initialized */
+Muse.Utils.makeButtonsVisibleAfterSettingMinWidth();/* body */
+Muse.Utils.fullPage('#page');/* 100% height page */
+$( '.breakpoint' ).registerBreakpoint();/* Register breakpoints */
+Muse.Utils.transformMarkupToFixBrowserProblems();/* body */
+}catch(b){if(b&&"function"==typeof b.notify?b.notify():Muse.Assert.fail("Error calling selector function: "+b),false)throw b;}})})};
+
+</script>
+  <!-- RequireJS script -->
+  <script src="scripts/require.js?crc=4157109226" type="text/javascript" async data-main="scripts/museconfig.js?crc=4153641093" onload="if (requirejs) requirejs.onError = function(requireType, requireModule) { if (requireType && requireType.toString && requireType.toString().indexOf && 0 <= requireType.toString().indexOf('#scripterror')) window.Muse.assets.check(); }" onerror="window.Muse.assets.check();"></script>
+   </body>
+</html>

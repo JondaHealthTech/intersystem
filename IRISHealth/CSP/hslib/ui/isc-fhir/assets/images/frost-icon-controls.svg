@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="17px" viewBox="0 0 22 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
+    <title>icon-controls</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(-374.000000, -319.000000)" fill="#636363" id="trakcare">
+            <g transform="translate(100.000000, 192.000000)">
+                <g id="icon-controls" transform="translate(270.000000, 120.000000)">
+                    <g id="icons/icon-controls">
+                        <g id="icon" transform="translate(4.000000, 7.000000)">
+                            <path d="M4.12601749,12 C4.57006028,10.2747728 6.13616057,9 8,9 C9.86383943,9 11.4299397,10.2747728 11.8739825,12 L22,12 L22,14 L11.8739825,14 C11.4299397,15.7252272 9.86383943,17 8,17 C6.13616057,17 4.57006028,15.7252272 4.12601749,14 L0,14 L0,12 L4.12601749,12 Z M10.1260175,3 C10.5700603,1.27477279 12.1361606,0 14,0 C15.8638394,0 17.4299397,1.27477279 17.8739825,3 L22,3 L22,5 L17.8739825,5 C17.4299397,6.72522721 15.8638394,8 14,8 C12.1361606,8 10.5700603,6.72522721 10.1260175,5 L0,5 L0,3 L10.1260175,3 Z M8,15 C9.1045695,15 10,14.1045695 10,13 C10,11.8954305 9.1045695,11 8,11 C6.8954305,11 6,11.8954305 6,13 C6,14.1045695 6.8954305,15 8,15 Z M14,6 C15.1045695,6 16,5.1045695 16,4 C16,2.8954305 15.1045695,2 14,2 C12.8954305,2 12,2.8954305 12,4 C12,5.1045695 12.8954305,6 14,6 Z" id="Rectangle-13-Copy" fill-rule="nonzero"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

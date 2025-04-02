@@ -1,0 +1,7 @@
+/* @class="%ZEN.Component.csMenuSeparator" */
+/* @doc="Enclosing div for COMP_NAME." */
+.csMenuSeparator {
+    position:absolute;
+    cursor:pointer;
+}
+/* EOF */

@@ -1,0 +1,124 @@
+<html>
+<head>
+    <script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+	<link rel="stylesheet" href="assets/styles/trialLogin.css">
+</head>
+<body onload="jInitMe()">
+<form id="F1" autocomplete="off">
+	<div id="wrapper">
+	    <div class="bg-wrapper">
+	        <div class="bg4">
+	            <img src="./assets/images/bg4.png">
+	        </div>
+	    </div>
+	    <div class="content">
+	        <img class="logo" src="./assets/images/JX Logo White.png" alt="Jonda X">
+	        <h1>
+	            Welcome to the JondaX Trial
+	        </h1>
+			<h2>Start to <span>transform</span> your health data <span>securely</span>.</h2>
+	        <div id="login-form" class="login-form">
+                <h4>Please enter your user id and password. Passwords are case-sensitive.</h4>
+	            <div class="input-group">
+	                <input type="text" name="T1" id="T1" placeholder="Enter your user id" onfocus="jChangeMe()" onkeypress="jCheckKey(event)">
+	            </div>
+	            <div class="input-group">
+	                <input type="password" name="T2" id="T2" placeholder="Enter your password" onkeypress="jCheckKey(event)">
+	                <img onclick="jTogglePassword(event)" src="./assets/images/eyeClose.png">
+	            </div>
+	            <p class="error-text" id="AlertText">
+	                Incorrect email or password
+	            </p>
+	            <button type="button" class="login-btn" onclick="jLogin()">Login</button>
+	            <div class="forget-pass" onclick="jResetPassword()">
+	                Forgot password
+	            </div>
+	            
+	        </div>
+	    
+	<script language="cache" runat="server">
+          	d SetFooter^trialHome
+          </script>   
+      </div> 
+	</div>
+	   <div id="popup1" class="popup inactive">
+         <div class="popup-dialog">
+            <!--<img src="./assets/images/success.png" alt="Cancel"> -->
+            <img src="./assets/images/trial/cross.png" alt="Close" class="close-btn" onclick="removePopup1()">
+            <h4>Your JondaX Free Trial has expired</h4>
+            <p>Your 14-day free trial period has expired. To continue experiencing JondaX&apos;s powerful data transformation capabilities, get in touch with us by clicking on the button below.</p>
+            <button class="blue-btn" onclick="jContact(event)">Contact Us</button>
+            <!--<button class="pink-btn" onclick="removePopup1()">Cancel</button> -->
+         </div>
+       </div> 
+
+<script type="text/javascript">var resizefunc = [];</script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+</form>
+
+</body>
+<script type="text/javascript">
+T1=self.F1.T1, T2=self.F1.T2
+let popup1 = document.getElementById("popup1");
+var T3
+
+function jTogglePassword(event){
+	if(T2.type=="password"){
+		T2.type="text";
+		event.target.src = "./assets/images/eyeOpen.png";
+	}
+	else{
+		T2.type="password";
+		event.target.src = "./assets/images/eyeClose.png";
+	}
+}
+
+function jInitMe(){
+	T1.focus()
+}
+
+function jCheckKey(event){
+	jChangeMe();
+	if(event.which === 13){
+		event.preventDefault();
+		jLogin()
+	}
+}
+
+function jChangeMe(){
+	document.getElementById("AlertText").style.opacity=0
+}
+
+function jLogin(){	
+	if ((T1.value=="")||(T2.value=="")){
+		document.getElementById("AlertText").style.opacity=1
+		document.getElementById("AlertText").innerHTML="Please fill both fields"
+		return false
+	}
+	#server(..cLogin(T1.value,T2.value))#
+}
+function jResetPassword(){
+	window.open('trialResetPassword1.csp','_self')
+}
+function openPopup1(){
+    setTimeout(()=>{
+       popup1.classList.remove("inactive")
+    },100);
+}
+function removePopup1(){
+    popup1.classList.add("inactive");
+}
+
+function jContact(e){
+	e.preventDefault();
+    window.location.href="mailto:partnerships@jonda.health?subject=%5BJondaX%5D%20%20Request%20for%20Account%20Extension&body=I%20would%20like%20to%20extend%20the%20validity%20of%20my%20JondaX%20Trial%20profile."
+	window.location.reload();  
+}
+</script>
+<script language="cache" method="cLogin" arguments="d1,d2:%String">
+	d Validate^trialLogin
+</script>
+</html>

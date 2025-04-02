@@ -1,0 +1,200 @@
+<AutoPageENS domain="Ensemble" parentpage="UtilEnsHome.csp" pagename="Testing Service - 1 of 4" title="@Ensemble:EnsTestingService@Testing Service" >
+<csp:class includes="Ensemble,EnsUI">
+
+<script language="CACHE" runat="SERVER">
+
+	// test if a production is running and if it is enabled for testing
+	Set tEnabled = 0
+
+	Set tDescription = $$$Text("This is the Testing Service page. You can use this page to manually test Business Processes and Operations.")
+	Set tMessage = ""
+
+	If $Data($$$EnsRuntime) {
+		// running
+		Set tProduction = $G($$$EnsRuntime("Name"))
+
+		// are we enabled
+		&sql(SELECT TestingEnabled INTO :e
+			FROM Ens_Config.Production
+			WHERE Name = :tProduction)
+			
+		If ((SQLCODE = 0) && e) {
+			Set tEnabled = 1
+			Set tDescription2 = $$$Text("To proceed:")_"<ul><li>"_$$$Text("Select either the Business Process or Business Operation radio button;")_"</li><li>"_$$$LocalizeText("Ensemble","TSSelect2","Select a test target from the accompanying list; and,")_"</li><li>"_$$$LocalizeText("Ensemble","Press","Press")_" <b>"_$$$LocalizeText("Ensemble","btnNext","Next")_"</b>.</li></ul>"
+		}
+		Else {
+			Set tProduction = tProduction
+			Set tMessage = $$$Text("Testing is not enabled for this Production.")
+			Set tDescription2 = $$$Text("In order to use the Testing Service you must enable testing for this production using the ")_"<nobr><a href=""UtilEnsProductions.csp"">"_$$$LocalizeText("Ensemble","ProdConfigPage","Production Configuration page")_"</a></nobr>"
+		}
+	}
+	Else {
+		// stopped
+		Set tProduction = "N/A"
+		Set tDescription2 = $$$Text("In order to use the Testing Service you must start this production using the ")_"<nobr><a href='UtilEnsProductions.csp'>"_$$$LocalizeText("Ensemble","ProdConfigPage","Production Configuration page")_".</a></nobr>"
+		Set tMessage = $$$Text("No production is running.")
+	}
+
+</script>
+
+<html>
+<head>
+<title><csp:text Domain="Ensemble">Testing Service</csp:text></title>
+<LINK REL="stylesheet" TYPE="text/css" HREF="/csp/sys/csputils.css" TITLE="Standard Style" >
+
+<script language="JavaScript">
+function changeType()
+{
+	// which radio button is selected	
+	var el = self.document.getElementById("radioProcess");
+	if (el) {
+		var process = el.checked;
+
+		el = self.document.getElementById("selectProcess");
+		if (el) {
+			el.disabled = !process;
+		}
+		
+		el = self.document.getElementById("selectOperation");
+		if (el) {
+			el.disabled = process;
+		}
+	
+		if (process) {
+			changeProcess();
+		}
+		else {
+			changeOperation();
+		}
+	}
+
+	return true;
+}
+
+function changeProcess()
+{
+	var target = self.document.getElementById("selectProcess").value;
+	var next = self.document.getElementById("btnNext");
+	next.disabled = (target == '');
+	return true;
+}
+
+function changeOperation()
+{
+	var target = self.document.getElementById("selectOperation").value;
+	var next = self.document.getElementById("btnNext");
+	next.disabled = (target == '');
+	return true;
+}
+</script>
+
+</head>
+<body onload="changeType();">
+
+<table border="0" class="LayoutMain" width="100%" height="100%" cellpadding="0" cellspacing="0">
+<tr height="100%">
+<td class="LayoutContentCol" width="80%" >
+
+<form action="#(..Link("UtilEnsTestingService1.csp"))#">
+<div style="margin-left:22%;margin-right:22%;" class="text1">#(tDescription)#</div>
+<div style="margin-left:22%;margin-right:22%;" class="text">#(tDescription2)#</div>
+<div align="center">
+
+<table border="0" cellspacing="5" cellpadding="2">
+
+<tr><td colspan="2">
+<span style="font-size: 0.8em;" Domain="Ensemble" TextId="CurrentProduction">Current Production:</span></td></tr>
+
+<tr><td colspan="2"><b>#(tProduction)#&nbsp;</b></td></tr>
+
+<csp:IF condition="$L(tMessage)">
+
+<tr><td colspan="2"><font color="red">#(tMessage)#&nbsp;</font></td></tr>
+</csp:IF>
+
+
+<csp:IF condition="tEnabled">
+
+<tr><td colspan="2"><hr></td></tr>
+
+<tr><td colspan="2">
+<span style="font-size: 0.8em;" TextId="Target" Domain="Ensemble" TextId="Target">Target:</span></td></tr>
+
+<!--  processes -->
+<tr><td align="left">
+<input id="radioProcess" type="radio" name="TYPE" checked value="process" onclick="changeType();"><csp:text Domain="Ensemble" TextId="BP">Business Process</csp:text></td>
+
+<td>
+<select id="selectProcess" name="PROCESS" onchange="changeProcess();">
+
+<script language="CACHE" runat="SERVER">
+
+	If tEnabled {
+		// get list of available hosts
+		&sql(DECLARE sql1 CURSOR FOR
+			SELECT Name,ClassName INTO :tName, :tCls
+			FROM Ens_Config.Item
+			WHERE Production->Name = :tProduction
+			ORDER BY Name
+		)
+
+		&html<<option value="">{#($$$Text("Select a Business Process"))#}</option>>
+
+		&sql(OPEN sql1)
+		&sql(FETCH sql1)
+		While (SQLCODE = 0) {
+			Set tName = $S(tName="":tCls,1:tName)
+			If ((tCls'="EnsLib.Testing.Process") && $zobjclassmethod(tCls,"%IsA","Ens.BusinessProcess")) {
+				&html<<option value="#(tName)#">#(tName)#</option>>
+			}
+			&sql(FETCH sql1)
+		}
+		&sql(CLOSE sql1)
+	}
+</script>
+</select>
+</td></tr>
+
+<!-- operations -->
+<tr><td align="left">
+<input id="radioOperation" type="radio" name="TYPE" value="operation" onclick="changeType();"><csp:text Domain="Ensemble" TextId="BO">Business Operation</csp:text></td>
+<td>
+<select id="selectOperation" name="OPERATION" disabled onchange="changeOperation();">
+
+<script language="CACHE" runat="SERVER">
+	If tEnabled {
+		&html<<option value="">{#($$$TextHTML("Select a Business Operation"))#}</option>>
+
+		&sql(OPEN sql1)
+		&sql(FETCH sql1)
+		While (SQLCODE = 0) {
+			Set tName = $S(tName="":tCls,1:tName)
+			If ($zobjclassmethod(tCls,"%Extends","Ens.BusinessOperation")) {
+				&html<<option value="#(tName)#">#(tName)#</option>>
+			}
+			&sql(FETCH sql1)
+		}
+		&sql(CLOSE sql1)
+	}
+</script>
+</select>
+</td></tr>
+
+</CSP:IF>
+
+<tr><td colspan="2"><hr></td></tr>
+<tr><td align="right">&nbsp;</td>
+<td align="left">
+<input id="btnBack" type="button" Domain="Ensemble" TextId="btnBack" value="Back" disabled>&nbsp;
+<input id="btnNext" type="submit" Domain="Ensemble" TextId="btnNext" value="Next" disabled>&nbsp;&nbsp;&nbsp;
+<input type="button" Domain="Ensemble" TextId="btnCancel" value="Cancel" onclick="self.location='#(..Link("UtilEnsHome.csp"))#';">
+</td></tr>
+</table>
+</div>
+</form>
+
+</td></tr></table>
+
+</body>
+</script>
+</html>

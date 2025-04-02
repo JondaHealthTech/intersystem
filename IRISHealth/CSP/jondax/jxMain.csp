@@ -1,0 +1,332 @@
+
+<html>
+<head>
+<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	i $g(%session.Data("UserID"))="" s %response.Redirect="jxLockDown.csp" q 1
+	q 1
+</script>
+<script language="cache" runat="server">
+	s id=$g(%session.Data("UserID"))
+	d HEAD1^WSP999
+</script>
+<link rel="stylesheet" href="assets/styles/cMain.css">
+</head>
+<body style="margin: 0px 0px">
+	<div id="wrapper">
+        <div class="bg-wrapper"><div class="bg3"><img src="./assets/images/bg3.png"></div></div>
+		<div class="content">
+			<div class="side-nav">
+				<img class="close-nav mobile-active" src="./assets/images/cross.png" alt="Cross" onclick="closeMobileNav(event)">
+				<img class="logo" src="./assets/images/JX Logo Blue.png" alt="Jonda Health">
+				<img class="logo-small" src="./assets/images/X Blue Pink.png" alt="Jonda Health">
+				<br>
+				<img class="profile" src="./CompanyLogos/default.png" alt="Profile">
+                    <h3><script language="cache" runat="server">w $s($g(%session.Data("CompanyName"))'="":$g(%session.Data("CompanyName")),1:"")</script></h3>
+                    <p class="location"><script language="cache" runat="server">w $s($g(%session.Data("City"))'="":$g(%session.Data("City")),1:""),$s($g(%session.Data("City"))'="":", ",1:""),$s($g(%session.Data("Country"))'="":$g(%session.Data("Country")),1:"")</script></p>
+                    <p class="plan" id="PlanName">Trial Plan</p>
+                    <div class="nav-items">
+                    	<!--<script language="cache" runat="server">
+                    		d WriteMenu^jxSideNav("Dashboard",0)
+                    	</script>-->
+                    	<div class='nav-item collapse dashboard active' onclick="jPopMain('jxDashboard.csp')">
+    						<div class='nav-collapse-item active'>
+    							<img class='dark' src='./assets/images/sNavDashboard_dark.png' alt='Settings'>
+    							<img src='./assets/images/sNavDashboard.png' alt='Dashboard'>
+    							<div class='nav-collapse'>
+    								<div class='nav-collapse-btn' onclick=''>
+    									<p>Dashboard</p>
+    									<img class='grey' src='./assets/images/dropDownGrey.png' alt='DropDown'  onclick='toggleCollapseDashboard(event)'>
+    									<img class='close-dark' src='./assets/images/dropDownCloseBlack.png' alt='DropDown' onclick='toggleCollapseDashboard(event)'>
+    									<img class='dark' src='./assets/images/dropDownBlack.png' alt='DropDown' onclick='toggleCollapseDashboard(event)'>
+    								</div>
+    							</div>
+    						</div>
+    						<div id='Activity' class='nav-collapse-field' onclick='openDashboardPages(event)'>Activity</div>
+   							<div id='Success' class='nav-collapse-field' onclick='openDashboardPages(event)'>Transaction Success Rate</div>
+    						<div id='TempUsage' class='nav-collapse-field' onclick='openDashboardPages(event)'>Templates Usage</div>
+    						<div id='Usage2' class='nav-collapse-field' onclick='openDashboardPages(event)'>Usage Quota</div>
+    					</div>
+    					<script language="cache" runat="server">
+	                   		s uid=%session.Data("UserID"),setting=""
+	                   		&sql(SELECT Setting INTO :setting FROM MX."User" WHERE ID=:uid)
+	                   		i (setting'=5),(setting'=6),(setting'=15) d
+	    					. w "<div class='nav-item upload' onclick='jPopMain(""jxS3Upload.csp"")'>",!
+	    					. w "	<img src='./assets/images/trial/smallUpload.png' alt='Data Transform'>",!
+	    					. w "	<img class='dark' src='./assets/images/trial/uploadF.png' alt='Buckets'>",!
+	    					. w " 	<p>Upload files</p>",! 
+	    					. w "</div>",!
+	    					.
+	    					. w "<div class='nav-item download' onclick='jPopMain(""jxS3Download.csp"")'>",!
+	    					. w "	<img src='./assets/images/trial/smallDownload.png' alt='Data Transform'>",!
+	    					. w "	<img class='dark' src='./assets/images/trial/downloadF.png' alt='Buckets'>",!
+	    					. w " 	<p>Download files</p>",! 
+	    					. w "</div><!--",!
+						</script>
+    					
+    					
+    					<div class='nav-item transform' onclick="jPopMain('jxFileUpload.csp')">
+    						<img src='./assets/images/sNavDT.png' alt='Data Transform'>
+    						<img class='dark' src='./assets/images/sNavDT_dark.png' alt='Data Transform'>
+    						<p>Data Transformations</p>
+    					</div>
+	                   <script language="cache" runat="server">
+	                   		s uid=%session.Data("UserID") i uid'=1,uid'=13 d
+	    					. w "<a class='nav-item' onclick='jOpenTemplated()'>",!
+	    					. w "	<img src='./assets/images/sNavDT.png' alt='Transform'>",!
+	    					. w "	<p>Template Transformation</p>",!
+	    					. w "</a>",!
+	    					.
+	    					. w "<a class='nav-item' onclick='jOpenRedact()'>",!
+	    					. w "	<img src='./assets/images/sNavDT.png' alt='Redact'>",!
+	    					. w "	<p>Redaction Demo</p>",!
+	    					. w "</a>",!
+						</script>
+    					<div class='nav-item collapse setting' onclick='toggleCollapseSetting(event)'>
+    						<div class='nav-collapse-item'>
+    							<img class='dark' src='./assets/images/sNavPassword_dark.png' alt='Password'>
+    							<img src='./assets/images/sNavPassword.png' alt='Password'>
+    							<div class='nav-collapse'>
+    								<div class='nav-collapse-btn' onclick=''>
+    									<p>Settings</p>
+    									<img class='grey' src='./assets/images/dropDownGrey.png' alt='DropDown'  onclick='toggleCollapseSetting(event)'>
+    									<img class='close-dark' src='./assets/images/dropDownCloseBlack.png' alt='DropDown' onclick='toggleCollapseSetting(event)'>
+    									<img class='dark' src='./assets/images/dropDownBlack.png' alt='DropDown' onclick='toggleCollapseSetting(event)'>
+    								</div>
+    							</div>
+    						</div>
+    						<div class='nav-collapse-field' id='change-pw' onclick="openSettingPages(event)">Change Password</div>
+    					</div>
+    					<div class='nav-item collapse template' onclick='toggleCollapseTemplate(event)'>
+    						<div class='nav-collapse-item'>
+    							<img class='dark' src='./assets/images/sNavSettings_dark.png' alt='Settings'>
+    							<img src='./assets/images/sNavSettings.png' alt='Settings'>
+    							<div class='nav-collapse'>
+    								<div class='nav-collapse-btn' onclick=''>
+    									<p>Templates</p>
+    									<img class='grey' src='./assets/images/dropDownGrey.png' alt='DropDown'  onclick='toggleCollapseTemplate(event)'>
+    									<img class='close-dark' src='./assets/images/dropDownCloseBlack.png' alt='DropDown' onclick='toggleCollapseTemplate(event)'>
+    									<img class='dark' src='./assets/images/dropDownBlack.png' alt='DropDown' onclick='toggleCollapseTemplate(event)'>
+    								</div>
+    							</div>
+    						</div>
+    						<script language="cache" runat="server">
+    						d WriteTemplates^jxSideNav
+    						</script>
+    					</div>
+    					<script language="cache" runat="server">
+	                   		s uid=%session.Data("UserID"),setting=""
+	                   		&sql(SELECT Setting INTO :setting FROM MX."User" WHERE ID=:uid)
+	                   		i (setting'=5),(setting'=6) d
+	                   		.;w "-->",!
+	                   	</script>	
+    					<a class='nav-item' href='mailto:support@jonda.health'>
+    						<img src='./assets/images/sNavSupport.png' alt='Support'>
+    						<p>Support</p>
+    					</a>
+                    </div>
+                    <div class="nav-footer">
+                        <div class="logout" onclick="jLogout()"><img src="./assets/images/logout.png" alt="Log Out"><p>Log Out</p></div>
+                        <div class="copyright">Jonda Health &copy; 2023 </div>
+                    </div>
+                    <div class="collapseBtn active" >
+                        <img class="collapseClose" src="./assets/images/collapseClose.png" alt="collapse" onclick="toggleSideNav()">
+                        <img class="collapseOpen" src="./assets/images/collapseOpen.png" alt="collapse" onclick="toggleSideNav()">
+                    </div>
+			</div>
+			<div class="main-field" id="main-field" style="vertical-align:top;padding:0px;">
+				<iframe src="jxDashboard.csp" name="iFrame1" id="iFrame1" style="width:100%;height:100%;border:0px;overflow:scroll" scrolling="yes" onload="changeNavItems(event)">
+				
+				</iframe>
+				<i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;z-index:101" onclick="openMobileNav(event)"></i>
+			</div>
+		</div>
+	</div>
+    <div id="popup1" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>Trial Limit Reached</h4>
+            <p>Your free trial for file transformations and pre-processing of PDFs and image files has ended. If you've loved the experience, consider choosing a package that best suits your needs.</p>
+            <a type="button" class="green-btn" href="mailto:partnerships@jonda.health?subject=Pricing for JondaX">Upgrade Now</a>
+        </div>
+    </div>
+    <div id="popup2" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>Out of Credits!</h4>
+            <p>You've utilized all your file transformations and pre-processing credits for PDFs and image files for this month. Any further transformations and pre-processing credits will be charged per transaction until next month. </p>
+            <a type="button" class="green-btn" href="mailto:partnerships@jonda.health?subject=Pricing for JondaX">Review Packages</a>
+        </div>
+    </div>
+    <script>
+        var resizefunc = [];
+    </script>
+    <!-- jQuery  -->
+	<script language="cache" runat="server">
+		d jQueryCore^CSP999
+	</script>
+
+</body>
+<script language="cache" runat="server">
+	d jScript^jxScripts
+	d jScript2^jxScripts
+</script>
+
+<script type="text/javascript">
+iFrame1=document.getElementById("iFrame1")
+let mySessionEnd;	
+iFrame1=document.getElementById("iFrame1");
+
+window.onload = jInitMe;
+document.onmousemove = resetTimer;
+document.onmousedown = resetTimer; // touchscreen presses
+document.ontouchstart = resetTimer;
+document.onclick = resetTimer; // touchpad clicks
+document.onkeypress = resetTimer;
+document.addEventListener('scroll', resetTimer, true); 
+function resetTimer(){
+	// Resets the session timer and trigger jLockDown after 1 hour (3600000 ms) of inactivity.
+	clearTimeout(mySessionEnd);
+	mySessionEnd = setTimeout(jLockDown, 3600000);
+}
+function clearTimer(){
+	// Clears the session timeout to prevent jLockDown from being triggered.
+	clearTimeout(mySessionEnd);
+}
+function jOpenTemplated(){
+	iFrame1.src="jxAltFileUpload.csp"	
+}
+function jOpenRedact(){
+	iFrame1.src="DemoDePii.csp"	
+}
+function jInitMe(){
+	#server(..cInitMe())# // Landing page after Login 
+	if(iFrame1.src.includes("jxDashboard")){
+		if(localStorage.getItem("trans-count")==0){
+			document.querySelector(".nav-item.dashboard.active .nav-collapse-btn img.dark").style.display="none";
+		}
+		else{
+		    document.querySelector(".nav-item.dashboard.active .nav-collapse-btn img").style.display="none";
+		    document.querySelector(".nav-item.dashboard.active .nav-collapse-btn img.dark").style.display="block";
+		}	
+	}
+	resetTimer();
+}
+function openTemplatePages(e){
+		e.stopPropagation();
+		let pageName = e.target.textContent;
+		jPopMain('jxViewTemp.csp');
+		#server(..cSaveBucket(pageName))#
+}
+
+function jPopMain(val){
+	#server(..cCheckSession())#
+	if(document.querySelector(".side-nav.nav-open")!=null){
+		document.querySelector(".side-nav.nav-open").classList.remove("nav-open");
+	}
+	iFrame1.src=val
+}
+let bk;
+function changeNavItems(e){
+	let src=e.target.src.split("/jx")[1].split(".")[0];
+	if(src.startsWith("Dashboard")){
+		let actives = document.querySelectorAll(".active");
+		for(i=0;i<actives.length;i++){
+			if(!actives[i].classList.contains("dashboard")){
+				actives[i].classList.remove("active");
+			}
+		}
+		let id=src.split("Dashboard")[1];
+		if(id!=""){
+			document.getElementById(id).classList.add("active");
+			document.querySelector(".nav-item.dashboard").classList.add("collapse-open");
+			document.querySelector(".nav-item.dashboard").classList.add("active");
+			if(localStorage.getItem("trans-count")!=0){
+		    	document.querySelector(".nav-item.dashboard .nav-collapse-btn img").style.display="none";
+		    	document.querySelector(".nav-item.dashboard .nav-collapse-btn img.dark").style.display="block";
+			}
+		}else{
+			if(localStorage.getItem("trans-count")!=0){
+		    	document.querySelector(".nav-item.dashboard .nav-collapse-btn img").style.display="none";
+		    	document.querySelector(".nav-item.dashboard .nav-collapse-btn img.dark").style.display="block";
+			}
+			document.querySelector(".nav-item.dashboard").classList.add("active");
+			document.querySelector(".nav-item.dashboard .nav-collapse-item").classList.add("active");
+		}
+	}
+	else {
+		let actives = document.querySelectorAll(".active");
+		for(i=0;i<actives.length;i++){
+			actives[i].classList.remove("active");
+		}
+		if(localStorage.getItem("trans-count")!=0){
+		    document.querySelector(".nav-item.dashboard .nav-collapse-btn img").style.display="block";
+		    document.querySelector(".nav-item.dashboard .nav-collapse-btn img.dark").style.display="none";
+		}
+		switch(src){
+			case "FileUpload":document.querySelector(".nav-item.transform").classList.add("active");break;
+			case "Buckets":document.querySelector(".nav-item.upload").classList.add("active");break;
+			case "S3Download":document.querySelector(".nav-item.download").classList.add("active");break
+			case "ChangePassword":{
+				document.querySelector("#change-pw").classList.add("active");
+				document.querySelector(".nav-item.setting").classList.add("collapse-open");
+				document.querySelector(".nav-item.setting").classList.add("active");
+			}
+			break;
+			case "ViewTemp":{
+				#server(..cLoadBucket())#
+				document.getElementById(bk).classList.add("active");
+				document.querySelector(".nav-item.template").classList.add("collapse-open");
+				document.querySelector(".nav-item.template").classList.add("active");
+			}
+			break;
+		}
+	}
+}
+
+function jLogout(){
+	#server(..cLogout())#
+}
+function jLockDown(){
+	#server(..cLockDown())#
+}
+
+const checkScrollbar = ()=>{
+	let navItems = document.querySelector(".nav-items");
+    if(navItems.scrollHeight > navItems.clientHeight){
+        navItems.style.marginRight = "0.5vw";
+        navItems.style.paddingRight = "0.5vw";
+    }
+    else{
+       	navItems.style.marginRight = 0;
+        navItems.style.paddingRight = 0;
+    }
+}
+checkScrollbar();
+</script>
+
+<script language="cache" method="cInitMe">
+	d LoadProfile^jxSideNav
+</script>
+<script language="cache" method="cSaveBucket" arguments="d1:%String">
+    s %session.Data("bk")=d1
+</script>
+ <script language="cache" method="cLoadBucket" arguments="d1:%String">
+    &js<bk="#(%session.Data("bk"))#">
+</script>
+ <script language="cache" method="cCheckSession">
+   if ($g(%session.Data("UserID"))=""){
+	   &js<window.open("jxLockDown.csp","_self")>
+   }
+</script>
+
+<script language="cache" method="cLockDown">
+	k %session.Data
+	&js<window.open("jxLockDown.csp","_parent")> // Lock down for inactivity of 1 hour
+</script>
+
+<script language="cache" method="cLogout">
+	d Logout^jxLogin($g(%session.Data("UserName"))) // Log out for inactivity of 1 hour
+</script>
+
+
+</html>

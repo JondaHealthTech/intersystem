@@ -1,0 +1,48 @@
+/* @class="%ZEN.Component.locatorBar" */
+/* @doc="Table used for locator bar." */
+.locatorBarTable {
+	font-size: 10pt;
+	width: 100%;
+}
+
+/* @doc="Cell within locator bar." */
+.locatorBarTable td {
+	background: #A0B088;
+	background-image: url(images/locatorgradient.png);
+	background-repeat: repeat-x;
+	border-bottom: 1px darkblue solid;
+	padding-bottom: 1px;
+}
+
+/* @doc="Div around locator links." */
+.locatorBarLinks {
+	font-size: 0.8em;
+	font-weight: bold;
+	color: darkblue;
+	text-decoration: none;
+	text-align: left;
+}
+
+/* @doc="Links in locator bar." */
+.locatorBarLinks a {
+	color: darkblue;
+	text-decoration: none;
+	padding-right: 1px;
+	padding-left: 1px;
+}
+
+.locatorBarLinks a:visited {
+	color: darkblue;
+}
+
+.locatorBarLinks a:hover {
+	color: red;
+	background: #FFFAE7;
+}
+
+/* @doc="Dropdown of jump links in locator bar." */
+.locatorBarSelect {
+	color: darkblue;
+	font-size: 0.8em;
+}
+/* EOF */

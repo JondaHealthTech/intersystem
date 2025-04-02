@@ -1,0 +1,882 @@
+/* ---------  System Manager Portal Style ------------------- */
+body {
+	font-family: Futura,Arial,sans-serif;
+}
+
+p {
+	font-size: 0.9em;
+	font-style: normal;
+	font-weight: normal;
+	color: #000000;
+}
+Title {
+	font-size: 16px;
+	font-weight: bold;
+}
+h2 {
+	font-size: 14px;
+	font-weight: bold;
+}
+h3 {
+	font-size: 0.9em;
+	font-weight: bold;
+}
+.footerlinks {
+	font-size: 10px;
+	font-style: normal;
+	color: #333333;
+}
+.ensemble-tagline {
+	font-size: 14px;
+	font-weight: bold;
+	color: #006699;
+}
+.quote-name {
+	font-size: 14px;
+	color: #000000;
+	text-align: right;
+}
+.quote-company {
+	font-size: 11px;
+	color: #000000;
+	font-weight: bold;
+	text-transform: capitalize;
+	text-align: right;
+}
+.back-to-top {
+	font-size: 10px;
+	font-style: normal;
+}
+A.buttonStyle
+{
+    COLOR: #000000;
+    FONT-SIZE: 12px;
+    TEXT-DECORATION: none
+}
+A.buttonStyle:visited
+{
+    COLOR: #000000;
+    TEXT-DECORATION: none
+}
+A.buttonStyle:hover
+{
+    COLOR: #00A090;
+}
+A.productBullets {
+	font-size: 12px;
+	color: #000000;
+	text-decoration: none;
+}
+A.productBullets:visited {
+    COLOR: #000000;
+    TEXT-DECORATION: none
+}
+A.productBullets:hover {
+    COLOR: #00A09A
+}
+ul {
+	font-size: 12px;
+	color: #000000;
+	list-style-type: square;
+}
+.run-inH-cache {
+	font-size: 14px;
+	font-weight: bold;
+	font-variant: small-caps;
+	color: #333695;
+}
+.breadCrumbs
+{
+    COLOR: #333695;
+    FONT-SIZE: 9px;
+}
+A.breadCrumbsLink
+{
+    COLOR: #333695;
+    FONT-SIZE: 9px;
+}
+A.breadCrumbsLink:visited
+{
+	COLOR: #333695;
+}
+A.breadCrumbsLink:hover
+{
+	COLOR: #00A090;
+}
+.run-inH-ensemble {
+	font-size: 14px;
+	font-weight: bold;
+	font-variant: small-caps;
+	color: #333695;
+}
+ol {
+	font-size: 12px;
+}
+A.SUB3buttonStyle
+{
+	COLOR: #000000;
+	FONT-SIZE: 11px;
+	TEXT-DECORATION: none;
+	text-align: right;
+}
+A.SUB3buttonStyle:visited
+{
+    COLOR: #000000;
+    TEXT-DECORATION: none
+}
+A.SUB3buttonStyle:hover
+{
+    COLOR: #00A090;
+}
+A.SUB4buttonStyle
+{
+	COLOR: #000000;
+	FONT-SIZE: 10px;
+	TEXT-DECORATION: none;
+	text-align: right;
+}
+A.SUB4buttonStyle:visited
+{
+    COLOR: #000000;
+    TEXT-DECORATION: none
+}
+A.SUB4buttonStyle:hover
+{
+    COLOR: #00A09A;
+}
+A.buttonStyleON
+{
+	COLOR: #333695;
+	FONT-SIZE: 12px;
+	TEXT-DECORATION: none;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+A.buttonStyleON:visited
+{
+	COLOR: #333695;
+	TEXT-DECORATION: none;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+A.buttonStyleON:hover
+{
+	COLOR: #00A09A;
+	padding-left: 2px;
+	padding-right: 2px;
+    
+}
+
+/* ----------------------------------------------------------
+
+Following styles are shared with Ensemble.
+
+------------------------------------------------------------- */
+/* layout styles */
+
+TABLE.LayoutMain {
+	font-family: Futura,Arial,sans-serif;
+	margin: 0px;
+	padding: 0px;
+}
+	
+TABLE.LayoutMain TR {
+	vertical-align: top;
+}
+
+TABLE.LayoutMain TD.LayoutMenuCol {
+	background: white;
+	border-right: 1px solid #cbcbcb;
+	vertical-align: top;
+}
+
+TABLE.LayoutMain TD.LayoutContentCol {
+	padding-left: 20px;
+	vertical-align: top;
+}
+
+DIV.TitleText {
+	font-size: 18px;
+	font-weight: bold;
+	color: #000000;
+	padding-left: 20px;
+}
+TD.Text1 {
+    color: #000000;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Menu styles */
+
+TABLE.Menu {
+	margin: 0px;
+	font: 1.0em;
+}
+
+
+DIV.MenuItem {
+}
+
+TD.MenuItem {
+	color: yellow;
+	background: #f2ce68;
+	width: 100%;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+	padding: 5px;
+}
+
+TD.MenuItem A.MenuItem {
+	color: black;
+	width: 100%;
+	padding: 0px;
+	text-decoration: none;
+}
+
+TD.MenuItem A:hover.MenuItem  {
+	color: black;
+	background: #FFF0B0;
+	width: 100%;
+	padding: 0px;
+	text-decoration: none;
+}
+
+TD.MenuItemCurr {
+	color: yellow;
+	background: #f7e8aa;
+	width: 100%;
+	border-bottom: 1px solid white;
+	padding: 5px;
+	text-decoration: none;
+
+}
+
+
+TD.MenuItemHi {
+	color: #333695;
+	background: #ffffff;
+	width: 100%;
+	border-bottom: 1px solid white;
+	padding: 5px;
+}
+
+TD.MenuItemHi A.MenuItem {
+	color: #333695;
+	width: 100%;
+	padding: 0px;
+	text-decoration: none;
+}
+
+TD.MenuItemCurrHi {
+	color: #333695;
+	background: #ffffff;
+	width: 100%;
+	border-bottom: 1px solid #cbcbcb
+	padding: 5px;
+}
+
+/* Detail pane table styles */
+
+DIV.DetailCommand { 
+	color: #333695;
+	border: 2px solid #333695;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.75px;
+	margin-right: 20px;
+	text-align: center;
+	text-decoration: none;
+	padding: 6px 20px;
+}
+
+A.DetailCommand { 
+	color: #333695;
+	border: 2px solid #333695;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.75px;
+	text-align: center;
+	text-decoration: none;
+	padding: 6px 20px;
+} 
+	
+A.DetailCommand:visited {
+	color: #333695;
+}
+	
+A.DetailCommand:hover {
+	border: 2px solid #00A09A;
+	color: #00A09A;
+	transition: color 0.03 ease;
+}
+
+/* table filter styles */
+
+.FilterTable {
+	border: 1px solid #F1F0E7;
+	border-radius:4px;
+	padding: 1px;
+	margin:10px 20px;
+}
+
+.FilterLabel {
+	color: black;
+	font-size: 0.7em;
+}
+
+.FilterMsg {
+	color: black;
+	font-size: 0.7em;
+}
+
+.FilterInput {
+	color: blue;
+	font-size: 0.7em;
+}
+
+
+.PagingButtons {
+	color: #3b84bc;
+	background: white;
+	border: 1px #cbcbcb solid;
+	padding: 1px;
+	font-size: 0.7em;
+}
+
+.PageLink {
+	color: black;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.PageLinkDisabled {
+	color: #B0B0FF;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.PageLinkCurr {
+	background: yellow;
+	color: #3b84bc;
+	font-weight: bold;
+	padding-left: 4px;
+	padding-right: 4px;
+	border-left: 1px black solid;
+	border-right: 1px black solid;
+}
+
+
+/* table details */
+
+TABLE.DetailTable	{ 
+	font-size: 11px;
+	margin-left: 20px; margin-right: 20px;
+	border: 1px #cbcbcb solid;
+}
+TABLE.DetailTable TH { 
+	font-weight: bold;
+	background:white; 
+	color: #888888;
+	text-align: center;
+}
+TABLE.DetailTable TH.SortCol { 
+	font-weight: bold;		
+	background: white; 
+	color: #3b84bc;
+	text-align: center;
+	}
+
+TABLE.DetailTable TH A { 
+	color: #3b84bc; 
+	font-weight: bold; 
+	text-decoration: none;
+	}
+
+TABLE.DetailTable TH.SortCol A { 
+	color: #3b84bc; 
+	font-weight: bold; 
+	text-decoration: none;
+	}
+
+TABLE.DetailTable TR.OddRow { background: #f0f0f0; }
+
+TABLE.DetailTable TR.EvenRow { background: #ffffff; }
+
+TABLE.DetailTable a:link, a:visited, a:active {
+	color: #333695;	
+}
+TABLE.DetailTable a:hover {
+	color:#00A09A;	
+}
+
+TD.DetailValue A {
+	width: 100%;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+TD.DetailValue DIV {
+	width: 100%;
+}
+
+TD.DetailLabel { 
+	color: #000000;
+	font-size: 12px;
+	font-weight: bold;
+}
+		
+TD.DetailMore {	
+	font-style: italic; 
+	color: #cbcbcb;
+	border-left: #cbcbcb solid 1px; 
+	border-bottom: #cbcbcb solid 1px; 
+	padding-left: 3px; 
+	padding-right: 5px; 
+}
+
+/* AutoForm styles */
+/* AutoForm: Form */
+
+TABLE.AutoForm	{ 
+	font-family: Futura,Arial,sans-serif;
+	background: #ffffff;
+	border: #cbcbcb solid 1px;
+	border-radius: 5px;
+	font-size: 16px;
+	margin-left: 20px; 
+	margin-right: 20px;
+}
+
+TD.AutoFormCaption {
+	font-weight: 600;
+	text-align: right;
+}
+
+TD.AutoFormButton {
+	padding-top: 10px;
+	text-align: right;
+}
+
+INPUT.AutoFormLookupButton {
+	font-weight: bold;
+	font-size: 0.6em;
+}
+
+
+/* AutoForm: Table */
+
+TABLE.AutoFormTable {
+	border: #cbcbcb solid 1px;
+	border-raidus: 5px;
+	font-size: 12px;
+	background: white;
+	margin-left: 20px; 
+	margin-right: 20px;
+}
+
+TR.AutoFormTableTitle {
+	background: #333695;
+	padding-left: 4px; 
+	padding-right: 4px;
+}
+
+TR.AutoFormTableTitle TH {
+	color: #888888;
+	font-weight: bold;
+	text-align: left;
+	border-bottom: #cbcbcb solid 1px;
+	border-right: #cbcbcb solid 1px;
+	padding: 3px;
+}
+
+TD.AutoFormTableExpandor {
+	background: #D0D0FF;
+	font-weight: bold;
+	border-bottom: #cbcbcb solid 1px;
+	padding: 3px;
+}
+
+TD.AutoFormTableCaption {
+	background: #ffffff;
+	color: #000000;
+	font-weight: bold;
+	border-bottom: #cbcbcb solid 1px;
+	border-right: #cbcbcb solid 1px;
+	padding: 3px;
+}
+TD.NumericCaption {
+	background: #D0D0FF;
+	border-bottom: #cbcbcb solid 1px;
+	border-right: #cbcbcb solid 1px;
+	padding: 3px;
+	text-align: right;
+}
+TD.AutoFormTableValue {
+	background: #FFFFFF;
+	border-bottom: #cbcbcb solid 1px;
+	border-right: #cbcbcb solid 1px;
+	padding: 3px;
+}
+	
+/* Use InfoTable to display a table with Name/Value pair
+   use th.title for title in the table. e.g. <th class="title" height="30" colspan=2> for "about" table.  
+*/	
+TABLE.InfoTable	{ 
+	background: #ffffff;
+	border: 1px solid #cbcbcb;
+	color: #000000;
+	font-size: 12px;
+	margin-left: 20px; 
+	margin-right: 20px;
+	border-radius: 5px;	
+}
+table.InfoTable th.title {
+	background: #F7F7F7;
+	border-bottom: #cbcbcb solid 1px; 
+	color: #000000;
+	font-weight: 600;
+	font-size: 18px;
+	text-align: left;
+	padding: 6px 30px;
+}
+table.InfoTable td.data { 
+	border-bottom: #CBCBCB solid 1px; 
+	font-size: 14px;
+	padding: 6px 30px;
+}
+
+table.InfoTable td.caption { 
+	font-weight: bold;	
+	border-bottom: #CBCBCB solid 1px; 
+	border-right: #CBCBCB solid 1px; 
+	font-size: 14px;
+	padding: 6px 30px;
+}
+	
+/* SMP User/Role Tab Menu */	
+td.menuHd {
+	background: white;
+	border-left: #346c8d solid 1px;
+	border-top: #346c8d solid 1px;
+	border-right: #346c8d solid 1px;
+	font-weight: bold;
+}
+td.menuHd A {
+	color: #3b84bc;
+	text-decoration: none;
+}
+td.menuHd A:hover {
+	color: #98923a;
+}		
+td.menuHdSel {
+	background: #edece4;
+	border-left: #346c8d solid 1px;
+	border-top: #346c8d solid 1px;
+	border-right: #346c8d solid 1px;
+	font-weight: bold;
+}
+td.menuHdSel A {
+	text-decoration: none;
+}	
+
+/* other styles */
+
+A.LastUpdate {
+	font-size: 12px;
+	color: #000000;
+	padding: 6px;
+	border: 1px solid #cbcbcb;
+	border-radius:4px;
+}
+A.LastUpdate:hover
+{
+	color: #00A09A;
+}
+
+DIV.ErrorBox {
+	margin: 20px;
+	border: 1px #cbcbcb solid;
+	border-radius: 5px;
+	color: #da4848;
+	font-family: Futura,Arial,sans-serif;
+	background: white;
+	padding:5px;
+}
+
+td.LocatorBar {
+	background: #ffffff;
+	border-bottom: 1px #cbcbcb solid;
+	padding-bottom: 1px;
+}
+
+DIV.Locator {
+	font-size: 12px;
+	font-weight: bold;
+	color: #333695;
+	text-decoration: none;
+}
+
+DIV.Locator A {
+	color: #333695;
+	text-decoration: none;
+	padding-right: 1px;
+	padding-left: 1px;
+}
+
+DIV.Locator A:visited {
+	color: #00A09A;
+}
+
+DIV.Locator A:hover {
+	color: #00A09A;
+	background: #FFFFFF;
+}
+
+/* ----------------------------------------------------------
+
+Following are not shared with Ensemble.   background:rgb(232,231,225);
+
+------------------------------------------------------------- */
+
+.wizardlabel {
+	font-size: 12px;
+	color: #000000;
+	text-align: right;
+}
+.wizardltlabel {
+	font-size: 12px;
+	color: #000000;
+	text-align: left;
+}
+
+/* ----------------------------------------------------------
+
+Following are new for 2010 - from %ZEN.Portal.application.
+
+------------------------------------------------------------- */
+/* style for "Management Portal" */
+.portalName {
+	color:#000000;
+	font-family: Futura,Arial,sans-serif; 
+	font-size:18px;
+	font-weight: bold;
+	text-align:left;
+	text-valign: middle;
+	position: absolute;
+	left: 300px;
+	top: 20px;
+}
+.portalPropertyPanelTitle {
+	color: white;
+	font-size: 12pt;
+	padding: 5px;
+}
+
+.portalPropertyPanelCommands {
+	color: white;
+	background: rgb(53,107,141);
+	width: 100px;
+	text-align: center;
+	font-size: 9pt;
+	border: 1px solid #CBCBCB;
+}
+.portalTitle {
+	width: 100%;
+	height: 100px;
+	position: relative;
+	box-shadow:0 2px 8px 0 rgba(0,0,0,0.12);
+	box-sizing: border-box;
+}
+.portalTitleInfoBox {
+	left: 20px;
+	position: absolute;
+	top: 70px;
+	width: 100%;
+	box-shadow:0 2px 8px 4 rgba(0,0,0,0.12);
+}
+
+.portalTitleInfoLabel {
+	font-family: Futura,Arial,sans-serif;
+	font-size: 14px;
+	font-weight: bold;	
+	color: #000000;
+	padding: 2px 2px;
+}
+
+.portalTitleInfoVal {
+	font-family: Futura,Arial,sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	color: #000000;
+	padding: 4px 12px 4px 2px;
+}
+
+.portalLostConnectivityWarn {
+	font-family: Futura,Arial,sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	letter-spacing: 0.75px;
+	text-align: center;	
+	background: #aa4040;
+	color:#ffffff;
+	border-radius: 4px;
+	padding: 6px 20px;
+	margin-left: 20px;
+}
+
+/* style to show "Development System" or "Live System", etc. */
+#portalServerFlag {
+	float: left;	
+}
+.portalTitleServerFlag {
+	border: 2px solid #333695;
+	border-radius: 4px;
+	color: #000000;
+	font-family: Futura,Arial,sans-serif;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.75px;
+	padding: 4px 20px;
+}
+.portalTitleServerFlagLive {
+	color: #da4848;  /* red */
+	border: 2px solid #da4848;
+}
+.portalTitleListBox {
+	position: absolute;
+	top: 5px;
+	left: 20px;
+	font-size: 9pt;	
+}
+/* tool ribbon */
+.toolRibbon {
+	height: 48px;
+	background: white;
+	border-bottom: 2px solid #E3E3E3;
+	vertical-align: middle;
+}
+/* dark green and bold for ribbon title */
+.ribbonTitle {
+	color:#00AFA9;
+	font-family: Futura,Arial,sans-serif; 
+	font-size:36px;
+	text-align:left;
+}
+.rednote {
+	font-size: 11px;
+	color: #da4848;
+	text-align: left;
+	font-weight: bold;
+}
+.greennote {
+	font-size: 11px;
+	color: #52b012;
+	text-align: left;
+	font-weight: bold;
+}
+.normal {
+	color: black;
+	font-size: 12px;
+	padding-right: 5px;
+}
+
+/* == New Styles == */
+body {
+	font-family: Futura,Arial,sans-serif;
+}
+.topLine {
+	border-top: 2px solid #333695;
+}
+.portalTitle {
+	width: 100%;
+	height: 100px;
+	position: relative;
+	box-shadow:0 2px 8px 0 rgba(0,0,0,0.12);
+	box-sizing: border-box;
+}
+/* style for "Management Portal" */
+.portalName {
+	color:#000000;
+	font-family: Futura,Arial,sans-serif; 
+	font-size:18px;
+	font-weight: bold;
+	text-align:left;
+	text-valign: middle;
+	position: absolute;
+	left: 300px;
+	top: 20px;
+}
+.portalTitleInfoLabel {
+	font-family: Futura,Arial,sans-serif;
+	font-size: 14px;
+	font-weight: bold;	
+	color: #000000;
+	padding: 2px 2px;
+}
+.portalTitleInfoVal {
+	font-family: Futura,Arial,sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	color: #000000;
+	padding: 4px 12px 4px 2px;
+}
+#portalServerFlag {
+	float: left;	
+}
+.portalTitleServerFlag {
+	border: 2px solid #333695;
+	border-radius: 4px;
+	color: #000000;
+	font-family: Futura,Arial,sans-serif;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.75px;
+	padding: 4px 20px;
+}
+.portalTitleServerFlagLive {
+	color: #da4848;  /* red */
+	border: 2px solid #da4848;
+}
+.portalTitleLink {
+	color: #000000;
+	font-family: Futura,Arial,sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	padding: 2px;
+	text-decoration: none;
+}
+.portalServerLink {
+	color: #333695;
+	font-family: Futura,Arial,sans-serif;
+	font-size: 12px;
+	font-weight: 550;
+	text-decoration: underline;
+}
+.portalLocatorLink {
+	text-decoration: none;
+}
+.portalTitleLink:hover,.portalServerLink:hover,.portalLocatorLink:hover {
+	color: #00A09A;
+	transition: color 0.03 ease;
+}
+/* command button styles */
+.commandButton {
+	background: #FFFFFF;
+	border-radius: 4px;
+ 	border: 2px solid #333695;
+	color: #333695;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.75px;
+	padding: 6px 20px;
+	text-align: center;
+	text-decoration: none;
+}
+.commandButton:hover {
+	color: #00A09A;
+	background: #ffffff;
+	border: 1px solid #00A09A;
+}

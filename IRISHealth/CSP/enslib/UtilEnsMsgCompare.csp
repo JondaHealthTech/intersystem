@@ -1,0 +1,8 @@
+<html>
+
+<frameset id="frameset" cols="50%,50%" frameborder=yes frameborder=1 border=2" >
+<frame src="CSPX.EnsMsgContentsPane.cls?$ID1=#($G(%request.Data("$ID1",1)))#" name="Left" MARGINWIDTH="0" MARGINHEIGHT="0" FRAMESPACING="0" FRAMEBORDER="1" SCROLLING="yes" >
+<frame src="CSPX.EnsMsgContentsPane.cls?$ID1=#($G(%request.Data("$ID2",1)))#" name="Right" MARGINWIDTH="0" MARGINHEIGHT="0" FRAMESPACING="0" FRAMEBORDER="1" SCROLLING="yes" >
+</frameset>
+
+</html>

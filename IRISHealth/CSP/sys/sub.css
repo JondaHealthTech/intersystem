@@ -1,0 +1,57 @@
+.wizard1 { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: black; }
+.wizard {  font-family: Verdana, Arial, Helvetica, sans-serif; 
+	background-color: #CCCCCC; border-color: #FFFFFF #999999 #CCCCCC #FFFFFF; 
+	position: relative; visibility: visible; height: 400px; width: 600px; left: 100px; top: 20px; 
+	font-style: normal; border-style: ridge; border-top-width: thin; border-right-width: thin; 
+	border-bottom-width: thin; border-left-width: thin
+	z-index: 100
+	}
+.wizardtop {  background-color: #003366; height: 20px; 
+	padding-top: 1px; padding-right: 1px; padding-bottom: 1px; padding-left: 3px; 
+	font-family: Verdana, Arial, Helvetica, sans-serif; color: #FFFFFF: 101
+	}
+
+.cntpara {font-family: "Trebuchet MS", Arial, sans-serif; font-size: 14px; margin-top: 0px; margin-bottom: 16px; color: #666666; line-height: 180%; text-align: justify}
+.cntpara b {font-family: Verdana, Arial, Helvetica, sans-serif; color: #666666}
+.menheadings {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 16px; font-weight: bold}
+a:link {color: #669999; text-decoration: underline}
+a:visited {color: #999999; text-decoration: underline}
+a:hover {color: #000000; text-decoration: underline}
+a:active {color: #000000; text-decoration: underline}
+.linkbar {  font-family: "Trebuchet MS", Arial, sans-serif; font-size: 10px}
+h1 {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 16px; color: #999999; font-weight: bold}
+h2 { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: #FFCC00; font-weight: bold; letter-spacing: 2px}
+h3 { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: #000000; font-weight: bold}
+
+.stepSelected { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; color: #666699; font-weight: bold; }
+.dark { background: #ffce84; }
+.light { background: #f7f7f7; }
+
+TABLE.NAV 		{ 
+	border: solid #8d9fa0 1px; 
+	font-size: 14px; 
+}
+TABLE.NAV TR.Major { 
+	background-color : #FFCE84; 
+	font-weight: bold;
+	text-decoration : none;
+	text-align: center;
+}
+
+TABLE.NAV TR.Minor { 
+	background-color : #FFFFFF; 
+	text-decoration : none;
+	text-align: left;
+}
+TABLE.NAV a:hover {
+	background-color : #99CC99;
+	color : #666666;
+}
+TABLE.NAV a:link { color: blue;
+ 	text-decoration : none;
+}
+TABLE.NAV a:active { color: blue; }
+TABLE.NAV a:visited { color: blue; 
+	text-decoration : none;
+}
+.wizardbottom { background-color: #CCCCCC; height: 20px; padding-top: 1px; padding-right: 1px; padding-bottom: 1px; padding-left: 3px; font-family: "Courier New", Courier, mono; border-color: black #FFFFFF #FFFFFF; border-style: inset; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-left-width: thin}

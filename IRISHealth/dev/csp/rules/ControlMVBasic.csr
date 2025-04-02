@@ -1,0 +1,254 @@
+<%@ page Language="basic" %>
+<!-- CSP Control Flow Rules for pages compiled to Basic code-->
+<!-- Copyright (c) 2000 InterSystems Inc. ALL RIGHTS RESERVED. -->
+
+<!-- IF --------------------------------------------- -->
+<csr:rule name="%IFMVBASIC" match="csp:if" language="mvbasic">
+<csr:attribute name=Condition required description="A run-time expression to be evaluated." type="expression:STRING">
+
+<csr:description>
+	The <b>csp:if</b> tag displays its contents if the Cache expression specified by the <b>condition</b> attribute evaluates to TRUE at run-time.
+	<p>
+	The following example tests if the <var>%session</var> object contains a value for 
+	<var>USERNAME</var>. If not it places an error message on the document:
+	<EXAMPLE>
+		<csp:if condition='(%session->Get("USERNAME")="")'>
+		Unauthorized Access!
+		</csp:if>
+	</EXAMPLE>
+</csr:description>
+
+<csr:class super=%CSP.RuleBlock>
+
+<csr:action>
+	<script language="Basic" runat="compiler">
+		me.NewBlock()
+		me.NextLabel=me.GetNewLabel()
+		me.WriteServer(" If (Not (" & UnEscapeHTML@%cspQuote(me.GetAttribute("condition","0")) & ")) Then Goto " & me.NextLabel & "; !{")
+	</script>
+	<csr:children>
+	<script language="Basic" runat="compiler">
+		comment=" !}"
+		If (me.EndLabel<>"") Then me.WriteServer(me.EndLabel & ": " & comment) : comment=""
+		If (me.NextLabel<>"") Then me.WriteServer(me.NextLabel & ": " & comment)
+		me.RemoveBlock()
+	</script>
+</csr:action>
+
+</csr:rule>
+
+<!-- ELSE --------------------------------------------- -->
+<csr:rule name="%ELSEMVBASIC" match="csp:if/csp:else" empty language="mvbasic">
+
+<csr:description>
+	The <b>csp:else</b> tag, placed within a <b>csp:IF</b> block, specifies that the text between it 
+	and the end of the <b>csp:if</b> are displayed if the <b>csp:if</b> <b>condition</b> evaluates to false 
+	at run-time.
+	<p>For example:
+	<EXAMPLE>
+	<csp:if condition='(name="Jack")'>
+		Hello, Jack!
+	<csp:else>
+		Hello, someone who is not Jack!
+	</csp:if>
+	</EXAMPLE>
+</csr:description>
+
+<csr:class super=%CSP.RuleBlock>
+
+<csr:action>
+	<script language="Basic" runat="compiler">
+		ifblock=me.GetCurrentBlock()
+		If (ifblock<>"") Then
+			If (ifblock.EndLabel="") Then ifblock.EndLabel=me.GetNewLabel()
+			me.WriteServer(" Goto " & ifblock.EndLabel & "; !}")
+			me.WriteServer(ifblock.NextLabel & ": !{")
+			ifblock.NextLabel=""
+		End If
+	</script>
+</csr:action>
+</csr:rule>
+
+<!-- ELSEIF --------------------------------------------- -->
+<csr:rule name="%ELSEIFMVBASIC" match="csp:if/csp:elseif" empty language="mvbasic">
+
+<csr:description>
+	The <b>csp:elseif</b> tag, placed within a <b>csp:IF</b> block, specifies that the text between it 
+	and the end of the <b>csp:IF</b> (or the next <b>csp:IF</b>)
+	are displayed if the <b>csp:elseif</b> <b>condition</b> evaluates to true 
+	at run-time.
+	<p>For example:
+	<EXAMPLE>
+	<csp:if condition='(name="Jack")'>
+		Hello, Jack!
+	<csp:elseif condition='(name="Jill")'>
+		Hello, Jill!
+	<csp:else>
+		Hello, someone who is not Jack or Jill!
+	</csp:if>
+	</EXAMPLE>
+</csr:description>
+
+<csr:class super=%CSP.RuleBlock>
+
+<csr:action>
+	<script language="Basic" runat="compiler">
+		ifblock=me.GetCurrentBlock()
+		If (ifblock<>"") Then
+			If (ifblock.EndLabel="") Then ifblock.EndLabel=me.GetNewLabel()
+			me.WriteServer(" Goto " & ifblock.EndLabel & "; !}")
+			label=ifblock.NextLabel
+			ifblock.NextLabel=me.GetNewLabel()
+			me.WriteServer(label & ":")
+			me.WriteServer(" If (Not (" & UnEscapeHTML@%cspQuote(me.GetAttribute("CONDITION","0")) & ")) Then Goto " & ifblock.NextLabel & "; !{")
+		End If
+	</script>
+</csr:action>
+</csr:rule>
+
+<!-- LOOP --------------------------------------------- -->
+<csr:rule name="%LOOPMVBASIC" match="csp:loop" language="mvbasic">
+<csr:attribute name=Counter required description="The name of the counter variable used by this loop." type="counterName:STRING">
+<csr:attribute name=From description="The starting value of the loop counter." type="startingValue:INT">
+<csr:attribute name=To description="The ending value of the loop counter." type="endingValue:INT">
+<csr:attribute name=Step default=1 description="The amount the loop counter is changed by on each iteration." type="incrementAmount:INT">
+
+<csr:description>
+The <b>csp:loop</b> tag repeatedly executes its contents based on its attribute values.
+</csr:description>
+
+<csr:class super=%CSP.RuleBlock>
+
+<csr:action>
+	<script language="Basic" runat="compiler">
+		counter=me.GetAttribute("counter","counter")
+		from=me.QuoteAttribute("from",1)
+		step=me.QuoteAttribute("step",1)
+		to=me.QuoteAttribute("to",1)
+		me.NewBlock()
+		me.WriteServer(" For " & counter & " = " & from & " To " & to & " Step " & step & "; !{")
+	</script>
+	<csr:children>
+	<script language="Basic" runat="compiler">
+		me.WriteServer(" Next; !}")
+		me.RemoveBlock()
+	</script>
+</csr:action>
+</csr:rule>
+
+<!-- WHILE --------------------------------------------- -->
+<csr:rule name="%WHILEMVBASIC" match="csp:while" language="mvbasic">
+<csr:attribute name=Condition required description="A Cache expression evaluated after each iteration. If the expression evaluated to TRUE, then the loop is iterated again." type="expression:STRING">
+<csr:attribute name=Counter description="The name of a local variable that is automatically incremented upon each iteration. It is equal to 1 upon the first iteration." type="counterName:STRING">
+
+<csr:description>
+	The <b>csp:while</b> tag repeatedly executes its contents while the 
+	Cach&eacute; expression specified by <var>condition</var> is true.
+	<p>Upon each iteration, a local variable specified by <var>counter</var> 
+	is incremented. The counter variable is equal to 1 upon the first iteration. 
+	Its value is tested after each iteration.  The counter variable will not
+	be New'ed and it is the user's responsibility to avoid conflict with other variables.
+	If counter is not specfied, no counter will be generated.
+	<p>For example:
+	<EXAMPLE>
+	<csp:while counter="x" condition="(x<3)">
+		Item #(x)#
+	</csp:while>
+	</EXAMPLE>
+	Will produce the following result:
+	<br>
+	<OUTPUT>
+	Item 1<br>
+	Item 2<br>
+	Item 3
+	</OUTPUT>
+</csr:description>
+
+<csr:class super=%CSP.RuleBlock>
+
+<csr:action>
+	<script language="Basic" runat="compiler">
+		counter=me.GetAttribute("counter")
+		me.NewBlock()
+		me.EndLabel=me.GetNewLabel()
+		me.NextLabel=me.GetNewLabel()
+		If (counter<>"") Then me.WriteServer(" " & counter & " = 0")
+		me.WriteServer(me.NextLabel & ":")
+		me.WriteServer(" If (Not (" & UnEscapeHTML@%cspQuote(me.GetAttribute("condition","0")) & ")) Then Goto " & me.EndLabel & "; !{")
+		If (counter<>"") Then me.WriteServer(" " & counter & " = " & counter & " + 1")
+	</script>
+	<csr:children>
+	<script language="Basic" runat="compiler">
+		me.WriteServer(" Goto " & me.NextLabel)
+		me.WriteServer(me.EndLabel & ": !}")
+		me.RemoveBlock()
+	</script>
+</csr:action>
+
+</csr:rule>
+
+<!-- WHILE COLLECTION=  --------------------------------------------- -->
+<csr:rule name="%WHILECOLLECTIONMVBASIC" match="csp:while[collection]" language="mvbasic">
+<csr:attribute name=collection required description="A Cache expression which evaluates to the oref of a Cache collection to iterate over." type="expression:OREF">
+<csr:attribute name=value description="The name of a local variable in which the value of the retrieved element is to be returned.  The default name is value." type="varname:STRING">
+<csr:attribute name=key description="The name of a local variable in which the key of the retrieved element is to be returned.  The default name is key." type="varname:STRING">
+<csr:attribute name=direction description="The direction of iteration, either forward or backward.  The default is forward." type="direction:STRING">
+
+<csr:description>
+	The <b>csp:while collection=...</b> tag executes its contents for each
+	element of the specified Cache collection.
+	<p>Upon each iteration, a local variable specified by <var>var</var> is set to the
+	value of the element and a local variable specified by <var>key</var> is set to
+	the key of the element.  The keys of a list collection are the integer positions in
+	the list beginning with 1.
+	<p>The direction of iteration is determined by the <var>direction</var>.
+	Forward, the default, means starting at the first element and iterating until the last.
+	Backward starts at the last element and interating until the first.
+	<p>For example:
+	<EXAMPLE>
+	<csp:while collection="listOfPeople" value="person">
+		Item #(person.Name)#
+	</csp:while>
+	</EXAMPLE>
+	Will produce the following result:
+	<br>
+	<OUTPUT>
+	Joe Smith<br>
+	Harry Jones<br>
+	</OUTPUT>
+</csr:description>
+
+<csr:class super=%CSP.RuleBlock>
+
+<csr:action>
+	<script language="Cache" runat="compiler">
+		New direction,next,key,value
+		Set direction=$zcvt(..GetAttribute("direction","forward"),"L")
+		If direction="forward" {
+			Set next="Next"
+		} ElseIf direction="backward" {
+			Set next="Previous"
+		} Else {
+			Set %statuscode=$$$ERROR($$$CSPInvalidDirection,..LineNumber)
+			Quit
+		}
+		Set key=..GetAttribute("key","key")
+		Set value=..GetAttribute("value","value")
+		Do ..NewBlock()
+		Set ..EndLabel=..GetNewLabel()
+		Set ..NextLabel=..GetNewLabel()
+		Do ..WriteServer(" "_key_"=""""")
+		Do ..WriteServer(..NextLabel_":")
+		Do ..WriteServer(" "_value_"="_$$UnEscapeHTML^%cspQuote(..GetAttribute("collection"))_"->Get"_next_"("_key_")")
+		Do ..WriteServer(" If ("_key_"="""") Then Goto "_..EndLabel_"; !{")
+	</script>
+	<csr:children>
+	<script language="Cache" runat="compiler">
+		Do ..WriteServer(" Goto "_..NextLabel)
+		Do ..WriteServer(..EndLabel_": !}")
+		Do ..RemoveBlock()
+	</script>
+</csr:action>
+
+</csr:rule>
+

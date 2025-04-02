@@ -1,0 +1,23 @@
+
+2025-03-26 13:28:44.197 HS.Util.Installer.Foundation:Install ========== START: Namespace Activation ==========
+2025-03-26 13:28:44.200 HS.Util.Installer.Foundation:CheckPrivileges User 'dbyan' has %Admin_Manage:USE privilege
+2025-03-26 13:28:44.219 HS.Util.Installer.Foundation:SecureInstall tComponent Foundation = JONDAX
+2025-03-26 13:28:45.183 HS.HC.Util.Installer:EnableEnsemble Created Ensemble Mappings
+2025-03-26 13:28:45.475 HS.HC.Util.Installer:EnableEnsemble Configuration Loaded
+2025-03-26 13:28:45.993 HS.HC.Util.Installer:EnableEnsemble Compiling Ensemble DeepSee Dashboard
+2025-03-26 13:28:45.997 HS.HC.Util.Installer:EnableEnsemble Ensemble Enabled
+2025-03-26 13:28:46.603 HS.Util.Installer.Foundation:SecureInstall Added Package mappings HS,HSMOD,SchemaMap,%pkg.isc
+2025-03-26 13:28:46.656 HS.Util.Installer.Foundation:SecureInstall Added include mappings HSMOD.*,SchemaMap*,%pkg.isc.*
+2025-03-26 13:28:47.361 HS.Util.Installer.Foundation:BuildPortalApp Created Portal CSP app
+2025-03-26 13:28:48.141 HS.Util.Installer.Foundation:CreateProduction Compiled template JONDAXPKG.FoundationProduction
+2025-03-26 13:28:48.145 HS.Util.Installer.Foundation:AdditionalSetup Set Credential HS_Services
+2025-03-26 13:28:49.272 HS.Util.Installer.Foundation:SecureInstall Recompiled XML extension classes
+2025-03-26 13:29:45.018 HS.FHIRServer.Installer:InstallNamespace Created FHIR web application
+2025-03-26 13:29:45.036 HS.FHIRServer.Installer:InstallNamespace Created FHIR API web application
+2025-03-26 13:29:45.056 HS.FHIRServer.Installer:InstallNamespace FHIR profile validation not enabled as JAVA_HOME system environment variable cannot be found.
+2025-03-26 13:29:45.074 HS.FHIRServer.Installer:InstallNamespace Created FHIR Purge Expired Search Results Task
+2025-03-26 13:29:45.226 HS.BulkFHIR.Installer:Setup Starting 
+2025-03-26 13:29:45.447 HS.BulkFHIR.Installer:Setup Completed 
+2025-03-26 13:29:55.094 HS.Util.Installer.Foundation:SecureInstall Install JONDAX done at 2025-03-26 13:29:55
+2025-03-26 13:29:55.097 HS.Util.Installer.Foundation:Install ========== END: Namespace Activation ==========
+2025-03-26 13:29:55.119 HS.Util.Installer.Foundation:Install 

@@ -1,0 +1,13 @@
+<html>
+<head>
+</head>
+<body>
+<csp:if condition='($data(%request.MimeData("fileupload",1)))'>
+    <script language="Cache" runat="server">
+    	//d Save^jxAltUploadRecord ;called by DemoDePii.csp for uploading file
+    	d Save^DemoRedacting  
+    </script>
+    </ul>
+</csp:if>
+</body>
+</html>

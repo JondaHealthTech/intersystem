@@ -1,0 +1,17 @@
+<!--
+Utilities: Configuration Page
+-->
+
+<AutoPage domain="Ensemble" pagename="Configuration" parentpage="UtilEnsHome.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Configuration</Text>
+</Pane>
+
+<Pane name="Navigator" extends="UtilEnsHome.csp" />
+
+<Pane name="Detail" type="CSPX.EnsConfig">
+	<Text>The following is a list of defined Productions:</Text>
+</Pane>
+
+</AutoPage>

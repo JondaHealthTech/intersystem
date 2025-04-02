@@ -1,0 +1,71 @@
+/* @class="%ZEN.Portal.assistedText" */
+/* @doc="Style for assisted-Text control." */
+.assistedText {
+}
+/* @class="%ZEN.Portal.selector" */
+
+/* @doc="Style for div around active selector." */
+.selectorDiv {
+	border: 1px solid #8080D0;
+	background: white;
+	height: 18px;
+}
+
+/* @doc="Style for selector input control." */
+.selectorInput {
+	border: none;
+}
+
+.selectorIcon {
+	padding: 1px;
+	width: 18px;
+	height: 18px;
+}
+
+.selectorIcon:hover {
+	padding: 0px;
+	background: #FFEEAA;
+	border-top: 1px solid silver;
+	border-left: 1px solid silver;
+	border-right: 1px solid darkgray;
+	border-bottom: 1px solid darkgray;
+	-moz-border-radius: 4;
+	-webkit-border-radius: 4;
+}
+
+.selectorModalBox {
+	/*width: 300px;*/
+	height: 250px;
+	overflow: hidden;
+	overflow-y: auto;
+	background: white;
+	padding: 2px;
+	box-shadow: 2px 2px 2px #808080;
+	border: 1px solid #808080;
+}
+
+.selectorItem,.selectorItemOdd {
+	display: block;
+	color: #404040;
+	text-decoration: none;
+	font-size: 0.8em;
+	padding: 2px;
+	font-family: arial;
+}
+
+.selectorItemOdd {
+	background: #F8F8F8;
+}
+
+.selectorItem:hover, .selectorItemOdd:hover {
+	color: white;
+	background: rgb(47,98,128);
+}
+
+.selectorCaption {
+	color: gray;
+	font-size: 8pt;
+	text-align: center;
+}
+
+/* EOF */

@@ -1,0 +1,491 @@
+h1 {
+    font-size: 3.5vw;
+    font-weight: 400;
+    line-height: 4.2vw;
+    color: white;
+    margin: 2.2vw 0 1.1vw;
+}
+h1 span {
+    color: #e63876;
+    font-weight: 700;
+}
+h2{
+    font-size: 2.1vw;
+    color:white;
+    font-weight: 400;
+    line-height: 2.5vw;
+    margin-bottom: 3.7vw;
+}
+h1,h2{
+    text-align:center;
+}
+.lab-upload {
+    padding:3rem 2rem;
+    width: 60vw;
+    max-width: 90vw;
+    margin: 0 auto 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px dashed #000000;
+    background: white;
+    border-radius: 20px;
+    z-index: 10;
+}
+
+.lab-upload h4 {
+    font-size: 1.7vw;
+    font-weight: 500;
+    line-height: 2vw;
+    position: relative;
+    color: black;
+    margin: 0;
+}
+.lab-upload > img {
+    margin: 2vw 0;
+    width: 6.5vw;
+}
+.lab-upload p {
+    font-size: 1.4vw;
+    font-weight: 500;
+    line-height: 1.8vw;
+    margin: 0;
+    color: black;
+}
+.lab-upload button {
+    color: #e63876;
+    font-size: 1.4vw;
+    font-weight: 500;
+    line-height: 1.8vw;
+    background-color: transparent;
+    border: 0;
+}
+.lab-upload .note {
+    margin-top: 1.8vw;
+    color: #a2a4b9;
+    font-size: 0.95vw;
+    font-weight: 500;
+    line-height: 1.2vw;
+}
+.modal-open .modal {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.modal .modal-dialog {
+    margin: 0 auto;
+    width: 85%;
+}
+.modal .modal-dialog .modal-content {
+    border-radius: 25px;
+}
+.modal-body {
+    padding: 3rem 0 !important;
+    border: none;
+    height: auto;
+    overflow: hidden;
+    text-align: center;
+}
+.modal-body h2 {
+    padding: 0 6vw;
+    font-size: 2.8125rem;
+    font-weight: 400;
+    line-height: 3.4375rem;
+    color: #405470;
+    text-align: left;
+}
+.modal-body h3 {
+    padding: 0 6vw;
+    font-size: 2.8125rem;
+    font-weight: 700;
+    line-height: 3.4375rem;
+    color: #405470;
+    text-align: left;
+}
+.modal-img {
+    width: 100%;
+    margin-top: 2.8125rem;
+}
+.inactive {
+    display: none !important;
+}
+.hr-group {
+    position: absolute;
+    bottom: 25%;
+    left: 0;
+    z-index: -1;
+}
+hr {
+    height: 0.9vh;
+    width: 100vw;
+    background: #e63876;
+    border: none;
+}
+.num {
+    position: absolute;
+    left: 5vw;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3.5vw;
+    height: 3.5vw;
+    background: #e63876;
+    color: white;
+    border-radius: 50%;
+    font-size: 2vw;
+    font-weight: 700;
+    line-height: 3.5vw;
+    text-align: center;
+}
+@media screen and (max-width: 1440px) {
+    html {
+        font-size: 14px;
+    }
+}
+@media screen and (max-width: 1000px) {
+    html {
+        font-size: 14px;
+    }
+    .pink-bg-text {
+        font-size: 1.3625rem;
+        padding: 0.325rem 0.625rem;
+        line-height: 1.75rem;
+        margin-top: 0;
+    }
+    .logo{
+        width: 15vw;
+    }
+    h1 {
+        font-size: 2rem;
+        line-height: 3.2rem;
+        margin: 2.2rem 0 2.5rem;
+        padding: 0 1rem;
+    }
+    h1 br{
+        display: none;
+    }
+    h2{
+        font-size: 1.3rem;
+    }
+    .lab-upload h4 {
+        font-size: 1.8rem;
+        line-height: 2rem;
+    }
+    .lab-upload > img {
+        margin: 2rem 0;
+        width: 6rem;
+    }
+    .lab-upload p {
+        font-size: 1.25rem;
+        line-height: 1.625rem;
+    }
+    .lab-upload button {
+        font-size: 1.25rem;
+        line-height: 1.625rem;
+    }
+    .lab-upload .note {
+        margin-top: 1.625rem;
+        font-size: 0.9rem;
+        line-height: 1.125rem;
+    }
+    .side-nav.nav-close{
+        width: 10vw;
+    }
+    .side-nav.nav-close + .main-field{
+        width: 90vw;
+    }
+    .side-nav.nav-close .profile{
+        width: 4vw;
+    }
+    .main-field{
+        width: 75vw;
+    }
+    .side-nav{
+        width: 35vw;
+    }
+    .profile{
+        width: 5.5vw;
+    }
+    h3{
+        font-size: 1.2vw;
+        line-height: 1.4vw;
+    }
+    .location{
+        font-size: 1vw;
+    }
+    .plan{
+        font-size: 1vw;
+        line-height: 1.2vw;
+    }
+    .nav-items{
+        margin-top: calc(6.5vh - 1vw);
+    }
+    .nav-item{
+        gap: 1.2vw;
+        padding: 0.8vw 2vw;
+        margin: 0.4vw 0;
+    }
+    .nav-collapse-item{
+        gap: 1.2vw;
+        padding:0.8vw 2vw;
+    }
+    .nav-collapse-btn{
+        gap:0.85vw;
+    }
+    .nav-collapse-field{
+        padding: 0.8vw 0 0.8vw 4.8vw;
+        font-size: 1.3vw;
+        line-height: 1.5vw;
+    }
+    .nav-item .nav-collapse-btn img{
+        width: 1vw;
+    }
+    .nav-item img{
+        width: 1.2rem;
+    }
+    .nav-item:last-child img{
+        width: 1.2rem;
+    }
+    .nav-item p{
+        font-size: 1.3vw;
+        line-height: 1.5vw;
+    }
+    .nav-item.active p{
+        color: #384A62;
+    }
+    .nav-footer{
+        position: absolute;
+        bottom: 3vh;
+        width: 100%;
+    }
+    .nav-footer {
+        font-size: 1.3vw;
+        line-height: 1.5vw;
+    }
+    .logout{
+        gap:1vw;
+    }
+    .logout img{
+        width: 1.5vw;
+    }
+    .collapseBtn img{
+        width: 2.9vw;
+    }
+    .num{
+        left:2vw;
+    }
+    .side-nav.nav-close + .main-field .num{
+        left:3vw;
+    }
+}
+@media screen and (max-width: 540px) {
+    html {
+        font-size: 14px;
+    }
+    .bg2 {
+        display: none;
+    }
+    .side-nav .logo {
+        width: 10rem;
+        margin-top: 3.5rem;
+    }
+    .logo {
+        width: 10rem;
+        margin: 3.5rem;
+        margin: 0 auto;
+    }
+    .pink-bg-text {
+        font-size: 1.2rem;
+        line-height: 1.25rem;
+        padding:0.8rem 1.2rem;
+        position: unset;
+        display: inline-block;
+        margin: 2rem 0 1rem;
+    }
+    .profile{
+        width: 4rem;
+        margin: 3rem 0 0;
+    }
+    h1 {
+        font-size: 1.8rem;
+        line-height: 2.2rem;
+        margin: 2.2rem 0 2.5rem;
+        padding: 0 1rem;
+    }
+    h1 br {
+        display: none;
+    }
+    h2 {
+        font-size: 1.5rem;
+        line-height: 2.2rem;
+    }
+    .main-field{
+        width: 100%;
+        position: unset;
+    }
+    .modal-body h2,
+    .modal-body h3 {
+        font-size: 1.7rem;
+        line-height: 2.2rem;
+    }
+    .modal-open .modal {
+        margin-top: 0;
+    }
+    .modal .modal-dialog {
+        width: 90%;
+    }
+    .lab-upload {
+        width: 90%;
+        min-height: unset;
+    }
+    .hr-group {
+        display: none;
+    }
+    .lab-upload h4 {
+        font-size: 1.6725rem;
+        line-height: 1.825rem;
+    }
+    .lab-upload > img {
+        margin: 1.825rem 0;
+        width: 6rem;
+    }
+    .lab-upload p {
+        font-size: 1.25rem;
+        line-height: 1.625rem;
+    }
+    .lab-upload button {
+        font-size: 1.25rem;
+        line-height: 1.625rem;
+    }
+    .lab-upload .note {
+        margin-top: 1.625rem;
+        font-size: 0.9rem;
+        line-height: 1.125rem;
+    }
+    .mobile-active{
+        display: block;
+    }
+    .nav-toggle,.close-nav{
+        position: absolute;
+        font-size: 2.2rem;
+        top:2rem;
+        right:5%;
+    }
+    .close-nav{
+        width: 1.5rem;
+    }
+    .side-nav{
+        width: 100%;
+        display: none;
+        transition: all 0.3s ease;
+    }
+    .side-nav.nav-open + .main-field{
+        display: none;
+    }
+    .side-nav.nav-open{
+        display: block;
+        border-radius: 0;
+    }
+    
+    h3{
+        font-size: 1.2rem;
+        line-height: 1.2rem;
+        margin: 1.8rem 0 0.5rem;
+    }
+    .location{
+        font-size: 1rem;
+        line-height: 1.2rem;
+    }
+    .plan{
+        font-size: 1.05rem;
+        line-height: 1rem;
+        color:#e63876;
+        margin-top: 1rem;
+    }
+    .nav-items{
+        margin-top: 4rem;
+    }
+    .nav-item{
+        gap: 1rem;
+        padding: 0.6rem 1.6rem;
+        margin: 0.3rem 0;
+    }
+    .nav-collapse-item{
+        gap: 1rem;
+        padding:0.6rem 1.6rem;
+    }
+    .nav-collapse-btn{
+        gap:0.7rem;
+    }
+    .nav-collapse-field{
+        padding: 0.6rem 0 0.6rem 4.2rem;
+        font-size: 1.2rem;
+        line-height: 1.2rem;
+    }
+    .nav-item .nav-collapse-btn img{
+        width: 0.8rem;
+    }
+    .nav-item img{
+        width: 1.5rem;
+    }
+    .nav-item:last-child img{
+        width: 1.4rem;
+    }
+    .nav-item p{
+        font-size: 1.2rem;
+        line-height: 1.2rem;
+    }
+    .nav-footer{
+        bottom: 3rem;
+    }
+    .nav-footer {
+        font-size: 1rem;
+        line-height: 1.2rem;
+    }
+    .logout{
+        gap:0.8rem;
+        margin-bottom: 2rem;
+    }
+    .logout img{
+        width: 1.2rem;
+    }
+    .collapseBtn img{
+        width: 2.3rem;
+        display: none;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    h1{
+        margin: 1.5rem 0;
+    }
+    .pink-bg-text {
+        margin: 1rem 0 0;
+    }
+    .nav-items{
+        margin-top: 2rem;
+    }
+}
+@media screen and (max-width: 300px) {
+    html{
+        font-size: 12px;
+    }
+    h1 {
+        font-size: 1.6rem;
+        line-height: 2rem;
+    }
+    .modal-body h2,
+    .modal-body h3 {
+        font-size: 1.5rem;
+        line-height: 2rem;
+    }
+    .lab-upload h4 {
+        font-size: 1.4rem;
+    }
+    .lab-upload > img {
+        margin: 1.825rem 0;
+        width: 5.5rem;
+    }
+}

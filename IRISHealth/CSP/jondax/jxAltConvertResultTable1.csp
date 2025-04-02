@@ -1,0 +1,1439 @@
+<html>
+<head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		;i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+		q 1
+	</script>
+
+	<script language="cache" runat="server">
+		s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+		;i r1'=1 s %response.Redirect="cLockDown.csp"
+		d HEAD1^CSP999
+	</script>
+	<link rel="stylesheet" href="assets/styles/jxAltConvertResultTable1.css" />
+</head>
+<body>
+<form name="F1" id="F1" onsubmit="return false;">
+    <div id="wrapper">
+        <div class="bg-wrapper">
+            <div class="bg3">
+                <img src="./assets/images/bg3.png" />
+            </div>
+        </div>
+        <div class="content">
+            <div class="main-field">
+                <div class="instruct-area">
+                    <div class="main-title">
+                        <h1>Transformation Results <span id="trans-id"></span></h1>
+                        <div class="btn-group">
+                        	<button type="button" class="pink-btn" onclick="toUploadScreen(event)">Go Back</button>
+                        	<button type="button" class="pink-btn" onclick="downloadBtn()">Download</button> 
+                        	<!--<button type="button" class="pink-btn" onclick="downloadBtn()">Download</button> 
+                        	
+                        <button type="button" class="grey-btn" onclick="openPopup10()"><img src="./assets/images/leftArrow.png" alt="Left Arrow">Back to Step 1</button>-->
+                        	
+                        </div>
+                    </div>
+                    <p>Instructions: Check the accuracy of the translated data and resolve all the translation issues before saving. Details of the template can be viewed by clicking on the template name link.</p>
+                </div>
+                <div class="result-review">
+                    <div class="all-result active">
+                        <div class="result-nav">
+                            <div class="nav-items">
+                                <div class="item active" onclick="openAllResult()">All Results</div>
+                                <div class="item" onclick="openReviewOptions()" style="display:none;">Review Options</div>                            
+                            </div>
+                            <!--<button type="button" class="pink-btn table-toggle-btn" onclick="toggleFullTable()">Resize Table</button>-->
+                            <button type="button" class="pink-btn table-toggle-btn" onclick="jPopOriginal()" >Preview</button>
+                            <div>
+                            <span id="RowCount" style="position:relative; font-size:14pt; color: white"></span>
+                            <span id="tRowCount" style="position:relative; font-size:14pt; color: white;text-align:right"></span>
+                            </div>
+                            <!-- <div class="date-picker"> 
+                                	<div class="date-input">dd/mm/yyyy <img src="assets/images/calendar.png" alt="Calendar">
+                                	</div>
+                            		<input type="date" id="report-date" onchange="changeDate(event)">
+                            </div>
+                            <button type="button" class="date-apply-btn" onclick="jApplyAll()">Apply to All</button>-->
+                        	<div class="result-name">
+                                <h2><span id="cName">Client Name</span> | <span id="tName" onclick="jOpenTemp()">Template Name</span></h2> 
+                            </div>
+                        </div>
+                        <div class="result-content">
+                            <div class="result-table" onscroll="handleScroll(event)">
+                                <img class="filter-btn" src="./assets/images/filter-blue.png" alt="Filter Button" onclick="toggleFilterOption(event)">
+                                <table class="table table-hover" id="Tab1">
+                                    <thead>
+                                        <tr>
+                                        	<th class="actions">Actions</th>
+                                            <th class="date">Date</th>
+                                            <th class="test-name">Test Name</th>
+                                            <th class="transformed-name"><img src="./assets/images/conversion.png" alt="Arrow">Transformed Test Name</th>
+                                            <th class="result">Result</th>
+                                            <th class="from-unit">From Unit <img src="./assets/images/conversion.png" alt="Arrow"></th>
+                                            <th class="convert-result" colspan="2">Converted Result</th>
+                                            <th>Lower Range</th>
+                                            <th colspan="2">Converted Lower Range</th>
+                                            <th>Upper Range</th>
+                                            <th colspan="2">Converted Upper Range</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBody">
+										<script language="cache" runat="server">
+											d WriteTable1^jxAltConvertResultTable2
+										</script>
+                                    </tbody>
+                                </table> 
+                                
+                                <div class="ws1"></div>
+                                <div class="ws2"></div>
+                                <!--<div class="addBtn"><button type="button" class="blue-btn" onclick="addNewRow()">Add row</button></div> 
+                                <div class="FYI"><span style="color:#E63876;">Pink text/boxes</span> indicate high probability of incorrect transcription.<span style="color:#405470;"> Blue text</span> indicate AI-corrected information.</div>-->
+                                <div class="FYI"> <span style="background-color: #F7D896;">Highlighted rows</span> indicate unmatched with original rows.<span style="background-color:#e6f796;">Highlighted cells</span> indicate no matching Client Template.</div>
+                    			<div class="testname-dropdown">
+                             		<ul>
+                             		</ul>
+                        		</div>
+                        		<div class="unit-dropdown">
+                            		<ul>
+                             		</ul>
+                        		</div>
+                                <div class="result-filter-dropdown">
+                                    <div class="option">
+                                        <div class="round">
+                                            <input name="result" id="R1" type="radio" value="All results" checked>
+                                            <label for="R1"></label>
+                                        </div>
+                                        <p>All results</p>
+                                    </div>
+                                    <div class="option">
+                                        <div class="round">
+                                            <input name="result" id="R2" type="radio" value="Issue">
+                                            <label for="R2"></label>
+                                        </div>
+                                        <p>Results with issue</p>
+                                    </div>
+                                    <div class="option">
+                                        <div class="round">
+                                            <input name="result" id="R3" type="radio" value="Converted">
+                                            <label for="R3"></label>
+                                        </div>
+                                        <p>Converted Results</p>
+                                    </div>
+                                    <button type="button" onclick="confirmFilter()">Confirm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-options">
+                        <div class="review-nav">
+                            <div class="nav-items">
+                                <div class="item" onclick="openAllResult()">All Results</div>
+                                <!--<div class="item active" onclick="openReviewOptions()" >Review Options</div> -->
+                            </div>
+                            <div class="result-name">
+                                <h2><span id="cName1">Client Name</span> | <span id="tName1" onclick="jOpenTemp">Template Name</span></h2>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <div class="review-select-option active">
+                                <p>Click the button to select an action to apply to the current file</p>
+                                <div class="dropdown review-toggle-btn" onclick="toggleOptions(event)">Choose an option <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                <img class="review-graphic" src="./assets/images/reviewOptionGraphic.png" alt="Graphic">
+                            	<img class="background-img" src="./assets/images/reviewOptionBackground.png" alt="Background">
+                            </div>
+                            <div class="review-option-main option2">
+                                <div class="r-option on-hold">
+                                    <div class="dropdown review-toggle-btn" onclick="toggleOptions(event)">Put file on hold <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                    <p>Putting a file on hold enables you to continue reviewing it on a later time. Using this option will mark the file as "On Hold" on the main screen.</p>
+                                </div>
+                                <div class="r-option transfer">
+                                    <div class="dropdown review-toggle-btn" onclick="toggleOptions(event)">Transfer to another reviewer <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                    <p>This option enables you to suspend current file review and transfer process  to another reviewer.</p>
+                                </div>
+                                <div class="r-option file-error">
+                                    <div class="dropdowns">
+                                        <div class="dropdown review-toggle-btn" onclick="toggleOptions(event)">Mark file as error <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                        <div id="error-reason" class="dropdown reason-toggle-btn" onclick="toggleReason(event)">Select reason <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                    </div>
+                                    <p>Indicating a file as an error means it contains major readability or processing issues. Marking it means a subsequent email will be sent to the client. 
+                                       <br><mark>Note: If unsure, contact Head Reviewer before confirming.</mark>
+                                    </p>
+                                    <div class="error-reason-dropdown">
+                                		<ul>
+                                    		<script language="cache" runat="server">
+                                    			d WriteReasons^jxAltConvertResultTable1
+                                    		</script>
+                                    	</ul>
+                            		</div>
+                                </div>
+                                <div class="review-note">
+                                    <textarea name="note" id="review-note" placeholder="Write additional notes here."></textarea>
+                                </div>
+                                <button type="button" class="green-btn" onclick="confirmReviewAction()">Confirm</button>
+                            </div>
+                            <div class="review-option-dropdown">
+                                <ul>
+                                    <li onclick="selectROption(event)">Put file on hold</li>
+                                    <li onclick="selectROption(event)">Transfer to another reviewer</li>
+                                    <li onclick="selectROption(event)">Mark file as error</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="popup1" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>New test name entered</h4>
+            <p>Do you want to add this test name to the database?</p>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="alert('Test name is added');removePopup1();">Yes</button>
+                <button type="button" class="pink-btn" onclick="removePopup1()">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup2" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>Hold on!</h4>
+            <p>You still have <span>Transformation Error Results</span>. Please address these in order to save the file.</p>
+            <div class="btn-group">
+                <button type="button" class="pink-btn" onclick="removePopup2()">Go Back</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup3" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>Are you sure you want to save changes?</h4>
+            <p>You will no longer be able to access this file as it will be sent to the client and subsequently deleted.</p>
+            <div class="btn-group">
+            <!-- modified by bobo AUG 6 for "Yes" function -->
+                <button type="button" class="green-btn" onclick="saveDocument1()">Yes</button>
+                <!--<button type="button" class="green-btn" onclick="saveDocument()">Yes</button>-->
+                <button type="button" class="pink-btn" onclick="removePopup3()">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup4" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>Are you sure you want to put this file on hold?</h4>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="confirmOnHold()">Yes</button>
+                <button type="button" class="pink-btn" onclick="removePopup4()">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup5" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>Are you sure you want to transfer this file to another reviewer?</h4>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="confirmTransfer()">Yes</button>
+                <button type="button" class="pink-btn" onclick="removePopup5()">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup6" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>Are you sure to mark <br>this file as error?</h4>
+            <p>The client will be notified of this action.</p>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="confirmFileError()">Yes</button>
+                <button type="button" class="pink-btn" onclick="removePopup6()">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup7" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>File ID <span class="trans-id"></span> is put on hold</h4>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="window.close()">Okay</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup8" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>File ID <span class="trans-id"></span> will be transferred</h4>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="window.close()">Okay</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup9" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>File ID <span class="trans-id"></span> is marked as error</h4>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="window.close()">Okay</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup10" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="Signup Success">
+            <h4>Are you sure you want to go back to Step 1?</h4>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="jGoBackToStep1()">Yes</button>
+                <button type="button" class="pink-btn" onclick="removePopup10()">No</button>
+            </div>
+        </div>
+    </div><!--
+    <div id="popup11" class="popup inactive">
+     <div class="popup-dialog">
+       <img src="./assets/images/success.png" alt="Signup Success">
+        <h4>Return to file upload screen?</h4>
+        <p>You cannot go back to the current page <br> to download this converted file.</p>
+        <div class="agree">
+            <div class="round">
+                <input name="C1" id="C1" type="checkbox" checked>
+                <label for="C1"></label>
+            </div>
+            <p>Do not show this again</p>
+        </div>
+        <div class="btn-group">
+            <button class="green-btn" onclick="jDoNotShow();window.frameElement.src = './jxAltFileUpload1.csp'">Okay</button>
+            <button class="pink-btn" onclick="removePopup(event)">Cancel</button>
+        </div>
+      </div>
+    </div>-->
+
+    <script>
+        var resizefunc = [];
+    </script>
+    <!-- jQuery  -->
+	<script language="cache" runat="server">
+		d jQueryCore^WSP999
+	</script>
+</form>
+</body>
+<script type="text/javascript">
+    R1=self.R1;R2=self.R2;R3=self.R3;
+    let resultTable=document.getElementsByClassName("result-table")[0];
+    let ws1=document.getElementsByClassName("ws1")[0];
+    let ws2=document.getElementsByClassName("ws2")[0];
+    let allResult=document.getElementsByClassName("all-result")[0];
+    let reviewOptions=document.getElementsByClassName("review-options")[0];
+    let reviewOptionDropdown=document.getElementsByClassName("review-option-dropdown")[0];
+	let errorDropdown = document.querySelector(".error-reason-dropdown");
+	let dropdownText="<img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'>";
+	let unitDropdown = document.querySelector(".unit-dropdown");
+	let testnameDropdown = document.querySelector(".testname-dropdown");
+    let popup1 = document.getElementById("popup1");
+    let popup2 = document.getElementById("popup2");
+    let popup3 = document.getElementById("popup3");
+    let popup4 = document.getElementById("popup4");
+    let popup5 = document.getElementById("popup5");
+    let popup6 = document.getElementById("popup6");
+    let popup7 = document.getElementById("popup7");
+    let popup8 = document.getElementById("popup8");
+    let popup9 = document.getElementById("popup9");
+    //let rid;
+    let currentTr;
+	let currentTestname;
+	let newTestname;
+	let newTunit;
+	let newFromUnit1;
+	let currentDropdown;
+	let dropdownActive=-1;
+	let unitsCal;
+	let mySessionEnd;
+	let fileName;
+	let downloadStr;
+	let filePath;
+	window.onload = jInitMe;
+	document.onload = resetTimer;
+	document.onmousemove = resetTimer;
+	document.onmousedown = resetTimer; // touchscreen presses
+	document.ontouchstart = resetTimer;
+	document.onclick = resetTimer; // touchpad clicks
+	document.onkeypress = resetTimer;
+	document.addEventListener('scroll', resetTimer, true); 
+	function resetTimer(e){
+		clearTimeout(mySessionEnd);
+		mySessionEnd = setTimeout(jLockDown, 36000000);
+	}
+	function clearTimer(){
+		clearTimeout(mySessionEnd);
+	}
+	function jLockDown(){
+		#server(..cLockDown())#
+	}
+	function jCountRows(){
+		rows=(document.getElementById("Tab1").rows.length)-1
+		document.getElementById("RowCount").innerHTML=rows + " row(s)"
+	}
+	function jInitMe(e){
+		resetTimer(e);
+        #server(..cInitMe())#
+        let transID = document.querySelectorAll(".trans-id");
+        for(i=0;i<transID.length;i++){
+	        transID[0].innerHTML = rid
+        }
+        jCountRows()
+    }
+    const checkScrollbar = ()=>{
+        if(resultTable.scrollHeight > resultTable.clientHeight){
+            ws1.style.right = "2.25vw";
+        }
+        else{
+            ws1.style.right = "1.5vw";
+        }
+        if(resultTable.scrollWidth > resultTable.clientWidth){
+	        ws2.style.bottom = "5vw";
+        }
+        else{
+	        ws2.style.bottom = "3.5vw";
+        }
+    }
+    checkScrollbar();
+    function toggleFullTable(){
+	    document.querySelector("table").classList.toggle("full");
+	    checkScrollbar();
+    }
+    function handleScroll(e){
+        if(e.target.scrollLeft>10){
+            document.querySelector("th:nth-child(2)").style.borderRight="2px solid #9B9B9B";
+        }
+        else{
+	        document.querySelector("th:nth-child(2)").style.borderRight="none";
+        }
+        removeNameSuggestions();
+        removeUnitSuggestions();
+    }
+    function jDoNotShow(){
+    }
+    function showInfo(e){
+        let infoText = e.target.nextElementSibling;
+        infoText.classList.add("active");
+        setTimeout(()=>{
+            infoText.classList.remove("active");
+        },2000)
+    }
+    function openTestNamePopUp(){
+        setTimeout(()=>{
+            popup1.classList.remove("inactive");
+        },100)
+    }
+    function openPopup1(){
+        setTimeout(()=>{
+            popup1.classList.remove("inactive");
+        },100)
+    }
+    function removePopup1(){
+        popup1.classList.add("inactive");
+    }
+    function downloadBtn(){  
+    	// Select all elements that have both "issue" and "deleted" classes
+    	let deletedIssues = document.querySelectorAll(".issue.deleted");
+
+    	// Loop through each selected element and remove the "issue" class
+    	deletedIssues.forEach(element => {
+       	 	element.classList.remove("issue");
+  			  });
+    	//old function
+        let errorResults = document.querySelectorAll(".issue").length;
+        if(errorResults==0){
+            openPopup3();
+        }
+        else{
+            openPopup2();
+        }
+    }
+    function addNewRow(e){
+    // Find the closest <tr> element (the row containing the button)
+    	let currentRow = e.target.closest('tr');
+    	let newTr = document.createElement('tr');
+    	newTr.classList.add("new");
+    	let trStr="<td class='actions'><img class='duplicate-icon' src='./assets/images/duplicate.png' alt='Duplicate' onclick='duplicateRow(event)' > <img src='./assets/images/delete.png' alt='Delete' onclick='deleteRow(event)' > <img class='add-row-icon' src='./assets/images/row.png' alt='Duplicate' onclick='addNewRow(event)' ></td><td class='date new' id='new-date'><input class='new' type='text' autocomplete='off' onkeyup='dataChange(event)' onfocus='' value=''></td><td class='test-name new'><input type='text' autocomplete='off' onkeydown='jLoadNewTestName(event)' onfocus='' value=''></td><td class='transformed-name new'><input type='text' autocomplete='off' onkeyup='dataChange(event)' onfocus='saveToGlobals()' value=''></td><td class='result new'><input class='new' type='text' autocomplete='off' onkeydown='jLoadNewTestUnit(event)' onfocus='' value=''></td><td class='from-unit new'><input class='new' type='text' autocomplete='off' onkeyup='' onkeydown='jLoadNewTestUnit(event)' onfocus='' value=''></td><td class='convert-result-unit new'><div class='dropdown' onclick='openUnitSuggestions(event)' tabindex='-1'><img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div></td><td class='convert-result-val new'><input type='text' autocomplete='off' onkeyup='dataChange(event)' value=''></td><td class='l-range new'><input class='new' type='text' autocomplete='off' onkeyup='dataChange(event)' onfocus='' value=''></td><td class='l-result-val new'><input type='text' autocomplete='off' onkeyup='dataChange(event)' value=''></td><td class='l-result-unit new'></td><td class='u-range new'><input class='new' type='text' autocomplete='off' onkeydown='jConvertNewResult(event)' onfocus='' value=''></td><td class='u-result-val'><input type='text' autocomplete='off' onkeyup='dataChange(event)' value=''></td><td class='u-result-unit new'></td>"
+    	newTr.innerHTML = trStr;
+    	currentRow.parentNode.insertBefore(newTr, currentRow.nextSibling);
+    	resultTable.scrollTop = resultTable.scrollHeight;
+    	newTr.querySelector(".test-name.new input").focus();
+    	jCountRows()
+		/*
+		let resultTable = document.querySelector(".result-content");
+		
+		let trStr="<td class='actions'><img class='duplicate-icon' src='./assets/images/duplicate.png' alt='Duplicate' onclick='duplicateRow(event)' > <img src='./assets/images/delete.png' alt='Delete' onclick='deleteRow(event)' > <img class='add-row-icon' src='./assets/images/row.png' alt='Duplicate' onclick='addNewRow(event)' ></td><td class='date new' id='new-date'><input class='new' type='text' autocomplete='off' onkeyup='dataChange(event)' onfocus='' value=''></td><td class='test-name new'><input type='text' autocomplete='off' onkeydown='jLoadNewTestName(event)' onfocus='' value=''></td><td class='transformed-name new'><input type='text' autocomplete='off' onkeyup='dataChange(event)' onfocus='saveToGlobals()' value=''></td><td class='result new'><input class='new' type='text' autocomplete='off' onkeydown='jLoadNewTestUnit(event)' onfocus='' value=''></td><td class='from-unit new'><input class='new' type='text' autocomplete='off' onkeydown='jLoadNewTestUnit(event)' onfocus='' value=''></td><td class='convert-result-unit new'><div class='dropdown' onclick='openUnitSuggestions(event)' tabindex='-1'><img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div></td><td class='convert-result-val new'><input type='text' autocomplete='off' onkeyup='dataChange(event)' value=''></td><td class='l-range new'><input class='new' type='text' autocomplete='off' onkeyup='dataChange(event)' onfocus='' value=''></td><td class='l-result-val new'><input type='text' autocomplete='off' onkeyup='dataChange(event)' value=''></td><td class='l-result-unit new'></td><td class='u-range new'><input class='new' type='text' autocomplete='off' onkeydown='jConvertNewResult(event)' onfocus='' value=''></td><td class='u-result-val'><input type='text' autocomplete='off' onkeyup='dataChange(event)' value=''></td><td class='u-result-unit new'></td>"
+
+		let newTr = document.createElement('tr');
+		newTr.classList.add("new");
+		newTr.innerHTML = trStr;
+		document.querySelector("tbody").appendChild(newTr);
+    	resultTable.scrollTop = resultTable.scrollHeight;
+    	newTr.querySelector(".test-name.new input").focus();
+    	jCountRows() */
+    	
+	}
+	
+	
+	function duplicateRow(e){
+		let oldTr = e.target.closest("tr");
+		let newTr = oldTr.cloneNode(true);
+		newTr.classList.add("duplicated");
+		oldTr.parentNode.insertBefore(newTr,oldTr.nextSibling);
+		jCountRows();
+		//Added by Nyein to update form while duplicating rows on 12th Oct
+		//saveForm();
+	}
+	function deleteRow(e){
+		let tr = e.target.closest("tr");
+		if(tr.classList.contains("duplicated") || tr.classList.contains("new")){
+			tr.remove();
+		}
+		else{
+			tr.classList.add("deleted");
+			let tds = tr.querySelectorAll("td");
+			for(var i=0;i<tds.length-1;i++){
+				tds[i].classList.add("deleted");
+				if (tds[i].querySelector("input")){
+					tds[i].querySelector("input").disabled=true;
+				}
+				
+			}
+			let icons = tds[0].querySelectorAll("img");
+			icons[0].src="./assets/images/duplicateGrey.png";
+			icons[1].src="./assets/images/undoDelete.png";
+			icons[1].setAttribute("onclick","undoDeleteRow(event)");
+		}
+		jCountRows();
+		//Added by Nyein to update form while delete or undo delete on 12th Oct
+		//saveForm();
+	}
+	function undoDeleteRow(e){
+		let tr = e.target.closest("tr");
+		tr.classList.remove("deleted");
+		let tds = tr.querySelectorAll("td");
+		for(var i=0;i<tds.length-1;i++){
+			tds[i].classList.remove("deleted");
+			if (tds[i].querySelector("input")){
+				tds[i].querySelector("input").disabled=false;
+			}
+		}
+		let icons = tds[0].querySelectorAll("img");
+		icons[0].src="./assets/images/duplicate.png";
+		icons[1].src="./assets/images/delete.png";
+		icons[1].setAttribute("onclick","deleteRow(event)");
+		//Added by Nyein to update form while delete or undo delete on 12th Oct
+		//saveForm();
+	}
+	
+	
+    function openPopup2(){
+        setTimeout(()=>{
+            popup2.classList.remove("inactive");
+        },100)
+    }
+    function removePopup2(){
+        popup2.classList.add("inactive");
+    }
+    function openPopup3(){
+        setTimeout(()=>{
+            popup3.classList.remove("inactive");
+        },100)
+    }
+    function removePopup3(){
+        popup3.classList.add("inactive");
+    }
+    function openPopup4(){
+        setTimeout(()=>{
+            popup4.classList.remove("inactive");
+        },100)
+    }
+    function removePopup4(){
+        popup4.classList.add("inactive");
+    }
+
+    function openPopup5(){
+        setTimeout(()=>{
+            popup5.classList.remove("inactive");
+        },100)
+    }
+    function removePopup5(){
+        popup5.classList.add("inactive");
+    }
+
+    function openPopup6(){
+        setTimeout(()=>{
+            popup6.classList.remove("inactive");
+        },100)
+    }
+    function removePopup6(){
+        popup6.classList.add("inactive");
+    }
+    function openPopup10(){
+        setTimeout(()=>{
+            popup10.classList.remove("inactive");
+        },100)
+    }
+    function removePopup10(){
+        popup10.classList.add("inactive");
+    }
+    function jOpenTemp(){
+	    #server(..cSetRid())#
+	    #server(..cOpenTemp(rid))#
+    	window.open('./jxAltViewTemp.csp','blank')
+    }
+	function jPopOriginal() {
+        //document.getElementById("file-loader").style.display = "block";
+
+        // Disable Ctrl+P
+        function disablePrint(event) {
+            if (event.ctrlKey && event.key === 'p') {
+                event.preventDefault();
+                alert("Ctrl+P is blocked");
+            }
+        }
+
+        //document.addEventListener('keydown', disablePrint);
+
+        setTimeout(() => {
+            #server(..cPopOriginal())#;
+            //document.getElementById("file-loader").style.display = "none";
+
+            // Remove the event listener after the file is opened
+            document.removeEventListener('keydown', disablePrint);
+        }, 10);
+    }    
+    function openNameSuggestions(e){
+        let position = e.target.getBoundingClientRect();
+        testnameDropdown.style.top = position.bottom + 5 + "px";
+        testnameDropdown.style.left = position.left + "px";
+        testnameDropdown.querySelector("ul").style.maxHeight = window.innerHeight - position.bottom - 30 + "px";
+        if(e.target.value.length>0){
+            testnameDropdown.classList.add("active");
+            currentDropdown=testnameDropdown;
+        }
+        else{
+            testnameDropdown.classList.remove("active");
+            currentDropdown=null;
+        }
+    }
+    function toggleFilterOption(e){
+        let position = e.target.getBoundingClientRect();
+        let dropdown = document.getElementsByClassName("result-filter-dropdown")[0];
+        dropdown.style.top = position.bottom + 5 + "px";
+        dropdown.style.right = window.innerWidth - position.right + "px";
+        setTimeout(()=>{
+            dropdown.classList.toggle("active");
+        },100)
+    }
+    function confirmFilter(){
+        if(R1.checked){
+            //show all rows
+            let tablerow = document.querySelectorAll("tr");
+            for(var i=1;i<tablerow.length;i++){
+                tablerow[i].style.display="table-row";
+            }
+            document.getElementsByClassName("result-filter-dropdown")[0].classList.remove("active");
+        }
+        else if(R2.checked){
+            //remove row without issues
+            let tablerow = document.querySelectorAll("tr");
+            for(var i=1;i<tablerow.length;i++){
+                let issue = tablerow[i].querySelectorAll("td.issue");
+                if(issue.length==0){
+                    tablerow[i].style.display="none";
+                }
+                else{
+	                tablerow[i].style.display="table-row";
+                }
+            }
+            document.getElementsByClassName("result-filter-dropdown")[0].classList.remove("active");
+        }
+        else if(R3.checked){
+            //remove row without issues and without converted
+            let tablerow = document.querySelectorAll("tr");
+            for(var i=1;i<tablerow.length;i++){
+                let converted = tablerow[i].querySelectorAll("td.converted");
+                if(converted.length==0){
+                    tablerow[i].style.display="none";
+                }
+                else{
+	                tablerow[i].style.display="table-row";
+                }
+            }
+            document.getElementsByClassName("result-filter-dropdown")[0].classList.remove("active");
+        }
+        checkScrollbar();
+    }
+    function removeNameSuggestions(){
+        testnameDropdown.classList.remove("active");
+        currentDropdown=null;
+    }
+    function removeUnitSuggestions(){
+        unitDropdown.classList.remove("active");
+        currentDropdown=null;
+    }
+    
+    function changeUnit(e){
+	    unitsCal = [];//0-cVal,1-lVal,2-uVal;
+	    let name = currentTr.querySelector(".test-name").textContent;
+	    let cInput = currentTr.querySelector(".convert-result-val").querySelector("input");
+		let lInput = currentTr.querySelector(".l-result-val").querySelector("input");
+		let uInput = currentTr.querySelector(".u-result-val").querySelector("input");
+		let fromUnit = currentTr.querySelector(".convert-result-unit").querySelector("div").textContent;
+		let toUnit = e.target.innerHTML;
+		#server(..cConvertResults(name,cInput.value,lInput.value,uInput.value,fromUnit,toUnit))#
+		//currentUnit.value = e.target.innerHTML;
+		cInput.parentElement.classList.add("edited");
+		lInput.parentElement.classList.add("edited");
+		uInput.parentElement.classList.add("edited");
+		cInput.value=unitsCal[0];
+		lInput.value=unitsCal[1];
+		uInput.value=unitsCal[2];
+		currentTr.querySelector(".convert-result-unit").classList.add("edited");
+		currentTr.querySelector(".convert-result-unit").classList.remove("issue");
+		currentTr.querySelector(".l-result-unit").classList.add("edited");
+		currentTr.querySelector(".u-result-unit").classList.add("edited");
+		currentTr.querySelector(".convert-result-unit").querySelector("div").innerHTML = toUnit + dropdownText;
+		currentTr.querySelector(".l-result-unit").innerHTML = toUnit;
+		currentTr.querySelector(".u-result-unit").innerHTML = toUnit;
+		currentTr.querySelector(".convert-result-unit").querySelector("div").focus();
+		setTimeout(()=>unitDropdown.classList.remove("active"),100);
+		currentDropdown=null;
+	}
+	function changeTestName(e){
+		currentTestname.value = e.target.innerHTML;
+		currentTestname.focus();
+		setTimeout(()=>testnameDropdown.classList.remove("active"),100);
+		currentDropdown=null;
+	}
+    function openAllResult(){
+        allResult.classList.add("active");
+        reviewOptions.classList.remove("active");
+    }
+    function openReviewOptions(){
+        allResult.classList.remove("active");
+        let reviewOptionMain = document.getElementsByClassName("review-option-main")[0];
+        let reviewSelectOption = document.getElementsByClassName("review-select-option")[0];
+        if(reviewOptionMain.classList.contains("active")){
+            reviewOptionMain.classList.remove("active");
+            reviewSelectOption.classList.add("active");
+        }
+        reviewOptions.classList.add("active");
+    }
+    function toggleOptions(e){
+        let elem = e.target;
+        if(elem.tagName=="IMG"){
+            elem = elem.parentElement;
+        }
+        let position=elem.getBoundingClientRect();
+        reviewOptionDropdown.style.top=position.bottom + 5 + "px";
+        reviewOptionDropdown.style.left=position.left + "px";
+        setTimeout(()=>{
+            reviewOptionDropdown.classList.toggle("active");
+        },100)
+    }
+    function selectROption(e){
+        reviewOptionDropdown.classList.remove("active");
+        let reviewOptionMain = document.getElementsByClassName("review-option-main")[0];
+        let reviewSelectOption = document.getElementsByClassName("review-select-option")[0];
+        if(reviewSelectOption.classList.contains("active")){
+            reviewSelectOption.classList.remove("active");
+            reviewOptionMain.classList.add("active");
+        }
+        if(reviewOptionMain.classList.contains("active")){
+            reviewOptionMain.classList.remove("option1");
+            reviewOptionMain.classList.remove("option2");
+            reviewOptionMain.classList.remove("option3");
+        }
+        switch(e.target.innerHTML){
+            case "Put file on hold":reviewOptionMain.classList.add("option1");break;
+            case "Transfer to another reviewer":reviewOptionMain.classList.add("option2");break;
+            case "Mark file as error":reviewOptionMain.classList.add("option3");break;
+        }
+    }
+    function isValidNum(num){
+	    if(num.match(/^-?\d+$/)){
+  			return true;
+		}else if(num.match(/^\d+\.\d+$/)){
+  			return true;
+		}else{
+  			return false;
+		}
+    }
+    function jLoadNewTestName(e){
+	    if (event.key === 'Enter'){
+	     if (e.target.closest(".test-name") != null) { //&& (e.target.closest(".transformed-name") == null)){
+            currentTestname = e.target;
+        	#server(..cLoadJXTestNames(e.target.value))#
+        	currentTr = e.target.parentElement.parentElement;
+	    	currentTr.querySelector(".transformed-name").querySelector("input").value=newTestname;
+        	//e.target.closest(".transformed-name.new input").value=newTestname;
+            //openNameSuggestions(e);
+            currentTr.querySelector(".result").querySelector("input").focus();
+        	}
+	    }	
+    }
+    function jLoadNewTestUnit(e){
+		if (event.key === 'Enter'){
+		let currentTestUnit = e.target; 
+		currentTr = e.target.parentElement.parentElement;  
+		let newResult=currentTr.querySelector(".result").querySelector("input").value;
+		let newFromUnit=currentTr.querySelector(".from-unit").querySelector("input").value;
+		currentTestname=currentTr.querySelector(".test-name").querySelector("input").value;
+		currentTname=currentTr.querySelector(".transformed-name").querySelector("input").value;
+		let newLRange=currentTr.querySelector(".l-range").querySelector("input");
+		let newURange=currentTr.querySelector(".u-range").querySelector("input"); 
+		if (newResult != null && newFromUnit == ''){
+			 alert("Enter from Unit");
+			 currentTr.querySelector(".from-unit").querySelector("input").focus();
+			 }
+		else if(newResult == '' && newFromUnit != null){
+			 alert("Enter result");
+			 currentTr.querySelector(".result").querySelector("input").focus()
+		 	}
+	    else{
+	         if (isValidNum(newResult)){
+		        #server(..cUnitCleanUp(newFromUnit))#
+		        //newFromUnit=newFromUnit1;
+		        //currentTr.querySelector(".from-unit").querySelector("input").value="";
+		        currentTr.querySelector(".from-unit").querySelector("input").value=newFromUnit1;
+		     	let position = currentTr.querySelector(".convert-result-unit").querySelector("div").getBoundingClientRect();
+			   	#server(..cLoadUnitsBasedOnName(currentTname,newFromUnit1))#
+       			unitDropdown.style.top = position.bottom + 5 + "px";
+        		unitDropdown.style.left = position.left + "px";
+        		unitDropdown.querySelector("ul").style.maxHeight = window.innerHeight - position.bottom - 30 + "px";
+        		setTimeout(()=>{
+        			unitDropdown.classList.add("active");
+        			currentDropdown=unitDropdown;
+        		},100)
+			   }
+			   newFromUnit1="";
+	        }
+    	}
+	}
+	function jConvertNewResult(e){
+		if (event.key === 'Enter'){
+	   	unitsCal = [];//0-cVal,1-lVal,2-uVal;
+	    let name = currentTr.querySelector(".transformed-name").querySelector("input");
+	    let cInput = currentTr.querySelector(".result").querySelector("input");
+		let lInput = currentTr.querySelector(".l-range").querySelector("input");
+		let uInput = currentTr.querySelector(".u-range").querySelector("input");
+		let fromUnit = currentTr.querySelector(".from-unit").querySelector("input");
+		let toUnit = currentTr.querySelector(".convert-result-unit").querySelector("div").textContent;
+		
+		let Tval=currentTr.querySelector(".convert-result-val").classList;
+		let TLval=currentTr.querySelector(".l-result-val").classList;
+		let TUval=currentTr.querySelector(".u-result-val").classList;
+		#server(..cConvertNewResults(name.value,cInput.value,lInput.value,uInput.value,fromUnit.value,toUnit))#
+		//currentUnit.value = e.target.innerHTML;
+		cInput.parentElement.classList.add("edited");
+		lInput.parentElement.classList.add("edited");
+		uInput.parentElement.classList.add("edited");
+		Tval.remove("issue");
+		TLval.remove("issue");
+		TUval.remove("issue");
+		
+		if (unitsCal[0] && unitsCal[0].includes("ERROR")) {Tval.add("issue");}
+		if (unitsCal[1] && unitsCal[1].includes("ERROR")) {TLval.add("issue");}
+		if (unitsCal[2] && unitsCal[2].includes("ERROR")) {TUval.add("issue");}
+		currentTr.querySelector(".convert-result-val").querySelector("input").value=unitsCal[0];
+		currentTr.querySelector(".l-result-val").querySelector("input").value=unitsCal[1];
+		currentTr.querySelector(".u-result-val").querySelector("input").value=unitsCal[2];
+		
+		currentTr.querySelector(".convert-result-unit").querySelector("div").innerHTML = toUnit + dropdownText;
+		currentTr.querySelector(".convert-result-unit").querySelector("div").focus();
+		setTimeout(()=>unitDropdown.classList.remove("active"),100);
+		currentDropdown=null;
+		}
+    }
+    function dataChange(e){
+        if(e.target.closest(".transformed-name")!=null){
+            currentTestname = e.target;
+        	#server(..cLoadTestNames(e.target.value))#
+            openNameSuggestions(e);
+        }
+       
+        if(e.target.value.length==0){
+	        if(e.target.parentElement.classList.contains("l-result-val") || e.target.parentElement.classList.contains("u-result-val")){
+	        	e.target.parentElement.classList.remove("issue");
+        	}
+	        else{
+        		e.target.parentElement.classList.add("issue");
+	        }
+        }
+        else{
+	        if(e.target.value.trim().length == 0){
+		        e.target.parentElement.classList.add("issue");
+	        }
+	        else{
+        		e.target.parentElement.classList.remove("issue");
+	        }
+        }
+        if(e.target.closest(".convert-result-val")!=null){
+	        if (isValidNum(e.target.value)){
+	        	e.target.parentElement.classList.remove("issue");
+	        } 
+	        else if ((e.target.value.includes('<'))||(e.target.value.includes('>'))){
+	        	e.target.parentElement.classList.remove("issue");
+	        } 
+	        else{
+	        	e.target.parentElement.classList.add("issue");
+	        }
+	    }
+        e.target.parentElement.classList.add("edited");
+    }
+    function openUnitSuggestions(e){
+	    currentTr = e.target.parentElement.parentElement;
+	    let name=currentTr.querySelector(".transformed-name").querySelector("input").value;
+	    let currentUnit=currentTr.querySelector(".from-unit").textContent;
+	    if (currentUnit==''){
+		    currentUnit=currentTr.querySelector(".from-unit").querySelector("input").value;
+	    }
+	    let position = e.target.getBoundingClientRect();
+        #server(..cLoadUnitsBasedOnName(name,currentUnit))#
+        unitDropdown.style.top = position.bottom + 5 + "px";
+        unitDropdown.style.left = position.left + "px";
+        unitDropdown.querySelector("ul").style.maxHeight = window.innerHeight - position.bottom - 30 + "px";
+        setTimeout(()=>{
+        	unitDropdown.classList.add("active");
+        	currentDropdown=unitDropdown;
+        },100)
+    }
+    function confirmReviewAction(){
+	    saveToGlobals();
+	    
+        let reviewOptionMain = document.getElementsByClassName("review-option-main")[0];
+        switch(reviewOptionMain.className.split(" ")[2]){
+            case "option1":openPopup4();break;
+            case "option2":openPopup5();break;
+            case "option3":openPopup6();break;
+        }
+    }
+    function confirmOnHold(){
+	    let note = document.getElementById("review-note").value;
+	    #server(..cFileStatusChange(note,'On-Hold',''))#
+        removePopup4();
+        popup7.classList.remove("inactive");
+    }
+    function confirmTransfer(){
+	    let note = document.getElementById("review-note").value;
+	    #server(..cFileStatusChange(note,'In-Transfer',''))#
+        removePopup5();
+        popup8.classList.remove("inactive");
+    }
+    let rid;
+    function confirmFileError(){
+	    let note = document.getElementById("review-note").value;
+	    let reason = document.getElementById("error-reason").innerHTML.split("<")[0];
+        // add to record -> reason + note, status " Failure"
+	    #server(..cFileStatusChange(note,'Failure',reason))#;
+	    
+	    // BOBOB ADDED HERE AUG 9
+	    #server(..cSetRid())#;
+	    #server(..cErrorReport(rid))#;
+	    
+	    #server(..cClearFormDataGlobal())#
+        removePopup6();
+        popup9.classList.remove("inactive");
+        
+ 
+        // create and error
+        // report by id 
+        
+    }
+    function toggleReason(e){
+        let elem = e.target;
+        if(elem.tagName=="IMG"){
+            elem = elem.parentElement;
+        }
+        let position=elem.getBoundingClientRect();
+        errorDropdown.style.top=position.bottom + 5 + "px";
+        errorDropdown.style.left=position.left + "px";
+        errorDropdown.style.maxHeight=window.innerWidth - position.bottom - 30 + "px";
+        setTimeout(()=>{
+            errorDropdown.classList.toggle("active");
+        },100)
+    }
+    function selectReason(e){
+	    document.querySelector(".reason-toggle-btn").innerHTML = e.target.innerHTML + dropdownText;
+	    errorDropdown.classList.remove("active");
+    }
+    
+    // function added by Bobo Aug 6
+    
+    function saveDocument(){
+	    #server(..cSetRid())#;
+	    #server(..cClearRBT(rid))# ;
+    	const tableBody = document.getElementById("tableBody");
+    	const tableRows = tableBody.querySelectorAll('tr');
+    	tableRows.forEach((row,index) => {
+	    	if(row.style.display=="none"){	    		
+		    	return;
+		    }
+	    	
+	    	const testName = (row.querySelector('td.transformed-name') && row.querySelector('td.transformed-name').querySelector('input').value) ? row.querySelector('td.transformed-name').querySelector('input').value : "";
+	    	if (testName == ""){return;}
+	    	const testValue = (row.querySelector('td.convert-result-val') && row.querySelector('td.convert-result-val').querySelector('input').value) ? row.querySelector('td.convert-result-val').querySelector('input').value : "";
+	    	const testUnit = (row.querySelector('td.convert-result-unit') && row.querySelector('td.convert-result-unit').querySelector('div').textContent) ? row.querySelector('td.convert-result-unit').querySelector('div').textContent : "";
+	    	const testLoRange = (row.querySelector('td.l-result-val') && row.querySelector('td.l-result-val').querySelector('input').value) ? row.querySelector('td.l-result-val').querySelector('input').value : "";
+	    	const testHiRange = (row.querySelector('td.u-result-val') && row.querySelector('td.u-result-val').querySelector('input').value) ? row.querySelector('td.u-result-val').querySelector('input').value : "";
+    		const testDate = (row.querySelector('td.date') && row.querySelector('td.date').innerHTML)? row.querySelector('td.date').innerHTML : "";
+    		//console.log(testName, testValue, testUnit, testHiRange, testLoRange);
+    		#server(..cSaveRBT(rid, testName, testValue, testUnit, testHiRange, testLoRange, testDate))#;
+    	}
+    	)
+    
+    	#server(..cResult2HL7(rid))#
+    	#server(..cClearFormDataGlobal())#
+    	window.close();
+    }
+        function saveDocument1(){
+	   
+	    #server(..cSetRid())#;
+	    #server(..cClearRBT(rid))# ;
+    	const tableBody = document.getElementById("tableBody");
+    	const tableRows = tableBody.querySelectorAll('tr');
+    
+    	tableRows.forEach((row,index) => {
+	    	if(row.classList.contains("deleted")){	    		
+		    	return;
+		    }
+	    	if(row.style.display=="none"){	    		
+		    	return;
+		    }
+	    	const testName = (row.querySelector('td.transformed-name') && row.querySelector('td.transformed-name').querySelector('input').value) ? row.querySelector('td.transformed-name').querySelector('input').value : "";
+	    	if (testName == ""){return;}
+	    	const testValue = (row.querySelector('td.convert-result-val') && row.querySelector('td.convert-result-val').querySelector('input').value) ? row.querySelector('td.convert-result-val').querySelector('input').value : "";
+	    	const testUnit = (row.querySelector('td.convert-result-unit') && row.querySelector('td.convert-result-unit').querySelector('div').textContent) ? row.querySelector('td.convert-result-unit').querySelector('div').textContent : "";
+	    	const testLoRange = (row.querySelector('td.l-result-val') && row.querySelector('td.l-result-val').querySelector('input').value) ? row.querySelector('td.l-result-val').querySelector('input').value : "";
+	    	const testHiRange = (row.querySelector('td.u-result-val') && row.querySelector('td.u-result-val').querySelector('input').value) ? row.querySelector('td.u-result-val').querySelector('input').value : "";
+    		const testDate = (row.querySelector('td.date') && row.querySelector('td.date').innerHTML)? row.querySelector('td.date').innerHTML : "";
+    		//console.log(testName, testValue, testUnit, testHiRange, testLoRange);
+    		#server(..cSaveRBT(rid, testName, testValue, testUnit, testHiRange, testLoRange, testDate))#
+    	})
+    	#server(..cResult2HL7(rid))#
+    	jDownloadFile();
+    	#server(..cClearFormDataGlobal())#
+    	toUploadScreen(event);
+    }
+	function jDownloadFile(){
+			//#server(..cConvertResults())#
+			//checkFileType();
+    		var blob = new Blob([downloadStr], {type: 'text/plain'});
+    		var link = document.createElement('a');
+    		link.href = URL.createObjectURL(blob);
+    		//link.href = fileName; 
+    		link.download = fileName;
+    		link.click();
+			URL.revokeObjectURL(link.href);
+			
+	} 
+    function saveToGlobals(){/*
+	    const tableBody = document.getElementById("tableBody");
+    	const tableRows = tableBody.querySelectorAll('tr');
+    	
+    	let count = 1;
+    	var arrOfObj = [];
+    	tableRows.forEach((row,index) => {
+	    	
+	    	if(row.style.display=="none"){	    	
+		    	var Obj = {ODate:"",OName:"", OValue:"", OUnit:"", OLoRange:"", OHiRange:"", TName:"",TValue:"",TUnit:"", TLoRange:"", THiRange:""};
+    			arrOfObj.push(Obj); 	
+		    	return;
+		    }
+		    
+	    	let ODate = (row.querySelector('td.date') && row.querySelector('td.date').innerHTML)? row.querySelector('td.date').innerHTML : "";
+	    	
+	    	let OName = (row.querySelector('td.test-name') && row.querySelector('td.test-name').innerHTML)? row.querySelector('td.test-name').innerHTML : "";
+	    	let OValue = (row.querySelector('td.result') && row.querySelector('td.result').innerHTML)? row.querySelector('td.result').innerHTML : "";
+	    	let OUnit = (row.querySelector('td.from-unit') && row.querySelector('td.from-unit').innerHTML)? row.querySelector('td.from-unit').innerHTML : "";
+	    	let OLoRange = (row.querySelector('td.l-range') && row.querySelector('td.l-range').innerHTML)? row.querySelector('td.l-range').innerHTML.split(" ")[0] : "";
+	    	let OHiRange = (row.querySelector('td.u-range') && row.querySelector('td.u-range').innerHTML)? row.querySelector('td.u-range').innerHTML.split(" ")[0] : "";
+	    	
+	    	let TName = (row.querySelector('td.transformed-name') && row.querySelector('td.transformed-name').querySelector('input').value) ? row.querySelector('td.transformed-name').querySelector('input').value : "";
+	  
+	    	let TValue = (row.querySelector('td.convert-result-val') && row.querySelector('td.convert-result-val').querySelector('input').value) ? row.querySelector('td.convert-result-val').querySelector('input').value : "";
+	    	let TUnit = (row.querySelector('td.convert-result-unit') && row.querySelector('td.convert-result-unit').querySelector('div').textContent) ? row.querySelector('td.convert-result-unit').querySelector('div').textContent : "";
+	    	let TLoRange = (row.querySelector('td.l-result-val') && row.querySelector('td.l-result-val').querySelector('input').value) ? row.querySelector('td.l-result-val').querySelector('input').value : "";
+	    	let THiRange = (row.querySelector('td.u-result-val') && row.querySelector('td.u-result-val').querySelector('input').value) ? row.querySelector('td.u-result-val').querySelector('input').value : "";
+    		//console.log(rid,count, ODate, OName, OValue, OUnit, OHiRange, OLoRange, TName, TValue, TUnit, THiRange, TLoRange);
+    		//#server(..cSaveForm(rid,count, ODate, OName, OValue, OUnit, OHiRange, OLoRange, TName, TValue, TUnit, THiRange, TLoRange))#;
+    		
+    		var Obj = {ODate:ODate,OName:OName, OValue:OValue, OUnit:OUnit, OLoRange:OLoRange, OHiRange:OHiRange, TName:TName,TValue:TValue,TUnit:TUnit, TLoRange:TLoRange, THiRange:THiRange};
+    		
+    		arrOfObj.push(Obj);
+    		//count += 1;
+    	}
+    	)
+    	var obj = {"FormData": arrOfObj};
+    	var jsonStr= JSON.stringify(obj);
+    	jsonStr = jsonStr.replace(/"/g,'"');
+    	#server(..cSaveJson(rid, jsonStr))#;
+    	*/
+    }
+    
+    function jGoBackToStep1(){
+	    saveToGlobals();
+    	
+    	window.open('./cReviewResultsS1.csp','_self')
+    }
+    
+    document.addEventListener("click",(e)=>{
+        if(e.target.closest(".popup-dialog") == null && document.querySelectorAll(".popup.inactive").length!=10){
+            removePopup1();
+            removePopup2();
+            removePopup3();
+            removePopup4();
+            removePopup5();
+            removePopup6();
+            removePopup10();
+        }
+        if(e.target.closest(".testname-dropdown") == null && testnameDropdown.classList.contains("active")){
+            removeNameSuggestions();
+        }
+        if(e.target.closest(".unitname-dropdown") == null && unitDropdown.classList.contains("active")){
+            removeUnitSuggestions();
+        }
+        if(e.target.closest(".review-option-dropdown") == null && e.target.closest(".review-toggle-btn") == null && reviewOptionDropdown.classList.contains("active")){
+            reviewOptionDropdown.classList.remove("active");
+        }
+        if(e.target.closest(".error-reason-dropdown") == null && e.target.closest(".reason-toggle-btn") == null && errorDropdown.classList.contains("active")){
+            errorDropdown.classList.remove("active");
+        }
+        if(e.target.closest(".result-filter-dropdown") == null && e.target.closest(".filter-btn")==null && document.querySelector(".result-filter-dropdown").classList.contains("active")){
+            document.querySelector(".result-filter-dropdown").classList.remove("active");
+        }
+    })
+    document.addEventListener("keydown",(e)=>{
+		if(currentDropdown!=null){
+			let lis = currentDropdown.querySelectorAll("li");
+			if(e.which==40){
+				if(dropdownActive<lis.length-1){
+					dropdownActive++;
+					lis[dropdownActive].focus();
+				}
+			}
+			if(e.which==38){
+				if(dropdownActive>0){
+					dropdownActive--;
+					lis[dropdownActive].focus();
+				} 
+			}
+			if(e.which==13){
+				lis[dropdownActive].click();
+				dropdownActive=-1;
+			}
+		}
+		if(e.target.closest(".convert-result-val")!=null){
+			if(e.which==39 || e.which==9){
+				e.preventDefault();
+				e.target.closest(".convert-result-val").nextElementSibling.querySelector(".dropdown").focus();
+			}
+		}
+		if(e.target.classList.contains("dropdown") && currentDropdown==null){
+			if(e.which==13 || e.which==40){
+				e.preventDefault();
+				e.target.click();
+			}
+		}
+	})
+</script>
+<script type="text/javascript">
+    function toUploadScreen(e){
+	    #server(..cRemoveReviewFile())#;
+	    var DoNotShow=1
+        if (DoNotShow==1){
+			window.frameElement.src = './jxAltFileUpload1.csp'
+	        return false
+	    }
+        setTimeout(()=>{
+            popup.classList.remove("inactive")
+        },100);
+        
+    }
+</script>
+
+<script language="cache" method="cSaveForm" arguments="rid,count, ODate, OName, OValue, OUnit, OHiRange, OLoRange, TName, TValue, TUnit, THiRange, TLoRange:%String">
+	// d UpdateRBT^jxResult2HL7(d1, d2, d3, d4, d5, d6) //updated on Sep 13 with globals
+	// rid, count, date, testName, testValue, testUnit, testHiRange, testLoRange
+	s userId = %session.Data("UserID")
+	//s ^FormData(userId, rid, count, "testDate") = ODate
+	if ($L(ODate)>0){
+		//s formattedDate = $replace(ODate, "-","/")
+		//s ^FormData(userId, rid, count, "testDate") = $zdate($zdateh(formattedDate,15,,,,,,,0),4) //dd/mm/yyyy
+		
+		s testDateInternal = $zdate($zdateh(formattedDate,15,,,,,,,0),4) //dd/mm/yyyy
+		if (testDateInternal = "31/12/1840"){
+			s ^FormData(userId, rid, count, "testDate") = ""
+		} else {s ^FormData(userId, rid, count, "testDate") = testDateInternal}
+		
+	}else {s ^FormData(userId, rid, count, "testDate") = ""}
+	s ^FormData(userId, rid, count, "testName") = $$H2C^WSP999(OName)
+	s ^FormData(userId, rid, count, "testValue") = $$H2C^WSP999(OValue)
+	s ^FormData(userId, rid, count, "testUnit") = $$H2C^WSP999(OUnit)
+	s ^FormData(userId, rid, count, "testHiRange") = $$H2C^WSP999(OHiRange)
+	s ^FormData(userId, rid, count, "testLoRange") = $$H2C^WSP999(OLoRange)
+	
+	s ^FormData(userId, rid, count, "TName") = $$H2C^WSP999(TName)
+	s ^FormData(userId, rid, count, "TValue") = $$H2C^WSP999(TValue)
+	s ^FormData(userId, rid, count, "TUnit") = $$H2C^WSP999(TUnit)
+	s ^FormData(userId, rid, count, "THiRange") = $$H2C^WSP999(THiRange)
+	s ^FormData(userId, rid, count, "TLoRange") = $$H2C^WSP999(TLoRange)
+	
+	q
+</script>
+
+<script language="cache" method="cInitMe">
+	;s %session.Data("jxAltUpload","IND")=0
+	d InitMe^jxAltConvertResultTable1
+</script>
+<script language="cache" method="cRemoveReviewFile">
+	d removeReviewFile^jxAltConvertResultTable1
+</script>
+<script language="cache" method="cOpenTemp" arguments="d1:%String">
+	s ^jxAltUpload("temp",d1)="jondaffr2"
+</script>
+<script language="cache" method="cSaveRBT" arguments="d1,d2,d3,d4,d5,d6, d7:%String">
+	;d UpdateRBT^jxResult2HL7(d1, d2, d3, d4, d5, d6, d7)
+	d UpdateRBT^jxAltConvertResultTable1(d1, d2, d3, d4, d5, d6, d7)
+	q
+</script>
+
+<script language="cache" method="cClearRBT" arguments="d1:%String">
+	;d ClearRBT^jxResult2HL7(d1)
+	d ClearRBT^jxAltConvertResultTable1(d1)
+	q
+</script>
+<script language="cache" method="cFileStatusChange" arguments="d1,d2,d3:%String">
+	d FileStatusChange^jxAltConvertResultTable1
+</script>
+<script language="cache" method="cConvertResults" arguments="d1,d2,d3,d4,d5,d6:%String">
+	d ConvertResults^jxAltConvertResultTable1
+</script>
+<script language="cache" method="cConvertNewResults" arguments="d1,d2,d3,d4,d5,d6:%String">
+	d ConvertNewResults^jxAltConvertResultTable1
+</script>
+
+<script language="cache" method="cSetRid" arguments="">
+	;&js<rid = `#(%session.Data("jxTransform","rid"))#`>
+	&js<rid = `#(%session.Data("jxAltUploadRecord","ID"))#`>
+</script>
+
+<script language="cache" method="cLoadTestNames" arguments="d1:%String">
+	d LoadTemplateNames^jxAltConvertResultTable1
+</script>
+<script language="cache" method="cLoadJXTestNames" arguments="d1:%String">
+	s newtest=$$LoadJXNames^jxAltConvertResultTable1(d1)
+	;&js<currentTestname.closest(".transformed-name").value=#(newtest)#>
+</script>
+<script language="cache" method="cLockDown">
+	k %session.Data
+	&js<window.open("cLockDown.csp","_self")>
+</script>
+<script language="cache" method="cLoadUnitsBasedOnName" arguments="d1,d2:%String">
+	d LoadUnitsBasedOnName^jxAltConvertResultTable1
+</script>
+<script language="cache" method="cUnitCleanUp" arguments="d1:%String">
+	d unitCleanUp^jxAltConvertResultTable1
+</script>
+<script language="cache" method="cPopOriginal">
+	d PopOriginal^jxAltConvertResultTable1
+</script>
+<script language="cache" method="cClearFormDataGlobal" arguments="">
+	s uid = %session.Data("UserID")
+	;s rid = %session.Data("jxTransform","rid")
+	s rid=%session.Data("jxAltUploadRecord","ID")
+	if ($d(^FormData(uid, rid)) = 10){
+		;K ^FormData(uid,rid)
+	}
+</script>
+
+<script language="cache" method="cResult2HL7" arguments="d1:%String">
+	s rid=d1
+	s status = $$jxResult2HL7IND^jxResult2HL7IND(rid)
+	if (status '= 0){
+		s fName= $PIECE(status, "\", $LENGTH(status, "\"))
+		&js<filePath="CSP/jondax/groot/"; fileName=`#(fName)#`;>
+		
+		;d ConvertResults^jxHL7ToFHIRjson(status,rid)
+		}
+	else {&js<alert("ERROR creating HL7 output file. Please contact the developers with the file ID.")>}
+</script>	
+<!--
+<script language="cache" method="cResult2HL7" arguments="d1:%String">
+
+	s status = $$jxResult2HL7^jxResult2HL7(d1)
+	
+	s rid = d1
+	if (status '= 0){
+		;&sql(SELECT Profile->Setting->CliProfileName, BucketName, OrgFile INTO :CliProfileName, :bk, :fileName FROM MX.Record WHERE ID=:d1)
+		
+		&sql(SELECT Profile->Setting, BucketName, OrgFile INTO :userSetting, :bk, :fileName FROM MX.Record WHERE ID=:d1)
+		if (bk["/"){
+			s bkfd = $p(bk,"/",2,*)
+			s bkn = $p(bk,"/",1)
+			&sql(SELECT Buckets_CliProfileName into :CliProfileName FROM MX.Setting_buckets  
+			WHERE buckets_folder =:bkfd and buckets_name = :bkn and setting=:userSetting
+			)
+		} else {
+			s bkfd = "-"
+			s bkn = bk
+			&sql(SELECT Buckets_CliProfileName into :CliProfileName FROM MX.Setting_buckets  
+			WHERE buckets_folder =:bkfd and buckets_name = :bkn and setting=:userSetting
+			)
+		}
+		
+		if (bk["/"){
+			s sourceFolderInProcess = $p(bk,"/",2,*)_"/In-Process"
+			s destinationFolderCompleted = $p(bk,"/",2,*)_"/Completed"
+			s bk = $p(bk,"/",1)	
+		} else {
+			s sourceFolderInProcess = "In-Process"
+			s destinationFolderCompleted = "Completed"
+		}
+		
+		&js<console.log("#(userSetting)#")>
+		&js<console.log("#(CliProfileName)#")>
+		
+		s sts1 = ##class(python.s3Utils).uploadFile(CliProfileName, status, bk, destinationFolderCompleted)
+		s fileName=$$C2H^WSP999(fileName)
+		s sts2 = ##class(python.s3Utils).moveFile(CliProfileName,bk,bk, fileName, sourceFolderInProcess , destinationFolderCompleted)	
+		&js<console.log("#(sts1)#")>
+		&js<console.log("#(sts2)#, #(bk)#, #(fileName)#")>
+		if ((+sts1=0)!(+sts2=0)){
+			&js<alert("An error occurred in moving files between buckets. Alert developers with file ID: #(d1)# , File Name: #($p(fileName, "\",*))#")>
+		} else {
+	;}// old close tag of if
+		if (+sts1 = 1){
+			; copy the HL7 result
+			d ##class(%File).CopyFile(status,"C:\InterSystems\Cache\JondaX\JondaX\jondaffr2\copies\"_fileName)
+			d ##class(%File).Delete(status)
+		}
+		s dt = $zdatetime($h,3)
+		s uid = %session.Data("UserID")
+		&sql(UPDATE MX.Record SET Status='Completed', ReviewedDate=:dt, ReviewedBy=:uid WHERE ID = :d1)
+		
+		s status= $$GenerateErrorReportByRid^jxErrorReport(d1,2)
+		i (status '= 0){
+			//&sql(SELECT Profile->Setting->CliProfileName, BucketName, OrgFile INTO :CliProfileName, :bk, :fileName FROM MX.Record WHERE ID=:d1)
+			
+			s sts = ##class(python.s3Utils).uploadFile(CliProfileName, status, bk, destinationFolderCompleted)
+		
+			; copy the HL7 result
+			d ##class(%File).CopyFile(status,"C:\InterSystems\Cache\JondaX\JondaX\jondaffr2\copies\"_fileName)
+			d ##class(%File).Delete(status)	
+		
+		}
+		; Commented by DW 21/11/2023
+		;d StripTables^jxBiolytica(rid)
+		
+		s uid = %session.Data("UserID")
+		s rid = %session.Data("jxTransform","rid")
+		if ($d(^FormData(uid, rid)) = 10){
+			; Commented by DW 21/11/2023
+			;K ^FormData(uid,rid)
+		}
+		}
+	} else {
+		&js<alert("ERROR creating HL7 output file. Please contact the developers with the file ID.")>
+	}
+	q
+</script> -->
+<script language="cache" method="cErrorReport" arguments="rid:%String">
+	s status= $$GenerateErrorReportByRid^jxErrorReport(rid)
+   
+	i (status '= 0){
+		;&sql(SELECT Profile->Setting->CliProfileName, BucketName, OrgFile INTO :CliProfileName, :bk, :fileName FROM MX.Record WHERE ID=:rid)
+		&sql(SELECT Profile->Setting, BucketName, OrgFile INTO :userSetting, :bk, :fileName FROM MX.Record WHERE ID=:d1)
+		
+		/*s bkfd = $p(bk,"/",2,*)
+		s bkn = $p(bk,"/",1)
+		&sql(SELECT Buckets_CliProfileName into :CliProfileName FROM MX.Setting_buckets  
+			WHERE buckets_folder =:bkfd and buckets_name = :bkn and setting=:userSetting
+			)*/
+		if (bk["/"){
+			s bkfd = $p(bk,"/",2,*)
+			s bkn = $p(bk,"/",1)
+			&sql(SELECT Buckets_CliProfileName into :CliProfileName FROM MX.Setting_buckets  
+			WHERE buckets_folder =:bkfd and buckets_name = :bkn and setting=:userSetting
+			)
+		} else {
+			s bkfd = "-"
+			s bkn = bk
+			&sql(SELECT Buckets_CliProfileName into :CliProfileName FROM MX.Setting_buckets  
+			WHERE buckets_folder =:bkfd and buckets_name = :bkn and setting=:userSetting
+			)
+		}
+		if (bk["/"){
+			s sourceFolderInProcess = $p(bk,"/",2,*)_"/In-Process"
+			s destinationFolderFailure= $p(bk,"/",2,*)_"/Failure"
+			s bk = $p(bk,"/",1)	
+		} else {
+			s sourceFolderInProcess = "In-Process"
+			s destinationFolderFailure = "Failure"
+		}
+		//&js<console.log(`#(sourceFolderInProcess)#`)>
+		//&js<console.log(`#(destinationFolderFailure)#`)>
+		s sts1 = ##class(python.s3Utils).uploadFile(CliProfileName, status, bk, destinationFolderFailure)
+		;d ##class(%File).Delete(status)
+		
+		s sts2 = ##class(python.s3Utils).moveFile(CliProfileName,bk,bk, fileName, sourceFolderInProcess, destinationFolderFailure)	
+		
+		if ((+sts1=0)!(+sts2=0)){&js<alert("An error occurred in moving files between buckets. Alert developers with file ID: ", "#(rid)#", "File Name: ", "#($p(fileName, "\",*))#")>}
+		else {
+			s dt = $zdatetime($h,3)
+			s uid = %session.Data("UserID")
+			&sql(UPDATE MX.Record SET Status='Failure', ReviewedDate=:dt, ReviewedBy=:uid WHERE ID = :rid)
+			d StripTables^jxBiolytica(rid)}
+	}
+	
+</script>
+<script language="cache" method="cSaveJson" arguments="rid, jsonStr:%String">
+
+	s userId = %session.Data("UserID")
+	s Obj = {}.%FromJSON(jsonStr)
+	
+	s iter = Obj."FormData".%GetIterator()
+	while iter.%GetNext(.key, .value, .type ) {
+		
+		s key = key + 1
+		s ODate = value."ODate"
+		s OName = value."OName"
+		s OValue = value."OValue"
+		s OUnit = value."OUnit"
+		s OHiRange = value."OHiRange"
+		s OLoRange = value."OLoRange"
+		s TName = value."TName"
+		s TValue = value."TValue"
+		s TUnit = value."TUnit"
+		s THiRange = value."THiRange"
+		s TLoRange = value."TLoRange"
+		
+		if ($L(ODate)>0){
+			s formattedDate = $replace(ODate, "-","/")
+			s testDateInternal = $zdate($zdateh(formattedDate,15,,,,,,,0),4) //dd/mm/yyyy
+			if (testDateInternal = "31/12/1840"){
+				s ^FormData(userId, rid, key, "testDate") = ""
+			} else {s ^FormData(userId, rid, key, "testDate") = testDateInternal}
+		} else { s ^FormData(userId, rid, key, "testDate") = ""}
+		
+		s ^FormData(userId, rid, key, "testName") = $$H2C^WSP999(OName)
+		s ^FormData(userId, rid, key, "testValue") = $$H2C^WSP999(OValue)
+		s ^FormData(userId, rid, key, "testUnit") = $$H2C^WSP999(OUnit)
+		s ^FormData(userId, rid, key, "testHiRange") = $$H2C^WSP999(OHiRange)
+		s ^FormData(userId, rid, key, "testLoRange") = $$H2C^WSP999(OLoRange)
+	
+		s ^FormData(userId, rid, key, "TName") = $$H2C^WSP999(TName)
+		s ^FormData(userId, rid, key, "TValue") = $$H2C^WSP999(TValue)
+		s ^FormData(userId, rid, key, "TUnit") = $$H2C^WSP999(TUnit)
+		s ^FormData(userId, rid, key, "THiRange") = $$H2C^WSP999(THiRange)
+		s ^FormData(userId, rid, key, "TLoRange") = $$H2C^WSP999(TLoRange)
+		
+	}
+</script>
+</html>

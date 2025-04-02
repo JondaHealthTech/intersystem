@@ -1,0 +1,35 @@
+body{
+    font-family:Montserrat;}
+
+.lab-upload {
+    padding:0.5rem 1rem;
+    text-align: center;
+    background: white;
+    border-radius: 20px;
+}
+
+.lab-upload h4 {
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 2vw;
+    position: relative;
+    color: black;
+    margin: 30px;
+}
+.lab-upload p {
+    font-size:15px;
+    font-weight: 500;
+    line-height: 1.8vw;
+    margin: 100px;
+    color: black;
+}
+.blue-btn{
+    padding:0.5vw 1vw;
+    color:white;
+    width:280px;
+    height:60px;
+    font-size:18px;
+    background: #405470;
+    border-radius: 15px;
+    border: none;
+}

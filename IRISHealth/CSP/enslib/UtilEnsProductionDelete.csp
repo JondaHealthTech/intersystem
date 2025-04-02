@@ -1,0 +1,14 @@
+<!--
+Utilities: Delete Production Page
+-->
+
+<AutoPage domain="Ensemble" pagename="Delete" parentpage="UtilEnsProductions.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Production Delete</Text>
+</Pane>
+
+<Pane name="Detail" type="CSPX.EnsProductionDeletePane">
+</Pane>
+ 
+</AutoPage>

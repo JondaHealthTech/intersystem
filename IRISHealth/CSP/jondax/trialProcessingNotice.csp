@@ -1,0 +1,71 @@
+<html lang="en"> <!--Groot v1.1-->
+    <head>
+    	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+		q 1
+		</script>
+    	<script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/trialProcessingNotice.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <h1>Your file is being processed!</h1>
+                    <h2>You'll receive an email when processing finishes</h2>
+              		<div id="lab-upload" class="lab-upload">
+				    	<div class="text">
+				    		<img src="./assets/images/trial/ProcessNotice.png" alt="Processing Notice">
+					        <p>Processing time can take up to 24 hours.<br>
+					        Transformation process includes human reviewers to ensure result accuracy.<br>
+					        <br>Once processing is completed, you may view your files in the <strong>Download files</strong> section.</p>
+					    </div>    
+					    <div class="button">
+					      	<button class="blue-btn" onclick="window.open('trialDownload.csp','_self')">View my files</button>
+					    </div>
+					</div>
+					<p id="acknowledgment">
+					Check your Inbox, Spam, or Junk folders for the download link.
+ 					</p>
+   					</div>
+            	
+             	<script language="cache" runat="server">
+          			d SetFooter^trialHome
+          		</script> 
+          		</div>  
+            </div>
+       </div>  
+
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+    <script type="text/javascript">
+    window.onload = jInit;
+	document.onmousemove = parent.resetTimer;
+	document.onmousedown = parent.resetTimer; // touchscreen presses
+	document.ontouchstart = parent.resetTimer;
+	document.onkeypress = parent.resetTimer;
+	document.onclick = parent.resetTimer; 
+	document.addEventListener('scroll', parent.resetTimer, true);
+	
+	function jInit() {
+		parent.resetTimer;
+			}
+    </script>
+    
+
+    <script language="cache" method="cLockDown">
+		k %session.Data
+		&js<window.open("trialLockDown.csp","_parent")>
+	</script>
+	</html>

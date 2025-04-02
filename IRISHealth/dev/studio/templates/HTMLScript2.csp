@@ -1,0 +1,7 @@
+<csp:StudioGenerateTemplate><script language="Cache" runat="server">
+	Write "<script"
+	Write " language=""",$get(%request.Data("language",1)),""""
+	Write:($get(%request.Data("language",1))'="JavaScript") " runat=""server"""
+	Write ">",!
+	Write $G(%request.Data("script",1)),!
+	Write "<","/script>",!</script>

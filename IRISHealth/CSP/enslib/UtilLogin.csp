@@ -1,0 +1,18 @@
+<!--
+	Login page.
+-->
+
+<AutoPage domain="Ensemble" pagename="Login">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>@Ensemble:LoginPage@Login Page</Text>
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.FormPane">
+	<Text>@Ensemble:LoginTitle@Please login:</Text>
+	<FormClass>CSPX.LoginForm</FormClass>
+	<SubmitPage>UtilEnsHome.csp</SubmitPage>
+	<Align>center</Align>
+</Pane>
+
+</AutoPage>

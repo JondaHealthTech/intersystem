@@ -1,0 +1,122 @@
+/* ---------  Ensemble_Record Mapper Style ------------------- */
+
+#mapSample {
+	background: white;
+	color: #404040;
+	border-top: 1px solid gray;
+	padding: 2px;
+	height: 200px;
+	overflow: auto;
+	font-family: courier new;
+	font-size: 12pt;
+}
+
+#mapSample .terminator {
+	border: 1px solid gray;
+	border-right: 3px solid gray;
+	border-left: 3px solid gray;
+	background: #F0F0F0;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+#mapSample .separator,
+#mapSample .repSeparator {
+	background: #F0F0F0;
+}
+
+#mapSample .separator {
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+#mapSample .sep1 {
+	color: red; 
+}
+
+#mapSample .sep2 {
+	color: orange;
+}
+
+#mapSample .sep3 {
+	color: darksalmon;
+}
+
+#mapSample .sep4 {
+	color: green;
+}
+
+#mapSample .sep5 {
+	color: blue;
+}
+
+#mapSample .sep6 {
+	color: indigo;
+}
+
+#mapSample .sep7 {
+	color: violet;
+}
+
+#mapSample .repField {
+	padding-left: 1px;
+	padding-right: 1px;
+}
+
+#mapSample .error {
+	background-color: red;
+}
+
+#mapSample .fieldData {
+	background-color: #D0D0FF;
+	border-left: 1px solid black;
+	padding-left: 2px;
+	padding-right: 2px;
+	white-space: nowrap;
+}
+
+#mapSample .fieldData.rightJustified {
+	border-left: none;
+	border-right: 1px solid black;
+}
+
+#mapSample .padding.left {
+	border-left: 1px solid black;
+}
+
+#mapSample .ignored {
+	background-color: orange;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+#mapSample .record {
+	margin-top: 20px;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	border-collapse: collapse;
+	font-family: monospace;
+}
+
+#mapSample .fixedwidth {
+}
+
+#mapSample .info {
+	color: gray;
+	background-color: #F0F0F0;
+	border-left: 1px solid black;
+}
+
+#mapSample .info td{
+	padding-left: 2px;
+	border-bottom: 1px solid black;
+	border-left: 1px solid black;
+}
+
+#mapSample .info.firstCell td {
+	border-left: 1px solid black;
+}
+
+#mapSample .endCell {
+	border-right: 1px solid black;
+}

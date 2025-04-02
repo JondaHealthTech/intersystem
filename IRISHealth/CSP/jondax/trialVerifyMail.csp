@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("Email"))="" s %response.Redirect="trialLockDown.csp" q 1
+		q 1
+		</script>
+    <script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+	<link rel="stylesheet" href="assets/styles/trialVerifyMail.css">
+</head>
+<body>
+	<div id="wrapper">
+	    <div class="bg-wrapper">
+	        <div class="bg4">
+	            <img src="./assets/images/bg4.png">
+	        </div>
+	    </div>
+	    
+	 <a href="https://www.jonda.health/" class="back-link">Back to website</a>
+     <div class="container">    
+     	<img class="logo1" src="./assets/images/trial/JXbyJx.png" alt="Jonda X">
+               
+
+      	<div class="form-container">  
+
+			<h1>Create a JondaX Free Trial Profile</h1>
+            	<img class="mail-img" src="./assets/images/trial/mailSent.png" alt="Verification mail sent">
+            	<h5>Verify your email address</h5>
+            	<p class="">Please check your inbox, spam, or junk folders.</p>
+                <div class="code-container">
+			        <input type="text" class="code-input" maxlength="1" id="code1" onkeydown="jBackSpace('code1','1','code1')" oninput="jMoveFocus(this, 'code2')">
+			        <input type="text" class="code-input" maxlength="1" id="code2" onkeydown="jBackSpace('code2','1','code1')" oninput="jMoveFocus(this, 'code3')">
+			        <input type="text" class="code-input" maxlength="1" id="code3" onkeydown="jBackSpace('code3','1','code2')"oninput="jMoveFocus(this, 'code4')">
+			        <input type="text" class="code-input" maxlength="1" id="code4" onkeydown="jBackSpace('code4','1','code3')"oninput="jMoveFocus(this, 'code5')">
+			        <input type="text" class="code-input" maxlength="1" id="code5" onkeydown="jBackSpace('code5','1','code4')">
+			    </div>
+				<button type="button" class="confirm-btn" onclick="jVerify()">Confirm</button>
+				<p class="error-text" id="AlertText">
+					
+	            </p> 
+				<button type="button" class="resend-mail disabled" onclick="jResend()">Resend Validation Email (<span class='countdown'>60</span>s)</button>
+				
+ 
+          </div>
+            
+            <footer>
+                <a href="#" class="footer-link"><span class="footer-span">Disclaimer</span>&emsp;|&emsp;</a>
+                <a href="#" class="footer-link"><span class="footer-span">Terms of use</span>&emsp;|&emsp;</a>
+                <a href="#" class="footer-link"><span class="footer-span">Privacy policy</span>&emsp;|&emsp;</a>
+                <a href="#" class="footer-link"><span class="footer-span">Contact us</span></a>
+            </footer>
+		
+	  </div>
+	</div>		    
+</body>
+<script  type="text/javascript">
+    const C1 = document.getElementById("code1");
+    const C2 = document.getElementById("code2");
+    const C3 = document.getElementById("code3");
+    const C4 = document.getElementById("code4");
+    const C5 = document.getElementById("code5");
+    let AlertText=document.getElementById("AlertText");
+    const codesContainer = document.querySelector('.code-container');
+	const inputs = codesContainer.querySelectorAll('input');
+	let countdown;
+	window.onload=startCountdown();
+
+	function jMoveFocus(currentInput, nextInputId) {
+		AlertText.innerHTML=""
+    	if (currentInput.value.length >= currentInput.maxLength) {
+                document.getElementById(nextInputId).focus();
+            }
+        }
+    function jBackSpace(field1, len, field2){
+	
+	if (window.event.keyCode==8){
+		document.getElementById(field1).value=""
+		document.getElementById(field2).focus();
+		
+	}
+	if (window.event.keyCode==69){
+		document.getElementById(field1).value=""
+	}
+	if (window.event.keyCode==13){
+		event.preventDefault();
+		jVerify();
+	}
+	}
+    
+	function jVerify(){
+		AlertText.innerHTML="";
+		const verifyCode=C1.value+C2.value+C3.value+C4.value+C5.value;
+		#server(..cCheckCode(verifyCode))#
+	}
+	function resetInput(){
+		inputs.forEach(input => {
+   	 		input.value = ""; 
+			});
+	}
+	function jResend(){
+		#server(..cResendVMail())#
+	}
+    function startCountdown() {
+            let timeLeft = 60;
+            const resend = document.querySelector(".resend-mail");
+            resend.classList.add("disabled");
+
+            countdown = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    resend.classList.remove("disabled");
+                    document.querySelector(".countdown").innerHTML = `${timeLeft}`;
+                } else {
+                    document.querySelector(".countdown").innerHTML = `${timeLeft}`;
+                    timeLeft--;
+                }
+            }, 1000);
+        }
+</script>
+<script language="cache" method="cCheckCode" arguments="d1:%String">
+	s mail=$g(%session.Data("Email"))
+	s vCode=$g(^TrialUser(mail,"vCode"))
+	i vCode=d1 &js<window.open("trialSignUp1.csp","_self")>
+	else  &js<AlertText.innerHTML="Wrong Verification Code!"; resetInput();>
+</script>
+<script language="cache" method="cResendVMail" arguments="d1:%String">
+	s d1=$g(%session.Data("Email"))
+	d VerifyByEmail^trialSignUp
+	&js<AlertText.innerHTML="Verification mail sent!"; resetInput();startCountdown();>
+</script>
+</html>

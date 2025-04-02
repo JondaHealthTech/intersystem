@@ -1,0 +1,52 @@
+<!--
+Activity Graph page
+-->
+
+<AutoPage domain="Ensemble" pagename="Activity Graph" parentpage="UtilEnsHome.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Activity Graph</Text>
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>Activity History:</Text>
+	<Query>Ens.Util.Statistics:EnumerateHostStatus</Query>
+	<Sortable>false</Sortable>
+	<ShowZebra>false</ShowZebra>
+	<AutoRefresh>true</AutoRefresh>
+
+	<Actions>
+		<Action href="UtilEnsMonitor.csp?$FRAME=Info" targetFrame="Info" name="$A">
+			<Caption>Details</Caption>
+			<Popup>Display details for this host.</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+		<Action href="UtilEnsActivityGraph.csp?$FRAME=Info" targetFrame="Info" name="$B">
+			<Caption>Graph</Caption>
+			<Popup>Display Activity Graph for this host.</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+	</Actions>
+
+	<Conditions>
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Error</Value>
+			<RowStyle>background: red;</RowStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Idle</Value>
+			<RowStyle>background: yellow;</RowStyle>
+		</Condition>
+	</Conditions>
+
+
+</Pane>
+
+<Pane name="Info" type="CSPX.EnsGraphPane">
+</Pane>
+
+</AutoPage>

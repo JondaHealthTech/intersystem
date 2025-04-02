@@ -1,0 +1,521 @@
+/* @class="%ZEN.Component.abstractListBox" */
+
+/* @doc="Wrapper for listBox." */
+.listBox {
+	color: black;
+	background: white;
+	border: 1px black solid;
+	width: 100%;
+	height: 100px;
+	overflow: auto;
+}
+
+/* @doc="Style for disabled list boxes." */
+.listBoxDisabled {
+	color: black;
+	background: darkgray;
+	border: 1px black solid;
+	width: 100%;
+	height: 100px;
+	overflow: auto;
+}
+
+/* @doc="Item within listBox." */
+.listBoxItem {
+	white-space: nowrap;
+	width: 100%;
+	color: black;
+	/* ie does not handle transparent */
+	border: 1px solid white;
+	cursor: pointer;
+}
+
+/* @doc="Selected item within listBox." */
+.listBoxItemSelected {
+	white-space: nowrap;
+	width: 100%;
+	color: black;
+	background: #E0E0E0;
+	font-weight: bold;
+	border: 1px dotted #202060;
+	cursor: pointer;
+}
+
+/* @doc="Selected item with focus within listBox." */
+.listBoxItemFocus {
+	white-space: nowrap;
+	width: 100%;
+	font-weight: bold;
+	color: white;
+	background: #5050F0;
+	background-image: url(images/grad-blue-10x30.png);
+	background-repeat: repeat-x;
+	border: 1px solid black;
+	cursor: pointer;
+}
+
+.listBoxItem:hover, .listBoxItemSelected:hover, .listBoxItemFocus:hover {
+	color: red;
+}
+
+/* no hover when disabled */
+.listBoxDisabled .listBoxItem:hover {
+	color: black;
+	background: darkgray;
+}
+
+.listBoxDisabled .listBoxItemSelected, .listBoxDisabled .listBoxItemSelected:hover, .listBoxDisabled .listBoxItemFocus {
+	white-space: nowrap;
+	width: 100%;
+	color: gray;
+	background: darkblue;
+	font-weight: bold;
+}
+
+/* @doc="Table displaying dataListBox dropdown contents." */
+.listBoxTable {
+	background: white;
+	width: 100%;
+}
+
+.listBoxTable td {
+	white-space: nowrap;
+	padding-right: 3px;
+	padding-bottom: 2px;
+}
+
+/* @doc="Headers within combobox dropdown list." */
+.listBoxTable th {
+	white-space: nowrap;
+	padding-right: 3px;
+	padding-bottom: 2px;
+	font-weight: bold;
+	text-align: left;
+	border-bottom: 1px solid #808080;
+	background: #404040;
+	background-image: url(images/grad-gray-10x30.png);
+	background-repeat: repeat-x;
+}
+
+/* @class="%ZEN.Component.button" */
+/* @doc="Style for button (input)." */
+.button {
+}
+/* @class="%ZEN.Component.checkbox" */
+/* @doc="Style for checkbox control." */
+.checkbox {
+}
+
+/* @doc="Caption for checkbox." */
+span.checkboxCaption {
+	cursor: pointer;
+	white-space: nowrap;
+}
+/* @class="%ZEN.Component.dateSelect" */
+
+/* @doc="Table used to layout elements within dateSelect." */
+.dateSelectTable {
+}
+
+/* @doc="Combobox within dateSelect." */
+.dateSelect {
+}
+
+/* @class="%ZEN.Component.dateText" */
+
+/* @doc="Style for div around active dateText control" */
+.dateTextDiv {
+	border: 1px solid #8080D0;
+	background: white;
+	height: 18px;
+}
+
+/* @doc="Style for dateText input control." */
+.dateTextInput {
+	border: none;
+}
+
+.dateTextIcon {
+	padding: 0px;
+	width: 18px;
+	height: 18px;
+}
+
+.dateTextIcon:hover {
+	padding: 0px;
+	background: #FFEEAA;
+}
+
+/* @class="%ZEN.Component.fileUpload" */
+/* @doc="Style for fileUpload control" */
+.fileUpload {
+}
+/* @class="%ZEN.Component.hbutton" */
+/* @doc="Style for button (input)." */
+.button {
+}
+/* @class="%ZEN.Component.image" */
+
+/* @doc="Style used for images with links." */
+.imageLink {
+	cursor: pointer;
+}
+
+/* @class="%ZEN.Component.label" */
+/* @doc="Style for labelText component." */
+.labelText {
+}
+/* @class="%ZEN.Component.lookup" */
+
+/* @doc="Style for div around the control." */
+.lookupDiv {
+	border-top: 1px solid #C0C0C0;
+	border-left: 1px solid #D0D0D0;
+	border-right: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;
+	background: white;
+	position: relative;
+	font-family: arial;
+	font-size: 14px;
+	color: #606060;
+	overflow: hidden;
+}
+
+.lookupBtn, .lookupBtnInactive {
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	border: 1px solid white;
+	background: white;
+	border-radius: 2px;
+}
+
+.lookupBtnInactive {
+	opacity: 0.25;
+}
+
+.lookupBtn:hover {
+	border: 1px solid #D0D0D0;
+	border-radius: 2px;
+
+background: -moz-linear-gradient(top,  rgb(255,255,255) 0%, rgb(241,241,241) 50%, rgb(225,225,225) 51%, rgb(246,246,246) 100%); /* FF3.6+ */
+background: -webkit-linear-gradient(top,  rgb(255,255,255) 0%,rgb(241,241,241) 50%,rgb(225,225,225) 51%,rgb(246,246,246) 100%); /* Chrome10+,Safari5.1+ */
+background: -ms-linear-gradient(top,  rgb(255,255,255) 0%,rgb(241,241,241) 50%,rgb(225,225,225) 51%,rgb(246,246,246) 100%); /* IE10+ */
+background: linear-gradient(top,  rgb(255,255,255) 0%,rgb(241,241,241) 50%,rgb(225,225,225) 51%,rgb(246,246,246) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#adffffff', endColorstr='#a1f6f6f6',GradientType=0 ); /* IE6-9 */
+}
+
+/* div within popup */
+.lookupResults {
+	border-top: 1px solid #D0D0D0;
+}
+
+table.lookupResultTable {
+	color: #404040;
+	background: white;
+	font-size: 12px;
+	font-family: arial;
+	border-bottom: 1px solid #D0D0D0;
+}
+
+table.lookupResultTable td {
+	border-bottom: 1px solid #F0F0F0;
+	padding: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+table.lookupResultTable tr {
+	-webkit-transition-property: background;
+	-webkit-transition-duration: 0.5s;
+	-webkit-transition-timing-function: ease;
+}
+
+table.lookupResultTable tr.lookupOdd:hover,
+table.lookupResultTable tr.lookupEven:hover {
+	background: #FFEEAA;
+	color: #404040;
+
+	-moz-transition-property: background;
+	-moz-transition-duration: 0.5s;
+	-moz-transition-timing-function: ease;
+}
+
+table.lookupResultTable tr.lookupSelected:hover {
+	color: #FFFFFF;
+}
+
+.lookupOdd {
+}
+
+.lookupEven {
+	background: #F4F4F4;
+}
+
+.lookupSelected {
+	background: rgb(53,107,141);
+	color: #F0F0F0;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(53,107,141)), color-stop(100%,rgb(33,87,121)));
+}
+
+/* image item within popup */
+.lookupImage {
+	max-width: 96px;
+	max-height: 96px;
+}
+/* each non-image item within popup */
+.lookupItem {
+	cursor: default;
+}
+
+/* filter control within popup */
+.lookupFilter {
+	font-size: 10px;
+	color: #404040;
+}
+
+/* @class="%ZEN.Component.radioButton" */
+/* @doc="Caption for radio button." */
+a.radioButtonCaption {
+	cursor: pointer;
+	white-space: nowrap;
+	text-decoration: none;
+	color: black;
+}
+
+/* @doc="Caption for disabled radio button." */
+a.radioButtonCaptionDisabled {
+	white-space: nowrap;
+	color: gray;
+	text-decoration: none;
+}
+
+a.radioButtonCaption:hover {
+	color: red;
+}
+
+a.radioButtonCaption:link, .radioButtonCaption:visited, .radioButtonCaption:active {
+}
+
+a.radioButtonCaptionDisabled:link, .radioButtonCaptionDisabled:visited, .radioButtonCaptionDisabled:active {
+}
+
+/* @class="%ZEN.Component.text" */
+/* @doc="Style for text (input)." */
+.text {
+}
+/* @class="%ZEN.Component.textarea" */
+/* @doc="Style for textarea." */
+.textarea {
+}
+/* @class="%ZEN.Component.abstractComboBox" */
+
+/* @doc="Input box of combobox." */
+.comboboxInput {
+	background: white;
+	vertical-align: middle;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	border-left: 1px solid black;
+	border-right: none;
+}
+
+/* @doc="Input box of combobox in timer mode." */
+.comboboxInputTimer {
+}
+
+/* @doc="Wrapper for dropdown of combobox." */
+.comboboxDropDown {
+	position: absolute;
+	margin: 0px;
+	top: 0px;
+	left: 0px;
+	background: white;
+	border: 1px solid black;
+	width: 250px;
+	height: 250px;
+	overflow: scroll;
+}
+
+/* @doc="Image button in combobox." */
+.comboboxImgButton {
+	background: white;
+	vertical-align: middle;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	border-left: none;
+	border-right: 1px solid black;
+	/* attempt to scale button with text */
+	width: 1.1em;
+	height: 1.1em;
+}
+
+/* @doc="Text button in combobox." */
+.comboboxTextButton {
+	vertical-align: middle;
+	font-size: 0.75em;
+	border: 1px solid black;
+	height: 100%;
+	background: #404040;
+	background-image: url(images/grad-gray-10x100.png);
+	background-repeat: repeat-x;
+}
+
+.comboboxTextButton:hover {
+	background: #404000;
+	background-image: url(images/grad-yellow-10x100.png);
+	background-repeat: repeat-x;
+}
+
+/* @doc="Table displaying combobox dropdown contents." */
+.comboboxTable {
+	background: white;
+	width: 100%;
+}
+
+.comboboxTable td {
+	white-space: nowrap;
+	padding-right: 3px;
+	padding-bottom: 2px;
+}
+
+/* @doc="Headers within combobox dropdown list." */
+.comboboxTable th {
+	white-space: nowrap;
+	padding-right: 3px;
+	padding-bottom: 2px;
+	font-weight: bold;
+	text-align: left;
+	border-bottom: 1px solid #808080;
+	background: #404040;
+	background-image: url(images/grad-gray-10x30.png);
+	background-repeat: repeat-x;
+}
+
+/* @doc="Item (tr) within combobox dropdown." */
+.comboboxItem {
+	width: 100%;
+	color: black;
+	cursor: pointer;
+}
+
+.comboboxItem a, .comboboxItemSelected a {
+	width: 100%;
+	display: block;
+	text-decoration: none;
+}
+
+/* we have to use an anchor so that IE will recognize :hover */
+.comboboxItem a:link, .comboboxItem a:active, .comboboxItem a:visited {
+	color: black;
+}
+
+.comboboxItemSelected a:link, .comboboxItemSelected a:active, .comboboxItemSelected a:visited {
+	color: white;
+}
+
+/* @doc="Mouse hover over selected item within combobox dropdown." */
+.comboboxItemSelected a:hover {
+	color: red;
+}
+
+/* @doc="Mouse hover over item within combobox dropdown." */
+.comboboxItem a:hover {
+	color: red;
+}
+
+/* @doc="Selected item (tr) within combobox dropdown." */
+.comboboxItemSelected {
+	width: 100%;
+	color: white;
+	cursor: pointer;
+	background: #000040;
+	background-image: url(images/grad-blue-10x30.png);
+	background-repeat: repeat-x;
+	border: 1px solid black;
+}
+
+/* @doc="Style for loading message within combobox dropdown." */
+.comboboxLoading {
+	font-style: italic;
+	color: blue;
+}
+
+.debugsqlquerypre {
+	white-space: normal;
+}
+/* @class="%ZEN.Component.dataListBox" */
+
+/* @class="%ZEN.Component.loginForm" */
+/* @doc="Style for login error message." */
+.zenLoginError {
+	color: red;
+	padding: 5px;
+}
+/* @class="%ZEN.Component.multiSelectSet" */
+/* @doc="Span around radio button and caption." */ 
+.multiSelectSetSpan {
+	white-space: nowrap;
+}
+
+/* @doc="Style for radio captions." */
+a.multiSelectSetCaption {
+	vertical-align: top;
+	text-decoration: none;
+	color: black;
+}
+
+/* @doc="Style for disabled radio captions." */
+a.multiSelectSetCaptionDisabled {
+	vertical-align: top;
+	text-decoration: none;
+	color: gray;
+}
+
+a.multiSelectSetCaption:link, .multiSelectSetCaption:visited, .multiSelectSetCaption:active {
+}
+
+a.multiSelectSetCaptionDisabled:link, .multiSelectSetCaptionDisabled:visited, .multiSelectSetCaptionDisabled:active {
+}
+
+/* @class="%ZEN.Component.password" */
+/* @doc="Style for password (input)." */
+.password {
+}
+/* @class="%ZEN.Component.radioSet" */
+/* @doc="Span around radio button and caption." */ 
+.radioSetSpan {
+	white-space: nowrap;
+}
+
+/* @doc="Style for radio captions." */
+a.radioSetCaption {
+	vertical-align: top;
+	text-decoration: none;
+	color: black;
+}
+
+/* @doc="Style for disabled radio captions." */
+a.radioSetCaptionDisabled {
+	vertical-align: top;
+	text-decoration: none;
+	color: gray;
+}
+
+a.radioSetCaption:hover {
+	color: red;
+}
+
+a.radioSetCaption:link, .radioSetCaption:visited, .radioSetCaption:active {
+}
+
+a.radioSetCaptionDisabled:link, .radioSetCaptionDisabled:visited, .radioSetCaptionDisabled:active {
+}
+
+/* @class="%ZEN.Component.select" */
+/* @doc="Style for select." */
+.select {
+}
+/* EOF */

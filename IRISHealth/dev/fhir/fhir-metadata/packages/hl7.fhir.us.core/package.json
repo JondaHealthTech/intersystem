@@ -1,0 +1,50 @@
+{
+  "_from": "hl7.fhir.us.core@3.1.0",
+  "_id": "hl7.fhir.us.core@3.1.0",
+  "_inBundle": false,
+  "_integrity": "sha512-dWGiEfEvecrgtjZGoC3UlhlNmuccy6S8ocC5HcH6pEwKyynHuIuxSmgUvjAM5NwBcj745855ctFjUH9sKlhEvg==",
+  "_location": "/hl7.fhir.us.core",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "hl7.fhir.us.core@3.1.0",
+    "name": "hl7.fhir.us.core",
+    "escapedName": "hl7.fhir.us.core",
+    "rawSpec": "3.1.0",
+    "saveSpec": null,
+    "fetchSpec": "3.1.0"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://packages.simplifier.net//hl7.fhir.us.core/-/hl7.fhir.us.core-3.1.0.tgz",
+  "_shasum": "a193ba80f9d04e9d7325fbb37188b30c63462e6d",
+  "_spec": "hl7.fhir.us.core@3.1.0",
+  "_where": "C:\\Users\\aepstein\\dev\\fhir-npm",
+  "author": {
+    "name": "HL7 International - US Realm Steering Committee"
+  },
+  "bundleDependencies": false,
+  "canonical": "http://hl7.org/fhir/us/core",
+  "date": "20191106123717",
+  "dependencies": {
+    "hl7.fhir.r4.core": "4.0.1"
+  },
+  "deprecated": false,
+  "directories": {
+    "lib": "package",
+    "example": "example"
+  },
+  "fhirVersions": [
+    "4.0.1"
+  ],
+  "license": "CC0-1.0",
+  "name": "hl7.fhir.us.core",
+  "title": "US Core",
+  "tools-version": 3,
+  "type": "fhir.ig",
+  "url": "http://hl7.org/fhir/us/core/STU3.1",
+  "version": "3.1.0"
+}

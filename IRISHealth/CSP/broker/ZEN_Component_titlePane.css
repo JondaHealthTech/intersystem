@@ -1,0 +1,12 @@
+/* @class="%ZEN.Component.titlePane" */
+.titlePane {
+	color: darkblue;
+	background: #FFFAE7;
+	width: 100%;
+	padding: 3px;
+	border-bottom: 1px solid darkblue;
+	font-size: 1.4em;
+	font-family: verdana;
+	text-align: center;
+}
+/* EOF */

@@ -1,0 +1,112 @@
+<!--
+Home page for utilities.
+-->
+
+<AutoPage domain="Ensemble" pagename="Ensemble">
+
+<Pane name="Title" type="CSPX.EnsTitlePane">
+	<Text>Management Portal</Text>
+</Pane>
+
+<Pane name="Navigator" type="%CSP.Util.NavigatorPane">
+	<Commands>
+		<Action href="UtilEnsHome.csp">
+			<Caption>Home</Caption>
+			<Popup>Go to the Management Portal page.</Popup>
+		</Action>
+
+		<Action href="UtilEnsProductions.csp">
+			<Caption>Productions</Caption>
+			<Popup>Edit, Start or Stop a Production.</Popup>
+		</Action>
+
+		<Action href="CSPX.Portal.Monitor.cls">
+			<Caption>System Monitor</Caption>
+			<Popup>Display System Monitor.</Popup>
+		</Action>
+
+		<Action href="UtilEnsLog.csp">
+			<Caption>Event Log</Caption>
+			<Popup>Display the contents of the Event Log.</Popup>
+		</Action>
+
+		<Action href="UtilEnsMessages.csp">
+			<Caption>Message Browser</Caption>
+			<Popup>Display a list of Message objects stored within the database.</Popup>
+		</Action>
+
+		<Action href="UtilEnsBPList.csp">
+			<Caption>Business Processes</Caption>
+			<Popup>Displays Defined Business Processes.</Popup>
+		</Action>
+
+		<Action href="UtilEnsRuleList.csp">
+			<Caption>Business Rules</Caption>
+			<Popup>Displays Business Rules.</Popup>
+		</Action>
+
+		<Action href="UtilEnsRuleLog.csp">
+			<Caption>Business Rule Log</Caption>
+			<Popup>Displays the Business Rules Log.</Popup>
+		</Action>
+
+		<Action href="UtilEnsMonitor.csp">
+			<Caption>Host Monitor</Caption>
+			<Popup>Display a list of current host processes along with their status.</Popup>
+		</Action>
+
+		<Action href="UtilEnsJobs.csp">
+			<Caption>Jobs</Caption>
+			<Popup>Display a list of current background jobs.</Popup>
+		</Action>
+
+		<Action href="UtilEnsQueues.csp">
+			<Caption>Queues</Caption>
+			<Popup>Display a list of current message queues.</Popup>
+		</Action>
+
+		<Action href="UtilEnsMA.csp">
+			<Caption>Maintenance</Caption>
+			<Popup>Maintenance Options</Popup>
+		</Action>
+
+		<Action href="UtilEnsDashboardList.csp">
+			<Caption>@Ensemble:Dashboards@Dashboards</Caption>
+			<Popup>@Ensemble:popDashList@Display a list of available Dashboards</Popup>
+		</Action>
+
+		<Action href="UtilEnsBusinessMetrics.csp">
+			<Caption>Business Metrics</Caption>
+			<Popup>Display contents of Business Metric cache</Popup>
+		</Action>
+
+		<Action href="WFHome.csp">
+			<Caption>Workflow Portal</Caption>
+			<Popup>Go to the Workflow Management Portal</Popup>
+		</Action>
+
+		<Action href="UtilEnsTestingService.csp">
+			<Caption>Testing Service</Caption>
+			<Popup>Display the Operations Test Page</Popup>
+		</Action>
+
+ 		<Action href="UtilEnsEDIMain.csp">
+			<Caption>EDI / HL7 Manager</Caption>
+			<Popup>EDI / HL7 Electronic Document Object Manager</Popup>
+		</Action>
+
+		<Action href="UtilEnsLogout.csp">
+			<Caption>Logout</Caption>
+			<Popup>Log out the current user from the Management Portal.</Popup>
+		</Action>
+
+	</Commands>
+
+</Pane>
+
+<Pane name="Detail" type="CSPX.EnsHomePagePane">
+	<Text>Welcome to the Management Portal:</Text>
+	<Align>left</Align>
+</Pane>
+
+</AutoPage>

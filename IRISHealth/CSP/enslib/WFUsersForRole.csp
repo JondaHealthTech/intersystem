@@ -1,0 +1,46 @@
+<!--
+Workflow: List of users for specific role
+-->
+
+<AutoPage domain="Ensemble" pagename="Workflow Users" parentpage="WFRoles.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Workflow Role Members</Text>
+</Pane>
+
+<Pane name="Info" type="%CSP.Util.TablePane">
+	<Text>The following users belong to the role {$ID1}.</Text>
+	<Query>EnsLib.Workflow.Engine:ListUsersForRole</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>false</ShowZebra>
+	<ShowRowNumbers>true</ShowRowNumbers>
+	<AutoRefresh>false</AutoRefresh>
+
+	<Actions>
+		<Action href="WFTasksForUser.csp?$FRAME=Info" name="$A">
+			<Caption>Tasks</Caption>
+			<Popup>Show tasks assigned to this user.</Popup>
+			<IDValues>{UserName}</IDValues>
+		</Action>
+		<!--
+		<Action href="WFUserEditor.csp?$FRAME=Info" name="$B" targetFrame="Info">
+			<Caption>Edit</Caption>
+			<Popup>Edit this user definition.</Popup>
+			<IDValues>{UserName}</IDValues>
+		</Action>
+		-->
+	</Actions>
+
+	<Conditions>
+		<!-- inactive -->
+		<Condition>
+			<ColumnName>IsActive</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>0</Value>
+			<RowStyle>background: #D0D0D0; color: #808080;</RowStyle>
+		</Condition>
+	</Conditions>
+
+</Pane>
+
+</AutoPage>

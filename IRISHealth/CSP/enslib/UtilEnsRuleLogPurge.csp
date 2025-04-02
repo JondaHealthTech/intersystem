@@ -1,0 +1,12 @@
+<!--
+Purge page for rule log.
+-->
+
+<AutoPage domain="Ensemble" pagename="Purge" parentpage="UtilEnsMA.csp">
+
+<Pane name="Detail" type="CSPX.EnsPurgePane">
+	<Text>Fill out the form and press the button to start purge:</Text>
+	<FormClass>CSPX.EnsPurgeForm</FormClass>
+	<PurgeType>Business Rule Log</PurgeType>
+</Pane>
+</AutoPage>

@@ -1,0 +1,14 @@
+<!--
+Utilities: Dashboard View Page
+-->
+
+<AutoPage domain="Ensemble" pagename="Dashboard" parentpage="UtilEnsDashboardList.csp" >
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Dashboard</Text>
+</Pane>
+
+<Pane name="Detail" type="CSPX.EnsDashboardPane">
+</Pane>
+
+</AutoPage>

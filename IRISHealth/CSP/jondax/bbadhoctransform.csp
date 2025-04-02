@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <!-- THIS IS TESTING FOR POP UPS  -->
+        
+       <style type="text/css">
+			body, html {
+			  height: 100%;			  
+			  background-color:#FFFFFF;
+			}
+			@font-face{
+	    		font-family: "Montserrat";
+	    		src: url("assets/fonts/Montserrat-VariableFont_wght.ttf");
+	    	}
+	    	
+	    	
+		</style>
+    </head>
+
+    <body>
+		
+	<button onClick="transformToSda()">TRANSFORM TO SDA</button>
+	<button onClick="jtempFile()">MODIFY SDA</button>
+	<button onClick="jIMGSDA()">TRANSFORM TO TYPE</button>
+	<button onClick="">DOWNLOAD</button>
+
+</body>
+
+<script type="text/javascript">
+	let a;
+	function transformToSda(){
+		#server(..cTransformToSDA())#
+	}
+	
+	function jtempFile(){
+		#server(..ctempFile())#
+	}
+	
+	function jIMGSDA(){
+		#server(..cIMGSDA())#
+	}
+</script>
+
+
+<script language="cache" method="cIMGSDA">
+	s %session.Data("jxTransform", "rid") = 396
+	d IMGToSDA^jxDataTransform
+	;&js<console.log(`#(%session.Data("jxTransform", "SDAStr"))#`)>
+</script>
+
+<script language="cache" method="ctempFile">
+
+	/*
+	s rid = 300
+	s outputsDir = "C:\InterSystems\Cache\JondaX\Biolytica\jondaffr2\outputs\"
+	s bk = "nexus-aime"
+	s setting = 1
+	d ^jxResult2HL7
+	*/
+	s bk = "jondaffr2"
+	s inProcessBucket = "s3://"_bk_"/In-Process/"
+	s failureBucket = "s3://"_bk_"/Failure/"
+	s completedBucket = "s3://"_bk_"/Completed/"	
+	s CliProfileName = "default"
+	
+	s stdDir = "C:\InterSystems\Cache\JondaX\Biolytica\jondaffr2\stdOutputs\"
+	s stdoutDir = stdDir_"log.txt"
+	s stderrDir = stdDir_"err.txt" 
+	
+	s cmdflag = "/SHELL/STDOUT="""_stdoutDir_""""_"/STDERR="""_stderrDir_"""" 
+	;s cmdflag = "/SHELL" 
+	s status = 	$ZF(-100, cmdflag, "echo", "%username%")
+	&js<console.log(`#(status)#`)>
+	q
+</script>
+
+<script language="cache" method="cTransformToSDA">	
+	s %session.Data("jxTransform","fileName") = "C:\data_transform\HL4.hl7"
+	d StandardizeHL7^jxDataTransform
+	d HL7ToSDA^jxDataTransform
+	;&js<console.log(`#(%session.Data("jxTransform","hl7Standardized"))#`)>
+
+	d ExtractSDA^jxDataTransform
+	d ModifySDA^jxDataTransform
+	;&js<console.log(`#(%session.Data("jxTransform","SDAStr"))#`)>
+	
+	d SDAToFHIRJson^jxDataTransform
+	&js<console.log(`#(%session.Data("jxTransform","downloadStr"))#`)>
+	&js<console.log(`#($SYSTEM.Process.UserName())#`)>
+</script>	
+
+<script language="cache" method="cExtractSDA">	
+	s %session.Data("jxTransform","filename") = "C:\data_transform\HL4.hl7"
+	d StandardizeHL7^jxDataTransform
+</script>
+
+
+</html>

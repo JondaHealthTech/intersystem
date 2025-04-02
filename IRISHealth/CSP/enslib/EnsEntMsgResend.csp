@@ -1,0 +1,617 @@
+<!--
+Utilities: Resend Messages
+-->
+
+<AutoPageENS domain="Ensemble" pagename="Resend" parentpage="EnsEntMessages.csp" title="@Ensemble:MsgResendTitle@Resend Messages">
+
+<html>
+<head>
+<title>Resend Messages</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+<script language=Cache runat=server>
+	#Include Ensemble
+	#Define MaxDisplayRows 1000
+	Set %session.Data("MaxDisplayRows")=$$$MaxDisplayRows
+	Set n=0
+	Set hasMore=$G(%request.Data("$MORE",1))
+	Set msgIds=$G(%request.Data("msgResendIDs",1),$G(%request.Data("$ID1",1)))
+	Set action=$G(%request.Data("action",1))
+	
+	Kill %session.Data("tSCMore"),%session.Data("msgTopOverflow"),%session.Data("msgMaxDisplay"),%session.Data("EnsEntMsgResend")
+	
+	If action="" { ; confirmation page
+		// Build local list of running servers
+		Set tSC=..getWSClientsList(.tWSClients)
+
+		#; Get target Productions List
+		Do ..getNodeTargetsList(.tWSClients,.tTargets)
+		Merge %session.Data("EnsEntMsgResend","AvailableTargets")=tTargets
+		Set tNoTarget='$G(tWSClients)
+
+		#; Move IDs into IRIS.Temp
+		Set ctKey=$I(^IRIS.Temp.ResendIDs)
+		Set tCount=$L(msgIds,",")
+		For i=1:1:tCount { Set msgid=$ZStrip($P(msgIds,",",i),"<>W")  Continue:""=msgid
+			Set ^IRIS.Temp.ResendIDs(ctKey,msgid)="", n=n+1
+		}
+		If hasMore {
+			#; Append the rest of the matching IDs to the first page of IDs we got passed
+			Set tFilterObj=##class(CSPX.EnsMsgFilterForm).%New()
+			Set tFilterObj.%Name=$G(%request.Data("FilterName",1))
+			Set tFilterObj.Status=$G(%request.Data("Status",1))
+			Set tFilterObj.StartTime=$G(%request.Data("StartTime",1))
+			Set tFilterObj.EndTime=$G(%request.Data("EndTime",1))
+			Set tFilterObj.StartId=$G(%request.Data("StartId",1))
+			Set tFilterObj.EndId=$G(%request.Data("EndId",1))
+			Set tFilterObj.Type=$G(%request.Data("Type",1))
+			Set tFilterObj.Source=$G(%request.Data("Source",1))
+			Set tFilterObj.IsError=$G(%request.Data("IsError",1))
+			; get 'em all - Set tFilterObj.MaxRows=$G(%request.Data("MaxRows",1))
+			Set tFilterObj.SortOrder=$G(%request.Data("SortOrder",1))
+			; don't care - Set tFilterObj.TimeFormat=$G(%request.Data("TimeFormat",1))
+			; don't care - Set tFilterObj.ColorBy=$G(%request.Data("ColorBy",1))
+			Set tFilterObj.TermsStr=$G(%request.Data("TermsStr",1))
+			Set:""'=tFilterObj.TermsStr sc=tFilterObj.%Terms.Clear(), tSC=##class(Ens.Util.XML.Reader).ObjectsFromString(tFilterObj.%Terms,tFilterObj.TermsStr,"EnsPortal.MsgFilter.Term")
+
+			#; Run the query starting from next ID just as if we were the message browser page
+			Set tRS=##class(%ResultSet).%New("CSPX.Enterprise.Portal.MsgTablePane:Enumerate")
+			Set tRS.RuntimeMode = 2
+			Set tNextId=$P(msgIds,",",tCount)+$S(tFilterObj.SortOrder=2:-1,1:1)
+			Set tSCMore=tRS.Execute(tFilterObj,tNextId)
+			If $$$ISOK(tSCMore) {
+				#; Complete the msgID list
+				While tRS.Next() { Set hasMore=hasMore+1
+					Kill tPropVals
+					If '$D(tPropVals("ID"),val) {
+						Set val=tRS.Get("ID")
+					}
+					If "<tc>"=val { 
+						Set tTopCount=##class(CSPX.Enterprise.Portal.MsgTablePane).%GetParameter("TOPCOUNT")
+						Set %session.Data("msgTopOverflow")=$ZCVT($$$FormatText($$$Text("Reached TOP limit of %1"),tTopCount),"O","HTML")
+					} Else {
+						Set ^IRIS.Temp.ResendIDs(ctKey,val)="", n=n+1
+					}
+				}
+				Set %session.Data("tRS")=1
+			} Else {
+				Set %session.Data("tSCMore")=tSCMore
+			}
+		}
+		Set ^IRIS.Temp.ResendIDs(ctKey)=n
+		If n>$$$MaxDisplayRows {
+			Set %session.Data("msgMaxDisplay")=$ZCVT($$$FormatText($$$Text("Cannot display more than %1 rows, but all %2 matching messages will be resent"),$$$MaxDisplayRows,n),"O","HTML")
+		}
+		Set msgIds="@"_ctKey
+	}
+	Set msgNewTargPrompt = $$$LocalizeText("Ensemble","msgNewTargPrompt","Enter the name of a new target to which the selected messages should be re-sent")
+	Set msgNoResults = $$$LocalizeText("Ensemble","msgNoResults","Failed to fetch additional matching messages")
+</script>
+<script language="javascript">
+
+function doResend()
+{
+	var idsList = '#(msgIds)#';
+	var status=#server(..resendMessages(self.document.getElementById("NewTarget").value, self.document.getElementById("HeadOfQueue").checked, idsList))#;
+	document.location='#(..Link("EnsEntMsgResend.csp?action=done&$ID1="))#' + status;
+}
+
+function doEditResend()
+{
+	var target=self.document.getElementById("NewTarget").value;
+	var headOfQueue=self.document.getElementById("HeadOfQueue").checked;
+	document.location='#(..Link("EnsEntMsgEditResend.csp?action=done&$ID1=")_$S(action'="":"",1:$O(^IRIS.Temp.ResendIDs($E(msgIds,2,*),"")))_"&$ID2=")#' + headOfQueue + '|' + target + '|Clone';
+}
+
+function confirmTarget()
+{
+	var targetSel = self.document.getElementById("TargetProdSel");
+	
+	var systemName = targetSel.options[targetSel.selectedIndex].value;
+	var itemSel = self.document.getElementById("TargetItemSel");
+	var itemName = itemSel.options[itemSel.selectedIndex].value;
+
+	if ((!systemName) || (systemName=='') || (!itemName) || (itemName=='')) {
+		itemName=prompt('#(msgNewTargPrompt)#','');
+		return false;
+	}
+	var link = #server(..getClientLink(systemName))#;
+	if (link=='') {
+		alert('Target \''+systemName+'|'+itemName+'\' not found in currently running Production.');
+		link='<a href=""><b>'+systemName+'</b></a>';
+	} else {
+		link='<a target=_blank href="'+link+'"><b>'+systemName+'</b></a>';
+	}
+	var expectedTarget = #server(..getExpectedItem())#;
+	if (itemName!=expectedTarget) {
+		var resend = confirm('The chosen target is not the same as the expected target. Do you still want to send to '+itemName+'?');
+		if (!resend) {
+			return false;
+		}
+	}
+	
+	for (var i = 1; i <= #($S(n>$$$MaxDisplayRows:$$$MaxDisplayRows,1:n))#; i++) {
+		var elem = self.document.getElementById('tnode_'+i);
+		if (elem) {
+			elem.innerHTML = link;
+		}
+		elem = self.document.getElementById('targ_'+i);
+		if (elem) {
+			elem.innerHTML = itemName;
+		}
+	}
+	
+	self.document.getElementById("NewTarget").value=systemName+'|'+itemName;
+	self.document.getElementById("TargetHead").innerHTML = 'New Target';
+	
+	return true;
+}
+
+function addTargetConfigs()
+{
+	var systemName = self.document.getElementById("TargetProdSel").value;
+	// clean up second drop down
+	var targetSel = self.document.getElementById("TargetItemSel");
+	var len = targetSel.length;
+	for (var i = 0; i < len; i++) {
+		targetSel.remove(0);
+	}
+	
+	var emptyOpt = document.createElement('option');
+	try {
+		targetSel.add(emptyOpt,null);
+	}
+	catch(ex) {
+		targetSel.add(emptyOpt);
+	}
+	
+	if (!systemName || systemName=='') {
+		targetSel.style.display='none';	
+		return false;
+	}
+
+	if (targetSel.style.display=='none') {
+		targetSel.style.display='inline';
+	}
+	
+	var expectedTarget = #server(..getExpectedItem())#;
+	var targets = #server(..getTargetItems(systemName))#;
+	targets = targets.split(",");
+	for (var i = 0; i < targets.length; i++) {
+		var currname = targets[i];
+		if (currname!='') {
+			var opt = document.createElement('option');
+			opt.text = currname;
+			opt.value = currname;
+			try {
+				targetSel.add(opt,null);
+			}
+			catch(ex) {
+				targetSel.add(opt); // For IE
+			}
+			if (currname==expectedTarget) {
+				opt.selected=true;
+				targetSel.remove(emptyOpt.index);
+			}
+		}
+	}
+	targetSel.focus();
+	return true;
+}
+
+function cleanTargets()
+{
+	#server(..cleanTargets())#;
+}
+
+function checkCollective()
+{
+	var collErr = self.document.getElementById('CollectiveError');
+	var collNewTarget = self.document.getElementById('CollectiveNewTarget');
+	var collMsg = self.document.getElementById('CollectiveMsgDisplay');
+	
+	if (collErr!=null) {
+		collMsg.innerHTML = collErr.value;
+		collMsg.style.display = 'block';
+		collMsg.style.color = 'red';
+	}
+	else if (collNewTarget!=null) {
+		self.document.getElementById('NewTarget').value = collNewTarget.value;
+		var targ = collNewTarget.value.split('|');
+		var targMsg = '';
+		if ((targ[0]!='')&&(targ[0]!=null)) { 
+			if ((targ[1]!='')&&(targ[1]!=null)) {
+				targMsg = 'a new target item of \''+targ[1]+'\' in ';
+			}
+			else {
+				targMsg = 'the original target items, but in ';
+			}
+			targMsg = targMsg + 'a new target production of \''+targ[0]+'\'';
+			
+		}
+		else if ((targ[1]!='')&&(targ[1]!=null)) {
+			targMsg = 'a new target item of \''+targ[1]+'\' in the original production';
+		}
+		else {
+			targMsg = 'the original target productions and items';
+		}
+		collMsg.innerHTML = '<h3>Collective Targeting returned '+targMsg+'.</h3>';
+		collMsg.style.display = 'block';
+	}
+}
+</script>
+</head>
+<body onunload="cleanTargets();" onload="checkCollective();">
+
+<form name="theForm">
+
+<script language=Cache runat=server>
+	#Include Ensemble
+	Set tMax=%session.Data("MaxDisplayRows")
+	Set ctKey=$S("@"=$E(msgIds):$E(msgIds,2,*),1:"")
+	If action="" { ; confirmation page
+		If tNoTarget {
+			Set msgCantResend = $$$LocalizeText("Ensemble","msgCantResend","Cannot resend - No client productions running.")
+			&html<<br><div style="margin-left: 40px;" >#(msgCantResend)#</div>>
+		} Else {
+			If hasMore {
+				If $$$ISERR($G(%session.Data("tSCMore"),$$$OK)) {
+					Do ##class(CSPX.Enterprise.Portal.MsgTablePane).DrawStatusError(%session.Data("tSCMore"))
+					Quit
+				}
+				If '$G(%session.Data("tRS")) {
+					// no result set; most likely empty query string
+					&html<<div style="margin-left: 20px; font-size: 0.8em;"><i>#(msgNoResults)#</i></div>>
+					Quit
+				}
+			}
+			Set msgEditResend = $$$LocalizeText("Ensemble","msgEditResend","Edit and then Resend the message")
+			Set msgCantEdit = $$$LocalizeText("Ensemble","msgCantEdit","Edit & Resend is only allowed when a single message is shown")
+			Set msgNewTarget = $$$LocalizeText("Ensemble","msgNewTarget","Select a new config target from the dropdown list and then click this button to apply it as the destination for every message listed below")
+			
+			Set tDoIndividual = 0
+			Set tDoCollective = 0
+			Set tTargetingSC = ##class(Ens.Enterprise.MsgBank.Targeting).GetCurrentConfig(.tCallbackClass,.tDoIndividual,.tDoCollective,.tValidConfig)
+			Set tTargetingMsg = ""
+			If $$$ISERR(tTargetingSC) { 
+				Set tTargetingMsg = "Problem accessing Targeting configuration: "_$ZCVT($$$StatusDisplayString(tTargetingSC),"O","HTML")
+				Set tTargetingMsg("err") = 1
+			}
+			Else {
+				If $$$ISERR(tValidConfig) {
+					Set tTargetingMsg = "Targeting configuration is not completely valid: "_$ZCVT($$$StatusDisplayString(tValidConfig),"O","HTML")_"<br/>"
+					Set tTargetingMsg("err") = 1
+					If '(tDoIndividual||tDoCollective) Set tTargetingMsg = tTargetingMsg_"NOT applying any callback logic</font>"
+				}
+				If tDoIndividual||tDoCollective Set tTargetingMsg = tTargetingMsg_"Messages are being retargeted automatically using callback class "_tCallbackClass_", on a"_$s(tDoCollective&&tDoIndividual:"n individual and then collective",tDoCollective:" collective",tDoIndividual:"n individual")_" basis."
+			}
+			
+			&html<<div class="Text1" >
+				<h3>Resend these messages?&nbsp;
+				<input type=button value=" No "  onclick="document.location='#(..Link("EnsEntMsgResend.csp?action=cancel&$ID1="_msgIds))#'">
+				<input type=button value=" Yes " onclick="doResend();">
+				<input type=button value="Edit then Resend" #($S(n=1:"onclick=""self.doEditResend();"" title="""_msgEditResend_"""", 1:"disabled title="""_msgCantEdit_""""))#>>
+			If '(tDoCollective||tDoIndividual) { ; If no automatic targeting is happening, show drop-down
+				&html<&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Select new target?&nbsp;
+			    	<select name="TargetProdSel" id="TargetProdSel" WIDTH="16" title="Client Node" onchange="addTargetConfigs();">
+					<option value="" selected></option>>
+					For i=1:1:$g(tWSClients) {
+						Set tClient = $g(tWSClients(i))
+						If tClient '="" &html<<option value="#(tClient)#">#(tClient)#</option>>
+					}
+				&html<</select>
+					<select name="TargetItemSel" id="TargetItemSel" title="Target Configuration Item" style="display: none;">
+						<option value="" selected></option>
+					</select>
+					<input type=button value="Confirm New Target" onclick="self.confirmTarget();" title="Click to confirm new target to currently selected messages">
+					</h3>>
+			}
+			&html<</div>
+				<div style="margin-left: 10px; font-size: 0.8em;">
+				<csp:text textid="" domain="Ensemble">Insert resubmitted messages at head of Queue</csp:text>
+				<input type="checkbox" id="HeadOfQueue"/>
+				<input type="hidden" name="NewTarget" id="NewTarget" value="" />
+				</div>
+				<div class="Text1" id="CollectiveMsgDisplay" style="display: none;"></div>>
+			If tTargetingMsg'="" {
+				&html<<div class="Text1" #($s($g(tTargetingMsg("err"),0):"style=""color: red;""",1:""))#><h3>#(tTargetingMsg)#</h3></div>>
+			}
+			&html<<br>
+				<div style="margin-left: 20px;">
+				<table border=1 cellpadding=4 cellspacing=0>
+				<tr align=center><th>Header</th><th>Msg&nbsp;Body</th><th>Created</th><th>Original Client</th><th>Session</th><th>Source</th><th id="TargetClient">Target Client</th><th id="TargetHead">Target</th></tr>>
+
+			Set tSortOrder=$G(%request.Data("SortOrder",1))
+			Set (tBadTargs,tBadHdrs)=0, msgNoTarget=$$$LocalizeText("Ensemble","msgNoEntTarget","Target Config Item Not Found Running on any client node")
+			Set tExpectedTarget = 0, tOnlyOne = 1
+			Set msgid="" For i=1:1 { Set msgid=$O(^IRIS.Temp.ResendIDs(ctKey,msgid),$S(tSortOrder=2:-1,1:1))  Quit:""=msgid
+				&sql(SELECT NodeId,(SELECT Name FROM Ens_Enterprise_MsgBank.Node WHERE ID = NodeId) As Node,ClientSessionId,SessionId,MessageBodyId,MessageBodyClassname,SourceConfigName,TargetConfigName,TimeCreated
+					 INTO :tNodeId,:tNode,:tClientSessionId,:tSessionId,:tBodyId,:tBodyClass,:tSource,:tTargItem,:tTimeCreated
+					 FROM Ens_Enterprise_MsgBank.MessageHeader WHERE ID = :msgid)
+				If SQLCODE {
+					Set:'tBadHdrs tBadHdrs("msgid")="", tBadHdrs("SQLCODE")=SQLCODE
+					Set tBadHdrs=tBadHdrs+1
+					If i<=tMax {
+						Set tSC=$$$ERROR($$$EnsErrGeneral,"Message header "_msgid_" not found; SQLCODE="_SQLCODE)
+						Set tStatus=$ZCVT($$$StatusDisplayString(tSC),"O","HTML")
+						&html<<tr align=center>
+						 	<td colspan=6><font color="red">#($P(tStatus,":",1)_":<br><b>"_$P(tStatus,":",2,999))#</b></font></td>
+							</tr>>
+					}
+				} Else {
+					Set tBodyId=$S(""=tBodyId:"&nbsp;",1:$ZCVT(tBodyId,"O","HTML"))
+					Set tOrigNode=$G(^Ens.MsgBankSvr("nodemap",tNodeId))
+					Set tNode=$S(""'=tOrigNode:"<b>"_tOrigNode_"</b><br/>(<i>+"_tNodeId_":"_tNode_"</i>)", 1:"+"_tNodeId_":"_tNode)
+					Set tTargNode=$G(tTargetQNode(tTargItem))
+					If tDoIndividual {
+						Set tSC = $zobjclassmethod(tCallbackClass,"IndividualMessage",msgid,.tNewTargNode,.tNewTargItem)
+						If $$$ISERR(tSC) {
+							Set tSC = $ZCVT($$$StatusDisplayString(tSC),"O","HTML")
+							&html<<tr align="center">
+								<td colspan="6" style="font-color: red;">Error in #(tCallbackClass)#:IndividualMessage - #(tSC)#</td>
+								</tr>> 
+							Continue   ; next message
+						}
+						If ($g(tNewTargNode)'="")&&(tNewTargNode'=tTargNode) Set tTargNode=tNewTargNode
+						If ($g(tNewTargItem)'="")&&(tNewTargItem'=tTargItem) Set tTargItem=tNewTargItem
+					}
+					If ""=tTargNode Set tTargNode=..findTargetNode(tTargItem,tOrigNode,.tTargLink)
+					Else  Set tTargNode=..findTargetNode(tTargItem,tTargNode,.tTargLink)
+					Set tTargetQNode(tTargItem)=tTargNode
+					Set:""'=tTargNode&&(tTargNode'=tOrigNode) ^IRIS.Temp.ResendIDs(ctKey,msgid,"newnode")=tTargNode_"|"
+					Set:""'=tTargItem $P(^IRIS.Temp.ResendIDs(ctKey,msgid,"newnode"),"|",2)=tTargItem
+					
+					If tTargNode=0 {
+						Set:'tBadTargs tBadTargs("msgid")=msgid
+						Set tBadTargs("targ","+"_tNodeId_":"_tTargItem)="",  tBadTargs=tBadTargs+1
+						Set:i<=tMax tTargItem="<font color=""red"">"_msgNoTarget_"</font>"
+					}
+					ElseIf i<=tMax {
+						&html<<tr align=center>
+							<td><a target=_blank href='#(..Link("EnsEntMsgTrace.csp?$ID1="_msgid))#'>#(msgid)#</a></td>>
+						If ""'=tBodyClass && ##class(%Dictionary.CompiledClass).%ExistsId(tBodyClass) && $zobjclassmethod(tBodyClass,"%Extends","Ens.VDoc.Interface") {
+							&html<<td><a target=_blank href='#(..Link("EDIDocumentView.csp?CLASS="_tBodyClass_"&NAME="_tBodyClass_"&ORIGIN=EDIDOC&HDR="_msgid_"&EDIDOCID="_tBodyId_"&DOCSPEC=Stored#doc_content"))#'>#(tBodyId)#</a></td>>
+						} Else {
+							&html<<td><a target=_blank href='#(..Link("EnsEntMsgDetails.csp?$FRAME=Info&ID1="_msgid))#'>#(tBodyId)#</a></td>>
+						}
+						If tOnlyOne && (tTargItem'=$g(tExpectedTarget("item"))) {
+							If tExpectedTarget > 0 {
+								Set tOnlyOne = 0
+								Kill tExpectedTarget("item")
+							}
+							Else {
+								Set tExpectedTarget=tExpectedTarget+1
+								Set tExpectedTarget("item")=tTargItem
+							}
+						}
+						&html<<td>#($P(##class(Ens.DataType.UTC).LogicalToDisplay(tTimeCreated),"."))#</td>
+							<td>#(tNode)#</td>
+							<td><a target=_blank href='#(..Link("EnsEntMsgTrace.csp?$ID1="_tSessionId))#'>#(tClientSessionId)#</a></td>
+							<td>#(tSource)#</td>
+							<td id='tnode_#(i)#'><a target=_blank href='#(tTargLink)#'>#(tTargNode)#</a></td>
+							<td id='targ_#(i)#'>#(tTargItem)#</td>
+							</tr>>
+					}
+				}
+			}
+			If $D(tExpectedTarget("item")) {
+				Set %session.Data("EnsEntMsgResend","ExpectedTarget") = tExpectedTarget("item")
+			}
+			If $D(%session.Data("msgMaxDisplay")) {
+				&html<<tr><td colspan=6><b>#(%session.Data("msgMaxDisplay"))#</b></td></tr>>
+			}
+			If $D(%session.Data("msgTopOverflow")) {
+				&html<<tr><td colspan=6><font color="red"><b>#(%session.Data("msgTopOverflow"))#</b></font></td></tr>>
+			}
+			If tBadHdrs {
+				Set msgBadHeaders=$$$LocalizeText("Ensemble","msgBadHeaders","%1 message headers could not be found, starting with Header #%2; SQLCODE=%3",tBadHdrs,tBadHdrs("msgid"),tBadHdrs("SQLCODE"))
+				&html<<tr><td colspan=6><font color="red"><b>#(msgBadHeaders)#</b></font></td></tr>>
+			}
+			If tBadTargs {
+				Set (tBadTargsList,kbt)="" For { Set kbt=$O(tBadTargs("targ",kbt))  Quit:""=kbt  Set tBadTargsList=tBadTargsList_","_kbt }  Set tBadTargsList=$E(tBadTargsList,2,*)
+				Set msgBadTargets=$$$LocalizeText("Ensemble","msgBadTargets","%1 messages had non-running targets (%2), starting with Header #%3.",tBadTargs,tBadTargsList,tBadTargs("msgid"))
+				&html<<tr><td colspan=8><font color="red"><b>#(msgBadTargets)#</b></font></td></tr>>
+			}
+			&html<</table></div><br>>
+			If tDoCollective {
+				Set tSC = $zobjclassmethod(tCallbackClass,"AllMessages",ctKey,.tNewNode,.tNewItem)
+				If $$$ISERR(tSC) {
+					Set errMsg = $ZCVT($$$StatusDisplayString(tSC),"O","HTML")
+					&html<<input type="hidden" name="CollectiveError" id="CollectiveError" value="&lt;h3&gt;Error applying collective targeting: #(errMsg)# &lt;/h3&gt" />>
+				}
+				Else {
+					&html<<input type="hidden" name="CollectiveNewTarget" id="CollectiveNewTarget" value="#($g(tNewNode)_"|"_$g(tNewItem))#" />>
+				}
+				
+			}
+		}
+	} ElseIf action="done" {
+		&html<<br><div style="margin-left: 40px;">>
+		
+		&html<<table border=1 cellpadding=4 cellspacing=0>>
+		&html<<tr align=center><th>Resend&nbsp;Status</th><th>Session</th><th>Original</th><th>Header</th><th>Msg&nbsp;Body</th><th>Created</th><th>Source</th><th>Target Client</th><th>Target</th></tr>>
+		
+		Set msgid="" For { Set msgid=$O(^IRIS.Temp.ResendIDs(ctKey,msgid),1,newid)  Quit:""=msgid
+			If $C(0)=$E(newid) { Set tSC=$E(newid,2,*), tErr=1 } Else { Set tSC=$$$OK, tErr=0 }
+			&sql(SELECT SessionId,MessageBodyId,MessageBodyClassname,SourceConfigName,TargetConfigName,TimeCreated,NodeId
+				 INTO :tSession,:tBodyId,:tBodyClass,:tSource,:tTargItem,:tTimeCreated,:tNodeId
+				 FROM Ens_Enterprise_MsgBank.MessageHeader WHERE ID = :msgid)
+			If SQLCODE {
+				Set:'tErr tSC=$$$ERROR($$$EnsErrGeneral,"Message header "_msgid_" not found; SQLCODE="_SQLCODE)
+			} Else {
+				Set tBodyId=$S(""=tBodyId:"&nbsp;",1:$ZCVT(tBodyId,"O","HTML"))
+				If 'tErr {
+					Set newTarg=$P(newid,","), newid=$P(newid,",",2)
+					Set tTargCli=$S(""=$P(newTarg,"|"):$G(^Ens.MsgBankSvr("nodemap",tNodeId)), 1:$P(newTarg,"|",1,$L(newTarg,"|")-1))
+					Set newTargItem=$P(newTarg,"|",$L(newTarg,"|"))
+					Set:""'=newTargItem tTargItem=newTargItem
+				}
+			}
+			Set tStatus=$ZCVT($ZCVT($$$StatusDisplayString(tSC),"I","XML"),"O","HTML")
+			&html<<tr align=center>
+				<td>#($S('tErr:"<b>"_tStatus,1:$P(tStatus,":",1)_":<br><b>"_$P(tStatus,":",2,999)))#</b></td>>
+
+			Set msgNA="N/A"
+			If SQLCODE {
+				&html<<td>#(msgNA)#</td>
+					<td>#(msgNA)#</td>
+					<td>#(msgNA)#</td>
+					<td>#(msgNA)#</td>
+					<td>#(msgNA)#</td>
+					<td>#(msgNA)#</td>
+					<td>#(msgNA)#</td>
+					<td>#(msgNA)#</td>
+					</tr>>
+			} ElseIf tErr {
+				&html<<td><a target=_blank href='#(..Link("EnsEntMsgTrace.csp?$ID1="_tSession))#'>#(tSession)#</a></td>
+					<td><a target=_blank href='#(..Link("EnsEntMsgTrace.csp?$ID1="_msgid))#'><i><b>Old:</b> #(msgid)#</i></a></td>
+					<td><a target=_blank href='#(..Link("EnsEntMsgTrace.csp?$ID1="_newid))#'><i>#(msgNA)#</i></a></td>>
+				If ""'=tBodyClass && ##class(%Dictionary.CompiledClass).%ExistsId(tBodyClass) && $zobjclassmethod(tBodyClass,"%Extends","Ens.VDoc.Interface") {
+					&html<<td><a target=_blank href='#(..Link("EDIDocumentView.csp?CLASS="_tBodyClass_"&NAME="_tBodyClass_"&ORIGIN=EDIDOC&HDR="_msgid_"&EDIDOCID="_tBodyId_"&DOCSPEC=Stored#doc_content"))#'><i><b>Old:</b> #(tBodyId)#</i></a></td>>
+				} Else {
+					&html<<td><a target=_blank href='#(..Link("EnsEntMsgDetails.csp?$FRAME=Info&ID1="_msgid))#'><i><b>Old:</b> #(tBodyId)#</i></a></td>>
+				}
+				&html<<td><i><b>Old:</b> #($P(##class(Ens.DataType.UTC).LogicalToDisplay(tTimeCreated),"."))#</i></td>
+				<td><i><b>Old:</b> #(tSource)#</i></td>
+				<td><i><b>Old:</b> #(msgNA)#</i></td>
+				<td><i><b>Old:</b> #(msgNA)#</i></td>
+				</tr>>
+			} Else {
+				&html<<td><a target=_blank href='#(..Link("EnsEntMsgTrace.csp?$ID1="_tSession))#'>#(tSession)#</a></td>
+					<td><a target=_blank href='#(..Link("EnsEntMsgTrace.csp?$ID1="_msgid))#'>#(msgid)#</a></td>>
+					If newid<0 { &html<<td>#($e(newid,4,*))#</td>> }
+					Else { &html<<td><a target=_blank href='#(..Link("EnsEntMsgTrace.csp?$ID1="_newid))#'>#(newid)#</a></td>> }
+				If ""'=tBodyClass && ##class(%Dictionary.CompiledClass).%ExistsId(tBodyClass) && $zobjclassmethod(tBodyClass,"%Extends","Ens.VDoc.Interface") {
+					&html<<td><a target=_blank href='#(..Link("EDIDocumentView.csp?CLASS="_tBodyClass_"&NAME="_tBodyClass_"&ORIGIN=EDIDOC&HDR="_msgid_"&EDIDOCID="_tBodyId_"&DOCSPEC=Stored#doc_content"))#'>#(tBodyId)#</a></td>>
+				} Else {
+					&html<<td><a target=_blank href='#(..Link("EnsEntMsgDetails.csp?$FRAME=Info&ID1="_msgid))#'>#(tBodyId)#</a></td>>
+				}
+				&html<<td>#($P(##class(Ens.DataType.UTC).LogicalToDisplay(tTimeCreated),"."))#</td>
+					<td>#(tSource)#</td>
+					<td>#(tTargCli)#</td>
+					<td>#(tTargItem)#</td>
+					</tr>>
+			}
+		}
+		&html<</table>>
+		&html<</div>>
+		Kill ^IRIS.Temp.ResendIDs(ctKey)
+	} Else { ; If action="cancel"
+		Set msgResendCancelled = $$$LocalizeText("Ensemble","msgResendCancelled","Resend action cancelled.")
+		&html<<br><div style="margin-left: 40px;">#(msgResendCancelled)#</div>>
+		Kill ^IRIS.Temp.ResendIDs(ctKey)
+	}
+</script>
+</form>
+</body>
+
+<script language="CACHE" method="findTargetNode" runat="server" arguments="pConfigName:%String,pNodeName:%String,*pLink:%String" returntype="%String">
+	New tFound,tMatch,i,iCli
+	Set (tFound,tMatch)=0
+	If $g(pNodeName)'="" {
+		For i=1:1:$g(%session.Data("EnsEntMsgResend","AvailableTargets",pNodeName)) {
+			If %session.Data("EnsEntMsgResend","AvailableTargets",pNodeName,i)=pConfigName Set tFound=i  Quit
+		}
+	}
+	Else { Quit 0 }
+	Set pLink=..getClientLink(pNodeName)
+	Quit pNodeName
+</script>
+
+<script language="CACHE" method="getTargetItems" runat="server" arguments="pSystem:%String" returntype="%String">
+	If $g(pSystem)="" Quit ""
+	New i, list
+	Set list=""
+	For i=1:1:$g(%session.Data("EnsEntMsgResend","AvailableTargets",pSystem)) {
+		Set list=list_$g(%session.Data("EnsEntMsgResend","AvailableTargets",pSystem,i))_","
+	}
+	Quit list
+</script>
+
+<script language="CACHE" method="getExpectedItem" runat="server" returntype="%String">
+	Quit $g(%session.Data("EnsEntMsgResend","ExpectedTarget"))
+</script>
+
+<script language="CACHE" method="getClientLink" runat="server" arguments="pClient:%String" returntype="%String" procedureblock="1">
+	&sql(Select WebIPAddress,Namespace,SOAPCredentials,SSLConfig
+		 Into :tWebIPAddress,:tNamespace,:tSOAPCredentials,:tSSLConfig
+		 From Ens_Enterprise.MonitorClient Where Name=:pClient)
+	Quit:SQLCODE ""
+	Quit "http"_$S(""'=tSSLConfig:"s",1:"")_"://"_tWebIPAddress_"/csp/"_tNamespace_"/UtilEnsHome.csp"
+</script>
+
+<script language="CACHE" method="getWSClientsList" runat="server" arguments="&pWSClients" returntype="%Status" procedureblock="1">
+	// Build local list of running servers
+	Set tSC=$$$OK
+	Set tRS=##class(%ResultSet).%New("Ens.Enterprise.Portal.MonitorModel:getMatrix")
+	Set tSC=tRS.Execute()
+	If $$$ISERR(tSC) Kill tRS  Quit tSC
+	// Color,SystemName,Status,ProductionName,SystemSpecs,StartTime,Details,UpdateReason,WebIPAddress,Namespace
+	Kill pWSClients  Set pWSClients=0
+	While tRS.Next() {
+		If ""'=tRS.Data("Details") {
+			Set pWSClients($I(pWSClients))=tRS.Data("Details")
+			Set pWSClients(pWSClients,"ProductionName")=tRS.Data("ProductionName")
+			Set pWSClients(pWSClients,"WebIPAddress")=tRS.Data("WebIPAddress")
+			Set pWSClients(pWSClients,"Namespace")=tRS.Data("Namespace")
+			Set pWSClients("index",pWSClients(pWSClients))=pWSClients
+		}
+	}
+	// Find the NodeId(s) for each running server
+	Set tRS=##class(%ResultSet).%New("Ens.Enterprise.MonitorClient:EnumerateClients")
+	Set tSC=tRS.Execute()
+	If $$$ISERR(tSC) Kill tRS  Quit tSC
+	// ID,IsNode,Name,NodeId,WebIPAddress,Namespace,SOAPCredentials,SSLConfig
+	While tRS.Next() {
+		Set iSvr=$G(pWSClients("index",tRS.Data("Name")))
+		If iSvr {
+			Set tNodeIds=tRS.Data("NodeId"), pWSClients(iSvr,"NodeIds")=tNodeIds
+			For iNode=1:1:$L(tNodeIds,",") { Set tNodeId=$P(tNodeIds,",",iNode)  Continue:""=tNodeId
+				Set pWSClients("nodeindex",tNodeId)=iSvr
+			}
+		}
+	} Kill tRS
+	Quit tSC
+</script>
+
+<script language="CACHE" method="getNodeTargetsList" runat="server" arguments="&pWSClients,&pTargetsList:%String" returntype="%Status" procedureblock="1">
+	Set tSC=$$$OK, tTypeSvcName=##class(Ens.Enterprise.Portal.MonitorModel).resolveHostType($$$eHostTypeService)
+	Kill pTargetsList
+	For iCli=1:1:pWSClients {
+		Set tRS=##class(%ResultSet).%New("Ens.Enterprise.Portal.MonitorModel:getMatrixDetails")
+		Set tSC1=tRS.Execute(pWSClients(iCli))
+		If $$$ISERR(tSC1) Set tSC=$$$ADDSC(tSC,tSC1)  Continue
+		// Name,CompletedCount,HostType,LastActivity
+		While tRS.Next() {
+			If tRS.Data("HostType")'=tTypeSvcName { ; exclude Service items
+				Set pTargetsList(pWSClients(iCli),$I(pTargetsList((pWSClients(iCli)))))=tRS.Data("Name")
+			}
+		} Kill tRS
+	}
+	Quit tSC
+</script>
+
+<script language="CACHE" method="resendMessages" runat="server" arguments="pNewTarget:%String,pHeadOfQueue:%Boolean,pHdrIds:%String" returntype="%String">
+	If "@"=$E(pHdrIds)&&'(pHdrIds[",") {
+		Set ctKey=$E(pHdrIds,2,*)
+		If pHeadOfQueue {
+			Set msgid="" For { Set msgid=$O(^IRIS.Temp.ResendIDs(ctKey,msgid),-1)  Quit:""=msgid
+				Set tTarget=$S(""'=pNewTarget:pNewTarget, 1:$G(^IRIS.Temp.ResendIDs(ctKey,msgid,"newnode")))
+				Set tSC=##class(Ens.Enterprise.MsgBank.MessageHeader).ResendDuplicatedMessage(.tWSClientObjs,msgid,.tNewHeaderId,tTarget,,,pHeadOfQueue)
+				Set ^IRIS.Temp.ResendIDs(ctKey,msgid)=$S($$$ISERR(tSC):$C(0)_tSC,1:tTarget_","_tNewHeaderId)
+			}
+		} Else { ; in reverse order
+			Set msgid="" For { Set msgid=$O(^IRIS.Temp.ResendIDs(ctKey,msgid))  Quit:""=msgid
+				Set tTarget=$S(""'=pNewTarget:pNewTarget, 1:$G(^IRIS.Temp.ResendIDs(ctKey,msgid,"newnode")))
+				Set tSC=##class(Ens.Enterprise.MsgBank.MessageHeader).ResendDuplicatedMessage(.tWSClientObjs,msgid,.tNewHeaderId,tTarget,,,pHeadOfQueue)
+				Set ^IRIS.Temp.ResendIDs(ctKey,msgid)=$S($$$ISERR(tSC):$C(0)_tSC,1:tTarget_","_tNewHeaderId)
+			}
+		}
+	}
+	Quit pHdrIds
+</script>
+
+<script language="CACHE" method="cleanTargets" runat="server">
+	Kill %session.Data("EnsEntMsgResend","ExpectedTarget")
+	Kill %session.Data("EnsEntMsgResend","AvailableTargets")
+</script>
+</html>

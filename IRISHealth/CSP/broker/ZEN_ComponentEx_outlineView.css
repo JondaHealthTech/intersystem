@@ -1,0 +1,63 @@
+/* @class="%ZEN.ComponentEx.outlineView" */
+
+.zovDiv {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	font-family: lucida sans unicode;
+	font-size: 10pt;
+	background: none;
+}
+
+/* node within outline viewer */
+.zovNode {
+	position: absolute;
+	background: white;
+	border: 1px solid black;
+	top: 0px;
+	left: 0px;
+	padding: 1px;
+	padding-left: 4px;
+	padding-right: 4px;
+	cursor: pointer;
+	-moz-border-radius: 4;
+	-webkit-border-radius: 4;
+}
+
+.zovNodeSelected {
+	position: absolute;
+	color: white;
+	top: 0px;
+	left: 0px;
+	border: 2px solid black;
+	padding: 1px;
+	padding-left: 4px;
+	padding-right: 4px;
+	-moz-border-radius: 4;
+
+	background: #8080FF;
+	cursor: pointer;
+}
+
+.zovNodeHover {
+	position: absolute;
+	background: #FFEEAA;
+	border: 1px solid black;
+	padding: 1px;
+	padding-left: 4px;
+	padding-right: 4px;
+	cursor: pointer;
+	-moz-border-radius: 4;
+	-webkit-border-radius: 4;
+}
+
+/* div used to draw connecting link to parent nodes */
+.zovLink {
+	position: absolute;
+	background: none;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	-moz-border-radius-bottomleft: 4;
+	-webkit-border-bottom-left-radius: 4;
+}
+/* EOF */

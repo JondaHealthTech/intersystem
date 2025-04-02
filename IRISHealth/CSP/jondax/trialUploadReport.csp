@@ -1,0 +1,76 @@
+<html lang="en"> <!--Groot v1.1-->
+    <head>
+    	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+		q 1
+		</script>
+    	<script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/trialUploadReport.css">
+    </head>
+    <body>
+    <div id="lab-upload" class="lab-upload">
+    			 <h4>You successfully uploaded <span id="success"></span> file(s) and issue(s) uploading <span id="fail"></span> files</h4>
+                 <div class="reports">
+						<div class="table-border"></div>
+							<div class="report-table">
+							<table class="table">
+								<tbody>
+								<script language="cache" runat="server">
+									d WriteReports^trialUpload
+								</script>
+								</tbody>
+							</table>
+							</div>
+						</div>
+				<button class="blue-btn" onclick="jOpenStep2()">Okay</button>			
+				</div>
+           
+    </div>
+ <script type="text/javascript">
+    window.onload = jInit();
+	document.onmousemove = parent.parent.resetTimer;
+	document.onmousedown = parent.parent.resetTimer; // touchscreen presses
+	document.ontouchstart = parent.parent.resetTimer;
+	document.onkeypress = parent.parent.resetTimer;
+	document.addEventListener('scroll', parent.parent.resetTimer, true);
+
+	const fileUpload = document.getElementById("fileupload");
+	const modalBtn = document.getElementById("BModal1");
+	let uploadedFiles = [];
+
+	function jInit() {
+		parent.parent.resetTimer;
+		#server(..cInit())# 
+	
+	}
+	
+    function jOpenStep2(){
+	   #server(..cCheck())#
+	    
+    	}
+    </script>
+    <script language="cache" method="cInit">
+     	d Init1^trialUpload
+    </script>
+    <script language="cache" method="cCheck">
+    s UserID=$g(%session.Data("UserID"))
+		; still waiting
+		i '$d(^trialUpload("UploadedFile",UserID))!$g(^trialUpload("UploadedFile",UserID))="" h 1
+		i '$d(^trialUpload("UploadedFile",UserID))!$g(^trialUpload("UploadedFile",UserID))="" h 1
+		i '$d(^trialUpload("UploadedFile",UserID))!$g(^trialUpload("UploadedFile",UserID))="" h 1
+		i '$d(^trialUpload("UploadedFile",UserID))!$g(^trialUpload("UploadedFile",UserID))="" h 1
+		i '$d(^trialUpload("UploadedFile",UserID))!$g(^trialUpload("UploadedFile",UserID))="" h 1
+		i '$d(^trialUpload("UploadedFile",UserID))!$g(^trialUpload("UploadedFile",UserID))="" h 1
+		i '$d(^trialUpload("UploadedFile",UserID))!$g(^trialUpload("UploadedFile",UserID))="" h 1
+		i '$d(^trialUpload("UploadedFile",UserID))!$g(^trialUpload("UploadedFile",UserID))="" h 1
+		
+		i $d(^trialUpload("UploadedFile",UserID)),$g(^trialUpload("UploadedFile",UserID))'="" {
+			if ($g(^trialUpload(UserID,"UploadedFile","success"))'=0) {
+				&js<window.open("trialSelectTransformation.csp","_parent")>
+			}else { &js<window.open("trialUpload.csp","_parent")> } 
+		}
+
+	</script>                    
+	</body>
+	
+</html>	                    

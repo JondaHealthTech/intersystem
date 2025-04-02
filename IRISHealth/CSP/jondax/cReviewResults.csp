@@ -1,0 +1,323 @@
+<html>
+<head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+		q 1
+	</script>
+
+	<script language="cache" runat="server">
+		s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+		i r1'=1 s %response.Redirect="cLockDown.csp"
+	d HEAD1^CSP999
+	</script>
+	<link rel="stylesheet" href="assets/styles/jxReviewResults.css" />
+</head>
+<body style="padding:0px;margin:0px">
+<form name="F1" id="F1">
+	<div id="wrapper">
+		<div class="bg-wrapper">
+			<div class="bg3">
+				<img src="./assets/images/bg3.png" />
+			</div>
+		</div>
+		<div class="content">
+			<div class="main-field">
+				<h1>Review Results</h1>
+				<h2><span id="for-review">1 result is</span> waiting to be reviewed.</h2>
+				<h4><span id="in-review">2 results are</span> in review.</h4>
+				<div class="results">
+					<div class="table-border"></div>
+					<div class="result-table">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Upload Date/Time</th>
+									<th>Process Date/Time</th>
+									<th>File Type</th>
+									<th>Transaction ID</th>
+									<th>Company Name</th>
+									<th>Report Type</th>
+									<th>Status <img id="filter-btn" src="./assets/images/filter-blue.png" alt="Filter" onclick="toggleStatusSelect(event)"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<script language="cache" runat="server">
+									d WriteRecords^cReviewResults
+								</script>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="status-select" class="collapse-field">
+		<div class="collapse">
+		<div class="item">
+				<div class="round">
+					<input name="status" id="C1" type="checkbox" value="All results" checked onclick="writeRecordBasedOnStatus(event)">
+					<label for="C1"></label>
+				</div>
+					<p>All results</p>
+			</div>
+			<div class="item">
+				<div class="round">
+					<input name="status" id="C2" type="checkbox" value="my-files" onclick="writeRecordBasedOnStatus(event)">
+					<label for="C2"></label>
+				</div>
+					<p>My files</p>
+			</div>
+			<div class="item">
+				<div class="round">
+					<input name="status" id="C3" type="checkbox" value="for-review" onclick="writeRecordBasedOnStatus(event)">
+					<label for="C3"></label>
+				</div>
+					<p>For review</p>
+			</div>
+			<div class="item">
+				<div class="round">
+					<input name="status" id="C4" type="checkbox" value="in-review" onclick="writeRecordBasedOnStatus(event)">
+					<label for="C4"></label>
+				</div>
+					<p>In review</p>
+			</div>
+			<div class="item">
+				<div class="round">
+					<input name="status" id="C5" type="checkbox" value="on-hold" onclick="writeRecordBasedOnStatus(event)">
+					<label for="C5"></label>
+				</div>
+				<p>On Hold</p>
+			</div>
+			<div class="item">
+				<div class="round">
+					<input name="status" id="C6" type="checkbox" value="in-transfer" onclick="writeRecordBasedOnStatus(event)">
+					<label for="C6"></label>
+				</div>
+				<p>In Transfer</p>
+			</div>
+			<button type="button" onclick="closeStatusSelect()">Confirm</button>
+		</div>
+	</div>
+</form>
+<script>
+	var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script language="cache" runat="server">
+	d jQueryCore^CSP999
+</script>
+</body>
+<script type="text/javascript">
+	C1=self.F1.C1;C2=self.F1.C2;C3=self.F1.C3;C4=self.F1.C4;C5=self.F1.C5;C6=self.F1.C6;
+	let statusSelect=document.getElementById("status-select");
+	let reviewCount;
+	let lastViewedPage;
+	window.onload = jInitMe;
+  	document.onload = parent.resetTimer;
+  	document.onmousemove = parent.resetTimer;
+  	document.onmousedown = parent.resetTimer; // touchscreen presses
+  	document.ontouchstart = parent.resetTimer;
+  	//document.onclick = parent.resetTimer; // touchpad clicks
+  	document.onkeypress = parent.resetTimer;
+  	document.addEventListener('scroll', parent.resetTimer, true); 
+	
+	function jInitMe(e){
+		parent.resetTimer(e);
+		#server(..cInitMe())#
+	}
+	
+	const checkScrollbar = ()=>{
+		let resultTable = document.querySelector(".result-table");
+		let tableBorder = document.querySelector(".table-border");
+		if(resultTable.scrollHeight > resultTable.clientHeight){
+			tableBorder.style.width = "calc(100% - 5vw + 4px)";
+			tableBorder.style.height = "calc(100% - 3vw + 4px)";
+		}
+		else{
+			tableBorder.style.width = "calc(100% - 4.2vw + 4px)";
+			tableBorder.style.height = (resultTable.clientHeight + 4)+"px";
+		}
+	}
+	
+	checkScrollbar();
+	
+	function toggleStatusSelect(e){
+		let elemPosition = e.target.getBoundingClientRect();
+		statusSelect.style.top = elemPosition.top + 16 + "px";
+		statusSelect.style.right = window.innerWidth - elemPosition.right + 10 + "px";
+		setTimeout(()=>{
+			statusSelect.classList.toggle("active");
+		},100)
+	}
+	
+	function closeStatusSelect(){
+		statusSelect.classList.remove("active");
+	}
+	function writeRecordBasedOnStatus(e){
+		let tr = document.querySelectorAll("tbody tr");
+		if(e.target.id!="C1"){
+			if(C1.checked){
+				C1.checked=false;
+				if(e.target.checked){
+					for(var i=0;i<tr.length;i++){
+						if(!tr[i].classList.contains(e.target.value)){
+							tr[i].style.display="none";
+						}
+					}
+				}
+				else{
+					for(var i=0;i<tr.length;i++){
+						if(tr[i].classList.contains(e.target.value)){
+							tr[i].style.display="none";
+						}
+					}
+				}
+			}
+			else{
+				if(e.target.checked){
+					for(var i=0;i<tr.length;i++){
+						if(tr[i].classList.contains(e.target.value)){
+							tr[i].style.display="table-row";
+						}
+					}
+				}
+				else{
+					for(var i=0;i<tr.length;i++){
+						if(tr[i].classList.contains(e.target.value)){
+							tr[i].style.display="none";
+						}
+					}
+				}
+			}
+		}
+		else{
+			C2.checked=false;C3.checked=false;C4.checked=false;C5.checked=false;C6.checked=false;
+			if(e.target.checked){
+				for(var i=0;i<tr.length;i++){
+					tr[i].style.display="table-row";
+				}
+			}
+			else{
+				for(var i=0;i<tr.length;i++){
+					tr[i].style.display="none";
+				}
+			}
+		}
+		checkScrollbar();
+	}
+	function toggleReview(e){
+		let transID = e.target.parentElement.parentElement.querySelector(".rid").textContent;
+		let trialRid=e.target.parentElement.parentElement.querySelector(".rid.trial");
+		let trial=""
+		if (trialRid!=null) { trial=trialRid.textContent;  }
+		
+		
+		if (transID == trial)
+		{
+			let newWindow;
+			#server(..cGetReviewCount())#
+		//if(reviewCount>0){
+			if(e.target.innerHTML=="Continue review"){
+				#server(..cSaveRid(transID))#
+				//Track for last page
+				newWindow = window.open(lastViewedPage,"new");
+			}
+			
+			switch(e.target.innerHTML){
+				case "Start review":{
+					#server(..cSaveReviewer(transID))#
+					let fileType=e.target.parentElement.parentElement.querySelector(".fileType").dataset.ext;
+					if(fileType=="hl7" || fileType=="xml" || fileType=="json" || fileType=="xlsx"){
+						newWindow = window.open("trialReviewResult.csp","new");
+					}
+					else{
+						newWindow = window.open("trialReviewResult.csp","new");
+						
+					}
+				break;
+				}
+				case "Review Transfer":{
+					#server(..cSaveReviewer(transID))#
+					newWindow = window.open("trialReviewResult.csp","new");
+				break;
+				}
+				case "Review On Hold":{
+					#server(..cSaveReviewer(transID))#
+					newWindow = window.open("trialReviewResult.csp","new");
+				break;
+				}
+			}
+			setInterval(()=>{
+				if(newWindow.opener==null){location.reload();}
+			},1000);
+			e.target.innerHTML="Continue review";
+			e.target.closest("tr").classList.add("my-files");
+			window.top.clearTimer();
+		}// close of if Trial 
+		else{ 
+			let newWindow;
+		#server(..cGetReviewCount())#
+		//if(reviewCount>0){
+			if(e.target.innerHTML=="Continue review"){
+				#server(..cSaveRid(transID))#
+				//Track for last page
+				newWindow = window.open(lastViewedPage,"new");
+			}
+			
+			switch(e.target.innerHTML){
+				case "Start review":{
+					#server(..cSaveReviewer(transID))#
+					let fileType=e.target.parentElement.parentElement.querySelector(".fileType").dataset.ext;
+					if(fileType=="hl7" || fileType=="xml" || fileType=="json" || fileType=="xlsx"){
+						newWindow = window.open("cReviewResultsS2.csp","new");
+					}
+					else{
+						newWindow = window.open("cReviewResultsS1.csp","new");
+						
+					}
+				break;
+				}
+				case "Review Transfer":{
+					#server(..cSaveReviewer(transID))#
+					newWindow = window.open("cReviewResultsS2.csp","new");
+				break;
+				}
+				case "Review On Hold":{
+					#server(..cSaveReviewer(transID))#
+					newWindow = window.open("cReviewResultsS2.csp","new");
+				break;
+				}
+			}
+			setInterval(()=>{
+				if(newWindow.opener==null){location.reload();}
+			},1000);
+			e.target.innerHTML="Continue review";
+			e.target.closest("tr").classList.add("my-files");
+			window.top.clearTimer();
+		}
+	}
+	
+	document.addEventListener("click",(e)=>{
+		if(e.target.closest("#status-select") == null && e.target.closest("#filter-btn") == null && e.target.closest(".popup-dialog") == null){
+			closeStatusSelect();
+		}
+	}
+	)
+</script>
+<script language="cache" method="cInitMe">
+	d INIT1^CSP999
+	d InitMe^cReviewResults
+</script>
+<script language="cache" method="cSaveRid" arguments="d1:%String">
+	d INIT1^CSP999
+	s %session.Data("jxTransform","rid") = d1
+	s lastViewedPage = $s($g(^LastView("cReviewResults",UserID,d1))="":"cReviewResultsS2.csp",1:^LastView("cReviewResults",UserID,d1))
+	&js<lastViewedPage = "#(lastViewedPage)#">
+</script>
+<script language="cache" method="cSaveReviewer" arguments="d1:%String">
+	d SaveReviewer^cReviewResults
+</script>
+<script language="cache" method="cGetReviewCount">
+	d GetReviewCount^cReviewResults
+</script>
+</html>

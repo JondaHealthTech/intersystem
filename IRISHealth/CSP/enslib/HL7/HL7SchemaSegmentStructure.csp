@@ -1,0 +1,84 @@
+<AutoPageENS domain="Ensemble" parentpage="HL7SchemaMain.csp" pagename="HL7 Segment Structure" title="@Ensemble:HL7ManagerSegmentStructure@HL7 Segment Structure">
+<html>
+<head>
+<title>HL7 Segment Structure</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+</head>
+<body>
+
+<div class="Text1">HL7 <b>Segment Structure</b> definition is displayed below:</div>
+
+<script language=Cache runat=server>
+#Include EnsHL7
+	set ss=%request.Get("SS")
+	set category=$p(ss,":",2)
+	set secondary=$p(ss,":",3)
+	If ((category'="")&&(secondary'="")) {
+		set description=..EscapeHTML($G($$$vaSchemaDescGbl(category,"SS",secondary)))
+		if '$data($$$vaSchemaGbl(category,"SS",secondary)) {
+			write "<b><font size=6>"_ss_" </font> Definition does not exist!</b>",!
+			quit
+		}
+	}
+	set ms=%request.Get("MS")
+	set tPath=%request.Get("PATH")
+</script>
+<csp:if condition="$L(tPath)">
+<div class="Text1"><i>Path you followed to get to this segment:</i>&nbsp;<b>#(tPath)#</b><br>
+	<i>In Message Structure </i>&nbsp;<b>'#($P(ms,":",2,3))#'</b></div>
+</csp:if>
+<div style="margin-left: 20px; margin-right: 20px;">
+
+<table border=1 cellpadding=4 cellspacing=0  style="font-size: 0.8em; margin-left: 20px;">
+
+<tr><td colspan=11><b><font size=6>#(category_":"_secondary)# </font> #($G(description))#</b></td></tr>
+
+<tr><td colspan=11 align=center><b></b></font></td></tr>
+
+<tr align='left'><th>Field</th><th>Description</th><th>Property&nbsp;Name</th><th>Data&nbsp;Structure</th><th>Symbol</th><th>Repeat&nbsp;Count</th><th>Length</th><th>Required</th><th>Repeating</th><th>Code&nbsp;Table</th><th><center><i>Alternate<br>Description</i></center></th></tr>
+
+<script language=Cache runat=server>
+	If ((category'="")&&(secondary'="")) {
+		set struct=$$$vaSchemaGbl(category,"SS",secondary)
+		kill names set name="" for { set name=$o($$$vaSchemaGbl(category,"SS",secondary,"names",name)) quit:name=""
+			set names($$$vaSchemaGbl(category,"SS",secondary,"names",name))=name
+		}
+		For i=1:1:$LL(struct)  { Set one=$LG(struct,i)
+			write "<tr>"
+			write "<td>"_i_"</td>"
+			; description
+			set description=..EscapeHTML($G($$$vaSchemaDescGbl(category,"SS",secondary,i)))
+			write "<td>",$s(description="":"&nbsp;",1:description),"</td>"
+			; property name
+			set tPropPath=$S(""=$G(names(i)):"",1:tPath_":"_$G(names(i)))_$S($LG(one,6):"()",1:"")
+			write "<td><a"_$S(""=tPath:"",1:" title='"_tPropPath_"' href='"_..Link("HL7SchemaPath.csp?PATH="_tPropPath_"&FIELD="_i_"&MS="_ms_"&SS="_ss)_"'")_">"_$G(names(i),"&nbsp")_"</a></td>"
+			; data structure
+			set value=$LG(one,1) write "<td>",$S(value="":"&nbsp;",1:"<a href='"_..Link("HL7SchemaDataStructure.csp?DS=DS:"_value_"&PATH="_tPropPath_"&FIELD="_i_"&MS="_ms_"&SS="_ss)_"'>"_value_"</a>"),"</td>"
+			; symbol
+			set value=$LG(one,2),annotate=$Case(value,"*":"zero or more", "+":"one or more", "!":"exactly one&nbsp;required", "?":"conditional", "&":"conditional", :"")
+			write "<td>",$S(value="":"&nbsp;",1:value_$s(annotate="":"",1:" ("_annotate_")")),"</td>"
+			; repeat count
+			set value=$LG(one,3) write "<td>",$S(value="":"&nbsp;",1:value),"</td>"
+			; length
+			set value=$LG(one,4) write "<td>",$S(value="":"&nbsp;",1:value),"</td>"
+			; required
+			set value=$LG(one,5) write "<td>",$S(value="":"&nbsp;",1:value),"</td>"
+			; if repeating
+			set value=$LG(one,6) write "<td>",$S(value="":"&nbsp;",1:value),"</td>"
+			; code table
+			set value=$G($$$vaSchemaGbl(category,"SS",secondary,"tables",i))
+			write "<td>",$S(value="":"&nbsp;",1:"<a href='"_..Link("HL7SchemaCodeTable.csp?CT=CT:"_value)_"'>"_value_"</a>"),"</td>"
+			; alternate description
+			set altdesc=..EscapeHTML($G($$$vaSchemaDescGbl(category,"SS",secondary,i,"alt")))
+			write "<td>",$S(altdesc="":"&nbsp;",1:altdesc),"</td>"
+		}
+	}
+</script>
+</table>
+
+<p>
+<a href="#(..Link("HL7SchemaMain.csp"))#">(Show All Categories)</a><br>
+<a href="#(..Link("HL7SchemaList.csp?ELEMENT=SS&CATEGORY="_category))#">(Show All Segment Structures in Category '#(category)#')</a>
+</div>
+</body>
+</html>

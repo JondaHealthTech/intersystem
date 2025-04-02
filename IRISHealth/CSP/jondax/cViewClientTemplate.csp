@@ -1,0 +1,368 @@
+<html>	<!-- View client template in Side Nav-->
+<head>
+<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+	q 1
+</script>
+
+<script language="cache" runat="server">
+	s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+	i r1'=1 s %response.Redirect="cLockDown.csp"
+	d HEAD1^CSP999
+</script>
+	<link rel="stylesheet" href="assets/styles/cClientTemplate1.css" />
+</head>
+    <body>
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div id="loader" class="loader">
+            	<div class="loader-content">
+            		<p>Please wait for all the data to be loaded!</p>
+            		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            	</div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;" onclick="openMobileNav(event)"></i>
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <div class="title">
+                    	<h1>Client Templates</h1>
+                    	<div class="temp-name-group">
+                    		<p>Client Template Name:</p>
+                    		<div class="temp-dropdown"><p class="temp-name"></p><img src="./assets/images/dropDownWhite.png" alt="Dropdown" onclick="openTemplateDropdown(event)"></div>
+                    	</div>
+                    </div>
+                    <!-- Initial characters filter-->
+                    <div id="temp-content" class="temp-content">
+                        <div class="filters">
+                            <div class="text-fil">
+                                <p onclick="jLoadTemplates(event)">All</p>
+                                <p onclick="jLoadTemplates(event)">1-9</p>
+                                <p onclick="jLoadTemplates(event)">A</p>
+                                <p onclick="jLoadTemplates(event)">B</p>
+                                <p onclick="jLoadTemplates(event)">C</p>
+                                <p onclick="jLoadTemplates(event)">D</p>
+                                <p onclick="jLoadTemplates(event)">E</p>
+                                <p onclick="jLoadTemplates(event)">F</p>
+                                <p onclick="jLoadTemplates(event)">G</p>
+                                <p onclick="jLoadTemplates(event)">H</p>
+                                <p onclick="jLoadTemplates(event)">I</p>
+                                <p onclick="jLoadTemplates(event)">J</p>
+                                <p onclick="jLoadTemplates(event)">K</p>
+                                <p onclick="jLoadTemplates(event)">L</p>
+                                <p onclick="jLoadTemplates(event)">M</p>
+                                <p onclick="jLoadTemplates(event)">N</p>
+                                <p onclick="jLoadTemplates(event)">O</p>
+                                <p onclick="jLoadTemplates(event)">P</p>
+                                <p onclick="jLoadTemplates(event)">Q</p>
+                                <p onclick="jLoadTemplates(event)">R</p>
+                                <p onclick="jLoadTemplates(event)">S</p>
+                                <p onclick="jLoadTemplates(event)">T</p>
+                                <p onclick="jLoadTemplates(event)">U</p>
+                                <p onclick="jLoadTemplates(event)">V</p>
+                                <p onclick="jLoadTemplates(event)">W</p>
+                                <p onclick="jLoadTemplates(event)">X</p>
+                                <p onclick="jLoadTemplates(event)">Y</p>
+                                <p onclick="jLoadTemplates(event)">Z</p>
+                            </div>
+                            <!-- Search Bar -->
+                            <div class="search-group">
+                                <input type="text" autocomplete="off" id="search" placeholder="Search" onkeyup="searchDataChange(event)">
+                                <img src="./assets/images/search icon.png" alt="Search" class="search-icon" onclick="jLoadSearchResults(1)">
+                            </div>
+                            <!--s<button class="filter-btn"><img src="./assets/images/filter.png" alt="Filter">Filters</button>-->
+                        </div>
+                        <!-- Template Table-->
+                        <div class="table-border"></div>
+                        <div class="temp-table">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>JX Name <div class="img-group"><img src="./assets/images/upArrow.png" alt="Up Arrow" onclick="jSortTable(1)"><img src="./assets/images/downArrow.png" alt="Down Arrow" onclick="jSortTable(2)"></div></th>
+                                        <th>Client Name <div class="img-group"><img src="./assets/images/upArrow.png" alt="Up Arrow" onclick="jSortTable(3)"><img src="./assets/images/downArrow.png" alt="Down Arrow" onclick="jSortTable(4)"></div></th>
+                                        <th>Client Unit</th>
+                                        <th style="color:gray">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Template dropdown data-->
+                        <div class="template-data dropdown-data">
+                            <ul>
+                            	<script language="cache" runat="server">
+                            		; Load template names 
+                            		d WriteTemplates^cViewClientTemplate
+                            	</script>
+                            </ul>
+                        </div>
+                        <div class="search-data dropdown-data">
+                            <ul>
+                            </ul>
+                        </div>
+                        <div class="diagnostic-data dropdown-data">
+                            <ul>
+                            </ul>
+                        </div>
+                        <div class="name-data dropdown-data">
+                            <ul>
+                            </ul>
+                        </div>
+                        <div class="unit-data dropdown-data">
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/detect.js"></script>
+        <script src="assets/js/fastclick.js"></script>
+        <script src="assets/js/jquery.slimscroll.js"></script>
+        <script src="assets/js/jquery.blockUI.js"></script>
+        <script src="assets/js/waves.js"></script>
+        <script src="assets/js/wow.min.js"></script>
+        <script src="assets/js/jquery.nicescroll.js"></script>
+        <script src="assets/js/jquery.scrollTo.min.js"></script>
+        <script src="assets/js/jquery.core.js"></script>
+        <script src="assets/js/jquery.app.js"></script>
+    </body>
+    <script type="text/javascript">
+        let currentTr;
+        let val1;
+        let val2;
+        let val3;
+    	let dropDownText = " <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'>"
+        let templateData = document.querySelector(".template-data");
+        let searchData = document.querySelector(".search-data");
+        let diagnosticData = document.querySelector(".diagnostic-data");
+        let nameData = document.querySelector(".name-data");
+        let unitData = document.querySelector(".unit-data");
+        let currentOrder = 1;
+        let currentLoadData = "";
+        let lastViewDate;
+        let prevSearchData;
+        window.onresize = setTableBorderPos;
+        window.onload = jInitMe;
+  		document.onload = parent.resetTimer;
+  		document.onmousemove = parent.resetTimer;
+  		document.onmousedown = parent.resetTimer; // touchscreen presses
+  		document.ontouchstart = parent.resetTimer;
+  		//document.onclick = parent.resetTimer; // touchpad clicks
+  		document.onkeypress = parent.resetTimer;
+  		document.addEventListener('scroll', parent.resetTimer, true); 
+        let searching = false;
+        
+        function jInitMe(e){
+	        // session timer resets on page load
+			parent.resetTimer(e);
+	        // Load table result
+	        #server(..cInitMe())#
+	        setTableBorderPos();
+	    	document.getElementById("loader").style.display = "none";
+        }
+        
+        // Set and adjust table border
+        function setTableBorderPos(){
+            let tableBorder = document.querySelector(".table-border");
+            let tempTable = document.querySelector(".temp-table");
+            let table = document.querySelector("table");
+            let filter = document.querySelector(".filters");
+            
+            setTimeout(()=>{
+	            let tablePosition = table.getBoundingClientRect();
+            	if(tempTable.scrollHeight > tempTable.clientHeight){
+                	tableBorder.style.height = "calc(60vh + 4px)"
+            	}
+            	else{
+		        	tableBorder.style.height = tablePosition.height + 4 + "px";
+            	}
+            	tableBorder.style.width = tablePosition.width + 4 + "px";
+            	filter.style.width = tablePosition.width;
+            },100);
+        }
+        // Activate template names dropdown
+        function openTemplateDropdown(e){
+            let position = e.target.getBoundingClientRect();
+            templateData.style.top = position.bottom + 2 + "px";
+            templateData.style.right =window.innerWidth - position.right + "px";
+            setTimeout(()=>{
+                templateData.classList.add("active");
+            },100);
+        }
+        // Selecting a template from dropdown
+        function changeBK(e){
+	        let bk=e.target.textContent;
+	        #server(..cSaveCurrentBK(bk))#
+	        document.querySelector(".temp-name").innerHTML = bk;
+	        jLoadTemplates("New BK");
+	        templateData.classList.remove("active");
+        }
+        
+        // Sort the table, JX Name or client name
+        function jSortTable(order){
+	    	if(order==currentOrder){ return;}
+		    if(document.querySelectorAll("tbody tr").length<=1){
+		    	return;
+		    }
+	    	if(searching){
+		    	jLoadSearchResults(order);
+		    	return;
+		    }
+	    	document.getElementById("loader").style.display = "block";
+	    	#server(..cLoadTemplates(currentLoadData,order,lastViewDate))#
+	    	currentOrder = order;
+	    	document.getElementById("loader").style.display = "none";
+            setTableBorderPos();
+    	}
+    	// Load table with selected character or num or load new template
+    	function jLoadTemplates(e){
+	    	let start=e.target?e.target.textContent:e;
+	    	searching=false;
+	    	if(start.startsWith("1")){
+		    	start="num"
+	    	}
+	    	if(start=="All"){
+		    	start=""
+	    	}
+	    	if(currentLoadData==start && currentOrder==1){return;}
+	    	document.getElementById("loader").style.display = "block";
+	    	if(start=="New BK"){
+		    	start=""
+	    	}
+	    	#server(..cLoadTemplates(start,1,lastViewDate))#
+	    	currentLoadData=start;
+	    	currentOrder=1;
+	    	document.getElementById("loader").style.display = "none";
+	    	setTableBorderPos();
+    	}
+
+        // Activate search suggestion dropdown and load suggestions
+        function searchDataChange(e){
+	        searching = true;
+	        if(e.keyCode==13){
+		        currentLoadData = e.target.value;
+		        jLoadSearchResults(1);
+		        setTableBorderPos();
+			    return;
+	        }
+	        if(e.target.value.length==0){
+		        searchData.classList.remove("active");
+		        currentOrder=1
+		        return;
+	        }
+	        let position = e.target.closest(".search-group").getBoundingClientRect();
+            searchData.style.top = position.bottom + 2 + "px";
+            searchData.style.left = position.left;
+           	if(e.target.value==prevSearchData){}
+	        else{
+		        prevSearchData=e.target.value;
+	        	#server(..cClearSearchData())#
+	        	#server(..cSearchData(e.target.value))#
+	        	#server(..cLoadSearchSuggestions())#
+	        	setTimeout(()=>{
+              		searchData.classList.add("active");
+               		if(searchData.getBoundingClientRect().width < position.width){
+                   		searchData.style.width = position.width;
+               		}
+           		},100);
+	        }
+        }
+        
+        // Load table with search result
+        function jLoadSearchResults(order){
+	    	document.getElementById("loader").style.display = "block";
+	        #server(..cLoadSearchResults(order))#
+	        currentOrder = order;
+			searchData.classList.remove("active");
+	    	document.getElementById("loader").style.display = "none";
+        }
+        // Choose from search suggestion
+        function jLoadSearchData(e){
+	        searching = true;
+	        let searchVal = e.target.textContent;
+	        document.getElementById("search").value = searchVal;
+            searchData.classList.remove("active");
+	        let search = e.target.getAttribute("value").split(":");
+	        let searchType = search[0];
+	        let searchId = search[1];
+	        #server(..cClearSearchData())#
+	        switch(searchType){
+		        case 'DiagnosticTest':#server(..cSearchDiagnosticTest(searchVal))#;break;
+		        case 'ClientName':#server(..cSearchClientName(searchVal))#;break;
+		        case 'ClientUnit':#server(..cSearchClientUnit(searchVal))#;break;
+	        }
+	        currentLoadData=searchVal;
+	        jLoadSearchResults(1);
+            setTableBorderPos();
+        }
+		// Deactive dropdown
+        document.addEventListener("click",(e)=>{
+	        if(e.target.closest(".template-data")==null && templateData.classList.contains("active")){
+		        templateData.classList.remove("active");
+	        }
+	        if(e.target.closest(".diagnostic-data")==null && diagnosticData.classList.contains("active")){
+		        diagnosticData.classList.remove("active");
+	        }
+	        if(e.target.closest(".name-data")==null && nameData.classList.contains("active")){
+		        nameData.classList.remove("active");
+	        }
+	        if(e.target.closest(".unit-data")==null && unitData.classList.contains("active")){
+		        unitData.classList.remove("active");
+	        }
+	        if(e.target.closest(".search-data")==null && searchData.classList.contains("active")){
+		        searchData.classList.remove("active");
+	        }
+        })
+    </script>
+    
+<script language="cache" method="cInitMe">
+	d InitMe^cViewClientTemplate
+</script>
+<script language="cache" method="cSaveCurrentBK" arguments="bk:%String">
+	d INIT1^CSP999
+	s lastViewDate = $s($g(^LastView("ClientTemplate",UserID,bk))="":"2023-03-01 00:00:01",1:$zdatetime($g(^LastView("ClientTemplate",UserID,bk)),3))
+	&js<lastViewDate="#(lastViewDate)#";>
+	s %session.Data("ClientTemplates","bk") = bk
+	s ^LastView("ClientTemplate",UserID,bk)=$h
+</script>
+
+<script language="cache" method="cLoadTemplates" arguments="searchVal:%String,orderCol:%Integer,lastViewDate:%String">
+	d LoadTemplates^cViewClientTemplate(searchVal,orderCol,lastViewDate)
+</script>
+
+<script language="cache" method="cClearSearchData">
+	k ^SearchDiagnosticTest
+	k ^SearchCName
+	k ^SearchData
+</script>
+<script language="cache" method="cSearchData" arguments="searchVal:%String">
+	d SearchData^cViewClientTemplate
+</script>
+<script language="cache" method="cSearchDiagnosticTest" arguments="searchVal:%String">
+	d SearchDiagnosticTest^cViewClientTemplate
+</script>
+<script language="cache" method="cSearchClientName" arguments="searchVal:%String">
+	d SearchClientName^cViewClientTemplate
+</script>
+<script language="cache" method="cSearchClientUnit" arguments="searchVal:%String">
+	d SearchClientUnit^cViewClientTemplate
+</script>
+<script language="cache" method="cLoadSearchSuggestions">
+	d LoadSearchSuggestions^cViewClientTemplate
+</script>
+<script language="cache" method="cLoadSearchResults" arguments="orderCol:%String">
+	d LoadSearchResults^cViewClientTemplate
+</script>
+</html>

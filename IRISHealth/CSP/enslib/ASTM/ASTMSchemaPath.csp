@@ -1,0 +1,48 @@
+<AutoPageENS domain="Ensemble" parentpage="ASTMSchemaSegmentStructure.csp" pagename="ASTM Property Path" title="@Ensemble:ASTMManagerPropertyPath@ASTM Property Path">
+<html>
+<head>
+<title>ASTM Property Path</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+</head>
+<body>
+
+<script language=Cache runat=server>
+	#include EnsEDIASTM
+	set tPath=%request.Get("PATH")
+	set ds=%request.Get("DS")
+	set ss=%request.Get("SS")
+	set iField=%request.Get("FIELD")
+	set cs=%request.Get("CS")
+	set csField=%request.Get("CSFIELD")
+	set cs1=%request.Get("CS1")
+	set cs1Field=%request.Get("CS1FIELD")
+	set category=$p(ds,":",2)
+	set secondary=$p(ds,":",3)
+	If ((category'="")&&(secondary'="")) {
+		set description=..EscapeHTML(##class(EnsLib.EDI.ASTM.Schema).GetDescription(ds))
+		if $data($$$vaSchemaGbl(category,"DS",secondary))=0 {
+			write "<b><font size=6>"_ds_" </font> Definition does not exist!</b>",!
+			quit
+		}
+	}
+</script>
+<div class="Text1"><i>Path you followed to get to this field:</i><br><br>
+	<table border=1 cellpadding=2 cellspacing=0 style="font-size: 1.2em;"><tbody align=center><tr><td>
+	<b>#(tPath)#</b>
+	</td></tr></table><br>
+	<csp:if condition="$L(csField)">
+		<i>Component Structure </i>&nbsp;<b>'#($P(ds,":",2,3))#'</b>, field # <b>#(csField)#</b>,<br>
+		<csp:if condition="$L(cs1Field)">
+			<i>Of Component Structure </i>&nbsp;<b>'#($P(cs1,":",2,3))#'</b>, field # <b>#(cs1Field)#</b>,<br>
+		</csp:if>
+	</csp:if>
+	<i>At Field#</i>&nbsp;<b>#(iField)#</b><br>
+	<i>Of Segment Structure </i>&nbsp;<b>'#($P(ss,":",2,3))#'</b>,<br>
+	<i>Of Document Structure </i>&nbsp;<b>'#($P(ds,":",2,3))#'</b></div>
+<p>
+<div style="margin-left: 20px">
+<a href="#(..Link("ASTMSchemaMain.csp"))#">(Show All Categories)</a><br>
+<a href="#(..Link("ASTMSchemaList.csp?ELEMENT=DS&CATEGORY="_category))#">(Show All Document Structures in category '#(category)#')</a><br>
+</div>
+</body>
+</html>

@@ -1,0 +1,720 @@
+<!-- CSP QUERY Tags -->
+<!-- Copyright (c) 2000 InterSystems Corp. ALL RIGHTS RESERVED. -->
+
+<!-- QUERY TAG --------------------------------------------- -->
+
+<csr:rule name="%QUERY" match="csp:query" empty language="any">
+<csr:description>
+The <b>csp:query</b> tag creates a <b>%ResultSet</b> object based on 
+a query defined within a Cach&eacute; class.
+<p>This tag defines a server-side variable, whose name is specified
+by the tag's <b>name</b> attribute, that refers to a <b>%ResultSet</b> object.
+The <b>%ResultSet</b> object is automatically executed (by calling its 
+<b>Execute</b> method using the parameter values given by the various
+<i>Pn</i> attributes of the tag) and is ready for use within the page.
+<p>The following example creates an unordered list by running a query:
+<EXAMPLE>
+<csp:query name="query" classname="IscPerson" queryname="ByName">
+<ul>
+<csp:while>
+	<li>#(query.Get("Name"))#
+</csp:while>
+</ul>
+</EXAMPLE>
+</csr:description>
+
+<csr:attribute name=Name required description="Name of local variable used to refer to the %ResultSet object created for this query." type="VariableName:STRING" >
+<csr:attribute name=ClassName required description="Name of the class containing the query." type="ClassName:QUERY(%CSP.DwxUtils.ClassList)" >
+<csr:attribute name=QueryName required description="Name of the query." type="QueryName:STRING" >
+<csr:attribute name=Mode description="Runtime mode of the query:  DISPLAY, LOGICAL, ODBC or SYSTEM." type="RuntimeMode:STRING" >
+
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	// find out how many parameters we have
+	New key,max,num,args,i
+	
+	Set key = "P"
+	Set max = 0
+	Set args = ""
+	Do ..TagAttributes.GetNext(.key)
+	While ((key'="")&&($E(key,1,1)="P")) {
+		Set num = +$E(key,2,$L(key))
+		If (num > max) { 
+			Set max = num
+		}
+		Do ..TagAttributes.GetNext(.key)
+	}
+
+	// build argument list for Execute; stuff it into %ARGLIST attribute
+	For i=1:1:max {
+		Set args = args_$S(i>1:",",1:"")_$$QuoteCSP^%cspQuote(..GetAttribute("P"_i))
+	}
+	Do ..SetAttribute("%ARGLIST",args)
+
+	// test if name is valid
+	If ('$zname(..GetAttribute("NAME"))) {
+		Set %statuscode=$$$ERROR($$$CSPSQLInvalidName,"name","csp:QUERY",..LineNumber)
+		Quit
+	}
+	
+	// test and convert runtime mode.
+	Do ..SetAttribute("mode",$zcvt(..GetAttribute("MODE","DISPLAY"),"U"))
+	If ..GetAttribute("MODE")="LOGICAL" {
+		Do ..SetAttribute("mode",0)
+	}
+	ElseIf ..GetAttribute("MODE")="ODBC" {
+		Do ..SetAttribute("mode",1)
+	}
+	ElseIf ..GetAttribute("MODE")="DISPLAY" {
+		Do ..SetAttribute("mode",2)
+	}
+	ElseIf ..GetAttribute("MODE")="SYSTEM" {
+		Do ..SetAttribute("mode","""""")
+	}
+	Else {
+		Set %statuscode=$$$ERROR($$$CSPSQLInvalidMode,..LineNumber)
+		Quit
+	}
+</script>
+
+<script language="Cache" runat="server">
+	// Open instance of ResultSet for runtime mode of DISPLAY.
+	Set ##(..GetAttribute("NAME"))## = ##class(%ResultSet).%New(##'..GetAttribute("CLASSNAME")'##_":"_##'..GetAttribute("QUERYNAME")'##)
+	Set ##(..GetAttribute("NAME"))##.RuntimeMode=##(..GetAttribute("MODE"))##
+
+	Set %sc = ##(..GetAttribute("NAME"))##.Execute(##(..GetAttribute("%ARGLIST"))##)
+	If (+%sc=0) {
+		Do ..ShowError(%sc)
+		Quit
+	}
+</script>
+
+<script language="Basic" runat="server">
+	' Open instance of ResultSet for runtime mode of DISPLAY.
+	##(..GetAttribute("NAME"))## = New %ResultSet(##'..GetAttribute("CLASSNAME")'## & ":" & ##'..GetAttribute("QUERYNAME")'##)
+	##(..GetAttribute("NAME"))##.RuntimeMode=##(..GetAttribute("MODE"))##
+
+	%sc = ##(..GetAttribute("NAME"))##.Execute(##(..GetAttribute("%ARGLIST"))##)
+	If System.Status.IsError(%sc) Then
+		me.ShowError(%sc)
+		Return 1
+	End If
+</script>
+
+<script language="MVBasic" runat="server">
+	! Open instance of ResultSet for runtime mode of DISPLAY.
+	##(..GetAttribute("NAME"))## = "%ResultSet"->%New(##'..GetAttribute("CLASSNAME")'## : ":" : ##'..GetAttribute("QUERYNAME")'##)
+	##(..GetAttribute("NAME"))##->RuntimeMode=##(..GetAttribute("MODE"))##
+
+	%sc = ##(..GetAttribute("NAME"))##->Execute(##(..GetAttribute("%ARGLIST"))##)
+	If "%SYSTEM.Status"->IsError(%sc) Then
+		"%CSP.Page"->ShowError(%sc)
+		Return 1
+	End
+</script>
+
+<csr:section name="PREHTML">
+<script language="Cache" runat="server">
+	Set ##(..GetAttribute("NAME"))##=$$$NULLOREF
+</script>
+<script language="Basic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+<script language="MVBasic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+</csr:section>
+
+<csr:section name="POSTHTML">
+<script language="Cache" runat="server">
+	Set ##(..GetAttribute("NAME"))##=$$$NULLOREF
+</script>
+<script language="Basic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+<script language="MVBasic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+</csr:section>
+
+</csr:action>
+</csr:rule>
+
+
+<!-- SCRIPT LANGUAGE=SQL TAG --------------------------------------------- -->
+<csr:rule name="%SCRIPTSQL" match="script[language=sql,name]" textonly language="any">
+
+<csr:description>
+The <b>script language=sql</b> tag creates a <b>%ResultSet</b> object based on 
+a SQL query defined within the inner text of this tag.
+<p>The query may contain parameters (values substituted at run-time) 
+within its WHERE clause. These parameters are specified using the ? character.
+<p>This tag defines a server-side variable, whose name is specified
+by the tag's <b>name</b> attribute, that refers to a <b>%ResultSet</b> object.
+The <b>%ResultSet</b> object is automatically prepared and executed 
+(by calling its <b>Execute</b> method using the parameter values given 
+by the various <i>Pn</i> attributes of the tag) and is ready for use 
+within the page.
+<p>The following example creates an unordered list by running a query:
+<EXAMPLE>
+
+<script language=sql name="query" p1="A">
+SELECT ID,Name FROM IscPerson WHERE Name %STARTSWITH ? Order By Name
+</script>
+
+<ul>
+<csp:while>
+	<li>#(query.Get("Name"))#
+</csp:while>
+</ul>
+</EXAMPLE></csr:description>
+
+<csr:attribute name=Name required description="Name of local variable used to refer to the %ResultSet object created for this query." type="VariableName:STRING" >
+<csr:attribute name=Mode description="Runtime mode of the query:  DISPLAY, LOGICAL, ODBC or SYSTEM." type="RuntimeMode:STRING" >
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	// find out how many parameters we have
+	New key,max,num,args,i
+	
+	Set key = "P"
+	Set max = 0
+	Set args = ""
+	Do ..TagAttributes.GetNext(.key)
+	While ((key'="")&&($E(key,1,1)="P")) {
+		Set num = +$E(key,2,$L(key))
+		If (num > max) { 
+			Set max = num
+		}
+		Do ..TagAttributes.GetNext(.key)
+	}
+
+	; build argument list for Execute; stuff it into %ARGLIST attribute
+	For i=1:1:max {
+		Set args=args_$S(i>1:",",1:"")_$$QuoteCSP^%cspQuote(..GetAttribute("P"_i))
+	}
+	Do ..SetAttribute("%ARGLIST",args)
+
+	// test if name is valid
+	If ..IsDefined("CURSOR") {
+		Set %statuscode=$$$ERROR($$$CSPBadSQLTag,..LineNumber)
+		Quit
+	}
+	If '$zname(..GetAttribute("NAME")) {
+		Set %statuscode=$$$ERROR($$$CSPSQLInvalidName,"name","script LANGUAGE=SQL",..LineNumber)
+		Quit
+	}
+	
+	// test and convert runtime mode.
+	Do ..SetAttribute("mode",$zcvt(..GetAttribute("MODE","DISPLAY"),"U"))
+	If ..GetAttribute("MODE")="LOGICAL" {
+		Do ..SetAttribute("mode",0)
+	}
+	ElseIf ..GetAttribute("MODE")="ODBC" {
+		Do ..SetAttribute("mode",1)
+	}
+	ElseIf ..GetAttribute("MODE")="DISPLAY" {
+		Do ..SetAttribute("mode",2)
+	}
+	ElseIf ..GetAttribute("MODE")="SYSTEM" {
+		Do ..SetAttribute("mode","""""")
+	}
+	Else {
+		Set %statuscode=$$$ERROR($$$CSPSQLInvalidMode,..LineNumber)
+		Quit
+	}
+	
+	Do ..SetAttribute("%SQLOnlyError",$$$ERRORCODE($$$CSPSQLOnlySelect))
+</script>
+
+<script language="Cache" runat="server">
+	// Open instance of ResultSet for runtime mode of DISPLAY.
+	Set ##(..GetAttribute("NAME"))## = ##class(%ResultSet).%New()
+	Set ##(..GetAttribute("NAME"))##.RuntimeMode=##(..GetAttribute("MODE"))##
+
+	Set sqlStatement=$zstrip($tr(##'..InnerText()'##,$C(9,13,10),"   "),"<>W")
+	If $zcvt($extract(sqlStatement,1,6),"U")'="SELECT" {
+		Do ..ShowError($$$ERROR($$$CSPSQLOnlySelect,"##(..LineNumber)##"))
+		Quit
+	}
+
+	// translate tab/cr/nl to spaces
+	Set %sc = ##(..GetAttribute("NAME"))##.Prepare(sqlStatement,0,"RUNTIME")
+	If (+%sc=0) {
+		Do ..ShowError(%sc)
+		Quit
+	}
+
+	Set %sc = ##(..GetAttribute("NAME"))##.Execute(##(..GetAttribute("%ARGLIST"))##)
+	If (+%sc=0) {
+		Do ..ShowError(%sc)
+		Quit
+	}
+</script>
+
+<script language="Basic" runat="server">
+	' Open instance of ResultSet for runtime mode of DISPLAY.
+	##(..GetAttribute("NAME"))## = New %ResultSet()
+	##(..GetAttribute("NAME"))##.RuntimeMode=##(..GetAttribute("MODE"))##
+
+	sqlStatement=Trim(Replace(Replace(Replace(##'..InnerText()'##,Chr(9)," "),Chr(13)," "),Chr(10)," "))
+	If Ucase(Left(sqlStatement,6))<>"SELECT" Then
+		me.ShowError(System.Status.Error(##(..GetAttribute("%SQLOnlyError"))##,"##'..LineNumber'##"))
+		Return 1
+	End If
+
+	' translate tab/cr/nl to spaces
+	%sc = ##(..GetAttribute("NAME"))##.Prepare(sqlStatement,0,"RUNTIME")
+	If System.Status.IsError(%sc) Then
+		me.ShowError(%sc)
+		Return 1
+	End If
+
+	%sc = ##(..GetAttribute("NAME"))##.Execute(##(..GetAttribute("%ARGLIST"))##)
+	If System.Status.IsError(%sc) Then
+		me.ShowError(%sc)
+		Return 1
+	End If
+</script>
+
+<script language="MVBasic" runat="server">
+	! Open instance of ResultSet for runtime mode of DISPLAY.
+	##(..GetAttribute("NAME"))## = "%ResultSet"->%New()
+	##(..GetAttribute("NAME"))##->RuntimeMode=##(..GetAttribute("MODE"))##
+
+	sqlStatement=Trim(CONVERT(Char(9):Char(13):Char(10),"   ",##'..InnerText()'##))
+	If UPCASE(Left(sqlStatement,6))<>"SELECT" Then
+		"%CSP.Page"->ShowError("%SYSTEM.Status"->Error(##(..GetAttribute("%SQLOnlyError"))##,"##'..LineNumber'##"))
+		Return 1
+	End
+
+	! translate tab/cr/nl to spaces
+	%sc = ##(..GetAttribute("NAME"))##->Prepare(sqlStatement,0,"RUNTIME")
+	If "%SYSTEM.Status"->IsError(%sc) Then
+		"%CSP.Page"->ShowError(%sc)
+		Return 1
+	End
+
+	%sc = ##(..GetAttribute("NAME"))##->Execute(##(..GetAttribute("%ARGLIST"))##)
+	If "%SYSTEM.Status"->IsError(%sc) Then
+		"%CSP.Page"->ShowError(%sc)
+		Return 1
+	End
+</script>
+
+<csr:section name="PREHTML">
+<script language="Cache" runat="server">
+	Set ##(..GetAttribute("NAME"))##=$$$NULLOREF
+</script>
+<script language="Basic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+<script language="MVBasic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+</csr:section>
+
+<csr:section name="POSTHTML">
+<script language="Cache" runat="server">
+	Set ##(..GetAttribute("NAME"))##=$$$NULLOREF
+</script>
+<script language="Basic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+<script language="MVBasic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+</csr:section>
+
+</csr:action>
+</csr:rule>
+
+<!-- SQLQUERY TAG --------------------------------------------- -->
+
+<csr:rule name="%SQLQUERY" match="csp:sqlquery" textonly language="any">
+<csr:description>
+The <b>csp:SQLQUERY</b> tag creates a <b>%ResultSet</b> object based on 
+a SQL query defined within the inner text of this tag.
+<p>The query may contain parameters (values substituted at run-time) 
+within its WHERE clause. These parameters are specified using the ? character.
+<p>This tag defines a server-side variable, whose name is specified
+by the tag's <b>name</b> attribute, that refers to a <b>%ResultSet</b> object.
+The <b>%ResultSet</b> object is automatically prepared and executed 
+(by calling its <b>Execute</b> method using the parameter values given 
+by the various <i>Pn</i> attributes of the tag) and is ready for use 
+within the page.
+<p>The following example creates an unordered list by running a query:
+<EXAMPLE>
+
+<csp:sqlquery name="query" p1="A">
+SELECT ID,Name FROM IscPerson WHERE Name %STARTSWITH ? Order By Name
+</csp:sqlquery>
+
+<ul>
+<csp:while>
+	<li>#(query.Get("Name"))#
+</csp:while>
+</ul>
+</EXAMPLE></csr:description>
+
+<csr:attribute name=Name required description="Name of local variable used to refer to the %ResultSet object created for this query." type="VariableName:STRING" >
+<csr:attribute name=Mode description="Runtime mode of the query:  DISPLAY, LOGICAL, ODBC or SYSTEM." type="RuntimeMode:STRING" >
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	// find out how many parameters we have
+	New key,max,num,args,i
+	
+	Set key = "P"
+	Set max = 0
+	Set args = ""
+	Do ..TagAttributes.GetNext(.key)
+	While ((key'="")&&($E(key,1,1)="P")) {
+		Set num = +$E(key,2,$L(key))
+		If (num > max) { 
+			Set max = num
+		}
+		Do ..TagAttributes.GetNext(.key)
+	}
+
+	// build argument list for Execute; stuff it into %ARGLIST attribute
+	For i=1:1:max {
+		Set args=args_$S(i>1:",",1:"")_$$QuoteCSP^%cspQuote(..GetAttribute("P"_i))
+	}
+	Do ..SetAttribute("%ARGLIST",args)
+
+	// test if name is valid
+	If ..IsDefined("CURSOR") {
+		Set %statuscode=$$$ERROR($$$CSPBadSQLTag,..LineNumber)
+		Quit
+	}
+	If '$zname(..GetAttribute("NAME")) {
+		Set %statuscode=$$$ERROR($$$CSPSQLInvalidName,"name","csp:SQLQUERY",..LineNumber)
+		Quit
+	}
+
+	// test and convert runtime mode.
+	Do ..SetAttribute("mode",$zcvt(..GetAttribute("MODE","DISPLAY"),"U"))
+	If ..GetAttribute("MODE")="LOGICAL" {
+		Do ..SetAttribute("mode",0)
+	}
+	ElseIf ..GetAttribute("MODE")="ODBC" {
+		Do ..SetAttribute("mode",1)
+	}
+	ElseIf ..GetAttribute("MODE")="DISPLAY" {
+		Do ..SetAttribute("mode",2)
+	}
+	ElseIf ..GetAttribute("MODE")="SYSTEM" {
+		Do ..SetAttribute("mode","""""")
+	}
+	Else {
+		Set %statuscode=$$$ERROR($$$CSPSQLInvalidMode,..LineNumber)
+		Quit
+	}
+
+	Do ..SetAttribute("%SQLOnlyError",$$$ERRORCODE($$$CSPSQLOnlySelect))
+</script>
+
+<script language="Cache" runat="server">
+	// Open instance of ResultSet for runtime mode of DISPLAY.
+	Set ##(..GetAttribute("NAME"))## = ##class(%ResultSet).%New()
+	Set ##(..GetAttribute("NAME"))##.RuntimeMode=##(..GetAttribute("MODE"))##
+
+	Set sqlStatement=$zstrip($tr(##'..InnerText()'##,$C(9,13,10),"   "),"<>W")
+	If $zcvt($extract(sqlStatement,1,6),"U")'="SELECT" {
+		Do ..ShowError($$$ERROR($$$CSPSQLOnlySelect,"##(..LineNumber)##"))
+		Quit
+	}
+
+	// translate tab/cr/nl to spaces
+	Set %sc = ##(..GetAttribute("NAME"))##.Prepare(sqlStatement,0,"RUNTIME")
+	If (+%sc=0) {
+		Do ..ShowError(%sc)
+		Quit
+	}
+
+	Set %sc = ##(..GetAttribute("NAME"))##.Execute(##(..GetAttribute("%ARGLIST"))##)
+	If (+%sc=0) {
+		Do ..ShowError(%sc)
+		Quit
+	}
+</script>
+
+<script language="Basic" runat="server">
+	' Open instance of ResultSet for runtime mode of DISPLAY.
+	##(..GetAttribute("NAME"))## = New %ResultSet()
+	##(..GetAttribute("NAME"))##.RuntimeMode=##(..GetAttribute("MODE"))##
+
+	sqlStatement=Trim(Replace(Replace(Replace(##'..InnerText()'##,Chr(9)," "),Chr(13)," "),Chr(10)," "))
+	If Ucase(Left(sqlStatement,6))<>"SELECT" Then
+		me.ShowError(System.Status.Error(##(..GetAttribute("%SQLOnlyError"))##,"##'..LineNumber'##"))
+		Return 1
+	End If
+
+	' translate tab/cr/nl to spaces
+	%sc = ##(..GetAttribute("NAME"))##.Prepare(sqlStatement,0,"RUNTIME")
+	If System.Status.IsError(%sc) Then
+		me.ShowError(%sc)
+		Return 1
+	End If
+
+	Set %sc = ##(..GetAttribute("NAME"))##.Execute(##(..GetAttribute("%ARGLIST"))##)
+	If System.Status.IsError(%sc) Then
+		me.ShowError(%sc)
+		Return 1
+	End If
+</script>
+
+<script language="MVBasic" runat="server">
+	! Open instance of ResultSet for runtime mode of DISPLAY.
+	##(..GetAttribute("NAME"))## = "%ResultSet"->%New()
+	##(..GetAttribute("NAME"))##->RuntimeMode=##(..GetAttribute("MODE"))##
+
+	sqlStatement=Trim(CONVERT(Char(9):Char(13):Char(10),"   ",##'..InnerText()'##))
+	If UPCASE(Left(sqlStatement,6))<>"SELECT" Then
+		"%CSP.Page"->ShowError("%SYSTEM.Status"->Error(##(..GetAttribute("%SQLOnlyError"))##,"##'..LineNumber'##"))
+		Return 1
+	End
+
+	! translate tab/cr/nl to spaces
+	%sc = ##(..GetAttribute("NAME"))##->Prepare(sqlStatement,0,"RUNTIME")
+	If "%SYSTEM.Status"->IsError(%sc) Then
+		"%CSP.Page"->ShowError(%sc)
+		Return 1
+	End
+
+	Set %sc = ##(..GetAttribute("NAME"))##->Execute(##(..GetAttribute("%ARGLIST"))##)
+	If "%SYSTEM.Status"->IsError(%sc) Then
+		"%CSP.Page"->ShowError(%sc)
+		Return 1
+	End
+</script>
+
+<csr:section name="PREHTML">
+<script language="Cache" runat="server">
+	Set ##(..GetAttribute("NAME"))##=$$$NULLOREF
+</script>
+<script language="Basic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+<script language="MVBasic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+</csr:section>
+
+<csr:section name="POSTHTML">
+<script language="Cache" runat="server">
+	Set ##(..GetAttribute("NAME"))##=$$$NULLOREF
+</script>
+<script language="Basic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+<script language="MVBasic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+</csr:section>
+
+</csr:action>
+</csr:rule>
+
+<!-- SQLQUERY[DATASOURCE] TAG --------------------------------------------- -->
+
+<csr:rule name="%SQLQUERYGW" match="csp:sqlquery[datasource]" textonly language="any">
+<csr:description>
+This tag is identical to the <b>csp:sqlquery</b> tag except that it
+redirects the query to an external database using the Cach&eacute;
+Relational Gateway.
+<p>The preferred way to execute queries on external tables is to link a
+Cache class to the external table and then use the normal methods of
+executing queries.
+</csr:description>
+
+<csr:attribute name=Name required description="Name of local variable used to refer to the %ResultSet object created for this query." type="VariableName:STRING" >
+<csr:attribute name=DataSource required description="This specifies the name of an external data source to be used for this query." type="DataSourceName:STRING" >
+<csr:attribute name=UserName description="Optional user name for the external data source." type="UserName:STRING" >
+<csr:attribute name=Password description="Optional password for the external data source." type="Password:STRING" >
+<csr:attribute name=Mode description="Runtime mode of the query:  DISPLAY, LOGICAL, ODBC or SYSTEM." type="RuntimeMode:STRING" >
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	// find out how many parameters we have
+	New key,max,num,args,i
+	
+	Set key = "P"
+	Set max = 0
+	Set args = ""
+	Do ..TagAttributes.GetNext(.key)
+	While ((key'="")&&($E(key,1,1)="P")) {
+		Set num = +$E(key,2,$L(key))
+		If (num > max) { 
+			Set max = num
+		}
+		Do ..TagAttributes.GetNext(.key)
+	}
+
+	// build argument list for Execute; stuff it into %ARGLIST attribute
+	For i=1:1:max {
+		Set args = args_$S(i>1:",",1:"")_$$QuoteCSP^%cspQuote(..GetAttribute("P"_i))
+	}
+	Do ..SetAttribute("%ARGLIST",args)
+
+	// test if name is valid
+	If ('$zname(..GetAttribute("NAME"))) {
+		Set %statuscode=$$$ERROR($$$CSPSQLInvalidName,"name","csp:SQLQUERY",..LineNumber)
+		Quit
+	}
+	
+	// test and convert runtime mode.
+	Do ..SetAttribute("mode",$zcvt(..GetAttribute("MODE","DISPLAY"),"U"))
+	If ..GetAttribute("MODE")="LOGICAL" {
+		Do ..SetAttribute("mode",0)
+	}
+	ElseIf ..GetAttribute("MODE")="ODBC" {
+		Do ..SetAttribute("mode",1)
+	}
+	ElseIf ..GetAttribute("MODE")="DISPLAY" {
+		Do ..SetAttribute("mode",2)
+	}
+	ElseIf ..GetAttribute("MODE")="SYSTEM" {
+		Do ..SetAttribute("mode","""""")
+	}
+	Else {
+		Set %statuscode=$$$ERROR($$$CSPSQLInvalidMode,..LineNumber)
+		Quit
+
+	Do ..SetAttribute("%SQLOnlyError",$$$ERRORCODE($$$CSPSQLOnlySelect))
+	}
+</script>
+
+<script language="Cache" runat="server">
+	// Open instance of External ResultSet for runtime mode of DISPLAY
+	Set ##(..GetAttribute("NAME"))## = ##class(%ResultSet).%New("%DynamicQueryGW:SQLGW")
+	Set ##(..GetAttribute("NAME"))##.RuntimeMode=##(..GetAttribute("MODE"))##
+
+	// Create connection to external data source
+    Set %SQLDataSource(##'..GetAttribute("NAME")'##) = ##class(%SQLGatewayConnection).%New()
+    Set %sc=(%SQLDataSource(##'..GetAttribute("NAME")'##)).Connect(##'..GetAttribute("DATASOURCE")'##,##'..GetAttribute("USERNAME")'##,##'..GetAttribute("PASSWORD")'##)
+	If (+%sc=0) {
+		Do ..ShowError(%sc)
+		Quit
+	}
+
+	Set sqlStatement=$zstrip($tr(##'..InnerText()'##,$C(9,13,10),"   "),"<>W")
+	If $zcvt($extract(sqlStatement,1,6),"U")'="SELECT" {
+		Do ..ShowError($$$ERROR($$$CSPSQLOnlySelect,"##(..LineNumber)##"))
+		Quit
+	}
+
+	// translate tab/cr/nl to spaces
+	Set %sc = ##(..GetAttribute("NAME"))##.Prepare(sqlStatement,0,%SQLDataSource(##'..GetAttribute("NAME")'##))
+	If (+%sc=0) {
+		Do ..ShowError(%sc)
+		Quit
+	}
+
+	Set %sc = ##(..GetAttribute("NAME"))##.Execute(##(..GetAttribute("%ARGLIST"))##)
+	If (+%sc=0) {
+		Do ..ShowError(%sc)
+		Quit
+	}
+</script>
+
+<script language="Basic" runat="server">
+	' Open instance of External ResultSet for runtime mode of DISPLAY
+	##(..GetAttribute("NAME"))## = New %ResultSet("%DynamicQueryGW:SQLGW")
+	##(..GetAttribute("NAME"))##.RuntimeMode=##(..GetAttribute("MODE"))##
+
+	' Create connection to external data source
+    %SQLDataSource(##'..GetAttribute("NAME")'##) = New %SQLGatewayConnection()
+    %sc=(%SQLDataSource(##'..GetAttribute("NAME")'##)).Connect(##'..GetAttribute("DATASOURCE")'##,##'..GetAttribute("USERNAME")'##,##'..GetAttribute("PASSWORD")'##)
+	If System.Status.IsError(%sc) Then
+		me.ShowError(%sc)
+		Return 1
+	End If
+
+	sqlStatement=Trim(Replace(Replace(Replace(##'..InnerText()'##,Chr(9)," "),Chr(13)," "),Chr(10)," "))
+	If Ucase(Left(sqlStatement,6))<>"SELECT" Then
+		me.ShowError(System.Status.Error(##(..GetAttribute("%SQLOnlyError"))##,"##'..LineNumber'##"))
+		Return 1
+	End If
+
+	' translate tab/cr/nl to spaces
+	%sc = ##(..GetAttribute("NAME"))##.Prepare(sqlStatement,0,%SQLDataSource(##'..GetAttribute("NAME")'##))
+	If System.Status.IsError(%sc) Then
+		me.ShowError(%sc)
+		Return 1
+	End If
+
+	%sc = ##(..GetAttribute("NAME"))##.Execute(##(..GetAttribute("%ARGLIST"))##)
+	If System.Status.IsError(%sc) Then
+		me.ShowError(%sc)
+		Return 1
+	End If
+</script>
+
+<script language="MVBasic" runat="server">
+	! Open instance of External ResultSet for runtime mode of DISPLAY
+	##(..GetAttribute("NAME"))## = "%ResultSet"->%New("%DynamicQueryGW:SQLGW")
+	##(..GetAttribute("NAME"))##->RuntimeMode=##(..GetAttribute("MODE"))##
+
+	! Create connection to external data source
+    %SQLDataSource(##'..GetAttribute("NAME")'##) = "%SQLGatewayConnection"->%New()
+    %sc=(%SQLDataSource(##'..GetAttribute("NAME")'##))->Connect(##'..GetAttribute("DATASOURCE")'##,##'..GetAttribute("USERNAME")'##,##'..GetAttribute("PASSWORD")'##)
+	If "%SYSTEM.Status"->IsError(%sc) Then
+		"%CSP.Page"->ShowError(%sc)
+		Return 1
+	End
+
+	sqlStatement=Trim(CONVERT(Char(9):Char(13):Char(10),"   ",##'..InnerText()'##))
+	If UPCASE(Left(sqlStatement,6))<>"SELECT" Then
+		"%CSP.Page"->ShowError("%SYSTEM.Status"->Error(##(..GetAttribute("%SQLOnlyError"))##,"##'..LineNumber'##"))
+		Return 1
+	End
+
+	! translate tab/cr/nl to spaces
+	%sc = ##(..GetAttribute("NAME"))##->Prepare(sqlStatement,0,%SQLDataSource(##'..GetAttribute("NAME")'##))
+	If "%SYSTEM.Status"->IsError(%sc) Then
+		"%CSP.Page"->ShowError(%sc)
+		Return 1
+	End
+
+	%sc = ##(..GetAttribute("NAME"))##->Execute(##(..GetAttribute("%ARGLIST"))##)
+	If "%SYSTEM.Status"->IsError(%sc) Then
+		"%CSP.Page"->ShowError(%sc)
+		Return 1
+	End
+</script>
+
+<csr:section name="PREHTML">
+<script language="Cache" runat="server">
+	Set ##(..GetAttribute("NAME"))##=$$$NULLOREF
+	Set %SQLDataSource(##'..GetAttribute("NAME")'##)=$$$NULLOREF
+</script>
+<script language="Basic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+	%SQLDataSource(##'..GetAttribute("NAME")'##)=""
+</script>
+<script language="MVBasic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+	%SQLDataSource(##'..GetAttribute("NAME")'##)=""
+</script>
+</csr:section>
+
+<csr:section name="POSTHTML">
+<script language="Cache" runat="server">
+	Set ##(..GetAttribute("NAME"))##=$$$NULLOREF
+	Set %SQLDataSource(##'..GetAttribute("NAME")'##)=$$$NULLOREF
+</script>
+<script language="Basic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+	%SQLDataSource(##'..GetAttribute("NAME")'##)=""
+</script>
+<script language="MVBasic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+	%SQLDataSource(##'..GetAttribute("NAME")'##)=""
+</script>
+</csr:section>
+
+</csr:action>
+</csr:rule>

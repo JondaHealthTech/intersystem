@@ -1,0 +1,355 @@
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat-VariableFont_wght.ttf");
+}
+html {
+    font-size: 16px;
+}
+body {
+    background: transparent;
+    font-family: "Montserrat";
+    height: 100vh;
+}
+.bg-wrapper {
+    background: #405470;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    z-index: -1;
+}
+.bg1 img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100vh;
+}
+.bg2 img {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 100vh;
+}
+.content {
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
+    z-index: 1;
+    padding: 0 1rem;
+}
+.logo {
+    width: 10vw;
+    margin-top: 3.5vw;
+}
+.pink-bg-text {
+    padding: 0.3vw 0.6vw;
+    font-size: 1.05vw;
+    font-weight: 500;
+    line-height: 1.2vw;
+    margin: 1.5vw 0 0;
+    background-color: #e63876;
+    color: white;
+    display: inline-block;
+}
+h1 {
+    font-size: 3vw;
+    font-weight: 400;
+    line-height: 3.5vw;
+    color: white;
+    margin: 3vw 0 3.5vw;
+}
+h1 span {
+    color: #e63876;
+    font-weight: 700;
+}
+h2{
+    font-size: 1.5vw;
+    font-weight: 600;
+    margin: 0;
+}
+.result-title{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.green-btn {
+    padding: 0 1.5vw;
+    height: 2.7vw;
+    color: white;
+    background: #4dcec9;
+    border-radius: 2.5rem;
+    border: none;
+    font-size: 1.1vw;
+    font-weight: 700;
+    line-height: 2.7vw;
+}
+.inactive {
+    display: none !important;
+}
+.hr-group {
+    position: absolute;
+    bottom: 25%;
+    left: 0;
+    z-index: -1;
+}
+hr {
+    height: 0.8vw;
+    width: 100vw;
+    background: #e63876;
+    border: none;
+}
+.num {
+    position: absolute;
+    left: 4vw;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3.2vw;
+    height: 3.2vw;
+    background: #e63876;
+    color: white;
+    border-radius: 50%;
+    font-size: 1.8vw;
+    font-weight: 700;
+    line-height: 3vw;
+    text-align: center;
+}
+.lab-result{
+    width: 80%;
+    height: 78vh;
+    margin: 1.8vw auto 0;
+    padding: 2vw;
+    background: white;
+    border-radius: 20px;
+}
+.lab-result .result-table {
+    width: 100%;
+    margin: 1vw auto;
+    height: 62vh;
+    max-width: 90vw;
+    position: relative;
+    text-align: left;
+    padding: 0;
+    overflow-y:auto;
+}
+.result-table table{
+    width: 98%;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-top:none;
+}
+.lab .lab-type {
+    position: absolute;
+    top: -5.3rem;
+}
+.lab-type.left {
+    left: 1rem;
+}
+
+.lab-type.right {
+    right: 1rem;
+}
+thead{
+    background: #405470;
+    position: sticky;
+    z-index: 5;
+    top:0;
+}
+tr{
+    border-radius: 20px;
+}
+th{
+    color:white;
+}
+.units,.name{
+    cursor: pointer;
+    position: relative;
+}
+.orgName{
+    width: 24%;
+}
+.name{
+    width: 30%;
+}
+.orgUnits{
+    width: 10%;
+}
+.units{
+    width: 13%;
+}
+.value{
+    width: 9%;
+}
+.range{
+    width: 14%;
+}
+.collapse{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height:23px;
+}
+.collapse-data{
+    position: absolute;
+    left: 0;
+    padding:10px;
+    background: white;
+    border: 1px solid  #405470;
+    border-radius: 15px;
+    width: 100%;
+    z-index: 1;
+    overflow: hidden;
+    display: none;
+}
+.collapse-data.active{
+    display: block;
+}
+ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+li{
+    display: inline-block;
+    width: 100%;
+    padding: 0.5vw;
+}
+li:hover{
+    background:  rgb(235, 239, 242);
+}
+li.no-result:hover{
+    background:white;
+    cursor:default;
+}
+.units img,.name img{
+    width: 0.8vw;
+}
+/* width */
+.result-table::-webkit-scrollbar {
+    width: 0.7vw;
+}
+ul::-webkit-scrollbar{
+    width: 0.5vw;
+}
+
+/* Track */
+.result-table::-webkit-scrollbar-track,ul::-webkit-scrollbar-track {
+    background: #d9d9d9;
+    border-radius: 20px;
+}
+
+/* Handle */
+.result-table::-webkit-scrollbar-thumb,ul::-webkit-scrollbar-thumb {
+    background: #405470;
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+.result-table::-webkit-scrollbar-thumb:hover,ul::-webkit-scrollbar-thumb:hover {
+    background: #a2a4b9;
+}
+
+@media screen and (max-width: 1440px) {
+    html {
+        font-size: 14px;
+    }
+}
+@media screen and (max-width: 1000px) {
+    html {
+        font-size: 13px;
+    }
+    .logo {
+        width: 12rem;
+        margin: 3.8rem;
+    }
+    .pink-bg-text {
+        font-size: 1.3625rem;
+        padding: 0.325rem 0.625rem;
+        line-height: 1.75rem;
+        margin-top: 0;
+    }
+    h1 {
+        font-size: 2.8rem;
+        line-height: 3.2rem;
+        margin: 3.2rem 0 3.5rem;
+        padding: 0 1rem;
+    }
+    .green-btn {
+        padding: 0 1.5625rem;
+        height: 3.375rem;
+        font-size: 1.5625rem;
+        line-height: 3.375rem;
+    }
+    .lab-compare {
+        margin: 3.75rem auto 0;
+    }
+    .lab-compare .lab {
+        height: 20rem;
+        padding: 2.1875rem;
+    }
+    .lab-result p {
+        font-size: 1.5625rem;
+        line-height: 1.875rem;
+    }
+    /* width */
+    .lab-result::-webkit-scrollbar {
+        width: 0.8rem;
+    }
+}
+@media screen and (max-width: 540px) {
+    html {
+        font-size: 12px;
+    }
+    .bg2 {
+        display: none;
+    }
+    .content {
+        overflow-y: scroll;
+    }
+    h1 {
+        font-size: 1.8rem;
+        line-height: 2.2rem;
+    }
+    h1 br {
+        display: none;
+    }
+    .hr-group {
+        display: none;
+    }
+    .green-btn {
+        font-size: 1.3rem;
+    }
+    .lab-compare {
+        margin-top: 0;
+    }
+    .lab-compare .lab {
+        width: 90vw;
+        margin-top: 5rem;
+    }
+    .lab-type.right {
+        left: 1rem;
+        right: unset;
+    }
+    .lab-result p {
+        font-size: 1.4rem;
+    }
+    .lab-result::-webkit-scrollbar {
+        width: 0.5rem;
+    }
+    .lab .lab-type {
+        top: -3.8rem;
+    }
+}
+
+@media screen and (max-width: 300px) {
+    h1 {
+        font-size: 1.6rem;
+        line-height: 2rem;
+        margin: 2rem 0;
+    }
+    .green-btn {
+        font-size: 1.2rem;
+    }
+}

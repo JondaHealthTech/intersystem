@@ -1,0 +1,25 @@
+# This file defines the Rest UrlMap studio assist database
+
+# Define the prefix mapping
+!prefix-mapping:urlmap:http://www.intersystems.com/urlmap
+
+# Set the default namespace to urlmap
+!default-namespace:http://www.intersystems.com/urlmap
+
+# Set the default prefix for element definitions that follow
+!default-prefix:urlmap
+
+/#Routes
+
+Routes/#Map
+Routes/#Route
+Routes|Extend@enum:!,true,false
+
+Map|Prefix
+Map|Forward
+
+Route|Url
+Route|Method@enum:!,GET,HEAD,POST,PUT,DELETE,TRACE,CONNECT
+Route|Call
+Route|Cors@enum:!,true,false
+Route|Disabled@enum:!,true,false

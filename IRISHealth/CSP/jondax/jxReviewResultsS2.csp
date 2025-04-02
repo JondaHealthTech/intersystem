@@ -1,0 +1,551 @@
+<html>
+    <head>
+        <script language="cache" runat="server">d HEAD1^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/jxReviewResultsS2.css" />
+    </head>
+    <body onload="jInitMe()">
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png" />
+                </div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <div class="instruct-area">
+                        <div class="main-title">
+                            <h1>Step 2: Transformation Results</h1>
+                            <button class="pink-btn" onclick="saveResult()">Save</button>
+                        </div>
+                        <p><span>Instructions: (include legend, template preferences)</span> Lorem ipsum dolor sit amet. Est nihil eaque At culpa maiores ut omnis mollitia sed magnam repellendus 33 quiaveritatis est tempora perspiciatis. Qui distinctio ullam aut cumque quia et adipisci tenetur! </p>
+                    </div>
+                    <div class="result-review">
+                        <div class="all-result active">
+                            <div class="result-nav">
+                                <div class="nav-items">
+                                    <div class="item active" onclick="openAllResult()">All Results</div>
+                                    <div class="item" onclick="openReviewOptions()">Review Options</div>
+                                </div>
+                                <div class="result-name">
+                                    <h2><span id="cName">Client Name</span> | <span id="tName" onclick="window.open('./jxViewTemp.csp','blank')">Template Name</span></h2> 
+                                </div>
+                            </div>
+                            <div class="result-content">
+                                <div class="result-table" onscroll="handleScroll(event)">
+                                    <img class="filter-btn" src="./assets/images/filter-blue.png" alt="Filter Button" onclick="toggleFilterOption(event)">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Test Name</th>
+                                                <th class="transformed-name"><img src="./assets/images/conversion.png" alt="Arrow">Transformed Test Name</th>
+                                                <th class="result">Result</th>
+                                                <th class="from-unit">From Unit <img src="./assets/images/conversion.png" alt="Arrow"></th>
+                                                <th class="convert-result" colspan="2">Converted Result</th>
+                                                <th>Lower Range</th>
+                                                <th colspan="2">Converted Lower Range</th>
+                                                <th>Upper Range</th>
+                                                <th colspan="2">Converted Upper Range</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="date">20-07-2023</td>
+                                                <td class="test-name">Creatinine</td>
+                                                <td class="transformed-name issue"><input id="test-name1" type="text" autocomplete="off" onkeyup="dataChange(event)" value="" placeholder="Translation missing"></td>
+                                                <td class="result">68</td>
+                                                <td class="from-unit">mL/min</td>
+                                                <td class="convert-result-val  ai-generate"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="70"></td>
+                                                <td class="convert-result-unit"><div class="dropdown">mL/min <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div></td>
+                                                <td class="l-range">68 ml/min</td>
+                                                <td class="l-result-val"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="68"></td>
+                                                <td class="l-result-unit"><div class="dropdown">mL/min <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div></td>
+                                                <td class="u-range">68 ml/min</td>
+                                                <td class="u-result-val"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="70"></td>
+                                                <td class="u-result-unit"><div class="dropdown">mL/min <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="date">20-07-2023</td>
+                                                <td class="test-name">eFGR</td>
+                                                <td class="transformed-name"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="eFGR"></td>
+                                                <td class="result">97</td>
+                                                <td class="from-unit">mL/min</td>
+                                                <td class="convert-result-val"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="97"></td>
+                                                <td class="convert-result-unit"><div class="dropdown">mL/min <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div></td>
+                                                <td class="l-range">60 ml/min</td>
+                                                <td class="l-result-val"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="60"></td>
+                                                <td class="l-result-unit"><div class="dropdown">mL/min <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div></td>
+                                                <td class="u-range">-</td>
+                                                <td class="u-result-val"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="-"></td>
+                                                <td class="u-result-unit"><div class="dropdown">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="date">20-07-2023</td>
+                                                <td class="test-name">AST</td>
+                                                <td class="transformed-name"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="AST"></td>
+                                                <td class="result">25</td>
+                                                <td class="from-unit">IU/L</td>
+                                                <td class="convert-result-val"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="25"></td>
+                                                <td class="convert-result-unit"><div class="dropdown">IU/L <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div></td>
+                                                <td class="l-range">0 ml/min</td>
+                                                <td class="l-result-val issue"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="0"></td>
+                                                <td class="l-result-unit"><div class="dropdown">mL/min <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div></td>
+                                                <td class="u-range">40 mL/min</td>
+                                                <td class="u-result-val"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="40"></td>
+                                                <td class="u-result-unit"><div class="dropdown">mL/min <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="date">20-07-2023</td>
+                                                <td class="test-name">ALT</td>
+                                                <td class="transformed-name"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="ALT"></td>
+                                                <td class="result">16</td>
+                                                <td class="from-unit">IU/L</td>
+                                                <td class="convert-result-val issue edited"><img src="./assets/images/info.png" alt="Info" onclick="showInfo(event)"><p class="info-text">Unit output not defined</p><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="25"></td>
+                                                <td class="convert-result-unit issue edited"><div class="dropdown">IU/L <img src="./assets/images/dropDownPink.png" alt="Dropdown"></div></td>
+                                                <td class="l-range">3 ml/min</td>
+                                                <td class="l-result-val"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="3"></td>
+                                                <td class="l-result-unit"><div class="dropdown">mL/min <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div></td>
+                                                <td class="u-range">40 mL/min</td>
+                                                <td class="u-result-val"><input type="text" autocomplete="off" onkeyup="dataChange(event)" value="40"></td>
+                                                <td class="u-result-unit"><div class="dropdown">mL/min <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="ws1"></div>
+                                    <div class="ws2"></div>
+                                    <div class="name-dropdown">
+                                        <ul>
+                                            <li onclick="changeTestName(event)">Creatinine</li>
+                                            <li onclick="changeTestName(event)">Kreatininum</li>
+                                            <li onclick="changeTestName(event)">Kreatinin</li>
+                                            <li onclick="changeTestName(event)">Kreatinine</li>
+                                        </ul>
+                                    </div>
+                                    <div class="result-filter-dropdown">
+                                        <div class="option">
+                                            <div class="round">
+                                                <input name="result" id="R1" type="radio" value="All results" checked>
+                                                <label for="R1"></label>
+                                            </div>
+                                            <p>All results</p>
+                                        </div>
+                                        <div class="option">
+                                            <div class="round">
+                                                <input name="result" id="R2" type="radio" value="In review">
+                                                <label for="R2"></label>
+                                            </div>
+                                            <p>Results with issue</p>
+                                        </div>
+                                        <button onclick="confirmFilter()">Confirm</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review-options">
+                            <div class="review-nav">
+                                <div class="nav-items">
+                                    <div class="item" onclick="openAllResult()">All Results</div>
+                                    <div class="item active"onclick="openReviewOptions()">Review Options</div>
+                                </div>
+                                <div class="result-name">
+                                    <h2><span id="cName">Client Name</span> | <span id="tName" onclick="window.open('./jxViewTemp.csp','blank')">Template Name</span></h2>
+                                </div>
+                            </div>
+                            <div class="review-content">
+                                <div class="review-select-option active">
+                                    <p>&lt;Info about review options&gt;</p>
+                                    <div class="dropdown review-toggle-btn" onclick="toggleOptions(event)">Choose an option <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                    
+                                </div>
+                                <div class="review-option-main option2">
+                                    <div class="r-option on-hold">
+                                        <div class="dropdown review-toggle-btn" onclick="toggleOptions(event)">Put file on hold <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                        <p>Putting a file on hold enables you to continue reviewing it on a later time. Using this option will mark the file as “On Hold” on the main screen.</p>
+                                    </div>
+                                    <div class="r-option transfer">
+                                        <div class="dropdown review-toggle-btn" onclick="toggleOptions(event)">Transfer to another reviewer <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                        <p>This option enables you to suspend current file review and transfer process  to another reviewer.</p>
+                                    </div>
+                                    <div class="r-option file-error">
+                                        <div class="dropdowns">
+                                            <div class="dropdown review-toggle-btn" onclick="toggleOptions(event)">Mark file as error <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                            <div class="dropdown reason-toggle-btn" onclick="toggleReason()">Select reason <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                        </div>
+                                        <p>Indicating a file as an error means it contains major readability or processing issues. Marking it means a subsequent email will be sent to the client. 
+                                           <br><mark>Note: If unsure, contact Head Reviewer before confirming.</mark>
+                                        </p>
+                                    </div>
+                                    <div class="review-note">
+                                        <textarea name="note" id="review-note" placeholder="Write additional notes here."></textarea>
+                                    </div>
+                                    <button class="green-btn" onclick="confirmReviewAction()">Confirm</button>
+                                </div>
+                                <div class="review-option-dropdown">
+                                    <ul>
+                                        <li onclick="selectROption(event)">Put file on hold</li>
+                                        <li onclick="selectROption(event)">Transfer to another reviewer</li>
+                                        <li onclick="selectROption(event)">Mark file as error</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="popup1" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>New test name entered</h4>
+                <p>Do you want to add this test name to the database?</p>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="alert('Test name is added');removePopup1();">Confirm</button>
+                    <button class="pink-btn" onclick="removePopup1()">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup2" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Hold on!</h4>
+                <p>You still have <span>Transformation Error Results</span>. Please address these in order to save the file.</p>
+                <div class="btn-group">
+                    <button class="pink-btn" onclick="removePopup2()">Go Back</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup3" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Are you sure you want to save changes?</h4>
+                <p>You will no longer be able to access this file as it will be sent to the client and subsequently deleted.</p>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="alert('Your changes are saved');removePopup3();">Confirm</button>
+                    <button class="pink-btn" onclick="removePopup3()">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup4" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Are you sure you want to put this file on hold?</h4>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="confirmOnHold()">Confirm</button>
+                    <button class="pink-btn" onclick="removePopup4()">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup5" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Are you sure you want to transfer this file to another reviewer?</h4>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="confirmTransfer()">Confirm</button>
+                    <button class="pink-btn" onclick="removePopup5()">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup6" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Are you sure to mark <br>this file as error?</h4>
+                <p>The client will be notified of this action.</p>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="confirmFileError()">Confirm</button>
+                    <button class="pink-btn" onclick="removePopup6()">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup7" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>File ID 3538 is put on hold</h4>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="window.open('./jxReviewResults.csp','_self')">Okay</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup8" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>File ID 3538 will be transferred</h4>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="window.open('./jxReviewResults.csp','_self')">Okay</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup9" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>File ID 3538 is marked as error</h4>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="window.open('./jxReviewResults.csp','_self')">Okay</button>
+                </div>
+            </div>
+        </div>
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+    <script type="text/javascript">
+        R1=self.R1;R2=self.R2;
+        let resultTable=document.getElementsByClassName("result-table")[0];
+        let ws1=document.getElementsByClassName("ws1")[0];
+        let allResult=document.getElementsByClassName("all-result")[0];
+        let reviewOptions=document.getElementsByClassName("review-options")[0];
+        let reviewOptionDropdown=document.getElementsByClassName("review-option-dropdown")[0];
+        let popup1 = document.getElementById("popup1");
+        let popup2 = document.getElementById("popup2");
+        let popup3 = document.getElementById("popup3");
+        let popup4 = document.getElementById("popup4");
+        let popup5 = document.getElementById("popup5");
+        let popup6 = document.getElementById("popup6");
+        let popup7 = document.getElementById("popup7");
+        let popup8 = document.getElementById("popup8");
+        let popup9 = document.getElementById("popup9");
+        let currentInput;
+        function jInitMe(){
+	        #server(..cInitMe())#
+        }
+        const checkScrollbar = ()=>{
+            if(resultTable.scrollHeight > resultTable.clientHeight){
+                ws1.style.right = "2.3vw";
+            }
+            else{
+                ws1.style.right = "1.5vw";
+            }
+        }
+        checkScrollbar();
+        function handleScroll(e){
+	        if(e.target.scrollLeft>10){
+                document.querySelector("th:nth-child(2)").style.borderRight="2px solid #9B9B9B";
+	        }
+	        else{
+		        document.querySelector("th:nth-child(2)").style.borderRight="none";
+	        }
+        }
+        function showInfo(e){
+            let infoText = e.target.nextElementSibling;
+            infoText.classList.add("active");
+            setTimeout(()=>{
+                infoText.classList.remove("active");
+            },2000)
+        }
+        function openTestNamePopUp(){
+            setTimeout(()=>{
+                popup1.classList.remove("inactive");
+            },100)
+        }
+        function openPopup1(){
+            setTimeout(()=>{
+                popup1.classList.remove("inactive");
+            },100)
+        }
+        function removePopup1(){
+            popup1.classList.add("inactive");
+        }
+        function saveResult(){
+            let noErrorResults = false;
+            if(noErrorResults){
+                openPopup2();
+            }
+            else{
+                openPopup3();
+            }
+        }
+        function openPopup2(){
+            setTimeout(()=>{
+                popup2.classList.remove("inactive");
+            },100)
+        }
+        function removePopup2(){
+            popup2.classList.add("inactive");
+        }
+        function openPopup3(){
+            setTimeout(()=>{
+                popup3.classList.remove("inactive");
+            },100)
+        }
+        function removePopup3(){
+            popup3.classList.add("inactive");
+        }
+        function openPopup4(){
+            setTimeout(()=>{
+                popup4.classList.remove("inactive");
+            },100)
+        }
+        function removePopup4(){
+            popup4.classList.add("inactive");
+        }
+
+        function openPopup5(){
+            setTimeout(()=>{
+                popup5.classList.remove("inactive");
+            },100)
+        }
+        function removePopup5(){
+            popup5.classList.add("inactive");
+        }
+
+        function openPopup6(){
+            setTimeout(()=>{
+                popup6.classList.remove("inactive");
+            },100)
+        }
+        function removePopup6(){
+            popup6.classList.add("inactive");
+        }
+        function openNameSuggestions(e){
+            let position = e.target.getBoundingClientRect();
+            let dropdown = document.getElementsByClassName("name-dropdown")[0];
+            dropdown.style.top = position.bottom + 10 + "px";
+            dropdown.style.left = position.left + "px";
+            if(e.target.value.length>2){
+                dropdown.classList.add("active");
+            }
+            else{
+                dropdown.classList.remove("active");
+            }
+        }
+        function toggleFilterOption(e){
+            let position = e.target.getBoundingClientRect();
+            let dropdown = document.getElementsByClassName("result-filter-dropdown")[0];
+            dropdown.style.top = position.bottom + 5 + "px";
+            dropdown.style.right = window.innerWidth - position.right + "px";
+            setTimeout(()=>{
+                dropdown.classList.toggle("active");
+            },100)
+        }
+        function confirmFilter(){
+            if(R1.checked){
+                //show all rows
+                let tablerow = document.querySelectorAll("tr");
+                for(var i=1;i<tablerow.length;i++){
+                    tablerow[i].style.display="table-row";
+                }
+                document.getElementsByClassName("result-filter-dropdown")[0].classList.remove("active");
+            }
+            else{
+                //remove row without issues
+                let tablerow = document.querySelectorAll("tr");
+                for(var i=1;i<tablerow.length;i++){
+                    let issue = tablerow[i].querySelectorAll("td.issue");
+                    let aiGenerate = tablerow[i].querySelectorAll("td.ai-generate");
+                    if(issue.length==0 && aiGenerate.length==0){
+                        tablerow[i].style.display="none";
+                    }
+                }
+                document.getElementsByClassName("result-filter-dropdown")[0].classList.remove("active");
+            }
+            checkScrollbar();
+        }
+        function removeSuggestions(){
+            document.getElementsByClassName("name-dropdown")[0].classList.remove("active");
+        }
+        function changeTestName(e){
+            currentInput.value=e.target.innerHTML;
+            removeSuggestions();
+        }
+        function openAllResult(){
+            allResult.classList.add("active");
+            reviewOptions.classList.remove("active");
+        }
+        function openReviewOptions(){
+            allResult.classList.remove("active");
+            let reviewOptionMain = document.getElementsByClassName("review-option-main")[0];
+            let reviewSelectOption = document.getElementsByClassName("review-select-option")[0];
+            if(reviewOptionMain.classList.contains("active")){
+                reviewOptionMain.classList.remove("active");
+                reviewSelectOption.classList.add("active");
+            }
+            reviewOptions.classList.add("active");
+        }
+        function toggleOptions(e){
+            let elem = e.target;
+            if(elem.tagName=="IMG"){
+                elem = elem.parentElement;
+            }
+            let position=elem.getBoundingClientRect();
+            reviewOptionDropdown.style.top=position.bottom + 5 + "px";
+            reviewOptionDropdown.style.left=position.left + "px";
+            setTimeout(()=>{
+                reviewOptionDropdown.classList.toggle("active");
+            },100)
+        }
+        function selectROption(e){
+            reviewOptionDropdown.classList.remove("active");
+            let reviewOptionMain = document.getElementsByClassName("review-option-main")[0];
+            let reviewSelectOption = document.getElementsByClassName("review-select-option")[0];
+            if(reviewSelectOption.classList.contains("active")){
+                reviewSelectOption.classList.remove("active");
+                reviewOptionMain.classList.add("active");
+            }
+            if(reviewOptionMain.classList.contains("active")){
+                reviewOptionMain.classList.remove("option1");
+                reviewOptionMain.classList.remove("option2");
+                reviewOptionMain.classList.remove("option3");
+            }
+            switch(e.target.innerHTML){
+                case "Put file on hold":reviewOptionMain.classList.add("option1");break;
+                case "Transfer to another reviewer":reviewOptionMain.classList.add("option2");break;
+                case "Mark file as error":reviewOptionMain.classList.add("option3");break;
+            }
+        }
+        function dataChange(e){
+            if(e.target.parentElement.classList.contains("transformed-name")){
+                currentInput = e.target;
+                openNameSuggestions(e);
+            }
+            e.target.parentElement.classList.add("edited");
+        }
+        function confirmReviewAction(){
+            let reviewOptionMain = document.getElementsByClassName("review-option-main")[0];
+            switch(reviewOptionMain.className.split(" ")[2]){
+                case "option1":openPopup4();break;
+                case "option2":openPopup5();break;
+                case "option3":openPopup6();break;
+            }
+        }
+        function confirmOnHold(){
+            removePopup4();
+            popup7.classList.remove("inactive");
+        }
+        function confirmTransfer(){
+            removePopup5();
+            popup8.classList.remove("inactive");
+        }
+        function confirmFileError(){
+            removePopup6();
+            popup9.classList.remove("inactive");
+        }
+        document.addEventListener("click",(e)=>{
+            if(e.target.closest(".popup-dialog") == null){
+                removePopup1();
+                removePopup2();
+                removePopup3();
+                removePopup4();
+                removePopup5();
+                removePopup6();
+            }
+            if(e.target.closest(".name-dropdown") == null && e.target.closest("#test-name")==null){
+                removeSuggestions();
+            }
+            if(e.target.closest(".review-option-dropdown") == null && e.target.closest(".review-toggle-btn") == null){
+                reviewOptionDropdown.classList.remove("active");
+            }
+            if(e.target.closest(".result-filter-dropdown") == null && e.target.closest(".filter-btn")==null){
+                document.getElementsByClassName("result-filter-dropdown")[0].classList.remove("active");
+            }
+        })
+    </script>
+<script language="cache" method="cInitMe">
+	d INIT^WSP999
+</script>
+</html>

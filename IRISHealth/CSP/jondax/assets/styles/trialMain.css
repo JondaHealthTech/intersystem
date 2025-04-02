@@ -1,0 +1,107 @@
+.side-nav {
+    padding: 0;
+}
+.nav-item.active-nav {
+    background-color: rgba(86, 196, 197, 0.3);
+}
+.nav-item img.dark {
+    display: none; /* Hide the dark images by default */
+}
+
+/* Style for active nav item */
+.nav-item.active-nav img {
+    display: none; /* Hide the default images */
+}
+
+.nav-item.active-nav img.dark {
+    display: inline; /* Show the dark images */
+}
+
+
+.popup-dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 30px;
+    width: 51vw;
+    height: 70vh;
+    padding:1.5vw 2vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+img.close-btn{
+    width: 20px !important;
+    height: 20px !important;
+}
+.popup-dialog h4{
+   line-height: normal;
+   color:black;
+   font-size:25px;
+   margin:10px;
+}
+.popup-dialog p{
+   color:black;
+   font-size:18px;
+   font-weight:400;
+   margin:0;
+}
+.popup-dialog p.pink-text{
+   color:#e63876;
+   font-size:18px;
+   font-weight:400;
+   margin:0;
+}
+input.delete-text{
+    background: none;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    padding: 0.8vw 1vw;
+    width: 80%;
+    font-family: Montserrat;
+    font-size: 1vw;
+    font-weight: 400;
+    line-height: 1.5vw;
+}
+.close-btn {
+    margin:10px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    opacity: 0.8;
+}
+.blue-btn{
+    padding:0.5vw 1vw;
+    color:white;
+    width:200px;
+    height:40px;
+    font-size:18px;
+    background: #405470;
+    border-radius: 15px;
+    border: none;
+    margin-top: 5px;
+}
+button[disabled]{
+    background-color: grey;
+}
+
+.pink-btn {
+    padding: inherit;
+    color: #ffffff;
+    width: 106px;
+    height: 18px;
+    font-family: Montserrat;
+    font-size: 12px;
+    font-weight: 400;
+    background: #e63876;
+    border-radius: 15px;
+    border: none;
+    margin-top: 0.8rem;
+}

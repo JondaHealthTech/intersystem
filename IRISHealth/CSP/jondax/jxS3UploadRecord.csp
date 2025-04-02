@@ -1,0 +1,14 @@
+<html>
+<head>
+</head>
+<body>
+<csp:if condition='($data(%request.MimeData("fileupload",1)))'>
+    <script language="Cache" runat="server">
+    	d UploadFiles^jxS3Upload
+    	;d UploadFiles^jxBuckets
+    	q
+    </script>
+    <!--</ul>-->
+</csp:if>
+</body>
+</html>

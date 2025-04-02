@@ -1,0 +1,456 @@
+!PATROLV3.4.00 BB8A36609A1B9B96DE75A54F87B7AABD
+!++
+!
+! PATROL Session Knowledge Module
+!
+!--
+
+
+VERSION 1.39
+
+APPLICATIONS = { 
+  { NAME = "ISC_CACHE_CONFIG",
+	ACTIVE = True,
+	SECURITY = False,
+	PROPAGATE_STATE = True,
+	CREATE_ICON = False,
+	SUSPEND_GLOBAL_PARAMS = False,
+	SHOWINST = False,
+	DISCOVERY_TIME = 0,
+	DISCOVERY = PSL,
+	OK_PICTURE = "database_ok.bmp",
+	COMMANDS = {
+		{ NAME = "Remove Configuration", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  983995844 "wconfig = get(\"sid\");\
+destroy(\"/ISC_CACHE_CONFIG/\".wconfig);\
+print(\"\\nISC_Cache-Info: Config removed  = \",wconfig);"}
+				}
+		},
+		{ NAME = "Process Status", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  988831941 "\
+wconfig = get(\"sid\");\
+psort = trim(get(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_ProcSort\"),\"\\n\");\
+if (psort == NULL) {\
+    psort = 1;\
+}\
+slist = \"Glo\\nGloD\\nRou\\nRouD\";\
+cont = TRUE;\
+\
+proclist = get(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_Proc\".trim(nthlinef(slist,psort),\"\\n\"));\
+#print(\"\\nslist = \",slist,\" psort = \",psort,\" proclist = \",proclist);\
+if (proclist == NULL) {\
+   proclist = \"\\nNo process data available.\\n\\n\";\
+} \
+\
+rsp = response(\"Process Status for Cache configuration \".wconfig, \"\", \"D=1,h=400,w=200,o=@Update,c=Close\",\
+	\"0\\n     PID     Global   (Delta)  Commands   (Delta)      Dir   Routine     State  Device\",\
+    	\"22\\n\" . proclist,\
+	\"14\\n1\",\
+	\"15\\n2\",\
+	\"0\\nSort by: \",\
+	\"10\\n\\n\".psort.\"\\nGlobal Total\\nGlobal Delta\\nCommand Total\\nCommand Delta\");\
+\
+while (cont)\
+{\
+    update = response_get_value(rsp,0);\
+\
+    if (errno) {\
+	print(\"\\nISC_Cache-Error: Error returned from Process Status window = \",errno);\
+	exit;\
+    }\
+\
+#    print(\"\\nResponse = \".update);\
+\
+    if (update) {\
+	psort = trim(nthlinef(update,3),\"\\n\");\
+#	print(\"\\nSort = \".nthlinef(slist,psort));\
+	proclist = get(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_Proc\".trim(nthlinef(slist,psort),\"\\n\"));\
+	if (proclist == NULL) {\
+	   proclist = \"\\nNo process data available.\\n\\n\";\
+	}\
+	response(rsp, \"\", \"D=1,h=400,w=200,o=@Update,c=Close\",\
+	\"0\\n     PID     Global   (Delta)  Commands   (Delta)      Dir   Routine     State  Device\",\
+    	\"22\\n\" . proclist,\
+	\"14\\n1\",\
+	\"15\\n2\",\
+	\"0\\nSort by: \",\
+	\"10\\n\\n\".psort.\"\\nGlobal Total\\nGlobal Delta\\nCommand Total\\nCommand Delta\");\
+    }\
+    else {\
+	cont = 0;\
+    }\
+}\
+\
+# Remember last sort order\
+set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_ProcSort\",psort);"}
+				}
+		},
+		{ NAME = "License Status", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1012332974 "\
+wconfig = get(\"sid\");\
+cont = TRUE;\
+lichead=\"     License Usage               Available   Maximum   Minimum   \";\
+licdata = get(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_License\");\
+if (licdata == NULL) {\
+   licdata = \"\\nNo license data available.\\n\\n\";\
+} \
+\
+rsp = response(\"License Status for Cache configuration \".wconfig, \"\", \"D=1,h=400,w=200,o=@Update,c=Close\",\
+	\"0\\n\" . lichead,\
+    	\"22\\n\" . \"\\n\".licdata.\"\\n\\n\");\
+\
+while (cont)\
+{\
+    update = response_get_value(rsp,0);\
+\
+    if (errno) {\
+	print(\"\\nISC_Cache-Error: Error returned from License Status window = \",errno);\
+	exit;\
+    }\
+\
+#    print(\"\\nResponse = \".update);\
+\
+    if (update) {\
+	licdata = get(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_License\");\
+	if (licdata == NULL) {\
+   		licdata = \"\\nNo license data available.\\n\\n\";\
+	} \
+	response(rsp, \"\", \"D=1,h=400,w=200,o=@Update,c=Close\",\
+		\"0\\n\" . lichead,\
+    		\"22\\n\" . \"\\n\".licdata.\"\\n\\n\");\
+    }\
+    else {\
+	cont = 0;\
+    }\
+}"}
+				}
+		}
+
+	},
+	ENVIRONMENT = {  "ISC_Directory" = "",  "ISC_License" = "",  "ISC_Loop" = "",  "ISC_ProcGlo" = "",  "ISC_ProcGloD" = "",  "ISC_ProcRou" = "",  "ISC_ProcRouD" = "",  "ISC_ProcSort" = "2" },
+	PARAMETERS = {
+		{	NAME = "ISC_Collector", PARAM_TYPE = COLLECTOR, ACTIVE = True, MONITOR = False, CHECK = False,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1034282372 "# Get config name and point to config instance to get manager directory\
+wconfig = get(\"sid\");\
+path = \"/ISC_CACHE_CONFIG/\".wconfig;\
+#print(\"\\npath = \",path);\
+tapp = get(\"/appType\");\
+\
+idir= get(path.\"/ISC_Directory\");\
+#print(\"\\nDir = \",idir);\
+mgrdir = (tapp == \"VMS\") ? substr(idir,1,length(idir)-1).\".mgr]\" : idir.\"/mgr\";\
+#print(\"\\nMgrDir = \",mgrdir);\
+cfile = (tapp == \"VMS\") ? mgrdir.\"patrol.dat\" : mgrdir.\"/patrol.dat\";\
+#print(\"\\nPatrol data file = \",cfile,\"\\n\");\
+\
+chan = fopen(cfile,\"r\");\
+if (chan_exists(chan)) {\
+	head=readln(chan);\
+	if (errno == 55) {\
+		print(\"\\nISC_Cache-Error: Unable to read data file \",cfile);\
+		close(chan);	\
+		exit;\
+	}\
+	timestamp=readln(chan);\
+	if (errno == 55) {\
+		print(\"\\nISC_Cache-Error: Unable to read data file \",cfile);\
+		close(chan);	\
+		exit;\
+	}\
+	loop=readln(chan);\
+	if (errno == 55) {\
+		print(\"\\nISC_Cache-Error: Unable to read data file \",cfile);\
+		close(chan);	\
+		exit;\
+	}\
+	gstat=readln(chan);\
+	if (errno == 55) {\
+		print(\"\\nISC_Cache-Error: Unable to read data file \",cfile);\
+		close(chan);	\
+		exit;\
+	}\
+	dstat=readln(chan);\
+	if (errno == 55) {\
+		print(\"\\nISC_Cache-Error: Unable to read data file \",cfile);\
+		close(chan);	\
+		exit;\
+	}\
+	mstat=readln(chan);\
+	if (errno == 55) {\
+		print(\"\\nISC_Cache-Error: Unable to read data file \",cfile);\
+		close(chan);	\
+		exit;\
+	}\
+	ostat=readln(chan);\
+	if (errno == 55) {\
+		print(\"\\nISC_Cache-Error: Unable to read data file \",cfile);\
+		close(chan);	\
+		exit;\
+	}\
+\
+#	print(\"ISC Cache data = \",gstat,\"\\n\");\
+}\
+else {\
+	print(\"\\nISC_Cache-Error: Unable to open data file \",cfile);\
+	exit;\
+}\
+\
+# Verify file\
+\
+#print(\"\\nFile header = \",head,\"\\n\");\
+#print(\"\\nTimestamp = \",timestamp,\"\\n\");\
+#print(\"\\nConvert to \",convert_date(timestamp),\" (\",errno,\")\\n\");\
+#print(\"\\nCompare to \",time(),\"\\n\");\
+\
+\
+if (head != \"Cache - Patrol data file V1.0\") {\
+	print(\"\\nISC_Cache-Error: File \",cfile,\" not an ISC Cache data file\");\
+	close(chan);	\
+	exit;\
+}\
+if (convert_date(timestamp) < time() - 600) {\
+	print(\"\\nISC_Cache-Error: Timestamp not current in file \",cfile);\
+	close(chan);	\
+	exit;\
+}\
+\
+#print(\"\\nInternal loop = \",get(path.\"/ISC_Loop\"),\", read loop = \",loop,\" \",(get(path.\"/ISC_Loop\")==loop));\
+if (get(path.\"/ISC_Loop\") != loop) {\
+	set(path.\"/ISC_Collector/interval\",loop);\
+	set(path.\"/ISC_Loop\",loop);\
+	print(\"\\nISC_Cache-Info: Collector loop timer reset to \",loop);\
+\
+}\
+\
+\
+\
+# Data strings from Cache\
+#\
+# dstat=\"PhyDirReads(1),PhyUptrReads(2),PhyBptrReads(3),PhyDataReads(4),PhyRouReads(5),PhyMapReads(6),PhyOtherReads(7),PhyDirWrites(8),PhyUptrWrites(9),PhyBptrWrites(10),PhyDataWrites(11),PhyRouWrites(12),PhyMapWrites(13),PhyOtherWrites(14),LogDirReads(15),LogUptrReads(16),LogBptrReads(17),LogDataReads(18),LogRouReads(19),LogMapReads(20),LogOtherReads(21)\"\
+# gstat=\"GlobalRefs(1),GlobalSets(2),GlobalKills(3),JrnEntries(4),BlocksAllocated(5),NetGloRefs(6),NetGloSets(7),NetGloKills(8),NetReqSent(9),NetCacheHits(10),NetCacheMisses(11),NetLocks(12),MLines(13),RoutineLoads(14),RoutineFetches(15),Locks(16),LocksSucceed(17),LocksFailed(18),TermReads(19),TermWrites(20),TermCharReads(21),TermCharWrites(22),SeqReads(23),SeqWrites(24),NetRetrans(25),NetBuffers(26)\"\
+# mstat=\"JobInGlobal(1),WDQueSize(2),AvailBuffs(3),NetGloJobs(4),QueGaccess(5),QueGaccUpd(6),QueGBFAny(7),QueGBFSpec(8),JrnFileSize(9),JrnEndOffset(10),TotGlobalBuffs(11),GThrottleCur(12),GThrottleMax(13),GThrottleCnt(14)\"\
+# ostat=\"ProcessCount(1),CacheEfficiency(2),LicenseType(3),LicenseAvail(4),LicenseMax(5),LicenseMin(6)\
+\
+\
+# Overview\
+\
+# Parse, format and store license data\
+# \"     License Usage               Available   Maximum    Minimum   \"\
+temp=nthargf(ostat,\"3\",\",\");\
+licdata=\"    \".temp.substr(\"                             \",1,29-length(temp));\
+temp=nthargf(ostat,\"4\",\",\");\
+licdata=licdata.\"  \".temp.substr(\"        \",1,8-length(temp));\
+temp=nthargf(ostat,\"5\",\",\");\
+licdata=licdata.\"  \".temp.substr(\"        \",1,8-length(temp));\
+licdata=licdata.\"  \".nthargf(ostat,\"6\",\",\");\
+licmax=nthargf(ostat,\"5\",\",\");\
+set(path.\"/ISC_License\",licdata);\
+\
+path = \"/ISC_CACHE_OVERVIEW/OVERVIEW_\".wconfig;\
+\
+# Done in ^PATROL now\
+#lreads=nthargf(dstat,\"15\",\",\") + nthargf(dstat,\"16\",\",\") + nthargf(dstat,\"17\",\",\") + nthargf(dstat,\"18\",\",\");\
+#lreads=lreads + nthargf(dstat,\"19\",\",\") + nthargf(dstat,\"20\",\",\") + nthargf(dstat,\"21\",\",\");\
+#preads=nthargf(dstat,\"1\",\",\") + nthargf(dstat,\"2\",\",\") + nthargf(dstat,\"3\",\",\") + nthargf(dstat,\"4\",\",\");\
+#preads=preads + nthargf(dstat,\"5\",\",\") + nthargf(dstat,\"6\",\",\") + nthargf(dstat,\"7\",\",\");\
+\
+#print(\"\\nLog reads = \",lreads,\" Phy reads = \",preads,\"\\n\");\
+\
+set(path.\"/ISC_GlobalRefs_/value\",nthargf(gstat,\"1\",\",\"));\
+set(path.\"/ISC_NetGloRefs_/value\",nthargf(gstat,\"6\",\",\"));\
+set(path.\"/ISC_RoutineLines_/value\",nthargf(gstat,\"13\",\",\"));\
+set(path.\"/ISC_RoutineLoads_/value\",nthargf(gstat,\"14\",\",\"));\
+set(path.\"/ISC_Locks_/value\",nthargf(gstat,\"16\",\",\"));\
+set(path.\"/ISC_ProcessCount/value\",nthargf(ostat,\"1\",\",\"));\
+set(path.\"/ISC_CacheEfficiency/value\",nthargf(ostat,\"2\",\",\"));\
+set(path.\"/ISC_LicensesUsed/value\",licmax);\
+set(path.\"/ISC_LicensesUsed/value\",nthargf(ostat,\"5\",\",\")-nthargf(ostat,\"4\",\",\"));\
+\
+# Global\
+\
+path = \"/ISC_CACHE_GLOBAL/GLOBAL_\".wconfig;\
+\
+greads = nthargf(gstat,\"1\",\",\") - nthargf(gstat,\"2\",\",\") - nthargf(gstat,\"3\",\",\");\
+\
+set(path.\"/ISC_GlobalRefs/value\",nthargf(gstat,\"1\",\",\"));\
+set(path.\"/ISC_GlobalSets/value\",nthargf(gstat,\"2\",\",\"));\
+set(path.\"/ISC_GlobalKills/value\",nthargf(gstat,\"3\",\",\"));\
+set(path.\"/ISC_GlobalReads/value\",greads);\
+set(path.\"/ISC_BlocksAllocated/value\",nthargf(gstat,\"5\",\",\"));\
+set(path.\"/ISC_Locks/value\",nthargf(gstat,\"16\",\",\"));\
+set(path.\"/ISC_LocksSucceed/value\",nthargf(gstat,\"17\",\",\"));\
+set(path.\"/ISC_LocksFailed/value\",nthargf(gstat,\"18\",\",\"));\
+set(path.\"/ISC_JobInGlobal/value\",nthargf(mstat,\"1\",\",\"));\
+set(path.\"/ISC_WDQueSize/value\",nthargf(mstat,\"2\",\",\"));\
+set(path.\"/ISC_GlobalAvailBuffs/value\",nthargf(mstat,\"3\",\",\"));\
+set(path.\"/ISC_QueGaccess/value\",nthargf(mstat,\"5\",\",\"));\
+set(path.\"/ISC_QueGaccUpd/value\",nthargf(mstat,\"6\",\",\"));\
+set(path.\"/ISC_QueGBFAny/value\",nthargf(mstat,\"7\",\",\"));\
+set(path.\"/ISC_QueGBFSpec/value\",nthargf(mstat,\"8\",\",\"));\
+set(path.\"/ISC_JrnEntries/value\",nthargf(gstat,\"4\",\",\"));\
+set(path.\"/ISC_JrnFileSize/value\",nthargf(mstat,\"9\",\",\"));\
+set(path.\"/ISC_JrnEndOffset/value\",nthargf(mstat,\"10\",\",\"));\
+set(path.\"/ISC_TotGlobalBuffs/value\",nthargf(mstat,\"11\",\",\"));\
+set(path.\"/ISC_GThrottleCur/value\",nthargf(mstat,\"12\",\",\"));\
+set(path.\"/ISC_GThrottleMax/value\",nthargf(mstat,\"13\",\",\"));\
+set(path.\"/ISC_GThrottleCnt/value\",nthargf(mstat,\"14\",\",\"));\
+\
+# Routines\
+\
+path = \"/ISC_CACHE_ROUTINE/ROUTINE_\".wconfig;\
+\
+set(path.\"/ISC_RoutineLines/value\",nthargf(gstat,\"13\",\",\"));\
+set(path.\"/ISC_RoutineLoads/value\",nthargf(gstat,\"14\",\",\"));\
+set(path.\"/ISC_RoutineFetches/value\",nthargf(gstat,\"15\",\",\"));\
+\
+# Disk Activity\
+\
+path = \"/ISC_CACHE_DISK/DISK_\".wconfig;\
+\
+set(path.\"/ISC_PhyDirReads/value\",nthargf(dstat,\"1\",\",\"));\
+set(path.\"/ISC_PhyUptrReads/value\",nthargf(dstat,\"2\",\",\"));\
+set(path.\"/ISC_PhyBptrReads/value\",nthargf(dstat,\"3\",\",\"));\
+set(path.\"/ISC_PhyDataReads/value\",nthargf(dstat,\"4\",\",\"));\
+set(path.\"/ISC_PhyRouReads/value\",nthargf(dstat,\"5\",\",\"));\
+set(path.\"/ISC_PhyMapReads/value\",nthargf(dstat,\"6\",\",\"));\
+set(path.\"/ISC_PhyOtherReads/value\",nthargf(dstat,\"7\",\",\"));\
+set(path.\"/ISC_PhyDirWrites/value\",nthargf(dstat,\"8\",\",\"));\
+set(path.\"/ISC_PhyUptrWrites/value\",nthargf(dstat,\"9\",\",\"));\
+set(path.\"/ISC_PhyBptrWrites/value\",nthargf(dstat,\"10\",\",\"));\
+set(path.\"/ISC_PhyDataWrites/value\",nthargf(dstat,\"11\",\",\"));\
+set(path.\"/ISC_PhyRouWrites/value\",nthargf(dstat,\"12\",\",\"));\
+set(path.\"/ISC_PhyMapWrites/value\",nthargf(dstat,\"13\",\",\"));\
+set(path.\"/ISC_PhyOtherWrites/value\",nthargf(dstat,\"14\",\",\"));\
+set(path.\"/ISC_LogDirReads/value\",nthargf(dstat,\"15\",\",\"));\
+set(path.\"/ISC_LogUptrReads/value\",nthargf(dstat,\"16\",\",\"));\
+set(path.\"/ISC_LogBptrReads/value\",nthargf(dstat,\"17\",\",\"));\
+set(path.\"/ISC_LogDataReads/value\",nthargf(dstat,\"18\",\",\"));\
+set(path.\"/ISC_LogRouReads/value\",nthargf(dstat,\"19\",\",\"));\
+set(path.\"/ISC_LogMapReads/value\",nthargf(dstat,\"20\",\",\"));\
+set(path.\"/ISC_LogOtherReads/value\",nthargf(dstat,\"21\",\",\"));\
+\
+# Network\
+\
+path = \"/ISC_CACHE_NETWORK/NETWORK_\".wconfig;\
+\
+ngreads = nthargf(gstat,\"6\",\",\") - nthargf(gstat,\"7\",\",\") - nthargf(gstat,\"8\",\",\");\
+\
+set(path.\"/ISC_NetGloRefs/value\",nthargf(gstat,\"6\",\",\"));\
+set(path.\"/ISC_NetGloSets/value\",nthargf(gstat,\"7\",\",\"));\
+set(path.\"/ISC_NetGloKills/value\",nthargf(gstat,\"8\",\",\"));\
+set(path.\"/ISC_NetGloReads/value\",nthargf(gstat,\"8\",\",\"));\
+set(path.\"/ISC_NetReqSent/value\",ngreads);\
+set(path.\"/ISC_NetCacheHits/value\",nthargf(gstat,\"10\",\",\"));\
+set(path.\"/ISC_NetCacheMisses/value\",nthargf(gstat,\"11\",\",\"));\
+set(path.\"/ISC_NetLocks/value\",nthargf(gstat,\"12\",\",\"));\
+set(path.\"/ISC_NetRetrans/value\",nthargf(gstat,\"25\",\",\"));\
+set(path.\"/ISC_NetBuffers/value\",nthargf(gstat,\"26\",\",\"));\
+set(path.\"/ISC_NetGloJobs/value\",nthargf(mstat,\"4\",\",\"));\
+\
+# Other\
+\
+path = \"/ISC_CACHE_OTHER/OTHER_\".wconfig;\
+\
+set(path.\"/ISC_TermReads/value\",nthargf(gstat,\"19\",\",\"));\
+set(path.\"/ISC_TermWrites/value\",nthargf(gstat,\"20\",\",\"));\
+set(path.\"/ISC_TermCharReads/value\",nthargf(gstat,\"21\",\",\"));\
+set(path.\"/ISC_TermCharWrites/value\",nthargf(gstat,\"22\",\",\"));\
+set(path.\"/ISC_SeqReads/value\",nthargf(gstat,\"23\",\",\"));\
+set(path.\"/ISC_SeqWrites/value\",nthargf(gstat,\"24\",\",\"));\
+\
+\
+# Processes\
+\
+proclist = \"\";\
+\
+do {\
+    text = readln(chan);\
+    if (errno == 55) {\
+	print(\"\\nISC_Cache-Error: Unable to read data file \",cfile);\
+	close(chan);	\
+	exit;\
+    }\
+    if (text != \"*\") {\
+	proclist = proclist.text.\"\\n\";\
+    }\
+} until (text == \"*\");\
+\
+set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_ProcGlo\",proclist);\
+\
+proclist = \"\";\
+\
+do {\
+    text = readln(chan);\
+    if (errno == 55) {\
+	print(\"\\nISC_Cache-Error: Unable to read data file \",cfile);\
+	close(chan);	\
+	exit;\
+    }\
+    if (text != \"*\") {\
+	proclist = proclist.text.\"\\n\";\
+    }\
+} until (text == \"*\");\
+\
+set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_ProcRou\",proclist);\
+\
+proclist = \"\";\
+\
+do {\
+    text = readln(chan);\
+    if (errno == 55) {\
+	print(\"\\nISC_Cache-Error: Unable to read data file \",cfile);\
+	close(chan);	\
+	exit;\
+    }\
+    if (text != \"*\") {\
+	proclist = proclist.text.\"\\n\";\
+    }\
+} until (text == \"*\");\
+\
+set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_ProcGloD\",proclist);\
+\
+proclist = \"\";\
+\
+do {\
+    text = readln(chan);\
+    if (errno == 55) {\
+	print(\"\\nISC_Cache-Error: Unable to read data file \",cfile);\
+	close(chan);	\
+	exit;\
+    }\
+    if (text != \"*\") {\
+	proclist = proclist.text.\"\\n\";\
+    }\
+} until (text == \"*\");\
+\
+set(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_ProcRouD\",proclist);\
+\
+# debug - print out environment data\
+#temp=get(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_Directory\");\
+#print(\"\\n ISC_Directory = \".temp);\
+#temp=get(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_Loop\");\
+#print(\"\\n ISC_Loop = \".temp);\
+#temp=get(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_ProcSort\");\
+#print(\"\\n ISC_ProcSort = \".temp);\
+#temp=get(\"/ISC_CACHE_CONFIG/\".wconfig.\"/ISC_License\");\
+#print(\"\\n ISC_License = \".temp);\
+#print(\"\\n\");\
+\
+close(chan);"}
+				},
+			START = "ASAP",
+			POLL_TIME = "30", EXTERNAL_POLLING = False
+		}
+
+	}
+  }
+}
+!64113

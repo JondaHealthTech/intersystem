@@ -1,0 +1,32 @@
+<csp:StudioGenerateTemplate><script language="Cache" runat="server">
+ Set tRows = $get(%request.Data("rows",1),1)
+ Set tRows = $S(tRows<0:0,tRows>1000:1000,1:tRows)
+ Set tCols = $get(%request.Data("rows",1),1)
+ Set tCols = $S(tCols<0:0,tCols>100:100,1:tCols)
+
+ Write "<table"
+ Write:($get(%request.Data("bgcolor",1))'="") " bgcolor=""",%request.Data("bgcolor",1),""""
+ Write:($get(%request.Data("border",1))'="") " border=""",%request.Data("border",1),""""
+ Write:($get(%request.Data("cols",1))'="") " cols=""",tCols,""""
+ Write:($get(%request.Data("cellpadding",1))'="") " cellpadding=""",%request.Data("cellpadding",1),""""
+ Write:($get(%request.Data("cellspacing",1))'="") " cellspacing=""",%request.Data("cellspacing",1),""""
+ Write ">",!
+ 
+ If ($data(%request.Data("headers",1))) {
+	Write "<tr>"
+	For c = 1:1:tCols {
+		Write "<th>",c,"</th>"
+	}
+	Write "</tr>",!
+ }
+
+ For r = 1:1:tRows {
+	 Write "<tr>"
+		For c = 1:1:tCols {
+			Write "<td>",$zconvert($get(%request.Data("content",1)),"O","HTML"),"</td>"
+		}
+	 Write "</tr>",!
+ }
+ 
+ Write "</table>",!
+</script>

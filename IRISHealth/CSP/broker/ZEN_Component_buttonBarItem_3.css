@@ -1,0 +1,17 @@
+/* @class="%ZEN.Component.buttonBarItem" */
+/* @doc="Enclosing div for COMP_NAME." */
+.buttonBarItem {
+    display:block;
+    cursor:pointer;
+    font: 12px sans-serif;
+    background: #e0e0e0;
+    color: black;
+}
+
+.zenToolTip {
+    background: white;
+    border:2px ridge #0000aa;
+    font:12px sans-serif;
+}
+
+/* EOF */

@@ -1,0 +1,12 @@
+<html>
+<head>
+</head>
+<body>
+<csp:if condition='($data(%request.MimeData("fileupload",1)))'>
+    <script language="Cache" runat="server">
+    	d Save^trialUpload
+    </script>
+    </ul>
+</csp:if>
+</body>
+</html>

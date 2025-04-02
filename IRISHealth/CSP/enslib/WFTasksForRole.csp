@@ -1,0 +1,60 @@
+<!--
+Workflow: List of tasks for specific role
+-->
+
+<AutoPage domain="Ensemble" pagename="Workflow Tasks" parentpage="WFRoles.csp" useframes="1">
+
+<Pane name="Info" type="%CSP.Util.TablePane">
+	<Text>The following tasks are currently assigned to the role {$ID1}.</Text>
+	<Query>EnsLib.Workflow.Engine:ListTasksForRole</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>false</ShowZebra>
+	<ShowRowNumbers>true</ShowRowNumbers>
+	<AutoRefresh>true</AutoRefresh>
+	<HiddenColumns>IsComplete</HiddenColumns>
+
+	<Conditions>
+		<!-- unassigned -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Unassigned</Value>
+			<RowStyle>background: yellow;</RowStyle>
+		</Condition>
+
+		<!-- assigned -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Assigned</Value>
+			<RowStyle>background: #AAAAFF;</RowStyle>
+		</Condition>
+
+		<!-- discarded -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Discarded</Value>
+			<RowStyle>background: #FFA0A0; color: #808080; font-size: 0.8em;</RowStyle>
+		</Condition>
+
+		<!-- cancelled -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Cancelled</Value>
+			<RowStyle>background: orange; color: #808080; font-size: 0.8em;</RowStyle>
+		</Condition>
+
+		<!-- completed -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Completed</Value>
+			<RowStyle>background: #D0D0D0; color: #808080; font-size: 0.8em;</RowStyle>
+		</Condition>
+	</Conditions>
+
+</Pane>
+
+</AutoPage>

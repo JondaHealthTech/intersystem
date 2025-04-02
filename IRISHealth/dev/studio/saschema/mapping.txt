@@ -1,0 +1,27 @@
+# This file defines the JSON Mapping studio assist database
+
+# Define the prefix mapping
+!prefix-mapping:map:http://www.intersystems.com/jsonmapping
+
+# Set the default namespace to urlmap
+!default-namespace:http://www.intersystems.com/jsonmapping
+
+# Set the default prefix for element definitions that follow
+!default-prefix:map
+
+/#Mapping
+
+Mapping|IgnoreInvalidField@enum:!,true,false
+Mapping|Null@enum:!,true,false
+Mapping|IgnoreNull@enum:!,true,false
+Mapping|Mapping
+Mapping|Reference
+Mapping/#Property
+
+Property|Name
+Property|FieldName
+Property|Include
+Property|Null@enum:!,true,false
+Property|IgnoreNull@enum:!,true,false
+Property|Mapping
+Property|Reference

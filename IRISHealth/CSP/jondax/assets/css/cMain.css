@@ -1,0 +1,30 @@
+nav-item.active-nav {
+    background-color: rgba(86, 196, 197, 0.3);
+}
+.nav-item img.dark {
+    display: none; /* Hide the dark images by default */
+}
+
+.nav-item.active-nav img {
+    display: none; /* Hide the default images */
+}
+
+.nav-item.active-nav img.dark {
+    display: inline; /* Show the dark images */
+}
+
+span.circle {
+    background: #FF0083;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    color: #FFF;
+    display: inline-block;
+    font-weight: bold;
+    font-size:7px;
+    line-height: 10px;
+    width: 10px;
+    margin-right: 5px;
+    text-align: center;
+    display:none;
+  }

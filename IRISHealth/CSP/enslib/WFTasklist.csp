@@ -1,0 +1,91 @@
+<!--
+Workflow: Task browser
+-->
+
+<AutoPage domain="Ensemble" pagename="Task Browser" parentpage="WFHome.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Workflow Tasks</Text>
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>The table below shows the most recent Workflow tasks.</Text>
+	<Query>EnsLib.Workflow.Engine:Tasklist</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>false</ShowZebra>
+	<ShowRowNumbers>true</ShowRowNumbers>
+	<AutoRefresh>true</AutoRefresh>
+	<HiddenColumns>IsComplete</HiddenColumns>
+
+	<Actions>
+		<Action href="WFTaskAssign.csp?$FRAME=Info" name="$A" targetFrame="Info">
+			<Caption>Assign</Caption>
+			<Popup>Assign or reassign this task.</Popup>
+			<IDValues>{TaskId},{AssignedTo},{Priority}</IDValues>
+		</Action>
+
+		<Action href="CSPX.EnsMsgContentsPane.cls" targetFrame="Info" name="TaskId">
+			<Caption>Contents</Caption>
+			<Popup>Displays the contents of this message.</Popup>
+			<IDValues>Body,{TaskId}</IDValues>
+		</Action>
+
+	</Actions>
+
+	<Conditions>
+		<!-- unassigned -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Unassigned</Value>
+			<RowStyle>background: yellow;</RowStyle>
+		</Condition>
+
+		<!-- assigned -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Assigned</Value>
+			<RowStyle>background: #AAAAFF;</RowStyle>
+		</Condition>
+
+		<!-- cancelled -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Cancelled</Value>
+			<RowStyle>background: orange; color: #808080; font-size: 0.8em;</RowStyle>
+		</Condition>
+
+		<!-- discarded -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Discarded</Value>
+			<RowStyle>background: #FFA0A0; color: #808080; font-size: 0.8em;</RowStyle>
+		</Condition>
+
+		<!-- completed -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Completed</Value>
+			<RowStyle>background: #D0D0D0; color: #808080; font-size: 0.8em;</RowStyle>
+		</Condition>
+
+		<Condition>
+			<ColumnName>IsComplete</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>1</Value>
+			<TargetColumn>$A</TargetColumn>
+			<CellStyle>disabled;</CellStyle>
+		</Condition>
+
+	</Conditions>
+
+</Pane>
+
+<Pane name="Info" type="%CSP.Util.Pane">
+</Pane>
+
+</AutoPage>

@@ -1,0 +1,203 @@
+<csr:rule name="WebStressTable" match="WebStress:table">
+<csr:attribute name="title" required>
+<csr:attribute name="class">
+<csr:attribute name="totalcols">
+<csr:attribute name="selectquery">
+<csr:attribute name="noreload">
+<csr:attribute name="nosave">
+<csr:attribute name="nosearch">
+<csr:attribute name="nonew">
+<csr:attribute name="nodelete">
+<csr:attribute name="nocopy">
+<csr:attribute name="noprevious">
+<csr:attribute name="customsave">
+<csr:attribute name="customdelete">
+<csr:attribute name="customselect">
+<csr:attribute name="customoptions">
+<csr:attribute name="customsearch">
+<csr:attribute name="alloff">
+<csr:action>
+
+<script language="cache" runat="compiler">
+	set title = ..GetAttribute("title")
+	set class = ..GetAttribute("class")
+	set totalcols= ..GetAttribute("totalcols")
+	if totalcols="" set totalcols=2
+	set selectquery = ..GetAttribute("selectquery")
+	set noreload = +..GetAttribute("noreload")
+	set nosave = +..GetAttribute("nosave")
+	set nosearch = +..GetAttribute("nosearch")
+	set nonew = +..GetAttribute("nonew")
+	set nodelete = +..GetAttribute("nodelete")
+	set nocopy = +..GetAttribute("nocopy")
+	set noprevious = +..GetAttribute("noprevious")
+	set customsave = ..GetAttribute("customsave")
+	set customdelete = ..GetAttribute("customdelete")
+	set customselect = ..GetAttribute("customselect")
+	set customoptions = ..GetAttribute("customoptions")
+	set customsearch = ..GetAttribute("customsearch")
+	set alloff = ..GetAttribute("alloff")
+	
+	if alloff=1 set selectquery="",noreload=1,nosave=1,nosearch=1,nonew=1,nodelete=1,nocopy=1,noprevious=1,customsave="",customdelete="",customselect="",customoptions="",customsearch=""
+	
+	set text=" do ##class(%WebStress.UI.Input).ShowInput("
+	set text=text_""""_title_""","""_class_""","""_totalcols_""","""_selectquery_""","""_noreload_""","""_nosave_""","""_nosearch_""","""_nonew_""","""_nodelete_""","""_nocopy_""","""_noprevious_""","""_customselect_""","""_customoptions_""","""_customsearch_""")"
+	do ..WriteServer(text)
+</script>
+<csr:children>
+</table>
+<csr:section name="HEAD">
+<script language="cache" runat="compiler">
+
+	if ('noreload)||('nosave)||('nosearch)||('nonew)||('nodelete)||('nocopy)||('nosearch) {
+		do ..WriteCSPText("<script language=""javascript"">",1)
+	}
+	if (selectquery'="")&&(customselect="") {
+		do ..WriteCSPText("function go_select()",1)
+		do ..WriteCSPText("{",1)
+		do ..WriteCSPText(" var elem = document.getElementById(""SELECTITEM"");",1)
+		do ..WriteCSPText(" var selectid = elem.value;",1)
+		do ..WriteCSPText(" go_loc = '"_page_"?OBJID='+selectid;",1)
+		do ..WriteCSPText(" go_page(go_loc);",1)
+		do ..WriteCSPText("}",1)
+		do ..WriteCSPText("function go_select_click()",1)
+		do ..WriteCSPText("{",1)
+		do ..WriteCSPText("}",1)
+	}
+	if 'noprevious {
+		do ..WriteCSPText("function go_previous()",1)
+		do ..WriteCSPText("{",1)
+		do ..WriteCSPText(" var elem = document.getElementById(""PREVIOUSITEM"");",1)
+		do ..WriteCSPText(" var selectid = elem.value;",1)
+		do ..WriteCSPText(" go_loc = '"_page_"?OBJID='+selectid;",1)
+		do ..WriteCSPText(" go_page(go_loc);",1)
+		do ..WriteCSPText("}",1)
+		do ..WriteCSPText("function go_previous_click()",1)
+		do ..WriteCSPText("{",1)
+		do ..WriteCSPText("}",1)
+	}
+	if 'noreload {
+		do ..WriteCSPText("function go_reload()",1)
+		do ..WriteCSPText("{",1)
+		do ..WriteCSPText(" if (check_changed()) {",1)
+		do ..WriteCSPText("  set_changed(0);",1)
+		do ..WriteCSPText("  var objid = '#($get(%request.Data(""OBJID"",1)))#';",1)
+		do ..WriteCSPText(" go_loc = '"_page_"?OBJID='+objid;",1)
+		do ..WriteCSPText(" go_page(go_loc);",1)
+		do ..WriteCSPText(" }",1)
+		do ..WriteCSPText("}",1)
+	}
+	if 'nonew {
+		do ..WriteCSPText("function go_new()",1)
+		do ..WriteCSPText("{",1)
+		do ..WriteCSPText(" if (check_changed()) {",1)
+		do ..WriteCSPText("  go_loc = '"_page_"';",1)
+		do ..WriteCSPText(" go_page(go_loc);",1)
+		do ..WriteCSPText(" }",1)
+		do ..WriteCSPText("}",1)
+	}
+	if 'nosave {
+		do ..WriteCSPText("function go_save()",1)
+		do ..WriteCSPText("{",1)
+		//do ..WriteCSPText(" #server(%WebStress.UI.Input.RemoveReloadId())#;",1)
+		if customsave="" {
+			do ..WriteCSPText(" if ("_$get(%form)_"_save()) {",1)
+		}
+		else {
+			do ..WriteCSPText(" if ("_customsave_"()) {",1)
+		}
+		do ..WriteCSPText("  try {",1)
+		do ..WriteCSPText("    var reloadid = "_$get(%form)_".OBJID.value;",1)
+		do ..WriteCSPText("    var response = grid_data_transfer(reloadid);",1)
+		do ..WriteCSPText("    var start = response.indexOf('<SaveDataResult>');",1)
+		do ..WriteCSPText("    var end = response.indexOf('</SaveDataResult>');",1)
+		do ..WriteCSPText("    var msg = response.substring(start+16,end);",1)
+		do ..WriteCSPText("    if (msg != 'ok') {",1)
+		do ..WriteCSPText("        var errors = msg.split('||');",1)
+		do ..WriteCSPText("        var error = '';",1)
+		do ..WriteCSPText("        for (i=0; i<errors.length; i++) {",1)
+		do ..WriteCSPText("            error = error + errors[i] + '\n';",1)
+		do ..WriteCSPText("        }",1)
+		do ..WriteCSPText("        alert(error);",1)
+		do ..WriteCSPText("        return;",1)
+		do ..WriteCSPText("    }",1)
+		do ..WriteCSPText("  }",1)
+		do ..WriteCSPText("  catch(e) {",1)
+		do ..WriteCSPText("    if (e.message!='Object expected') {",1)
+		do ..WriteCSPText("        alert(e.message);",1)
+		do ..WriteCSPText("        return;",1)
+		do ..WriteCSPText("    }",1)
+		do ..WriteCSPText("  }",1)
+		do ..WriteCSPText("  alert('Saved Details');",1)
+		do ..WriteCSPText("  set_changed(0);",1)
+		if 'nonew {
+			do ..WriteCSPText("    var reloadid = "_%form_".OBJID.value;",1)
+			do ..WriteCSPText("  if (reloadid == '') {",1)
+			do ..WriteCSPText("   go_new();",1)
+			do ..WriteCSPText("  }",1)
+			do ..WriteCSPText("  else {",1)
+			do ..WriteCSPText("   go_loc = '"_page_"?OBJID='+reloadid;",1)
+			do ..WriteCSPText(" go_location(go_loc);",1)
+			do ..WriteCSPText("  }",1)
+		}
+		do ..WriteCSPText(" }",1)
+		do ..WriteCSPText("}",1)
+		do ..WriteCSPText("function update(id)",1)
+		do ..WriteCSPText("{",1)
+		do ..WriteCSPText(" if (check_changed()) {",1)
+		do ..WriteCSPText("  go_loc = '"_page_"?OBJID=' + id;",1)
+		do ..WriteCSPText(" go_location(go_loc);",1)
+		do ..WriteCSPText(" }",1)
+		do ..WriteCSPText(" return true;",1)
+		do ..WriteCSPText("}",1)
+		if ('nosearch)&&(customsearch="") {
+		do ..WriteCSPText("function go_search()",1)
+ 		do ..WriteCSPText("{",1)
+ 		do ..WriteCSPText("   if (check_changed()) {",1)
+ 		do ..WriteCSPText("      search();",1)
+ 		do ..WriteCSPText("   }",1)
+ 		do ..WriteCSPText("}",1)
+		}
+	}
+	
+	if 'nodelete&&($get(%form)'="") {
+		do ..WriteCSPText("function go_delete()",1)
+		do ..WriteCSPText("{",1)
+		do ..WriteCSPText(" var form = self.document."_%form_";",1)
+		do ..WriteCSPText(" var objid = form.OBJID.value;",1)
+		if customdelete = "" {
+			do ..WriteCSPText(" if (#server(%WebStress.UI.Input.DeleteIt(""##(class)##"",objid))#) {",1)
+		}
+		else {
+			do ..WriteCSPText(" if ("_customdelete_"()) {",1)
+		}
+		do ..WriteCSPText("  set_changed(0);",1)
+		do ..WriteCSPText("  alert('Item Deleted');",1)
+		do ..WriteCSPText("  go_new();",1)
+		do ..WriteCSPText(" }",1)
+		do ..WriteCSPText("}",1)
+	}
+	if 'nocopy&&($get(%form)'="") {
+		do ..WriteCSPText("function go_copy()",1)
+		do ..WriteCSPText("{",1)
+		do ..WriteCSPText(" var form = self.document."_%form_";",1)
+		do ..WriteCSPText(" var objid = form.OBJID.value;",1)
+		do ..WriteCSPText(" var newId = #server(%WebStress.UI.Input.CopyIt(""##(class)##"",objid))#;",1)
+		do ..WriteCSPText(" go_loc = '"_page_"?OBJID=' + newId;",1)
+		do ..WriteCSPText(" go_location(go_loc);",1)
+		do ..WriteCSPText(" alert('Item Copied');",1)
+		do ..WriteCSPText("}",1)
+	}
+	if ('noreload)||('nosave)||('nonew)||('nodelete)||('nocopy)||('nosearch) {
+		do ..WriteCSPText("<"_"/script>",1)
+	}
+</script>
+</csr:section>
+</csr:action>
+<csr:action>
+<script language="cache" runat="compiler">
+	kill title,class,totalcols,selectquery,noreload,nosave,nosearch,nonew,nodelete,nocopy,noprevious,customsave,customdelete,customselect,customoptions,alloff,text
+	kill atts,bodyAtts,data,page,quote,value,attName
+</script>
+</csr:action>
+</csr:rule>

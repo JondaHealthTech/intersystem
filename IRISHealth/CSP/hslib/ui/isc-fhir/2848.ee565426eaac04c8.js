@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkisc_fhir=self.webpackChunkisc_fhir||[]).push([[2848],{2848:O=>{O.exports=JSON.parse('{"header":{"ABOUT_DIALOG_HS_TITLE":"About HealthShare","ABOUT_DIALOG_HS_VERSION":"Version","ABOUT_DIALOG_APP_TITLE":"About","ABOUT_DIALOG_APP_VERSION":"Version","DROPDOWN_LOGOUT":"Log Out"}}')}}]);

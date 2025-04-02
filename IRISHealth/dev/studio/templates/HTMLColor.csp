@@ -1,0 +1,209 @@
+<!--Studio Template -->
+<!-- Copyright (c) 2001, InterSystems Corp. ALL RIGHTS RESERVED -->
+
+<csp:StudioInteractiveTemplate name="HTML Color" type="CSP,CLS"  description="Inserts an HTML color value." id="HTMLColor">
+<csp:class DOMAIN="%TemplateMessages">
+
+<html>
+<head>
+<title>#($$$Text("HTML Color Selector"))#</title>
+
+<style type="text/css">
+<!--
+
+table.Input	{	background: silver; color: black;
+				}
+
+td.ColorCell	{
+					font-size: 9pt;
+					border: black solid 1px;
+					text-decoration: none;
+				}
+
+td.ColorCellHi	{
+					font-size: 9pt;
+					border: white solid 1px;
+					text-decoration: none;
+				}
+
+-->
+</style>
+
+
+<script language="JavaScript" type="text/javascript">
+function testColor(clr)
+{
+	self.document.all.TEST.style.background = clr;
+	self.document.theForm.COLOR.value = clr;
+	return true;
+}
+
+function btnTest()
+{
+	var clr = self.document.theForm.COLOR.value;
+	self.document.all.TEST.style.background = clr;
+	return true;
+}
+
+</script>
+
+</head>
+
+<body>
+
+<script language="cache" runat="server">
+	Do ..DrawTitle($$$Text("HTML Color Wizard"))
+</script>
+<!-- YSD2449<h1>#($$$Text("HTML Color Wizard"))#</h1>-->
+<div CLASS="Description">#($$$Text("Choose a color from the table or enter an HTML color value in the input field and then press OK."))#</div>
+<hr>
+
+
+<div align="center">
+<table border="1" cellpadding="3" cellspacing="0">
+<script language="Cache" runat="server">
+ Set init = $get(%request.Data("SelectedText",1),"#FFFFFF")
+ 
+ For b = 0,64,128,160,176,192,208,224,255 {
+	 Set bv = $zhex(b)
+	 Set:$length(bv)<2 bv = "0" _ bv
+
+	 Write "<tr>"
+	 For g = 0,64,128,176,192,224,255 {
+	 	 Set gv = $zhex(g)
+		 Set:$length(gv)<2 gv = "0" _ gv
+
+		 For r = 0,32,64,128,160,176,192,208,224,255 {
+		 	Set rv = $zhex(r)
+			Set:$length(rv)<2 rv = "0" _ rv
+			Set color = "#" _ rv_gv_bv
+		 	Write "<td class=""ColorCell"" bgcolor=""",color,""" onclick=""testColor('",color,"');"" onmouseover=""this.className='ColorCellHi';"" onmouseout=""this.className='ColorCell';"" >&nbsp;</td>"
+	 	}
+	 }
+	 Write "</tr>",!
+ }
+
+</script>
+</table>
+</div>
+<br>
+<div align="center">
+
+<form name="theForm" action="HTMLColor2.csp">
+<table class="INPUT" border="1" cellpadding="3" cellspacing="0">
+<tr><td id="TEST" width="100" bgcolor="#(init)#">&nbsp;</TD>
+
+<td>#($$$Text("Color"))#: 
+<input type="text" name="COLOR" value="#(init)#">&nbsp;
+<input type="button" name="TEXT" value=" Test " onclick="btnTest();" textid="">&nbsp;
+<input type="submit" name="SUBMIT" value=" OK " textid="">&nbsp;
+</td>
+</tr>
+</table>
+</form>
+
+</div>
+
+</body>
+<script language="Cache" method="DrawStyle" arguments="" returntype="">
+&html<
+<style type="text/css">
+<!--
+body { 
+	color: black; background: #E0E0E0; 
+	font-family: Arial,Helvetica,sans-serif;
+}
+			 
+input {	font-family: Arial,Helvetica,sans-serif; 
+	color: black;
+	font-size: 0.8em;
+}
+
+span.guibutton { 
+	color: green;
+	font-weight: bold;
+}
+
+td.Label {
+	text-align: right;
+	font-size: 0.8em;
+	font-weight: bold;
+}
+
+div.Description	{
+	font-size: 0.8em; 
+	padding: 10px;
+}
+			 
+.stdTitle {
+	color: white;
+	background: rgb(53,107,141);
+	background-image: none;
+	width: 100%;
+	padding: 0px;
+	border-bottom: 1px solid gray;
+	font-size: 1.4em;
+	font-family: arial;
+	text-align: center;
+	white-space: nowrap;
+}
+
+/* UserName etc. */
+.stdTitleInfo {
+	color: black;
+	width: 100%;
+	padding: 0px;
+	font-family: arial;
+	text-align: left;
+	white-space: nowrap;
+}
+
+.stdTitleInfo td {
+	color: black;
+	padding-left: 5px;
+	padding-right: 10px;
+	font-size: 8pt;
+	font-weight: bold;
+	text-align: left;
+	white-space: nowrap;
+}
+
+.stdTitleInfo th {
+	color: white;
+	padding: 0px;
+	font-size: 8pt;
+	font-weight: normal;
+	text-align: right;
+	white-space: nowrap;
+}			 
+-->
+</style>
+
+>
+</script>
+<script language="Cache" method="DrawTitle" arguments="pTitle:%String" returntype="">
+	#; This method is called by other Template wizards.
+	#; Draw page style first (this style is the same for all wizards).
+	Do ..DrawStyle()
+	#; draw html title box (this method is copied from %ZEN.Template.studioTemplate.cls)
+	#; pTitle is passed in from calling page.
+	Set tName = $$$Text("Server Template","%ZEN")
+	Set tUserName = $$$Text("User","%ZEN")
+	Set tNamespace = $$$Text("Namespace","%ZEN")
+
+	&html<<table class="stdTitle" border="0" cellpadding="0" cellspacing="0" width="100%">
+		<tr>
+		<td align="left" width="58"><img width="58" height="58" src="#(..Link("portal/icon_sysexplore.png"))#"/></td>
+		<td align="left" width="90%" style="padding-left:20px;">
+		<div style="font-size: 0.6em;">#(tName)#</div>
+		<div>#(pTitle)#</div></td>
+		<td valign="top">&nbsp;
+		<table class="stdTitleInfo" border="0" cellpadding="0" cellspacing="2">
+		<tr><th>#(tUserName)#:</th><th>#($UserName)#</th></tr>
+		<tr><th>#(tNamespace)#:</th><th>#($namespace)#</th></tr>
+		</table>
+		</td>
+		</tr></table>>
+	Quit
+</script>
+</html>

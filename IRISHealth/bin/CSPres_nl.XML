@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  ***********************************************************  -->
+<!--  In order to work with the Cache build translation mechanism, -->
+<!--  this file format must be strictly followed:                  -->
+<!--  1. encoding must be "UTF-8"                                  -->
+<!--  2. all tags must have open and close on same line            -->
+<!--  ***********************************************************  -->
+
+<!-- Before placing a single or double quote in a message, check whether -->
+<!-- it needs to be escaped in the Web Gateway code.                     -->
+<MsgFile Language="nl">
+
+<MsgDomain Domain="%CSPGateway">
+
+<!--                                      -->
+<!--  Gateway Form's Titles               -->
+<!--                                      -->
+
+<Message Id="Z_ISC">InterSystems Corporation</Message>
+<Message Id="Z_CSP">Cach&amp;#233; Server-pagina&apos;s</Message>
+<Message Id="Z_WGM">Webgatewaybeheer</Message>
+<Message Id="Z_CACHE_LOGO">InterSystems IRIS-logo</Message>
+
+
+
+<!--                                      -->
+<!--  Main Menu                           -->
+<!--                                      -->
+
+<Message Id="A_01">Beheer</Message>
+
+<Message Id="T_SYSTEM_STATUS">Systeemstatus</Message>
+<Message Id="H_SYSTEM_STATUS">De actieve verbindingen van de CSP-gateway met de InterSystems IRIS-servers weergeven</Message>
+
+<Message Id="T_GATEWAY_INIT">Gateway geïnitialiseerd</Message>
+
+<Message Id="T_CLOSE_CONNECTIONS">Sluit verbindingen</Message>
+<Message Id="H_CLOSE_CONNECTIONS">Sluit alle verbindingen met een bepaalde InterSystems IRIS server</Message>
+
+<Message Id="T_TEST_SERVER">Test serververbinding</Message>
+<Message Id="H_TEST_SERVER">Controleer of een bepaalde InterSystems IRIS server antwoordt</Message>
+
+<Message Id="T_VIEW_EVENT_LOG">Toon gebeurtenissenlogboek</Message>
+<Message Id="H_VIEW_EVENT_LOG">Toon het CSP-gatewaygebeurtenissenlogboek</Message>
+
+<Message Id="A_02">Configuratie</Message>
+<Message Id="T_DEFAULT_PARAMETERS">Standaard parameters</Message>
+<Message Id="H_DEFAULT_PARAMETERS">Stel de standaardparameters in voor de CSP-gateway</Message>
+
+<Message Id="T_SERVER_ACCESS">Toegang tot server</Message>
+<Message Id="H_SERVER_ACCESS">Configureer/voeg toe/wis toegang tot InterSystems IRIS server van CSP-gateway</Message>
+
+<Message Id="T_APPLICATION_ACCESS">Toegang tot applicatie</Message>
+<Message Id="H_APPLICATION_ACCESS">Configureer/Voeg toe/Wis een CSP-applicatie</Message>
+
+<Message Id="T_ABOUT_CSP_GATEWAY">Over CSP-gateway</Message>
+<Message Id="H_ABOUT_CSP_GATEWAY">Toon de versie-informatie van de CSP-gateway</Message>
+
+<Message Id="T_LANGUAGE">Taal</Message>
+<Message Id="H_LANGUAGE">Kies de taal waarin u deze configuratieforms wilt zien</Message>
+
+<Message Id="A_03">InterSystems IRIS-beheer</Message>
+
+<Message Id="T_BACK_TO_PORTAL">Terug naar beheerportaal</Message>
+<Message Id="H_BACK_TO_PORTAL">Terug naar het InterSystems IRIS-beheerportaal</Message>
+
+
+
+<!--                                      -->
+<!--  System Status                       -->
+<!--                                      -->
+
+<Message Id="A_11">Verbindingsnummer</Message>
+<Message Id="A_13">IP-adres</Message>
+<Message Id="A_14">TCP/IP-poort:</Message>
+<Message Id="A_15">Server-PID</Message>
+<Message Id="A_16">Status</Message>
+<Message Id="A_16a">Wachttijd / Timeout</Message>
+<Message Id="A_17">Activiteit</Message>
+<Message Id="A_18">Gateway-PID</Message>
+<Message Id="B_CLOSE">Sluiten</Message>
+
+<Message Id="A_111">Totaal aantal verbindingen</Message>
+<Message Id="A_112">Verbindingen in gebruik</Message>
+<Message Id="A_113">Private verbindingen</Message>
+<Message Id="A_114">Totale hoeveelheid activiteit</Message>
+<Message Id="A_115">Aanvragen in wachtrij</Message>
+
+<Message Id="T_PATH">Pad</Message>
+<Message Id="T_PATH_NUMBER">Foldernummer</Message>
+<Message Id="T_ACTION">Actie</Message>
+
+<Message Id="A_121">Gecachede forms</Message>
+<Message Id="A_122">Gecachede gegevens (Bytes)</Message>
+<Message Id="A_123">Gecachede form-activiteit</Message>
+<Message Id="A_124">In wachtrij geplaatste threads</Message>
+
+<Message Id="A_413a5">Totaal aantal Cache-blokken</Message>
+<Message Id="A_413a6">Cache-blokken In Gebruik</Message>
+<Message Id="A_FORM">Formulier</Message>
+<Message Id="A_SIZE">Omvang</Message>
+
+<Message Id="B_REFRESH">Hernieuwen</Message>
+
+<Message Id="B_CLEAR">Wissen</Message>
+
+<Message Id="B_CLEAR_CACHE">Caché wissen</Message>
+
+
+
+<!--                                      -->
+<!--  Close Connections                   -->
+<!--                                      -->
+
+<Message Id="A_21">Sluit alle verbindingen op de server</Message>
+<Message Id="A_22">Kies * om alle verbindingen op alle servers te sluiten</Message>
+<Message Id="B_CLOSE_CONNECTIONS">Sluit verbinding(en)</Message>
+<Message Id="T_INFO_SESSIONS_CLOSED">Alle aangegeven verbindingen zijn nu gesloten</Message>
+
+
+
+<!--                                      -->
+<!--  Test Connection                     -->
+<!--                                      -->
+
+<Message Id="A_31">Toon gebeurtenissenlogboek van server-zijde</Message>
+<Message Id="B_CONNECT">Verbinden</Message>
+
+<Message Id="T_TEST_SERVER_SUCCESS">Verbindingstest met server succesvol</Message>
+<Message Id="T_TEST_SERVER_FAILURE">Verbindingstest met server mislukt</Message>
+
+
+
+<!--                                      -->
+<!--  View Event Log                      -->
+<!--                                      -->
+
+<Message Id="B_CLEAR_LOG">Logboek leegmaken</Message>
+<Message Id="A_42">Het gebeurtenissenlogboek is leeggemaakt</Message>
+<Message Id="A_43">Het gebeurtenislogboek kan niet worden verwijderd.  Controleer of de gateway over de vereiste bevoegdheden beschikt om naar het bestand te schrijven</Message>
+<Message Id="A_TOP">Boven</Message>
+<Message Id="A_MORE">Meer</Message>
+<Message Id="A_LOG_ASCENDING">Datum en Tijd Volgorde</Message>
+<Message Id="A_LOG_DESCENDING">Datum- en tijdvolgorde omdraaien</Message>
+
+
+
+<!--                                      -->
+<!--  View HTTP Trace                     -->
+<!--                                      -->
+
+<Message Id="T_VIEW_HTTP_TRACE">HTTP-tracering weergeven</Message>
+<Message Id="H_VIEW_HTTP_TRACE">De HTTP-traceringfaciliteit van CSP-gateway weergeven</Message>
+<Message Id="A_VHT_TITLE">HTTP-traceringsfaciliteit voor webgateway</Message>
+<Message Id="T_VHT_ON">Tracering AAN</Message>
+<Message Id="H_VHT_ON">De traceringfaciliteit inschakelen. Dit stelt het logboekniveau in op &apos;v9r&apos;</Message>
+<Message Id="T_VHT_OFF">Tracering UIT</Message>
+<Message Id="H_VHT_OFF">De traceringfaciliteit uitschakelen. Dit zal &apos;v9r&apos; uit het logboekniveau verwijderen</Message>
+<Message Id="H_VHT_REFRESH">De waarde van dit frame vernieuwen</Message>
+<Message Id="T_VHT_CLEAR">Wissen</Message>
+<Message Id="H_VHT_CLEAR">Gebeurtenissenlogboek wissen</Message>
+<Message Id="T_VHT_SHOW_RESPONSE">Antwoord weergeven</Message>
+<Message Id="T_VHT_SHOW_REQUEST">Aanvraag weergeven</Message>
+<Message Id="Z_DATE">Datum</Message>
+<Message Id="Z_REQUEST_ID">Aanvraag-id</Message>
+<Message Id="Z_REQUEST">Aanvraag</Message>
+<Message Id="Z_SESSION_ID">Sessie-id</Message>
+<Message Id="Z_REMOTE_ADDR">Extern adres</Message>
+
+
+
+<!--                                      -->
+<!--  Default Parameters                  -->
+<!--                                      -->
+
+<Message Id="T_INSTANCE_HOST_NAME">Instance-hostnaam</Message>
+<Message Id="H_INSTANCE_HOST_NAME">De naam van de netwerkhost voor deze specifieke instance van de CSP-gateway.</Message>
+
+<Message Id="T_MAXIMUM_CONNECTIONS">Maximaal aantal Connecties</Message>
+<Message Id="H_MAXIMUM_CONNECTIONS">Het maximale aantal verbindingen naar InterSystems IRIS dat door deze instantie gemaakt kan worden</Message>
+
+<Message Id="T_MAXIMUM_CACHE_SIZE">Maximale Cache Grootte</Message>
+<Message Id="H_MAXIMUM_CACHE_SIZE">De maximale hoeveelheid formulierdata dat in de Gateway cache kan worden vastgehouden</Message>
+
+
+<Message Id="A_51">Beveiliging</Message>
+
+<Message Id="A_51A">Dit zijn de beveiligingsparameters die vereist zijn door gateway-beheerders om toegang te kunnen krijgen tot deze formulieren</Message>
+
+<Message Id="T_SM_SERVICE_STATUS">Toegang tot deze formulieren</Message>
+<Message Id="H_SM_SERVICE_STATUS">Toegang tot dit pakket met formulieren voor gateway-beheer</Message>
+
+<Message Id="T_USERNAME">Gebruikersnaam</Message>
+<Message Id="H_USERNAME">De gebruikersnaam voor deze service</Message>
+
+<Message Id="T_PASSWORD">Wachtwoord</Message>
+<Message Id="H_PASSWORD">Het wachtwoord voor toegang tot deze formulieren</Message>
+<Message Id="T_SR_PASSWORD">Wachtwoord instellen/herstellen</Message>
+
+<Message Id="A_52">Bevestigen</Message>
+
+<Message Id="Z_PW">Wachtwoord herstellen</Message>
+<Message Id="Z_PE">Wachtwoordfout</Message>
+<Message Id="Z_PR">Wachtwoord verwijderd</Message>
+<Message Id="Z_PU">Wachtwoord ongewijzigd</Message>
+
+<Message Id="T_SM_TIMEOUT">Time-out voor sessie</Message>
+<Message Id="H_SM_TIMEOUT">Sessietime-out voor beveiligde toegang tot deze formulieren</Message>
+
+<Message Id="Z_SLO">Sessie is afgemeld</Message>
+<Message Id="Z_STO">Er is een time-out opgetreden voor uw sessie (of de sessie is ongeldig)</Message>
+
+<Message Id="T_SYSTEM_MANAGER">Systeembeheerder machine(s)</Message>
+<Message Id="H_SYSTEM_MANAGER">IP-adres of DNS-namen van computer die de CSP-gateway kunnen configureren, gescheiden door &apos;+&apos; of &apos;,&apos;</Message>
+
+<Message Id="T_SYS_UNPW_OVERRIDE">Gebruikersnaam en wachtwoord negeren</Message>
+<Message Id="H_SYS_UNPW_OVERRIDE">Kies deze optie om hier gedefinieerde clients de mogelijkheid te bieden om zonder gebruikersnaam en wachtwoord in te loggen</Message>
+
+<Message Id="T_SYS_ACCEPT_X_FORWARDED_FOR">Accepteer client-IP-adresssen die doorgestuurd zijn door proxy-servers</Message>
+<Message Id="H_SYS_ACCEPT_X_FORWARDED_FOR">Klikop deze optie om client-IP-adressen te accepteren die doorgestuurd zijn door proxy-servers (Weergegeven in de HTTP-request-header &apos;X-Forwarded-For&apos;)</Message>
+
+<Message Id="T_CUSTOM_SM_LOGIN_FORM">Custom Inlog Formulier</Message>
+<Message Id="H_CUSTOM_SM_LOGIN_FORM">Te tonen pagina om Administrators in te loggen in de Gateway Management formulieren</Message>
+
+<Message Id="T_LOGIN">Meld u aan bij Web Gateway Management</Message>
+<Message Id="B_LOGIN">Aanmelden</Message>
+
+<Message Id="T_LOGOUT">Afmelden</Message>
+<Message Id="H_LOGOUT">Afmelden bij dit beheerpakket</Message>
+
+<Message Id="T_ERROR_NO_SM_ACCESS">U bent niet bevoegd om deze faciliteit te gebruiken (of het configuratiebestand is onleesbaar)</Message>
+
+<Message Id="T_TIMEOUT_ALL_CONNECTIONS">Pas time-out toe op alle verbindingen</Message>
+<Message Id="H_TIMEOUT_ALL_CONNECTIONS">Vink deze optie aan om de time-out op alle verbindingen toe te passen (inclusief de verbindingen in de minimal pool)</Message>
+
+<Message Id="T_BACK_TO_PORTAL1">Terug naar Enterprise-beheer</Message>
+<Message Id="H_BACK_TO_PORTAL1">Terug naar het Enterprise-beheerportaal</Message>
+<Message Id="A_031">Enterprise-beheer</Message>
+
+<Message Id="A_53">Verbindingen naar InterSystems IRIS</Message>
+
+<Message Id="T_S_RESPONSE_TIMEOUT">Time-out bij antwoord van server</Message>
+<Message Id="H_S_RESPONSE_TIMEOUT">Maximale aan InterSystems IRIS toegestane aantal seconden voor antwoord, alvorens de foutboodschap &apos;Server bezet&apos; wordt doorgegeven.</Message>
+
+<Message Id="T_QUEUED_REQUEST_TIMEOUT">Time-out voor aanvragen in wachtrij </Message>
+<Message Id="H_QUEUED_REQUEST_TIMEOUT">Maximale toegestane aantal seconden dat een aanvraag kan wachten op een InterSystems IRIS verbinding alvorens de foutboodschap &apos;Server bezet&apos; wordt doorgegeven.</Message>
+
+<Message Id="T_NO_ACTIVITY_TIMEOUT">Geen time-out voor activiteit </Message>
+<Message Id="H_NO_ACTIVITY_TIMEOUT">Bij sessies zonder status: indien een InterSystems IRIS serverproces niet actief is gedurende dit aantal seconden, zal dit afgesloten worden.</Message>
+
+<Message Id="T_ENV_PARAMETERS">Niveau gebeurtenissenlogboek</Message>
+<Message Id="H_ENV_PARAMETERS">Hoeveelheid loggen uitgevoerd, &apos;E&apos; voor logfouten, &apos;V&apos; voor uitgebreid loggen</Message>
+
+<Message Id="T_EVENT_LOG_FILE">Gebeurtenislogboekbestand</Message>
+<Message Id="H_EVENT_LOG_FILE">De naam van het gebeurtenislogboekbestand (met pad indien noodzakelijk).</Message>
+
+<Message Id="T_EVENT_LOG_ROTATION_SIZE">Event Log wisselgrootte</Message>
+<Message Id="H_EVENT_LOG_ROTATION_SIZE">De omvang wanneer logwisseling moet plaatsvinden (uitgedrukt in Bytes n; or Kilobytes: nK; or Megabytes: nM)</Message>
+
+<Message Id="T_MAX_LOGGED_REQUEST_SIZE">Maximale grootte geregistreerde aanvraag</Message>
+<Message Id="H_MAX_LOGGED_REQUEST_SIZE">De maximale hoeveelheid gegevens die per HTTP-verzoek wordt geregistreerd (voor logniveau v9; uitgedrukt in Bytes n; of Kilobytes: nK; of Megabytes: nM).</Message>
+
+<Message Id="T_RETAIN_ALL_LOG_FILES">Behouden van Alle Log Bestanden</Message>
+<Message Id="H_RETAIN_ALL_LOG_FILES">Vink deze optie aan om alle roterende log bestanden te behouden</Message>
+
+
+<Message Id="A_54">of later</Message>
+<Message Id="A_56">Pad</Message>
+<Message Id="A_57">Standaardbestand</Message>
+
+
+<Message Id="A_53A">ASP omleiden</Message>
+
+<Message Id="T_DOCUMENT_ROOT">Web-documentroot</Message>
+<Message Id="H_DOCUMENT_ROOT">Alleen nodig als CSP wordt omgeleid via ASP. Fysiek pad naar de documentroot van de IIs-webserver, b.v. &apos;c:\\inetpub\\wwwroot&apos;</Message>
+
+<Message Id="T_ASP_DIRECTORY">Tijdelijke ASP-directory</Message>
+<Message Id="H_ASP_DIRECTORY">Alleen nodig als CSP wordt omgeleid via ASP. Fysiek pad naar een directory om tijdelijke bestanden te schrijven.</Message>
+
+<Message Id="T_RUN_TIME_SCRIPT">Run-timescript</Message>
+<Message Id="H_RUN_TIME_SCRIPT">Plaats van de run-time CSP-gatewaymodule, die wordt gebruikt voor het testen van serververbindingen</Message>
+
+<Message Id="A_58">Standaardscript</Message>
+
+
+<Message Id="A_59">Interne HTTP-server</Message>
+
+<Message Id="T_WS_SERVICE_STATUS">Servicestatus</Message>
+<Message Id="H_WS_SERVICE_STATUS">Status van de interne HTTP-server</Message>
+
+<Message Id="T_NSD_DOCUMENT_ROOT">NSD Document Root</Message>
+<Message Id="H_NSD_DOCUMENT_ROOT">Fysiek pad naar de documentroot van de webserver in de Network Service Daemon (NSD), bijvoorbeeld &apos;c:\\cachesys\\csp&apos;</Message>
+
+
+<Message Id="A_55">Voer de bestandsnaam van de html-pagina in om deze te tonen of een URL om de browser om te leiden als deze fout zich voordoet.</Message>
+
+<Message Id="T_SERVER_ERROR">Serverfout</Message>
+<Message Id="H_SERVER_ERROR">Pagina die wordt weergegeven als CSP-gateway een interne fout vindt</Message>
+<Message Id="X_SERVER_ERROR">Er heeft zich een interne fout voorgedaan binnen CSP</Message>
+
+<Message Id="T_SERVER_BUSY">Server bezet</Message>
+<Message Id="H_SERVER_BUSY">Pagina die wordt weergegeven als alle beschikbare CSP-verbindingen in gebruik zijn</Message>
+<Message Id="X_SERVER_BUSY">De InterSystems IRIS server is bezet</Message>
+
+<Message Id="T_SERVER_UNAVAILABLE">Server niet beschikbaar</Message>
+<Message Id="H_SERVER_UNAVAILABLE">Pagina die wordt weergegeven als de InterSystems IRIS server met opzet vanuit de Gateway-configuratie is uitgeschakeld</Message>
+<Message Id="X_SERVER_UNAVAILABLE">De InterSystems IRIS server is momenteel niet beschikbaar</Message>
+
+<Message Id="T_SERVER_TIMEOUT">Time-out server</Message>
+<Message Id="H_SERVER_TIMEOUT">Weer te geven pagina bij time-out aanvraag aan InterSystems IRIS-server</Message>
+<Message Id="X_SERVER_TIMEOUT">Time-out van aanvraag</Message>
+
+<Message Id="T_CONNECTION_CLOSED">Verbinding afgesloten</Message>
+<Message Id="H_CONNECTION_CLOSED">Pagina die wordt weergegeven als de server de sessie in state-aware modus afsluit</Message>
+<Message Id="X_CONNECTION_CLOSED">De verbinding met de InterSystems IRIS server is nu afgesloten</Message>
+
+<Message Id="Z_CNS">De configuratie is niet opgeslagen omdat er geen naam is opgegeven</Message>
+<Message Id="Z_CS">Configuratie opgeslagen</Message>
+
+
+<Message Id="T_CON_ALLOC">Verbindingstoewijzing</Message>
+<Message Id="H_CON_ALLOC">Methode waarmee verbindingen worden toegewezen aan stateless sessies</Message>
+<Message Id="R_CON_ALLOC_FF">Eerst Beschikbare</Message>
+<Message Id="R_CON_ALLOC_RR">Round Robin</Message>
+
+
+
+<!--                                      -->
+<!--  Server Configuration                -->
+<!--                                      -->
+
+<Message Id="A_61">Klik op een bestaande server en wijzig/kopieer of wis de configuratie ervan.</Message>
+
+<Message Id="R_EDIT_SERVER">Wijzig server</Message>
+<Message Id="H_EDIT_SERVER">Wijzig de geselecteerde serverconfiguratie</Message>
+
+<Message Id="R_COPY_SERVER">Kopieer server</Message>
+<Message Id="H_COPY_SERVER">Kopieer de geselecteerde serverconfiguratie</Message>
+
+<Message Id="R_DELETE_SERVER">Wis server</Message>
+<Message Id="H_DELETE_SERVER">Wis de geselecteerde serverconfiguratie</Message>
+
+<Message Id="A_62">Of maak een nieuwe serverconfiguratie</Message>
+
+<Message Id="B_ADD_SERVER">Voeg server toe</Message>
+<Message Id="H_ADD_SERVER">Maak een nieuwe serverconfiguratie</Message>
+
+
+<Message Id="T_SERVER_NAME">Servernaam</Message>
+<Message Id="H_SERVER_NAME">De naam van de InterSystems IRIS server</Message>
+<Message Id="V_SERVER_NAME">Servernaam is vereist; mag geen gereserveerde tekens bevatten `=`, `[`, of `]`; mag niet beginnen met `APP_PATH:` (niet hoofdlettergevoelig); mag niet `--- Geen ---` zijn; en mag niet `SYSTEEM`, `SYSTEEM_INDEX` of `APP_PATH_INDEX` (niet hoofdlettergevoelig) zijn</Message>
+
+<Message Id="T_SERVER_NUMBER">Servernummer</Message>
+
+<Message Id="T_SERVICE_STATUS">Servicestatus</Message>
+<Message Id="H_SERVER_STATUS">Deze server aan- of uitzetten</Message>
+<Message Id="H_APPLICATION_STATUS">Deze applicatie aan- of uitzetten</Message>
+
+<Message Id="T_IP_ADDRESS">TCP/IP Adres</Message>
+<Message Id="H_IP_ADDRESS">TCP/IP-adres van de InterSystems IRIS server waarmee wordt verbonden</Message>
+
+<Message Id="T_TCP_PORT">TCP/IP-poort:</Message>
+<Message Id="H_TCP_PORT">TCP/IP-poort van de InterSystems IRIS server waarmee wordt verbonden, gewoonlijk 1972</Message>
+
+<Message Id="T_MIRROR_AWARE">Configuratie is Spiegelbewust</Message>
+<Message Id="H_MIRROR_AWARE">Indien aangevinkt, is deze configuratie op de hoogte van InterSystems IRIS-spiegels</Message>
+
+<Message Id="A_623">State-less parameters</Message>
+
+<Message Id="T_MINIMUM_SERVER_SESSIONS">Minimum server-verbindingen</Message>
+<Message Id="H_MINIMUM_SERVER_SESSIONS">Op te starten verbindingen alvorens een bestaand proces opnieuw wordt gebruikt</Message>
+
+<Message Id="T_MAXIMUM_SERVER_SESSIONS">Maximum aantal server-verbindingen</Message>
+<Message Id="H_MAXIMUM_SERVER_SESSIONS">Maximum aantal verbindingen dat de gateway naar de InterSystems IRIS server zal maken alvorens aanvragen in de wachtrij te plaatsen</Message>
+
+<Message Id="T_MAX_SESSION_CONNECTIONS">Maximaal aantal Connecties per Sessie</Message>
+<Message Id="H_MAX_SESSION_CONNECTIONS">Het maximumaantal verbindingen dat tegelijkertijd door een afzonderlijke sessie kan worden gebruikt</Message>
+
+
+<Message Id="A_62A">Verbindingsbeveiliging</Message>
+
+<Message Id="T_SECURITY_LEVEL">Beveiligingsniveau verbinding</Message>
+<Message Id="H_SECURITY_LEVEL">Beveiligingsniveau verbinding</Message>
+<Message Id="H_SECURITY_LEVEL0">Geen</Message>
+<Message Id="H_SECURITY_LEVEL1">Verificatie</Message>
+<Message Id="H_SECURITY_LEVEL2">Gegevensintegriteit</Message>
+<Message Id="H_SECURITY_LEVEL3">Gegevenscodering</Message>
+<Message Id="H_SECURITY_LEVEL9">(CCONNECT omzeilen)</Message>
+<Message Id="H_SECURITY_LEVEL10">SSL</Message>
+
+<Message Id="H_SPASSWORD">Het wachtwoord voor toegang tot deze server</Message>
+
+<Message Id="T_SERVER_TYPE">Servertype</Message>
+<Message Id="H_SERVER_TYPE">Servertype</Message>
+<Message Id="H_SERVER_TYPE0">Windows</Message>
+<Message Id="H_SERVER_TYPE1">Unix</Message>
+<Message Id="H_SERVER_TYPE2">VMS</Message>
+
+<Message Id="T_PRODUCT">Product</Message>
+<Message Id="H_PRODUCT">Product</Message>
+<Message Id="H_PRODUCT0">InterSystems IRIS</Message>
+<Message Id="H_PRODUCT1">Ensemble</Message>
+
+<Message Id="T_SERVICE_PRINCIPAL">Servicenaam</Message>
+<Message Id="H_SERVICE_PRINCIPAL">Servicenaam</Message>
+
+<Message Id="A_62B">Genereren</Message>
+<Message Id="A_62C">Dit zijn de beveiligingsinstellingen die vereist zijn door de gateway om toegang te kunnen krijgen tot deze server</Message>
+
+<Message Id="T_KEYTABLE">Sleuteltabel</Message>
+<Message Id="H_KEYTABLE">Sleuteltabelbestand (inclusief volledig pad)</Message>
+
+<Message Id="T_SSL_CONF_NAME">SSL-configuratienaam</Message>
+<Message Id="H_SSL_CONF_NAME">De naam van de te gebruiken SSL-configuratie.</Message>
+
+<Message Id="T_SSLCC_PROTOCOL_MIN">Minimale versie SSL/TLS-protocol</Message>
+<Message Id="H_SSLCC_PROTOCOL_MIN">Minimaal te gebruiken versie SSL/TLS-protocol</Message>
+
+<Message Id="T_SSLCC_PROTOCOL_MAX">Maximale versie SSL/TLS-protocol</Message>
+<Message Id="H_SSLCC_PROTOCOL_MAX">Maximaal te gebruiken SSL/TLS-protocolversie</Message>
+
+<Message Id="T_SSLCC_KEY_TYPE">SSl Sleuteltype</Message>
+<Message Id="H_SSLCC_KEY_TYPE">Type SSL Sleutelbestand</Message>
+<Message Id="H_SSLCC_KEY_TYPE1">DSA</Message>
+<Message Id="H_SSLCC_KEY_TYPE2">RSA</Message>
+
+<Message Id="T_SSLCC_VERIFY_PEER">SSL Verfieer Peer</Message>
+<Message Id="H_SSLCC_VERIFY_PEER">Peer certificaatverificatie vereist</Message>
+
+<Message Id="T_SSLCC_CIPHER_SUITES">SSL/TLS Cipher Suites (TLSv1.2 en lager)</Message>
+<Message Id="H_SSLCC_CIPHER_SUITES">De Cipher Suite-lijst (TLSv1.2 en lager)</Message>
+
+<Message Id="T_SSLCC_CIPHER_SUITES_1_3">SSL/TLS Cipher Suites (TLSv1.3)</Message>
+<Message Id="H_SSLCC_CIPHER_SUITES_1_3">De Cipher Suite-lijst (TLSv1.3)</Message>
+
+<Message Id="T_SSLCC_CERTIFICATE_FILE">SSL Certificaatbestand</Message>
+<Message Id="H_SSLCC_CERTIFICATE_FILE">Volledig folder voor SSL Certificaatbestand</Message>
+
+<Message Id="T_SSLCC_CERTIFICATE_KEY_FILE">SSL Certificaat Sleutelbestand</Message>
+<Message Id="H_SSLCC_CERTIFICATE_KEY_FILE">Het volledige pad naar het SSL-sleutelbestand voor het certificaat</Message>
+
+<Message Id="T_SSLCC_CA_CERTIFICATE_FILE">SSL-certificaatbestand van certificeringsinstantie</Message>
+<Message Id="H_SSLCC_CA_CERTIFICATE_FILE">De volledige foldernaam voor het SSL Trusted Certificatie-authoriteit (CA) Certificaat</Message>
+
+<Message Id="T_SSLCC_PRIVATE_KEY_PASSWORD">Wachtwoord SSL-privésleutel</Message>
+<Message Id="H_SSLCC_PRIVATE_KEY_PASSWORD">Het wachtwoord voor de SSL-privésleutel</Message>
+
+
+<Message Id="A_625">Optionele parameters</Message>
+
+<Message Id="A_626">Deze parameters zullen van de CSP-gateway &apos;Standaardparameters&apos; worden geërfd, als ze hier niet zijn opgegeven.</Message>
+
+<Message Id="A_628">Voer de bestandsnaam van de html-pagina in om deze te tonen of een URL om de browser om te leiden als deze fout zich voordoet. Deze waarden zullen van de CSP-gateway &apos;Standaardparameters&apos; worden geërfd, als ze hier niet zijn opgegeven.</Message>
+
+<Message Id="A_631">U kunt de configuratie voor deze server niet wissen</Message>
+<Message Id="A_632">U kunt de configuratie voor deze server niet wissen omdat deze door een applicatie gebruikt wordt</Message>
+<Message Id="A_633">Wis de configuratie voor deze server</Message>
+
+<Message Id="Z_SCNS">De serverconfiguratie is niet opgeslagen omdat er geen naam opgegeven werd</Message>
+
+<Message Id="Z_ECNS">Configuratie niet opgeslagen. Controleer bestandsrechten</Message>
+
+
+<Message Id="Z_EWINI">Kan niet schrijven naar het configuratiebestand</Message>
+<Message Id="Z_SCC">De serverconfiguratie is gekopieerd</Message>
+<Message Id="Z_SCNC">De serverconfiguratie is niet gekopieerd omdat er een nieuwe naam werd opgegeven</Message>
+<Message Id="Z_SCD">De serverconfiguratie is gewist</Message>
+<Message Id="Z_SCS">Serverconfiguratie is opgeslagen</Message>
+
+<Message Id="T_ERROR_SYS_DISABLED">De server is momenteel uitgeschakeld</Message>
+<Message Id="T_ERROR_SYS_UNAVAILABLE">De server is momenteel niet beschikbaar</Message>
+<Message Id="T_ERROR_SYS_NOT_DEFINED">Server kan niet worden herkend</Message>
+<Message Id="T_ERROR_SERVER_PROGRAM">Het programma op de server heeft een fout opgehaald - Raadpleeg het gebeurtenislogboek voor meer informatie</Message>
+<Message Id="T_ERROR_NO_DATA_RETURNED">Het programma op de server heeft geen resultaten opgehaald</Message>
+<Message Id="T_INFO_SA_LOGOUT">De verbinding met de server is nu verbroken</Message>
+
+
+
+<!--                                      -->
+<!--  Application Configuration           -->
+<!--                                      -->
+
+<Message Id="A_71">Klik op een bestaande applicatie en wijzig/kopieer of wis de configuratie ervan.</Message>
+
+<Message Id="R_EDIT_APPLICATION">Applicatie wijzigen</Message>
+<Message Id="H_EDIT_APPLICATION">Wijzig de geselecteerde applicatieconfiguratie</Message>
+
+<Message Id="R_COPY_APPLICATION">Applicatie kopiëren</Message>
+<Message Id="H_COPY_APPLICATION">Kopieer de geselecteerde applicatieconfiguratie</Message>
+
+<Message Id="R_DELETE_APPLICATION">Applicatie wissen</Message>
+<Message Id="H_DELETE_APPLICATION">Wis de geselecteerde applicatieconfiguratie</Message>
+
+<Message Id="A_72">Of maak een nieuwe applicatieconfiguratie</Message>
+
+<Message Id="B_ADD_APPLICATION">Applicatie toevoegen </Message>
+<Message Id="H_ADD_APPLICATION">Maak een nieuwe applicatieconfiguratie</Message>
+
+
+<Message Id="T_APPLICATION_PATH">Applicatiepad</Message>
+<Message Id="H_APPLICATION_PATH">Naam van het applicatiepad</Message>
+<Message Id="V_APPLICATION_PATH">Toepassingspad is vereist; mag geen gereserveerde tekens `=`, `[`, of `]` bevatten; en mag geen `:` bevatten vóór de eerste `/`, indien van toepassing</Message>
+
+<Message Id="T_WSP_PATH">Fysiek pad van de webserver</Message>
+<Message Id="H_WSP_PATH">Fysiek pad op de webserver van het applicatiepad</Message>
+
+<Message Id="T_EXTRA_CGI">Extra CGI-omgevingsvariabelen</Message>
+<Message Id="H_EXTRA_CGI">Een lijst met door komma&apos;s gescheiden extra CGI-omgevingsvariabelen die wordt verzonden naar InterSystems IRIS</Message>
+
+<Message Id="T_PROC_CLASS">Verwerken met deze klasse</Message>
+<Message Id="H_PROC_CLASS">De bestanden in dit pad verwerken met de opgegeven klasse</Message>
+
+<Message Id="T_GZIP_COMPRESSION">GZIP-compressie</Message>
+<Message Id="H_GZIP_COMPRESSION">GZIP-compressie in- of uitschakelen voor dit pad</Message>
+
+<Message Id="T_GZIP_MIN_FILE_SIZE">Minimumbestandsgrootte voor GZIP</Message>
+<Message Id="H_GZIP_MIN_FILE_SIZE">De minimale bestandgrootte, in Bytes, waarvoor GZIP compressie zal worden toegepast</Message>
+
+<Message Id="T_GZIP_EXCLUDE_FILE_TYPES">GZIP Uitzonderings-bestandtypen</Message>
+<Message Id="H_GZIP_EXCLUDE_FILE_TYPES">Vermijd GZIP-compressie voor deze bestandstypen</Message>
+
+<Message Id="T_RESPONSE_SIZE">Antwoordgrootte notificatie</Message>
+<Message Id="H_RESPONSE_SIZE">Selecteer de methode om de client in lichten over de omvang van de responsedata</Message>
+
+<Message Id="R_RESPONSE_SIZE_CT">Codering afgekapte transporten</Message>
+<Message Id="R_RESPONSE_SIZE_CL">Lengte van de Inhoud</Message>
+<Message Id="R_RESPONSE_SIZE_CT_CL">Chuncked Overdrachtscodering</Message>
+
+<Message Id="T_RESPONSE_SIZE_ALWAYS">Genereer een response omvangsnotificatie voor alle aanvragen</Message>
+<Message Id="H_RESPONSE_SIZE_ALWAYS">Kies deze optie om een response grootte-notificatie te genereren voor alle aanvragen (inclusief wanneer HTTP Keep-Alive niet gebruikt wordt)</Message>
+
+<Message Id="T_KEEPALIVE">KeepAlive</Message>
+<Message Id="H_KEEPALIVE">Schakel HTTP KeepAlive-connectiviteit voor dit pad in of uit.</Message>
+
+<Message Id="T_NPH">Non-Parsed Headers</Message>
+<Message Id="H_NPH">Schakel het Non-Parsed Headers-protocol voor dit pad in of uit.  Schakel deze eigenschap uit zodat de hostende webserver de antwoordheaders die zijn gegenereerd door CSP, kan verwerken.</Message>
+
+<Message Id="T_DEFAULT_SERVER">Standaardserver</Message>
+
+<Message Id="T_ALTERNATIVE_SERVERS">Alternatieve servers</Message>
+
+<Message Id="T_ALTERNATIVE_SERVER">Alternatieve server</Message>
+
+<Message Id="R_ALT_LB">Gebruiken voor load-balancing en failover</Message>
+<Message Id="R_ALT_FO">Alleen voor failover gebruiken</Message>
+
+<Message Id="R_ALT_LBx">Gebruik Load-Balancing en Fail-Over</Message>
+<Message Id="R_ALT_FOx">Gebruik Fail-Over</Message>
+<Message Id="R_ALT_ONEx">Gebruik enkel eerste Server</Message>
+
+
+<Message Id="A_723">Servers</Message>
+<Message Id="A_723x">Server</Message>
+
+<Message Id="A_731">U kunt de configuratie voor dit applicatiepad niet wissen</Message>
+<Message Id="A_733">Wis de configuratie voor dit applicatiepad</Message>
+
+<Message Id="Z_ACNS">De applicatieconfiguratie is niet opgeslagen omdat er geen naam opgegeven werd</Message>
+<Message Id="Z_ACC">De applicatieconfiguratie is gekopieerd</Message>
+<Message Id="Z_ACNC">De applicatieconfiguratie is niet gekopieerd omdat er een nieuwe naam werd opgegeven</Message>
+<Message Id="Z_ACD">De applicatieconfiguratie is gewist</Message>
+<Message Id="Z_ACS">Applicatieconfiguratie opgeslagen</Message>
+
+<Message Id="T_ERROR_APP_DISABLED">Applicatie is momenteel uitgeschakeld</Message>
+
+
+
+<!--                                      -->
+<!--  About Web Gateway                   -->
+<!--                                      -->
+
+<Message Id="Z_VERSION">Versie</Message>
+<Message Id="Z_GATEWAY_BUILD">Gateway Build</Message>
+<Message Id="Z_OPENSSL_VERSION">OpenSSL-versie</Message>
+<Message Id="Z_WS_NAME">Naam webserver</Message>
+<Message Id="Z_WS_TYPE">Type webserver</Message>
+<Message Id="Z_WS_API">Actieve interface</Message>
+<Message Id="Z_COPYRIGHT">Copyright</Message>
+
+<Message Id="Z_WS_INTERNAL">Interne webserver CSP-gateway</Message>
+<Message Id="Z_WS_MICROSOFT">Microsoft-webserver (of compatibel met ISAPI)</Message>
+<Message Id="Z_WS_NETSCAPE">Netscape-webserver (of compatibel met NSAPI)</Message>
+<Message Id="Z_WS_APACHE">Apache-webserver</Message>
+
+
+
+<!--                                      -->
+<!--  Message Groups                      -->
+<!--                                      -->
+
+<Message Id="G_ERROR_WEB_SERVER">Webserver-fout</Message>
+<Message Id="G_ERROR_AVAILABILITY">Fout bij beschikbaarheid server</Message>
+<Message Id="G_ERROR_ACCESS">Toegangsschending van server</Message>
+<Message Id="G_ERROR_PROGRAM">Programmafout op server</Message>
+<Message Id="G_LOGOUT">Server uitgelogd</Message>
+<Message Id="G_TIMEOUT">Time-out server</Message>
+<Message Id="G_SM">Systeembeheer</Message>
+
+
+
+<!--                                      -->
+<!--  General Text                        -->
+<!--                                      -->
+
+<Message Id="Z_CSPGW">CSP-gateway</Message>
+
+<Message Id="R_ENABLED">Aangezet</Message>
+<Message Id="R_DISABLED">Uitgezet</Message>
+<Message Id="R_NOACTION">Geen actie</Message>
+
+<Message Id="Z_DEFAULT">Standaard</Message>
+
+<Message Id="B_SAVE_CONFIGURATION">Bewaar configuratie</Message>
+
+<Message Id="Z_ERINI">Kan het configuratiebestand niet lezen</Message>
+<Message Id="Z_ERLOG">Kan gebeurtenissenlogboek niet lezen</Message>
+<Message Id="Z_EWLOG">Kan niet schrijven naar gebeurtenissenlogboek</Message>
+
+<Message Id="B_SUBMIT">Verzenden</Message>
+<Message Id="H_SUBMIT">Geselecteerde actie uitvoeren</Message>
+
+<Message Id="Z_ARE_YOU_SURE">Weet u het zeker?</Message>
+<Message Id="B_YES_DELETE">JA: VERWIJDEREN</Message>
+
+<Message Id="Z_SM">Systeembeheer</Message>
+<Message Id="Z_HELP">Help</Message>
+<Message Id="Z_ERROR_PAGES">Foutpagina&apos;s</Message>
+
+<Message Id="Z_NONE">Geen</Message>
+
+<Message Id="Z_WARNING">Waarschuwing</Message>
+
+<Message Id="Z_IV">Overgeerfde waarde</Message>
+<Message Id="Z_NIV">Geen waarde om te erven</Message>
+<Message Id="Z_IP">Geërfde pagina</Message>
+<Message Id="Z_NIP">Geen pagina om te erven</Message>
+
+<Message Id="Z_ILO">Ongeldige bewerking</Message>
+
+<Message Id="Z_SME">Systems Management-fout</Message>
+
+<Message Id="Z_CRE">De gateway kan het configuratiebestand niet lezen.  Controleer of deze over de benodigde bevoegdheden beschikt om dit bestand te kunnen lezen</Message>
+<Message Id="Z_CWE">De gateway kan niet naar het configuratiebestand schrijven.  Controleer of deze over de benodigde bevoegdheden beschikt om naar dit bestand te schrijven</Message>
+
+<Message Id="T_S_VERSION">Versie van InterSystems IRIS Server/s</Message>
+<Message Id="H_S_VERSION">&quot;De versie van &amp;#233;-servers waarmee deze gateway-installatie verbinding moet maken.  Selecteer de versie van de oudste server</Message>
+
+<Message Id="Z_CONF_RELOAD">De Gateway moet opnieuw gestart worden om de laatste configuratiewijzigingen door te voeren.</Message>
+
+
+
+<!--                                      -->
+<!--  Error Messages                      -->
+<!--                                      -->
+
+<Message Id="M_ERROR_CONDITION">Foutconditie</Message>
+<Message Id="M_SERVER_TIMEOUT">De CSP-toepassing heeft niet gereageerd binnen de time-outperiode.</Message>
+<Message Id="M_NO_ACCESS">Toegang tot de server is geweigerd.</Message>
+<Message Id="M_CLOSE_CONNECTION">De CSP-toepassing heeft vóór het verzenden van een antwoord de verbinding verbroken.</Message>
+<Message Id="M_INCOMPLETE_RESPONSE">De CSP-toepassing heeft vóór het verzenden van een volledig antwoord de verbinding verbroken.</Message>
+
+<Message Id="T_ERROR_NO_MEMORY">Niet genoeg geheugen om het verzoek uit te voeren</Message>
+<Message Id="T_ERROR_NO_CHANNEL">Alle kanalen naar de Server zijn in gebruik: Probeer het later nog eens</Message>
+<Message Id="T_ERROR_ILLEGAL_SA_ACCESS">Niet-toegestande toegangspoging van Status-bewuste (private) verbinding door de client</Message>
+<Message Id="T_ERROR_INCORRECT_SA_HANDLE">Onjuiste Status-bewuste (private) verbindingsidentifier opgegeven door de client</Message>
+<Message Id="T_ERROR_SA_SESSION_CLOSED">De Status-Bewuste (private) Verbinding waarmee U verbonden was is nu gesloten</Message>
+<Message Id="T_ERROR_REQ_TIMEOUT">Aanvraag heeft maximale tijd overschreden</Message>
+
+
+</MsgDomain>
+</MsgFile>

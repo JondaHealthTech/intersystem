@@ -1,0 +1,10 @@
+<!--
+Utilities: Add Host to Production Wizard
+-->
+
+<AutoPage domain="Ensemble" pagename="Host Wizard">
+
+<Pane name="Detail" type="CSPX.EnsHostWizardPane">
+</Pane>
+
+</AutoPage>

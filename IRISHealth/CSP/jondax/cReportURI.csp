@@ -1,0 +1,24 @@
+
+<script language="Cache" runat="server">
+  // Handle POST requests
+    // Check if the request method is POST
+    If %request.Method = "POST" {
+      // Read the incoming JSON payload
+      Set payload = %request.Content.Read()
+      
+      // Log the report (you can customize this to save to a global or database)
+      Set ^ReportURILog($I(^ReportURILog)) = $ZDateTime($Horolog, 3) _ " - " _ payload
+      
+      // Return a success response
+      Set %response.Status = 200
+      Set %response.ContentType = "application/json"
+      Write "{""status"":""success""}"
+    } Else {
+      // Return an error for non-POST requests
+      Set %response.Status = 405
+      Set %response.ContentType = "application/json"
+      Write "{""status"":""error"", ""message"":""Method Not Allowed""}"
+    }
+    
+    Quit $$$OK
+</script>

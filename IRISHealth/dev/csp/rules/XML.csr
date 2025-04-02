@@ -1,0 +1,166 @@
+<!-- CSP XML Tags -->
+<!-- Copyright (c) 2000 InterSystems Corp. ALL RIGHTS RESERVED. -->
+
+<csr:rule name="%XSQLORACLE" match="XSQL:QUERY[XMLNS:XSQL=URN:ORACLE-XSQL]">
+<csr:description>
+Support Oracle's XSQL tag
+</csr:description>
+
+<!-- We need to pre-process the Oracle SQL to convert {@name} into %request.Get(name) -->
+
+<csr:attribute name=Connection description="Connection identifier" type="VariableName:STRING" >
+<csr:attribute name="Rowset-Element" description="Specifies the XML tag for the row set, the default is ROWSET">
+<csr:attribute name="Row-Element" description="Specifies the XML tag for each row, the default is ROW">
+<csr:attribute name="Skip-Rows" description="Specifies the number of rows to skip before returning data">
+<csr:attribute name="Max-Rows" description="Specifies the maximum number of rows to return (not including any rows skipped by skip-rows)">
+<csr:attribute name="Tag-Case" description="Controls the case of the XML tags, 'upper' means uppercase and 'lower' specifies lowercase.  The default is to use the case of the column names">
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	; find out how many parameters we have
+	New args,arglist,mode,i,sql,expr
+
+	Set sql=##class(%CSP.XMLSQL).PreProcessSQL(..InnerText(),.args,1,.mode)
+
+	Do ..SetAttribute("%SQL",sql)
+
+	#; build argument list for Execute; stuff it into %ARGLIST attribute
+	Set arglist=""
+	For i=1:1:args Set arglist=arglist_$S(i>1:",",1:"")_##class(%CSP.XMLSQL).ResolveElementName(args(i),##this,1)
+	Do ..SetAttribute("%ARGLIST",arglist)
+	
+	#; Make up a name
+	Set i=1+%compiler.Get("%rscounter",0)
+	Do %compiler.Set("%rscounter",i)
+	Do ..SetAttribute("NAME","SQLRS"_i)
+
+	#; handle any range limits
+	If ..IsDefined("SKIP-ROWS") Do
+	. Set i=..GetAttribute("SKIP-ROWS")
+	. Set i=##class(%CSP.XMLSQL).ResolveElementName(i,##this,0)
+	. Set expr=":$S("_i_"'="""":row>"_i_",1:1)"
+	Else  Set expr=""
+	Do ..SetAttribute("%SKIP",expr)
+
+	If ..IsDefined("MAX-ROWS") Do
+	. Set i=..GetAttribute("MAX-ROWS")
+	. Set i=##class(%CSP.XMLSQL).ResolveElementName(i,##this,0)
+	. Set expr="  Quit:$S("_i_"'="""":rows'<"_i_",1:0)"
+	Else  Set expr=""
+	Do ..SetAttribute("%MAX",expr)
+
+	#; Check rowset-element and row-element
+	Set expr=$S(..IsDefined("ROWSET-ELEMENT"):..GetAttribute("ROWSET-ELEMENT"),1:"ROWSET")
+	Do ..SetAttribute("%XMLROWSET",expr)
+
+	Set expr=$S(..IsDefined("ROW-ELEMENT"):..GetAttribute("ROW-ELEMENT"),1:"ROW")
+	Do ..SetAttribute("%XMLROW",expr)
+
+	#; Check the case
+	Set expr=$ZCVT(..GetAttribute("TAG-CASE"),"l"),expr=$S(expr="lower":"l",expr="upper":"u",1:"")
+	Set expr=$S(expr'="":"$ZCVT(%arg,"""_expr_""")",1:"%arg")
+	Do ..SetAttribute("%XMLCVT",expr)
+
+	#; Set the content-type
+	Do %compiler.Set("%cspparam.CONTENTTYPE","text/xml")
+
+</script>
+
+<script language="Cache" runat="server">
+
+	#define XMLCVT(%arg)    ##(..GetAttribute("%XMLCVT"))##
+
+	; Open instance of ResultSet
+	Set %sc=1
+	Set ##(..GetAttribute("NAME"))##=##class(%ResultSet).%New("%DynamicQuery.SQL")
+
+	; translate tab/cr/nl to spaces
+	Set %sc=##(..GetAttribute("NAME"))##.Prepare($TR(##'..GetAttribute("%SQL")'##,$C(9,13,10),"   "),0,"DISPLAY")
+	If (+%sc=0) Do ..ShowError(%sc) QUIT
+
+	Set %sc=##(..GetAttribute("NAME"))##.Execute(##(..GetAttribute("%ARGLIST"))##)
+	If (+%sc=0) Do ..ShowError(%sc) QUIT
+
+	#; Collect the columns information
+	Set columns=##(..GetAttribute("NAME"))##.GetColumnCount()
+	For i=1:1:columns Set columns(i)=##(..GetAttribute("NAME"))##.GetColumnName(i)
+
+	Set xmlrowset=$$$XMLCVT("##(..GetAttribute("%XMLROWSET"))##")
+	Set xmlrow=$$$XMLCVT("##(..GetAttribute("%XMLROW"))##")
+	If xmlrowset'="" Write "<",xmlrowset,">",$C(13,10)
+	Set rows=0
+	For row=1:1 Quit:'##(..GetAttribute("NAME"))##.Next()  Do##(..GetAttribute("%SKIP"))####(..GetAttribute("%MAX"))##
+	. If xmlrow'="" Write "<",xmlrow,">",$C(13,10)
+	. For i=1:1:columns Set name=$ZCVT($$$XMLCVT(..EscapeHTML(columns(i))),"O","UTF8") Write "<",name,">",$ZCVT(..EscapeHTML(##(..GetAttribute("NAME"))##.GetData(i)),"O","UTF8"),"</",name,">",$C(13,10)
+	. If xmlrow'="" Write "</",xmlrow,">",$C(13,10)
+	. Set rows=rows+1
+	If xmlrowset'="" Write "</",xmlrowset,">",$C(13,10)
+	Set ##(..GetAttribute("NAME"))##=""
+</script>
+
+</csr:action>
+</csr:rule>
+
+
+<csr:rule name="%MSXMLSQL" match="SQL:QUERY[XMLNS:SQL=URN:SCHEMAS-MICROSOFT-COM:XML-SQL]">
+<csr:description>
+Support Microsoft's SQL tag
+</csr:description>
+
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	; find out how many parameters we have
+	New args,arglist,mode,i,sql
+
+	Set sql=##class(%CSP.XMLSQL).PreProcessSQL(..InnerText(),.args,0,.mode)
+
+	Do ..SetAttribute("%SQL",sql)
+
+	; build argument list for Execute; stuff it into %ARGLIST attribute
+	Set arglist=""
+	For i=1:1:args Set arglist=arglist_$S(i>1:",",1:"")_"%request.Get("""_args(i)_""")"
+	Do ..SetAttribute("%ARGLIST",arglist)
+	
+	; Make up a name
+	Set i=1+%compiler.Get("%rscounter",0)
+	Do %compiler.Set("%rscounter",i)
+	Do ..SetAttribute("NAME","SQLRS"_i)
+
+	#; Set the content-type
+	Do %compiler.Set("%cspparam.CONTENTTYPE","text/xml")
+</script>
+
+<script language="Cache" runat="server">
+	; Open instance of ResultSet
+	Set %sc=1
+	Set ##(..GetAttribute("NAME"))##=##class(%ResultSet).%New("%DynamicQuery.SQL")
+
+	; translate tab/cr/nl to spaces
+	Set %sc=##(..GetAttribute("NAME"))##.Prepare($TR(##'..GetAttribute("%SQL")'##,$C(9,13,10),"   "),0,"DISPLAY")
+	If (+%sc=0) Do ..ShowError(%sc) QUIT
+
+	Set %sc=##(..GetAttribute("NAME"))##.Execute(##(..GetAttribute("%ARGLIST"))##)
+	If (+%sc=0) Do ..ShowError(%sc) QUIT
+
+	#; Collect the columns information
+	Set columns=##(..GetAttribute("NAME"))##.GetColumnCount()
+	For i=1:1:columns Set columns(i)=##(..GetAttribute("NAME"))##.GetColumnName(i)
+
+	For  Quit:'##(..GetAttribute("NAME"))##.Next()  Do
+	. Write "<row "
+	. For i=1:1:columns Write $ZCVT(..EscapeHTML(columns(i)),"O","UTF8"),"=""",$ZCVT(..EscapeHTML(##(..GetAttribute("NAME"))##.GetData(i)),"O","UTF8"),""" "
+	. Write "/>",$C(13,10)
+	Set ##(..GetAttribute("NAME"))##=""
+
+</script>
+
+</csr:action>
+</csr:rule>
+
+
+
+
+<!-- End-of-file -->
+
+

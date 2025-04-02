@@ -1,0 +1,71 @@
+/* @class="%ZEN.Component.dynaView" */
+
+/* @doc="Default style for dynaView: list mode." */
+table.dynaViewList {
+	background: white;
+	padding: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+/* @doc="Default style for dynaView: details mode." */
+table.dynaViewDetails {
+	background: white;
+	padding: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+/* @doc="Table header within dynaView: details mode." */
+table.dynaViewDetails th {
+	text-align: left;
+	color: black;
+	font-weight: bold;
+	padding: 2px;
+	border-bottom: 1px solid #808080;
+	background: #404040;
+	background-image: url(images/grad-gray-10x30.png);
+	background-repeat: repeat-x;
+}
+
+/* @doc="Selectable item within dynaView." */
+.dynaViewItem {
+	vertical-align: middle;
+	white-space: nowrap;
+	color: black;
+	/* ie does not handle transparent */
+	border: 1px solid white;
+	cursor: default;
+}
+
+/* @doc="Selected item in dynaView." */
+.dynaViewItemSelected {
+	vertical-align: middle;
+	white-space: nowrap;
+	color: black;
+	background: #E0E0E0;
+	border: 1px dotted #202060;
+}
+
+/* @doc="Selected item with focus in dynaView." */
+.dynaViewItemFocus {
+	vertical-align: middle;
+	white-space: nowrap;
+	color: white;
+	background: #000040;
+	background-image: url(images/grad-blue-10x30.png);
+	background-repeat: repeat-x;
+	border: 1px solid black;
+}
+
+/* @doc="Image in dynaView." */
+.dynaViewItem img, .dynaViewItemSelected img, .dynaViewItemFocus img {
+	border: none;
+	vertical-align: middle;
+}
+
+.dynaViewItem:hover {
+	color: red;
+}
+
+/* EOF */

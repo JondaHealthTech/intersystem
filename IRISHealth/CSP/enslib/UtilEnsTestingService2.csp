@@ -1,0 +1,106 @@
+<AutoPageENS domain="Ensemble" parentpage="UtilEnsHome.csp" pagename="Testing Service - 3 of 4" title="@Ensemble:EnsTestingService@Testing Service">
+<CSP:CLASS INCLUDES="Ensemble,EnsUI">
+
+<SCRIPT LANGUAGE="CACHE" RUNAT="SERVER">
+	Set tProduction = $G($$$EnsRuntime("Name"))
+	Set tTarget = $G(%request.Data("TARGET",1))
+	Set tReqClass = $G(%request.Data("REQUEST",1))
+	Set tDescription = $$$TextHTML("Fill in the details (if any) for this request and press the Invoke button to send the request to its target.")
+</SCRIPT>
+
+<html>
+<head>
+<title><csp:text TextId="TestingService3" Domain="Ensemble"></csp:text></title>
+<LINK REL="stylesheet" TYPE="text/css" HREF="/csp/sys/csputils.css" TITLE="Standard Style" >
+
+<style>
+table.StatTable 	{ border: 1px black solid; background: white; }
+table.StatTable td	{ font-size: 0.8em; }
+</style>
+
+<script language="javascript">
+function invokeTest()
+{
+	var contentCtl = self.document.getElementById('%XCONT');
+	if (contentCtl) self.document.getElementById('$IDXCONT').value = contentCtl.value;
+	var theForm = self.document.theForm;
+	theForm.submit();
+}
+</script>
+
+</head>
+<body>
+<table border="0" class="LayoutMain" width="100%" height="100%" cellpadding="0" cellspacing="0">
+<tr height="100%">
+<td class="LayoutContentCol" width="80%" >
+
+<div align="center" class="Text1" style="margin-left:20%;margin-right:20%;">
+#(tDescription)#<hr>
+</div>
+
+<div align="center">
+<table class="StatTable" border="0" cellspacing="5" cellpadding="0">
+<tr><td align="right"><csp:text Domain="Ensemble" TextId="CurrentProduction">Current Production:</csp:text></td>
+<td><b>#(tProduction)#&nbsp;</b></td></tr>
+<tr><td align="right"><csp:text Domain="Ensemble" TextId="Target">Target:</csp:text></td>
+<td><b>#(tTarget)#&nbsp;</b></td></tr>
+<tr><td align="right"><csp:text Domain="Ensemble" TextId="RequestType">Request Type</csp:text></td>
+<td><b>#(tReqClass)#&nbsp;</b></td></tr>
+</table>
+</div>
+
+<div align="center" class="Text">
+<script language=Cache runat=server>
+	Set tID(1) = tTarget
+	Set tID(2) = tReqClass
+	
+	// !!! error checking
+	If ((tTarget = "") || (tReqClass = "")) {
+		Write $$$TextHTML("Target and Request class must be provided."),!
+	} Else {
+		Set tObj = $zobjclassmethod(tReqClass,"%New")
+		If ($IsObject(tObj)) {
+			If ($G(%request.Data("TYPE",1)) = "") {
+				// if we get here after sending a test message
+				//  then we cannot go back to the start of the wizard
+				set n = 1
+			} Else {
+				Set backArgs = "?TYPE=" _ $G(%request.Data("TYPE",1)) _
+								"&OPERATION=" _ $G(%request.Data("OPERATION",1)) _
+								"&PROCESS=" _ $G(%request.Data("PROCESS",1))
+	
+				Set tButtons(1) = ##class(%CSP.Util.FormButton).%New()
+				Set tButtons(1).Name = "$AUTOFORM_BACK"
+				Set tButtons(1).Caption = $$$Text("Back")
+				Set tButtons(1).OnClick = "self.document.location='"_..Link("UtilEnsTestingService1.csp" _ backArgs)_"';" 
+				Set n = 2
+			}
+			Set tButtons(n) = ##class(%CSP.Util.FormButton).%New()
+			Set tButtons(n).Name = "$AUTOFORM_SAVE"
+			Set tButtons(n).Caption = $$$Text("Invoke")
+			Set tButtons(n).OnClick = "invokeTest();"
+
+			Set n = n + 1
+			Set tButtons(n) = ##class(%CSP.Util.FormButton).%New()
+			Set tButtons(n).Name = "$AUTOFORM_CANCEL"
+			Set tButtons(n).Caption = $$$Text("Cancel")
+			Set tButtons(n).OnClick = "self.document.location='"_..Link("UtilEnsHome.csp")_"';"
+
+			Set tURL = ..Link("UtilEnsTestingService3.csp")
+			If $zobjclassmethod(tReqClass,"%Extends","Ens.Util.MessageBodyMethods") {
+				Do $zobjclassmethod(tReqClass, "%DrawHTMLForm", tObj, .tID, tURL, .tButtons)
+			} ElseIf $zobjclassmethod(tReqClass,"%Extends","%CSP.Util.AutoForm") {
+				Do $zobjclassmethod(tReqClass, "DrawHTMLForm", tObj, .tID, tURL, .tButtons)
+			} Else {
+				Do ##class(%CSP.Util.AutoFormDynamic).DrawHTMLForm(tObj, .tID, tURL, .tButtons)
+			}
+		}
+	}
+	
+</script>
+</div>
+
+</td></tr></table>
+
+</body>
+</html>

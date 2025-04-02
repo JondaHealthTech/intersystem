@@ -1,0 +1,14 @@
+
+2025-03-26 13:00:30.278 HS.Util.Installer.Foundation:Install ========== START: Namespace Activation ==========
+2025-03-26 13:00:30.281 HS.Util.Installer.Foundation:CheckPrivileges User 'dbyan' has %Admin_Manage:USE privilege
+2025-03-26 13:00:30.299 HS.Util.Installer.Foundation:SecureInstall tComponent Foundation = JONDAX
+2025-03-26 13:00:31.496 HS.HC.Util.Installer:EnableEnsemble Created Ensemble Mappings
+2025-03-26 13:00:31.799 HS.HC.Util.Installer:EnableEnsemble Configuration Loaded
+2025-03-26 13:00:32.666 HS.HC.Util.Installer:EnableEnsemble Compiling Ensemble DeepSee Dashboard
+2025-03-26 13:00:32.671 HS.HC.Util.Installer:EnableEnsemble Ensemble Enabled
+2025-03-26 13:00:33.364 HS.Util.Installer.Foundation:SecureInstall Added Package mappings HS,HSMOD,SchemaMap,%pkg.isc
+2025-03-26 13:00:33.416 HS.Util.Installer.Foundation:SecureInstall Added include mappings HSMOD.*,SchemaMap*,%pkg.isc.*
+2025-03-26 13:00:34.466 HS.Util.Installer.Foundation:BuildPortalApp Created Portal CSP app
+2025-03-26 13:00:35.530 HS.Util.Installer.Foundation:CreateProduction Compiled template JONDAXPKG.FoundationProduction
+2025-03-26 13:00:35.534 HS.Util.Installer.Foundation:AdditionalSetup Set Credential HS_Services
+2025-03-26 13:00:36.791 HS.Util.Installer.Foundation:SecureInstall Recompiled XML extension classes

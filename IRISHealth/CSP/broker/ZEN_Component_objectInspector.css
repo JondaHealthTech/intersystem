@@ -1,0 +1,117 @@
+/* @class="%ZEN.Component.objectInspector" */
+
+/* @doc="Main table for objectInspector." */
+table.inspectorGrid {
+	background: white;
+	table-layout: fixed;
+	padding: 0px;
+	width: 100%;
+}
+
+/* @doc="Label for objectInspector." */
+table.inspectorGrid th.dynaGridLabel {
+	border-right: 1px solid gray;
+	border-bottom: 1px solid gray;
+	padding: 1px;
+	padding-left: 3px;
+	padding-right: 3px;
+	cursor: pointer;
+	background: #DDEEFF;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+	color: black;
+	background: #404040;
+	background-image: url(images/grad-gray-10x100.png);
+	background-repeat: repeat-x;
+}
+
+/* @doc="Column labels for objectInspector." */
+table.inspectorGrid th.dynaGridColumn {
+	border-bottom: 1px solid gray;
+	padding: 1px;
+	padding-left: 3px;
+	padding-right: 3px;
+	cursor: pointer;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+	color: black;
+	background: #404040;
+	background-image: url(images/grad-gray-10x100.png);
+	background-repeat: repeat-x;
+}
+
+/* @doc="Row labels for objectInspector." */
+table.inspectorGrid th.dynaGridRow {
+	border-right: 1px solid gray;
+	border-bottom: 1px solid gray;
+	padding: 1px;
+	padding-left: 3px;
+	padding-right: 3px;
+	cursor: pointer;
+	background: #DDEEFF;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+	font-weight: normal;
+	color: darkblue;
+	background: #404040;
+	background-image: url(images/grad-gray-10x100.png);
+	background-repeat: repeat-x;
+}
+
+/* @doc="Cells within objectInspector." */
+table.inspectorGrid td {
+	border-bottom: 1px solid gray;
+	padding: 0px;
+	margin: 0px;
+	cursor: pointer;
+	text-align: right;
+}
+
+table.inspectorGrid th.dynaGridLabel:hover,
+table.inspectorGrid th.dynaGridRow:hover,
+table.inspectorGrid th.dynaGridColumn:hover {
+	color: white;
+	background: #808080;
+}
+
+table.inspectorGrid td div {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+/* @doc="Current cell with focus within objectInspector." */
+table.inspectorGrid td div.focus {
+	color: white;
+	background: #000040;
+	background-image: url(images/grad-blue-10x30.png);
+	background-repeat: repeat-x;
+}
+
+/* @doc="Selected cell within objectInspector." */
+table.inspectorGrid td div.selected {
+	background: #E0E0E0;
+}
+
+.objectInspectorButton {
+	font-size: 0.8em;
+	height: 20px;
+	width: 20px;
+	background-image: url(images/inspector.gif);
+	background-repeat: no-repeat;
+	background-color: #C0C0C0;
+}
+
+/* div containing popup button */
+.objectInspectorButtonDiv {
+	width: 100%;
+	height: 100%;
+	background: #000040;
+	background-image: url(images/grad-blue-10x30.png);
+	background-repeat: repeat-x;
+}
+
+/* EOF */

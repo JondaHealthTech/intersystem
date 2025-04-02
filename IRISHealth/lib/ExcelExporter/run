@@ -1,0 +1,197 @@
+#! /bin/sh
+
+rpm_mode=true
+java_exec_args="-Djava.awt.headless=true"
+excel_exec_args=
+no_config=false
+excel_exec_debug=false
+show_help=false
+for arg in "$@" ; do
+  if [ "$arg" = "--noconfig" ] ; then
+    no_config=true
+  elif [ "$arg" = "--execdebug" ] ; then
+    excel_exec_debug=true
+  elif [ my"$arg" = my"--h"  -o my"$arg" = my"--help"  ] ; then
+    show_help=true
+    excel_exec_args="$excel_exec_args -h"
+  else
+    if [  my"$arg" = my"-h"  -o  my"$arg" = my"-help" ] ; then
+      show_help=true
+    fi
+    excel_exec_args="$excel_exec_args \"$arg\""
+  fi
+done
+
+# Source/default excel configuration
+if $no_config ; then
+  rpm_mode=false
+else
+  # provide default configuration values
+  if [ -z "$rpm_mode" ] ; then
+    rpm_mode=false
+  fi
+  if [ -z "$usejikes" ] ; then
+    usejikes=$use_jikes_default
+  fi
+fi
+
+# Setup Java environment in rpm mode
+if $rpm_mode ; then
+  if [ -f /usr/share/java-utils/java-functions ] ; then
+    . /usr/share/java-utils/java-functions
+    set_jvm
+    set_javacmd
+  fi
+fi
+
+# OS specific support.  $var _must_ be set to either true or false.
+cygwin=false;
+darwin=false;
+case "`uname`" in
+  CYGWIN*) cygwin=true ;;
+  Darwin*) darwin=true
+           if [ -z "$JAVA_HOME" ] ; then
+             JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
+           fi
+           ;;
+esac
+
+if [ -z "$EXCEL_HOME" -o ! -d "$EXCEL_HOME" ] ; then
+  ## resolve links - $0 may be a link to excel's home
+  PRG="$0"
+  progname=`basename "$0"`
+
+  # need this for relative symlinks
+  while [ -h "$PRG" ] ; do
+    ls=`ls -ld "$PRG"`
+    link=`expr "$ls" : '.*-> \(.*\)$'`
+    if expr "$link" : '/.*' > /dev/null; then
+      PRG="$link"
+    else
+      PRG=`dirname "$PRG"`"/$link"
+    fi
+  done
+
+  EXCEL_HOME=`dirname "$PRG"`
+
+  # make it fully qualified
+  EXCEL_HOME=`cd "$EXCEL_HOME" && pwd`
+fi
+
+# For Cygwin, ensure paths are in UNIX format before anything is touched
+if $cygwin ; then
+  [ -n "$EXCEL_HOME" ] &&
+    EXCEL_HOME=`cygpath --unix "$EXCEL_HOME"`
+  [ -n "$JAVA_HOME" ] &&
+    JAVA_HOME=`cygpath --unix "$JAVA_HOME"`
+fi
+
+if [ "$OS" = "Windows_NT" ] ; then
+    pathSepChar=";"
+else
+    pathSepChar=":"
+fi
+
+if [ -z "$JAVACMD" ] ; then
+  if [ -n "$JAVA_HOME"  ] ; then
+    if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
+      # IBM's JDK on AIX uses strange locations for the executables
+      JAVACMD="$JAVA_HOME/jre/sh/java"
+    else
+      JAVACMD="$JAVA_HOME/bin/java"
+    fi
+  else
+    JAVACMD=`which java 2> /dev/null `
+    if [ -z "$JAVACMD" ] ; then
+        JAVACMD=java
+    fi
+  fi
+fi
+
+if [ ! -x "$JAVACMD" ] ; then
+  echo "Error: JAVA_HOME is not defined correctly."
+  echo "  We cannot execute $JAVACMD"
+  exit 1
+fi
+
+if [ -n "$CLASSPATH" ] ; then
+  LOCALCLASSPATH=$CLASSPATH
+fi
+
+# add excel.jar, excel-sandbox and excel-hyph.jar, which reside in $EXCEL_HOME/build
+LOCALCLASSPATH=$LOCALCLASSPATH
+
+# add in the dependency .jar files, which reside in $EXCEL_HOME/lib
+OLD_IFS=$IFS
+IFS="
+"
+DIRLIBS=${EXCEL_HOME}/*.jar
+for i in ${DIRLIBS}
+do
+    # if the directory is empty, then it will return the input string
+    # this is stupid, so case for it
+    if [ "$i" != "${DIRLIBS}" ] ; then
+      if [ -z "$LOCALCLASSPATH" ] ; then
+        LOCALCLASSPATH=$i
+      else
+        LOCALCLASSPATH="$i"${pathSepChar}$LOCALCLASSPATH
+      fi
+    fi
+done
+IFS=$OLD_IFS
+
+# For Cygwin, switch paths to appropriate format before running java
+# For PATHs convert to unix format first, then to windows format to ensure
+# both formats are supported. Probably this will fail on directories with ;
+# in the name in the path. Let's assume that paths containing ; are more
+# rare than windows style paths on cygwin.
+if $cygwin; then
+  if [ "$OS" = "Windows_NT" ] && cygpath -m .>/dev/null 2>/dev/null ; then
+    format=mixed
+  else
+    format=windows
+  fi
+  EXCEL_HOME=`cygpath --$format "$EXCEL_HOME"`
+  LCP_TEMP=`cygpath --path --unix "$LOCALCLASSPATH"`
+  LOCALCLASSPATH=`cygpath --path --$format "$LCP_TEMP"`
+  if [ -n "$CLASSPATH" ] ; then
+    CP_TEMP=`cygpath --path --unix "$CLASSPATH"`
+    CLASSPATH=`cygpath --path --$format "$CP_TEMP"`
+  fi
+  CYGHOME=`cygpath --$format "$HOME"`
+fi
+
+# add a second backslash to variables terminated by a backslash under cygwin
+if $cygwin; then
+  case "$EXCEL_HOME" in
+    *\\ )
+    EXCEL_HOME="$EXCEL_HOME\\"
+    ;;
+  esac
+  case "$CYGHOME" in
+    *\\ )
+    CYGHOME="$CYGHOME\\"
+    ;;
+  esac
+  case "$LOCALCLASSPATH" in
+    *\\ )
+    LOCALCLASSPATH="$LOCALCLASSPATH\\"
+    ;;
+  esac
+  case "$CLASSPATH" in
+    *\\ )
+    CLASSPATH="$CLASSPATH\\"
+    ;;
+  esac
+fi
+
+# Execute excel using eval/exec to preserve spaces in paths,
+# java options, and excel args
+if [ "$EXCELMEMSIZE" = "" ] ; then
+    EXCELMEMSIZE="512m"
+fi
+excel_exec_command="exec \"$JAVACMD\" -classpath \"$LOCALCLASSPATH\" -Xmx$EXCELMEMSIZE -Djava.awt.headless=true $EXCEL_OPTS com.intersystems.excel.ExportWithoutServer $excel_exec_args"
+if $excel_exec_debug ; then
+    echo $excel_exec_command
+fi
+eval $excel_exec_command

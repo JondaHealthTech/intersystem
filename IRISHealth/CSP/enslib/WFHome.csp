@@ -1,0 +1,57 @@
+<!--
+Home page for Workflow.
+-->
+
+<AutoPage domain="Ensemble" pagename="Workflow">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Workflow Portal</Text>
+</Pane>
+
+<Pane name="Navigator" type="%CSP.Util.NavigatorPane">
+	<Commands>
+		<Action href="UtilEnsHome.csp">
+			<Caption>Home</Caption>
+			<Popup>Go to the Management Portal page.</Popup>
+		</Action>
+
+		<Action href="WFHome.csp">
+			<Caption>Workflow Home</Caption>
+			<Popup>Go to the Workflow Home Page.</Popup>
+		</Action>
+
+		<Action href="WFTasks.csp">
+			<Caption>My Tasks</Caption>
+			<Popup>Displays Worklist for current user.</Popup>
+		</Action>
+
+		<Action href="WFRoles.csp">
+			<Caption>Workflow Roles</Caption>
+			<Popup>Displays Workflow Role Management page.</Popup>
+		</Action>
+
+		<Action href="WFUsers.csp">
+			<Caption>Workflow Users</Caption>
+			<Popup>Displays Workflow User Management page.</Popup>
+		</Action>
+
+		<Action href="WFTasklist.csp">
+			<Caption>Task Browser</Caption>
+			<Popup>Displays Workflow Task Browser.</Popup>
+		</Action>
+
+		<Action href="WFWorklist.csp">
+			<Caption>Worklist Browser</Caption>
+			<Popup>Displays Workflow Worklist Item Browser.</Popup>
+		</Action>
+
+	</Commands>
+
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.Pane">
+	<Text>Welcome to the Workflow Management Portal</Text>
+	<Align>left</Align>
+</Pane>
+
+</AutoPage>

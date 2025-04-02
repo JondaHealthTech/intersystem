@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+		q 1
+		</script>
+    <script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+    <title>Delete Account Survey</title>
+	<link rel="stylesheet" href="assets/styles/trialDeleteAccSurvey.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <img src="./assets/images/trial/logo.png" alt="JondaX Logo" class="logo">
+            <h1>We're Sorry to See You Go!</h1>
+            <div class="sad-face"><img src="./assets/images/trial/Vector.png" alt="Sad Face" class="sad-face"></div>
+            <p>Your feedback is important to us. Before you delete your account, could you please take a moment to answer one quick question? This will help us improve our service.</p>
+            
+        </div>
+        <div class="right-section">
+            <h2>What is the primary reason for deleting your JondaX Trial?</h2>
+            <form id="feedback-form">
+                <label class="custom-radio">
+                    <input type="radio" name="reason" value="time">
+                    <span class="custom-radio-btn"></span>
+                    I didn&apos;t have enough time to try it out.
+                </label><br>
+                <label class="custom-radio">
+                    <input type="radio" name="reason" value="features">
+                    <span class="custom-radio-btn"></span>
+                    I didn&apos;t find the features useful.
+                </label><br>
+                <label class="custom-radio">
+                    <input type="radio" name="reason" value="issues">
+                    <span class="custom-radio-btn"></span>
+                    I had technical issues.
+                </label><br>
+                <label class="custom-radio">
+                    <input type="radio" name="reason" value="privacy">
+                    <span class="custom-radio-btn"></span>
+                    I have privacy/security concerns.
+                </label><br>
+                <label class="custom-radio">
+                    <input type="radio" name="reason" value="alternative">
+                    <span class="custom-radio-btn"></span>
+                    I found a better alternative.
+                </label><br>
+                <label class="custom-radio">
+                    <input type="radio" name="reason" value="other">
+                    <span class="custom-radio-btn"></span>
+                    Other (please specify)
+                </label>
+                <input type="text" id="other-reason" placeholder="Type your answer here" disabled>
+                <p class="TQ">Thank you for your feedback!</p>
+                <button type="button" class="delete-btn" onclick="jConfirm()" disabled>Delete Profile</button>
+            </form>
+        </div>
+    </div>
+<script type="text/javascript">
+	let mySessionEnd;	
+	window.onload=resetTimer;
+	document.onmousemove = resetTimer;
+	document.onmousedown = resetTimer; 
+	document.ontouchstart = resetTimer;
+	document.onclick = resetTimer; 
+	document.onkeypress = resetTimer;
+	document.addEventListener('scroll', resetTimer, true); 
+    const form = document.getElementById('feedback-form');
+    const deleteBtn = document.querySelector('.delete-btn');
+    const otherReasonInput = document.getElementById('other-reason');
+    
+    function resetTimer(){
+	clearTimeout(mySessionEnd);
+	mySessionEnd = setTimeout(jLockDown, 3600000);
+	}
+	function clearTimer(){
+		clearTimeout(mySessionEnd);
+	}
+	function jLockDown(){
+		#server(..cLockDown())#
+	}
+    function handleFormChange() {
+        const selectedReason = form.elements['reason'].value;
+        if (selectedReason === 'other') {
+            otherReasonInput.disabled = false;
+        } else {
+            otherReasonInput.disabled = true;
+            otherReasonInput.value = '';  
+        }
+
+        if (selectedReason) {
+            deleteBtn.disabled = false;
+            deleteBtn.style.opacity = '1';
+        } else {
+            deleteBtn.disabled = true;
+            deleteBtn.style.opacity = '0.6';
+        }
+    }
+
+	form.addEventListener('change', handleFormChange);
+
+
+    function jConfirm() {
+        const selectedReason = form.elements['reason'].value;
+        const selectedInput =form.querySelector('input[name="reason"]:checked');
+        const label = selectedInput.closest('label');
+        let reason =''      
+
+        if(selectedReason === 'other') {
+            reason = otherReasonInput.value.trim();
+        } else {
+            reason = label ? label.textContent.trim() : '';  
+            }
+        #server(..cAddReason(reason))#
+        window.open("trialAccDeleted.csp","_self")        }
+</script>
+<script type="text/javascript">
+let mySessionEnd;	
+window.onload =resetTimer;
+document.onmousemove = resetTimer;
+document.onmousedown = resetTimer; 
+document.ontouchstart = resetTimer;
+document.onclick = resetTimer; 
+document.onkeypress = resetTimer;
+document.addEventListener('scroll', resetTimer, true); 
+
+
+function resetTimer(){
+	clearTimeout(mySessionEnd);
+	mySessionEnd = setTimeout(jLockDown, 3600000);
+}
+function clearTimer(){
+	clearTimeout(mySessionEnd);
+}
+function jLockDown(){
+	#server(..cLockDown())#
+}
+
+</script>
+<script language="cache" method="cAddReason" arguments="d1:%String">
+	s uid=$g(%session.Data("UserID"))
+    &sql(Update MX."User" SET Notes=:d1 WHERE ID=:uid)
+    k %session.Data
+</script>
+<script language="cache" method="cLockDown">
+	k %session.Data
+	&js<window.open("trialLockDown.csp","_parent")>
+</script>
+</body>
+</html>

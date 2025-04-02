@@ -1,0 +1,11 @@
+{
+    "HOME.TITLE": "Principale",
+    "HOME.SELECT": "Selezionare",
+    "header": {
+        "DROPDOWN_LOGOUT": "Disconnettersi",
+        "ABOUT_DIALOG_HS_TITLE": "Intorno HealthShare",
+        "ABOUT_DIALOG_HS_VERSION": "Versione: ",
+        "ABOUT_DIALOG_APP_TITLE": "Intorno ",
+        "ABOUT_DIALOG_APP_VERSION": "Versione: "
+    }
+}

@@ -1,0 +1,19 @@
+/* @class="%ZEN.Component.colorPicker" */
+/* @doc="Table wrapper for colorPicker." */
+table.colorPicker {
+	border: 1px darkblue solid;
+}
+
+/* @doc="Cell in colorPicker." */
+.colorPickerCell {
+	border: 2px #F0F0FF solid;
+	cursor: pointer;
+}
+
+/* @doc="Selected cell in colorPicker." */
+.colorPickerCellSelected {
+	border: 2px red solid;
+	cursor: pointer;
+}
+
+/* EOF */

@@ -1,0 +1,101 @@
+<!--
+	Start/stop production page.
+-->
+
+<AutoPage domain="Ensemble" pagename="Productions" parentpage="UtilEnsHome.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Productions</Text>
+</Pane>
+
+<Pane name="Navigator" extends="UtilEnsHome.csp" />
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>Edit, start or stop a production using the table below:</Text>
+	<Query>Ens.Config.Production:ProductionStatus</Query>
+	<AutoRefresh>true</AutoRefresh>
+	
+	<HiddenColumns>StatusEnum</HiddenColumns>
+
+	<Commands>
+		<Action href="UtilEnsProductionWizard.csp">
+			<Caption>Create New Production</Caption>
+			<Popup>Go to the New Production Wizard page.</Popup>
+		</Action>
+		
+		<Action href="UtilEnsProductionDelete.csp">
+			<Caption>Delete Production</Caption>
+			<Popup>Go to the Production Delete page.</Popup>
+		</Action>
+	</Commands>
+
+	<Actions>
+		<Action href="CSPX.EnsConfigFrame.cls" name="$A">
+			<Caption>Configure</Caption>
+			<Popup>Edit the configuration of this production.</Popup>
+			<IDValues>{Production}</IDValues>
+		</Action>
+
+		<Action href="CSPX.EnsStartStopPage.cls?MODE=start&amp;URL=UtilEnsProductions.csp" name="$B">
+			<Caption>Start</Caption>
+			<Confirm>Do you really wish to start this production?</Confirm>
+			<Popup>Start this production.</Popup>
+			<IDValues>{Production}</IDValues>
+		</Action>
+
+		<Action href="CSPX.EnsStartStopPage.cls?MODE=stop&amp;URL=UtilEnsProductions.csp" name="$C">
+			<Caption>Stop</Caption>
+			<Confirm>Do you really wish to stop this production?</Confirm>
+			<Popup>Stop this production.</Popup>
+			<IDValues>{Production}</IDValues>
+		</Action>
+		
+		<Action href="CSPX.EnsProductionDocumentation.cls" type="popup" name="$E">
+			<Caption>Documentation</Caption>
+			<Popup>View or generate configuration documentation for this production in HTML format.</Popup>
+			<IDValues>{Production}</IDValues>
+		</Action>
+	</Actions>
+
+	<Conditions>
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Running</Value>
+			<RowStyle>background: lightgreen; font-weight: bold;</RowStyle>
+		</Condition>
+
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Suspended</Value>
+			<RowStyle>background: orange; font-weight: bold;</RowStyle>
+		</Condition>
+
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Stopped</Value>
+			<RowStyle>background: #E0E0E0;</RowStyle>
+		</Condition>
+
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<TargetColumn>$B</TargetColumn>
+			<Predicate>EQ</Predicate>
+			<Value>Running</Value>
+			<CellStyle>disabled;</CellStyle>
+		</Condition>
+
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<TargetColumn>$C</TargetColumn>
+			<Predicate>NEQ</Predicate>
+			<Value>Running</Value>
+			<CellStyle>disabled;</CellStyle>
+		</Condition>
+	</Conditions>
+	
+</Pane>
+
+</AutoPage>

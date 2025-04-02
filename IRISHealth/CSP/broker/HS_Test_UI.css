@@ -1,0 +1,26 @@
+/* @class="HS.Test.UI.Menu" */
+/* active menu item: this is used for top-level items
+	when their submenu is displayed.
+*/
+a.menuItemSelected {
+	display: block;
+	color: darkblue;
+	padding: 2px 3px 2px 3px;
+	text-decoration: none;
+	white-space: nowrap;
+	vertical-align: middle;
+	border: none;
+	margin: 1px 1px 1px 1px;
+}
+
+/* @doc="Mouse over menu item." */
+a.menuItemSelected:hover {
+	background: #FFFFA0;
+	border: 1px darkblue dotted;
+	margin: 0px 0px 0px 0px;
+}
+
+a.menuItemSelected:link, a.menuItemSelected:visited, a.menuItemSelected:active {
+}
+
+/* EOF */

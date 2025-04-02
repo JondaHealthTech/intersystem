@@ -1,0 +1,23 @@
+td.label {
+	font-weight: normal;
+	text-align: left;
+}
+th.left {
+	text-align: left;
+}
+td.para1:first-letter {
+	font-size: 1.5em;
+}
+div.statement {
+	border: 1px dashed teal;
+	padding: 10px;
+}
+.selbuttons {
+	width: 25px;
+}
+.small {
+	font-size:0.80em
+}
+table.cond {
+	border: 1px solid teal;
+}

@@ -1,0 +1,17 @@
+!PATROLV3.4.00
+!++
+!
+! PATROL Knowledge Module List for InterSystems Cache'
+!
+!--
+KM_LIST = {
+	"ISC_CACHE.km"
+	"ISC_CACHE_CONFIG.km"
+	"ISC_CACHE_DISK.km"
+	"ISC_CACHE_GLOBAL.km"
+	"ISC_CACHE_ROUTINE.km"
+	"ISC_CACHE_NETWORK.km"
+	"ISC_CACHE_OTHER.km"
+	"ISC_CACHE_OVERVIEW.km"
+}
+

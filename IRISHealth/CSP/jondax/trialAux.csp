@@ -1,0 +1,67 @@
+<html >
+<head>
+    <!--<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+		q 1
+		</script> -->
+    <script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+	<link rel="stylesheet" href="assets/styles/trialAux.css">
+    <title>Jonda Health Disclaimer</title>
+</head>
+<body>
+
+	    <div class="bg-wrapper">
+	        <div class="bg4">
+	            <img src="./assets/images/bg4.png">
+	        </div>
+	    </div>	    
+   		<div class="container">
+    	<img class="logo1" src="./assets/images/trial/JXbyJx.png" alt="Jonda X">
+        <div class="content-box">
+            <div class="iframe-container">
+                <iframe src="" id="content-frame"></iframe> 
+            </div>
+            <div class="btn">
+            <button type="button" class="blue-btn" onclick="window.close()">Back</button>
+            </div>
+        </div>
+        <div class="links">
+            <footer>
+                <a href="trialAux.csp?section=terms"  class="footer-link"><span class="footer-span">Terms of use</span></a><span class="t1">&emsp;|&emsp;</span>
+                <a href="trialAux.csp?section=privacy"  class="footer-link"><span class="footer-span">Privacy policy</span></a><span class="t1">&emsp;|&emsp;</span>
+                <a href="mailto:partnerships@jonda.health?subject=More%20Information%20About%20JondaX&body=I%20would%20like%20to%20know%20more%20about%20JondaX." class="footer-link">
+    			<span class="footer-span">Contact us</span>
+				</a>
+            </footer>
+        </div>
+    </div>
+    
+
+</body>
+<script type="text/javascript">
+    // Function to get the query parameter by name
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // Get the 'section' query parameter
+    const section = getQueryParam('section');
+
+    // Set the iframe src based on the section
+    const iframe = document.getElementById('content-frame');
+    switch (section) {
+        case 'terms':
+            iframe.src = 'trialTermsofUse.csp'; // Load Terms of Use content
+            break;
+        case 'privacy':
+            iframe.src = 'trialPrivacyPolicy.csp'; // Load Privacy Policy content
+            break;
+        case 'contact':
+            iframe.src = 'contact.csp'; // Load Contact Us content
+            break;
+        default:
+            iframe.src = 'trialPrivacyPolicy.csp'; // Load some default content
+    }
+</script>
+</html>

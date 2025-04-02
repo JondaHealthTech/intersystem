@@ -1,0 +1,155 @@
+<AutoPageENS domain="Ensemble" parentpage="XMLSchemaMain.csp" pagename="XML Document Structure" title="@Ensemble:XMLManagerDocumentStructure@XML Document Structure">
+<html>
+<head>
+<title>XML Message Document Structure</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+</head>
+<body>
+
+<script language=Cache runat=server>
+#Include EnsEDIXML
+	Set path=%request.Get("PATH")
+	Set ds=%request.Get("DS")
+	Set elem=$p(ds,":",1)
+	Set cat=$p(ds,":",2)
+	Set struct=$p(ds,":",3)
+	If ((cat'="")&&(elem'="")&&(struct'="")) {
+		Set ref=$Name($$$vaSchemaGbl(cat,elem,struct,"meta"))
+		Set txtName=$Case(elem, "DS":$$$Text("Document Structure / DocType"), "CT":$$$Text("Complex Type Structure"), "CG":$$$Text("Component Group"), "ST":$$$Text("Simple Type"), :$$$Text("Unknown Structure"))
+		&html<<div class="Text1">XML <b>#(txtName)#</b> definition</div>>
+		Set tDescNode=$G(@ref@("desc"))
+		Set tDesc=$S(""=tDescNode:"",1:$Replace($$$vaSchemaGbl(cat,tDescNode,"chars"),$C(13,10),$C(10)))
+		Set tDesc=$Replace($Replace(..EscapeHTML($ZStrip(tDesc,"<>C")),$C(13),$C(10)),$C(10),"<br/>"_$C(13,10))
+		/*
+			Set description=..EscapeHTML(##class(EnsLib.EDI.XML.Schema).GetDescription(ds))
+			if $data($$$vaSchemaGbl(cat,"DS",struct))=0 {
+				write "<b><font size=6>"_ds_" </font> Definition does not exist!</b>",!
+				quit
+		*/
+		&html<
+			<hr/>
+			<div class="Text"><font size=6><b>#(cat_":"_struct)#</b></font></div>
+		>
+		If $D(@ref) {
+			Set xpre="",toptype=""
+			For {
+				Set cnt=$G(@ref)
+				Set prevtype=toptype, toptype=$G(@ref@("type"))
+				Quit:prevtype=toptype
+				Set xtype=$G(@ref@("xtype"))
+				Set tRef="XMLSchemaDocumentStructure.csp?DS="_$P(toptype,":")_":"_cat_":"_$P($P(toptype,":",2),"(")_"&PATH="_path
+				Set tNode=$G(@ref@("n"))
+				Set tSrc=$S(""=tNode:"",1:$G($$$vaSchemaGbl(cat,"src",$G($$$vaSchemaGbl(cat,$P($P($P(tNode,":"),","),"("),"src"),0))))
+				&html<
+				<div class="Text" title="node=#(tNode)#, src=#(tSrc)#">#($S(""=toptype:"",1:"Type : <a href="_..Link(tRef)_"><b>"_toptype_"</b></a><br/>"))#
+				 &nbsp;xsd : <b>#($S(""'=xtype:xtype,1:"No structure defined"))#</b></div>>
+				 If ""'=tDesc {
+				 	&html<<div class="Text" title="node=#($G(tDescNode))#">#(tDesc)#</div>>
+				 }
+				&html<<hr/>>
+				Quit:""=toptype||cnt
+				
+				Set tDesc=""
+				Set xpre=xpre_xtype_":"
+				Set elem=$p(toptype,":",1)
+				Set struct=$p(toptype,":",2)
+				Set ref2=$Name($$$vaSchemaGbl(cat,elem,struct,"meta"))
+				Quit:'$D(@ref2)
+				Set ref=ref2
+			}
+		}
+		If ""'=path {
+			&html<&nbsp;>
+			&html<#($$$Text("Path followed to this document structure:"))#<br/>
+				&nbsp;&nbsp;&nbsp;<b>#(path)#</b><hr/>>
+		}
+		If $D(@ref) {
+			#; Draw segments table
+			&html<<div style="margin-left: 20px; margin-right: 20px;">
+				<table border=1 cellpadding=2 cellspacing=0 style="font-size: 1.0em;"><tbody align=center><tr><th>&nbsp;</th><th>Name</th><th>Type</th><th>Required</th><th>IsAttr</th><th>Element</th><th>Default</th><th>Description</th></tr>>
+			#; Build segment paths list
+			Set iSeg=0,depth=0,fullpath=""
+			For iRow=1:1:cnt {
+				Do ..showRow($Name(@ref@(iRow)),path,cat,xpre)
+			}
+			write "</table>"
+			write "<br>"
+		}
+	}
+</script>
+<hr/>
+<p>
+<a href="#(..Link("XMLSchemaMain.csp"))#">(Show All Categories)</a><br>
+<a href="#(..Link("XMLSchemaList.csp?ELEMENT=DS&CATEGORY="_cat))#">(Show All Document Structures in category '#(cat)#')</a><br>
+</div>
+</body>
+<script language=Cache runat=server method=showRow ARGUMENTS="ref,path,cat,xpre" PROCEDUREBLOCK="1">
+	Set iSeg=0,fullpath=""
+	//For iTab=1:1:depth-1 { Write "+&nbsp;" }
+	Set name=$G(@ref@("name")), type=$G(@ref@("type")), req=$G(@ref@("req")), attr=$G(@ref@("a")), dname=##class(EnsLib.EDI.XML.Schema).getDName(ref), xtype=$G(@ref@("xtype")), default=$G(@ref@("default"))
+	Set tElem=$P(type,":",1) Set:"?"=tElem tElem="" Set:""'=tElem type=$P(type,":",2,99)
+
+	Set tDescNode=$G(@ref@("desc"))
+	Set tDesc=$S(""=tDescNode:"",1:$Replace($$$vaSchemaGbl(cat,tDescNode,"chars"),$C(13,10),$C(10)))
+	Set tDesc=$Replace($Replace(..EscapeHTML($ZStrip(tDesc,"<>C")),$C(13),$C(10)),$C(10),"<br/>"_$C(13,10))
+	Set tNum=+$P(ref,",",$L(ref,","))
+	Set tRef="XMLSchemaDocumentStructure.csp?DS="_tElem_":"_cat_":"_$P(type,"(")_"&PATH="_path_$S(""=path:"",1:".")_name
+	Set tNode=$G(@ref@("n"))
+	Set tSrc=$S(""=tNode:"",1:$G($$$vaSchemaGbl(cat,"src",$G($$$vaSchemaGbl(cat,$P($P($P(tNode,":"),","),"("),"src"),0))))
+	&html<<tr>
+		<td align="left" title="node=#(tNode)#">#(tNum)#</td>
+		<td align="left" title="#($Replace(path_$S(""=path:"",1:".")_name,"()","(1)"))#">#($S(""=name:"-",1:name))#</td>
+		<td>#($S(""=type:"&nbsp;",""=tElem:type,1:"<a href="_..Link(tRef)_" title=""src="_tSrc_""">"_type_"</a>"))#</td>
+		<td>#($S(""=req:"&nbsp;",1:req))#</td>
+		<td>#($S(""=attr:"&nbsp;",1:"attr"))#</td>
+		<td title="xsd=#($S(""=xtype:"&nbsp;",1:xpre_xtype))#">#($S(""=dname:"&nbsp;-&nbsp;",1:dname))#</td>
+		<td>#($S(""=default:"&nbsp;",1:default))#</td>
+		<td style='text-align:left; width:400em;'#($S(""=tDescNode:"",1:" title='node="_tDescNode_"'"))#>#($S(""=tDesc:"&nbsp;",1:tDesc))#</td>
+		</tr>>
+</script>
+<script language=Cache runat=server>
+	//For iRow=1:1:$G(@ref) {
+	//	Do ..showRow(.ca,$Name(@ref@(iRow)),depth+1,cat)
+	//
+		/*
+		#; Draw segments table
+		write "<table border=1 cellpadding=2 cellspacing=0 style=""font-size: 1.0em;""><tbody align=center><tr>",!
+		#; Build segment paths list
+		Set sc=##class(EnsLib.EDI.XML.Schema).GetContentArray(.ca,,cat_":"_struct)
+		If $$$ISERR(sc) { Do $system.Status.DisplayError(sc) }
+		Else {
+			Set iSeg=0,depth=0,fullpath=""
+			For iRow=1:1 { quit:'rs.Next()
+				Set path=rs.Data("Property"), type=rs.Data("Type")
+				If $E(path,depth+1)="." { Set depth=depth+1 }
+				Else {
+					While depth&&($E(path,depth)'=".") { set depth=depth-1 }
+				}
+				&html<<tr><td align='left'>#($Replace($E(path,1,depth),".","+&nbsp;")_$E(path,depth+1,*))#</td><td>#($S(""=type:"&nbsp;",1:type))#</td></tr>>
+			}
+			Do ..showRow(.ca,$Name(ca))
+		}
+		Set iSeg=0  For i=1:1:$l(struct,"~")  {
+			Set tSegRef=$p(struct,"~",i)
+			if tSegRef="[" write "<td><table border=1 cellpadding=2 cellspacing=0 bordercolor=green style=""border: 2 dotted""><tr>",! continue
+			if tSegRef="]" write "</tr></table></td>",! continue
+			if tSegRef="{" write "<td><table border=1 cellpadding=2 cellspacing=0 bordercolor=red><tr>",! continue
+			if tSegRef="}" write "</tr></table></td>",! continue
+			if tSegRef="<" write "<td><table border=1 cellpadding=2 cellspacing=0 bordercolor=orange style=""border: 1 dotted""><tr>",! continue
+			if tSegRef=">" write "</tr></table></td>",! continue
+			if tSegRef="|" continue
+			Set iSeg=iSeg+1, tName=$P(tSegRef,":",2)
+			If "DocsRef"=$E(tName,*-$L("DocsRef")+1,*) {
+				Set tRef=$S("Message"'=$E(tName,1,*-$L("DocsRef")):
+							"XMLSchemaMessageType.csp?MT=MT:"_$p(tSegRef,":")_":"_$E(tName,1,*-$L("DocsRef"))
+						, 1:"XMLSchemaList.csp?ELEMENT=MT&CATEGORY="_$S("."=$P(tSegRef,":"):$G($$$vaSchemaGbl(cat,"base"),cat),1:$P(tSegRef,":")))
+				write "<td><a title='Zero or more """_$E(tName,1,*-$L("DocsRef"))_""" documents appear here' href='"_..Link(tRef)_"'>"_tName_"</a></td>"
+			} Else {
+				Set tPath=$S($G(segs(iSeg,"type"))=tName&&(tName'=""):segs(iSeg), 1:"")
+				Set tDesc=..EscapeHTML(##class(EnsLib.EDI.XML.Schema).GetDescription("SS:"_tSegRef))
+				write "<td><a title='"_$S(""'=tPath:tPath, 1:tSegRef)_$S(""=tDesc:"",1:" - "_tDesc)_"' href='"_..Link("XMLSchemaSegmentStructure.csp?SS=SS:"_tSegRef_"&PATH="_$S(""=tPath:"",1:tPath)_"&DS="_ds)_"'>"_tName_"</a></td>"
+			}
+		}
+		*/
+</script>
+</html>

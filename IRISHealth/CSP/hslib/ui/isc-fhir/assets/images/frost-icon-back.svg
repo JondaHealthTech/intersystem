@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="7px" height="9px" viewBox="0 0 7 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 56 (81588) - https://sketch.com -->
+    <title>back</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="8.05281028 1.77569907 4.48692131 5.34117307 0.921032337 1.77569907 -0.0130786918 2.71022508 4.48692131 7.21022508 8.98692131 2.71022508"></polygon>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Masthead/Condensed" transform="translate(-15.000000, -19.000000)">
+            <g id="header">
+                <g id="back">
+                    <g transform="translate(14.000000, 19.000000)">
+                        <g id="icons/icon-arrow-right" transform="translate(4.500000, 4.500000) scale(-1, 1) translate(-4.500000, -4.500000) ">
+                            <mask id="mask-2" fill="white">
+                                <use xlink:href="#path-1"></use>
+                            </mask>
+                            <use id="Page-1" fill="#333695" fill-rule="evenodd" transform="translate(4.486921, 4.492962) rotate(-90.000000) translate(-4.486921, -4.492962) " xlink:href="#path-1"></use>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

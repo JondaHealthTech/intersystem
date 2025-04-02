@@ -1,0 +1,67 @@
+/*
+	skin_contemprary.css
+	Additional CSS for "Contemporary" color scheme
+	Copyright (c) 2009 InterSystems Corp. ALL RIGHTS RESERVED.
+	background: #5090B0;
+*/
+
+.zenLabel {
+	color: #404040;
+}
+
+.toolRibbon {
+	background: #FFEEFF;
+}
+
+.ribbonLabel {
+	color: #202020;
+}
+
+.expandoNode a {
+	color: white;
+	background: purple;
+}
+
+
+/* top/bottom strips */
+#contentsOuter {
+	background: #7C3577;
+}
+
+#contentsInner {
+	border-top: 1px solid #D0A0D0;
+	border-bottom: 1px solid #D0A0D0;
+}
+
+
+/* div around left-hand column */
+#contentsLeft {
+	color: white;
+	background: #E5CC34;
+	border-right: 1px solid #7C3577;
+}
+
+.worklistGroup {
+	border-top: 1px solid #7C3577;
+}
+
+#worklistTitle {
+	color: #404040;
+
+}
+
+tr.worklistRowOdd {
+	background: #F8EEE5;
+}
+
+
+tr.listRowOdd {
+	background: #F8EEE5;
+}
+
+
+#foldersHeader {
+	background: #E5CC34;
+	background-image: none;
+}
+

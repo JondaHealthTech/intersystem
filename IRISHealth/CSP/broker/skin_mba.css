@@ -1,0 +1,25 @@
+/*
+	skin_mba.css
+	Additional CSS for "MBA" color scheme
+	Copyright (c) 2009 InterSystems Corp. ALL RIGHTS RESERVED.
+*/
+
+.zenLabel {
+	color: #404040;
+}
+
+#desktop {
+	background: #F8F8FF;
+}
+
+/* div around left-hand column */
+#contentsLeft {
+	color: #404040;
+}
+
+#worklistTitle {
+	color: #404040;
+
+}
+
+

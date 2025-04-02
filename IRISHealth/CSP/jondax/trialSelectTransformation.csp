@@ -1,0 +1,219 @@
+<html lang="en"> <!--Groot v1.1-->
+    <head>
+    	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+		q 1
+		</script>
+    	<script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/trialSelectTransformation.css">
+        <link rel="stylesheet" href="assets/styles/trialFooter.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                  <!--  <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">-->
+                    <h1>Step 2: Choose your output</h1>
+                    <h2>You are transforming <span id="tCount"></span> files</h2>
+              		<div id="lab-upload" class="lab-upload">
+						<div class="format-selection">
+    					<h3>Select a format to transform your file(s) into</h3>
+    						<div class="format-options">
+        					<button class="format-btn" onclick="jSetOutputFormat(event)">HL7 V2</button>
+		        			<button class="format-btn" onclick="jSetOutputFormat(event)">FHIR XML</button>
+			        		<button class="format-btn" onclick="jSetOutputFormat(event)">FHIR JSON</button>
+        					<button class="format-btn" onclick="openPopup1(event)">Other</button>
+    						</div>
+						</div>
+
+						<div class="unit-selection">
+    					<h3>Select the units for your transformed file(s)</h3>
+    						<div class="unit-options">
+        						<label class="unit-option">
+            					<input type="radio" name="units" onclick="jSetOutputUnit(event)" checked>
+            					<span>SI Units</span>
+        						</label>
+        						<label class="unit-option">
+            					<input type="radio" name="units" onclick="jSetOutputUnit(event)" >
+            					<span>Conventional Units</span>
+        						</label>
+        						<label class="unit-option">
+            					<input type="radio" name="units" onclick="openPopup1(event)">
+            					<span>Custom</span>
+        						</label>
+    						</div>
+						</div>
+						<div class="action-buttons">
+							<button class="pink-btn" onclick="openPopup2()">Cancel</button>
+							<button class="blue-btn" onclick="jOpenStep2()">Continue</button>			
+						</div>
+					</div>
+					<p id="acknowledgment">JondaX can output any file, data, & naming conventions. For this trial, we've got three
+ 						standard formats all set up for you to try out. The Trial only covers 30 most common blood biomarkers. For additional formats, contact us.
+ 					</p>
+   					</div> 
+                
+            	
+             	<script language="cache" runat="server">
+          			d SetFooter^trialHome
+          		</script>   
+               </div>
+            </div>
+       <div id="popup1" class="popup inactive">
+         <div class="popup-dialog">
+            <!--<img src="./assets/images/success.png" alt="Cancel"> -->
+            <img src="./assets/images/trial/cross.png" alt="Close" class="close-btn" onclick="removePopup1()">
+            <h4>Configure a custom file output</h4>
+            <p>For custom output requirements, contact us and we'll help you set up what you need.</p>
+            <button class="blue-btn" onclick="jContact()">Contact Us</button>
+            <!--<button class="pink-btn" onclick="removePopup1()">Cancel</button> -->
+         </div>
+       </div> 
+       <div id="popup2" class="popup inactive">
+         <div id="p2" class="popup-dialog">
+            <img src="./assets/images/trial/cross.png" alt="Close" class="close-btn" onclick="removePopup2()">
+            <h4>Are you sure you want to cancel this transformation?</h4>
+            <p>By clicking cancel, your uploaded file(s) will be deleted.</p>
+            <div class='buttons'>
+            	<button class="pink-btn" onclick="removePopup2()">Go Back</button>
+            	<button class="blue-btn" onclick="jDeleteUploaded()">Cancel</button>
+            </div>
+         </div>
+       </div>
+       <div id="popup3" class="popup inactive">
+         <div class="popup-dialog">
+            <!--<img src="./assets/images/success.png" alt="Cancel"> -->
+            <img src="./assets/images/trial/cross.png" alt="Close" class="close-btn" onclick="removePopup3()">
+            <h4>No output format is selected!</h4>
+            <p>Please select a output format for your files to continue.</p>
+         </div>
+       </div>     
+   </div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+    <script type="text/javascript">
+    window.onload = jInit;
+    iFrame1=document.getElementById("iFrame1");
+	document.onmousemove = parent.resetTimer;
+	document.onmousedown = parent.resetTimer; // touchscreen presses
+	document.ontouchstart = parent.resetTimer;
+	document.onkeypress = parent.resetTimer;
+	document.addEventListener('scroll', parent.resetTimer, true);
+	let popup1 = document.getElementById("popup1");
+    let popup2 = document.getElementById("popup2");
+    let popup3 = document.getElementById("popup3");
+	let fileCount;
+	let outputFormat;
+	let outputUnit;
+
+	const fileUpload = document.getElementById("fileupload");
+	const modalBtn = document.getElementById("BModal1");
+	let uploadedFiles = [];
+	
+	function jInit(){
+		parent.resetTimer;
+		#server(..cInit())#
+	}
+	function openPopup1(e){
+		e.preventDefault();
+        setTimeout(()=>{
+           popup1.classList.remove("inactive")
+        },100);
+    }
+    function removePopup1(){
+        popup1.classList.add("inactive");
+    }
+    function openPopup2(){
+        setTimeout(()=>{
+           popup2.classList.remove("inactive")
+        },100);
+    }
+    function removePopup2(){
+        popup2.classList.add("inactive");
+    }
+    function openPopup3(){
+        setTimeout(()=>{
+        	popup3.classList.remove("inactive")
+        },100);
+    }
+    function removePopup3(){
+        popup3.classList.add("inactive");
+    }
+    function jContact(){
+        window.location.href="mailto:partnerships@jonda.health?subject=%5BJondaX%5D%20Request%20for%20Additional%20Transformation%20Options&body=I%20would%20like%20to%20avail%20of%20additional%20transformation%20formats%20and%20units."
+        jDeleteUploaded();
+		    
+    }
+    function jDeleteUploaded(){
+	    #server(..cDeleteUploaded())#
+	    window.open("trialUpload.csp","_self")
+    }
+    function jOpenStep2(){
+	    var buttons = document.querySelector('.format-btn.active');
+	    if (buttons== null) {
+		    openPopup3();
+		    }
+	    else {
+		    window.open("trialProcessingNotice.csp","_self")
+		    }
+    }   
+    function jSetOutputFormat(e){
+        var buttons = document.querySelector('.format-btn.active');
+        if (buttons){
+        	buttons.classList.remove('active');
+        }
+        var clickedButton = e.target;
+        outputFormat=clickedButton.innerHTML;
+        clickedButton.classList.add('active');
+    	#server(..cSetOutputFormat(outputFormat))#
+    }
+    function jSetOutputUnit(e){
+		selectedUnit = e.target.nextElementSibling.textContent.trim();
+    	#server(..cSetOutputUnit(selectedUnit))#
+    }  
+    function addNewLabel(cTemp) {
+        const existingLabel = document.querySelector('.unit-option');
+        
+        const newLabel = document.createElement('label');
+        newLabel.className = 'unit-option'; // Same class if needed
+        newLabel.innerHTML = `
+            <input type="radio" name="units" onclick="jSetOutputUnit(event)">
+            <span>`+cTemp+`</span>
+        `;
+        existingLabel.parentNode.insertBefore(newLabel, existingLabel);
+    }
+</script>
+     <script language="cache" method="cInit">
+     	d Init^trialSelectTransformation
+
+    </script>
+    <script language="cache" method="cDeleteUploaded">
+    	d DeleteUploaded^trialSelectTransformation
+	</script>    
+    
+	<script language="cache" method="cSetOutputFormat" arguments="d1:%String">
+		d SetFormat^trialSelectTransformation(d1)
+	</script>
+	<script language="cache" method="cSetOutputUnit" arguments="d1:%String">
+		d SetUnit^trialSelectTransformation(d1)
+	</script>
+	 <script language="cache" method="cCheckTemplate">
+    	s uid=$g(%session.Data("UserID"))
+    	s cTemp=""
+    	&sql(SELECT ID INTO cTemp FROM MX.trialCustomTemplateSetup WHERE Profile=:uid)
+    	if cTemp'="" &js<cTemp=`#(cTemp)#`>
+    	
+	</script> 
+	</html>

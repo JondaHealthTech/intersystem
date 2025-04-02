@@ -1,0 +1,213 @@
+/* @class="%ZEN.ComponentEx.finderPane" */
+
+/* fade in for hover */
+.finderItem a,
+.finderItemOdd a,
+.finderItemSelected a,
+.finderIconItem,
+.finderIconItemSelected,
+tr.finderListRowOdd,
+tr.finderListRowEven,
+tr.finderListRowSelected {
+	-webkit-transition-property: background;
+	-webkit-transition-duration: 0.33s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: background;
+	-moz-transition-duration: 0.33s;
+	-moz-transition-timing-function: ease;
+}
+
+/* div around finder columns */
+.finderColumnWrapper {
+	position: relative;
+	height: 100%;
+	overflow: hidden;
+}
+
+.finderColumn {
+	position: absolute;
+	vertical-align: top;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	border-right: gray solid 1px;
+	top: 0px;
+	height: 100%;
+}
+
+.finderDetailColumn {
+	position: absolute;
+	vertical-align: top;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	top: 0px;
+	bottom: 0px;
+}
+
+.finderItem {
+	background: #FFFFFF;
+}
+
+.finderItemOdd {
+	background: #EEEEEE;
+}
+
+.finderItemSelected {
+	font-weight: bold;
+	background: darkblue;
+	color: white;
+}
+
+.finderItemDisabled {
+	background: silver;
+	color: gray;
+}
+
+.finderItem a,.finderItemOdd a {
+	color: black;
+	padding: 5px;
+	display: block;
+	text-decoration: none;
+	word-wrap: break-word;
+}
+
+.finderItemDisabled a {
+	padding: 5px;
+	display: block;
+	text-decoration: none;
+	word-wrap: break-word;
+}
+
+.finderItemSelected a {
+	color: white;
+	padding: 5px;
+	display: block;
+	text-decoration: none;
+	word-wrap: break-word;
+}
+
+/* show item with focus */
+.finderItem a:focus,.finderItemOdd a:focus,.finderItemSelected a:focus {
+	font-weight: bold;
+}
+
+.finderItem a:hover,
+.finderItemOdd a:hover {
+	background: #FFEEAA;
+	color: black;
+}
+
+.finderItemSelected a:hover {
+	color: #FFEEAA;
+}
+
+.finderItem a:active,
+.finderItemOdd a:active,
+.finderItemSelected a:active {
+	text-shadow: 0px 0px 20px #FFEEAA, -0px -0px 20px #FFEEAA;
+}
+
+/* div around icons */
+.finderIconsWrapper {
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+.finderIconItem,.finderIconItemSelected {
+	float: left;
+	text-decoration: none;
+	font-size: 10pt;
+	overflow: hidden;
+	color: black;
+	text-align: center;
+	margin: 1px;
+	padding: 1px;
+	width: 200px;
+	height: 90px;
+	color: #404040;
+}
+
+.finderIconItemSelected {
+	font-weight: bold;
+	color: black;
+}
+
+.finderIconItemSelected img {
+	border: 1px solid darkgray;
+}
+
+.finderIconItem img {
+	border: 1px solid transparent;
+}
+
+.finderIconItem:link,.finderIconItemSelected:link {
+	color: black;
+}
+
+.finderIconItem:hover,.finderIconItemSelected:hover {
+	color: black;
+	background: #FFEEAA;
+	padding: 0px;
+	border: 1px solid #DDCC88;
+}
+
+/* div around list view */
+.finderListWrapper {
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+table.finderListTable {
+	width: 100%;
+	-webkit-user-select: none;
+}
+
+table.finderListTable td {
+	padding: 3px;
+	border-bottom: 1px solid #DDDDDD;
+}
+
+.finderListRowSelected .finderListName {
+	text-decoration: none;
+	color: white;
+}
+
+.finderListName {
+	text-decoration: none;
+	color: #404040;
+}
+
+.finderListName:hover {
+	text-decoration: underline;
+}
+
+/* top level rows in sort mode */
+.finderListTopRow {
+	background: #AAAAFF;
+}
+
+.finderListRowOdd {
+	background: #EEEEEE;
+}
+
+.finderListRowEven {
+	background: white;
+}
+
+.finderListRowSelected {
+	background: darkblue;
+	color: white;
+}
+
+tr.finderListRowOdd:hover,
+tr.finderListRowEven:hover {
+	background: #FFEEAA;
+}
+
+tr.finderListRowSelected:hover {
+	background: rgb(73,127,161);
+}
+
+/* EOF */

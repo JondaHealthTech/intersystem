@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Simple Calculator</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+text-align: center;
+margin: 0;
+padding: 0;
+}
+.calculator {
+margin: 50px auto;
+width: 300px;
+padding: 20px;
+border: 1px solid #ccc;
+border-radius: 10px;
+box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+.calculator input[type="number"] {
+width: 90%;
+padding: 10px;
+margin: 10px 0;
+border: 1px solid #ccc;
+border-radius: 5px;
+font-size: 16px;
+}
+.calculator button {
+padding: 10px 20px;
+margin: 5px;
+font-size: 16px;
+color: #fff;
+background-color: #007BFF;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+.calculator button:hover {
+background-color: #0056b3;
+}
+.result {
+margin-top: 20px;
+font-size: 18px;
+font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div class="calculator">
+<h2>Simple Calculator</h2>
+<input type="number" id="T1" placeholder="Enter first number">
+<input type="number" id="T2" placeholder="Enter second number">
+<div>
+<button id="B1" onclick="jCalculate('add')">Add</button>
+<button id="B2" onclick="jCalculate('subtract')">Subtract</button>
+<button id="B3" onclick="jCalculate('multiply')">Multiply</button>
+<button id="B4" onclick="jCalculate('divide')">Divide</button>
+</div>
+<div class="result" id="result">Result: </div>
+</div>
+
+<script type="text/javascript">
+function jCalculate(operation) 
+{
+const T1 = parseFloat(document.getElementById('T1').value);
+const T2 = parseFloat(document.getElementById('T2').value);
+let result = '';
+if (isNaN(T1) || isNaN(T2)) {
+result = "Please enter valid numbers!";
+} else {
+// Calling server method
+#server(..cCalculate(T1,T2,operation))#
+}
+}
+</script>
+</body>   
+<script language="cache" runat="server">   
+;&js<alert("This is a Calculator!")>
+</script>
+<script language="cache" method="cCalculate" arguments="d1,d2,d3:%String">
+;&js<alert("This is a Calculator!");>
+do calculate^martin9
+</script>
+</html>

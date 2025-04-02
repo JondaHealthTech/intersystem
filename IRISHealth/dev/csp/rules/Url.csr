@@ -1,0 +1,372 @@
+
+<!-- URL.csr --------------------------------------------- -->
+
+	Rules for URL rewriting.  Here, we define rules for
+	all of the places a .csp url can appear.  When we find
+	one (assuming it's not already calling #url()#), we
+	rewrite it to use #url()#.
+
+	The HTML 4.01 DTD (see below) was used to determine
+	when URL rewriting should take place.
+
+	http://www.w3.org/TR/html4/sgml/dtd.html
+	
+	The OnMatch tag attribute rewriting mechanism is used to
+	rewrite the URL for these tags in generic way.  OnMatch
+	is fired for all matching tags even if the tag is overridden.
+
+<!-- ----------------------------------------------------- -->
+
+
+
+<!-- A TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the A HREF tag -->
+
+<csr:rule name="%URL.A" match="a[href]" language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("href",$$$cspRewriteUrl(rule.GetAttribute("HREF")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+<!-- AREA TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the AREA HREF tag -->
+
+<csr:rule name="%URL.AREA" match="area[href]" empty language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("href",$$$cspRewriteUrl(rule.GetAttribute("HREF")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+
+<!-- BODY TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the BODY BACKGROUND tag -->
+
+<csr:rule name="%URL.BODY" match="body[background]" language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("background",$$$cspRewriteUrl(rule.GetAttribute("BACKGROUND")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+
+<!-- FORM TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the FORM tag -->
+
+<csr:rule name="%URL.FORM" match="form" language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Now insert the call to add any hidden form tags we need
+	New tag,line,action,mover,posA,posE
+	Set action=rule.GetAttribute("ACTION")
+	// Do not rewrite Javascript action.
+	If ($length(action,":")>1) && ($zcvt($piece(action,":",1),"L")="javascript") Quit $$$OK
+	// Remove #url from action attribute
+	Set posA=$find(action,"#url(")
+	Set posE=$find(action,")#")
+	If (posE>posA) && (posA>0) {
+		Set $extract(action,posE-2,posE-1)=""
+		Set $extract(action,posA-5,posA-1)=""
+	}
+
+	Set tag = ##class(%CSP.TagCache).%New()
+	Set tag.Family = "csp"
+	Do tag.SetAttribute("runat","server")
+	Set line = ##class(%CSP.TextAtom).%New()
+	Set line.Text = ":##($select('%compiler.Get(""%cspFormHiddenFieldsAtEnd""):$case(%compiler.PageLanguage,""basic"":"" PrintLn : Print me."",""mvbasic"":"" Print; Print """"%CSP.Page""""->"",:""	Write !,.."")_""InsertHiddenFields(""_$$QuoteCSP^%cspQuote("_$$Quote^%cspQuote(action)_")_"")""_$case(%compiler.PageLanguage,""basic"":"""",""mvbasic"":"":"",:"",!""),1:""""))##"
+	Do tag.AddChildElement(line)
+	Do rule.AddChildElement(tag)
+
+	Set mover = ##class(%CSP.TagMoveToEnd).%New()
+	Set mover.Family = "csp"
+	Set tag = ##class(%CSP.TagCache).%New()
+	Set tag.Family = "csp"
+	Do tag.SetAttribute("runat","server")
+	Set line = ##class(%CSP.TextAtom).%New()
+	Set line.Text = ":##($select(%compiler.Get(""%cspFormHiddenFieldsAtEnd""):$case(%compiler.PageLanguage,""basic"":"" PrintLn me."",""mvbasic"":"" Print """"%CSP.Page""""->"",:""	Write .."")_""InsertHiddenFields(""_$$QuoteCSP^%cspQuote("_$$Quote^%cspQuote(action)_")_"")""_$case(%compiler.PageLanguage,""basic"":"""",""mvbasic"":"""",:"",!""),1:""""))##"
+	Do tag.AddChildElement(line)
+	Do mover.AddChildElement(tag)
+	Do rule.AddChildElement(mover)
+
+	; Remove any parameters from the ACTION as these do not work and we will replace with hidden fields
+	If action["?" Do rule.SetAttribute("action",$Piece(action,"?"))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+<!-- FRAME TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the FRAME SRC tag -->
+
+<csr:rule name="%URL.FRAME" match="frame[src]" empty language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("src",$$$cspRewriteUrl(rule.GetAttribute("SRC")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+<!-- IFRAME TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the IFRAME SRC tag -->
+
+<csr:rule name="%URL.IFRAME" match="iframe[src]" empty language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("src",$$$cspRewriteUrl(rule.GetAttribute("SRC")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+<!-- IMG TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the IMG SRC tag -->
+
+<!--  ***  NOTE: This rule is also found in Object.csr  ***  -->
+
+<csr:rule name="%URL.IMG" match="img[src]" empty language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("src",$$$cspRewriteUrl(rule.GetAttribute("SRC")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+<!-- IMAGE TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the IMAGE SRC tag -->
+
+<!--  ***  NOTE: This rule is also found in Object.csr  ***  -->
+
+<csr:rule name="%URL.IMAGE" match="image[src]" empty language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("src",$$$cspRewriteUrl(rule.GetAttribute("SRC")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+<!-- LINK TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the LINK HREF tag -->
+
+<csr:rule name="%URL.LINK" match="link[href]" empty language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("href",$$$cspRewriteUrl(rule.GetAttribute("HREF")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+<!-- Q TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the Q CITE tag -->
+
+<csr:rule name="%URL.Q" match="q[cite]" language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("cite",$$$cspRewriteUrl(rule.GetAttribute("CITE")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+<!-- BLOCKQUOTE TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the BLOCKQUOTE CITE tag -->
+
+<csr:rule name="%URL.BLOCKQUOTE" match="blockquote[cite]" language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("cite",$$$cspRewriteUrl(rule.GetAttribute("CITE")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+
+<!-- INS TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the INS CITE tag -->
+
+<csr:rule name="%URL.INS" match="ins[cite]" language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("cite",$$$cspRewriteUrl(rule.GetAttribute("CITE")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+
+<!-- DEL TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the DEL CITE tag -->
+
+<csr:rule name="%URL.DEL" match="del[cite]" language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("cite",$$$cspRewriteUrl(rule.GetAttribute("CITE")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+
+<!-- INPUT TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the IMG SRC tag -->
+
+<!--  ***  NOTE: This rule is also found in Object.csr  ***  -->
+
+<csr:rule name="%URL.INPUT" match="input[src]" empty language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("src",$$$cspRewriteUrl(rule.GetAttribute("SRC")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+
+<!-- SCRIPT TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the SCRIPT SRC tag -->
+
+<csr:rule name="%URL.SCRIPT" match="script[src]" textonly language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("src",$$$cspRewriteUrl(rule.GetAttribute("SRC")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+
+<!-- STYLE TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the STYLE SRC tag -->
+
+<csr:rule name="%URL.STYLE" match="style[src]" language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("src",$$$cspRewriteUrl(rule.GetAttribute("SRC")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+
+<!-- ILAYER TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the ILAYER SRC tag for Netscape compatibility -->
+
+<csr:rule name="%URL.ILAYER" match="ilayer[src]" language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("src",$$$cspRewriteUrl(rule.GetAttribute("SRC")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+
+<!-- LAYER TAG --------------------------------------------- -->
+<!-- This rule handles URL rewriting for the LAYER SRC tag for Netscape compatibility -->
+
+<csr:rule name="%URL.LAYER" match="layer[src]" language="any">
+<csr:action>
+
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	; Check the URL to see if it needs rewriting ...
+	Do rule.SetAttribute("src",$$$cspRewriteUrl(rule.GetAttribute("SRC")))
+	Quit $$$OK
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>

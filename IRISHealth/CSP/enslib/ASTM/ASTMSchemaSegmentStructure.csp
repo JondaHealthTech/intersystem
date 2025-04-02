@@ -1,0 +1,86 @@
+<AutoPageENS domain="Ensemble" parentpage="ASTMSchemaMain.csp" pagename="ASTM Segment Structure" title="@Ensemble:ASTMManagerSegmentStructure@ASTM Segment Structure">
+<html>
+<head>
+<title>ASTM Segment Structure</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+</head>
+<body>
+
+<div class="Text1">ASTM <b>Segment Structure</b> definition is displayed below:</div>
+
+<script language=Cache runat=server>
+#include EnsEDIASTM
+	set ss=%request.Get("SS")
+	set category=$p(ss,":",2)
+	set secondary=$p(ss,":",3)
+	If ((category'="")&&(secondary'="")) {
+		set description=..EscapeHTML($get($$$vaSchemaDescGbl(category,"SS",secondary)))
+		if '$data($$$vaSchemaGbl(category,"SS",secondary)) {
+			write "<b><font size=6>"_ss_" </font> Definition does not exist!</b>",!
+			quit
+		}
+	}
+	set ds=%request.Get("DS")
+	set tPath=%request.Get("PATH")
+</script>
+<csp:if condition="$L(tPath)">
+<div class="Text1"><i>Path you followed to get to this segment:</i>&nbsp;<b>#(tPath)#</b><br>
+	<i>In Document Structure </i>&nbsp;<b>'#($P(ds,":",2,3))#'</b></div>
+</csp:if>
+<div style="margin-left: 20px; margin-right: 20px;">
+
+<table border=1 cellpadding=4 cellspacing=0  style="font-size: 0.8em; margin-left: 20px;">
+
+<tr><td colspan=11><b><font size=6>#(category_":"_secondary)# </font> #($G(description))#</b></td></tr>
+
+<tr><td colspan=11 align=center><b></b></font></td></tr>
+
+<tr align='left'><th>Field</th><th>Description</th><th>Property&nbsp;Name</th><th>Data&nbsp;Structure</th><th>Symbol</th><th>Repeat&nbsp;Count</th><th>Length</th><th>Required</th><th>Repeating</th><th>Code&nbsp;Table</th><th><center><i>Alternate<br>Description</i></center></th></tr>
+
+<script language=Cache runat=server>
+#include EnsEDIASTM
+	If ((category'="")&&(secondary'="")) {
+		set struct=$$$vaSchemaGbl(category,"SS",secondary)
+		kill names set name="" for { set name=$o($$$vaSchemaGbl(category,"SS",secondary,"names",name)) quit:name=""
+			set names($$$vaSchemaGbl(category,"SS",secondary,"names",name))=name
+		}
+		for i=1:1:$LL(struct)  {
+			set one=$li(struct,i)
+			write "<tr>"
+			write "<td>"_i_"</td>"
+			; description
+			set description=..EscapeHTML($get($$$vaSchemaDescGbl(category,"SS",secondary,i)))
+			write "<td>",$s(description="":"&nbsp;",1:description),"</td>"
+			; property name
+			set tPropPath=$S(""=$get(names(i)):"",1:tPath_":"_$get(names(i)))_$S($li(one,6):"()",1:"")
+			write "<td><a"_$S(""=tPath:"",1:" title='"_tPropPath_"' href='"_..Link("ASTMSchemaPath.csp?PATH="_tPropPath_"&FIELD="_i_"&DS="_ds_"&SS="_ss)_"'")_">"_$get(names(i),"&nbsp")_"</a></td>"
+			; component structure
+			set value=$li(one,1) write "<td>",$s(value="":"&nbsp;",1:"<a href='"_..Link("ASTMSchemaComponentStructure.csp?CS=CS:"_value_"&PATH="_tPropPath_"&FIELD="_i_"&DS="_ds_"&SS="_ss)_"'>"_value_"</a>"),"</td>"
+			; symbol
+			set value=$li(one,2),annotate=$case(value,"*":"zero or more", "+":"one or more", "!":"exactly one&nbsp;required", "?":"conditional", "&":"conditional", :"")
+			write "<td>",$s(value="":"&nbsp;",1:value_$s(annotate="":"",1:" ("_annotate_")")),"</td>"
+			; repeat count
+			set value=$li(one,3) write "<td>",$s(value="":"&nbsp;",1:value),"</td>"
+			; length
+			set value=$li(one,4) write "<td>",$s(value="":"&nbsp;",1:value),"</td>"
+			; required
+			set value=$li(one,5) write "<td>",$s(value="":"&nbsp;",1:value),"</td>"
+			; if repeating
+			set value=$li(one,6) write "<td>",$s(value="":"&nbsp;",1:value),"</td>"
+			; code table
+			set value=$g($$$vaSchemaGbl(category,"SS",secondary,"tables",i))
+			write "<td>",$s(value="":"&nbsp;",1:"<a href='"_..Link("ASTMSchemaCodeTable.csp?CT=CT:"_value)_"'>"_value_"</a>"),"</td>"
+			; alternate description
+			set altdesc=..EscapeHTML($get($$$vaSchemaDescGbl(category,"SS",secondary,i,"alt")))
+			write "<td>",$s(altdesc="":"&nbsp;",1:altdesc),"</td>"
+		}
+	}
+</script>
+</table>
+
+<p>
+<a href="#(..Link("ASTMSchemaMain.csp"))#">(Show All Categories)</a><br>
+<a href="#(..Link("ASTMSchemaList.csp?ELEMENT=SS&CATEGORY="_category))#">(Show All Segment Structures in Category '#(category)#')</a>
+</div>
+</body>
+</html>

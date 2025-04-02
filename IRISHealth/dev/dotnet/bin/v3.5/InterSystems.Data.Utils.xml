@@ -1,0 +1,621 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>InterSystems.Data.Utils</name>
+    </assembly>
+    <members>
+        <member name="T:InterSystems.BuildInfo">
+            <summary>
+            Version Information
+            </summary>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.BusinessHost">
+            <summary>
+            This is superclass for BusinessService, BusinessProcess and BusinessOperation that defines common methods
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessHost.OnGetConnections">
+            <summary>
+            The OnGetConnections() method returns all of the targets of any SendRequestSync or SendRequestAsync
+            calls for the class. Implement this method to allow connections between components to show up in
+            the interoperability UI.
+            </summary>
+            <returns>an IRISList containing all targets for the class. Default is null.</returns>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessHost.SendRequestSync(System.String,InterSystems.EnsLib.PEX.Message,System.Int32,System.String)">
+            <summary>
+            The SendRequestSync() method sends the specified message to the target business process or business operation synchronously.
+            </summary>
+            <param name="target">a string that specifies the name of the business process or operation to receive the request.The target is the name of the component as specified in the Item Name property in the production definition, not the class name of the component.</param>
+            <param name="request">specifies the message to send to the target.The request is a class that is a subclass of Message class.</param>
+            <param name="timeout">an optional integer that specifies the number of seconds to wait before treating the send request as a failure.The default value is -1, which means wait forever.</param>
+            <param name="description">an optional string parameter that sets a description property in the message header.</param>
+            <returns>an instance of object that contains the response object</returns>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessHost.SendRequestSync(System.String,InterSystems.Data.IRISClient.ADO.IRISObject,System.Int32,System.String)">
+            <summary>
+            The SendRequestSync() method sends the specified message to the target business process or business operation synchronously.
+            </summary>
+            <param name="target">a string that specifies the name of the business process or operation to receive the request.The target is the name of the component as specified in the Item Name property in the production definition, not the class name of the component.</param>
+            <param name="request">specifies the message to send to the target. The request is an instance of IRISObject class. If the target is a built-in ObjectScript component, you should use the IRISObject class. The IRISObject class enables the PEX framework to convert the message to a class supported by the target.</param>
+            <param name="timeout">an optional integer that specifies the number of seconds to wait before treating the send request as a failure.The default value is -1, which means wait forever.</param>
+            <param name="description">an optional string parameter that sets a description property in the message header.</param>
+            <returns>an instance of object that contains the response object</returns>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.BusinessOperation">
+            <summary>
+            The BusinessOperation class to provide implementation for a business operation, which sends the message to the external system.
+            This class corresponds to the PEX framework EnsLib.PEX.BusinessOperation class. 
+            The EnsLib.PEX.BusinessOperation RemoteClassName property identifies the Java or.NET class with the business operation implementation.
+            The business operation can optionally use an adapter to handle the outgoing message.
+            Specify the adapter in the OutboundAdapter property.
+            If the business operation has an adapter, it uses the adapter to send the message to the external system.
+            The adapter can either be a PEX adapter or an ObjectScript adapter.
+            </summary>
+        </member>
+        <member name="F:InterSystems.EnsLib.PEX.BusinessOperation.Adapter">
+            <summary>
+            The Adapter instance variable provides access to the outbound adapter associated with the business operation.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessOperation.OnConnected">
+            <summary>
+            The OnConnected() method is called when the component is connected or reconnected after being disconnected.
+            Use the OnConnected() method to initialize any structures needed by the component.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessOperation.getAdapterType">
+            <summary>
+            The getAdapterType() method is called when registering the business operation in order to instruct the business operation on what outbound adapter to use.
+            The return value from this method should be the string name of the outbound adapter class. This may be an ObjectScript class or a PEX adapter class (Use the registered proxy name).
+            Return the empty string for adapterless business operations.
+            </summary>
+            <returns>A string naming the adapter class to use</returns>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessOperation.OnInit">
+            <summary>
+            The OnInit() method is called when the component is started.
+            Use the OnInit() method to initialize any structures needed by the component.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessOperation.OnTearDown">
+            <summary>
+            The OnTearDown() method is called before the component is terminated. Use OnTeardown() to free any structures.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessOperation.OnMessage(System.Object)">
+            <summary>
+            The OnMessage() message is called when the business operation receives a message from another production component.
+            Typically, the operation will either send the message to the external system or forwards it to a business process or another business operation.
+            If the operation has an adapter, it uses the Adapter.invoke() method to call the method on the adapter that sends the message to the external system.
+            If you operation is forwarding the message to another production component, it uses the SendRequestAsync() or the SendRequestSync() method.
+            You must implement an OnMessage method with a single parameter of type Object. Within the method you can cast the parameter to the actual type passed by the caller.
+            </summary>
+            <param name="request">an instance of object containing the incoming message for the business operation.</param>
+            <returns>an instance of object containing the response object.</returns>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessOperation._setIrisHandles(InterSystems.Data.IRISClient.ADO.IRISObject,InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessOperation.SendRequestAsync(System.String,InterSystems.Data.IRISClient.ADO.IRISObject,System.String)">
+            <summary>
+            The SendRequestAsync() method sends the specified message to the target business process or business operation asynchronously.
+            </summary>
+            <param name="target">a string that specifies the name of the business process or operation to receive the request.The target is the name of the component as specified in the Item Name property in the production definition, not the class name of the component.</param>
+            <param name="request">specifies the message to send to the target. The request is an instance of IRISObject class. If the target is a built-in ObjectScript component, you should use the IRISObject class. The IRISObject class enables the PEX framework to convert the message to a class supported by the target.</param>
+            <param name="description">an optional string parameter that sets a description property in the message header.</param>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessOperation.SendRequestAsync(System.String,InterSystems.EnsLib.PEX.Message,System.String)">
+            <summary>
+            The SendRequestAsync() method sends the specified message to the target business process or business operation asynchronously.
+            </summary>
+            <param name="target">a string that specifies the name of the business process or operation to receive the request.The target is the name of the component as specified in the Item Name property in the production definition, not the class name of the component.</param>
+            <param name="request">specifies the message to send to the target.The request is an instance of a subclass of Message class.</param>
+            <param name="description">an optional string parameter that sets a description property in the message header.</param>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessOperation._dispatchOnConnected(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessOperation._dispatchOnInit(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessOperation._dispatchOnTearDown(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessOperation._dispatchOnMessage(System.Object)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.BusinessProcess">
+            <summary>
+            The BusinessProcess classes typically contains most of the logic in a production. 
+            A business process can receive messages from a business service, another business process, or a business operation.
+            It can modify the message, convert it to a different format, or route it based on the message contents. 
+            The business process can route a message to a business operation or another business process.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess.OnConnected">
+            <summary>
+            The OnConnected() method is called when the component is connected or reconnected after being disconnected.
+            Use the OnConnected() method to initialize any structures needed by the component.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess.OnInit">
+            <summary>
+            The OnInit() method is called when the component is started.
+            Use the OnInit() method to initialize any structures needed by the component.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess.OnTearDown">
+            <summary>
+            The OnTearDown() method is called before the component is terminated.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess.OnRequest(System.Object)">
+            <summary>
+            The OnRequest() method handles requests sent to the business process. A production calls this method whenever an initial request for a specific business process arrives on the appropriate queue and is assigned a job in which to execute.
+            </summary>
+            <param name="request">an object that contains the request message sent to the business process.</param>
+            <returns>an object that contains the response message that this business process can return to the production component that sent the initial message</returns>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess.OnResponse(System.Object,System.Object,System.Object,System.Object,System.String)">
+            <summary>
+            The OnResponse() method handles responses sent to the business process in response to messages that it sent to the target. A production calls this method whenever a response for a specific business process arrives on the appropriate queue and is assigned a job in which to execute. Typically this is a response to an asynchronous request made by the business process where the responseRequired parameter has a true value.
+            </summary>
+            <param name="request">an object that contains the initial request message sent by to business process.</param>
+            <param name="response">an object that contains the response message that this business process can return to the production component that sent the initial message.</param>
+            <param name="callRequest">an object that contains the request that the business process sent to its target.</param>
+            <param name="callResponse">an object that contains the incoming response.</param>
+            <param name="completionKey">a string that contains the completionKey specified in the completionKey parameter of the outgoing SendAsync() method.</param>
+            <returns>an object that contains the response message that this business process can return to the production component that sent the initial message.</returns>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess.OnComplete(System.Object,System.Object)">
+            <summary>
+            The OnComplete() method is called after the business process has received and handled all responses to requests it has sent to targets.
+            </summary>
+            <param name="request">an object that contains the initial request message sent by to business process.</param>
+            <param name="response">an object that contains the response message that this business process can return to the production component that sent the initial message.</param>
+            <returns>an object that contains the response message that this business process can return to the production component that sent the initial message</returns>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess._setIrisHandles(InterSystems.Data.IRISClient.ADO.IRISObject,InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess.SendRequestAsync(System.String,InterSystems.Data.IRISClient.ADO.IRISObject,System.Boolean,System.String,System.String)">
+            <summary>
+            The SendRequestAsync() method sends the specified message to the target business process or business operation asynchronously.
+            </summary>
+            <param name="target">a string that specifies the name of the business process or operation to receive the request. The target is the name of the component as specified in the Item Name property in the production definition, not the class name of the component.</param>
+            <param name="request">specifies the message to send to the target. The request is an instance of IRISObject class. If the target is a built-in ObjectScript component, you should use the IRISObject class. The IRISObject class enables the PEX framework to convert the message to a class supported by the target.</param>
+            <param name="responseRequired">a boolean value that specifies if the target must send a response message.</param>
+            <param name="completionKey">a string that will be sent with the response message.</param>
+            <param name="description">an optional string parameter that sets a description property in the message header.</param>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess.SendRequestAsync(System.String,InterSystems.EnsLib.PEX.Message,System.Boolean,System.String,System.String)">
+            <summary>
+            The SendRequestAsync() method sends the specified message to the target business process or business operation asynchronously.
+            </summary>
+            <param name="target">a string that specifies the name of the business process or operation to receive the request. The target is the name of the component as specified in the Item Name property in the production definition, not the class name of the component.</param>
+            <param name="request">specifies the message to send to the target. The request is a class that is a subclass of Message class.</param>
+            <param name="responseRequired">a boolean value that specifies if the target must send a response message.</param>
+            <param name="completionKey">a string that will be sent with the response message.</param>
+            <param name="description">an optional string parameter that sets a description property in the message header.</param>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess._savePersistentProperties(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess._restorePersistentProperties(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess._dispatchOnConnected(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess._dispatchOnInit(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess._dispatchOnTearDown(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess._dispatchOnRequest(InterSystems.Data.IRISClient.ADO.IRISObject,System.Object)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess._dispatchOnResponse(InterSystems.Data.IRISClient.ADO.IRISObject,System.Object,System.Object,System.Object,System.Object,System.String)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess._dispatchOnComplete(InterSystems.Data.IRISClient.ADO.IRISObject,System.Object,System.Object)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess.Reply(System.Object)">
+            <summary>
+            The Reply() method sends the specified response to the production component that sent the initial request to the business process.
+            </summary>
+            <param name="response">an object that contains the response message.</param>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess.SetTimer(System.Int32,System.String)">
+            <summary>
+            The SetTimer() method specifies the maximum time the business process will wait for responses.
+            </summary>
+            <param name="timeout">an integer that specifies a number of seconds.</param>
+            <param name="completionKey">a string that will be returned with the response if the maximum time is exceeded.</param>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessProcess.SetTimer(System.String,System.String)">
+            <summary>
+            The SetTimer() method specifies the maximum time the business process will wait for responses.
+            </summary>
+            <param name="timeout">a string that specifies a time period, such as “PT15S”, which represents 15 seconds of processor time.</param>
+            <param name="completionKey">a string that will be returned with the response if the maximum time is exceeded.</param>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.BusinessService">
+            <summary>
+            The BusinessService class is responsible for receiving the data from the external system and sending it to business processes or business operations in the production.
+            The business service can use an adapter to access the external system.
+            There are three ways of implementing a business service:
+            <list type="number">Polling business service with an adapter — The production framework at regular intervals calls the adapter’s OnTask() method, which sends the incoming data to the the business service ProcessInput() method, which, in turn calls the OnProcessInput method with your code.</list>
+            <list type="number">Polling business service that uses the default adapter — In this case, the framework calls the default adapter's OnTask method with no data. The OnProcessInput() method then performs the role of the adapter and is responsible for accessing the external system and receiving the data.</list>
+            <list type="number">Nonpolling business service — The production framework does not initiate the business service. Instead custom code in either a long-running process or one that is started at regular intervals initiates the business service by calling the Director.CreateBusinessService() method.</list>
+            </summary>
+        </member>
+        <member name="F:InterSystems.EnsLib.PEX.BusinessService._WaitForNextCallInterval">
+            <summary>
+            Maps to property Ens.BusinessService:%WaitForNextCallInterval.
+            Users set this at runtime to indicate if the next call to OnTask should wait for call interval.
+            </summary>
+        </member>
+        <member name="F:InterSystems.EnsLib.PEX.BusinessService.Adapter">
+            <summary>
+            The Adapter instance variable provides access to the inbound adapter associated with the business operation.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessService.getAdapterType">
+            <summary>
+            The getAdapterType() method is called when registering the business service in order to instruct the business service on what inbound adapter to use.
+            The return value from this method should be the string name of the inbound adapter class. This may be an ObjectScript class or a PEX adapter class (Use the registered proxy name).
+            Return the empty string for adapterless business services.
+            </summary>
+            <returns>A string naming the adapter class to use</returns>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessService.OnConnected">
+            <summary>
+            The OnConnected() method is called when the component is connected or reconnected after being disconnected.
+            Use the OnConnected() method to initialize any structures needed by the component.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessService.OnInit">
+            <summary>
+            The OnInit() method is called when the component is started.
+            Use the OnInit() method to initialize any structures needed by the component.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessService.OnTearDown">
+            <summary>
+            The OnTearDown() method is called before the component is terminated. Use OnTeardown() to free any structures.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessService.OnProcessInput(System.Object)">
+            <summary>
+            The OnProcessInput() method receives the message from the inbound adapter via the ProcessInput() method and is responsible for forwarding it to target business processes or operations.
+            If the business service does not specify an adapter, then the default adapter calls the OnProcessInput() method with no message and the business service is responsible for receiving the data from the external system and validating it.
+            </summary>
+            <param name="messageInput">an instance of Object containing the data that the inbound adapter passes in. The message can have any structure agreed upon by the inbound adapter and the business service. The message does not have to be a subclass of Message or IRISObject and is typically not persisted in the database.</param>
+            <returns>an instance of Object to the inbound adapter.</returns>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessService._setIrisHandles(InterSystems.Data.IRISClient.ADO.IRISObject,InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessService.SendRequestAsync(System.String,InterSystems.Data.IRISClient.ADO.IRISObject,System.String)">
+            <summary>
+            The SendRequestAsync() method sends the specified message to the target business process or business operation asynchronously.
+            </summary>
+            <param name="target">a string that specifies the name of the business process or operation to receive the request.The target is the name of the component as specified in the Item Name property in the production definition, not the class name of the component.</param>
+            <param name="request">specifies the message to send to the target. The request is an instance of IRISObject class. If the target is a built-in ObjectScript component, you should use the IRISObject class. The IRISObject class enables the PEX framework to convert the message to a class supported by the target.</param>
+            <param name="description">an optional string parameter that sets a description property in the message header.</param>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessService.SendRequestAsync(System.String,InterSystems.EnsLib.PEX.Message,System.String)">
+            <summary>
+            The SendRequestAsync() method sends the specified message to the target business process or business operation asynchronously.
+            </summary>
+            <param name="target">a string that specifies the name of the business process or operation to receive the request.The target is the name of the component as specified in the Item Name property in the production definition, not the class name of the component.</param>
+            <param name="request">specifies the message to send to the target.The request is an instance of a subclass of Message class.</param>
+            <param name="description">an optional string parameter that sets a description property in the message header.</param>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessService._dispatchOnConnected(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessService._dispatchOnInit(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.BusinessService._dispatchOnTearDown(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.Common">
+            <summary>
+            This is common superclass for all component types that defines common methods
+            </summary>
+        </member>
+        <member name="F:InterSystems.EnsLib.PEX.Common.irisHandle">
+            <summary>
+            An instance of IRISObject that points to the corresponding PEX component on the IRIS side.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.Common._getProperties">
+            <summary>
+            Get a list of the Fields or Properties of this C# class.
+            This is used by the Production Configuration Page to display them as settings.
+            Use Attribute FieldMetadata for a field or property in order to specify IsRequired, Category, or Description for that field/property
+            or to set the dataType to something more specialized than Integer, Numeric, Boolean, or String by specifying DataType.
+            Use boolean parameter ExcludeFromSettings to exclude a Field from this list, and so prevent it from being displayed as a setting in the Production Configuration Page.
+            The default is to return all public fields/properties that are not inherited from the InterSystems.EnsLib.PEX classes
+            and to assume all fields/properties are optional and in the Additional category.
+            </summary>
+            <returns>A list of lists of form $lb(propName,dataType,defaultVal,required,category,description)</returns>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.Common._getSettingInfo(System.Reflection.MemberInfo,System.String)">
+            <summary>
+            This gets nearly all of the metadata that we need for an individual field or property.
+            MemberInfo is a generic type, so there are a couple properties we can only get from the specific type FieldInfo or PropertyInfo, but this method attempts to reduce that duplication.
+            If it is determined that the field or property should not be included as a setting in the ObjectScript proxy, then this method returns null and the field or property does not get added to the list.
+            </summary>
+            <param name="fieldOrProp">An individual field or property of the class</param>
+            <param name="dataType">The data type of the field or property - this can't be found from MemberInfo, so needs to be passed in as a separate parameter</param>
+            <returns>Either a list of form $lb(propName,dataType,,required,category,description) for the field/property or null</returns>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.Common._getInfo">
+            <summary>
+            Get class information to display in the Informational Settings expando for Production config items of this Business Host or Adapter.
+            This method simply returns a list containing the superclass and the values specified by using the ClassMetadata attribute.
+            ClassMetadata has named parameters Description, InfoURL, and IconURL.
+            IconURL is not yet displayed anywhere
+            </summary>
+            <returns>A list of metadata about the class, of form $lb(SuperClass,Description,InfoURL,IconURL,AdapterName)</returns>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.Common.LOGINFO(System.String)">
+            <summary>
+            Write a log entry of type "info". Log entries can be viewed in the management portal.
+            </summary>
+            <param name="message">a string that is written to the log.</param>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.Common.LOGALERT(System.String)">
+            <summary>
+            Write a log entry of type "alert". Log entries can be viewed in the management portal.
+            </summary>
+            <param name="message">a string that is written to the log.</param>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.Common.LOGWARNING(System.String)">
+            <summary>
+            Write a log entry of type "warning". Log entries can be viewed in the management portal.
+            </summary>
+            <param name="message">a string that is written to the log.</param>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.Common.LOGERROR(System.String)">
+            <summary>
+            Write a log entry of type "error". Log entries can be viewed in the management portal.
+            </summary>
+            <param name="message">a string that is written to the log.</param>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.Common.LOGASSERT(System.String)">
+            <summary>
+            Write a log entry of type "assert". Log entries can be viewed in the management portal.
+            </summary>
+            <param name="message">a string that is written to the log.</param>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.Director">
+            <summary>
+            The Director class is used for nonpolling business services, that is, business services which are not automatically called by the production framework (through the inbound adapter) at the call interval.
+            Instead these business services are created by a custom application by calling the Director.CreateBusinessService() method.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.Director.CreateBusinessService(InterSystems.Data.IRISClient.IRISADOConnection,System.String)">
+            <summary>
+            The CreateBusinessService() method initiates the specified business service.
+            </summary>
+            <param name="connection">an IRISConnection object that specifies the connection to an IRIS instance for .NET.</param>
+            <param name="target">a string that specifies the name of the business service in the production definition.</param>
+            <returns>an object that contains an instance of IRISBusinessService</returns>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.InboundAdapter">
+            <summary>
+            The InboundAdapter is responsible for receiving the data from the external system, validating the data, and sending it to the business service by calling BusinessHost.ProcessInput() method.
+            </summary>
+        </member>
+        <member name="F:InterSystems.EnsLib.PEX.InboundAdapter.BusinessHost">
+            <summary>
+            The BusinessHost instance variable provides access to the business service associated with the inbound adapter. The adapter calls the ProcessInput() method of the business service.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.InboundAdapter.OnConnected">
+            <summary>
+            The OnConnected() method is called when the component is connected or reconnected after being disconnected.
+            Use the OnConnected() method to initialize any structures needed by the component.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.InboundAdapter.OnInit">
+            <summary>
+            The OnInit() method is called when the component is started.
+            Use the OnInit() method to initialize any structures needed by the component.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.InboundAdapter.OnTearDown">
+            <summary>
+            The OnTearDown() method is called before the business component is terminated. Use the OnTeardown() method to free any structures.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.InboundAdapter.OnTask">
+            <summary>
+            The OnTask() method is called by the production framework at intervals determined by the business service CallInterval property. 
+            The OnTask() method is responsible for receiving the data from the external system, validating the data, and sending it in a message to the business service OnProcessInput() method. 
+            The message can have any structure agreed upon by the inbound adapter and the business service.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.InboundAdapter._setIrisHandles(InterSystems.Data.IRISClient.ADO.IRISObject,InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.InboundAdapter._dispatchOnConnected(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.InboundAdapter._dispatchOnInit(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.InboundAdapter._dispatchOnTearDown(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.IRISBusinessOperation">
+            <summary>
+            Class for proxy objects that represent business operation instances in IRIS
+            </summary>
+        </member>
+        <member name="F:InterSystems.EnsLib.PEX.IRISBusinessOperation.irisHandle">
+            <summary>
+            An instance of IRISObject that points to the corresponding PEX component on the IRIS side.
+            </summary>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.IRISBusinessService">
+            <summary>
+            Class for proxy objects that represent business service instances in IRIS
+            </summary>
+        </member>
+        <member name="F:InterSystems.EnsLib.PEX.IRISBusinessService.irisHandle">
+            <summary>
+            An instance of IRISObject that points to the corresponding PEX component on the IRIS side.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.IRISBusinessService.ProcessInput(System.Object)">
+            <summary>
+            Sends an object to the business service instance
+            </summary>
+            <param name="input">an instance of object to be sent to the business service</param>
+            <returns>an instance of object that is returned from the business service</returns>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.IRISInboundAdapter">
+            <summary>
+            Class for proxy objects that represent inbound adapter instances in IRIS
+            </summary>
+        </member>
+        <member name="F:InterSystems.EnsLib.PEX.IRISInboundAdapter.irisHandle">
+            <summary>
+            An instance of IRISObject that points to the corresponding PEX component on the IRIS side.
+            </summary>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.IRISOutboundAdapter">
+            <summary>
+            Class for proxy objects that represent outbound adapter instances in IRIS
+            </summary>
+        </member>
+        <member name="F:InterSystems.EnsLib.PEX.IRISOutboundAdapter.irisHandle">
+            <summary>
+            An instance of IRISObject that points to the corresponding PEX component on the IRIS side.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.IRISOutboundAdapter.invoke(System.String,System.Object[])">
+            <summary>
+            Invoke a method of the outbound adapter instance
+            </summary>
+            <param name="method">name of the method to be invoked</param>
+            <param name="arguments">arguments of the invocation</param>
+            <returns>an instance of object</returns>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.Message">
+            <summary>
+            The Message class is the abstract class that is the superclass for persistent messages sent from one component to another.
+            The Message class has no properties or methods. Users subclass Message class in order to add properties.
+            The PEX framework provides the persistence to objects derived from the Message class.
+            </summary>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.OutboundAdapter">
+            <summary>
+            The OutboundAdapter is responsible for sending the data to the external system.
+            </summary>
+        </member>
+        <member name="F:InterSystems.EnsLib.PEX.OutboundAdapter.BusinessHost">
+            <summary>
+            The BusinessHost instance variable provides access to the BusinessOperation associated with the OutboundAdapter.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.OutboundAdapter.OnConnected">
+            <summary>
+            The OnConnected() method is called when the component is connected or reconnected after being disconnected.
+            Use the OnConnected() method to initialize any structures needed by the component.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.OutboundAdapter.OnInit">
+            <summary>
+            The OnInit() method is called when the component is started.
+            Use the OnInit() method to initialize any structures needed by the component.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.OutboundAdapter.OnTearDown">
+            <summary>
+            The OnTearDown() method is called before the business component is terminated. Use the OnTeardown() method to free any structures.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.OutboundAdapter._setIrisHandles(InterSystems.Data.IRISClient.ADO.IRISObject,InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.OutboundAdapter._dispatchOnConnected(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.OutboundAdapter._dispatchOnInit(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="M:InterSystems.EnsLib.PEX.OutboundAdapter._dispatchOnTearDown(InterSystems.Data.IRISClient.ADO.IRISObject)">
+            <summary>
+            This is for internal use only.
+            </summary>
+        </member>
+        <member name="T:InterSystems.EnsLib.PEX.Persistent">
+            <summary>
+            Persistent attribute <code>[Persistent]</code> allows users to mark properties of a business process to be persistent.
+            This means properties modified by one method of a business process will be preserved and be visible in all subsequent methods of the same business process object.
+            Persistence lasts for the duration of the life span of the business process object.
+            Only properties of type string and primitive types can be marked as persistent.
+            </summary>
+        </member>
+    </members>
+</doc>

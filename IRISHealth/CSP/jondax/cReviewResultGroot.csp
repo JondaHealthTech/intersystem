@@ -1,0 +1,2154 @@
+<html>
+<head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		; check in InitMe^cReviewResultGroot
+		;i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+		q 1
+	</script>
+
+	<script language="cache" runat="server">
+		s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+		;i r1'=1 s %response.Redirect="cLockDown.csp"
+		d HEAD1^CSP999
+	</script>
+	<link rel="stylesheet" href="assets/styles/cReviewResultGroot.css" />
+</head>
+<body>
+<form name="F1" id="F1" onsubmit="return false;">
+    <div id="wrapper">
+        <div class="bg-wrapper">
+            <div class="bg3">
+                <img src="./assets/images/bg3.png" />
+            </div>
+        </div>
+        <div class="content">
+            <div class="main-field">
+                <div class="instruct-area">
+                    <div class="main-title">
+                        <h1>Transformation Results <span id="trans-id"></span></h1>
+                        <div class="btn-group">
+                        <button type="button" class="grey-btn" onclick="openPopup10()"><img src="./assets/images/leftArrow.png" alt="Left Arrow">Back</button>
+                        	<button type="button" class="pink-btn" onclick="jDownloadBtn()">Download</button> 
+                        	<button type="button" class="pink-btn" onclick="saveResult()">Save</button>
+                        </div>
+                    </div>
+                    <p>Instructions: Check the accuracy of the translated data and resolve all the translation issues before saving. Details of the template can be viewed by clicking on the template name link.</p>
+                </div>
+                <div class="result-review">
+                    <div class="all-result active">
+                        <div class="result-nav">
+                            <div class="nav-items">
+                                <div class="item active" onclick="openAllResult()">All Results</div>
+                                <div class="item" onclick="openReviewOptions()">Review Options</div>
+                            </div>
+                            <button type="button" class="pink-btn table-toggle-btn" onclick="orgTable()">Original Table</button>
+                            
+                        	<button type="button" class="pink-btn preview" onclick="jPopOriginal()">Preview</button>
+                        	<button type="button" class="pink-btn save-edits-btn" onclick="saveToGlobals()">Save Edits</button>
+                        	<div class="result-name">
+                        		<!-- Set in InitMe^cReviewResultGroot -->
+                                <h2><span id="cName">Client Name</span> | <span id="tName" onclick="window.open('./cViewTemp.csp','blank')">Template Name</span></h2> 
+                            </div>
+                        </div>
+                        <div class="result-content">
+                          <div class="result-header">
+                             <div class="title">
+                               <!-- Date Picker -->
+                             	<div class="date-picker"> 
+                                	<div class="date-input">dd/mm/yyyy <img src="assets/images/calendar.png" alt="Calendar">
+                                	</div>
+                            		<input type="date" id="report-date" onchange="changeDate(event)">
+                            	</div>
+                            	<button type="button" class="date-apply-btn" onclick="jApplyAll()">Apply to All</button>
+                           	    <!-- Counts-->
+                           	    <div class="row-count">
+                            		<span id="RowCount" ></span>
+                        			<span id="OCRrowCount" ></span>
+                        	    </div> 
+                        	    <!-- Redacted radio btns-->
+                        	    <div class="redact-type">
+                            		<span>Redacted:</span>
+                            		<div class='redact-item'>
+										<div class='round'>
+											<input autocomplete='off' name='redact' id='P1' type='radio' value="Yes" onclick="jRedacted()" checked>
+									 		<label for='P1'></label>
+										</div>
+										<p>Yes</p>
+									</div>
+									<div class='redact-item'>
+										<div class='round'>
+											<input autocomplete='off' name='redact' id='P2' type='radio' onclick="jRedacted()" value="No">
+									 		<label for='P2'></label>
+										</div>
+										<p>No</p>
+									</div>
+                        	    </div> 
+                        	    <!-- Report type -->
+                        	    <div class="report-type">
+                                	<h2>Report Type:</h2>
+                                	<div id="report-btn" class="dropdown report" onclick="toggleSelectReport(event)">Select Type <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                            	</div>
+                           	 </div>
+	                            
+	                        <img class="filter-btn" src="./assets/images/filter-blue.png" alt="Filter Button" onclick="toggleFilterOption(event)">     
+                       	  </div>
+                       	  <!-- Result Table -->
+                            <div class="result-table" onscroll="handleScroll(event)">
+                                <table class="table table-hover" id="Tab1">
+                                    <thead>
+                                        <tr>
+                                        	<th class="actions">Actions</th>
+                                            <th class="date">Date</th>
+                                            <th class="test-name" >
+                                            <span onclick="jResetTable()">Test Name</span>
+                                            	<div class="img-group">
+                                            		<img src="./assets/images/dropDownCloseBlack.png" alt="Up Arrow(Asc)" onclick="jSortTable(2,'asc')">
+                                            		<img src="./assets/images/dropDownSharp.png" alt="Down Arrow(Desc)" onclick="jSortTable(2,'desc')">
+                                            	</div>
+                                            </th>
+                                            <th class="transformed-name"><img src="./assets/images/conversion.png" alt="Arrow">Transformed Test Name</th>
+                                            <th class="result">Result</th>
+                                            <th class="from-unit">From Unit <img src="./assets/images/conversion.png" alt="Arrow"></th>
+                                            <th class="convert-result" colspan="2">Converted Result</th>
+                                            <th class="l-range">Lower Range</th>
+                                            <!-- colspan="2" -->
+                                            <th class="transformed-lRange">Converted Lower Range</th>
+                                            <th class="u-range">Upper Range</th>
+                                   			<!-- colspan="2" -->	
+                                            <th class="transformed-uRange">Converted Upper Range</th>
+                                            <th class="comment" style="display:none;">Comments</th>
+                                            <th class="row-num" style="display:none;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBody">
+										<script language="cache" runat="server">
+											; populate results
+											d WriteResults^cReviewResultGroot
+										</script>
+                                    </tbody>
+                                </table>
+                                <div class="ws1"></div>
+                                <div class="ws2"></div>
+                                <div class="FYI"><span style="color:#E63876;">Pink boxes</span> indicate high probability of incorrect transcription. <span style="color:#E63876;">Pink text</span> indicate manually entered data. <span style="color:#56C4C5;">Teal box</span> indicate AI-corrected information.</div>
+                    			<div class="testname-dropdown">
+                             		<ul>
+                             		</ul>
+                        		</div>
+                        		<div class="unit-dropdown">
+                            		<ul>
+                             		</ul>
+                        		</div>
+                        		<!-- Result table filter -->
+                                <div class="result-filter-dropdown">
+                                    <div class="option">
+                                        <div class="round">
+                                            <input name="result" id="R1" type="radio" value="All results" checked>
+                                            <label for="R1"></label>
+                                        </div>
+                                        <p>All results</p>
+                                    </div>
+                                    <div class="option">
+                                        <div class="round">
+                                            <input name="result" id="R2" type="radio" value="Issue">
+                                            <label for="R2"></label>
+                                        </div>
+                                        <p>Results with issue</p>
+                                    </div>
+                                    <div class="option">
+                                        <div class="round">
+                                            <input name="result" id="R3" type="radio" value="Converted">
+                                            <label for="R3"></label>
+                                        </div>
+                                        <p>Converted Results</p>
+                                    </div>    
+                                    <div class="option">
+                                        <div class="round">
+                                            <input name="result" id="R4" type="radio" value="Original">
+                                            <label for="R4"></label>
+                                        </div>    
+                                        <p>Original Values</p>
+                                    </div>
+                                    <button type="button" onclick="confirmFilter()">Confirm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Review options tab -->
+                    <div class="review-options">
+                        <div class="review-nav">
+                            <div class="nav-items">
+                                <div class="item" onclick="openAllResult()">All Results</div>
+                                <div class="item active"onclick="openReviewOptions()">Review Options</div>
+                            </div>
+                            <div class="result-name">
+                                <h2><span id="cName1">Client Name</span> | <span id="tName1" onclick="window.open('./cViewTemp.csp','blank')">Template Name</span></h2>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <div class="review-select-option active">
+                                <p>Click the button to select an action to apply to the current file</p>
+                                <div class="dropdown review-toggle-btn" onclick="toggleOptions(event)">Choose an option <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                <img class="review-graphic" src="./assets/images/reviewOptionGraphic.png" alt="Graphic">
+                            	<img class="background-img" src="./assets/images/reviewOptionBackground.png" alt="Background">
+                            </div>
+                            <div class="review-option-main option2">
+                                <div class="r-option on-hold">
+                                    <div class="dropdown review-toggle-btn" onclick="toggleOptions(event)">Put file on hold <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                    <p>Putting a file on hold enables you to continue reviewing it on a later time. Using this option will mark the file as "On Hold" on the main screen.</p>
+                                </div>
+                                <div class="r-option transfer">
+                                    <div class="dropdown review-toggle-btn" onclick="toggleOptions(event)">Transfer to another reviewer <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                    <p>This option enables you to suspend current file review and transfer process  to another reviewer.</p>
+                                </div>
+                                <div class="r-option file-error">
+                                    <div class="dropdowns">
+                                        <div class="dropdown review-toggle-btn" onclick="toggleOptions(event)">Mark file as error <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                        <div id="error-reason" class="dropdown reason-toggle-btn" onclick="toggleReason(event)">Select reason <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                                    </div>
+                                    <p>Indicating a file as an error means it contains major readability or processing issues. Marking it means a subsequent email will be sent to the client. 
+                                       <br><mark>Note: If unsure, contact Head Reviewer before confirming.</mark>
+                                    </p>
+                                    <div class="error-reason-dropdown">
+                                		<ul>
+                                    		<script language="cache" runat="server">
+                                    			d WriteReasons^cReviewResultGroot
+                                    		</script>
+                                    	</ul>
+                            		</div>
+                                </div>
+                                <div class="review-note">
+                                    <textarea name="note" id="review-note" placeholder="Write additional notes here."></textarea>
+                                </div>
+                                <button type="button" class="green-btn" onclick="confirmReviewAction()">Confirm</button>
+                            </div>
+                            <div class="review-option-dropdown">
+                                <ul>
+                                    <li onclick="selectROption(event)">Put file on hold</li>
+                                    <li onclick="selectROption(event)">Transfer to another reviewer</li>
+                                    <li onclick="selectROption(event)">Mark file as error</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Report type dropdown -->
+    <div id="report-select" class="collapse-field">
+       <div class="collapse">
+        <script language="cache" runat="server">
+        	; Populate report types
+        	d WriteResultTypes^cReviewResultGroot
+        </script>
+            <!--
+            <div class="report-item" onclick="openPopup1()">
+                <div class="round">
+                    <input autocomplete="off" name="report" id="C18" type="checkbox" value="Other">
+                    <label for="C18"></label>
+                </div>
+                <p>Other</p>
+            </div>
+            -->
+        </div>
+      <button type="button" onclick="closeReportSelect()">Confirm</button>
+    </div>
+    
+    <!-- Popups -->
+    <div id="popup1" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>New test name entered</h4>
+            <p>Do you want to add this test name to the database?</p>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="alert('Test name is added');removePopup1();">Yes</button>
+                <button type="button" class="pink-btn" onclick="removePopup1()">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup2" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>Hold on!</h4>
+            <p>You still have <span>Transformation Error Results</span>. Please address these in order to save the file.</p>
+            <div class="btn-group">
+                <button type="button" class="pink-btn" onclick="removePopup2()">Go Back</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup3" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>Are you sure you want to save changes?</h4>
+            <p>You will no longer be able to access this file as it will be sent to the client and subsequently deleted.</p>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="saveDocument()">Yes</button>
+                <button type="button" class="pink-btn" onclick="removePopup3()">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup4" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>Are you sure you want to put this file on hold?</h4>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="confirmOnHold()">Yes</button>
+                <button type="button" class="pink-btn" onclick="removePopup4()">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup5" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>Are you sure you want to transfer this file to another reviewer?</h4>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="confirmTransfer()">Yes</button>
+                <button type="button" class="pink-btn" onclick="removePopup5()">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup6" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>Are you sure to mark <br>this file as error?</h4>
+            <p>The client will be notified of this action.</p>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="confirmFileError()">Yes</button>
+                <button type="button" class="pink-btn" onclick="removePopup6()">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup7" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>File ID <span class="trans-id"></span> is put on hold</h4>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="window.close()">Okay</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup8" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>File ID <span class="trans-id"></span> will be transferred</h4>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="window.close()">Okay</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup9" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>File ID <span class="trans-id"></span> is marked as error</h4>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="window.close()">Okay</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup10" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="Signup Success">
+            <h4>Are you sure you want to go back?</h4>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="jGoBackToStep1()">Yes</button>
+                <button type="button" class="pink-btn" onclick="removePopup10()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var resizefunc = [];
+    </script>
+    <!-- jQuery  -->
+	<script language="cache" runat="server">
+		d jQueryCore^WSP999
+	</script>
+</form>
+</body>
+
+<script type="text/javascript">
+	let mySessionEnd;
+  	document.onload = resetTimer;
+  	document.onmousemove = resetTimer;
+  	document.onmousedown = resetTimer; // touchscreen presses
+  	document.ontouchstart = resetTimer;
+  	//document.onclick = parent.resetTimer; // touchpad clicks
+  	document.onkeypress = resetTimer;
+  	document.addEventListener('scroll',resetTimer, true);
+    R1=self.R1;R2=self.R2;R3=self.R3;
+    let resultTable=document.getElementsByClassName("result-table")[0];
+    let ws1=document.getElementsByClassName("ws1")[0];
+    let ws2=document.getElementsByClassName("ws2")[0];
+    let allResult=document.getElementsByClassName("all-result")[0];
+    let reviewOptions=document.getElementsByClassName("review-options")[0];
+    let reviewOptionDropdown=document.getElementsByClassName("review-option-dropdown")[0];
+	let errorDropdown = document.querySelector(".error-reason-dropdown");
+	let unitDropdown = document.querySelector(".unit-dropdown");
+	let testnameDropdown = document.querySelector(".testname-dropdown");
+	let dropDownText = " <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'>";
+	let calendarText = " <img src='assets/images/calendar.png' alt='Calendar'>";
+	let reportSelect = document.getElementById("report-select");
+	let reportBtn = document.getElementById("report-btn");
+    let popup1 = document.getElementById("popup1");
+    let popup2 = document.getElementById("popup2");
+    let popup3 = document.getElementById("popup3");
+    let popup4 = document.getElementById("popup4");
+    let popup5 = document.getElementById("popup5");
+    let popup6 = document.getElementById("popup6");
+    let popup7 = document.getElementById("popup7");
+    let popup8 = document.getElementById("popup8");
+    let popup9 = document.getElementById("popup9");
+    let rid;
+    let initialVal;
+    let typingTimer;
+	const debounceTime = 300;
+    let reportType="";
+    let newClassList;
+    let newTestname;
+	let newTunit;
+	let newFromUnit1;
+    let dropdownText= " <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'>";
+    let rbt;
+    let currentTr;
+	let currentTestname;
+	let currentDropdown;
+	let dropdownActive=-1;
+	let unitsCal;
+	let filePath;
+	let fName;
+	let downloadStr;
+	let date="";
+ 
+	window.onload = jInitMe;
+	// Session control
+	function resetTimer(){
+		clearTimeout(mySessionEnd);
+		mySessionEnd = setTimeout(jLockDown, 3600000);
+	}
+	function clearTimer(){
+		clearTimeout(mySessionEnd);
+	}
+	function jLockDown(){
+		#server(..cLockDown())#
+	}
+	// End of session control
+	
+	function jInitMe(e){
+		resetTimer(e);
+        #server(..cInitMe())#
+        let transID = document.querySelectorAll(".trans-id");
+        for(i=0;i<transID.length;i++){
+	        transID[0].innerHTML = rid
+        }
+        if(reportType!=""){
+			loadReportSelect();
+		}
+        jRedacted()
+        jCountRows()
+        //closeReportSelect()	//Added on 12Dec24 to auto select "Blood Test" as reportType 
+		if(date!=""){
+			//jApplyAll()	//Added on 11Dec24 to populate the report date in all rows
+		}
+    }
+    
+	// Table row count
+	function jCountRows(){
+		rows=(document.getElementById("Tab1").rows.length)-1
+		document.getElementById("RowCount").innerHTML="Table "+rows + " row(s),"
+	}
+	
+	// Change the date format
+    function changeDate(e){
+		let date = new Date(e.target.value);
+		if(isNaN(date)){
+			document.querySelector(".date-input").innerHTML="dd/mm/yyyy" +calendarText;
+			return;
+		}
+		document.querySelector(".date-input").innerHTML=date.getDate().toString().padStart(2, '0')+"/"+(date.getMonth()+1).toString().padStart(2, '0')+"/"+date.getFullYear()+calendarText;
+	}
+	// Apply date to all rows
+	function jApplyAll(){
+		let refinedDate;
+		let date = new Date(document.querySelector("#report-date").value);
+		if(date!="Invalid Date"){
+			let dateCols = document.querySelectorAll("td.date");
+			 dateCols.forEach((td) => {
+            refinedDate = date.getDate().toString().padStart(2, '0') + "/" + 
+                           (date.getMonth() + 1).toString().padStart(2, '0') + "/" + 
+                           date.getFullYear();
+            td.innerHTML=refinedDate;
+        });
+		// 30.10.2024 date value to pass onto SaveReportDate function
+        reportDate = document.querySelector("#report-date").value; 
+		// 30.10.2024 New Function to save date
+		#server(..cSaveReportDate(reportDate,rid))#; 
+		}
+		else{
+			alert("Date is invalid");
+		}
+	}
+	// Ajust table and scrollbar
+    const checkScrollbar = ()=>{
+        if(resultTable.scrollHeight > resultTable.clientHeight){
+            ws1.style.right = "2.25vw";
+        }
+        else{
+            ws1.style.right = "1.5vw";
+        }
+        if(resultTable.scrollWidth > resultTable.clientWidth){
+	        ws2.style.bottom = "1vw";
+        }
+        else{
+	        ws2.style.bottom = "2.5vw";
+        }
+    }
+    checkScrollbar();
+    
+    function handleScroll(e){
+        /*
+        if(e.target.scrollLeft>10){
+            document.querySelector("th:nth-child(3)").style.borderRight="2px solid #9B9B9B";    
+        }
+        else{
+	        document.querySelector("th:nth-child(2)").style.borderRight="none";
+        } */
+        
+        // Close suggestion dropdowns when scroll to right
+        removeNameSuggestions();
+        removeUnitSuggestions();
+    }
+    function removeNameSuggestions(){
+        testnameDropdown.classList.remove("active");
+        currentDropdown=null;
+    }
+    function removeUnitSuggestions(){
+        unitDropdown.classList.remove("active");
+        currentDropdown=null;
+    }
+    function showInfo(e){	// not used
+        let infoText = e.target.nextElementSibling;
+        infoText.classList.add("active");
+        setTimeout(()=>{
+            infoText.classList.remove("active");
+        },2000)
+    }
+    
+    function openTestNamePopUp(){
+        setTimeout(()=>{
+            popup1.classList.remove("inactive");
+        },100)
+    }
+    // not used, Activate popup1 when detecting new testname
+    function openPopup1(){
+        setTimeout(()=>{
+            popup1.classList.remove("inactive");
+        },100)
+    }
+    // Deactivate popup1
+    function removePopup1(){
+        popup1.classList.add("inactive");
+    }
+    
+    function saveResult(){
+	    
+	    // Select all columns that have issues but deleted
+        let errorResults = document.querySelectorAll(".issue").length;
+    	let deletedIssues = document.querySelectorAll(".issue.deleted");
+    	// Loop through each selected element and remove the "issue" class
+    	deletedIssues.forEach(element => {
+       	 	element.classList.remove("issue");
+  			  });
+  		// Count erroes again	  
+        errorResults = document.querySelectorAll(".issue").length;
+        if(errorResults==0){
+	        // Confirmation to save file
+            openPopup3(); 
+        }
+        else{
+	        // Results containong errors
+            openPopup2();	
+        }
+    }
+    
+    //Activate and deactivate popup2,popup3,popup4,5,6,10
+    function openPopup2(){
+        setTimeout(()=>{
+            popup2.classList.remove("inactive");
+        },100)
+    }
+    function removePopup2(){
+        popup2.classList.add("inactive");
+    }
+    function openPopup3(){
+        setTimeout(()=>{
+            popup3.classList.remove("inactive");
+        },100)
+    }
+    function removePopup3(){
+        popup3.classList.add("inactive");
+    }
+    function openPopup4(){
+        setTimeout(()=>{
+            popup4.classList.remove("inactive");
+        },100)
+    }
+    function removePopup4(){
+        popup4.classList.add("inactive");
+    }
+    function openPopup5(){
+        setTimeout(()=>{
+            popup5.classList.remove("inactive");
+        },100)
+    }
+    function removePopup5(){
+        popup5.classList.add("inactive");
+    }
+    function openPopup6(){
+        setTimeout(()=>{
+            popup6.classList.remove("inactive");
+        },100)
+    }
+    function removePopup6(){
+        popup6.classList.add("inactive");
+    }
+    function openPopup10(){
+        setTimeout(()=>{
+            popup10.classList.remove("inactive");
+        },100)
+    }
+    function removePopup10(){
+        popup10.classList.add("inactive");
+    }
+    
+    // Active/deactivate Test Name suggetions under Transformed Name textbox
+    function openNameSuggestions(e){
+	    // Set dimensions
+        let position = e.target.getBoundingClientRect();
+        testnameDropdown.style.top = position.bottom + 5 + "px";
+        testnameDropdown.style.left = position.left + "px";
+        testnameDropdown.querySelector("ul").style.maxHeight = window.innerHeight - position.bottom - 30 + "px";
+        
+        if(e.target.value.length>0){
+	        // Show the dialog if there are suggestions
+            testnameDropdown.classList.add("active");
+            currentDropdown=testnameDropdown;
+        }
+        else{
+            testnameDropdown.classList.remove("active");
+            currentDropdown=null;
+        }
+    }
+    
+    // Active/deactivate report type dropdown
+    function toggleFilterOption(e){
+	    // Set dimensions
+        let position = e.target.getBoundingClientRect();
+        let dropdown = document.getElementsByClassName("result-filter-dropdown")[0];
+        dropdown.style.top = position.bottom + 5 + "px";
+        dropdown.style.right = window.innerWidth - position.right + "px";
+        setTimeout(()=>{
+            dropdown.classList.toggle("active");
+        },100)
+    }
+    
+    // Result table filter
+    function confirmFilter(){
+	    document.querySelector("table").classList.remove("org");
+	    document.querySelector("table").classList.remove("transformed");
+        if(R1.checked){
+            //show all rows
+            let tablerow = document.querySelectorAll("tr");
+            for(var i=1;i<tablerow.length;i++){
+                tablerow[i].style.display="table-row";
+            }
+            document.getElementsByClassName("result-filter-dropdown")[0].classList.remove("active");
+        }
+        else if(R2.checked){
+            //remove row without issues
+            let tablerow = document.querySelectorAll("tr");
+            for(var i=1;i<tablerow.length;i++){
+                let issue = tablerow[i].querySelectorAll("td.issue");
+                if(issue.length==0){
+                    tablerow[i].style.display="none";
+                }
+                else{
+	                tablerow[i].style.display="table-row";
+                }
+            }
+            document.getElementsByClassName("result-filter-dropdown")[0].classList.remove("active");
+        }
+        else if(R3.checked){
+            transformedValue();
+            document.getElementsByClassName("result-filter-dropdown")[0].classList.remove("active");
+        }
+        else if(R4.checked){
+            orgTable();
+            document.getElementsByClassName("result-filter-dropdown")[0].classList.remove("active");
+        }
+        checkScrollbar();
+    }
+    // For result table option - All results
+    function openAllResult(){
+        allResult.classList.add("active");
+        reviewOptions.classList.remove("active");
+    }
+    // For result table option - Only converted values columns
+    function transformedValue(){
+    	document.querySelector("table").classList.toggle("transformed");
+    	checkScrollbar();
+    }
+    // For result table option - Only original/initial-scan values columns
+    function orgTable(){
+    	document.querySelector("table").classList.toggle("org");
+    	checkScrollbar();
+    }
+	// Cater for changing the "to unit"
+	function changeUnit(e){
+	    unitsCal = [];//0-cVal,1-lVal,2-uVal;
+	    
+	    let name =currentTr.querySelector(".transformed-name").querySelector("input");
+	    let cInput = currentTr.querySelector(".convert-result-val").querySelector("input");
+		let lInput = currentTr.querySelector(".l-result-val").querySelector("input");
+		let uInput = currentTr.querySelector(".u-result-val").querySelector("input");
+		
+		let Val = currentTr.querySelector(".result").textContent;
+		let lVal = currentTr.querySelector('.l-range input') 
+				    ? currentTr.querySelector('.l-range input').value 
+				    : (currentTr.querySelector('.l-range') && currentTr.querySelector('.l-range').textContent) 
+				        ? currentTr.querySelector('.l-range').textContent.split(" ")[0]: "";
+		let uVal = currentTr.querySelector('.u-range input') 
+				    ? currentTr.querySelector('.u-range input').value 
+				    : (currentTr.querySelector('.u-range') && currentTr.querySelector('.u-range').textContent) 
+				        ? currentTr.querySelector('.u-range').textContent.split(" ")[0]: "";
+		let toUnit = e.target.textContent; 
+		let fromUnit = currentTr.querySelector(".from-unit").textContent;
+		
+		//alert(Val+", "+lVal+", "+uVal);
+		// Calculate the value
+		#server(..cConvertNewResults(name.value,Val,lVal,uVal,fromUnit,toUnit))#
+		
+		// Add class "edited" to value,l-range and u-range and remove "issue"
+		cInput.parentElement.classList.add("edited");
+		lInput.parentElement.classList.add("edited");
+		uInput.parentElement.classList.add("edited");
+		cInput.parentElement.classList.remove("issue");
+		lInput.parentElement.classList.remove("issue");
+		uInput.parentElement.classList.remove("issue")
+		// Set calculated values
+		cInput.value=unitsCal[0];
+		lInput.value=unitsCal[1];
+		uInput.value=unitsCal[2];
+		
+		// Add class "issue" to value,l-range and u-range if errors contained
+		if (unitsCal[0] && unitsCal[0].includes("ERROR")) {cInput.parentElement.classList.add("issue");}
+		if (unitsCal[1] && unitsCal[1].includes("ERROR")) {lInput.parentElement.classList.add("issue");}
+		if (unitsCal[2] && unitsCal[2].includes("ERROR")) {uInput.parentElement.classList.add("issue");}
+		
+		// Add class "edited" transformed unit,l-range unit and u-range unit
+		currentTr.querySelector(".convert-result-unit").classList.add("edited");
+		currentTr.querySelector(".convert-result-unit").classList.remove("issue");
+		//currentTr.querySelector(".l-result-unit").classList.add("edited");
+		//currentTr.querySelector(".u-result-unit").classList.add("edited");
+		// Change the to-unit/transformed unit
+		currentTr.querySelector(".convert-result-unit").querySelector("div").innerHTML = toUnit + dropDownText;
+		// Change the unit of l-range and u-range
+		//currentTr.querySelector(".l-result-unit").innerHTML = toUnit;
+		//currentTr.querySelector(".u-result-unit").innerHTML = toUnit;
+		// Focus on to-unit  
+		currentTr.querySelector(".convert-result-unit").querySelector("div").focus();
+		setTimeout(()=>unitDropdown.classList.remove("active"),100);
+		currentDropdown=null;
+	}
+	
+	// Selecting suggested test name from TestNameSuggestions
+	function changeTestName(e){
+		currentTestname.value = e.target.textContent;
+		currentTestname.focus();
+		setTimeout(()=>testnameDropdown.classList.remove("active"),100);
+		currentDropdown=null;
+	}
+    
+    // review options tab, 
+    function openReviewOptions(){
+	    // Deactivate result table
+        allResult.classList.remove("active");
+        // Open review options 
+        let reviewOptionMain = document.getElementsByClassName("review-option-main")[0];
+        let reviewSelectOption = document.getElementsByClassName("review-select-option")[0];
+        if(reviewOptionMain.classList.contains("active")){
+            reviewOptionMain.classList.remove("active");
+            reviewSelectOption.classList.add("active");
+        }
+        reviewOptions.classList.add("active");
+    }
+    
+    // Activate review options dropdown
+    function toggleOptions(e){
+        let elem = e.target;
+        if(elem.tagName=="IMG"){
+            elem = elem.parentElement;
+        }
+        // Set dimensions
+        let position=elem.getBoundingClientRect();
+        reviewOptionDropdown.style.top=position.bottom + 5 + "px";
+        reviewOptionDropdown.style.left=position.left + "px";
+        setTimeout(()=>{
+            reviewOptionDropdown.classList.toggle("active");
+        },100)
+    }
+    
+    // Selection of review option
+    function selectROption(e){
+        reviewOptionDropdown.classList.remove("active");
+        let reviewOptionMain = document.getElementsByClassName("review-option-main")[0];
+        let reviewSelectOption = document.getElementsByClassName("review-select-option")[0];
+        if(reviewSelectOption.classList.contains("active")){
+            reviewSelectOption.classList.remove("active");
+            reviewOptionMain.classList.add("active");
+        }
+        if(reviewOptionMain.classList.contains("active")){
+            reviewOptionMain.classList.remove("option1");
+            reviewOptionMain.classList.remove("option2");
+            reviewOptionMain.classList.remove("option3");
+        }
+        // Put option and change the UI according to it
+        switch(e.target.innerHTML){
+            case "Put file on hold":reviewOptionMain.classList.add("option1");break;
+            case "Transfer to another reviewer":reviewOptionMain.classList.add("option2");break;
+            case "Mark file as error":reviewOptionMain.classList.add("option3");break;
+        }
+    }
+    // Check if number or not
+    function isValidNum(num){
+	    if(num.match(/^-?\d+$/)){
+  			return true;
+		}else if(num.match(/^\d+\.\d+$/)){
+  			return true;
+		}else{
+  			return false;
+		}
+    }
+    
+    // Editing original testname
+    function jLoadNewTestName(e){
+	    if (event.key === 'Enter'){
+	     if (e.target.closest(".test-name") != null) { 
+            currentTestname = e.target;
+        	#server(..cLoadJXTestNames(e.target.value))#
+        	currentTr = e.target.parentElement.parentElement;
+        	currentTr.querySelector(".test-name").classList.remove("issue");
+	    	currentTr.querySelector(".transformed-name").outerHTML=newTestname; //
+            currentTr.querySelector(".test-name").innerHTML=e.target.value;
+            currentTr.querySelector(".test-name").onclick=jEditBox;
+            currentTr.querySelector(".result").querySelector("input").focus();
+        	}//saveToGlobals();
+	    }	
+    }
+    // Load unit according to new test name
+    function jLoadNewTestUnit(e){
+		if (event.key === 'Enter'){
+		let currentTestUnit = e.target; 
+		currentTr = e.target.parentElement.parentElement;  
+		//let newResult=currentTr.querySelector(".result").querySelector("input").value;
+		//let newFromUnit=currentTr.querySelector(".from-unit").querySelector("input").value;
+		let newResult = currentTr.querySelector('.result input') 
+    				? currentTr.querySelector('.result input').value 
+   					 : (currentTr.querySelector('.result') && currentTr.querySelector('.result').textContent) 
+       				 ? currentTr.querySelector('.result').textContent: "";
+
+		let newFromUnit = currentTr.querySelector('.from-unit input') 
+				    ? currentTr.querySelector('.from-unit input').value 
+				    : (currentTr.querySelector('.from-unit') && currentTr.querySelector('.from-unit').textContent) 
+				        ? currentTr.querySelector('.from-unit').textContent: "";		
+		currentTestname=currentTr.querySelector(".test-name").textContent; //querySelector("input").value;
+		currentTname=currentTr.querySelector(".transformed-name").querySelector("input").value;
+		let newLRange=currentTr.querySelector(".l-range").querySelector("input");
+		let newURange=currentTr.querySelector(".u-range").querySelector("input"); 
+		
+		if(newResult == '' ){  //&& newFromUnit != null
+			 alert("Enter result");
+			 currentTr.querySelector(".from-unit").innerHTML=newFromUnit;
+			 currentTr.querySelector(".result").querySelector("input").focus()
+		 	}
+	    else{
+		     currentTr.querySelector(".result").innerHTML=newResult;
+		     currentTr.querySelector(".result").onclick=jEditBox;
+		     currentTr.querySelector(".from-unit").innerHTML=newFromUnit; 	
+		     currentTr.querySelector(".from-unit").onclick=jEditBox;
+ 	
+	         if (isValidNum(newResult)){
+		        //#server(..cUnitCleanUp(newFromUnit))#
+		        //newFromUnit=newFromUnit1;
+		        //currentTr.querySelector(".from-unit").querySelector("input").value="";
+		        currentTr.querySelector(".from-unit").innerHTML=newFromUnit;
+		     	let position = currentTr.querySelector(".convert-result-unit").querySelector("div").getBoundingClientRect();
+			   	#server(..cLoadUnitsBasedOnName(currentTname,newFromUnit))#
+       			unitDropdown.style.top = position.bottom + 5 + "px";
+        		unitDropdown.style.left = position.left + "px";
+        		unitDropdown.querySelector("ul").style.maxHeight = window.innerHeight - position.bottom - 30 + "px";
+        		setTimeout(()=>{
+        			unitDropdown.classList.add("active");
+        			currentDropdown=unitDropdown;
+        		},100)
+			   }
+			   currentTr.querySelector(".from-unit").classList.remove("issue");
+			   currentTr.querySelector(".result").classList.remove("issue");
+			   //newFromUnit1="";
+			   saveToGlobals();
+	        }
+    	}
+	}
+	
+	// Convert values for changed testname and unit, almost same as changeUnit()
+	function jConvertNewResult(e){
+		if (event.key === 'Enter'){
+		currentTr=e.target.closest("tr");	
+	   	unitsCal = [];//0-cVal,1-lVal,2-uVal;
+	    let name = currentTr.querySelector(".transformed-name").querySelector("input");
+	    let fromUnit = currentTr.querySelector(".from-unit").textContent;
+	    let cInput = currentTr.querySelector(".result").textContent; //querySelector("input").value;
+		let lInput = currentTr.querySelector(".l-range").querySelector("input").value;
+		currentTr.querySelector(".l-range").innerHTML=lInput;
+		currentTr.querySelector(".l-range").onclick=jEditBox;
+		let uInput = currentTr.querySelector(".u-range").querySelector("input").value;
+		currentTr.querySelector(".u-range").innerHTML=uInput;
+		currentTr.querySelector(".u-range").onclick=jEditBox;
+		
+		let toUnit = currentTr.querySelector(".convert-result-unit").querySelector("div").textContent;
+		let Tval=currentTr.querySelector(".convert-result-val").classList;
+		let TLval=currentTr.querySelector(".l-result-val").classList;
+		let TUval=currentTr.querySelector(".u-result-val").classList;
+		//console.log(name.value+","+cInput.value+","+lInput.value+","+uInput.value+","+fromUnit.value+","+toUnit);
+		#server(..cConvertNewResults(name.value,cInput,lInput,uInput,fromUnit,toUnit))#
+		//currentUnit.value = e.target.innerHTML;
+		Tval.add("edited"); //cInput.parentElement.classList.add("edited");
+		TLval.add("edited"); //lInput.parentElement.classList.add("edited");
+		TUval.add("edited"); //uInput.parentElement.classList.add("edited");
+		Tval.remove("issue");
+		TLval.remove("issue");
+		TUval.remove("issue");
+		//console.log(unitsCal[0]+", "+unitsCal[1]+", "+unitsCal[2])
+		if (unitsCal[0] && unitsCal[0].includes("ERROR")) {Tval.add("issue");}
+		if (unitsCal[1] && unitsCal[1].includes("ERROR")) {TLval.add("issue");}
+		if (unitsCal[2] && unitsCal[2].includes("ERROR")) {TUval.add("issue");}
+		currentTr.querySelector(".convert-result-val").querySelector("input").value=unitsCal[0];
+		currentTr.querySelector(".l-result-val").querySelector("input").value=unitsCal[1];
+		currentTr.querySelector(".u-result-val").querySelector("input").value=unitsCal[2];
+		
+		currentTr.querySelector(".convert-result-unit").querySelector("div").innerHTML = toUnit + dropdownText;
+		currentTr.querySelector(".convert-result-unit").querySelector("div").focus();
+		setTimeout(()=>unitDropdown.classList.remove("active"),100);
+		currentDropdown=null;
+		currentTr.querySelector(".l-range").classList.remove("issue");
+		currentTr.querySelector(".u-range").classList.remove("issue");
+		saveToGlobals();
+		}
+    }
+    // Change the text color pink if it is edited by reviewer
+    function dataChange(e){
+	    currentTr=e.target.closest("tr");
+	    let currentResult=currentTr.querySelector(".result").textContent;
+        if(e.target.closest(".transformed-name")!=null){
+            currentTestname = e.target;
+        	#server(..cLoadTestNames(e.target.value))#
+            openNameSuggestions(e);
+        }
+        
+        if(e.target.value.length==0){
+	        if(e.target.parentElement.classList.contains("l-result-val") || e.target.parentElement.classList.contains("u-result-val")){
+	        	e.target.parentElement.classList.remove("issue");
+        	}
+	        else{
+        		e.target.parentElement.classList.add("issue");
+	        }
+        }
+        else{
+	        if(e.target.value.trim().length == 0){
+		        e.target.parentElement.classList.add("issue");
+	        }
+	        else{
+        		e.target.parentElement.classList.remove("issue");
+	        }
+        }
+        console.log(currentResult +"= "+e.target.value);
+        if(e.target.closest(".convert-result-val")!=null){
+	        if (isValidNum(e.target.value)){
+	        	e.target.parentElement.classList.remove("issue");
+	        } 
+	        else if (isNaN(e.target.value) && e.target.value ==currentResult){
+				
+	        	e.target.parentElement.classList.remove("issue");
+	        } 
+	        else if ((e.target.value.includes('<'))||(e.target.value.includes('>'))){
+	        	e.target.parentElement.classList.remove("issue");
+	        }
+	        // 23-01-2025 Martin To allow "-" character in Converted Result
+	        else if ((e.target.value.includes('+'))||(e.target.value.includes('-'))){
+	        	e.target.parentElement.classList.remove("issue");
+	        } 
+	        else{
+	        	e.target.parentElement.classList.add("issue");
+	        }
+	    }
+        e.target.parentElement.classList.add("edited");
+    }
+    
+	// Unit suggestion dropdown
+    function openUnitSuggestions(e){
+	    currentTr = e.target.parentElement.parentElement;
+		let Tname = currentTr.querySelector(".transformed-name input").value;
+	    let currentUnit=currentTr.querySelector(".from-unit").textContent;
+	    let position = e.target.getBoundingClientRect();
+        #server(..cLoadUnitsBasedOnName(Tname,currentUnit))#
+        unitDropdown.style.top = position.bottom + 5 + "px";
+        unitDropdown.style.left = position.left + "px";
+        unitDropdown.querySelector("ul").style.maxHeight = window.innerHeight - position.bottom - 30 + "px";
+        setTimeout(()=>{
+        	unitDropdown.classList.add("active");
+        	currentDropdown=unitDropdown;
+        },100)
+    }
+    
+    // Confirm review option > "On-Hold", "Transfer", "Error"
+    function confirmReviewAction(){
+	    saveToGlobals();
+	    
+        let reviewOptionMain = document.getElementsByClassName("review-option-main")[0];
+        switch(reviewOptionMain.className.split(" ")[2]){
+            case "option1":openPopup4();break;
+            case "option2":openPopup5();break;
+            case "option3":openPopup6();break;
+        }
+    }
+    
+    // Submit file Status (On-hold)
+    function confirmOnHold(){
+	    let note = document.getElementById("review-note").value;
+	    #server(..cFileStatusChange(note,'On-Hold',''))#
+        removePopup4();
+        popup7.classList.remove("inactive");
+    }
+    // Submit file Status (In-Transfer)
+    function confirmTransfer(){
+	    let note = document.getElementById("review-note").value;
+	    #server(..cFileStatusChange(note,'In-Transfer',''))#
+        removePopup5();
+        popup8.classList.remove("inactive");
+    }
+    // Submit file Status (Error)
+    function confirmFileError(){
+	    let note = document.getElementById("review-note").value;
+	    let reason = document.getElementById("error-reason").innerHTML.split("<")[0];
+        // add to record -> reason + note, status " Failure"
+	    //#server(..cFileStatusChange(note,'Failure',reason))#;
+	    
+	    // BOBOB ADDED HERE AUG 9
+	    #server(..cSetRid())#;
+	    #server(..cErrorReport(rid,note,'Failure',reason))#;
+	    
+	    //#server(..cClearFormDataGlobal())#
+        removePopup6();
+        popup9.classList.remove("inactive");
+        // create and error
+        // report by id        
+    }
+    // Activate/deactivate error option dropdown
+    function toggleReason(e){
+        let elem = e.target;
+        if(elem.tagName=="IMG"){
+            elem = elem.parentElement;
+        }
+        let position=elem.getBoundingClientRect();
+        errorDropdown.style.top=position.bottom + 5 + "px";
+        errorDropdown.style.left=position.left + "px";
+        errorDropdown.style.maxHeight=window.innerWidth - position.bottom - 30 + "px";
+        setTimeout(()=>{
+            errorDropdown.classList.toggle("active");
+        },100)
+    }
+    // Set error reason and close the dropdown
+    function selectReason(e){
+	    document.querySelector(".reason-toggle-btn").innerHTML = e.target.innerHTML + dropDownText;
+	    errorDropdown.classList.remove("active");
+    }
+    
+    // 16-01-2025 Martin
+    let originalRows;
+    // Table row sorting(columnIndex=3 for sorting by TestName)
+    function jSortTable(columnIndex, order = 'asc') {
+	    const table = document.getElementById("Tab1");
+	    const rows = Array.from(table.rows).slice(1); // Get all rows except the header
+	    
+	    if (!originalRows) {
+        	originalRows = Array.from(table.rows).slice(1);
+    	}
+	    rows.sort((rowA, rowB) => {
+	        const cellA = rowA.cells[columnIndex].textContent.trim().toLowerCase();
+	        const cellB = rowB.cells[columnIndex].textContent.trim().toLowerCase();
+
+	        if (cellA < cellB) return order === 'asc' ? -1 : 1;
+	        if (cellA > cellB) return order === 'asc' ? 1 : -1;
+	        return 0;
+	    });
+
+	    // Append sorted rows back to the table body
+	    const tbody = table.tBodies[0];
+	    rows.forEach(row => tbody.appendChild(row));
+	}
+	// 16-01-2025 Martin
+	// Reset table to original order
+	function jResetTable() {
+	    const table = document.getElementById("Tab1");
+	    const tbody = table.tBodies[0];
+
+	    if (originalRows) {
+	        originalRows.forEach(row => tbody.appendChild(row));
+	    }
+	}
+
+    // Final file saving
+    function saveDocument(){
+	    #server(..cSetRid())#;
+	    // Delete records in ResultBloodtest_Tests
+	    #server(..cClearRBT(rid))# ;
+	    
+	    // Pull data from current result table
+    	const tableBody = document.getElementById("tableBody");
+    	const tableRows = tableBody.querySelectorAll('tr');
+    	tableRows.forEach((row,index) => {
+	    	// Skip the deleted rows
+	    	if(row.classList.contains("deleted")){
+	    		return;
+	    	}
+	    	if(row.style.display=="none"){	    		
+		    	return;
+		    }
+	    	const testName = (row.querySelector('td.transformed-name') && row.querySelector('td.transformed-name').querySelector('input').value) ? row.querySelector('td.transformed-name').querySelector('input').value : "";
+	    	if (testName == ""){return;}
+	    	const testValue = (row.querySelector('td.convert-result-val') && row.querySelector('td.convert-result-val').querySelector('input').value) ? row.querySelector('td.convert-result-val').querySelector('input').value : "";
+	    	const testUnit = (row.querySelector('td.convert-result-unit') && row.querySelector('td.convert-result-unit').querySelector('div').textContent) ? row.querySelector('td.convert-result-unit').querySelector('div').textContent : "";
+	    	const testLoRange = (row.querySelector('td.l-result-val') && row.querySelector('td.l-result-val').querySelector('input').value) ? row.querySelector('td.l-result-val').querySelector('input').value : "";
+	    	const testHiRange = (row.querySelector('td.u-result-val') && row.querySelector('td.u-result-val').querySelector('input').value) ? row.querySelector('td.u-result-val').querySelector('input').value : "";
+    		const testDate = (row.querySelector('td.date') && row.querySelector('td.date').textContent)? row.querySelector('td.date').textContent : "";
+    		const textarea = row.querySelector('td.comment textarea');
+			const testComment = textarea ? textarea.value : "";
+
+    		//console.log(testName, testValue, testUnit, testHiRange, testLoRange);
+    		
+    		// Save data to ResultBloodtest_Tests
+    		#server(..cSaveRBT(rid, testName, testValue, testUnit, testHiRange, testLoRange, testDate,testComment))#;
+    	}
+    	)
+    	// Error log for unredacted file
+    	#server(..cUnredactedError(rid))#
+    	// Convert to HL7
+    	#server(..cResult2HL7(rid))#
+    	
+    	// Clear globals ^FormData
+    	#server(..cClearFormDataGlobal())#
+    	#server(..cRemoveFile())#
+    	window.close();
+    }
+    
+    // Save result table data into ^FormData
+    function saveToGlobals(){
+	    #server(..cClearFormDataGlobal())#
+	    const tableBody = document.getElementById("tableBody");
+    	const tableRows = tableBody.querySelectorAll('tr');
+    	let ODate,OName,OValue,OUnit,OLoRange,OHiRange,TName,TNameEdited,TValue,TUnit,TLoRange,THiRange="";
+    	let count = 1;
+    	var arrOfObj = [];
+    	tableRows.forEach((row,index) => {   	
+	    	if(row.classList.contains("deleted")){
+	    		return;
+	    	}
+	    	
+	    	if(row.style.display=="none"){	
+	    		//alert("none") ;
+		    	var Obj = {ODate:"",OName:"", OValue:"", OUnit:"", OLoRange:"", OHiRange:"", TName:"",TValue:"",TUnit:"", TLoRange:"", THiRange:""};
+    			arrOfObj.push(Obj); 	
+		    	return;
+		    }			    
+		    if(row.querySelector(".transformed-name").classList.contains("edited")){
+	    		TNameEdited = (row.querySelector('td.transformed-name') && row.querySelector('td.transformed-name').querySelector('input').value) ? row.querySelector('td.transformed-name').querySelector('input').value : "";
+				//console.log(TNameEdited);
+    			}
+    			else {
+	    			TNameEdited = ""
+	    			}	    			
+		    let ODate = (row.querySelector('td.date') && row.querySelector('td.date').textContent)? row.querySelector('td.date').textContent : "";
+	    	let OName = (row.querySelector('td.test-name') && row.querySelector('td.test-name').textContent)? row.querySelector('td.test-name').textContent : "";
+	    	let OValue = (row.querySelector('td.result') && row.querySelector('td.result').textContent)? row.querySelector('td.result').textContent : "";
+	    	let OUnit = (row.querySelector('td.from-unit') && row.querySelector('td.from-unit').textContent)? row.querySelector('td.from-unit').textContent : "";
+	    	let OLoRange = row.querySelector('td.l-range input') 
+						    ? row.querySelector('td.l-range input').value 
+						    : (row.querySelector('td.l-range') && row.querySelector('td.l-range').textContent); 
+						    //? row.querySelector('td.l-range').textContent.split(" ")[0]: "";
+			let OHiRange = row.querySelector('td.u-range input') 
+						    ? row.querySelector('td.u-range input').value 
+						    : (row.querySelector('td.u-range') && row.querySelector('td.u-range').textContent);
+					        //? row.querySelector('td.u-range').textContent.split(" ")[0]: "";							        
+	    	let OComment = (row.querySelector('td.comment') && row.querySelector('td.comment textarea')) 
+	    					? row.querySelector('td.comment textarea').value : "";
+
+	    	
+	    	let TName = (row.querySelector('td.transformed-name') && row.querySelector('td.transformed-name').querySelector('input').value) ? row.querySelector('td.transformed-name').querySelector('input').value : "";
+			if (TName == ""){return;}
+			let TUnit = (row.querySelector('td.convert-result-unit') && 
+						 row.querySelector('td.convert-result-unit').querySelector('div').textContent) 
+						 ? row.querySelector('td.convert-result-unit').querySelector('div').textContent : "";
+	    	if (TUnit == ""){return;}
+			if(row.querySelector("td.convert-result-unit").classList.contains("edited")){
+	    		TUnitEdited = (row.querySelector('td.convert-result-unit') &&
+	    					   row.querySelector('td.convert-result-unit').querySelector('div').textContent) 
+	    					   ? row.querySelector('td.convert-result-unit').querySelector('div').textContent: "";
+    			}
+    			else {
+	    			TUnitEdited = ""
+	    			}
+	    	let TValue = (row.querySelector('td.convert-result-val') && row.querySelector('td.convert-result-val').querySelector('input').value) ? row.querySelector('td.convert-result-val').querySelector('input').value : "";
+	    	if (TValue == ""){return;}
+	    	
+	    	let TLoRange = (row.querySelector('td.l-result-val') && row.querySelector('td.l-result-val').querySelector('input').value) ? row.querySelector('td.l-result-val').querySelector('input').value : "";
+	    	let THiRange = (row.querySelector('td.u-result-val') && row.querySelector('td.u-result-val').querySelector('input').value) ? row.querySelector('td.u-result-val').querySelector('input').value : "";
+    		
+    		
+    		//console.log(rid,count, ODate, OName, OValue, OUnit, OHiRange, OLoRange, TName, TValue, TUnit, THiRange, TLoRange);
+    		var Obj = {ODate:ODate,OName:OName, OValue:OValue, OUnit:OUnit, OLoRange:OLoRange, OHiRange:OHiRange, OComment:OComment, TName:TName,TNameEdited:TNameEdited,TValue:TValue,TUnit:TUnit,TUnitEdited:TUnitEdited, TLoRange:TLoRange, THiRange:THiRange};  		
+    		arrOfObj.push(Obj); 
+    		//console.log("'"+TUnit+"'");	
+    	})
+    	var obj = {"FormData": arrOfObj};
+    	var jsonStr= JSON.stringify(obj);
+    	jsonStr = jsonStr.replace(/"/g,'"');
+    	
+    	#server(..cSaveJson(rid, jsonStr))#;
+    	
+    }
+    
+    function debounceInput(e) {
+    	clearTimeout(typingTimer);
+    	typingTimer = setTimeout(saveEdited(e), debounceTime);
+	}
+	
+    function saveEdited(e){
+	    let row =e.target.closest('tr')
+	    let rownum =row.querySelector('td.row-num').textContent;
+	    let tName=row.querySelector('td.transformed-name');
+    	let editedTName = (tName && tName.querySelector('input').value) ? tName.querySelector('input').value : "";
+    	//alert("rownum: "+rownum);
+    	  	
+    	tName.classList.remove('issue');
+    	tName.classList.add('edited');
+    	saveToGlobals();
+    }
+	// Close the window
+    function jGoBackToStep1(){
+	   // #server(..cClearFormDataGlobal())#
+	    closeReportSelect();
+	    saveToGlobals();
+    	window.close();
+    }
+    
+    // Deactivate popups and dropdowns
+    document.addEventListener("click",(e)=>{
+        if(e.target.closest(".popup-dialog") == null && document.querySelectorAll(".popup.inactive").length!=10){
+            removePopup1();
+            removePopup2();
+            removePopup3();
+            removePopup4();
+            removePopup5();
+            removePopup6();
+            removePopup10();
+        }
+        if(e.target.closest(".testname-dropdown") == null && testnameDropdown.classList.contains("active")){
+            removeNameSuggestions();
+        }
+        if(e.target.closest(".unitname-dropdown") == null && unitDropdown.classList.contains("active")){
+            removeUnitSuggestions();
+        }
+        if(e.target.closest(".review-option-dropdown") == null && e.target.closest(".review-toggle-btn") == null && reviewOptionDropdown.classList.contains("active")){
+            reviewOptionDropdown.classList.remove("active");
+        }
+        if(e.target.closest(".error-reason-dropdown") == null && e.target.closest(".reason-toggle-btn") == null && errorDropdown.classList.contains("active")){
+            errorDropdown.classList.remove("active");
+        }
+        if(e.target.closest(".result-filter-dropdown") == null && e.target.closest(".filter-btn")==null && document.querySelector(".result-filter-dropdown").classList.contains("active")){
+            document.querySelector(".result-filter-dropdown").classList.remove("active");
+        }
+        if(e.target.closest("#report-select") == null && e.target.closest("#report-btn") == null && e.target.closest(".popup-dialog") == null && reportSelect.classList.contains("active")){
+			closeReportSelect();
+		}
+    })
+    
+    // moving focus when a dropdown is active
+    document.addEventListener("keydown",(e)=>{
+		if(currentDropdown!=null){
+			let lis = currentDropdown.querySelectorAll("li");
+			if(e.which==40){
+				if(dropdownActive<lis.length-1){
+					dropdownActive++;
+					lis[dropdownActive].focus();
+				}
+			}
+			if(e.which==38){
+				if(dropdownActive>0){
+					dropdownActive--;
+					lis[dropdownActive].focus();
+				} 
+			}
+			if(e.which==13){
+				lis[dropdownActive].click();
+				dropdownActive=-1;
+			}
+		}
+		if(e.target.closest(".convert-result-val")!=null){
+			if(e.which==39 || e.which==9){
+				e.preventDefault();
+				e.target.closest(".convert-result-val").nextElementSibling.querySelector(".dropdown").focus();
+			}
+		}
+		if(e.target.classList.contains("dropdown") && currentDropdown==null){
+			if(e.which==13 || e.which==40){
+				e.preventDefault();
+				e.target.click();
+			}
+		}
+	})
+	
+	function jRedacted() {  //12-Nov-2024
+    // Select the currently checked radio button in the 'redact' group
+    let option = document.querySelector('input[name="redact"]:checked');
+    
+    // Call server method
+    if (option) {
+        #server(..cRedacted(option.value,rid))#
+    }
+	}
+	// Duplicate a row
+	function duplicateRow(e){
+		let oldTr = e.target.closest("tr");
+		let newTr = oldTr.cloneNode(true);
+		newTr.classList.add("duplicated");
+		oldTr.parentNode.insertBefore(newTr,oldTr.nextSibling);
+		jCountRows();
+		saveToGlobals();
+
+	}
+	// Add new row with inputs
+	function addNewRow(e){
+		reportDate = document.querySelector("#report-date").value.split("-").reverse().join("/"); 
+    	let currentRow = e.target.closest('tr');
+    	let newTr = document.createElement('tr');
+    	newTr.classList.add("new");
+    	
+    	let trStr="<td class='actions'><img class='duplicate-icon' src='./assets/images/duplicate.png' alt='Duplicate' onclick='duplicateRow(event)' > <img src='./assets/images/delete.png' alt='Delete' onclick='deleteRow(event)' > <img class='add-row-icon' src='./assets/images/row.png' alt='Duplicate' onclick='addNewRow(event)' ></td>";
+    	trStr+="<td class='date new' onclick='jEditBox(event)' id='new-date'>"+reportDate+"</td>" //<input class='new' type='text' autocomplete='off' onkeyup='dataChange(event)' onfocus='' value=''></td>";
+    	trStr+="<td class='test-name new issue'><input type='text' autocomplete='off' onkeydown='jLoadNewTestName(event)' onfocus='' value=''></td>";
+    	trStr+="<td class='transformed-name edited'><input type='text' autocomplete='off' onkeyup='dataChange(event)' onfocus='saveToGlobals()' value=''></td>";
+    	trStr+="<td class='result new issue'><input class='new' type='text' autocomplete='off' onkeydown='jLoadNewTestUnit(event)' onfocus='' value=''></td>";
+    	trStr+="<td class='from-unit new issue'><input class='new' type='text' autocomplete='off' onkeyup='' onkeydown='jLoadNewTestUnit(event)' onfocus='' value=''></td>";
+    	trStr+="<td class='convert-result-unit new'><div class='dropdown' onclick='openUnitSuggestions(event)' tabindex='-1'><img src='./assets/images/dropDownDarkBlue.png' onclick='openUnitSuggestions(event)' alt='Dropdown'></div></td>";
+    	trStr+="<td class='convert-result-val new'><input type='text' autocomplete='off' onkeyup='dataChange(event)' value=''></td>";
+    	trStr+="<td class='l-range new issue'><input class='new' type='text' autocomplete='off' onkeyup='dataChange(event)' onfocus='' value=''></td>";
+    	trStr+="<td class='l-result-val new'><input type='text' autocomplete='off' onkeyup='dataChange(event)' value=''></td>";
+    	//trStr+="<td class='l-result-unit new'></td>";
+    	trStr+="<td class='u-range new issue'><input class='new' type='text' autocomplete='off' onkeydown='jConvertNewResult(event)' onfocus='' value=''></td>";
+    	trStr+="<td class='u-result-val'><input type='text' autocomplete='off' onkeyup='dataChange(event)' value=''></td>";
+    	trStr += "<td class='comment' display='none'><textarea autocomplete='off' rows='5' cols='50' onkeyup=''></textarea></td>";
+    	newTr.innerHTML = trStr;
+    	currentRow.parentNode.insertBefore(newTr, currentRow.nextSibling);
+    	resultTable.scrollTop = resultTable.scrollHeight;
+    	newTr.querySelector(".test-name.new input").focus();
+    	jCountRows();
+	}
+	// Delete a row
+	function deleteRow(e){
+		let tr = e.target.closest("tr");
+		if(tr.classList.contains("duplicated") || tr.classList.contains("new")){
+			tr.remove();
+		}
+		else{
+			
+			tr.classList.add("deleted");
+			let tds = tr.querySelectorAll("td");
+			for(var i=0;i<tds.length-1;i++){
+				tds[i].classList.add("deleted");
+				if (tds[i].querySelector("input")){
+					tds[i].querySelector("input").disabled=true;
+				}
+			}
+			let icons = tds[0].querySelectorAll("img");
+			icons[0].src="./assets/images/duplicateGrey.png";
+			icons[1].src="./assets/images/undoDelete.png";
+			icons[1].setAttribute("onclick","undoDeleteRow(event)");
+		}
+		saveToGlobals();
+		jCountRows();
+	}
+	
+	// Undelete a row
+	function undoDeleteRow(e){
+		let tr = e.target.closest("tr");
+		tr.classList.remove("deleted");
+		let tds = tr.querySelectorAll("td");
+		for(var i=0;i<tds.length-1;i++){
+			tds[i].classList.remove("deleted");
+			if (tds[i].querySelector("input")){
+				tds[i].querySelector("input").disabled=false;
+			}
+		}
+		let icons = tds[0].querySelectorAll("img");
+		icons[0].src="./assets/images/duplicate.png";
+		icons[1].src="./assets/images/delete.png";
+		icons[1].setAttribute("onclick","deleteRow(event)");
+		saveToGlobals();
+	}
+	
+	// Convert table data to HL7 and FHIR xml for reviewers
+	function jDownloadBtn(){
+		let errorResults = document.querySelectorAll(".issue").length;
+    	let deletedIssues = document.querySelectorAll(".issue.deleted");
+
+    	deletedIssues.forEach(element => {
+       	 	element.classList.remove("issue");
+  			  });
+
+    	errorResults = document.querySelectorAll(".issue").length;
+        if(errorResults!=0){
+            openPopup2();
+        }
+        else{
+			#server(..cSetRid())#;
+		    #server(..cClearRBT(rid))# ;
+	    	const tableBody = document.getElementById("tableBody");
+	    	const tableRows = tableBody.querySelectorAll('tr');
+	    
+	    	tableRows.forEach((row,index) => {
+		    	if(row.classList.contains("deleted")){	    		
+			    	return;
+			    }
+		    	if(row.style.display=="none"){	    		
+			    	return;
+			    }
+		    	const testName = (row.querySelector('td.transformed-name') && row.querySelector('td.transformed-name').querySelector('input').value) ? row.querySelector('td.transformed-name').querySelector('input').value : "";
+		    	if (testName == ""){return;}
+		    	const testValue = (row.querySelector('td.convert-result-val') && row.querySelector('td.convert-result-val').querySelector('input').value) ? row.querySelector('td.convert-result-val').querySelector('input').value : "";
+		    	const testUnit = (row.querySelector('td.convert-result-unit') && row.querySelector('td.convert-result-unit').querySelector('div').textContent) ? row.querySelector('td.convert-result-unit').querySelector('div').textContent : "";
+		    	const testLoRange = (row.querySelector('td.l-result-val') && row.querySelector('td.l-result-val').querySelector('input').value) ? row.querySelector('td.l-result-val').querySelector('input').value : "";
+		    	const testHiRange = (row.querySelector('td.u-result-val') && row.querySelector('td.u-result-val').querySelector('input').value) ? row.querySelector('td.u-result-val').querySelector('input').value : "";
+	    		const testDate = (row.querySelector('td.date') && row.querySelector('td.date').textContent)? row.querySelector('td.date').textContent : "";
+	    		const textarea = row.querySelector('td.comment textarea');
+				const testComment = textarea ? textarea.value : "";
+	    		//console.log(testName);
+	    		#server(..cSaveRBT(rid, testName, testValue, testUnit, testHiRange, testLoRange, testDate,testComment))#
+	    	})
+	    	#server(..cReviewerDownload(rid))#
+	    	#server(..cSetPath())#
+	    	
+	    	jDownloadFile();
+        }
+	}
+	// Download HL7 and FHIR xml for reviewers
+	function jDownloadFile(){
+		var blob = new Blob([downloadStr], {type: 'text/plain'});
+		var link = document.createElement('a');
+		link.href = URL.createObjectURL(blob);
+		link.href = filePath+"\\"+fName; 
+		link.download = fName;
+		link.click();
+		URL.revokeObjectURL(link.href);
+		#server(..cDelete())#
+	}
+	
+	// Preview original file
+	function jPopOriginal() {
+        //document.getElementById("file-loader").style.display = "block";
+
+        // Disable Ctrl+P
+        function disablePrint(event) {
+            if (event.ctrlKey && event.key === 'p') {
+                event.preventDefault();
+                alert("Ctrl+P is blocked");
+            }
+        }
+        document.addEventListener('keydown', disablePrint);
+
+        setTimeout(() => {
+            #server(..cPopOriginal())#;
+            //document.getElementById("file-loader").style.display = "none";
+
+            // Remove the event listener after the file is opened
+            document.removeEventListener('keydown', disablePrint);
+        }, 10);
+    }  	
+    // Activate/deactivate the report type dropdown
+    function toggleSelectReport(e){
+		let elemPosition = e.target.getBoundingClientRect();
+		reportSelect.style.top = "238px"; //elemPosition.top + 30 + "px";
+		reportSelect.style.right = "105px"; //window.innerWidth - elemPosition.right + 17 + "px";
+		setTimeout(()=>{
+			reportSelect.classList.toggle("active");
+		},100)
+	}
+	
+	function loadReportSelect(){
+		
+		let report = reportType.split(",");
+		report.forEach(rep=>{
+			if(document.querySelector("input[value='"+rep+"']")!=null){
+				document.querySelector("input[value='"+rep+"']").checked=true
+			}
+		});
+		closeReportSelect();
+	}
+	// Save the report type in database
+	function closeReportSelect(){
+		let checkedCB=$("#report-select input:checkbox:checked");
+		let checkCount = checkedCB.length;
+		let reportDate = document.querySelector("#report-date").value;
+		let reportTypeStr = "";
+		if(checkCount > 1){
+			reportBtn.innerHTML = "Multiple" + dropDownText;
+		}
+		else if(checkCount==0){
+			reportBtn.innerHTML = "None Selected" + dropDownText;
+		}
+		else{
+			reportBtn.innerHTML = $("#report-select input:checkbox:checked")[0].value + dropDownText;
+		}
+		for(let i=0;i<checkedCB.length;i++){
+			if(i==0){
+				reportTypeStr+=checkedCB[i].value;
+			}
+			else{
+				reportTypeStr+=","+checkedCB[i].value;
+			}
+		};
+		//alert(reportTypeStr+","+reportDate+","+rbt);
+		#server(..cSaveReport(reportTypeStr,reportDate,rbt))#;
+		reportSelect.classList.remove("active");
+	}
+	// Edit box on Ctrl+click, available for TestName,Result,From-unit,l-range and u-range
+	function jEditBox(event) {
+	    if (event.ctrlKey) {
+			tdCell=event.target.closest("td");
+			initialVal=tdCell.textContent;
+	        tdCell.innerHTML=#server(..cSetBox(tdCell.className,initialVal))#
+	        tdCell.querySelector('input').focus();
+	    }
+  	}
+  	// Change textbox of TestName into textcontent and load new to-unit
+  	function jCloseTestBox(e) {
+    	clearTimeout(typingTimer);
+    	typingTimer = setTimeout(saveNewInput(e), debounceTime);
+    	if (value=="") {
+	    	tdCell.innerHTML=initialVal;
+	    	currentTr.querySelector(".transformed-name").querySelector("input").value=initialVal;
+	    	}
+    	else {
+	    	#server(..cLoadJXTestNames(value))#
+	    	//if (newClass==="issue"){currentTr.querySelector(".transformed-name").classList.add("issue")}
+	    	currentTr.querySelector(".transformed-name").outerHTML=newTestname; //querySelector("input").value
+    	}
+		//load unit according to new converted test name 
+	    	let FromUnit=currentTr.querySelector('.from-unit').textContent;
+	     	let position = currentTr.querySelector(".convert-result-unit").querySelector("div").getBoundingClientRect();
+		   	#server(..cLoadUnitsBasedOnName(newTestname,FromUnit))#
+   			unitDropdown.style.top = position.bottom + 5 + "px";
+    		unitDropdown.style.left = position.left + "px";
+    		unitDropdown.querySelector("ul").style.maxHeight = window.innerHeight - position.bottom - 30 + "px";
+    		setTimeout(()=>{
+    			//unitDropdown.classList.add("active");
+    			currentDropdown=unitDropdown;
+    		},100)
+    	convertEditedRow();
+	}
+	// Set up for changing edited textbox into textcontent and convert values
+  	function jCloseEditBox(e) {
+    	clearTimeout(typingTimer);
+    	typingTimer = setTimeout(saveNewInput(e), debounceTime);
+    	convertEditedRow();
+	}
+	// Change edited textbox to textContent
+    function saveNewInput(e){
+	    value =e.target.closest('input').value;
+	    tdCell=event.target.closest("td");
+	    currentTr=event.target.closest("tr");
+	    tdCell.innerHTML=value;
+	    
+    }
+    // Convert new values
+    function convertEditedRow(){
+		unitsCal = [];//0-cVal,1-lVal,2-uVal;
+	    let name = currentTr.querySelector(".transformed-name").querySelector("input");
+	    let cInput = currentTr.querySelector(".result").textContent;
+		let lInput = currentTr.querySelector('.l-range input') 
+				    ? currentTr.querySelector('.l-range input').value 
+				    : (currentTr.querySelector('.l-range') && currentTr.querySelector('.l-range').textContent);
+		let uInput = currentTr.querySelector('.u-range input') 
+				    ? currentTr.querySelector('.u-range input').value 
+				    : (currentTr.querySelector('.u-range') && currentTr.querySelector('.u-range').textContent);
+
+		let toUnit = currentTr.querySelector(".convert-result-unit").querySelector("div").textContent;
+		let fromUnit = currentTr.querySelector(".from-unit").textContent;
+		//alert(name.value+","+cInput+","+ lInput+","+uInput+",");
+		//console.log("debug>"+name.value+cInput+lInput+uInput+fromUnit+toUnit);
+		#server(..cCleanUnits(name.value,cInput,lInput,uInput,fromUnit,toUnit))#
+		console.log(unitsCal[0]+","+unitsCal[1]+","+unitsCal[2]+","+fromUnit+","+toUnit);
+		//currentUnit.value = e.target.textContent;
+		let Tval=currentTr.querySelector(".convert-result-val");
+		let TLval=currentTr.querySelector(".l-result-val");
+		let TUval=currentTr.querySelector(".u-result-val");
+		Tval.classList.remove("issue");
+		TLval.classList.remove("issue");
+		TUval.classList.remove("issue");
+		if (unitsCal[0] && unitsCal[0].includes("ERROR")) {Tval.classList.add("issue");}
+		if (unitsCal[1] && unitsCal[1].includes("ERROR")) {TLval.classList.add("issue");}
+		if (unitsCal[2] && unitsCal[2].includes("ERROR")) {TUval.classList.add("issue");}
+		currentTr.querySelector(".convert-result-val").querySelector("input").value=unitsCal[0];
+		currentTr.querySelector(".l-result-val").querySelector("input").value=unitsCal[1];
+		currentTr.querySelector(".u-result-val").querySelector("input").value=unitsCal[2]; 
+		/*cInput.parentElement.classList.add("edited");
+		lInput.parentElement.classList.add("edited");
+		uInput.parentElement.classList.add("edited"); */
+		currentTr.querySelector(".convert-result-unit").classList.remove("issue");
+		currentTr.querySelector(".convert-result-unit").title = "Edited";
+		currentTr.querySelector(".convert-result-val").title = "Edited";
+		//currentTr.querySelector(".l-result-unit").classList.add("edited");
+		//currentTr.querySelector(".u-result-unit").classList.add("edited");
+		//currentTr.querySelector(".l-result-unit").textContent = toUnit;
+		//currentTr.querySelector(".u-result-unit").textContent = toUnit;
+		currentTr.querySelector(".l-range").innerHTML = lInput;
+		currentTr.querySelector(".u-range").innerHTML = uInput;
+
+		saveToGlobals();
+    }
+</script>
+
+<script language="cache" method="cInitMe">
+	d InitMe^cReviewResultGroot
+</script>
+<script language="cache" method="cLockDown">
+	k %session.Data
+	&js<window.open("cLockDown.csp","_self")>
+</script>
+
+<script language="cache" method="cSetBox" arguments="d1,d2:%String">
+	; Set edit input box for Ctrl+click
+	s placeholder=d2
+	s className=$p(d1," ",1)
+	s newBox=$CASE(className,
+			  "date":"<input type='text' class='date-input'  autocomplete='off' onblur='saveNewInput(event)' value='' placeholder='"_placeholder_"'>",
+			  "test-name":"<input type='text' class='test-name-input'  autocomplete='off' onblur='jCloseTestBox(event)' value='' placeholder='"_placeholder_"'>",
+              "result":"<input type='text' class='result-input'  autocomplete='off' onblur='jCloseEditBox(event)' value='' placeholder='"_placeholder_"'>",
+              "from-unit":"<input type='text' class='from-unit-input' style='color:;' autocomplete='off' onblur='jCloseEditBox(event)' value='' placeholder='"_placeholder_"'>",
+              "l-range":"<input type='text' class='l-range-input'  autocomplete='off' onblur='jCloseEditBox(event)' value='' placeholder='"_placeholder_"'>",
+              "u-range":"<input type='text' class='u-range-input'  autocomplete='off' onblur='jCloseEditBox(event)' value='' placeholder='"_placeholder_"'>"
+              )            
+    q newBox
+              
+</script>
+<script language="cache" method="cRedacted" arguments="d1,rid:%String"> 
+	//new feature 12-Nov-2024 // Updated on 22Nov2024
+	; if the file is redacted(Yes) delete error log in MX.Error 
+	s ^jxRedacted(rid)=d1	// save the seletion in global 22Nov2024
+	
+	;old function
+	;if d1="Yes" d
+	;.&sql(DELETE FROM MX.Error WHERE Record=:rid AND Code='JX5001')
+	;else  d UnredactedError^cReviewResultGroot	; if the file is unredacted(No) log error in MX.Error 
+</script>
+<script language="cache" method="cUnredactedError" arguments="d1:%String"> 
+		d UnredactedError^cReviewResultGroot
+</script>
+<script language="cache" method="cPopOriginal">
+	; Preview org file
+	d PopOriginal^cReviewResultGroot
+</script>
+
+<script language="cache" method="cSaveReport" arguments="d1,d2,rbt:%String">
+	;Save date and report type when report type confirms->closeReportSelect()
+	d SaveReport^cReviewResultGroot
+</script>
+<script language="cache" method="cSaveReportDate" arguments="d1,rid:%String"> // 30.10.2024 New Function to save date
+	; Save report date when click "Apply all" btn
+	d SaveReportDate^cReviewResultGroot
+</script>
+<script language="cache" method="cSetPath">
+	; Set directory of file for reviewer download
+	s fDir=$g(%session.Data("reviewerFileDir")) ;"C:\InterSystems\Cache\CSP\review\jondax\"_rid
+	s filename = %session.Data("FileName")
+	s fDir="../"_$replace($p(fDir,"\Cache\CSP\",2),"\","/")
+	&js<filePath=`#(fDir)#`; fName=`#(filename)#`;>
+				
+</script>
+ <script language="cache" method="cDelete" >
+ 	; Delete reviewer download file in system
+	d DeleteReviewerFile^cReviewResultGroot
+</script>
+
+<script language="cache" method="cSaveRBT" arguments="d1,d2,d3,d4,d5,d6,d7,d8:%String">
+	// Store results in MX.ResultBloodTest_Tests
+	d UpdateRBT^jxResult2HL7(d1, d2, d3, d4, d5, d6, d7, d8)
+	q
+</script>
+
+<script language="cache" method="cClearRBT" arguments="d1:%String">
+	// Delete results from MX.ResultBloodTest_Tests
+	d ClearRBT^jxResult2HL7(d1)
+	q
+</script>
+<script language="cache" method="cFileStatusChange" arguments="d1,d2,d3:%String">
+	// Update file Status upon review option
+	d FileStatusChange^cReviewResultGroot(d1,d2,d3)
+</script>
+<script language="cache" method="cSetRid" arguments="">
+	; Set js rid
+	&js<rid = `#(%session.Data("jxTransform","rid"))#`>
+</script>
+
+<script language="cache" method="cLoadTestNames" arguments="d1:%String">
+	; Load template name suggestions
+	d LoadTemplateNames^cReviewResultGroot
+</script>
+
+<script language="cache" method="cLoadUnitsBasedOnName" arguments="d1,d2:%String">
+	; Load unit of the transformed testname
+	d LoadUnitsBasedOnName^cReviewResultGroot
+</script>
+<script language="cache" method="cLoadJXTestNames" arguments="d1:%String">
+	; Transformed d1(new test name) into template test name
+	s newtest=$$LoadJXNames^cReviewResultGroot(d1)
+	;&js<currentTestname.closest(".transformed-name").value=#(newtest)#>
+</script>
+<script language="cache" method="cUnitCleanUp" arguments="d1:%String">
+	d unitCleanUp^cReviewResultGroot ;not use
+</script>
+<script language="cache" method="cCleanUnits" arguments="d1,d2,d3,d4,d5,d6:%String">
+	//&js<console.log("In cCleanUNits"+`#(d3)#`+`#(d4)#`)>
+	s d2=$replace(d2," ","") 
+	s d3=$replace(d3," ","") 
+	s d4=$replace(d4," ","")
+	#Import MX
+	s rid=%session.Data("jxTransform","rid")
+	&sql(SELECT BucketName INTO :bk FROM Record WHERE id=:rid)
+	
+	i bk["INDO"!(bk["JXTesting") {
+		// treat "." as comma
+		s d2=$replace(d2,".",""),d3=$replace(d3,".",""),d4=$replace(d4,".","")
+		
+		// treat commas as "."
+		s d2=$replace(d2,",","."),d3=$replace(d3,",","."),d4=$replace(d4,",",".")
+
+		}else 
+		{	s d2=$replace(d2,",","."),d3=$replace(d3,",","."),d4=$replace(d4,",",".")
+		}
+	; Convert new edited values
+	d ConvertNewResults^cReviewResultGroot
+	
+</script>
+<script language="cache" method="cConvertNewResults" arguments="d1,d2,d3,d4,d5,d6:%String">
+	#import MX
+	; Calculate values
+	s d2=$$H2C^WSP999(d2)
+	s d3=$p(d3," ",1) s d3=$$H2C^WSP999(d3)
+	s d4=$p(d4," ",1) s d4=$$H2C^WSP999(d4)
+	s rid=%session.Data("jxTransform","rid")
+	&sql(SELECT BucketName INTO :bk FROM Record WHERE id=:rid)
+	s ^test("1")=bk_rid
+	&js<console.log(`#(d2)#`+","+`#(d3)#`+","+`#(d4)#`+","+`#(bk)#`);>
+	i bk["INDO"!(bk["JXTesting") {
+		&js<console.log(`#(d2)#`);>
+		// treat "." as comma
+		s d2=$replace(d2,".",""),d3=$replace(d3,".",""),d4=$replace(d4,".","")
+		// treat commas as "."
+		s d2=$replace(d2,",","."),d3=$replace(d3,",","."),d4=$replace(d4,",",".")
+		
+		}else 
+	{	s d2=$replace(d2,",","."),d3=$replace(d3,",","."),d4=$replace(d4,",",".")
+		}
+	d ConvertNewResults^cReviewResultGroot
+</script>
+
+<script language="cache" method="cConvertResults" arguments="d1,d2,d3,d4,d5,d6:%String">
+	; not used
+	s d2=$$H2C^WSP999(d2)
+	s d3=$p(d3," ",1) s d3=$$H2C^WSP999(d3)
+	s d4=$p(d4," ",1) s d4=$$H2C^WSP999(d4)
+	;d ConvertResults^cReviewResultGroot //take original test name
+	d ConvertNewResults^cReviewResultGroot //take Transformed Testname
+</script>
+
+<script language="cache" method="cClearFormDataGlobal" arguments="">
+	; Delete ^FormData
+	s uid = %session.Data("UserID")
+	s rid = %session.Data("jxTransform","rid")
+	if ($d(^FormData(uid, rid)) = 10){
+		K ^FormData(uid,rid)
+	}
+</script>
+<script language="cache" method="cSaveEditedTName" arguments="d1,d2:%String"> 
+	;not used
+	s uid = %session.Data("UserID")
+	s rid = %session.Data("jxTransform","rid")
+	s ^FormData(uid, rid, d2, "TNameEdited")=d1
+	s ^FormData(uid, rid, d2, "TName")=d1
+</script>
+
+<script language="cache" method="cRemoveFile" arguments="">
+	; Remove files after producing output
+	s previewFile=$g(%session.Data("jxPreview","File"))
+	s tempFile=$g(%session.Data("jxTransform","TempDir"))
+	if $d(%session.Data("jxTransform","OutputDir","xml/json")) d ##class(%File).Delete($g(%session.Data("jxTransform","OutputDir","xml/json")))
+	d ##class(%File).Delete($g(%session.Data("jxTransform","OutputDir","HL7")))
+	d ##class(%File).Delete(previewFile)
+	d ##class(%File).Delete(tempFile)
+</script>	
+
+<script language="cache" method="cResult2HL7" arguments="d1:%String">
+	; Produce output in client's format and upload to client's S3 bucket
+	s rid = d1
+	s uid = %session.Data("UserID")
+	&sql(SELECT Profile, Profile->CompanyName,Profile->Setting, BucketName, OrgFile,Profile->APIURL INTO :profile, :CompanyName,:userSetting, :bk, :fileName,:url FROM MX.Record WHERE ID=:d1)
+	s format="" &sql(SELECT Profile->Setting->OutputFormat INTO :format FROM MX.Record WHERE ID=:d1)
+	s format=$zconvert(format,"l")
+	
+	
+	if format="hl7"{
+		s status = $$jxResult2HL7^jxResult2HL7(d1)
+		if (status '= 0){
+			;&sql(SELECT Profile->Setting->CliProfileName, BucketName, OrgFile INTO :CliProfileName, :bk, :fileName FROM MX.Record WHERE ID=:d1)
+			s %session.Data("jxTransform","OutputDir","HL7")=status
+			;&sql(SELECT Profile, Profile->CompanyName,Profile->Setting, BucketName, OrgFile INTO :profile,:CompanyName,:userSetting, :bk, :fileName FROM MX.Record WHERE ID=:d1)
+			
+	
+			if (bk["/"){
+				s bkfd = $p(bk,"/",2,*)
+				s bkn = $p(bk,"/",1)
+				&sql(SELECT Buckets_CliProfileName into :CliProfileName FROM MX.Setting_buckets  
+				WHERE buckets_folder =:bkfd and buckets_name = :bkn and setting=:userSetting
+				)
+			} else {
+				s bkfd = "-"
+				s bkn = bk
+				&sql(SELECT Buckets_CliProfileName into :CliProfileName FROM MX.Setting_buckets  
+				WHERE buckets_folder =:bkfd and buckets_name = :bkn and setting=:userSetting
+				)
+			}
+			
+			if (bk["/"){
+				s sourceFolderInProcess = $p(bk,"/",2,*)_"/In-Process"
+				s destinationFolderCompleted = $p(bk,"/",2,*)_"/Completed"
+				s bk = $p(bk,"/",1)	
+			} else {
+				s sourceFolderInProcess = "In-Process"
+				s destinationFolderCompleted = "Completed"
+			}
+			; Path for client portal download 
+			s copyDir= $g(%session.Data("Dir"))_profile  ;"C:/InterSystems/Cache/JondaX/ClientDownload/"_profile 
+			d CreateDir^jxS3Upload(copyDir)
+			d CreateDir^jxS3Upload(copyDir_"/Completed")
+			d CreateDir^jxS3Upload(copyDir_"/Completed/"_rid)
+			
+			s sts1 = ##class(python.s3Utils).uploadFile(CliProfileName, status, bk, destinationFolderCompleted)
+			s fileName=$$C2H^WSP999(fileName)
+			s sts2 = ##class(python.s3Utils).moveFile(CliProfileName,bk,bk, fileName, sourceFolderInProcess , destinationFolderCompleted)	
+			
+			if ((+sts1=0)!(+sts2=0)){
+				d Binary2file^cReviewResultGroot
+				s sts3 = ##class(python.s3Utils).uploadFile(CliProfileName, %dev, bk, sourceFolderInProcess)
+				i +sts3 = 1 d 
+				. d ##class(%File).Delete(%dev) k %dev
+				. s sts4 = ##class(python.s3Utils).moveFile(CliProfileName,bk,bk, fileName, sourceFolderInProcess , destinationFolderCompleted)	
+				;&js<alert("An error occurred in moving files between buckets. Alert developers with file ID: #(d1)# , File Name: #($p(fileName, "\",*))#")>
+			}
+			if (+sts1=1) d
+			. ; copy the HL7 result
+			. ;d ##class(%File).CopyFile(status,"C:\InterSystems\Cache\JondaX\JondaX\jondaffr2\copies\"_fileName)
+			. if (profile'=1),(profile'=9) d ##class(%File).CopyFile(status,copyDir_"/Completed/"_rid)
+			. d ##class(%File).Delete(status)
+			
+			i profile=9 d
+			. s status1 = $$jxResult2JSON^jxResult2JSON(rid)
+			. if (status1'=0) d ##class(python.s3Utils).uploadFile(CliProfileName, status1, bk, destinationFolderCompleted)
+			
+			s dt = $zdatetime($h,3)
+			&sql(UPDATE MX.Record SET Status='Completed', ReviewedDate=:dt, ReviewedBy=:uid WHERE ID = :d1)
+			// Notification
+			s status= $$GenerateErrorReportByRid^jxErrorReport(d1,2)
+			i (status '= 0){
+				//&sql(SELECT Profile->Setting->CliProfileName, BucketName, OrgFile INTO :CliProfileName, :bk, :fileName FROM MX.Record WHERE ID=:d1)
+				
+				s sts = ##class(python.s3Utils).uploadFile(CliProfileName, status, bk, destinationFolderCompleted)
+			
+				; copy the Notification result
+				d ##class(%File).CopyFile(status,"C:\InterSystems\Cache\JondaX\JondaX\jondaffr2\copies\"_fileName)
+				s errFname=##class(%File).GetFilename(status)
+				if (profile'=1),(profile'=9) d ##class(%File).CopyFile(status,copyDir_"/Completed/"_rid_"/"_errFname)
+				d ##class(%File).Delete(status)	
+			
+			}
+			
+		} else {
+			&js<alert("ERROR creating HL7 output file. Please contact the developers with the file ID.")>
+		}
+	} //close tag of format="HL7"
+	
+	elseif(format="json"){
+		; for normal JSON
+		s status = $$jxResult2JSON^jxResult2JSON(rid)
+		if (status'=0) d 
+		. if url'="" s apiSts= ##class(python.APIUtils).POST(jsonString,profile,fileName,url,rid) s ^martin("API")=apiSts
+		. d Upload2S3^jxResult2JSON(status,rid)
+		
+	}
+	else {
+		; for FHIRjson and  FHIRxml
+		s status = $$jxResult2HL7^jxResult2HL7(rid)
+		if (status'=0) d ConvertResults^jxHL7ToFHIRjson(status,rid)
+		
+	}
+	q
+</script>
+
+<script language="cache" method="cReviewerDownload" arguments="d1:%String">
+	; Produce output in HL7,FHIRjson/xml for reviewers to download
+	#import MX
+	s rid = d1
+	s dt=$zdatetime($h,3)
+	s format="" &sql(SELECT Profile->Setting->OutputFormat INTO :format FROM MX.Record WHERE ID=:d1)
+	s format=$zconvert(format,"l")
+	s %session.Data("OutputFormat")=format
+	&sql(SELECT Profile, Profile->CompanyName,Profile->Setting, BucketName, OrgFile,Profile->APIURL INTO :profile, :CompanyName,:userSetting, :bk, :fileName,:url FROM MX.Record WHERE ID=:d1)
+	
+	s copyDir= "C:\InterSystems\Cache\CSP\review\jondax\"_rid 	;Path for reviewer download, Will be deleted after saving the Live file
+	d CreateDir^jxS3Upload(copyDir_"\")
+	;s copyDir1= $g(%session.Data("Dir"))_profile 		; Path for client portal download 
+	;d CreateDir^jxS3Upload(copyDir1)
+	;d CreateDir^jxS3Upload(copyDir1_"/Completed/")
+	;d CreateDir^jxS3Upload(copyDir1_"/Failure/")
+
+	s %session.Data("reviewerFileDir")=copyDir	
+	if format="hl7"{
+		s status = $$jxResult2HL7^jxResult2HL7(rid)
+		
+		if (status '= 0){	
+			; copy the HL7 result
+			d ##class(%File).CopyFile(status,copyDir)
+			d ##class(%File).Delete(status)
+			;&js<console.log("#(status)#")>
+			
+			&sql(SELECT ID INTO :eid FROM MX.Error WHERE Record=:rid ORDER BY ID DESC )
+			if eid '=""  &sql(UPDATE MX.Error SET ReportedDate=:dt, Location='cReviewerDownload^cReviewResultGroot.csp' WHERE ID=:eid)
+			
+			s %session.Data("FileName")=$p(status,"\",*)
+			s %session.Data("OutputFormat")="hl7"
+			}
+		else {
+			&js<alert("ERROR creating HL7 output file. Please contact the developers with the file ID.")>
+			}
+	} //close tag of format="HL7"
+	
+	elseif(format="json") {
+		; for normal JSON
+		s status = $$jxResult2JSON^jxResult2JSON(rid)
+		if (status'=0) {
+			; copy the HL7 result
+			d ##class(%File).CopyFile(status,copyDir)
+			d ##class(%File).Delete(status)
+			
+			&sql(SELECT ID INTO :eid FROM MX.Error WHERE Record=:rid ORDER BY ID DESC )
+			if eid '="" &sql(UPDATE MX.Error SET ReportedDate=:dt, Location='cReviewerDownload^cReviewResultGroot.csp' WHERE ID=:eid)
+			
+			s %session.Data("FileName")=$p(status,"\",*)
+			s %session.Data("OutputFormat")="json"	
+		}
+		else {
+			&js<alert("ERROR creating JSON output file. Please contact the developers with the file ID.")>
+			}
+	}
+	
+	else {
+
+		s status = $$jxResult2HL7^jxResult2HL7(rid) 
+
+		if (status'=0) {
+			
+			&sql(SELECT ID INTO :eid FROM MX.Error WHERE Record=:rid ORDER BY ID DESC )
+			if eid '=""  &sql(UPDATE MX.Error SET ReportedDate=:dt, Location='cReviewerDownload^cReviewResultGroot.csp' WHERE ID=:eid)
+			
+			s %session.Data("FileName")=$p(status,"\",*)
+			s fileFormat=$g(%session.Data("OutputFormat"))
+			d StandardizeHL7^jxHL7ToFHIRjson(status)
+			d HL7ToSDA^jxHL7ToFHIRjson(status)
+
+			if (fileFormat="fhirjson")	
+			{
+				d SDAToFHIRJson^jxHL7ToFHIRjson(status)
+				s %session.Data("OutputFormat")="json"
+				}
+			else{
+				d SDAToFHIRXml^jxHL7ToFHIRjson(status)
+				s %session.Data("OutputFormat")="xml"
+			}
+				
+			
+			if xml'="" d
+				. d ##class(%File).CopyFile(status,copyDir)
+				. d ##class(%File).Delete(xml)
+			e  &js<alert("ERROR creating FHIR output file. Please contact the developers with the file ID.")>
+			
+			d ##class(%File).Delete(status)
+		}
+		else 
+		{
+			&js<alert("ERROR creating HL7 output file. Please contact the developers with the file ID.")>
+			}
+		
+	}
+	&sql( DELETE FROM MX.ResultBloodTest_Tests WHERE ResultBloodTest->Record=:rid)
+	q
+</script>
+
+
+<script language="cache" method="cErrorReport" arguments="rid,d1,d2,d3:%String">
+	; Produce error report csv and upload to client's S3 bucket
+	
+	d FileStatusChange^cReviewResultGroot(d1,"In-Process",d3)
+	s status= $$GenerateErrorReportByRid^jxErrorReport(rid)
+	i (status '= 0)
+	{
+		&sql(SELECT Profile,Profile->CompanyName,Profile->Setting, BucketName, OrgFile INTO :profile, :CompanyName,:userSetting, :bk, :fileName FROM MX.Record WHERE ID=:rid)
+		; Path for client portal download 
+			s copyDir= $g(%session.Data("Dir"))_profile  ;"C:/InterSystems/Cache/JondaX/ClientDownload/"_profile 
+			d CreateDir^jxS3Upload(copyDir)
+			d CreateDir^jxS3Upload(copyDir_"/Failure")
+			d CreateDir^jxS3Upload(copyDir_"/Failure/"_rid)
+
+		if (bk["/"){
+			s bkfd = $p(bk,"/",2,*)
+			s bkn = $p(bk,"/",1)
+			&sql(SELECT Buckets_CliProfileName into :CliProfileName FROM MX.Setting_buckets  
+			WHERE buckets_folder =:bkfd and buckets_name = :bkn and setting=:userSetting
+			)
+		} else {
+			s bkfd = "-"
+			s bkn = bk
+			&sql(SELECT Buckets_CliProfileName into :CliProfileName FROM MX.Setting_buckets  
+			WHERE buckets_folder =:bkfd and buckets_name = :bkn and setting=:userSetting
+			)
+		}
+		if (bk["/"){
+			s sourceFolderInProcess = $p(bk,"/",2,*)_"/In-Process"
+			s destinationFolderFailure= $p(bk,"/",2,*)_"/Failure"
+			s bk = $p(bk,"/",1)	
+		} else {
+			s sourceFolderInProcess = "In-Process"
+			s destinationFolderFailure = "Failure"
+		}
+		
+		s sts1 = ##class(python.s3Utils).uploadFile(CliProfileName, status, bk, destinationFolderFailure)
+		
+		;d ##class(%File).Delete(status)
+		
+		s sts2 = ##class(python.s3Utils).moveFile(CliProfileName,bk,bk, fileName, sourceFolderInProcess, destinationFolderFailure)	
+	
+if ((+sts1=0)!(+sts2=0))
+		{	
+			d Binary2file^cReviewResultGroot
+			i '$d(%dev) &sql(UPDATE Record SET Note=null,Reason=null,ReviewedDate=null WHERE ID=:rid) &js<alert("An error occurred in moving files between buckets. Alert developers with file ID: #(rid)# , File Name: #($p(fileName, "\",*))#"); window.close();> q
+		
+			s sts3 = ##class(python.s3Utils).uploadFile(CliProfileName, %dev, bk, sourceFolderInProcess)
+			i +sts3 = 1 d 
+			. d ##class(%File).Delete(%dev) k %dev
+			. s sts4 = ##class(python.s3Utils).moveFile(CliProfileName,bk,bk, fileName, sourceFolderInProcess , destinationFolderFailure)	
+			. s errFname=##class(%File).GetFilename(status)
+			. d ##class(%File).CopyFile(status,copyDir_rid_"\"_errFname)
+			. s dt = $zdatetime($h,3)
+			. s uid = %session.Data("UserID")
+			. &sql(UPDATE MX.Record SET Status='Failure', ReviewedDate=:dt, ReviewedBy=:uid WHERE ID = :rid)
+			. d StripTables^jxBiolytica(rid)
+			. d RemoveFile^cReviewResultGroot
+			. s uid = %session.Data("UserID")
+			. if ($d(^FormData(uid, rid)) = 10) k ^FormData(uid,rid)
+			else  &js<alert("An error occurred in moving files between buckets. Alert developers with file ID: #(rid)# , File Name: #($p(fileName, "\",*))#");>
+		}
+		else{
+			s errFname=##class(%File).GetFilename(status)
+			d ##class(%File).CopyFile(status,copyDir_rid_"\"_errFname)
+			s dt = $zdatetime($h,3)
+			s uid = %session.Data("UserID")
+			&sql(UPDATE MX.Record SET Status='Failure', ReviewedDate=:dt, ReviewedBy=:uid WHERE ID = :rid)
+			d StripTables^jxBiolytica(rid)
+			;d FileStatusChange^cReviewResultGroot(d1,d2,d3)
+			d RemoveFile^cReviewResultGroot
+			s uid = %session.Data("UserID")
+			if ($d(^FormData(uid, rid)) = 10){
+				K ^FormData(uid,rid)
+			}
+			
+		}
+	}else  {
+		&js<alert("An error occurred in marking file as  error"); 
+		window.close(); >
+	}
+	
+</script>
+<script language="cache" method="cSaveJson" arguments="rid, jsonStr:%String">
+	; Save passed json string into ^FormData
+	s userId = %session.Data("UserID")
+	s Obj = {}.%FromJSON(jsonStr)
+	
+	s iter = Obj."FormData".%GetIterator()
+	while iter.%GetNext(.key, .value, .type ) {
+		
+		s key = key + 1
+		s ODate = value."ODate"
+		s OName = value."OName"
+		s OValue = value."OValue"
+		s OUnit = value."OUnit"
+		s OHiRange = value."OHiRange"
+		s OLoRange = value."OLoRange"
+		s OComment = value."OComment"
+		s TName = value."TName"
+		s TNameEdited = value."TNameEdited"
+		s TValue = value."TValue"
+		s TUnit = value."TUnit"
+		s TUnit = $zstrip(TUnit, ">W")
+		s TUnitEdited=value."TUnitEdited"
+		s THiRange = value."THiRange"
+		s TLoRange = value."TLoRange"
+		
+		if ($L(ODate)>0){
+			s formattedDate = $replace(ODate, "-","/")
+			s testDateInternal = $zdate($zdateh(formattedDate,15,,,,,,,0),4) //dd/mm/yyyy
+			if (testDateInternal = "31/12/1840"){
+				s ^FormData(userId, rid, key, "testDate") = ""
+			} else {s ^FormData(userId, rid, key, "testDate") = testDateInternal}
+		} else { s ^FormData(userId, rid, key, "testDate") = ""}
+		
+		s ^FormData(userId, rid, key, "testName") = $$H2C^WSP999(OName)
+		s ^FormData(userId, rid, key, "testValue") = $$H2C^WSP999(OValue)
+		s ^FormData(userId, rid, key, "testUnit") = $$H2C^WSP999(OUnit)
+		s ^FormData(userId, rid, key, "testHiRange") = $$H2C^WSP999(OHiRange)
+		s ^FormData(userId, rid, key, "testLoRange") = $$H2C^WSP999(OLoRange)
+		s ^FormData(userId, rid, key, "testComment") = $$H2C^WSP999(OComment)
+			
+		s ^FormData(userId, rid, key, "TName") = $$H2C^WSP999(TName)
+		s ^FormData(userId, rid, key, "TNameEdited") = $$H2C^WSP999(TNameEdited)
+		s ^FormData(userId, rid, key, "TValue") = $$H2C^WSP999(TValue)
+		s ^FormData(userId, rid, key, "TUnit") = $$H2C^WSP999(TUnit)
+		s ^FormData(userId, rid, key, "TUnitEdited") = $$H2C^WSP999(TUnitEdited)
+		s ^FormData(userId, rid, key, "THiRange") = $$H2C^WSP999(THiRange)
+		s ^FormData(userId, rid, key, "TLoRange") = $$H2C^WSP999(TLoRange)
+		
+		s ^FormData(userId, rid,"RowCount") = $$H2C^WSP999(key)
+		
+	}
+</script>
+
+</html>

@@ -1,0 +1,189 @@
+<html>
+    <head>
+    	<script language="cache" runat="server">d HEAD1^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/jxSettingsPreferenceB2B.css">
+    </head>
+    <body onload="jLoadProfile()">
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div class="content">
+                <!--<div class="side-nav">
+	                <img class="close-nav mobile-active" src="./assets/images/cross.png" alt="Cross" onclick="closeMobileNav(event)">
+	                <img class="logo" src="./assets/images/Jonda X Logo Blue Pink.png" alt="Jonda Health">
+	                <img class="logo-small" src="./assets/images/X Blue Pink.png" alt="Jonda Health">
+                    <br>
+                    <img class="profile" src="./assets/images/profileBordered.png" alt="Profile">
+                    <h3><script language="cache" runat="server">w $s($g(%session.Data("CompanyName"))'="":$g(%session.Data("CompanyName")),1:"")</script></h3>
+                    <p class="location"><script language="cache" runat="server">w $s($g(%session.Data("City"))'="":$g(%session.Data("City")),1:""),$s($g(%session.Data("City"))'="":", ",1:""),$s($g(%session.Data("Country"))'="":$g(%session.Data("Country")),1:"")</script></p>
+                    <p class="plan">Trial Plan</p>
+                    <div class="nav-items">
+                    	<script language="cache" runat="server">
+                    		d WriteMenu^jxSideNav("Settings",2)
+                    	</script>
+                    </div>
+                    <div class="nav-footer">
+                        <div class="logout" onclick="jLogout()"><img src="./assets/images/logout.png" alt="Log Out"><p>Log Out</p></div>
+                        <div class="copyright">Jonda Health &copy; 2023 </div>
+                    </div>
+                    <div class="collapseBtn active" >
+                        <img class="collapseClose" src="./assets/images/collapseClose.png" alt="collapse" onclick="toggleSideNav()">
+                        <img class="collapseOpen" src="./assets/images/collapseOpen.png" alt="collapse" onclick="toggleSideNav()">
+                    </div>
+                </div>-->
+                <div class="main-field">
+                    <i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;" onclick="openMobileNav(event)"></i>
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <h1>
+                        Preferences
+                    </h1>
+                    <div id="pref-content" class="pref-content">
+                        <div class="value-prefs">
+                            <h3>Value Preferences</h3>
+                            <div class="value-pref">
+                                <p>Choose prefered decimal point for the results (The default is 2) : </p>
+                                <div class="drop-down">
+                                    <select name="decimal" id="d1" disabled>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2" selected>2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="4">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="value-pref">
+                                <p>Choose prefered rounding options for the results (The default is Normal round): </p>
+                                <div class="drop-down">
+                                    <select name="rounding" id="d2" disabled>
+                                        <option value="round">Normal round</option>
+                                        <option value="round" selected>Scientific round</option>
+                                        <option value="round up" >Round up (Ceil)</option>
+                                        <option value="round down">Round down (Floor)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="date-prefs">
+                            <h3>Date Preferences</h3>
+                            <div class="date-pref">
+                                <p>Choose your prefered date format (The default is DD-MM-YYYY)  : </p>
+                                <div class="drop-down">
+                                    <select name="dateFormat" id="d3" onchange="checkCustom(event)" disabled>
+                                        <option value="DD-MM-YYYY" selected>DD-MM-YYYY</option>
+                                        <option value="MM-DD-YYYY" >MM-DD-YYYY</option>
+                                        <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                        <option value="DD Mmm YYYY">DD Mmm YYYY</option>
+                                        <option value="Mmm [D]D YYYY">Mmm [D]D YYYY</option>
+                                        <option value="Custom">Custom</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="date-pref custom-date">
+                                <p>Please enter the prefered date format if you choose "Custom"</p>
+                                <input id="d4" type="text" value="" placeholder="Enter Date Format">
+                            </div>
+                        </div>-->
+                        <div class="btn-group">
+                            <button class="save-btn" onclick="savePref()"><i class="fa fa-floppy-o"></i>Save Preferences</button>
+                            <button class="cancel-btn" onclick="cancelEdit()"><i class="fa fa-times"></i>Cancel Edit</button>
+                        </div>
+                        <button class="edit-btn" onclick="allowEdit()"><i class="fa fa-pencil-square-o"></i>Edit Preferences</button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+	<script language="cache" runat="server">
+		d jScript^jxScripts
+		d jScript2^jxScripts
+	</script>
+    <script type="text/javascript">
+    	function jLoadProfile(){
+	    	#server(..cLoadProfile())#
+    	}
+        const d1=document.getElementById("d1");
+        const d2=document.getElementById("d2");
+        const d3=document.getElementById("d3");
+        const d4=document.getElementById("d4");
+        let d1Val = "";
+        let d2Val = "";
+        let d3Val = "";
+        let d4Val = "";
+        const btnGroup = document.getElementsByClassName("btn-group")[0];
+        function checkCustom(e){
+            let customDate = document.getElementsByClassName("custom-date")[0];
+            if(e.target.value=="Custom"){
+                customDate.classList.add("active");
+            }
+            else{
+                customDate.classList.remove("active");
+            }
+        }
+        function allowEdit(){
+            d1.disabled=false;
+            //d2.disabled=false;
+            //d3.disabled=false;
+            ///d4.disabled=false;
+            d1Val = d1.value;
+            //d2Val = d2.value;
+			//d3Val = d3.value;
+            d4Val = d4.value;
+            btnGroup.classList.add("active");
+        }
+        function cancelEdit(){
+            let customDate = document.getElementsByClassName("custom-date")[0];
+            d1.value = d1Val;
+            d2.value = d2Val;
+            d3.value = d3Val;
+            d4.value = d4Val;
+            d1.disabled=true;
+            d2.disabled=true;
+            d3.disabled=true;
+            d4.disabled=true;
+            btnGroup.classList.remove("active");
+            if(d3Val != "Custom"){
+                customDate.classList.remove("active");
+            }
+        }
+        function savePref(){
+            d1.disabled=true;
+            d2.disabled=true;
+            d3.disabled=true;
+            d4.disabled=true;
+            btnGroup.classList.remove("active");
+        }
+        function jLogout(){
+	        #server(..cLogout())#
+        }
+
+	function openTemplatePages(e){
+		e.stopPropagation();
+		let pageName = e.target.id;
+		window.open('jxViewTemp.csp','_self');
+		#server(..cSaveBucket(pageName))#
+    }
+    </script>
+    <script language="cache" method="cLoadProfile">
+    	;d LoadProfile^jxSideNav
+    </script>
+    <script language="cache" method="cLogout">
+    	d Logout^jxLogin
+    </script>
+    <script language="cache" method="cSaveBucket" arguments="d1:%String">
+    	s %session.Data("bk")=d1
+    </script>
+</html>

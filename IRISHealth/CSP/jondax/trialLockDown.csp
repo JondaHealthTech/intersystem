@@ -1,0 +1,42 @@
+<html>
+<head>
+	<script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+	<link rel="stylesheet" href="assets/styles/jxLockDown.css">
+</head>
+<body onload="jInitMe()">
+<form id="F1">
+	<div id="wrapper">
+	    <div class="bg-wrapper">
+	        <div class="bg4">
+	            <img src="./assets/images/bg4.png">
+	        </div>
+	    </div>
+	    <div class="content">
+	        <img class="logo" src="./assets/images/JX Logo White.png" alt="Jonda X">
+	        <div id="lockdown-field" class="lockdown-field">
+				<img src="./assets/images/Lockdown.png" alt="Lockdown">
+                <h3>You've been signed out</h3>
+                <h4>To keep you and your data safe, you were signed out due to inactivity  </h4>
+	            <button type="button" class="login-btn" onclick="window.open('trialLogin.csp','_self')">Login</button>
+	        </div>
+	    </div>
+	</div>
+	<script type="text/javascript">var resizefunc = [];</script>
+	<!-- jQuery  -->
+	<script language="cache" runat="server">
+		d jQueryCore^WSP999
+	</script>
+</form>
+</body>
+<script type="text/javascript">
+	function jInitMe(){
+		#server(..cInitMe())#
+	}
+</script>
+	<script language="cache" method="cInitMe">
+		
+		k %session.Data
+		
+	</script>
+</html>
+

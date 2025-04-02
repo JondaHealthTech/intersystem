@@ -1,0 +1,135 @@
+
+
+*************************************************************************************
+Installation/upgrade of IRIS started at 2025-03-26 11:13:17.484
+*************************************************************************************
+
+Checking Production AutoStart setting in CPF file.
+Updating for Interoperability installation:
+    * Configuration:
+      - System Libraries Parent Directory:C:\InterSystems\IRIS\mgr
+      - Manager Directory:                c:\intersystems\iris\mgr\
+      - Configuration Name:               IRIS
+      - Configuration Directory:          c:\intersystems\iris\
+      - Version:                          IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST
+      - Upgrade:                          No
+    * Storage:
+      - ENSLIB
+        + Adding Database: ENSLIB in C:\InterSystems\IRIS\mgr\enslib
+        + ENSLIB is marked as Read Only and will be set back to Read Only after Initialization
+    * Security:
+      - Creating resource %DB_ENSLIB for ENSLIB
+      - Username '_Ensemble' created successfully with properties 'AccountNeverExpires' and 'PasswordNeverExpires' set to True.
+      - Creating Interoperability Resources
+2025-03-26 11:13:17 0 %Library.EnsembleMgr: Installation starting at 2025-03-26 11:13:17, LogLevel=1
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_Deploy' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_DeploymentPkg' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_DeploymentPkgClient' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_TestingService' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_DTLTest' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_ProductionRun' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_ConfigItemRun' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MessageResend' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MessageEditResend' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MessageSuspend' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MessageDiscard' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MessageTrace' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MessageHeader' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MessageContent' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MessageExport' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_Purge' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_Dashboard' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_EventLog' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_RuleLog' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_ProductionDocumentation' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_Portal' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_ViewFileSystem' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MsgBank_MessageHeader' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MsgBank_MessageContent' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MsgBank_MessageResend' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MsgBank_MessageEditResend' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MsgBank_MessageTrace' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MsgBank_Dashboard' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MsgBank_EventLog' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_AlertAdministration' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_Agents' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_Code' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_BPL' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_DTL' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_Rules' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_RoutingRules' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_BusinessRules' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_RecordMap' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_ProductionConfig' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_EDISchema' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_EDISchemaAnnotations' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_Queues' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_Jobs' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_PurgeSchedule' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_PurgeSettings' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_SystemDefaultConfig' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_Credentials' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_ArchiveManager' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_LookupTables' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MsgBankConfig' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_MsgBank' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_WorkflowConfig' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_Alerts' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_ITK' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_PubSub' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_RestrictedUI_SystemDefaultSettings' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_Port' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_IPAddress' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_Server' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_AllowedIPAddresses' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_ActorPoolSize' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_PoolSize' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_Enabled' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_SettingsReportConfig' with public permission(s) '', type=0
+2025-03-26 11:13:17 1 CreateResource: Creating Resource '%Ens_PortSettingsReport' with public permission(s) '', type=0
+2025-03-26 11:13:17 0 %Library.EnsembleMgr: Installation succeeded at 2025-03-26 11:13:17
+2025-03-26 11:13:17 0 %Installer: Elapsed time .022827s
+
+      - Creating Interoperability Roles
+2025-03-26 11:13:17 0 %Library.EnsembleMgr: Installation starting at 2025-03-26 11:13:17, LogLevel=1
+2025-03-26 11:13:17 1 CreateRole: Creating Role '%EnsRole_Operator' with resources '%Ens_Portal:U,%Ens_ProductionRun:U,%Ens_ConfigItemRun:U,%Ens_MessageResend:U,%Ens_Dashboard:U,%Ens_ProductionConfig:R,%Ens_EventLog:U,%Ens_RuleLog:U,%Ens_MessageTrace:U,%Ens_MessageHeader:U,%Ens_Queues:R,%Ens_Jobs:R,%Ens_SystemDefaultConfig:R,%Ens_Credentials:R,%Ens_LookupTables:R,%Ens_MsgBank:R,%Ens_WorkflowConfig:R,%Ens_Alerts:RW,%Ens_MsgBank_MessageHeader:U,%Ens_MsgBank_MessageResend:U,%Ens_MsgBank_MessageTrace:U,%Ens_MsgBank_Dashboard:U,%Ens_MsgBank_EventLog:U,%Ens_ITK:R,%Ens_Agents:R,%Ens_PortSettingsReport:R,%Ens_SettingsReportConfig:R', granting ''
+2025-03-26 11:13:17 1 CreateRole: Creating Role '%EnsRole_RulesDeveloper' with resources '%Ens_Portal:U,%Ens_Rules:RW,%Ens_RuleLog:U', granting ''
+2025-03-26 11:13:17 1 CreateRole: Creating Role '%EnsRole_WebDeveloper' with resources '%Ens_DeploymentPkg:U,%Ens_TestingService:U,%Ens_DTLTest:U,%Ens_MessageEditResend:U,%Ens_MessageSuspend:U,%Ens_MessageDiscard:U,%Ens_MessageContent:U,%Ens_Purge:U,%Ens_ProductionDocumentation:U,%Ens_Code:RW,%Ens_ProductionConfig:W,%Ens_EDISchema:RW,%Ens_EDISchemaAnnotations:RW,%Ens_Queues:W,%Ens_Jobs:W,%Ens_LookupTables:W,%Ens_MsgBankConfig:RW,%Ens_WorkflowConfig:W,%Ens_Alerts:W,%Ens_MsgBank_MessageEditResend:U,%Ens_MsgBank_MessageContent:U,%Ens_ViewFileSystem:U,%Ens_ITK:W,%Ens_PubSub:RW', granting '%EnsRole_Operator,%EnsRole_RulesDeveloper,%DB_ENSLIB'
+2025-03-26 11:13:17 1 CreateRole: Creating Role '%EnsRole_Developer' with resources '%Ens_PurgeSettings:W', granting '%Developer,%EnsRole_WebDeveloper'
+2025-03-26 11:13:17 1 CreateRole: Creating Role '%EnsRole_Administrator' with resources '%Ens_DeploymentPkg:U,%Ens_DeploymentPkgClient:W,%Ens_Deploy:U,%Ens_TestingService:U,%Ens_DTLTest:U,%Ens_MessageEditResend:U,%Ens_MessageSuspend:U,%Ens_MessageDiscard:U,%Ens_MessageContent:U,%Ens_Purge:U,%Ens_MessageExport:U,%Ens_ProductionDocumentation:U,%Ens_Code:R,%Ens_ProductionConfig:W,%Ens_EDISchema:R,%Ens_EDISchemaAnnotations:R,%Ens_Queues:W,%Ens_Jobs:W,%Ens_PurgeSchedule:U,%Ens_PurgeSettings:W,%Ens_SystemDefaultConfig:W,%Ens_Credentials:W,%Ens_ArchiveManager:RW,%Ens_LookupTables:W,%Ens_MsgBankConfig:RW,%Ens_MsgBank:W,%Ens_WorkflowConfig:W,%Ens_Alerts:W,%Ens_MsgBank_MessageEditResend:U,%Ens_MsgBank_MessageContent:U,%Ens_ViewFileSystem:U,%Ens_ITK:W,%Ens_PubSub:R,%Ens_AlertAdministration:U,%Ens_Agents:W,%Ens_PortSettingsReport:RW,%Ens_SettingsReportConfig:RW', granting '%EnsRole_Operator,%DB_ENSLIB'
+2025-03-26 11:13:17 1 CreateRole: Creating Role '%EnsRole_Monitor' with resources '%Ens_Portal:U,%Ens_Dashboard:U,%Ens_MsgBank_Dashboard:U', granting ''
+2025-03-26 11:13:17 1 CreateRole: Creating Role '%EnsRole_PubSubDeveloper' with resources '%Ens_Portal:U,%Ens_PubSub:RW', granting ''
+2025-03-26 11:13:17 1 CreateRole: Creating Role '%EnsRole_AlertOperator' with resources '%Ens_Portal:U,%Ens_Alerts:RW', granting ''
+2025-03-26 11:13:17 1 CreateRole: Creating Role '%EnsRole_AlertAdministrator' with resources '%Ens_AlertAdministration:U', granting '%EnsRole_AlertOperator'
+2025-03-26 11:13:17 1 CreateRole: Creating Role '%EnsRole_RegistryManager' with resources '', granting ''
+2025-03-26 11:13:17 1 CreateRole: Creating Role '%EnsRole_RegistrySelect' with resources '', granting ''
+2025-03-26 11:13:17 1 CreateRole: Creating Role '%EnsRole_TempSQLDict' with resources '', granting ''
+2025-03-26 11:13:17 1 CreateRole: Creating Role '%EnsRole_InteropEditorsAPI' with resources '%Development:U', granting ''
+2025-03-26 11:13:17 0 %Library.EnsembleMgr: Installation succeeded at 2025-03-26 11:13:17
+2025-03-26 11:13:17 0 %Installer: Elapsed time .02222s
+
+      - Starting Interoperability Security Upgrade
+      - Adding '%EnsRole_Administrator' and '%EnsRole_Developer' roles to users with permissions on the '%Admin_Manage' resource
+        + Adding '%EnsRole_Administrator' and '%EnsRole_Developer' roles to user 'Admin'
+      - Completed addition of '%EnsRole_Administrator' and '%EnsRole_Developer' roles to users with permissions on the '%Admin_Manage' resource
+      - Configuration IRIS updated.
+    * Upgrading existing namespaces
+    * Interoperability enabling namespaces
+      - Marking IRISLIB as ReadOnly=0 (was previously ReadOnly=1)
+      - Marking ENSLIB as ReadOnly=0 (was previously ReadOnly=1)
+      - Loading localized messages into database ENSLIB
+        + Loading: C:\InterSystems\IRIS\mgr\Locale\allmessages_de.xml
+        + Loading: C:\InterSystems\IRIS\mgr\Locale\allmessages_en-us.xml
+        + Loading: C:\InterSystems\IRIS\mgr\Locale\allmessages_es.xml
+        + Loading: C:\InterSystems\IRIS\mgr\Locale\allmessages_fr.xml
+        + Loading: C:\InterSystems\IRIS\mgr\Locale\allmessages_it.xml
+        + Loading: C:\InterSystems\IRIS\mgr\Locale\allmessages_ja.xml
+        + Loading: C:\InterSystems\IRIS\mgr\Locale\allmessages_ko.xml
+        + Loading: C:\InterSystems\IRIS\mgr\Locale\allmessages_nl.xml
+        + Loading: C:\InterSystems\IRIS\mgr\Locale\allmessages_pt-br.xml
+        + Loading: C:\InterSystems\IRIS\mgr\Locale\allmessages_ru.xml
+        + Loading: C:\InterSystems\IRIS\mgr\Locale\allmessages_uk.xml
+        + Loading: C:\InterSystems\IRIS\mgr\Locale\allmessages_zh-cn.xml
+      - Setting IRISLIB back to ReadOnly=1
+      - Setting ENSLIB back to ReadOnly=1
+Update Complete.

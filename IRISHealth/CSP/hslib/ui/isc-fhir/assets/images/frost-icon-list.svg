@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
+    <title>icon-list</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(-340.000000, -192.000000)" fill="#636363" id="trakcare">
+            <g transform="translate(100.000000, 192.000000)">
+                <g id="icons/icon-list" transform="translate(240.000000, 0.000000)">
+                    <path d="M7,8.9998011 L27,8.9998011 L27,6.9998011 L7,6.9998011 L7,8.9998011 Z M3,8.9998011 L4.99625503,8.9998011 L4.99625503,6.9998011 L3,6.9998011 L3,8.9998011 Z M7,14.0031941 L27,14.0031941 L27,12.0031941 L7,12.0031941 L7,14.0031941 Z M3,14.0031941 L4.99625503,14.0031941 L4.99625503,12.0031941 L3,12.0031941 L3,14.0031941 Z M7,19 L27,19 L27,17 L7,17 L7,19 Z M3,19 L4.99625503,19 L4.99625503,17 L3,17 L3,19 Z M7,24 L27,24 L27,22 L7,22 L7,24 Z M3,24 L4.99625503,24 L4.99625503,22 L3,22 L3,24 Z" id="Page-1"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

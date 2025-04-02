@@ -1,0 +1,2404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:attributeGroup name="WebAttributes">
+	<xs:attribute name="name" type="xs:string" use="required"/>
+	<xs:attribute name="application" type="xs:string" use="optional"/>
+	<xs:attribute name="default" type="xs:boolean" use="optional"/>
+	<xs:anyAttribute namespace="##any" processContents="lax"/>
+</xs:attributeGroup>
+<xs:attributeGroup name="RoutineAttributes">
+	<xs:attribute name="name" type="xs:string" use="required"/>
+	<xs:attribute name="type" use="required">
+		<xs:simpleType>
+			<xs:restriction base="xs:NMTOKEN">
+				<xs:enumeration value="INC"/>
+				<xs:enumeration value="INT"/>
+				<xs:enumeration value="BAS"/>
+				<xs:enumeration value="MAC"/>
+				<xs:enumeration value="MVB"/>
+				<xs:enumeration value="MVI"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="languagemode" type="xs:byte" use="optional" default="0"/>
+	<xs:attribute name="timestamp" type="xs:string" use="optional"/>
+	<xs:attribute name="generated" type="xs:boolean" use="optional"/>
+	<xs:anyAttribute namespace="##any" processContents="lax"/>
+</xs:attributeGroup>
+<xs:element name="Export">
+	<xs:annotation>
+		<xs:documentation>XML Export/Import format for InterSystems IRIS. The generator must be 'IRIS' or 'Cache' and the optional version is used to support importing older versions of the XML format. If it is not present, the interpretation is that this is the latest version.</xs:documentation>
+	</xs:annotation>
+	<xs:complexType>
+		<xs:sequence>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="Project">
+					<xs:annotation>
+						<xs:documentation>InterSystems IRIS project definition. You must supply a name and optionally the date/time it was last modified. The Target is the item to run when you start a debug session in Studio. The HttpServer is the location of the web server to use when you do a 'View as Web Page' from Studio.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:element name="ProjectDescription" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Optional description of the project.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Items" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>List of items in the project.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="ProjectItem" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Each project item has a name and a type.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="name" type="xs:string" use="required"/>
+												<xs:attribute name="type" type="xs:string" use="required"/>
+												<xs:anyAttribute namespace="##any" processContents="lax"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="BreakPoints" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>List of break points in the project.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="BreakPoint" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Each break point can have a condition, a routine and an offset.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="Condition" type="xs:string" use="optional"/>
+												<xs:attribute name="Routine" type="xs:string" use="optional"/>
+												<xs:attribute name="Offset" type="xs:string" use="optional"/>
+												<xs:anyAttribute namespace="##any" processContents="lax"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="WatchPoints" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>List of watch points in the project.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="WatchPoint" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Each watch point can have a condition and a variable name.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="Condition" type="xs:string" use="optional"/>
+												<xs:attribute name="Variable" type="xs:string" use="optional"/>
+												<xs:anyAttribute namespace="##any" processContents="lax"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="WatchVariables" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>List of watch variables in the project.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="WatchVariable" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Each watch variable can have a variable name and a pane.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="Pane" type="xs:string" use="optional"/>
+												<xs:attribute name="Variable" type="xs:string" use="optional"/>
+												<xs:anyAttribute namespace="##any" processContents="lax"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>							
+						</xs:choice>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="LastModified" type="xs:string" use="optional"/>
+						<xs:attribute name="Target" type="xs:string" use="optional"/>
+						<xs:attribute name="TargetType" type="xs:integer" use="optional"/>
+						<xs:attribute name="HttpServer" type="xs:string" use="optional"/>
+						<xs:attribute name="RunInTerminal" type="xs:boolean" use="optional"/>
+						<xs:attribute name="TerminalUsername" type="xs:string" use="optional"/>
+						<xs:attribute name="TerminalPassword" type="xs:string" use="optional"/>
+						<xs:attribute name="TerminalPort" type="xs:string" use="optional"/>
+						<xs:attribute name="Defines" type="xs:string" use="optional"/>
+						<xs:anyAttribute namespace="##any" processContents="lax"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Package">
+					<xs:annotation>
+						<xs:documentation>IRIS package definition. This provides global information about any classes in this package.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Description" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Optional description of the package.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="clientname" type="xs:string" use="optional"/>
+						<xs:attribute name="globalprefix" type="xs:string" use="optional"/>
+						<xs:attribute name="ownername" type="xs:string" use="optional"/>
+						<xs:attribute name="rtnprefix" type="xs:string" use="optional"/>
+						<xs:attribute name="sqlname" type="xs:string" use="optional"/>
+						<xs:anyAttribute namespace="##any" processContents="lax"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Global">
+					<xs:annotation>
+						<xs:documentation>IRIS global.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="Node"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="CSP">
+					<xs:annotation>
+						<xs:documentation>Web page.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attributeGroup ref="WebAttributes"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="CSPBase64">
+					<xs:annotation>
+						<xs:documentation>Web page base64 encoded.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:base64Binary">
+								<xs:attributeGroup ref="WebAttributes"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Routine">
+					<xs:annotation>
+						<xs:documentation>IRIS routine. You must specify the name of the routine including the type as suffix, for example, Test.MAC. Both the languagemode and timestamp are optional.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attributeGroup ref="RoutineAttributes"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="RoutineBase64">
+					<xs:annotation>
+						<xs:documentation>IRIS routine base64 encoded. You must specify the name of the routine including the type as suffix, for example, Test.MAC. Both the languagemode and timestamp are optional.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:base64Binary">
+								<xs:attributeGroup ref="RoutineAttributes"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="RoutineWideBase64">
+					<xs:annotation>
+						<xs:documentation>IRIS routine unpacked into bytes, and then base64 encoded because there are non-printable and Unicode characters in this routine. You must specify the name of the routine including the type as suffix, for example, Test.MAC. Both the languagemode and timestamp are optional.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:base64Binary">
+								<xs:attributeGroup ref="RoutineAttributes"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Document">
+					<xs:annotation>
+						<xs:documentation>User defined document type.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType mixed="true">
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:any processContents="lax"/>
+						</xs:choice>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="OBJ">
+					<xs:annotation>
+						<xs:documentation>IRIS object code. The name is the name of the routine.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DataBase64" type="xs:base64Binary"/>
+							<xs:element minOccurs="0" maxOccurs="unbounded" ref="Node"/>
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="Class"/>
+				<xs:any namespace="##other" processContents="lax"/>
+			</xs:choice>
+			<xs:element name="Checksum" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>An optional checksum used to detect when the file has been edited manually.  This has been deprecated and is no longer used.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="value" type="xs:long" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="generator" type="xs:string" use="required"/>
+		<xs:attribute name="version" type="xs:byte" use="optional"/>
+		<xs:attribute name="zv" type="xs:string" use="optional"/>
+		<xs:attribute name="ts" type="xs:string" use="optional"/>
+		<xs:anyAttribute namespace="##any" processContents="lax"/>
+	</xs:complexType>
+</xs:element>
+<xs:element name="Node">
+	<xs:annotation>
+		<xs:documentation>A global node.</xs:documentation>
+	</xs:annotation>
+	<xs:complexType>
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="Sub" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The subscript name.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SubCrLf" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The subscript name with cr/lf line terminators rather than just lf.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SubBase64" type="xs:base64Binary">
+					<xs:annotation>
+						<xs:documentation>The subscript name encoded with base64 because there is non-printable data in the name.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SubWideBase64" type="xs:base64Binary">
+					<xs:annotation>
+						<xs:documentation>The subscript name unpacked into bytes and then encoded with base64 because there are both Unicode and non-printable data in the name.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+			<xs:choice minOccurs="0">
+				<xs:element name="Data" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The data value at this node.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DataCrLf" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The data value at this node with cr/lf line terminators rather than just lf.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DataBase64" type="xs:base64Binary">
+					<xs:annotation>
+						<xs:documentation>The data value at this node encoded in base64 because there is non-printable data in the data.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DataWideBase64" type="xs:base64Binary">
+					<xs:annotation>
+						<xs:documentation>The data value at this node unpacked into bytes and then encoded in base64 because there are both Unicode and non-printable data in the data.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+			<xs:element ref="Node" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:element>
+<xs:element name="Class">
+<xs:annotation>
+ <xs:documentation>IRIS class defintion</xs:documentation>
+</xs:annotation>
+ <xs:complexType>
+  <xs:choice minOccurs="0" maxOccurs="unbounded">
+   <xs:element name="Abstract" type="xs:boolean" default="0">
+   <xs:annotation>
+    <xs:documentation>Specifies that the class cannot have instances; for datatypes, specifies that the class cannot be used as an attribute type.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="ClassDefinitionError" type="xs:boolean" default="0">
+   <xs:annotation>
+    <xs:documentation>Set to true if there is a problem serializing the class so the compiler knows not to compile this.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="ClassType" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Specifies how this class is to be used.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="ClientDataType">
+   <xs:annotation>
+    <xs:documentation>In the case of a datatype class, specifies the type used when exposed via ActiveX or Java. Datatype classes must specify a client datatype. </xs:documentation>
+   </xs:annotation>
+    <xs:simpleType>
+     <xs:restriction base="xs:string">
+      <xs:enumeration value="bigint"/>
+      <xs:enumeration value="BIGINT"/>
+      <xs:enumeration value="Bigint"/>
+      <xs:enumeration value="binary"/>
+      <xs:enumeration value="BINARY"/>
+      <xs:enumeration value="Binary"/>
+      <xs:enumeration value="binarystream"/>
+      <xs:enumeration value="BINARYSTREAM"/>
+      <xs:enumeration value="Binarystream"/>
+      <xs:enumeration value="boolean"/>
+      <xs:enumeration value="BOOLEAN"/>
+      <xs:enumeration value="Boolean"/>
+      <xs:enumeration value="characterstream"/>
+      <xs:enumeration value="CHARACTERSTREAM"/>
+      <xs:enumeration value="Characterstream"/>
+      <xs:enumeration value="currency"/>
+      <xs:enumeration value="CURRENCY"/>
+      <xs:enumeration value="Currency"/>
+      <xs:enumeration value="date"/>
+      <xs:enumeration value="DATE"/>
+      <xs:enumeration value="Date"/>
+      <xs:enumeration value="double"/>
+      <xs:enumeration value="DOUBLE"/>
+      <xs:enumeration value="Double"/>
+      <xs:enumeration value="handle"/>
+      <xs:enumeration value="HANDLE"/>
+      <xs:enumeration value="Handle"/>
+      <xs:enumeration value="integer"/>
+      <xs:enumeration value="INTEGER"/>
+      <xs:enumeration value="Integer"/>
+      <xs:enumeration value="list"/>
+      <xs:enumeration value="LIST"/>
+      <xs:enumeration value="List"/>
+      <xs:enumeration value="longvarchar"/>
+      <xs:enumeration value="LONGVARCHAR"/>
+      <xs:enumeration value="Longvarchar"/>
+      <xs:enumeration value="numeric"/>
+      <xs:enumeration value="NUMERIC"/>
+      <xs:enumeration value="Numeric"/>
+      <xs:enumeration value="status"/>
+      <xs:enumeration value="STATUS"/>
+      <xs:enumeration value="Status"/>
+      <xs:enumeration value="time"/>
+      <xs:enumeration value="TIME"/>
+      <xs:enumeration value="Time"/>
+      <xs:enumeration value="timestamp"/>
+      <xs:enumeration value="TIMESTAMP"/>
+      <xs:enumeration value="Timestamp"/>
+      <xs:enumeration value="varchar"/>
+      <xs:enumeration value="VARCHAR"/>
+      <xs:enumeration value="Varchar"/>
+      <xs:enumeration value="fdate"/>
+      <xs:enumeration value="FDATE"/>
+      <xs:enumeration value="Fdate"/>
+      <xs:enumeration value="ftimestamp"/>
+      <xs:enumeration value="FTIMESTAMP"/>
+      <xs:enumeration value="Ftimestamp"/>
+      <xs:enumeration value="decimal"/>
+      <xs:enumeration value="DECIMAL"/>
+      <xs:enumeration value="Decimal"/>
+      <xs:enumeration value="mvdate"/>
+      <xs:enumeration value="MVDATE"/>
+      <xs:enumeration value="Mvdate"/>
+     </xs:restriction>
+    </xs:simpleType>
+   </xs:element>
+   <xs:element name="ClientName" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>This gives an alternate name for the class if it projected, for example, to Java.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="CompileAfter" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Indicates that the class compiler should compile this class after the specified classes.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="ConstraintClass" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Additional constraint member super classes to inherit.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Copyright" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Optional copyright notice associated with this class</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="DdlAllowed" type="xs:boolean" default="0">
+   <xs:annotation>
+    <xs:documentation>In the case of a persistent class, indicates whether or not DDL statements can be used to alter or delete the class definition. </xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="DependsOn" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>List of classes that this class depends on being runable in order for this class to compile.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Deployed" type="xs:integer" default="0">
+   <xs:annotation>
+    <xs:documentation>Indicates whether the class has been deployed, that is, disassociated from the source that was used to build it.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Deprecated" type="xs:boolean" default="0">
+   <xs:annotation>
+    <xs:documentation>True if this class is deprecated.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Description" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Specifies a description of the class.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Dynamic" type="xs:boolean" default="0">
+   <xs:annotation>
+    <xs:documentation>Deprecated.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="EmbeddedClass" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>If specified in a member type class is the name of the class which forms the embedded superclass</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Final" type="xs:boolean" default="0">
+   <xs:annotation>
+    <xs:documentation>Specifies that the class cannot have subclasses.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="ForeignKey">
+    <xs:complexType>
+     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Deprecated" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>True if this foreign key is deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Description" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Supplies a description of the foreign key.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Internal" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true then do not display this item in automatic documentation.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="NoCheck" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies whether InterSystems IRIS should check this foreign key constraint.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="OnDelete">
+      <xs:annotation>
+       <xs:documentation>Specifies what referential action to take when the key value is deleted from the foreign table.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="cascade"/>
+         <xs:enumeration value="CASCADE"/>
+         <xs:enumeration value="Cascade"/>
+         <xs:enumeration value="noaction"/>
+         <xs:enumeration value="NOACTION"/>
+         <xs:enumeration value="Noaction"/>
+         <xs:enumeration value="setdefault"/>
+         <xs:enumeration value="SETDEFAULT"/>
+         <xs:enumeration value="Setdefault"/>
+         <xs:enumeration value="setnull"/>
+         <xs:enumeration value="SETNULL"/>
+         <xs:enumeration value="Setnull"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="OnUpdate">
+      <xs:annotation>
+       <xs:documentation>Specifies what referential action to take when the key value is updated in the foreign table.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="cascade"/>
+         <xs:enumeration value="CASCADE"/>
+         <xs:enumeration value="Cascade"/>
+         <xs:enumeration value="noaction"/>
+         <xs:enumeration value="NOACTION"/>
+         <xs:enumeration value="Noaction"/>
+         <xs:enumeration value="setdefault"/>
+         <xs:enumeration value="SETDEFAULT"/>
+         <xs:enumeration value="Setdefault"/>
+         <xs:enumeration value="setnull"/>
+         <xs:enumeration value="SETNULL"/>
+         <xs:enumeration value="Setnull"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="Properties" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies one or more properties whose values are used to constrain the value of the foreign key.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ReferencedClass" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the name of the class containing the key referred to by this foreign key definition.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ReferencedKey" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the key name of a unique index within a class that provides the set of allowed values for this foreign key.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies an alternate name for this foreign key when referred to via SQL.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+   </xs:element>
+   <xs:element name="GeneratedBy" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>If this class is generated by some other component then this is the name of the item that generated this class</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Hidden" type="xs:boolean" default="0">
+   <xs:annotation>
+    <xs:documentation>Specifies that this class is not typically listed when viewing the contents of the class dictionary.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Import" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Supplies a list of class packages to import for this class.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="IncludeCode" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Specifies an optional list of include files used when compiling this class.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="IncludeGenerator" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Specifies an optional list of include files used when compiling the method generator methods of this class.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Index">
+    <xs:complexType>
+     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Abstract" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that this index should be abstract.  Not projected to SQL, holds no data.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Condition" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>In the case of a conditional index, specifies the condition that must be met for an entry to be included in the index.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="CoshardWith" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the name of the class this class is cosharded with.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Data" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a list of properties whose values are to be stored within this index.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Deprecated" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>True if this index is deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Description" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a description of the index.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Extent" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>An extent index is used to keep track of which object instances belong to a subclass. When using bitmap indices, then an extent index is automatically maintained and there is no need to define one.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="IdKey" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that the property or properties defined for this index will be used to form the Object Identity value for this object. This value is used to uniquely locate persistent object instances. </xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Internal" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true, then do not display this item in automatic documentation.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Parameter">
+       <xs:complexType>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="value" type="xs:string"/>
+       </xs:complexType>
+      </xs:element>
+      <xs:element name="PrimaryKey" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that this index should be reported, via SQL, as being the Primary Key for this class. </xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Properties" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a list of properties used to build this index. May also include a collation specification for each property.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ShardKey" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true then this index defines the components of the shard key.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Defines an alternate name for this index when referred to via SQL.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Type">
+      <xs:annotation>
+       <xs:documentation>Specifies the type of the index. Type &apos;key&apos; is deprecated.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="bitmap"/>
+         <xs:enumeration value="BITMAP"/>
+         <xs:enumeration value="Bitmap"/>
+         <xs:enumeration value="bitslice"/>
+         <xs:enumeration value="BITSLICE"/>
+         <xs:enumeration value="Bitslice"/>
+         <xs:enumeration value="columnar"/>
+         <xs:enumeration value="COLUMNAR"/>
+         <xs:enumeration value="Columnar"/>
+         <xs:enumeration value="index"/>
+         <xs:enumeration value="INDEX"/>
+         <xs:enumeration value="Index"/>
+         <xs:enumeration value="collatedkey"/>
+         <xs:enumeration value="COLLATEDKEY"/>
+         <xs:enumeration value="Collatedkey"/>
+         <xs:enumeration value="key"/>
+         <xs:enumeration value="KEY"/>
+         <xs:enumeration value="Key"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="TypeClass" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the FunctionalIndex class used to provide the implementation of the functional index interface.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Unique" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies whether this is a unique index.  The property or properties indexed by a unique index are constrained to have unique values.  This means that no two instances can have the same collated value within the extent among the set of all objects of the class that defines the index.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+   </xs:element>
+   <xs:element name="IndexClass" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Additional index member super classes to inherit.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Inheritance">
+   <xs:annotation>
+    <xs:documentation>Define the inheritance order when using multiple inheritance, if a member exists in multiple superclasses which one will take precedence.</xs:documentation>
+   </xs:annotation>
+    <xs:simpleType>
+     <xs:restriction base="xs:string">
+      <xs:enumeration value="left"/>
+      <xs:enumeration value="LEFT"/>
+      <xs:enumeration value="Left"/>
+      <xs:enumeration value="right"/>
+      <xs:enumeration value="RIGHT"/>
+      <xs:enumeration value="Right"/>
+     </xs:restriction>
+    </xs:simpleType>
+   </xs:element>
+   <xs:element name="Language" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>The default language used to implement methods for this class.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="LegacyInstanceContext" type="xs:boolean" default="0">
+   <xs:annotation>
+    <xs:documentation>If true then pass %this as first argument of all instance methods</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="MemberSuper" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>This is the class to inherit if this class is used as a member class in member inheritance</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Method">
+    <xs:complexType>
+     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Abstract" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that this is an abstract method. An abstract method has no implementation and has no executable code generated for it. Abstract methods exist solely for the purpose of defining a method signature or interface that can be overridden and implemented within one or more subclasses. </xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ClassMethod" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that the method is a class method.  Instance methods can only be invoked via an instantiated object while class methods can be directly invoked without an object instance. </xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ClientMethod" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true this method is only available on the server, and is to be projected as a client method.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ClientName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>An alias used by client projections of this method.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="CodeMode">
+      <xs:annotation>
+       <xs:documentation>Specifies how a given method is implemented: as a routine call, lines of code to be compiled, an expression, or a method that will generate the resulting method or object.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value="call"/>
+         <xs:enumeration value="CALL"/>
+         <xs:enumeration value="Call"/>
+         <xs:enumeration value="code"/>
+         <xs:enumeration value="CODE"/>
+         <xs:enumeration value="Code"/>
+         <xs:enumeration value="expression"/>
+         <xs:enumeration value="EXPRESSION"/>
+         <xs:enumeration value="Expression"/>
+         <xs:enumeration value="generator"/>
+         <xs:enumeration value="GENERATOR"/>
+         <xs:enumeration value="Generator"/>
+         <xs:enumeration value="objectgenerator"/>
+         <xs:enumeration value="OBJECTGENERATOR"/>
+         <xs:enumeration value="Objectgenerator"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="Deprecated" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>True if this method is deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Description" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a description of the method.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ExternalProcName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the SQL procedure name in the foreign database.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Final" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that subclasses cannot override the implementation of the method.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ForceGenerate" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>When true we always regenerate this method into each subclass even if normal rules would allow us to call the superclass implementation.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="FormalSpec" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the list of arguments. Each argument is of the format [&amp;|*]&lt;name&gt;[:&lt;type&gt;][=&lt;default&gt;] where &amp; means pass-by-reference and * means output-only.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="GenerateAfter" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>In the case of a method generator method, specifies that the generator should be invoked after the listed methods are generated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Implementation" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>The code that is executed when the method is invoked. In the case of an expression method, this is an expression. In the case of a call method, this is the name of an ObjectScript routine to call.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ImplementationBase64" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>The code that is executed when the method is invoked. In the case of an expression method, this is an expression. In the case of a call method, this is the name of an ObjectScript routine to call.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ImplementationWideBase64" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>The code that is executed when the method is invoked. In the case of an expression method, this is an expression. In the case of a call method, this is the name of an ObjectScript routine to call.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Internal" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true, then do not display this item in automatic documentation.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Language" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>The language used to implement this method.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="NoContext" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true and in a datatype method, this prevents the * Set %val=..prop Set $this=&quot;&quot; * that is added to the property method so you can override things like the Get/Set methods.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="NotForProperty" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="NotInheritable" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that this method is not inherited in subclasses.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="PlaceAfter" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies that the class compiler should place this method after the listed methods in the routine it creates for the class.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Private" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that the method is private. Private methods can only be invoked by instance methods of this class or its subclasses.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ProcedureBlock">
+      <xs:annotation>
+       <xs:documentation>Specifies that this method uses procedure block for method code.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="0"/>
+         <xs:enumeration value="1"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="PublicList" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the public list.  This keyword is used only if the ProcedureBlock keyword is set to true.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Requires" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Comma separated string of resource constraints to run this method</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ReturnResultsets" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true this method may return zero, one, or more Resultsets in the %sqlcontext.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ReturnType" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the data type of the value returned by a call to the method. Setting ReturnType to an empty string specifies that there is no return value.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ReturnTypeParams" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>A comma separated list of any parameters on the ReturnType keyword.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ServerOnly">
+      <xs:annotation>
+       <xs:documentation>Specifies that a method will not be projected to a Java or C++ client.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="0"/>
+         <xs:enumeration value="1"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="SoapAction" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Lets you specify the HTTP SOAP action that must be used when invoking this web service method as a web method. For SOAP 1.1, the SOAP action is obtained from the SOAPAction HTTP header. For SOAP 1.2, it is obtained from the Content-Type HTTP header.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SoapBindingStyle">
+      <xs:annotation>
+       <xs:documentation>Specifies what type of SOAP invocation is used for a web method. This keyword is ignored for non-web methods.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="document"/>
+         <xs:enumeration value="DOCUMENT"/>
+         <xs:enumeration value="Document"/>
+         <xs:enumeration value="rpc"/>
+         <xs:enumeration value="RPC"/>
+         <xs:enumeration value="Rpc"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="SoapBodyUse">
+      <xs:annotation>
+       <xs:documentation>Specifies what kind of SOAP encoding is used for the inputs and outputs of a web method. This keyword is ignored for non-web methods.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="literal"/>
+         <xs:enumeration value="LITERAL"/>
+         <xs:enumeration value="Literal"/>
+         <xs:enumeration value="encoded"/>
+         <xs:enumeration value="ENCODED"/>
+         <xs:enumeration value="Encoded"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="SoapMessageName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the name of the child element of the body of the response message for a web service method.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SoapNameSpace" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Overrides the SOAPNAMESPACE class parameter for this web service or web service client.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SoapRequestMessage" type="xs:string">
+      <xs:annotation>
+       <xs:documentation> This keyword will reflects the expected element name for top element of the SOAP body in the SOAP request.  This element is needed to distinguish between multiple requests which have the same SoapAction but different top level body elements.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SoapTypeNameSpace" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Overrides the SOAPTYPENAMESPACE class parameter for this web service or web service client.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>If this method is projected as an SQL stored procedure, then this name is used as the name of the stored procedure.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlProc" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that the method can be invoked as an SQL stored procedure. Only class methods can be called as SQL stored procedures.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlRoutine">
+      <xs:annotation>
+       <xs:documentation>If &apos;procedure&apos; then this is equivalent to SqlProc keyword and means class method can be called as an SQL procedure. If &apos;function&apos; then this class method can be called as an SQL function.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="procedure"/>
+         <xs:enumeration value="PROCEDURE"/>
+         <xs:enumeration value="Procedure"/>
+         <xs:enumeration value="function"/>
+         <xs:enumeration value="FUNCTION"/>
+         <xs:enumeration value="Function"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="WebMethod" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that a method can be invoked as a web method using the SOAP protocol.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ZenMethod" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that the method should be projected to the web client for use in the Zen framework.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+   </xs:element>
+   <xs:element name="Modified">
+   <xs:annotation>
+    <xs:documentation>If set to 0 then class is always modified, and so it is always saved.</xs:documentation>
+   </xs:annotation>
+    <xs:simpleType>
+     <xs:restriction base="xs:string">
+      <xs:enumeration value="0"/>
+      <xs:enumeration value="1"/>
+      <xs:enumeration value="2"/>
+      <xs:enumeration value="3"/>
+     </xs:restriction>
+    </xs:simpleType>
+   </xs:element>
+   <xs:element name="NoContext" type="xs:boolean" default="0">
+   <xs:annotation>
+    <xs:documentation>If true, datatype methods have access to the current instance instead of providing their own context.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="NoExtent" type="xs:boolean" default="0">
+   <xs:annotation>
+    <xs:documentation>If TRUE will prevent this class from instantiating a persistent extent.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="OdbcType">
+   <xs:annotation>
+    <xs:documentation>In the case of a datatype class, specifies the type used when exposed via ODBC or JDBC. Datatype classes must specify an ODBC type. </xs:documentation>
+   </xs:annotation>
+    <xs:simpleType>
+     <xs:restriction base="xs:string">
+      <xs:enumeration value="bigint"/>
+      <xs:enumeration value="BIGINT"/>
+      <xs:enumeration value="Bigint"/>
+      <xs:enumeration value="bit"/>
+      <xs:enumeration value="BIT"/>
+      <xs:enumeration value="Bit"/>
+      <xs:enumeration value="date"/>
+      <xs:enumeration value="DATE"/>
+      <xs:enumeration value="Date"/>
+      <xs:enumeration value="double"/>
+      <xs:enumeration value="DOUBLE"/>
+      <xs:enumeration value="Double"/>
+      <xs:enumeration value="guid"/>
+      <xs:enumeration value="GUID"/>
+      <xs:enumeration value="Guid"/>
+      <xs:enumeration value="integer"/>
+      <xs:enumeration value="INTEGER"/>
+      <xs:enumeration value="Integer"/>
+      <xs:enumeration value="longvarbinary"/>
+      <xs:enumeration value="LONGVARBINARY"/>
+      <xs:enumeration value="Longvarbinary"/>
+      <xs:enumeration value="longvarchar"/>
+      <xs:enumeration value="LONGVARCHAR"/>
+      <xs:enumeration value="Longvarchar"/>
+      <xs:enumeration value="numeric"/>
+      <xs:enumeration value="NUMERIC"/>
+      <xs:enumeration value="Numeric"/>
+      <xs:enumeration value="posixtime"/>
+      <xs:enumeration value="POSIXTIME"/>
+      <xs:enumeration value="Posixtime"/>
+      <xs:enumeration value="smallint"/>
+      <xs:enumeration value="SMALLINT"/>
+      <xs:enumeration value="Smallint"/>
+      <xs:enumeration value="time"/>
+      <xs:enumeration value="TIME"/>
+      <xs:enumeration value="Time"/>
+      <xs:enumeration value="timestamp"/>
+      <xs:enumeration value="TIMESTAMP"/>
+      <xs:enumeration value="Timestamp"/>
+      <xs:enumeration value="tinyint"/>
+      <xs:enumeration value="TINYINT"/>
+      <xs:enumeration value="Tinyint"/>
+      <xs:enumeration value="varbinary"/>
+      <xs:enumeration value="VARBINARY"/>
+      <xs:enumeration value="Varbinary"/>
+      <xs:enumeration value="varchar"/>
+      <xs:enumeration value="VARCHAR"/>
+      <xs:enumeration value="Varchar"/>
+      <xs:enumeration value="resultset"/>
+      <xs:enumeration value="RESULTSET"/>
+      <xs:enumeration value="Resultset"/>
+      <xs:enumeration value="struct"/>
+      <xs:enumeration value="STRUCT"/>
+      <xs:enumeration value="Struct"/>
+     </xs:restriction>
+    </xs:simpleType>
+   </xs:element>
+   <xs:element name="Owner" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Specifies the owner of the class and its corresponding table. By default, classes and tables are owned by _SYSTEM.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Parameter">
+    <xs:complexType>
+     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Abstract" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies whether this is an abstract parameter.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Constraint" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a constraint value used by Studio to provide input validation for the parameter. Its value is not used nor enforced by the Class Compiler.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Default" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a default value for the parameter assuming the Expression keyword is blank.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Deprecated" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>True if this parameter is deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Description" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a description of the parameter.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Encoded" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true then the parameter value is base64 encoded.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Expression" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>An expression to seed parameter with evaluated at compile time, if specified this takes precedence over the Default keyword.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Final" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that subclasses cannot override the definition of the parameter.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Flags" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies any additional modifier flags for the parameter type.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Internal" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true, then do not display this item in automatic documentation.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Type" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a type for the parameter. The type is used by Studio to provide input validation for the parameter.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+   </xs:element>
+   <xs:element name="ProcedureBlock" type="xs:boolean" default="1">
+   <xs:annotation>
+    <xs:documentation>Specifies that the class uses procedure block for method code.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Projection">
+    <xs:complexType>
+     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Deprecated" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>True if this projection is deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Description" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a description of the projection.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Internal" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true, then do not display this item in automatic documentation.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="NotInheritable" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that this projection is not inherited in subclasses.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Parameter">
+       <xs:complexType>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="value" type="xs:string"/>
+       </xs:complexType>
+      </xs:element>
+      <xs:element name="Type" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the name of the class associated with the projection.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+   </xs:element>
+   <xs:element name="ProjectionClass" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Additional projection member super classes to inherit.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Property">
+    <xs:complexType>
+     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Aliases" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>List of aliases for this property.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Calculated" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that the property has no in-memory storage allocated for it when the object containing it is instantiated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Cardinality">
+      <xs:annotation>
+       <xs:documentation>Specifies the cardinality of a relationship property. The Cardinality keyword is required for relationship properties. It is ignored by non-relationship properties. </xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="one"/>
+         <xs:enumeration value="ONE"/>
+         <xs:enumeration value="One"/>
+         <xs:enumeration value="many"/>
+         <xs:enumeration value="MANY"/>
+         <xs:enumeration value="Many"/>
+         <xs:enumeration value="parent"/>
+         <xs:enumeration value="PARENT"/>
+         <xs:enumeration value="Parent"/>
+         <xs:enumeration value="children"/>
+         <xs:enumeration value="CHILDREN"/>
+         <xs:enumeration value="Children"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="ClientName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>An alias used by client projections of this property.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Collection">
+      <xs:annotation>
+       <xs:documentation>Specifies that a property is a collection property as well as what type of collection it is.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="array"/>
+         <xs:enumeration value="ARRAY"/>
+         <xs:enumeration value="Array"/>
+         <xs:enumeration value="list"/>
+         <xs:enumeration value="LIST"/>
+         <xs:enumeration value="List"/>
+         <xs:enumeration value="binarystream"/>
+         <xs:enumeration value="BINARYSTREAM"/>
+         <xs:enumeration value="Binarystream"/>
+         <xs:enumeration value="characterstream"/>
+         <xs:enumeration value="CHARACTERSTREAM"/>
+         <xs:enumeration value="Characterstream"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="Deprecated" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>True if this property is deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Description" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a description of the property.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Final" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that subclasses cannot override the definition of this property.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Identity" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that this property is the identity for this class. Identity properties can be set in new objects only and the default is set by incrementing a counter.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="InitialExpression" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies an initial value for the property.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Internal" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true, then do not display this item in automatic documentation.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Inverse" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the name of the inverse side of a relationship. That is, the name of the corresponding relationship property in the related class. The inverse property must exist in the related class and have the correct Cardinality value. The Inverse keyword is required for relationship properties. It is ignored by non-relationship properties.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="MultiDimensional" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that an attribute has the characteristics of a multidimensional array.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="NoModBit" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="NotInheritable" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="OnDelete">
+      <xs:annotation>
+       <xs:documentation>Specifies what referential action to take when the key value is deleted from the foreign table.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="cascade"/>
+         <xs:enumeration value="CASCADE"/>
+         <xs:enumeration value="Cascade"/>
+         <xs:enumeration value="noaction"/>
+         <xs:enumeration value="NOACTION"/>
+         <xs:enumeration value="Noaction"/>
+         <xs:enumeration value="setdefault"/>
+         <xs:enumeration value="SETDEFAULT"/>
+         <xs:enumeration value="Setdefault"/>
+         <xs:enumeration value="setnull"/>
+         <xs:enumeration value="SETNULL"/>
+         <xs:enumeration value="Setnull"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="Parameter">
+       <xs:complexType>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="value" type="xs:string"/>
+       </xs:complexType>
+      </xs:element>
+      <xs:element name="Private" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that the property is private. Private properties can only be used by instance methods of this class or its subclasses.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ReadOnly" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that the property is readonly.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Relationship" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that a property is a relationship property. </xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Required" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>In the case of a persistent class, specifies that the value of the property must be given a value before it can be stored to disk.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ServerOnly">
+      <xs:annotation>
+       <xs:documentation>Specifies that a property will not be projected to a Java or C++ client.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="0"/>
+         <xs:enumeration value="1"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="SqlCollation">
+      <xs:annotation>
+       <xs:documentation>Deprecated.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="alphaup"/>
+         <xs:enumeration value="ALPHAUP"/>
+         <xs:enumeration value="Alphaup"/>
+         <xs:enumeration value="plus"/>
+         <xs:enumeration value="PLUS"/>
+         <xs:enumeration value="Plus"/>
+         <xs:enumeration value="minus"/>
+         <xs:enumeration value="MINUS"/>
+         <xs:enumeration value="Minus"/>
+         <xs:enumeration value="space"/>
+         <xs:enumeration value="SPACE"/>
+         <xs:enumeration value="Space"/>
+         <xs:enumeration value="exact"/>
+         <xs:enumeration value="EXACT"/>
+         <xs:enumeration value="Exact"/>
+         <xs:enumeration value="upper"/>
+         <xs:enumeration value="UPPER"/>
+         <xs:enumeration value="Upper"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="SqlColumnNumber" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Explicitly sets the SQL Column number for this property. This is provided for legacy application support.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlComputeCode" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies ObjectScript code that evaluates to a computed field value. </xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlComputed" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that this property is an SQL computed field.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlComputeOnChange" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies one or more properties whose modification triggers the recalculation of this computed field within SQL.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlFieldName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>In the case of a persistent class, specifies the column name used to identify the property in its SQL projection. By default, the SQL column name is the same as the property name.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlListDelimiter" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the delimiter character used within SQL for lists. This is provided for legacy application support.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlListType">
+      <xs:annotation>
+       <xs:documentation>specifies the representation to be used for a list.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="delimited"/>
+         <xs:enumeration value="DELIMITED"/>
+         <xs:enumeration value="Delimited"/>
+         <xs:enumeration value="list"/>
+         <xs:enumeration value="LIST"/>
+         <xs:enumeration value="List"/>
+         <xs:enumeration value="subnode"/>
+         <xs:enumeration value="SUBNODE"/>
+         <xs:enumeration value="Subnode"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="Transient" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>In the case of a persistent class, specifies that the property is not stored in the database.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Type" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the name of the class associated with the property, which can be a data type class, a persistent class, or an embeddable serial class.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="UDLText">
+       <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:element name="Category">
+          <xs:simpleType>
+           <xs:restriction base="xs:string">
+            <xs:enumeration value="comment"/>
+            <xs:enumeration value="COMMENT"/>
+            <xs:enumeration value="Comment"/>
+            <xs:enumeration value="error"/>
+            <xs:enumeration value="ERROR"/>
+            <xs:enumeration value="Error"/>
+           </xs:restriction>
+          </xs:simpleType>
+         </xs:element>
+         <xs:element name="Content" type="xs:string">
+         <xs:annotation>
+          <xs:documentation>Holds the content of the UDL text.</xs:documentation>
+         </xs:annotation>
+         </xs:element>
+         <xs:element name="ContentBase64" type="xs:string">
+         <xs:annotation>
+          <xs:documentation>Holds the content of the UDL text.</xs:documentation>
+         </xs:annotation>
+         </xs:element>
+         <xs:element name="ContentWideBase64" type="xs:string">
+         <xs:annotation>
+          <xs:documentation>Holds the content of the UDL text.</xs:documentation>
+         </xs:annotation>
+         </xs:element>
+         <xs:element name="Position">
+          <xs:simpleType>
+           <xs:restriction base="xs:string">
+            <xs:enumeration value="body"/>
+            <xs:enumeration value="BODY"/>
+            <xs:enumeration value="Body"/>
+            <xs:enumeration value="header"/>
+            <xs:enumeration value="HEADER"/>
+            <xs:enumeration value="Header"/>
+           </xs:restriction>
+          </xs:simpleType>
+         </xs:element>
+         <xs:element name="TextType" type="xs:integer" default="0"/>
+        </xs:choice>
+       <xs:attribute name="name" type="xs:string" use="required"/>
+      </xs:complexType>
+      </xs:element>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+   </xs:element>
+   <xs:element name="PropertyClass" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Additional property member super classes to inherit.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Query">
+    <xs:complexType>
+     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="ClientName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>An alias used by client projections of this query.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Deprecated" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>True if this query is deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Description" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a description of the query.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Final" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that subclasses cannot override the definition of the query.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="FormalSpec" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the list of arguments passed to the Execute method. Each argument is of the format [&amp;|*]&lt;name&gt;[:&lt;type&gt;][=&lt;default&gt;] where &amp; means pass-by-reference and * means output-only.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Internal" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true, then do not display this item in automatic documentation.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="NotInheritable" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Deprecated</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Parameter">
+       <xs:complexType>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="value" type="xs:string"/>
+       </xs:complexType>
+      </xs:element>
+      <xs:element name="Private" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SoapBindingStyle">
+      <xs:annotation>
+       <xs:documentation>Specifies what type of SOAP invocation is used for a web method. This keyword is ignored for non-web methods.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="document"/>
+         <xs:enumeration value="DOCUMENT"/>
+         <xs:enumeration value="Document"/>
+         <xs:enumeration value="rpc"/>
+         <xs:enumeration value="RPC"/>
+         <xs:enumeration value="Rpc"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="SoapBodyUse">
+      <xs:annotation>
+       <xs:documentation>Specifies what kind of SOAP encoding is used for the inputs and outputs of a web method. This keyword is ignored for non-web methods.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="literal"/>
+         <xs:enumeration value="LITERAL"/>
+         <xs:enumeration value="Literal"/>
+         <xs:enumeration value="encoded"/>
+         <xs:enumeration value="ENCODED"/>
+         <xs:enumeration value="Encoded"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="SoapNameSpace" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the namespace at the binding operation level in the WSDL. Applies only in a class that is defined as a web service or web client.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>If this query is projected as an SQL stored procedure, then this name is used as the name of the stored procedure.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlProc" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that the query can be invoked as an SQL stored procedure.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlQuery" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies an SQL statement to be used for an SQL-based query.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlView" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies whether to project this query as an SQL View.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlViewName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies an SQL alias for the view projected from this query.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Type" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the Query class used to provide the implementation of the query interface.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="WebMethod" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>description=Specifies that this query can be invoked using the SOAP protocol. </xs:documentation>
+      </xs:annotation>
+      </xs:element>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+   </xs:element>
+   <xs:element name="QueryClass" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Additional query member super classes to inherit.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="ServerOnly">
+   <xs:annotation>
+    <xs:documentation>Specifies whether this class is projected to Java clients.</xs:documentation>
+   </xs:annotation>
+    <xs:simpleType>
+     <xs:restriction base="xs:string">
+      <xs:enumeration value=""/>
+      <xs:enumeration value="0"/>
+      <xs:enumeration value="1"/>
+     </xs:restriction>
+    </xs:simpleType>
+   </xs:element>
+   <xs:element name="Sharded" type="xs:integer" default="0">
+   <xs:annotation>
+    <xs:documentation>0 if table is not sharded, 1 if it is sharded on the shard manager, 2 if it is sharded on the shard itself.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="SoapBindingStyle">
+   <xs:annotation>
+    <xs:documentation>Specifies the SOAP Binding used by this class when it is used to send and receive mnessages via SOAP.</xs:documentation>
+   </xs:annotation>
+    <xs:simpleType>
+     <xs:restriction base="xs:string">
+      <xs:enumeration value="document"/>
+      <xs:enumeration value="DOCUMENT"/>
+      <xs:enumeration value="Document"/>
+      <xs:enumeration value="rpc"/>
+      <xs:enumeration value="RPC"/>
+      <xs:enumeration value="Rpc"/>
+     </xs:restriction>
+    </xs:simpleType>
+   </xs:element>
+   <xs:element name="SoapBodyUse">
+   <xs:annotation>
+    <xs:documentation>Specifies the encoding used for SOAP messages.</xs:documentation>
+   </xs:annotation>
+    <xs:simpleType>
+     <xs:restriction base="xs:string">
+      <xs:enumeration value="literal"/>
+      <xs:enumeration value="LITERAL"/>
+      <xs:enumeration value="Literal"/>
+      <xs:enumeration value="encoded"/>
+      <xs:enumeration value="ENCODED"/>
+      <xs:enumeration value="Encoded"/>
+     </xs:restriction>
+    </xs:simpleType>
+   </xs:element>
+   <xs:element name="SqlCategory">
+   <xs:annotation>
+    <xs:documentation>In the case of a datatype class, specifies a type to use for calculations in SQL. Datatype classes must specify an SQL Category.</xs:documentation>
+   </xs:annotation>
+    <xs:simpleType>
+     <xs:restriction base="xs:string">
+      <xs:enumeration value="date"/>
+      <xs:enumeration value="DATE"/>
+      <xs:enumeration value="Date"/>
+      <xs:enumeration value="double"/>
+      <xs:enumeration value="DOUBLE"/>
+      <xs:enumeration value="Double"/>
+      <xs:enumeration value="fmdate"/>
+      <xs:enumeration value="FMDATE"/>
+      <xs:enumeration value="Fmdate"/>
+      <xs:enumeration value="fmtimestamp"/>
+      <xs:enumeration value="FMTIMESTAMP"/>
+      <xs:enumeration value="Fmtimestamp"/>
+      <xs:enumeration value="integer"/>
+      <xs:enumeration value="INTEGER"/>
+      <xs:enumeration value="Integer"/>
+      <xs:enumeration value="mvdate"/>
+      <xs:enumeration value="MVDATE"/>
+      <xs:enumeration value="Mvdate"/>
+      <xs:enumeration value="name"/>
+      <xs:enumeration value="NAME"/>
+      <xs:enumeration value="Name"/>
+      <xs:enumeration value="numeric"/>
+      <xs:enumeration value="NUMERIC"/>
+      <xs:enumeration value="Numeric"/>
+      <xs:enumeration value="posixts"/>
+      <xs:enumeration value="POSIXTS"/>
+      <xs:enumeration value="Posixts"/>
+      <xs:enumeration value="string"/>
+      <xs:enumeration value="STRING"/>
+      <xs:enumeration value="String"/>
+      <xs:enumeration value="time"/>
+      <xs:enumeration value="TIME"/>
+      <xs:enumeration value="Time"/>
+      <xs:enumeration value="timestamp"/>
+      <xs:enumeration value="TIMESTAMP"/>
+      <xs:enumeration value="Timestamp"/>
+      <xs:enumeration value="vector"/>
+      <xs:enumeration value="VECTOR"/>
+      <xs:enumeration value="Vector"/>
+     </xs:restriction>
+    </xs:simpleType>
+   </xs:element>
+   <xs:element name="SqlRoutinePrefix" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Deprecated.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="SqlRowIdName" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>In the case of a persistent class, specifies an altername field name used for the ID column. By default the ID is called ID.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="SqlRowIdPrivate" type="xs:boolean" default="0">
+   <xs:annotation>
+    <xs:documentation>In the case of a persistent class, specifies whether the ID column is projected to ODBC as a hidden field.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="SqlTableName" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>In the case of a persistent class, specifies the table name used to identify the class in its SQL projection. By default, the SQL table name is the same as the class name.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Storage">
+    <xs:complexType>
+     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="CounterLocation" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the base location of counters for properties with type is %Library.Counter. Normally this would be a global reference such as ^User.PersonC. The global reference can also include one or more leading subscripts.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Data">
+       <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:element name="Attribute" type="xs:string"/>
+         <xs:element name="ColumnarGlobal" type="xs:string">
+         <xs:annotation>
+          <xs:documentation>Specifies the name of the global this Columnar column is stored in.</xs:documentation>
+         </xs:annotation>
+         </xs:element>
+         <xs:element name="Structure">
+         <xs:annotation>
+          <xs:documentation>Specifies how the data is stored into a global node.</xs:documentation>
+         </xs:annotation>
+          <xs:simpleType>
+           <xs:restriction base="xs:string">
+            <xs:enumeration value="node"/>
+            <xs:enumeration value="NODE"/>
+            <xs:enumeration value="Node"/>
+            <xs:enumeration value="listnode"/>
+            <xs:enumeration value="LISTNODE"/>
+            <xs:enumeration value="Listnode"/>
+            <xs:enumeration value="subnode"/>
+            <xs:enumeration value="SUBNODE"/>
+            <xs:enumeration value="Subnode"/>
+            <xs:enumeration value="vector"/>
+            <xs:enumeration value="VECTOR"/>
+            <xs:enumeration value="Vector"/>
+           </xs:restriction>
+          </xs:simpleType>
+         </xs:element>
+         <xs:element name="Subscript" type="xs:string"/>
+         <xs:element name="Value">
+          <xs:complexType>
+           <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="Value" type="xs:string"/>
+           </xs:choice>
+          <xs:attribute name="name" type="xs:string" use="required"/>
+         </xs:complexType>
+         </xs:element>
+        </xs:choice>
+       <xs:attribute name="name" type="xs:string" use="required"/>
+      </xs:complexType>
+      </xs:element>
+      <xs:element name="DataLocation" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies expression that is the location where data is stored for this class. Normally this would be a global reference such as ^User.PersonD. The global reference can also include one or more leading subscripts.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="DefaultData" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the name of the DATA definition that the Class Compiler Data Structure Generator uses to place any previously unstored properties. A property is unstored if it is storable, but is not listed in any DATA definition. </xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Deprecated" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>True if this storage is deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Description" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a description of the storage definition. This description is displayed by the online class reference.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ExtentLocation" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the base location of globals used by the extent of this class. </xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ExtentSize" type="xs:string"/>
+      <xs:element name="Final" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that the storage definition cannot be modified by subclasses.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="IdExpression" type="xs:string"/>
+      <xs:element name="IdFunction">
+      <xs:annotation>
+       <xs:documentation>Specifies the system function used to allocate new id values.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="increment"/>
+         <xs:enumeration value="INCREMENT"/>
+         <xs:enumeration value="Increment"/>
+         <xs:enumeration value="sequence"/>
+         <xs:enumeration value="SEQUENCE"/>
+         <xs:enumeration value="Sequence"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="IdLocation" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies location of the ID Counter.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Index">
+       <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:element name="Location" type="xs:string"/>
+        </xs:choice>
+       <xs:attribute name="name" type="xs:string" use="required"/>
+      </xs:complexType>
+      </xs:element>
+      <xs:element name="IndexLocation" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the global used for indices for this class. If not specified, the index location is ^MyApp.MyClassI, where MyApp.MyClass is the classname. </xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Internal" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true then do not display this item in automatic documentation.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Property">
+       <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:element name="AverageFieldSize" type="xs:string"/>
+         <xs:element name="BiasQueriesAsOutlier">
+          <xs:simpleType>
+           <xs:restriction base="xs:string">
+            <xs:enumeration value=""/>
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+           </xs:restriction>
+          </xs:simpleType>
+         </xs:element>
+         <xs:element name="ChildBlockCount" type="xs:string"/>
+         <xs:element name="ChildExtentSize" type="xs:string"/>
+         <xs:element name="Histogram" type="xs:string"/>
+         <xs:element name="OutlierSelectivity" type="xs:string"/>
+         <xs:element name="Selectivity" type="xs:string"/>
+         <xs:element name="StreamLocation" type="xs:string"/>
+        </xs:choice>
+       <xs:attribute name="name" type="xs:string" use="required"/>
+      </xs:complexType>
+      </xs:element>
+      <xs:element name="Sharded" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Value of the Sharded keyword</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ShardKey">
+       <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:element name="CoshardWith" type="xs:string">
+         <xs:annotation>
+          <xs:documentation>Specifies the class with which to coshard this class</xs:documentation>
+         </xs:annotation>
+         </xs:element>
+         <xs:element name="Properties" type="xs:string">
+         <xs:annotation>
+          <xs:documentation>Specifies the properties of the shard key</xs:documentation>
+         </xs:annotation>
+         </xs:element>
+        </xs:choice>
+       <xs:attribute name="name" type="xs:string" use="required"/>
+      </xs:complexType>
+      </xs:element>
+      <xs:element name="ShardLocalClassName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the name of the shard-local class</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ShardLocalTableName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the name of the shard-local table</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlChildSub" type="xs:string"/>
+      <xs:element name="SqlIdExpression" type="xs:string"/>
+      <xs:element name="SQLMap">
+       <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:element name="BlockCount" type="xs:integer" default="0"/>
+         <xs:element name="Condition" type="xs:string"/>
+         <xs:element name="ConditionalWithHostVars" type="xs:boolean" default="0"/>
+         <xs:element name="ConditionFields" type="xs:string"/>
+         <xs:element name="Data">
+          <xs:complexType>
+           <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="Delimiter" type="xs:string"/>
+            <xs:element name="Node" type="xs:string"/>
+            <xs:element name="Piece" type="xs:string"/>
+            <xs:element name="RetrievalCode" type="xs:string"/>
+           </xs:choice>
+          <xs:attribute name="name" type="xs:string" use="required"/>
+         </xs:complexType>
+         </xs:element>
+         <xs:element name="Global" type="xs:string"/>
+         <xs:element name="PopulationPct" type="xs:string"/>
+         <xs:element name="PopulationType" type="xs:string"/>
+         <xs:element name="RowIdSpec">
+          <xs:complexType>
+           <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="Expression" type="xs:string"/>
+            <xs:element name="Field" type="xs:string"/>
+           </xs:choice>
+          <xs:attribute name="name" type="xs:string" use="required"/>
+         </xs:complexType>
+         </xs:element>
+         <xs:element name="RowReference" type="xs:string"/>
+         <xs:element name="Structure" type="xs:string"/>
+         <xs:element name="Subscript">
+          <xs:complexType>
+           <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="AccessType" type="xs:string"/>
+            <xs:element name="Accessvar">
+             <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+               <xs:element name="Code" type="xs:string"/>
+               <xs:element name="Variable" type="xs:string"/>
+              </xs:choice>
+             <xs:attribute name="name" type="xs:string" use="required"/>
+            </xs:complexType>
+            </xs:element>
+            <xs:element name="DataAccess" type="xs:string"/>
+            <xs:element name="Delimiter" type="xs:string"/>
+            <xs:element name="Expression" type="xs:string"/>
+            <xs:element name="Invalidcondition">
+             <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+               <xs:element name="Expression" type="xs:string"/>
+              </xs:choice>
+             <xs:attribute name="name" type="xs:string" use="required"/>
+            </xs:complexType>
+            </xs:element>
+            <xs:element name="LoopInitValue" type="xs:string"/>
+            <xs:element name="NextCode" type="xs:string"/>
+            <xs:element name="NullMarker" type="xs:string"/>
+            <xs:element name="StartValue" type="xs:string"/>
+            <xs:element name="StopExpression" type="xs:string"/>
+            <xs:element name="StopValue" type="xs:string"/>
+           </xs:choice>
+          <xs:attribute name="name" type="xs:string" use="required"/>
+         </xs:complexType>
+         </xs:element>
+         <xs:element name="Type">
+         <xs:annotation>
+          <xs:documentation>Specifies what kind of a map this is.</xs:documentation>
+         </xs:annotation>
+          <xs:simpleType>
+           <xs:restriction base="xs:string">
+            <xs:enumeration value=""/>
+            <xs:enumeration value="data"/>
+            <xs:enumeration value="DATA"/>
+            <xs:enumeration value="Data"/>
+            <xs:enumeration value="index"/>
+            <xs:enumeration value="INDEX"/>
+            <xs:enumeration value="Index"/>
+            <xs:enumeration value="bitmap"/>
+            <xs:enumeration value="BITMAP"/>
+            <xs:enumeration value="Bitmap"/>
+            <xs:enumeration value="bitmapextent"/>
+            <xs:enumeration value="BITMAPEXTENT"/>
+            <xs:enumeration value="Bitmapextent"/>
+           </xs:restriction>
+          </xs:simpleType>
+         </xs:element>
+        </xs:choice>
+       <xs:attribute name="name" type="xs:string" use="required"/>
+      </xs:complexType>
+      </xs:element>
+      <xs:element name="SqlRowIdName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the name of the Row ID column projected to SQL.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlRowIdProperty" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the SQL RowId property. This keyword is only used by classes that have been migrated from earlier InterSystems products.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlTableNumber" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the internal SQL Table Number. This keyword is only used by classes that have been migrated from earlier InterSystems products.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="State" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>For a serial embedded class, this keyword specifies which Data definition is used to define the serialized state of the object. This is also the default DATA definition that unstored properties will be added to by the default structure generator.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="StreamLocation" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the default global used to store any stream properties within this class. If not specified, the index location is ^MyApp.MyClassS, where MyApp.MyClass is the classname. </xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Type" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies the Storage Class used to provide persistence for this class.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="VersionLocation" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies location of the %Version Counter.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+   </xs:element>
+   <xs:element name="StorageStrategy" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Specifies the name of the storage strategy used to control persistence for this class.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Super" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Specifies one or more superclasses for the class.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="System">
+   <xs:annotation>
+    <xs:documentation>Specifies the order to compile classes in when compiling a set, we always proceed in the order 1,2,3,4,0 where 0 is the default if not specified.</xs:documentation>
+   </xs:annotation>
+    <xs:simpleType>
+     <xs:restriction base="xs:string">
+      <xs:enumeration value="0"/>
+      <xs:enumeration value="1"/>
+      <xs:enumeration value="2"/>
+      <xs:enumeration value="3"/>
+      <xs:enumeration value="4"/>
+     </xs:restriction>
+    </xs:simpleType>
+   </xs:element>
+   <xs:element name="TimeChanged" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Gives the time the last change was made to the class.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="TimeCreated" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Gives the time the class was first created.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="Trigger">
+    <xs:complexType>
+     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Code" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>The code that is executed when the trigger is fired.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="CodeMode">
+      <xs:annotation>
+       <xs:documentation>Specifies how a given method is implemented: lines of code to be compiled, or a method that will generate the resulting method or object.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value="code"/>
+         <xs:enumeration value="CODE"/>
+         <xs:enumeration value="Code"/>
+         <xs:enumeration value="generator"/>
+         <xs:enumeration value="GENERATOR"/>
+         <xs:enumeration value="Generator"/>
+         <xs:enumeration value="objectgenerator"/>
+         <xs:enumeration value="OBJECTGENERATOR"/>
+         <xs:enumeration value="Objectgenerator"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="Deprecated" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>True if this trigger is deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Description" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a description of the SQL trigger.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Event">
+      <xs:annotation>
+       <xs:documentation>Specifies the SQL event that will fire the trigger.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value="insert"/>
+         <xs:enumeration value="INSERT"/>
+         <xs:enumeration value="Insert"/>
+         <xs:enumeration value="update"/>
+         <xs:enumeration value="UPDATE"/>
+         <xs:enumeration value="Update"/>
+         <xs:enumeration value="delete"/>
+         <xs:enumeration value="DELETE"/>
+         <xs:enumeration value="Delete"/>
+         <xs:enumeration value="insert/update"/>
+         <xs:enumeration value="INSERT/UPDATE"/>
+         <xs:enumeration value="Insert/update"/>
+         <xs:enumeration value="insert/delete"/>
+         <xs:enumeration value="INSERT/DELETE"/>
+         <xs:enumeration value="Insert/delete"/>
+         <xs:enumeration value="update/delete"/>
+         <xs:enumeration value="UPDATE/DELETE"/>
+         <xs:enumeration value="Update/delete"/>
+         <xs:enumeration value="insert/update/delete"/>
+         <xs:enumeration value="INSERT/UPDATE/DELETE"/>
+         <xs:enumeration value="Insert/update/delete"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="Final" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>Specifies that subclasses cannot override the definition of the SQL trigger.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Foreach">
+      <xs:annotation>
+       <xs:documentation>Indicates if the trigger will be invoked for each row, for rows and objects, or for each statement</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="row"/>
+         <xs:enumeration value="ROW"/>
+         <xs:enumeration value="Row"/>
+         <xs:enumeration value="row/object"/>
+         <xs:enumeration value="ROW/OBJECT"/>
+         <xs:enumeration value="Row/object"/>
+         <xs:enumeration value="statement"/>
+         <xs:enumeration value="STATEMENT"/>
+         <xs:enumeration value="Statement"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="Internal" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true, then do not display this item in automatic documentation.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Language">
+      <xs:annotation>
+       <xs:documentation>The language used to implement this trigger.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+         <xs:enumeration value="objectscript"/>
+         <xs:enumeration value="OBJECTSCRIPT"/>
+         <xs:enumeration value="Objectscript"/>
+         <xs:enumeration value="tsql"/>
+         <xs:enumeration value="TSQL"/>
+         <xs:enumeration value="Tsql"/>
+         <xs:enumeration value="ispl"/>
+         <xs:enumeration value="ISPL"/>
+         <xs:enumeration value="Ispl"/>
+         <xs:enumeration value="python"/>
+         <xs:enumeration value="PYTHON"/>
+         <xs:enumeration value="Python"/>
+         <xs:enumeration value="cache"/>
+         <xs:enumeration value="CACHE"/>
+         <xs:enumeration value="Cache"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="NewTable" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>The name of the SQL table that holds old values for the trigger.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="OldTable" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>The name of the SQL table that holds old values for the trigger.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Order" type="xs:integer" default="0">
+      <xs:annotation>
+       <xs:documentation>In the case of multiple triggers for the same EVENT and TIME, specifies the order in which the triggers should be fired.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SqlName" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies an alternate name when this trigger is used by SQL.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Time">
+      <xs:annotation>
+       <xs:documentation>Specifies whether the trigger is fired before or after the EVENT.</xs:documentation>
+      </xs:annotation>
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value="before"/>
+         <xs:enumeration value="BEFORE"/>
+         <xs:enumeration value="Before"/>
+         <xs:enumeration value="after"/>
+         <xs:enumeration value="AFTER"/>
+         <xs:enumeration value="After"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="UpdateColumnList" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies one or more columns whose modification causes the trigger to be pulled by SQL.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+   </xs:element>
+   <xs:element name="TriggerClass" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Additional trigger member super classes to inherit.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="UDLText">
+    <xs:complexType>
+     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Category">
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value="comment"/>
+         <xs:enumeration value="COMMENT"/>
+         <xs:enumeration value="Comment"/>
+         <xs:enumeration value="error"/>
+         <xs:enumeration value="ERROR"/>
+         <xs:enumeration value="Error"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="Content" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Holds the content of the UDL text.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ContentBase64" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Holds the content of the UDL text.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="ContentWideBase64" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Holds the content of the UDL text.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Position">
+       <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value="body"/>
+         <xs:enumeration value="BODY"/>
+         <xs:enumeration value="Body"/>
+         <xs:enumeration value="header"/>
+         <xs:enumeration value="HEADER"/>
+         <xs:enumeration value="Header"/>
+        </xs:restriction>
+       </xs:simpleType>
+      </xs:element>
+      <xs:element name="TextType" type="xs:integer" default="0"/>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string"/>
+   </xs:complexType>
+   </xs:element>
+   <xs:element name="ViewQuery" type="xs:string">
+   <xs:annotation>
+    <xs:documentation>Gives the SQL query used for View definition of this class.</xs:documentation>
+   </xs:annotation>
+   </xs:element>
+   <xs:element name="XData">
+    <xs:complexType>
+     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Data" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>The data stream.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="DataBase64" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>The data stream.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="DataWideBase64" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>The data stream.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Deprecated" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>True if this XDATA is deprecated.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Description" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Specifies a description of the XData.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="Internal" type="xs:boolean" default="0">
+      <xs:annotation>
+       <xs:documentation>If true, then do not display this item in automatic documentation.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="MimeType" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>Mime type of XData block.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="SchemaSpec" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>The schema definition of the data.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      <xs:element name="XMLNamespace" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>The default XML NameSpace for the XDATA.</xs:documentation>
+      </xs:annotation>
+      </xs:element>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+   </xs:complexType>
+   </xs:element>
+  </xs:choice>
+ <xs:attribute name="name" type="xs:string" use="required"/>
+</xs:complexType>
+</xs:element>
+</xs:schema>

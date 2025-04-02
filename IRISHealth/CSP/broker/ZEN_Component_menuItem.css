@@ -1,0 +1,62 @@
+/* @class="%ZEN.Component.menuItem" */
+
+/* @doc="Basic menu item." */
+a.menuItem {
+	display: inline-block;
+	color: darkblue;
+	padding: 2px 3px 2px 3px;
+	text-decoration: none;
+	white-space: nowrap;
+	vertical-align: middle;
+	border: none;
+	margin: 1px 1px 1px 1px;
+	cursor: pointer;
+}
+
+/* @doc="Mouse over menu item." */
+a.menuItem:hover {
+	background: #FFFFA0;
+	border: 1px darkblue dotted;
+	margin: 0px 0px 0px 0px;
+	cursor: pointer;
+}
+
+a.menuItem:link, a.menuItem:visited, a.menuItem:active {
+}
+
+/* @doc="Disabled menu item." */
+a.menuItemDisabled {
+	display: inline-block;
+	color: gray;
+	background: #E0E0E0;
+	padding: 4px 4px 4px 4px;
+	text-decoration: none;
+	white-space: nowrap;
+	vertical-align: middle;
+	border: none;
+	margin: 0px 0px 0px 0px;
+}
+
+a.menuItemDisabled:hover,a.menuItemDisabled:active,a.menuItemDisabled:link, a.menuItemDisabled:visited {
+}
+
+/* active menu item: this is used for top-level items
+	when their submenu is displayed.
+*/
+a.menuItemActive {
+	display: inline-block;
+	color: darkblue;
+	padding: 2px 3px 2px 3px;
+	text-decoration: none;
+	white-space: nowrap;
+	vertical-align: middle;
+	background: #FFFFA0;
+	border: 1px darkblue dotted;
+	margin: 0px 0px 0px 0px;
+	cursor: pointer;
+}
+
+a.menuItemActive:hover,a.menuItemActive:active,a.menuItemActive:link, a.menuItemActive:visited {
+}
+
+/* EOF */

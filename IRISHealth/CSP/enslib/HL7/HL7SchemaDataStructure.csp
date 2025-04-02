@@ -1,0 +1,84 @@
+<AutoPageENS domain="Ensemble" parentpage="HL7SchemaMain.csp" pagename="HL7 Data Structure" title="@Ensemble:HL7ManagerDataStructure@HL7 Data Structure">
+<html>
+<head>
+<title>HL7 Data Structure</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+</head>
+<body>
+
+<div class="Text1">HL7 Data Structure Definition is displayed below:</div>
+
+<script language=Cache runat=server>
+#Include EnsHL7
+	set tPath=%request.Get("PATH")
+	set ms=%request.Get("MS")
+	set ss=%request.Get("SS")
+	set iField=%request.Get("FIELD")
+	set ds=%request.Get("DS")
+	set ds1=%request.Get("DS1")
+	set ds1Field=%request.Get("DS1FIELD")
+	set category=$p(ds,":",2)
+	set secondary=$p(ds,":",3)
+	If ((category'="")&&(secondary'="")) {
+		set description=..EscapeHTML($G($$$vaSchemaDescGbl(category,"DS",secondary)))
+		if $D($$$vaSchemaGbl(category,"DS",secondary))=0 {
+			write "<b><font size=6>"_ds_" </font> Definition does not exist!</b>",!
+			quit
+		}
+	}
+</script>
+<csp:if condition="$L(tPath)">
+<div class="Text1"><i>Path you followed to get to this data structure:</i>&nbsp;<b>#(tPath)#</b><br>
+	<csp:if condition="$L(ds1Field)">
+		<i>Data Structure </i>&nbsp;<b>'#($P(ds1,":",2,3))#'</b>, field # <b>#(ds1Field)#</b>,<br>
+	</csp:if>
+	<i>At Field#</i>&nbsp;<b>#(iField)#</b><br>
+	<i>Of Segment Structure </i>&nbsp;<b>'#($P(ss,":",2,3))#'</b>,<br>
+	<i>Of Message Structure </i>&nbsp;<b>'#($P(ms,":",2,3))#'</b></div>
+</csp:if>
+
+<div style="margin-left: 20px; margin-right: 20px;">
+<table border=1 cellpadding=4 cellspacing=0  style="font-size: 0.8em;">
+
+<tr><td colspan=6><b><font size=6>#(category_":"_secondary)# </font> #($G(description))#</b></td></tr>
+
+<tr align='left'><th>Component</th><th>Description</th><th>Property&nbsp;Name</th><th>Data&nbsp;Structure</th><th>Code&nbsp;Table</th><th><center><i>Alternate<br>Description</i></center></th></tr>
+
+<script language=Cache runat=server>
+	If ((category'="")&&(secondary'="")) {
+		set struct=$$$vaSchemaGbl(category,"DS",secondary)
+		kill names set name="" for  {
+			set name=$O($$$vaSchemaGbl(category,"DS",secondary,"names",name)) quit:name=""
+			set names($$$vaSchemaGbl(category,"DS",secondary,"names",name))=name
+		}
+		For i=1:1:$LL(struct) { Set value=$LG(struct,i)
+			write "<tr>"
+			write "<td>"_i_"</td>"
+			; description
+			set description=..EscapeHTML($G($$$vaSchemaDescGbl(category,"DS",secondary,i)))
+			write "<td>",$S(description="":"&nbsp;",1:description),"</td>"
+			; property name
+			set tPropPath=$S(""=tPath||(""=$G(names(i))):"",1:tPath_"."_$G(names(i)))
+			write "<td><a"_$S(""=tPropPath:"",1:" title='"_tPropPath_"' href='"_..Link("HL7SchemaPath.csp?PATH="_tPropPath_"&DS="_ds_"&DSFIELD="_i_"&DS1="_ds1_"&DS1FIELD="_ds1Field_"&FIELD="_iField_"&MS="_ms_"&SS="_ss)_"'")_">"_$G(names(i),"&nbsp")_"</a></td>"
+			; data structure
+			write "<td>",$S(value="":"&nbsp;",1:"<a href='"_..Link("HL7SchemaDataStructure.csp?DS=DS:"_value_"&PATH="_tPropPath_"&DS1="_ds_"&DS1FIELD="_i_"&FIELD="_iField_"&MS="_ms_"&SS="_ss)_"'>"_value_"</a>"),"</td>"
+			; code table
+			set value=$G($$$vaSchemaGbl(category,"DS",secondary,"tables",i))
+			write "<td>",$S(value="":"&nbsp;",1:"<a href='"_..Link("HL7SchemaCodeTable.csp?CT=CT:"_value)_"'>"_value_"</a>"),"</td>"
+			; alternate description
+			set altdesc=..EscapeHTML($G($$$vaSchemaDescGbl(category,"DS",secondary,i,"alt")))
+			write "<td>",$S(altdesc="":"&nbsp;",1:altdesc),"</td>"
+			write "</tr>",!
+		}
+	}
+</script>
+
+</table>
+
+<p>
+<a href="#(..Link("HL7SchemaMain.csp"))#">(Show All Categories)</a><br>
+<a href="#(..Link("HL7SchemaList.csp?ELEMENT=DS&CATEGORY="_category))#">(Show All Data Structures in Category '#(category)#')</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1111 @@
+<!-- WLD to CSP Converter Tags -->
+<!-- Copyright (c) 2001,2002 InterSystems Inc. ALL RIGHTS RESERVED. -->
+
+
+<csr:rule name="%WLD.VarShow" match="WLD:SHOWLV" empty>
+<csr:description>
+The <B>WLDSHOWLV</B> displays all request and session object contents
+</csr:description>
+<csr:action>
+<SCRIPT LANGUAGE=CACHE RUNAT=SERVER>
+ ;
+ W "<hr>",$C(13,10)
+ W "<p><h2>Local variables:</h2><br>",$C(13,10)
+ W
+ ;
+ W "<hr>",$C(13,10)
+ W "<p><h2>Request Object Contents:</h2><br>",$C(13,10)
+ N x
+ S x=""
+ f i=1:1 S x=%request.Next(x) Q:x=""  D
+ .S y=%request.Get(x)
+ .w x,"=",y,"<br>"
+ W "URL = ",%request.URL,"<br>"
+ ;
+ W "<hr>",$C(13,10)
+ W "<p><h2>Session Object Contents:</h2><br>",$C(13,10)
+ S x=""
+ f i=1:1 S x=%session.Next(x) Q:x=""  D
+ .S y=%session.Get(x)
+ .w x,"=",y,"<br>"
+ ;
+ W "<hr>",$C(13,10)
+ W "<p><h2>Environment Object Contents:</h2><br>",$C(13,10)
+ S x=""
+ f i=1:1 S x=%request.NextCgiEnv(x) Q:x=""  D
+ .S y=%request.GetCgiEnv(x)
+ .w x,"=",y,"<br>"
+ W "<hr>",$C(13,10)
+ ;
+ W "<p><h2>%KEY Contents:</h2><br>",$C(13,10)
+ S x=""
+ f i=1:1 S x=$O(%KEY(x)) Q:x=""  D
+ .S y=%KEY(x)
+ .w x,"=",y,"<br>"
+ W "<hr>",$C(13,10)
+ ;
+ W "<p><h2>%CGIEVAR Contents:</h2><br>",$C(13,10)
+ S x=""
+ f i=1:1 S x=$O(%CGIEVAR(x)) Q:x=""  D
+ .S y=%CGIEVAR(x)
+ .w x,"=",y,"<br>"
+ W "<hr>",$C(13,10)
+ ;
+</SCRIPT>
+</csr:action>
+</csr:rule>
+
+
+<csr:rule name="%WLD.Focus" match="WLD:FOCUS" empty>
+<csr:attribute name=FIELD required description="Field name on which to focus" type="STRING">
+<csr:attribute name=FORM required description="Form number containing field" type="STRING">
+<csr:description>
+The <B>WLDFOCUS</B> forces focus onto a field, as per WebLink Developer. Note the execution
+is carried out in the WLD:END tag
+</csr:description>
+<csr:action>
+<script LANGUAGE='javascript'>
+wldfocus = '##(%this.GetAttribute("FORM"))##' + '&' + '##(%this.GetAttribute("FIELD"))##' ;
+function wldSetFocus(wldfocus) {
+    var str = new String(wldfocus) ; 
+    focp = str.split("&");
+    formno = focp[0] ;
+    fieldname = focp[1] ;
+    focstr = 'self.document.forms[' + formno + '].' + fieldname + '.focus() ;' ;
+    eval(focstr) ;
+}
+</script>
+</csr:action>
+</csr:rule>
+
+
+<csr:rule name="%WLD.HRef" match="WLD:A">
+<csr:description>
+This rule implements the &action= mechanism of WLD
+</csr:description>
+<csr:action>
+<SCRIPT LANGUAGE=CACHE RUNAT=COMPILER>
+	;
+	N %href,%cspaction,%p1,%p2
+	s %href=%this.GetAttribute("WLDHREF")
+	;I %href'["cspaction" Q
+	S %p1=$P(%href,"cspaction=",1)
+	S %cspaction=$P(%href,"cspaction=",2)
+	S %p2=$P(%cspaction,"&",2,500)
+	S %cspaction=$P(%cspaction,"&",1)
+	S %cspaction=$P(%cspaction,"()",1)
+	s %action="cspaction="_%compiler.Get("%classname")_"."_%cspaction
+	S %href=%p1_%action
+	I %p2'="" S %href=%href_"&"_%p2
+	;
+	d %this.SetAttribute("WLDHREF",%href)
+	;
+</SCRIPT>
+<A HREF='#url(##(%this.GetAttribute("WLDHREF"))##)#'>
+<csr:children>
+</A>
+</csr:action>
+</csr:rule>
+
+
+<csr:rule name="%WLD.Submit" match="INPUT[TYPE=WLDSUBMIT]" empty>
+<csr:description>
+This rule implements the mechanisms for supporting WLD's NEXTPAGE= and ACTION=
+within a <input type=submit> tag.
+</csr:description>
+<csr:action>
+<SCRIPT LANGUAGE=CACHE RUNAT=COMPILER>
+	;
+	n action,nextpage,onclick,nvp,name
+	s action=%this.GetAttribute("ACTION")
+	s nextpage=%this.GetAttribute("NEXTPAGE")
+	S name=%this.GetAttribute("NAME")
+	S nvp=$P(nextpage,"?",2),nextpage=$P(nextpage,"?",1)
+	I nvp'="" S action=action_"&"_nvp
+	s onclick=%this.GetAttribute("ONCLICK")
+	;
+	d %this.TagAttributes.RemoveAt("ACTION")
+	d %this.TagAttributes.RemoveAt("NEXTPAGE")
+	;
+	i onclick'="" s onclick=onclick_";"
+	
+	s onclick=onclick_"this.form.action="
+	;s onclick=onclick_"'#url("_nextpage_"?cspaction="_%compiler.Get("%classname")_"."_action_")#'"
+	I action="" s onclick=onclick_"'#url("_nextpage_"?PRESSED="_name_")#'"
+	E  s onclick=onclick_"'#url("_nextpage_"?PRESSED="_name_"&cspaction="_%compiler.Get("%classname")_"."_action_")#'"
+	;
+	d %this.SetAttribute("ONCLICK",onclick)
+	d %this.SetAttribute("TYPE","SUBMIT")
+	;
+</SCRIPT>
+<csr:default>
+</csr:action>
+</csr:rule>
+
+
+<csr:rule name="%WLD.Image" match="INPUT[SRC,TYPE=WLDIMAGE]" empty>
+<csr:description>
+This rule implements the mechanisms for supporting WLD's NEXTPAGE= and ACTION=
+within a <input type=image> tag.
+</csr:description>
+<csr:action>
+<SCRIPT LANGUAGE=CACHE RUNAT=COMPILER>
+	;
+	n action,nextpage,onclick,nvp,name
+	s action=%this.GetAttribute("ACTION")
+	s nextpage=%this.GetAttribute("NEXTPAGE")
+	S name=%this.GetAttribute("NAME")
+	S nvp=$P(nextpage,"?",2),nextpage=$P(nextpage,"?",1)
+	I nvp'="" S action=action_"&"_nvp
+	s onclick=%this.GetAttribute("ONCLICK")
+	;
+	d %this.TagAttributes.RemoveAt("ACTION")
+	d %this.TagAttributes.RemoveAt("NEXTPAGE")
+	;
+	I onclick'="" s onclick=onclick_";"
+	;
+	s onclick=onclick_"this.form.action="
+	;s onclick=onclick_"'#url("_nextpage_"?cspaction="_%compiler.Get("%classname")_"."_action_")#'"
+	I action="" s onclick=onclick_"'#url("_nextpage_"?PRESSED="_name_")#'"
+	E  s onclick=onclick_"'#url("_nextpage_"?PRESSED="_name_"&cspaction="_%compiler.Get("%classname")_"."_action_")#'"
+	;
+	d %this.SetAttribute("ONCLICK",onclick)
+	d %this.SetAttribute("TYPE","IMAGE")
+	;
+</SCRIPT>
+<csr:default>
+</csr:action>
+</csr:rule>
+
+
+<csr:rule name="%WLD.Radio" match="INPUT[TYPE=WLDRADIO]" empty>
+<csr:description>
+This rule implements the mechanisms for emulating WLD's RADIO button interface
+</csr:description>
+<csr:action>
+<SCRIPT LANGUAGE=CACHE RUNAT=COMPILER>
+	;
+	S name=%this.GetAttribute("NAME")
+	S value=%this.GetAttribute("VALUE")
+	;S onclick2=%this.GetAttribute("ONCLICK")
+	;S onclick="changed(this.name,this.value,this.checked)"
+	;I onclick2'="" S onclick=onclick_" ; "_onclick2 k onclick2
+	;d %this.SetAttribute("ONCLICK",onclick)
+	;
+	k nvplist
+	S pos=0
+	Set key="" For  Do %this.TagAttributes.GetNext(.key) Quit:key=""  Do
+	. If key="TYPE" Quit
+	. If key="CHECKED" Quit
+	. Set nvp=%this.TagAttributes.GetAt(key)
+	. S pos=pos+1
+	. S $LIST(nvplist,pos)=nvp
+	;
+</SCRIPT>
+
+<script language=cache runat=server>
+ s fname=##'name'##
+ s fvalue=##'value'##
+ s nvplist=##'nvplist'##
+ W "<INPUT TYPE=RADIO "
+ F pos=1:1:$LL(nvplist) D
+ .S nvp=$LIST(nvplist,pos)
+ .S name=$LIST(nvp,2)
+ .S value=$LIST(nvp,1)
+ .W " "_name_"="""_value_""""
+ If $D(SELECTED(fname,fvalue))!($G(@fname)=fvalue) W " CHECKED"
+ W ">"_$C(13,10)
+ ;
+ ;S %namemap(fname)="~RADIO~"
+</script>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%WLD.CheckBox" match="INPUT[TYPE=WLDCHECKBOX]" empty>
+<csr:description>
+This rule implements the mechanisms for emulating WLD's CHECKBOX button interface
+</csr:description>
+<csr:action>
+<SCRIPT LANGUAGE=CACHE RUNAT=COMPILER>
+	;
+	S name=%this.GetAttribute("NAME")
+	S value=%this.GetAttribute("VALUE")
+	;
+	k nvplist,nvplist2
+	S pos=0
+	Set key="" For  Do %this.TagAttributes.GetNext(.key) Quit:key=""  Do
+	. If key="TYPE" Quit
+	. If key="CHECKED" Quit
+	. Set nvp=%this.TagAttributes.GetAt(key)
+	. S pos=pos+1
+	. S $LIST(nvplist,pos)=nvp
+	. S nam=$LG(nvp,2)
+	. S val=$LG(nvp,1)
+	. s $p(nvplist2,"~",pos)=nam_"`"_val
+	;
+</SCRIPT>
+
+<script language=cache runat=server>
+ s fname=##'name'##
+ s fvalue=##'value'##
+ s nvplist2=##'nvplist2'##
+ W "<INPUT TYPE=CHECKBOX "
+ s %stop=0
+ f pos=1:1 d  q:%stop
+ . s nvp=$P(nvplist2,"~",pos)
+ . i nvp="" s %stop=1 Q
+ . s name=$P(nvp,"`",1)
+ . s value=$P(nvp,"`",2)
+ . w " "_name
+ . i value'="" W "="""_value_""""
+ If $D(SELECTED(fname,fvalue))!($G(@fname)=fvalue) W " CHECKED"
+ W ">"_$C(13,10)
+ ;
+ ;S %namemap(fname)="~CHECKBOX~"
+</script>
+</csr:action>
+</csr:rule>
+
+
+<csr:rule name="%WLD.AlertError" match="WLD:ERROR" empty>
+<csr:description>
+The <B>WLD:ERROR</B> tag displays the Error variable as an alert, as per Developer
+</csr:description>
+<csr:action>
+<script language=cache runat=server>
+ ;
+ I $G(wldalert)'="" D
+ .W "<","script language=javascript>",$C(13,10)
+ .W "alert('",wldalert,"') ;",$C(13,10)
+ .W "<","/script>",$C(13,10)
+ .K wldalert
+ ;
+</script>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%WLD.Start" match="WLD:START" empty>
+<csr:description>
+This tag should be put at the start of any page that uses the WLD functionality
+</csr:description>
+<csr:action>
+
+<SCRIPT LANGUAGE="JavaScript">
+ wldfocus = "off" ;
+</SCRIPT>
+
+<SCRIPT LANGUAGE=CACHE RUNAT=SERVER>
+ If '$D(%wldemulate)
+ {
+   Set %wldemulate=1
+   S %wldsave("%wldsave")=""
+   S %wldsave("%wldemulate")=""
+   S %wldsave("PREVPAGE")=""
+   S %wldsave("wldredirect")=""
+   S %wldsave("Error")=""
+   S %wldsave("Warning")=""
+   S %wldsave("%Page")=""
+   S %wldsave("LIST")=""
+   S %wldsave("SELECTED")=""
+   S %wldsave("GRID")=""
+   S %wldsave("VALUE")=""
+   S %wldsave("TEXTAREA")=""
+   S %wldsave("SETCOOKIE")=""
+   S %wldsave("JUMP")=""
+   S %wldsave("%App")=""
+   S %wldsave("%sessid")=""
+   S %wldsave("PRESSED")=""
+   S %wldsave("%namemap")=""
+ }
+</SCRIPT>
+
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%WLD.End" match="WLD:END" empty>
+<csr:description>
+This tag should be put at the very end of any page that uses the WLD functionality,
+just before the </BODY> tag
+</csr:description>
+<csr:action>
+
+<SCRIPT LANGUAGE="JavaScript">
+ var error = '#($G(Error))#' ;
+ if (error == '')
+ {
+   error = '#($G(Warning))#' ;
+  }
+ if (error != '')
+ {
+   alert(error) ;
+ }
+ if (wldfocus != 'off') {
+ wldSetFocus(wldfocus) ;
+ }
+</SCRIPT>
+
+<script language=cache runat=server>
+ Set Error=""
+ Set wldredirect=0
+</script>
+
+</csr:action>
+</csr:rule>
+
+
+
+<csr:rule name="%WLD.Options" match="SELECT/WLD:OPTIONS" empty>
+<csr:description>
+The <B>WLD:OPTIONS</B> generates options from the LIST array
+</csr:description>
+<csr:action>
+
+<SCRIPT LANGUAGE=CACHE RUNAT=COMPILER>
+	;
+	S name=%this.Parent.GetAttribute("NAME") ; get name from parent SELECT
+	;
+</SCRIPT>
+
+<script language=cache runat=server>
+ ;
+ D
+ .N listname,n,option,value,%selval
+ .;
+ .s listname=##'name'##
+ .;
+ .S n=""
+ .S %selval=$G(@listname)
+ .F  S n=$O(LIST(listname,n)) Q:n=""  D
+ ..S option=LIST(listname,n)
+ ..S value=$P(option,"~",2),option=$P(option,"~",1)
+ ..I value="" S value=$G(VALUE(listname,n))
+ ..W "<","option"
+ ..I value'="" W " value=""",value,""""
+ ..D
+ ...I option'="",$D(SELECTED(listname,option)) W " SELECTED" Q
+ ...I value'="",$D(SELECTED(listname,value)) W " SELECTED" Q
+ ...I option=%selval W " SELECTED" Q
+ ...I value=%selval W " SELECTED" Q
+ ..W ">",option,$C(13,10)
+ ;
+</script>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%WLD.Text" match="TEXTAREA/WLD:WRITETEXT" empty>
+<csr:description>
+The <B>WLD:WRITETEXT</B> generates text from the TEXTAREA array
+</csr:description>
+<csr:action>
+
+<SCRIPT LANGUAGE=CACHE RUNAT=COMPILER>
+	;
+	S name=%this.Parent.GetAttribute("NAME") ; get name from parent TEXTAREA
+	;
+</SCRIPT>
+
+<script language=cache runat=server>
+ ;
+ D
+ .N %field,CRLF,%max,%i
+ .S CRLF=$C(13,10)
+ .s %field=##'name'##
+ .;
+ .I '$D(%namemap(%field)) S %namemap(%field)="~TEXTAREA~"
+ .S %max=$ZP(TEXTAREA(%field,""))
+ .W $G(TEXTAREA(%field,1))
+ .F %i=2:1:%max D
+ ..N %txt
+ ..S %txt=$G(TEXTAREA(%field,%i))
+ ..I $E(%txt,1,10)="<CONTINUE>" S %txt=$E(%txt,11,$L(%txt))
+ ..E  W CRLF
+ ..w %txt
+ ;
+</script>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%WLD.GridHeading" match="/WLD:GRID/WLD:GRIDHEADING">
+<csr:description>
+This purpose of this empty rule is to instantiate the WLD:GRIDHEADING tag
+into the DOM
+</csr:description>
+<csr:action>
+<csr:default>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%WLD.GridData" match="/WLD:GRID/WLD:GRIDDATA">
+<csr:description>
+This purpose of this empty rule is to instantiate the WLD:GRIDDATA tag
+into the DOM
+</csr:description>
+<csr:action>
+<csr:default>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%WLD.Grid" match="WLD:GRID">
+<csr:description>
+This rule implements the standard WLD Grid tag.
+</csr:description>
+<csr:action>
+<SCRIPT LANGUAGE=CACHE RUNAT=COMPILER>
+	;
+	N key,nvp,pos,i,count
+	;
+	S tablename=%this.GetAttribute("NAME")
+	S maxcols=%this.GetAttribute("COLS")
+	S maxrows=%this.GetAttribute("ROWS")
+	S pos=0
+	S nvplist=""
+	;
+	Set key="" For  Do %this.TagAttributes.GetNext(.key) Quit:key=""  Do
+	. If key="NAME" Quit
+	. If key="COLS" Quit
+	. If key="ROWS" Quit
+	. Set nvp=%this.TagAttributes.GetAt(key)
+	. S pos=pos+1
+	. S $LIST(nvplist,pos)=nvp
+	;
+	s griddata=""
+	s gridheading=""
+	Set count=%this.Children.Count()
+	For i=1:1:count Set el=%this.Children.GetAt(i) Do
+	. N tagname,attrname
+	. S tagname=el.TagName
+	. Q:tagname=""  ; ignore null string children included by parser
+	. I tagname="WLD:GRIDHEADING" D
+	. . Set attrname=el.GetAttribute("NAME")
+	. . Set col=el.GetAttribute("COL")
+	. . S $LIST(gridheading,i)=attrname_"~"_col
+	. I tagname="WLD:GRIDDATA" D
+	. . Set value=el.GetAttribute("VALUE")
+	. . Set col=el.GetAttribute("COL")
+	. . Set row=el.GetAttribute("ROW")
+	. . s $LIST(griddata,i)=value_"~"_col_"~"_row
+	;
+	Quit
+</SCRIPT>
+
+<SCRIPT LANGUAGE=CACHE RUNAT=SERVER>
+	;
+	N att,d,col,row,name,value,name,value,pos,nvp,i
+	;
+	s maxrows=##'maxrows'##
+	s maxcols=##'maxcols'##
+	S tablename=##'tablename'##
+	S nvplist=##'nvplist'##
+	S griddata=##'griddata'##
+	S gridheading=##'gridheading'##
+	;
+	F i=1:1:$LL(gridheading) D
+	.
+	.	N d,hname,col
+	.	S d=$LG(gridheading,i)
+	.	Q:d=""
+	.	S hname=$P(d,"~",1)
+	.	S col=$P(d,"~",2)
+	.	S GRID(tablename,"headings",col)=hname
+	;
+	F i=1:1:$LL(griddata) D
+	.
+	.	N d,hvalue,col,row
+	.	S d=$LG(griddata,i)
+	.	Q:d=""
+	.	S hvalue=$P(d,"~",1)
+	.	S col=$P(d,"~",2)
+	.	S row=$P(d,"~",3)
+	.	S GRID(tablename,"data",row,col)=hvalue
+	;
+	S d=$G(GRID(tablename))
+	I maxcols="" S maxcols=$P(d,"~",1)
+	I maxrows="" S maxrows=$P(d,"~",2)
+	;
+	W "<TABLE ID="""_tablename_""""
+	F pos=1:1:$LL(nvplist) D
+	.S nvp=$LIST(nvplist,pos)
+	.S name=$LIST(nvp,2)
+	.S value=$LIST(nvp,1)
+	.W " "_name_"="""_value_""""
+	W ">"_$C(13,10)
+	;
+	; headings
+	;
+	W "<TR>",$C(13,10)
+	F col=1:1:maxcols
+	{
+		S d=$G(GRID(tablename,"headings",col)) 
+		S:d="" d="&nbsp;" 
+		W "<TD>"
+		W $S($D(d):d,1:"#(d)#")
+		W "</td>",$C(13,10)
+	}
+	W "</TR>"_$C(13,10)
+	;
+	; data cells
+	;
+	F row=1:1:maxrows
+	{
+		W "<TR>"_$C(13,10)
+		F col=1:1:maxcols 
+		{
+			S d=$G(GRID(tablename,"data",row,col))
+			S:d="" d="&nbsp;"
+			W "<TD>"
+			if $ZCVT(d,"U")["A HREF"
+			{
+				N %tagparam,%CurrTagID,%tagindex,methods,href
+				;
+				D ParseTag^%wldprse(d,1,.methods)
+				S href=%tagparam("HREF")
+				S href=$$UCSUB2^%wlduta(href,".asp")
+				S href=$$REPLACE^%wlduta(href,".ASP",".csp")
+				S href=$$REPLACE^%wlduta(href,".csp&",".csp?")
+				W "<A HREF='",..Link(href),"'>",$P(d,">",2,255)
+				
+			}
+			else
+			{
+				W d
+			}
+			W "</TD>"_$C(13,10)
+		}
+		W "</TR>"_$C(13,10)
+	}	
+	W "<TABLE>"_$C(13,10)
+</SCRIPT>
+</csr:action>
+</csr:rule>
+
+
+<csr:rule name="%WLD.DHTMLGrid" match="WLD:DHTMLGRID">
+<csr:description>
+This rule implements the WLD DHTML Grid tag.
+</csr:description>
+<csr:action>
+<SCRIPT LANGUAGE=CACHE RUNAT=COMPILER>
+	;
+	N key,nvp,pos,i,count
+	;
+	S tablename=%this.GetAttribute("NAME")
+	S maxcols=%this.GetAttribute("COLS")
+	S maxrows=%this.GetAttribute("ROWS")
+	S pos=0
+	S nvplist=""
+	;
+	Set key="" For  Do %this.TagAttributes.GetNext(.key) Quit:key=""  Do
+	. If key="NAME" Quit
+	. If key="COLS" Quit
+	. If key="ROWS" Quit
+	. Set nvp=%this.TagAttributes.GetAt(key)
+	. S pos=pos+1
+	. S $LIST(nvplist,pos)=nvp
+	;
+	s griddata=""
+	s gridheading=""
+	Set count=%this.Children.Count()
+	For i=1:1:count Set el=%this.Children.GetAt(i) Do
+	. N tagname,attrname
+	. S tagname=el.TagName
+	. Q:tagname=""  ; ignore null string children included by parser
+	. I tagname="WLD:GRIDHEADING" D
+	. . Set attrname=el.GetAttribute("NAME")
+	. . Set col=el.GetAttribute("COL")
+	. . S $LIST(gridheading,i)=attrname_"~"_col
+	. I tagname="WLD:GRIDDATA" D
+	. . Set value=el.GetAttribute("VALUE")
+	. . Set col=el.GetAttribute("COL")
+	. . Set row=el.GetAttribute("ROW")
+	. . s $LIST(griddata,i)=value_"~"_col_"~"_row
+	;
+	S dhtml=$$UPCASE^%wlduta(%this.GetAttribute("DHTML"))
+	S headcolor=%this.GetAttribute("HEADINGCOLOR")
+	S fontcolor=%this.GetAttribute("FONTCOLOR")
+	S buttons=%this.GetAttribute("BUTTONS")
+	S upbuttontext=%this.GetAttribute("Upbuttontext")
+	S downbuttontext=%this.GetAttribute("Downbuttontext")
+	S selectbuttontext=%this.GetAttribute("Selectbuttontext")
+	;
+	S onMap("ACTIONONDOWN")="wldGridActionDOWN"
+	S onMap("ACTIONONUP")="wldGridActionUP"
+	S onMap("ACTIONONEDIT")="wldGridActionEDIT"
+	S onMap("ACTIONONSELECT")="wldGridActionSELECT"
+	for onx="ACTIONONDOWN","ACTIONONUP","ACTIONONEDIT","ACTIONONSELECT"
+	{
+	  S on1=%this.GetAttribute(onx)
+	  s methName=onMap(onx)
+	  D buildOnMethod(methName,on1)
+	}
+	Quit
+
+:buildOnMethod(name,calledMeth) ;
+  New handle,code 
+  Set handle=%compiler.Get("%classhandle") 
+  Set code="Q"
+  S calledMeth=$P(calledMeth,"()",1)
+  If calledMeth'="" S code=" D .."_calledMeth_"() "_code
+  S code=code_$$$EOL
+  Set %statuscode=$$AddMethod^%apiCDL(handle,name) 
+  If $$$ISERR(%statuscode) Do DisplayError^%apiOBJ(%sc) Quit 
+  Do SetMethod^%apiCDL(handle,name,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+  Do SetMethod^%apiCDL(handle,name,$$$cMETHimplementation,.code)
+  Do SetMethod^%apiCDL(handle,name,$$$cMETHclassmethod,1) 
+  Do SetMethod^%apiCDL(handle,name,$$$cMETHformalspec,element.GetAttribute("ARGUMENTS")) 
+  Quit 
+
+</SCRIPT>
+
+<SCRIPT LANGUAGE=CACHE RUNAT=SERVER>
+	;
+	N att,d,col,row,name,value,name,value,pos,nvp,i
+	;
+	s maxrows=##'maxrows'##
+	s maxcols=##'maxcols'##
+	S tablename=##'tablename'##
+	S nvplist=##'nvplist'##
+	S griddata=##'griddata'##
+	S gridheading=##'gridheading'##
+	S dhtml=##'dhtml'##
+	S headcolor=##'headcolor'##
+	S fontcolor=##'fontcolor'## I fontcolor="" S fontcolor="white"
+	S buttons=##'buttons'##
+	S upbuttontext=##'upbuttontext'## I upbuttontext="" S upbuttontext="Up"
+	S downbuttontext=##'downbuttontext'## I downbuttontext="" S downbuttontext="Down"
+	S selectbuttontext=##'selectbuttontext'## I selectbuttontext="" S selectbuttontext="Select"
+	;
+	F i=1:1:$LL(gridheading) D
+	.
+	.	N d,hname,col
+	.	S d=$LG(gridheading,i)
+	.	Q:d=""
+	.	S hname=$P(d,"~",1)
+	.	S col=$P(d,"~",2)
+	.	S GRID(tablename,"headings",col)=hname
+	;
+	F i=1:1:$LL(griddata) D
+	.
+	.	N d,hvalue,col,row
+	.	S d=$LG(griddata,i)
+	.	Q:d=""
+	.	S hvalue=$P(d,"~",1)
+	.	S col=$P(d,"~",2)
+	.	S row=$P(d,"~",3)
+	.	;S GRID(tablename,"data",row,col)=hvalue
+	.	I '$D(GRID(tablename,"tagdefined",row,col)) D
+	. .        S GRID(tablename,"data",row,col)=hvalue
+	. .        S GRID(tablename,"tagdefined",row,col)="" ; flag to prevent update later
+	;
+	S d=$G(GRID(tablename))
+	I maxcols="" S maxcols=$P(d,"~",1)
+	E  S $P(GRID(tablename),"~",1)=maxcols
+	I maxrows="" S maxrows=$P(d,"~",2)
+	E  S $P(GRID(tablename),"~",2)=maxrows
+	;
+	W "<TABLE ID="""_tablename_""""
+	F pos=1:1:$LL(nvplist) D
+	.S nvp=$LIST(nvplist,pos)
+	.S name=$LIST(nvp,2)
+	.Q:$E(name,1,8)="ACTIONON"
+	.S value=$LIST(nvp,1)
+	.W " "_name_"="""_value_""""
+	W ">"_$C(13,10)
+	;
+	; headings
+	;
+	W "<TBODY id='"_tablename_"h'>"
+	W "<TR>",$C(13,10)
+	F col=1:1:maxcols
+	{
+		S d=$G(GRID(tablename,"headings",col)) 
+		S:d="" d="&nbsp;" 
+		W "<TD"
+		I headcolor'="",fontcolor'="" D
+		.  W " style='background-color:"_headcolor_"; color:"_fontcolor_"'>"
+		W $S($D(d):d,1:"#(d)#")
+		W "</td>",$C(13,10)
+	}
+	W "</TR>"_$C(13,10)
+	;
+	; data cells
+	;
+	W "<TBODY id='"_tablename_"d'>"
+	F row=1:1:maxrows
+	{
+		W "<TR>"_$C(13,10)
+		F col=1:1:maxcols 
+		{
+			S d=$G(GRID(tablename,"data",row,col))
+			S:d="" d="&nbsp;"
+			W "<TD"
+			W " style='color:"_fontcolor_"' OnClick='SelectCell("_row_","_col_")'>"
+			if $ZCVT(d,"U")["A HREF"
+			{
+				N %tagparam,%CurrTagID,%tagindex,methods,href
+				;
+				D ParseTag^%wldprse(d,1,.methods)
+				S href=%tagparam("HREF")
+				S href=$$UCSUB2^%wlduta(href,".asp")
+				S href=$$REPLACE^%wlduta(href,".ASP",".csp")
+				S href=$$REPLACE^%wlduta(href,".csp&",".csp?")
+				W "<A HREF='",..Link(href),"'>",$P(d,">",2,255)
+				
+			}
+			else
+			{
+				W d
+			}
+			W "</TD>"_$C(13,10)
+		}
+		W "</TR>"_$C(13,10)
+	}
+	W "</TBODY>"_$C(13,10)
+	I buttons'="" D
+	.w "<tr>"_$C(13,10)
+	.W "<td colspan="""_maxcols_""">"_$C(13,10)
+	.W "<input type=button name=up value="""_upbuttontext_""" OnClick=""UpButton()"">"
+	.W " <input type=button name=down value="""_downbuttontext_""" OnClick=""DownButton()"">"
+	.W " <input type=button name=SelectButton value="""_selectbuttontext_""" OnClick=""SelectRow()"">"
+	.W "</td>"_$C(13,10)
+	.W "</tr>"_$C(13,10)
+
+	W "<TABLE>"_$C(13,10)
+	W "<SC"_"RIPT LANGUAGE=JAVASCRIPT>"_$C(13,10)
+	W "ColorTable() ;"_$C(13,10)
+	W "</S"_"CRIPT>"_$C(13,10)
+	;W "<APPLET NAME='CacheCSPBroker' ARCHIVE='cspbroker.jar' CODEBASE='/csp/broker' CODE='cspbroker.class' WIDTH=0 HEIGHT=0 ALIGN=RIGHT>"_$C(13,10)
+	;W "</APPLET>"_$C(13,10)
+</SCRIPT>
+
+<csr:section NAME=HEAD>
+
+<SCRIPT LANGUAGE=CACHE RUNAT=COMPILER>
+	;
+	S tablename=%this.GetAttribute("NAME")
+	S dhtml=$zcvt(%this.GetAttribute("DHTML"),"U")
+	S hlcolor=%this.GetAttribute("HIGHLIGHTCOLOR")
+	S ncolor=%this.GetAttribute("NORMALCOLOR")
+
+</SCRIPT>
+
+<STYLE TYPE='text/css'>
+.HighLight {background-color:##(%this.GetAttribute("HIGHLIGHTCOLOR"))##}
+.Normal {background-color:##(%this.GetAttribute("NORMALCOLOR"))##}
+</STYLE>
+
+
+<script language=cache runat=server>
+ S lt="<"
+ S gt=">"
+</script>
+
+<script for=document event=onkeydown language=jscript>
+KeyTable() ;
+</script>
+
+<SCRIPT LANGUAGE=JavaScript SRC="/csp/broker/cspbroker.js">
+</SCRIPT>
+
+<script language=javascript>
+CurrentRow = 0 ;
+AbsTopRow = 1 ;
+DocLoaded='no' ;
+ShiftedDown = false ;
+editing = false ;
+ClosedEdit = false ;
+tablename = '##(%this.GetAttribute("NAME"))##' ;
+
+function ColorTable()
+{
+  RowOn(0) ;
+  for (row=1; row #(lt)# document.all.##(%this.GetAttribute("NAME"))##d.rows.length; row++)
+  {
+      RowOff(row) ;
+  }
+}
+function RowOn(row)
+{
+   for (col=0; col #(lt)# document.all.##(%this.GetAttribute("NAME"))##d.rows(0).cells.length; col++)
+   {
+      document.all.##(%this.GetAttribute("NAME"))##d.rows(row).cells(col).className='HighLight' ;
+   }
+}
+
+function RowOff(row)
+{
+  for (col=0; col #(lt)# document.all.##(%this.GetAttribute("NAME"))##d.rows(0).cells.length; col++)
+  {
+     document.all.##(%this.GetAttribute("NAME"))##d.rows(row).cells(col).className='Normal' ;
+  }
+}
+
+function KeyTable()
+{
+  Code = event.keyCode ;
+  switch (Code)
+  {
+     case 40:
+        if (editing)
+        {
+           break;
+        }
+        DownRow() ;
+        break;
+
+        //up arrow
+        case 38:
+        if (editing)
+        {
+           break;
+        }
+        UpRow() ;
+        break;
+
+        case 13:
+        if (editing)
+        {
+          CloseEdit() ;
+          editing = false ;
+          ClosedEdit = true ;
+        }
+        break ;
+
+        default:
+        break;
+  }
+}
+
+function DownRow()
+{
+  if (CurrentRow #(lt)#= (document.all.##(%this.GetAttribute("NAME"))##d.rows.length-2))
+  {
+     CurrentRow++ ;
+     for (col=0; col #(lt)# document.all.##(%this.GetAttribute("NAME"))##d.rows(0).cells.length; col++)
+     {
+        document.all.##(%this.GetAttribute("NAME"))##d.rows(CurrentRow).cells(col).className='HighLight' ;
+        document.all.##(%this.GetAttribute("NAME"))##d.rows(CurrentRow-1).cells(col).className='Normal' ;
+     }
+  }
+  else
+  {
+      Down1Line() ;
+  }
+}
+
+function Down1Line()
+{
+   #server(..GridDown('##(%this.GetAttribute("NAME"))##',CurrentRow,AbsTopRow))#
+}
+
+function DownButton()
+{
+   RowOff(CurrentRow) ;
+   CurrentRow++ ;
+   if (CurrentRow #(gt)# (document.all.##(%this.GetAttribute("NAME"))##d.rows.length - 1))
+   {
+      CurrentRow = document.all.##(%this.GetAttribute("NAME"))##d.rows.length - 1 ;
+      Down1Line() ;
+   }
+   RowOn(CurrentRow) ;
+}
+
+function Up1Line()
+{
+   #server(..GridUp('##(%this.GetAttribute("NAME"))##',CurrentRow,AbsTopRow))#
+}
+
+function UpRow()
+{
+   if (CurrentRow #(gt)# 0)
+   {
+      CurrentRow=CurrentRow-1 ;
+      for (col=0; col #(lt)# document.all.##(%this.GetAttribute("NAME"))##d.rows(0).cells.length; col++)
+      {
+         document.all.##(%this.GetAttribute("NAME"))##d.rows(CurrentRow).cells(col).className='HighLight' ;
+         document.all.##(%this.GetAttribute("NAME"))##d.rows(CurrentRow+1).cells(col).className='Normal' ;
+      }
+   }
+   else
+   {
+         Up1Line() ;
+   }
+}
+
+function UpButton()
+{
+	RowOff(CurrentRow) ;
+	CurrentRow-- ;
+	if (CurrentRow #(lt)# 0)
+	{
+	     CurrentRow = 0 ;
+	     Up1Line() ;
+	}
+	RowOn(CurrentRow) ;
+}
+
+function SelectRow()
+{
+    if (editing)
+    {
+        return ;
+    }
+    if (ClosedEdit)
+    {
+        ClosedEdit = false ;
+        return ;
+    }
+    #server(..GridSelectRow('##(%this.GetAttribute("NAME"))##',CurrentRow,AbsTopRow,'##(%this.GetAttribute("ACTIONONSELECT"))##'))#
+}
+
+function SelectCell(row,col)
+{
+  if (editing)
+  {
+     if (CurrentRow == (row - 1))
+     {
+       return ;
+     }
+     CloseEdit() ;
+     RowOff(CurrentRow) ;
+     CurrentRow = row - 1  ;
+     RowOn(CurrentRow) ;
+     editing = false ;
+     return ;
+  }
+  row-- ;
+  if (row != CurrentRow)
+  {
+     RowOff(CurrentRow) ;
+     CurrentRow = row ;
+     RowOn(CurrentRow) ;
+     return ;
+  }
+  event.cancelBubble ;
+  cell = event.srcElement ;
+  col-- ;
+  RowOff(CurrentRow) ;
+  CurrentRow = row ;
+  RowOn(CurrentRow) ;
+  EditRow = row ;
+  EditCol = col ;
+  value = cell.innerText ;
+  html = '#(lt)#input type=text name=field value="' + value + '"#(gt)#' ;
+  document.all.##(%this.GetAttribute("NAME"))##d.rows(row).cells(col).innerHTML = html ;
+  document.all.field.focus() ;
+  editing = true ;
+}
+
+function CloseEdit()
+{
+
+    document.all.field.blur() ;
+    value = document.all.field.value ;
+    document.all.##(%this.GetAttribute("NAME"))##d.rows(EditRow).cells(EditCol).innerHTML = value ;
+    document.all.SelectButton.focus() ;
+    erow=EditRow + AbsTopRow ;
+    #server(..GridCloseEdit('##(%this.GetAttribute("NAME"))##',erow,EditCol,value,'##(%this.GetAttribute("ACTIONONEDIT"))##'))#
+
+}
+
+</script>
+
+</csr:section>
+</csr:action>
+</csr:rule>
+
+
+<csr:rule name="%WLD.PrePage" match="WLD:PrePageScript" textonly>
+<csr:action>
+ <script language=CACHE runat=COMPILER>
+  New handle,i,j,lines,line,code,key,vlist,s
+  Set handle=%compiler.Get("%classhandle")
+  Set code=" D ..CSPpps1() I $G(Error)'="""" Q 1"_$$$EOL
+  For i=1:1:element.Children.Count() Do
+  . Set lines=element.Children.GetAt(i).Text
+  . For j=1:1:$l(lines,$$$EOL) Do
+  . . Set line=$tr($p(lines,$$$EOL,j),$c(9)," ")
+  . . f s=1:1:$l(line)+1 q:$e(line,s)'=" "
+  . . i $e(line,s)=":" s line=$e(line,s+1,$l(line))
+  . . e  s line=" "_$e(line,s,$l(line))
+  . . If $tr(line," ")'="" Set code=code_line_$$$EOL
+  Set code=code_" D ..CSPpps2()"_$$$EOL
+  Set code=code_" Q 1"_$$$EOL
+  Set %statuscode=$$AddMethod^%apiCDL(handle,"OnPreHTTP")
+  If $$$ISERR(%statuscode) Do DisplayError^%apiOBJ(%sc) Quit
+  Do SetMethod^%apiCDL(handle,"OnPreHTTP",$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+  Do SetMethod^%apiCDL(handle,"OnPreHTTP",$$$cMETHimplementation,.code)
+  Do SetMethod^%apiCDL(handle,"OnPreHTTP",$$$cMETHclassmethod,1)
+  Do SetMethod^%apiCDL(handle,"OnPreHTTP",$$$cMETHformalspec,"")
+  Do SetMethod^%apiCDL(handle,"OnPreHTTP",$$$cMETHreturntype,"%Boolean")
+  Quit
+ </script>
+</csr:action>
+</csr:rule>
+
+
+<csr:rule name="%WLD.PostPage" match="WLD:PostPageScript" textonly>
+<csr:action>
+ <script language=CACHE runat=COMPILER>
+  New handle,i,j,lines,line,code,key,vlist,s
+  Set handle=%compiler.Get("%classhandle")
+  Set code=""
+  For i=1:1:element.Children.Count() Do
+  . Set lines=element.Children.GetAt(i).Text
+  . For j=1:1:$l(lines,$$$EOL) Do
+  . . Set line=$tr($p(lines,$$$EOL,j),$c(9)," ")
+  . . f s=1:1:$l(line)+1 q:$e(line,s)'=" "
+  . . i $e(line,s)=":" s line=$e(line,s+1,$l(line))
+  . . e  s line=" "_$e(line,s,$l(line))
+  . . If $tr(line," ")'="" Set code=code_line_$$$EOL
+  Set code=code_" D ..CSPpostp()"_$$$EOL
+  Set code=code_" Q 1"_$$$EOL
+  Set %statuscode=$$AddMethod^%apiCDL(handle,"OnPostHTTP")
+  If $$$ISERR(%statuscode) Do DisplayError^%apiOBJ(%sc) Quit
+  Do SetMethod^%apiCDL(handle,"OnPostHTTP",$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+  Do SetMethod^%apiCDL(handle,"OnPostHTTP",$$$cMETHimplementation,.code)
+  Do SetMethod^%apiCDL(handle,"OnPostHTTP",$$$cMETHclassmethod,1)
+  Do SetMethod^%apiCDL(handle,"OnPostHTTP",$$$cMETHformalspec,"")
+  ;Do SetMethod^%apiCDL(handle,"OnPostHTTP",$$$cMETHreturntype,"%Boolean")
+  Quit
+ </script>
+</csr:action>
+</csr:rule>
+
+
+<csr:rule name="%WLD.Action" match="WLD:ActionScript" textonly> 
+<csr:description> 
+The <B>CSP:METHOD</B> tag is supersede by <B>SCRIPT LANGUAGE=CACHE METHOD</B> tag. 
+</csr:description> 
+<csr:attribute name=MethodName required description="The name of the generated method. Must be a valid method name." type="methodName:STRING"> 
+<csr:attribute name=ReturnType description="The return type of the method." type="dataType:STRING"> 
+<csr:attribute name=Arguments description="A list of arguments for the method." type="spec:STRING" required> 
+<csr:action> 
+ <script language=CACHE runat=COMPILER> 
+  New name,handle,i,j,lines,line,code,key,vlist,s 
+  Set name=element.GetAttribute("METHODNAME") If name="" Quit 
+  Set handle=%compiler.Get("%classhandle") 
+  Set code=" K %return"_$$$EOL For i=1:1:element.Children.Count() Do 
+  . Set lines=element.Children.GetAt(i).Text 
+  . For j=1:1:$l(lines,$$$EOL) Do 
+  . . Set line=$tr($p(lines,$$$EOL,j),$c(9)," ") 
+  . . f s=1:1:$l(line)+1 q:$e(line,s)'=" " 
+  . . i $e(line,s)=":" s line=$e(line,s+1,$l(line)) 
+  . . e  s line=" "_$e(line,s,$l(line)) 
+  . . If $tr(line," ")'="" Set code=code_line_$$$EOL 
+  Set code=code_" i $G(%return)'="""" D ..CSPXReturn(%return) K %return Quit"_$$$EOL 
+  Set %statuscode=$$AddMethod^%apiCDL(handle,name) 
+  If $$$ISERR(%statuscode) Do DisplayError^%apiOBJ(%sc) Quit 
+  Do SetMethod^%apiCDL(handle,name,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+  Do SetMethod^%apiCDL(handle,name,$$$cMETHimplementation,.code)
+  Do SetMethod^%apiCDL(handle,name,$$$cMETHclassmethod,1) 
+  Do SetMethod^%apiCDL(handle,name,$$$cMETHformalspec,element.GetAttribute("ARGUMENTS")) 
+  Set key="" For  Do element.TagAttributes.GetNext(.key) Quit:key=""  Do 
+  . If key="NAME" Quit 
+  . If key="ARGUMENTS" Quit 
+  . If key="LANGUAGE" Quit 
+  . Set vlist=element.TagAttributes.GetAt(key) 
+  . Do SetMethod^%apiCDL(handle,name,$zcvt(key,"l"),$lg(vlist,1,1)) 
+  Quit 
+ </script> 
+</csr:action> 
+</csr:rule> 

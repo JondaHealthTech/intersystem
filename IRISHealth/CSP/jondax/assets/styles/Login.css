@@ -1,0 +1,307 @@
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat-VariableFont_wght.ttf");
+}
+html {
+    font-size: 16px;
+}
+body {
+    background: transparent;
+    font-family: "Montserrat";
+    height: 100vh;
+}
+.bg-wrapper {
+    background: #405470;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    z-index: -1;
+}
+.bg1 img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100vh;
+}
+.bg2 img {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 100vh;
+}
+.content {
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
+    z-index: 1;
+    padding: 0 1rem;
+}
+.logo {
+    width: 10vw;
+    margin-top: 3.5vw;
+}
+.pink-bg-text {
+    padding: 0.3vw 0.6vw;
+    font-size: 1.05vw;
+    font-weight: 500;
+    line-height: 1.2vw;
+    margin: 2.2vw 0 0;
+    background-color: #e63876;
+    color: white;
+    display: inline-block;
+}
+h1 {
+    font-size: 3vw;
+    font-weight: 400;
+    line-height: 3.5vw;
+    color: white;
+    margin: 2vw 0 2.5vw;
+}
+h1 span {
+    color: #e63876;
+    font-weight: 700;
+}
+
+.login-form {
+    padding: 2rem;
+    width: 50vw;
+    height: 48vh;
+    max-width: 90vw;
+    margin: 0 auto 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px dashed #405470;
+    background: white;
+    border-radius: 20px;
+    z-index: 10;
+}
+.input-group {
+    width: 90%;
+    position: relative;
+    margin: 1.2vw 0;
+}
+.input-group input {
+    background: none;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    padding: 0.8vw 1vw;
+    width: 100%;
+    font-family: Montserrat;
+    font-size: 1vw;
+    font-weight: 400;
+    line-height: 1.5vw;
+}
+::placeholder {
+    color: #c4c4c4;
+}
+.input-group img {
+    position: absolute;
+    width: 1.2vw;
+    top: 50%;
+    right: 1vw;
+    transform: translateY(-50%);
+}
+.login-btn {
+    width: 90%;
+    margin: 1.2vw 0;
+    border-radius: 20px;
+    border: none;
+    color: white;
+    background: #405470;
+    padding: 0.7vw 1vw;
+    font-family: Montserrat;
+    font-size: 1vw;
+    font-weight: 400;
+    line-height: 1.5vw;
+}
+.error-text {
+    height: 3vw;
+    opacity: 0;
+    color: #e63876;
+    font-size: 0.8vw;
+    font-weight: 400;
+    line-height: 1.5vw;
+}
+.error-text.active {
+    opacity: 1;
+}
+.forget-pass {
+    font-size: 1vw;
+    font-weight: 400;
+    line-height: 1.5vw;
+    color:#e63876;
+    text-decoration: underline;
+    cursor:pointer;
+}
+.pass-req {
+    width: 90%;
+}
+.pass-req p {
+    color: #939393;
+    text-align: left;
+    font-size: 0.8vw;
+}
+.inactive {
+    display: none !important;
+}
+.hr-group {
+    position: absolute;
+    bottom: 25%;
+    left: 0;
+    z-index: -1;
+}
+hr {
+    height: 0.7vw;
+    width: 100vw;
+    background: #e63876;
+    border: none;
+}
+.num {
+    position: absolute;
+    left: 8vw;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3.2vw;
+    height: 3.2vw;
+    background: #e63876;
+    color: white;
+    border-radius: 50%;
+    font-size: 1.8vw;
+    font-weight: 700;
+    line-height: 3vw;
+    text-align: center;
+}
+@media screen and (max-width: 1440px) {
+    html {
+        font-size: 14px;
+    }
+}
+@media screen and (max-width: 1000px) {
+    html {
+        font-size: 13px;
+    }
+    .logo {
+        width: 12rem;
+        margin: 3.8rem;
+    }
+    .pink-bg-text {
+        font-size: 1.3625rem;
+        padding: 0.325rem 0.625rem;
+        line-height: 1.75rem;
+        margin-top: 0;
+    }
+    h1 {
+        font-size: 2.8rem;
+        line-height: 3.2rem;
+        margin: 2.2rem 0 2.5rem;
+        padding: 0 1rem;
+    }
+    .lab-upload h4 {
+        font-size: 1.8rem;
+        line-height: 2rem;
+    }
+    .lab-upload > img {
+        margin: 2rem 0;
+        width: 6rem;
+    }
+    .lab-upload p {
+        font-size: 1.25rem;
+        line-height: 1.625rem;
+    }
+    .lab-upload button {
+        font-size: 1.25rem;
+        line-height: 1.625rem;
+    }
+    .lab-upload .note {
+        margin-top: 1.625rem;
+        font-size: 0.9rem;
+        line-height: 1.125rem;
+    }
+}
+@media screen and (max-width: 540px) {
+    html {
+        font-size: 12px;
+    }
+    .bg2 {
+        display: none;
+    }
+    .logo {
+        width: 11rem;
+        margin: 3.6rem;
+    }
+    .pink-bg-text {
+        font-size: 1.0625rem;
+        line-height: 1.25rem;
+    }
+    h1 {
+        font-size: 1.8rem;
+        line-height: 2.2rem;
+        margin: 2.2rem 0 2.5rem;
+        padding: 0 1rem;
+    }
+    h1 br {
+        display: none;
+    }
+    .modal-body h2,
+    .modal-body h3 {
+        font-size: 1.7rem;
+        line-height: 2.2rem;
+    }
+    .modal-open .modal {
+        margin-top: 0;
+    }
+    .modal .modal-dialog {
+        width: 90%;
+    }
+    .lab-upload {
+        width: 90%;
+    }
+    .hr-group {
+        display: none;
+    }
+    .lab-upload h4 {
+        font-size: 1.6725rem;
+        line-height: 1.825rem;
+    }
+    .lab-upload > img {
+        margin: 1.825rem 0;
+        width: 6rem;
+    }
+    .lab-upload p {
+        font-size: 1.25rem;
+        line-height: 1.625rem;
+    }
+    .lab-upload button {
+        font-size: 1.25rem;
+        line-height: 1.625rem;
+    }
+    .lab-upload .note {
+        margin-top: 1.625rem;
+        font-size: 0.8725rem;
+        line-height: 1.125rem;
+    }
+}
+
+@media screen and (max-width: 300px) {
+    h1 {
+        font-size: 1.6rem;
+        line-height: 2rem;
+    }
+    .modal-body h2,
+    .modal-body h3 {
+        font-size: 1.5rem;
+        line-height: 2rem;
+    }
+    .lab-upload h4 {
+        font-size: 1.4rem;
+    }
+    .lab-upload > img {
+        margin: 1.825rem 0;
+        width: 5.5rem;
+    }
+}

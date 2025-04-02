@@ -1,0 +1,223 @@
+<AutoPageENS domain="Ensemble" parentpage="UtilEnsHome.csp" pagename="Testing Service - 4 of 4" title="@Ensemble:EnsTestingService@Testing Service">
+<CSP:CLASS INCLUDES="Ensemble,EnsUI">
+
+<SCRIPT LANGUAGE="CACHE" RUNAT="SERVER">
+	Set tDone = $G(%request.Data("DONE",1),0)
+	Set tSessionId = $G(%request.Data("ID",1))
+	If (tDone) {
+		Set tDescription = $$$Text("The results are displayed below.")_"<br>"_$$$Text("Press Done to return to the main page; Press Trace to view a message trace for this test session.")
+	} Else {
+		Set tDescription = $$$Text("Waiting for results...")
+	}
+	Set tTarget = $G(%request.Data("$ID1",1))
+	Set tRequestClass = $G(%request.Data("$ID2",1))
+</SCRIPT>
+
+<html>
+<head>
+<title><csp:text TextId="TestingService4" Domain="Ensemble"></csp:text></title>
+<LINK REL="stylesheet" TYPE="text/css" HREF="/csp/sys/csputils.css" TITLE="Standard Style" >
+
+<style>
+
+table.StatusBar { border: 1px black solid; }
+td.StatusOn 	{ background: blue; }
+td.StatusOff 	{ background: cyan; }
+
+table.StatTable 	{ border: 1px black solid; background: white; }
+table.StatTable td	{ font-size: 0.8em; }
+
+pre.error		{ border: 1px black solid; background: white; padding: 10px; }
+
+span.error 		{ color: red; font-weight: bold; }
+
+</style>
+
+<SCRIPT LANGUAGE="JavaScript">
+
+var timerID = null;
+var counter = 0;
+
+function refreshStatus()
+{
+	if (timerID) {
+		self.clearTimeout(timerID);
+	}
+
+	counter++;
+	var sessionId = self.document.getElementById('SessionId').value;
+	#call(..GetStatus(counter,sessionId,'#(tTarget)#','#(tRequestClass)#'))#
+}
+</SCRIPT>
+
+
+</head>
+<body>
+<table border="0" class="LayoutMain" width="100%" height="100%" cellpadding="0" cellspacing="0">
+<tr height="100%">
+<td class="LayoutContentCol" width="80%" >
+
+<div align="center" class="Text1" style="margin-left:50px;margin-right:50px;" >
+#(tDescription)#<hr>
+</div>
+<div class="Text" style="margin-left:50px;margin-right:50px; ">
+<script language=Cache runat=server>
+	Set tError = $$$Text("An error has occurred")
+	Do {
+		If ('tDone) {
+			Set tSession = "", tErrMsg="", tSC=$$$OK
+		
+			// get results of submit
+			If $zobjclassmethod(tRequestClass,"%Extends","Ens.Util.MessageBodyMethods") {
+				Set tObj = $zobjclassmethod(tRequestClass,"%ProcessSubmit", %request, , .tErrMsg)
+			} ElseIf $zobjclassmethod(tRequestClass,"%Extends","%CSP.Util.AutoForm") {
+				Set tObj = $zobjclassmethod(tRequestClass,"ProcessSubmit", %request, , .tErrMsg)
+			} Else {
+				Set tObj=##class(%CSP.Util.AutoFormDynamic).ProcessSubmit(%request, , .tErrMsg, 0)
+			}
+			If '$IsObject(tObj) {
+				Write $$$Text("Unable to create Request object:")_tErrMsg,!
+				&html<<form><input id="SessionId" type="hidden" value=""></form>>
+				Set tDone=1
+				Quit
+			}
+			Set tSC = tObj.%ValidateObject()
+			If $$$ISERR(tSC) {
+				&html<<br><span class="error">#(tError)#:</span><br>>
+				// get and display escaped error message(s)
+				Do $system.Status.DecomposeStatus(tSC,.err)
+				Set tVal=$ZCVT($G(err(1)),"O","HTML")  For i=2:1:$G(err) Set tVal = tVal _ "<br>"_$C(13,10)_"+<br>"_$C(13,10)_ $ZCVT($G(err(i)),"O","HTML")
+				Write tVal
+				&html<<form><input id="SessionId" type="hidden" value=""></form>>
+				Set tDone=1
+				Quit
+			}
+			// send the request
+			Set tStart = $$$timeUTC
+			Set tSC = ##Class(EnsLib.Testing.Service).SendTestRequest(tTarget, tObj, .tResponse, .tSessionId)
+			If ($$$ISERR(tSC)) {
+				&html<<br><span class="error">#(tError)#:</span><br>>
+				// get and display escaped error message(s)
+				Do $system.Status.DecomposeStatus(tSC,.err)
+				Set tVal=$ZCVT($G(err(1)),"O","HTML")  For i=2:1:$G(err) Set tVal = tVal _ "<br>"_$C(13,10)_"+<br>"_$C(13,10)_ $ZCVT($G(err(i)),"O","HTML")
+				Write tVal
+				&html<<form><input id="SessionId" type="hidden" value=""></form>>
+				Set tDone=1
+				Quit
+			}
+			&html<<form>
+				<input id="SessionId" type="hidden" value="#(tSessionId)#">
+				</form>>
+
+			Set $$$EnsRuntimeAppData("EnsLib.Testing.Service",tSessionId,"start") = tStart
+			Set tTime = "<i>"_$$$Text("Waiting...")_"</i>"
+		}
+		Else {
+			Set tStart = $G($$$EnsRuntimeAppData("EnsLib.Testing.Service",tSessionId,"start"))
+			Set tTime = $G($$$EnsRuntimeAppData("EnsLib.Testing.Service",tSessionId,"time"),"N/A")
+		}
+		Set helpTarget = $$$Text("The Business Operation or Business Process to which the request is sent.")
+		Set helpRequestType = $$$Text("The type of request used for this test session.")
+		Set helpSessionId = $$$Text("The session number used for this test session.")
+		Set helpRequestTime = $$$Text("The time when the Testing Service sent the test message.")
+		Set helpResponseTime =  $$$Text("The time when the Testing Service received a response.")
+		
+		&html<<div align="center"><table border="0" class="StatTable">>
+		&html<<tr><td><b><a title="#(helpTarget)#">#($$$Text("Target:"))#</a></b></td><td>#(tTarget)#</td></tr>>
+		&html<<tr><td><b><a title="#(helpRequestType)#">#($$$Text("Request Type:"))#</a></b></td><td>#(tRequestClass)#</td></tr>>
+		&html<<tr><td><b><a title="#(helpSessionId)#">#($$$Text("Session Id:"))#</a></b></td><td>#(tSessionId)#</td></tr>>
+		&html<<tr><td><b><a title="#(helpRequestTime)#">#($$$Text("Request sent:"))#</a></b></td><td>#(tStart)#</td></tr>>
+		&html<<tr><td><b><a title="#(helpResponseTime)#">#($$$Text("Response received:"))#</a></b></td><td><div id="RcvStatus">#(tTime)#</div></td></tr>>
+
+		&html<<tr><td colspan="2"><div id="StatusBar"></div></td></tr>>
+
+		&html<</table></div>>
+		
+		If (tDone) {
+			If ($G($$$EnsRuntimeAppData("EnsLib.Testing.Service",tSessionId)) = "Error") {
+				// error
+				&html<<br>
+					<div align="center"><span class="error">#($$$LocalizeText("Ensemble","ErrorReceived","An error was received:","ErrorReceived"))#</span></div>
+					<pre class="error">>
+					Do $System.Status.DecomposeStatus($G($$$EnsRuntimeAppData("EnsLib.Testing.Service",tSessionId,"error")),.tErr)
+					Write $ZCVT($G(tErr(1)),"O","HTML")
+				&html<</pre>>
+			}
+			Else {
+				// try to look at response		
+				Set tAnswerOID = $G($$$EnsRuntimeAppData("EnsLib.Testing.Service",tSessionId,"response"))
+				Set tAnswerClassname=$LG(tAnswerOID,1,"Ens.Response")
+				Set tAnswer = $zobjclassmethod($LG(tAnswerOID,1,"Ens.Response"),"%OpenId",$LG(tAnswerOID,2))
+				If ($IsObject(tAnswer)) {
+					&html<<br>
+						<div align="center">#($ZCVT($$$FormatText($$$Text("Response [%1]"),tAnswer.%ClassName(1)),"O","HTML"))#<br><br>>
+						If tAnswer.%Extends("Ens.Util.MessageBodyMethods") {
+							Do tAnswer.%DrawHTMLTable(tAnswer)
+						} ElseIf tAnswer.%Extends("%CSP.Util.AutoForm") {
+							Do tAnswer.DrawHTMLTable(tAnswer)
+						} Else {
+							Do ##class(%CSP.Util.AutoFormDynamic).DrawHTMLTable(tAnswer)
+						}
+					&html<</div>>
+				}
+				ElseIf ('$D($$$EnsRuntimeAppData("EnsLib.Testing.Service",tSessionId,"time"))) {
+					&html<<br><b><div align="center">#($$$LocalizeText("Ensemble","NoResponse","No response was received."))#</div></b><br>>
+				}
+				Else {
+					&html<<br><b><div align="center">#($$$LocalizeText("Ensemble","TargetNoResponse","This target does not provide a response."))#</div></b><br>>
+				}
+			}
+			// kill test data
+			Kill $$$EnsRuntimeAppData("EnsLib.Testing.Service",tSessionId)
+		}
+	} While 0
+	
+</script>
+</div>
+
+<div align="center">
+<table border="0" cellspacing="5" cellpadding="5">
+<tr><td colspan="2"><hr></td></tr>
+<tr><td colspan="2">
+<input id="btnBack" type="button" Domain="Ensemble" TextId="btnBack" value="Back" onclick="self.document.location='#(..Link("UtilEnsTestingService2.csp?TARGET="_tTarget_"&REQUEST="_tRequestClass))#';">
+&nbsp;<input type="button" Domain="Ensemble" TextId="btnDone" value="Done" onclick="self.document.location='#(..Link("UtilEnsHome.csp"))#';">
+&nbsp;<input type="button" Domain="Ensemble" TextId="Trace" value="Trace" onclick="self.document.location='#(..Link("UtilEnsMsgTrace.csp?$ID1="_tSessionId))#';">
+</td></tr>
+</table>
+</div>
+
+</td></tr></table>
+
+<csp:IF condition="'tDone">
+<script language="javascript">
+	timerID = self.setTimeout("refreshStatus()",250);
+</script>
+</csp:IF>
+
+</body>
+
+<SCRIPT LANGUAGE="Cache" METHOD="GetStatus" RUNAT="server" ARGUMENTS="pCounter,pSessionId,pTarget,pRequest">
+	// max number of times to wait
+	Set tMaxCount = 50
+	Set tPct = (pCounter/tMaxCount) * 100
+	
+	Set tBar = "<table class=""StatusBar"" border=""0"" cellpadding=""0"" cellspacing=""0"" width=""100%""><tr><td class=""StatusOn"" width=""" _
+				(tPct) _ "%"">&nbsp;</td><td class=""StatusOff"" width=""" _
+				(100-(tPct)) _ "%"">&nbsp;</td></tr></table>"
+
+	&js< stat = CSPPage.document.getElementById('StatusBar');
+		stat.innerHTML = '#(tBar)#';
+	>
+	If (pCounter < tMaxCount) && ('$D($$$EnsRuntimeAppData("EnsLib.Testing.Service",pSessionId,"response"))) {
+		&js<
+			timerID = CSPPage.setTimeout("refreshStatus()",500);
+		>
+	} Else {
+		&js<
+			CSPPage.document.location='#(..Link("UtilEnsTestingService3.csp?$ID1="_pTarget_"&$ID2="_pRequest_"&DONE=1&ID="_pSessionId))#';
+		>
+	}
+	Quit
+</SCRIPT>
+
+</html>

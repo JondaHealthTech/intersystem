@@ -1,0 +1,22 @@
+# This file defines the Ensemble SearchTable Schema studio assist database
+
+# Define the prefix mapping
+!prefix-mapping:ensST:http://www.intersystems.com/EnsSearchTable
+
+# Set the default namespace to EnsSearchTable
+!default-namespace:http://www.intersystems.com/EnsSearchTable
+
+# Set the default prefix for element defintions that follow
+!default-prefix:ensST
+
+/#Items
+
+Items/#Item
+
+Item|DocType
+Item|PropName
+Item|PropType@enum:!,String:CaseSensitive,String:CaseInsensitive,Integer,Numeric,Boolean,DateTime:ODBC,DateTime:HL7
+Item|StoreNulls@enum:!,true,false
+Item|Supersedable@enum:!,true,false
+Item|IndexType@enum:!,None,Standard,Bitmap
+Item|Unselective@enum:!,true,false

@@ -1,0 +1,84 @@
+<html>
+<head>
+
+<!-- Put your page Title here -->
+<title>	Cache Server Page </title>
+ 	<style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+
+</head>
+
+<body onload="init()">
+  <table>
+    <thead>
+      <tr>
+        <th>Serial</th>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Unit</th>
+        <th>Low Range</th>
+        <th>High Range</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody id="table-body">
+
+    </tbody>
+  </table>
+</body>
+<script type="text/javascript">
+function init(){
+	#server(..cFillRows())#
+}
+
+function appendRow(serial, name, value, unit, loRange, hiRange, date){
+	let tbody = document.getElementById('table-body');
+	const row = document.createElement('tr');
+	
+	let args = [serial, name,value,unit,loRange,hiRange,date];
+	
+	args.forEach(arg =>{
+		const cell = document.createElement('td');
+		cell.textContent = arg;
+    	row.appendChild(cell);
+	})
+
+	tbody.appendChild(row);
+
+}
+
+
+</script>
+
+<script language="cache" method="cFillRows" arguments="">
+	for index=1:1:500 {
+		if ($d(^AIDATA(index)) = 10){
+			s name = $g(^AIDATA(index, "name"))
+			s unit = $g(^AIDATA(index, "unit"))
+			s value = $g(^AIDATA(index, "value"))
+			s loRange = $g(^AIDATA(index, "loRange"))
+			s hiRange = $g(^AIDATA(index, "hiRange"))
+			s date = $g(^AIDATA(index, "date"))
+			
+			&js<appendRow(`#(index)#`,`#(name)#`,`#(value)#`,`#(unit)#`,`#(loRange)#`,`#(hiRange)#`,`#(date)#`)>
+			
+		}
+	}
+	
+</script>
+
+</html>

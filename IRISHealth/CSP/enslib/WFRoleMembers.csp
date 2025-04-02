@@ -1,0 +1,14 @@
+<!--
+Workflow: Workflow users
+-->
+
+<AutoPage domain="Ensemble" pagename="Workflow Users" parentpage="WFRoles.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Workflow Users</Text>
+</Pane>
+
+<Pane name="Info" type="EnsLib.Workflow.UI.RoleMembersDetailPane">
+</Pane>
+
+</AutoPage>

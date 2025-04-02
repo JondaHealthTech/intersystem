@@ -1,0 +1,639 @@
+Start of IRIS initialization at 11:13:04AM on Mar 26, 2025
+IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST
+Locale setting is enuw
+Source directory is c:\intersystems\iris\dist\install\misc\
+
+Loading system routines
+%SYS.AMS.SQL        %SYS.API  %SYS.Access         %SYS.AppMetadataStack.SQL.0
+%SYS.AppMetadataStack.SQL.1   %SYS.Audit.0        %SYS.Audit.1
+%SYS.Audit.G1       %SYS.AuditString.0  %SYS.AuditString.1  %SYS.AuditString.G1
+%SYS.BINDSRV        %SYS.BackgroundTask.0         %SYS.BackgroundTask.1
+%SYS.Bench.Run.0    %SYS.Bench.Run.1    %SYS.Bench.Test.0   %SYS.Bench.Test.1
+%SYS.BigData.ECP    %SYS.CDIRECT        %SYS.CONFIG         %SYS.Capture
+%SYS.ClusterInfo.0  %SYS.ClusterInfo.1  %SYS.DATABASE       %SYS.DBSRV
+%SYS.DOCDB          %SYS.DatabaseQuery.0          %SYS.DatabaseQuery.1
+%SYS.Date.SlidingWindow.0     %SYS.Date.SlidingWindow.1     %SYS.Debug
+%SYS.DeepSee        %SYS.DynamicQuery   %SYS.DynamicStatement
+%SYS.Ensemble.0     %SYS.Ensemble.1     %SYS.Execute.0      %SYS.Execute.1
+%SYS.Execute.G1     %SYS.FILE %SYS.GCREATE        %SYS.GD   %SYS.GIFMSM
+%SYS.GLO  %SYS.GXLINF1        %SYS.GXLINFO        %SYS.Gateway
+%SYS.GlobalQuery.0  %SYS.GlobalQuery.1  %SYS.ISCLOG
+%SYS.Journal.BitSetRecord.0   %SYS.Journal.BitSetRecord.1   %SYS.Journal.File.0
+%SYS.Journal.File.1 %SYS.Journal.History.0        %SYS.Journal.History.1
+%SYS.Journal.Marker.0         %SYS.Journal.Marker.1
+%SYS.Journal.Record.0         %SYS.Journal.Record.1
+%SYS.Journal.SetKillRecord.0  %SYS.Journal.SetKillRecord.1
+%SYS.Journal.System.0         %SYS.Journal.System.1
+%SYS.Journal.Transaction.0    %SYS.Journal.Transaction.1
+%SYS.Journal.VectorSetKillRecord.0      %SYS.Journal.VectorSetKillRecord.1
+%SYS.LCBINDSRV      %SYS.LDAP %SYS.LDAP.0         %SYS.LDAP.1
+%SYS.LICENSE        %SYS.LockQuery.0    %SYS.LockQuery.1    %SYS.MACHINE
+%SYS.MFT.Connection.Base.0    %SYS.MFT.Connection.Base.1
+%SYS.MFT.Connection.Box.0     %SYS.MFT.Connection.Box.1
+%SYS.MFT.Connection.Dropbox.0 %SYS.MFT.Connection.Dropbox.1
+%SYS.MFT.Connection.Kiteworks.0         %SYS.MFT.Connection.Kiteworks.1
+%SYS.ML.AutoML.Configuration.0          %SYS.ML.AutoML.Configuration.1
+%SYS.ML.Configuration.0       %SYS.ML.Configuration.1
+%SYS.ML.DataRobot.Configuration.0       %SYS.ML.DataRobot.Configuration.1
+%SYS.ML.H2O.Configuration.0   %SYS.ML.H2O.Configuration.1
+%SYS.ML.PMML.Configuration.0  %SYS.ML.PMML.Configuration.1  %SYS.MONLBL
+%SYS.MPP  %SYS.MQTT.Helper.0  %SYS.MQTT.Helper.1  %SYS.MV
+%SYS.MVACTIVELISTS.0          %SYS.MVACTIVELISTS.1          %SYS.MVC  %SYS.MVED
+%SYS.MVED2          %SYS.MVF  %SYS.MVGC %SYS.MVI  %SYS.MVIM %SYS.MVIM2
+%SYS.MVQ  %SYS.MVSP %SYS.MVSP2          %SYS.MVSP3          %SYS.MVUE
+%SYS.Maint.Bitmap.0 %SYS.Maint.Bitmap.1 %SYS.Maint.BitmapMessage.0
+%SYS.Maint.BitmapMessage.1    %SYS.Maint.BitmapResults.0
+%SYS.Maint.BitmapResults.1    %SYS.Monitor.0      %SYS.Monitor.1
+%SYS.Monitor.AbstractDashboard.0        %SYS.Monitor.AbstractDashboard.1
+%SYS.Monitor.AbstractNotification.0     %SYS.Monitor.AbstractNotification.1
+%SYS.Monitor.AbstractNotificationFilter.0
+%SYS.Monitor.AbstractNotificationFilter.1         %SYS.Monitor.AbstractSensor.0
+%SYS.Monitor.AbstractSensor.1 %SYS.Monitor.AbstractSubscriber.0
+%SYS.Monitor.AbstractSubscriber.1       %SYS.Monitor.AppMonSensor.0
+%SYS.Monitor.AppMonSensor.1   %SYS.Monitor.ComponentClass.0
+%SYS.Monitor.ComponentClass.1 %SYS.Monitor.Control.0
+%SYS.Monitor.Control.1        %SYS.Monitor.Email.0
+%SYS.Monitor.Email.1          %SYS.Monitor.Reading.0
+%SYS.Monitor.Reading.1        %SYS.Monitor.SAM.Abstract.0
+%SYS.Monitor.SAM.Abstract.1   %SYS.Monitor.SampleSubscriber.0
+%SYS.Monitor.SampleSubscriber.1         %SYS.Monitor.Sensor.0
+%SYS.Monitor.Sensor.1         %SYS.Monitor.SensorReading.0
+%SYS.Monitor.SensorReading.1  %SYS.NAMESPACE      %SYS.NLS  %SYS.NLS.Device.0
+%SYS.NLS.Device.1   %SYS.NLS.Format.0   %SYS.NLS.Format.1   %SYS.NLS.Locale.0
+%SYS.NLS.Locale.1   %SYS.NLS.Table.0    %SYS.NLS.Table.1    %SYS.NOJRN
+%SYS.Namespace.0    %SYS.Namespace.1    %SYS.OAuth2.AccessToken.0
+%SYS.OAuth2.AccessToken.1     %SYS.OAuth2.Authorization.0
+%SYS.OAuth2.Authorization.1   %SYS.OAuth2.Registration.0
+%SYS.OAuth2.Registration.1    %SYS.OAuth2.Request.0
+%SYS.OAuth2.Request.1         %SYS.OAuth2.Validation.0
+%SYS.OAuth2.Validation.1      %SYS.OBJECTS
+%SYS.OpenAM.IdentityServices.0          %SYS.OpenAM.IdentityServices.1
+%SYS.OpenAM.IdentityServices.G1         %SYS.PATCH          %SYS.PMODE
+%SYS.PTools         %SYS.PTools.FileCreation.0    %SYS.PTools.FileCreation.1
+%SYS.PTools.ModuleName.0      %SYS.PTools.ModuleName.1
+%SYS.PTools.ModuleName.G1     %SYS.PTools.SQLBenchMarkQueries.0
+%SYS.PTools.SQLBenchMarkQueries.1
+%SYS.PTools.SQLBenchMarkQueriesPValues.0
+%SYS.PTools.SQLBenchMarkQueriesPValues.1
+%SYS.PTools.SQLBenchMarkResults.0       %SYS.PTools.SQLBenchMarkResults.1
+%SYS.PTools.SQLQuery.0        %SYS.PTools.SQLQuery.1
+%SYS.PTools.SQLStats.0        %SYS.PTools.SQLStats.1
+%SYS.PTools.SQLUtilResults.0  %SYS.PTools.SQLUtilResults.1
+%SYS.PTools.SQLUtilities.0    %SYS.PTools.SQLUtilities.1    %SYS.PTools.Stats.0
+%SYS.PTools.Stats.1 %SYS.PTools.StatsSQL.0        %SYS.PTools.StatsSQL.1
+%SYS.PTools.StatsSQLParameters.0        %SYS.PTools.StatsSQLParameters.1
+%SYS.PTools.StatsSQLSQLTextRaw.0        %SYS.PTools.StatsSQLSQLTextRaw.1
+%SYS.PTools.UtilSQLAnalysis.0 %SYS.PTools.UtilSQLAnalysis.1
+%SYS.PTools.UtilSQLAnalysisDB.0         %SYS.PTools.UtilSQLAnalysisDB.1
+%SYS.PTools.UtilSQLStatements.0         %SYS.PTools.UtilSQLStatements.1
+%SYS.PTools.UtilSQLStatementsSQLTextRaw.0
+%SYS.PTools.UtilSQLStatementsSQLTextRaw.1         %SYS.PTools2
+%SYS.PToolsDEP      %SYS.PToolsUtil     %SYS.PhoneProviders.0
+%SYS.PhoneProviders.1         %SYS.PhoneProviders.G1
+%SYS.Portal.Resources.0       %SYS.Portal.Resources.1       %SYS.Portal.Users.0
+%SYS.Portal.Users.1 %SYS.ProcessQuery.0 %SYS.ProcessQuery.1 %SYS.Python.0
+%SYS.Python.1       %SYS.Python.ArrayTraits.0     %SYS.Python.ArrayTraits.1
+%SYS.Python.IteratorHelper.0  %SYS.Python.IteratorHelper.1
+%SYS.Python.ListTraits.0      %SYS.Python.ListTraits.1      %SYS.Python.SQL.0
+%SYS.Python.SQL.1   %SYS.Python.SQLResultSet.0    %SYS.Python.SQLResultSet.1
+%SYS.Python.SQLStatement.0    %SYS.Python.SQLStatement.1
+%SYS.Python.StreamIterator.0  %SYS.Python.StreamIterator.1
+%SYS.Python.StreamTraits.0    %SYS.Python.StreamTraits.1
+%SYS.Python.Traits.0          %SYS.Python.Traits.1          %SYS.Python.Utils.0
+%SYS.Python.Utils.1 %SYS.Python.WSGI.0  %SYS.Python.WSGI.1  %SYS.PythonTrait.0
+%SYS.PythonTrait.1  %SYS.QRCode.0       %SYS.QRCode.1       %SYS.Queue.0
+%SYS.REST.0         %SYS.REST.1         %SYS.RMSession.0    %SYS.RMSession.1
+%SYS.ResultSet      %SYS.SECURITY       %SYS.SECURITY1      %SYS.SERVER
+%SYS.SHARDSRV       %SYS.SQLObjectQuery.0         %SYS.SQLObjectQuery.1
+%SYS.SQLRTUMAKER    %SYS.SQLSEC         %SYS.SQLSRV
+%SYS.SQLStatementCache.0      %SYS.SQLStatementCache.1      %SYS.SQLStreamSRV
+%SYS.SecurityContextToken.0   %SYS.SecurityContextToken.1   %SYS.Stacker.0
+%SYS.Stacker.1      %SYS.Studio.DocumentHistory.0 %SYS.Studio.DocumentHistory.1
+%SYS.System.0       %SYS.System.1       %SYS.TCPProvider    %SYS.Task.0
+%SYS.Task.1         %SYS.Task.BackupAllDatabases.0
+%SYS.Task.BackupAllDatabases.1
+%SYS.Task.BackupCumulativeDatabaseList.0
+%SYS.Task.BackupCumulativeDatabaseList.1
+%SYS.Task.BackupFullDatabaseList.0      %SYS.Task.BackupFullDatabaseList.1
+%SYS.Task.BackupIncrementDatabaseList.0 %SYS.Task.BackupIncrementDatabaseList.1
+%SYS.Task.BackupSuper.0       %SYS.Task.BackupSuper.1
+%SYS.Task.CheckLogging.0      %SYS.Task.CheckLogging.1
+%SYS.Task.CleanSourceJournal.0          %SYS.Task.CleanSourceJournal.1
+%SYS.Task.Config.0  %SYS.Task.Config.1  %SYS.Task.DeepSeeBuild.0
+%SYS.Task.DeepSeeBuild.1      %SYS.Task.DeepSeeSynchronize.0
+%SYS.Task.DeepSeeSynchronize.1          %SYS.Task.Definition.0
+%SYS.Task.Definition.1        %SYS.Task.Definition.G1
+%SYS.Task.DiagnosticReport.0  %SYS.Task.DiagnosticReport.1
+%SYS.Task.FeatureTracker.0    %SYS.Task.FeatureTracker.1    %SYS.Task.History.0
+%SYS.Task.History.1 %SYS.Task.Init.0    %SYS.Task.Init.1
+%SYS.Task.IntegrityCheck.0    %SYS.Task.IntegrityCheck.1
+%SYS.Task.InventoryScan.0     %SYS.Task.InventoryScan.1
+%SYS.Task.Password.0          %SYS.Task.PurgeAudit.0
+%SYS.Task.PurgeAudit.1        %SYS.Task.PurgeBackupLog.0
+%SYS.Task.PurgeBackupLog.1    %SYS.Task.PurgeErrorsAndLogs.0
+%SYS.Task.PurgeErrorsAndLogs.1          %SYS.Task.PurgeJournal.0
+%SYS.Task.PurgeJournal.1      %SYS.Task.PurgeTaskHistory.0
+%SYS.Task.PurgeTaskHistory.1  %SYS.Task.PurgeZENReports.0
+%SYS.Task.PurgeZENReports.1   %SYS.Task.RunLegacyTask.0
+%SYS.Task.RunLegacyTask.1     %SYS.Task.SecurityScan.0
+%SYS.Task.SecurityScan.1      %SYS.Task.ShadowPurge.0
+%SYS.Task.ShadowPurge.1       %SYS.Task.SwitchJournal.0
+%SYS.Task.SwitchJournal.1     %SYS.TaskEmailOnCompletion.0
+%SYS.TaskEmailOnCompletion.1  %SYS.TaskEmailOnError.0
+%SYS.TaskEmailOnError.1       %SYS.TaskEmailOnExpiration.0
+%SYS.TaskEmailOnExpiration.1  %SYS.TaskSuper.0    %SYS.TaskSuper.1
+%SYS.TokenAuth.0    %SYS.TokenAuth.1    %SYS.Trace.0        %SYS.Trace.1
+%SYS.UNITTEST       %SYS.Wcdu %SYS.Wgr  %SYS.Wgs  %SYS.WhitelistUtils.0
+%SYS.WhitelistUtils.1         %SYS.WorkQueueMgr   %SYS.WorkQueueMgr1
+%SYS.X509Credentials.0        %SYS.X509Credentials.1
+%SYS.X509Credentials.G1       %SYS.XSQL %SYS.ZENReportExcelExporter.0
+%SYS.ZENReportExcelExporter.1 %SYS.ZENReportPDFMerge.0
+%SYS.ZENReportPDFMerge.1      %SYS.ZENReportServer.0
+%SYS.ZENReportServer.1        %SYS.ZenReportLockControl     %SYS.cspServer
+%SYS.cspServer2     %SYS.cspServer3     %SYS.ikcheck        %SYS.nodejsServer
+ARCHIVE   BACKUP    BITMAPSCAN          BLKCHANG  BLKCOL    BLKDUMP   BROADCAS
+Backup.General.0    Backup.General.1    Backup.Online.0     Backup.Online.1
+Backup.ShardedCluster.0       Backup.ShardedCluster.1       Backup.Task.0
+Backup.Task.1       Buttons   CKEY      CLNDMN    COLLATE   COMMCTRL
+CSPButtons          CSPGWMGR  Config.Archives.0   Config.Archives.1
+Config.Archives.G1  Config.CPF.0        Config.CPF.1        Config.CPF.G1
+Config.Cluster.0    Config.Cluster.1    Config.ComPorts.0   Config.ComPorts.1
+Config.CommentList.0          Config.CommentList.1
+Config.CommonMapMethods.0     Config.CommonMapMethods.1
+Config.CommonMapMethods.G1    Config.CommonMapProperties.0
+Config.CommonMapProperties.1  Config.CommonMethods.0
+Config.CommonMethods.1        Config.CommonMultipleMethods.0
+Config.CommonMultipleMethods.1          Config.CommonMultipleMethods.G1
+Config.CommonProperties.0     Config.CommonProperties.1
+Config.CommonSingleMethods.0  Config.CommonSingleMethods.1
+Config.CommonSingleMethods.G1 Config.ConfigFile.0 Config.ConfigFile.1
+Config.Configuration.0        Config.Configuration.1
+Config.Conversions.0          Config.Conversions.1          Config.DBName.0
+Config.DBName.1     Config.Databases.0  Config.Databases.1  Config.Databases.G1
+Config.Debug.0      Config.Debug.1      Config.DeviceSubTypes.0
+Config.DeviceSubTypes.1       Config.Devices.0    Config.Devices.1
+Config.ECP.0        Config.ECP.1        Config.ECPServers.0 Config.ECPServers.1
+Config.Gateways.0   Config.Gateways.1   Config.GenericMapMethods.0
+Config.GenericMapMethods.1    Config.GenericMapMethods.G1
+Config.GenericMapProperties.0 Config.GenericMapProperties.1 Config.Host.0
+Config.Host.1       Config.Host.G1      Config.IO.0         Config.IO.1
+Config.Journal.0    Config.Journal.1    Config.LicenseServers.0
+Config.LicenseServers.1       Config.Logging.0    Config.Logging.1
+Config.MagTapes.0   Config.MagTapes.1   Config.Map.0        Config.Map.1
+Config.MapGlobals.0 Config.MapGlobals.1 Config.MapMirrors.0 Config.MapMirrors.1
+Config.MapPackages.0          Config.MapPackages.1
+Config.MapRoutines.0          Config.MapRoutines.1          Config.MapShadows.0
+Config.MapShadows.1 Config.MirrorMember.0         Config.MirrorMember.1
+Config.Mirrors.0    Config.Mirrors.1    Config.Miscellaneous.0
+Config.Miscellaneous.1        Config.Monitor.0    Config.Monitor.1
+Config.NLS.Locales.0          Config.NLS.Locales.1
+Config.NLS.LocalesXLTTables.0 Config.NLS.LocalesXLTTables.1
+Config.NLS.SubTables.0        Config.NLS.SubTables.1
+Config.NLS.SubTablesFromTo.0  Config.NLS.SubTablesFromTo.1  Config.NLS.Tables.0
+Config.NLS.Tables.1 Config.NLS.TablesModes.0      Config.NLS.TablesModes.1
+Config.NLS.TablesPatternRanges.0        Config.NLS.TablesPatternRanges.1
+Config.NLS.TablesXYActions.0  Config.NLS.TablesXYActions.1  Config.NSName.0
+Config.NSName.1     Config.Namespaces.0 Config.Namespaces.1
+Config.Namespaces.G1          Config.SQL.0        Config.SQL.1
+Config.Shadows.0    Config.Shadows.1    Config.SqlSysDatatypes.0
+Config.SqlSysDatatypes.1      Config.SqlUserDatatypes.0
+Config.SqlUserDatatypes.1     Config.Startup.0    Config.Startup.1
+Config.Telnet.0     Config.Telnet.1     Config.WinStartup.0 Config.WinStartup.1
+Config.WorkQueues.0 Config.WorkQueues.1 Config.WorkQueues.G1
+Config.config.0     Config.config.1     CryptoTest          DATABASE  DATABASE1
+DATACHECK DATAMOVE  DBACK     DBACKA    DBACKB    DBACKC    DBACKP    DBREST
+DBREST2   DBRESTP   DBRTEXT   DBRTEXT1  DBSIZE    DISMOUNT  DMREPAIR  DSET
+DZCVTFILE DataMove.API.0      DataMove.API.1      DataMove.Data.0
+DataMove.Data.1     DataMove.DataCheck.0          DataMove.DataCheck.1
+DataMove.Defaults.0 DataMove.Defaults.1 DeepSee.FeatureGetter.0
+DeepSee.FeatureGetter.1       DeepSeeButtons      ECPBackSvr          ECPClSt
+ECPCliR   ECPCliW   ECPClient ECPRecovery         ECPSvrR   ECPSvrW   ECPWork
+EDITOR    EDITOR1   EDITOR2   EDITOR3   EDITOR4   EMS       ENVIRON
+EncryptionKey       FT.CloudInfoGetter.0          FT.CloudInfoGetter.1
+FT.Collector.0      FT.Collector.1      FT.EmbeddedPythonGetter.0
+FT.EmbeddedPythonGetter.1     FT.EncDBGetter.0    FT.EncDBGetter.1
+FT.FeatureGetter.0  FT.FeatureGetter.1  FT.IdentifyingInfoGetter.0
+FT.IdentifyingInfoGetter.1    FT.LicenseGetter.0  FT.LicenseGetter.1
+FT.MirrorGetter.0   FT.MirrorGetter.1   FT.OSTypeGetter.0   FT.OSTypeGetter.1
+FT.ProcGetter.0     FT.ProcGetter.1     FT.ReportGetter.0   FT.ReportGetter.1
+GBLOCKCOPY          GBLOCKCOPY1         GCOMPACT  GETPPGINFO          GLOBAL
+GLOBUFF   GLOREC    GLOSTAT   HALT      INTEGRIT  Integrity
+Inventory.Component.0         Inventory.Component.1
+Inventory.ComponentSet.0      Inventory.ComponentSet.1
+Inventory.DatabaseComponent.0 Inventory.DatabaseComponent.1
+Inventory.DirectoryComponent.0          Inventory.DirectoryComponent.1
+Inventory.FileComponent.0     Inventory.FileComponent.1
+Inventory.Hashable.0          Inventory.Hashable.1
+Inventory.RoutineComponent.0  Inventory.RoutineComponent.1  Inventory.Scan.0
+Inventory.Scan.1    Inventory.Scanner.0 Inventory.Scanner.1 JCONVERT  JOBEXAM
+JOBEXAM2  JOURNAL   JRNARC    JRNCHECK  JRNCLFOR  JRNCLUREST
+JRNCLUREST2         JRNDUMP   JRNINFO   JRNMARK   JRNOPTS   JRNRESTB  JRNRESTC
+JRNRESTC2 JRNRESTCHELP        JRNRESTD  JRNRESTF  JRNRESTO  JRNROLL   JRNSTART
+JRNSTAT   JRNSTOP   JRNSWTCH  JRNUTIL   JRNUTIL2  JRNUTILOLD          JRNWUTL
+JRNZIP    Journal.Restore.0   Journal.Restore.1   LABEL     LANGC00   LANGC01
+LANGC02   LANGC03   LANGC05   LANGC06   LANGC08   LANGC09   LANGC10   LANGC11
+LANGC12   LANGC13   LANGF00   LANGF01   LANGF02   LANGF03   LANGF05   LANGF06
+LANGF08   LANGF09   LANGF10   LANGF11   LANGF12   LANGV00   LANGV01   LANGV02
+LANGV03   LANGV05   LANGV06   LANGV08   LANGV09   LANGV10   LANGV11   LANGZDEF
+LANGZINST LEGACYNETWORK       LMFMON    LOCKTAB   LOGDMN    MATH      MIRROR
+MIRRORCOMM          MIRRORCTL MIRRORMGR MIS1      MIS2      MIS3      MIS4
+MIS5      MONHEALTHMGR        MONITOR   MONMGR    MOUNT     MSU
+Monitor.Sample.0    Monitor.Sample.1    Monitor.Sample.G1   MonitorTools.SNMP.0
+MonitorTools.SNMP.1 NETBENCH  NETDATA   NETWORK   NLS       NLS1      NLS2
+NLSCOMP   NLSLOAD   NSPACTIVATE         NSPMAP    NSPUTIL
+Net.Provision.Installer.0     Net.Provision.Installer.1
+Net.Provision.Installer.G1    OAuth2.AccessToken.0
+OAuth2.AccessToken.1          OAuth2.AccessTokenResponseProperties.0
+OAuth2.AccessTokenResponseProperties.1  OAuth2.Client.0     OAuth2.Client.1
+OAuth2.Client.Metadata.0      OAuth2.Client.Metadata.1      OAuth2.Endpoint.0
+OAuth2.Endpoint.1   OAuth2.JWTServer.0  OAuth2.JWTServer.1  OAuth2.Metadata.0
+OAuth2.Metadata.1   OAuth2.Metadata.G1  OAuth2.PostLogoutRedirect.0
+OAuth2.PostLogoutRedirect.1   OAuth2.Response.0   OAuth2.Response.1
+OAuth2.Server.AccessToken.0   OAuth2.Server.AccessToken.1
+OAuth2.Server.Auth.0          OAuth2.Server.Auth.1
+OAuth2.Server.Client.0        OAuth2.Server.Client.1
+OAuth2.Server.Configuration.0 OAuth2.Server.Configuration.1
+OAuth2.Server.Introspection.0 OAuth2.Server.Introspection.1
+OAuth2.Server.JWTid.0         OAuth2.Server.JWTid.1
+OAuth2.Server.Logout.0        OAuth2.Server.Logout.1
+OAuth2.Server.Metadata.0      OAuth2.Server.Metadata.1
+OAuth2.Server.OpenID.0        OAuth2.Server.OpenID.1
+OAuth2.Server.REST.0          OAuth2.Server.REST.1
+OAuth2.Server.Registration.0  OAuth2.Server.Registration.1
+OAuth2.Server.Session.0       OAuth2.Server.Session.1
+OAuth2.Server.Token.0         OAuth2.Server.Token.1
+OAuth2.Server.Userinfo.0      OAuth2.Server.Userinfo.1
+OAuth2.ServerDefinition.0     OAuth2.ServerDefinition.1
+OAuth2.SessionEvents.0        OAuth2.SessionEvents.1        ODT       OPER
+PATROL    PERFMON   PERFSAMPLE          PKI       PKI.CAClient.0
+PKI.CAClient.1      PKI.CAServer.0      PKI.CAServer.1
+PKI.CAServer.GetCertificate.0 PKI.CAServer.GetCertificate.1
+PKI.CAServer.ListCertificates.0         PKI.CAServer.ListCertificates.1
+PKI.CAServer.SubmitCSR.0      PKI.CAServer.SubmitCSR.1      PKI.CAServerSoap.0
+PKI.CAServerSoap.1  PKI.CAServerSoap.GetCertificate.0
+PKI.CAServerSoap.GetCertificate.1       PKI.CAServerSoap.ListCertificates.0
+PKI.CAServerSoap.ListCertificates.1     PKI.CAServerSoap.SubmitCSR.0
+PKI.CAServerSoap.SubmitCSR.1  PKI.CSR.0 PKI.CSR.1 PKI.Certificate.0
+PKI.Certificate.1   PREFETCH  PRIO      PROFILE   RCVRYDMN  RECEIVE   RECPRI
+REDEBUG   RELBL     REPAIR    RESJOB    ROLLBAC   ROLLBACK
+Report.ExternalUser.0         Report.ExternalUser.1         SECURITY  SECURITY1
+SECURITY2 SETQUOTA  SHADOW    SHDWCBLK  SHDWCLI   SHDWINFO  SHDWSBLK  SHDWSRV
+SHDWSTAT  SHDWUTIL  SHDWX     SHUTDOWN  SNMP      SNMPENS   SNMPTC    SS
+SSVNGLOBAL          SSVNJOB   SSVNLOCK  SSVNROUTINE         ST        START
+STRTENQ   STU       STU1      STURECOV  SWSET     SYS.Agent.0
+SYS.Agent.1         SYS.ApplicationError.0        SYS.ApplicationError.1
+SYS.ArchiveManager.0          SYS.ArchiveManager.1          SYS.Clone.0
+SYS.Clone.1         SYS.Cluster.0       SYS.Cluster.1       SYS.Compatibility.0
+SYS.Compatibility.1 SYS.Container.0     SYS.Container.1     SYS.DLM.0 SYS.DLM.1
+SYS.DLMLockModes.0  SYS.DLMLockModes.1  SYS.DataCheck.Configuration.0
+SYS.DataCheck.Configuration.1 SYS.DataCheck.ConfigurationDBXMap.0
+SYS.DataCheck.ConfigurationDBXMap.1     SYS.DataCheck.Destination.0
+SYS.DataCheck.Destination.1   SYS.DataCheck.GlobalReference.0
+SYS.DataCheck.GlobalReference.1         SYS.DataCheck.LocalDatabase.0
+SYS.DataCheck.LocalDatabase.1 SYS.DataCheck.LogEntry.0
+SYS.DataCheck.LogEntry.1      SYS.DataCheck.Phase.0
+SYS.DataCheck.Phase.1         SYS.DataCheck.PhaseCheck.0
+SYS.DataCheck.PhaseCheck.1    SYS.DataCheck.PhaseIdle.0
+SYS.DataCheck.PhaseIdle.1     SYS.DataCheck.PhaseRecheckDiscrepancies.0
+SYS.DataCheck.PhaseRecheckDiscrepancies.1         SYS.DataCheck.PhaseStop.0
+SYS.DataCheck.PhaseStop.1     SYS.DataCheck.Query.0
+SYS.DataCheck.Query.1         SYS.DataCheck.RangeList.0
+SYS.DataCheck.RangeList.1     SYS.DataCheck.RangeState.0
+SYS.DataCheck.RangeState.1    SYS.DataCheck.RunParameters.0
+SYS.DataCheck.RunParameters.1 SYS.DataCheck.RunParametersGlobalSelectionMask.0
+SYS.DataCheck.RunParametersGlobalSelectionMask.1  SYS.DataCheck.Source.0
+SYS.DataCheck.Source.1        SYS.DataCheck.StateReason.0
+SYS.DataCheck.StateReason.1   SYS.DataCheck.Statistics.0
+SYS.DataCheck.Statistics.1    SYS.DataCheck.System.0
+SYS.DataCheck.System.1        SYS.DataCheck.SystemName.0
+SYS.DataCheck.SystemName.1    SYS.DataCheck.Workflow.0
+SYS.DataCheck.Workflow.1      SYS.Database.0      SYS.Database.1
+SYS.Database.BackgroundDefragment.0     SYS.Database.BackgroundDefragment.1
+SYS.Database.BackgroundFileCompact.0    SYS.Database.BackgroundFileCompact.1
+SYS.ECP.0 SYS.ECP.1 SYS.EnsMetrics.0    SYS.EnsMetrics.1
+SYS.History.Adaptor.0         SYS.History.Adaptor.1         SYS.History.Daily.0
+SYS.History.Daily.1 SYS.History.DailyDB.0         SYS.History.DailyDB.1
+SYS.History.DailyPerf.0       SYS.History.DailyPerf.1
+SYS.History.DailySys.0        SYS.History.DailySys.1
+SYS.History.DailyWD.0         SYS.History.DailyWD.1
+SYS.History.Database.0        SYS.History.Database.1
+SYS.History.Hourly.0          SYS.History.Hourly.1
+SYS.History.HourlyDB.0        SYS.History.HourlyDB.1
+SYS.History.HourlyPerf.0      SYS.History.HourlyPerf.1
+SYS.History.HourlySys.0       SYS.History.HourlySys.1
+SYS.History.HourlyWD.0        SYS.History.HourlyWD.1
+SYS.History.PerfData.0        SYS.History.PerfData.1
+SYS.History.PerfDataWD.0      SYS.History.PerfDataWD.1
+SYS.History.Performance.0     SYS.History.Performance.1
+SYS.History.Projection.0      SYS.History.Projection.1
+SYS.History.SharedMemoryData.0          SYS.History.SharedMemoryData.1
+SYS.History.SharedMemoryDataSMID.0      SYS.History.SharedMemoryDataSMID.1
+SYS.History.SharedMemoryUsage.0         SYS.History.SharedMemoryUsage.1
+SYS.History.SysData.0         SYS.History.SysData.1
+SYS.History.SysDataDB.0       SYS.History.SysDataDB.1
+SYS.History.SystemUsage.0     SYS.History.SystemUsage.1
+SYS.History.UserAbstract.0    SYS.History.UserAbstract.1
+SYS.History.WriteDaemon.0     SYS.History.WriteDaemon.1     SYS.ICM.0 SYS.ICM.1
+SYS.Lock.0          SYS.Lock.1          SYS.LogDmn.0        SYS.LogDmn.1
+SYS.LogDmn.Manifest.Event.0   SYS.LogDmn.Manifest.Event.1
+SYS.LogDmn.Manifest.Events.0  SYS.LogDmn.Manifest.Events.1
+SYS.LogDmn.Manifest.Facility.0          SYS.LogDmn.Manifest.Facility.1
+SYS.Metrics.0       SYS.Metrics.1       SYS.Mirror.0        SYS.Mirror.1
+SYS.MirrorConfiguration.0     SYS.MirrorConfiguration.1
+SYS.MirrorDejournal.0         SYS.MirrorDejournal.1
+SYS.Mirroring.GetMirroringInformationSoap.0
+SYS.Mirroring.GetMirroringInformationSoap.1
+SYS.Mirroring.GetMirroringInformationSoap.GetDatabaseSizeProperties.0
+SYS.Mirroring.GetMirroringInformationSoap.GetDatabaseSizeProperties.1
+SYS.Mirroring.GetMirroringInformationSoap.GetFailoverMemberInformation.0
+SYS.Mirroring.GetMirroringInformationSoap.GetFailoverMemberInformation.1
+SYS.Mirroring.MirroringWebServices.0    SYS.Mirroring.MirroringWebServices.1
+SYS.Mirroring.MirroringWebServices.GetDatabaseSizeProperties.0
+SYS.Mirroring.MirroringWebServices.GetDatabaseSizeProperties.1
+SYS.Mirroring.MirroringWebServices.GetFailoverMemberInformation.0
+SYS.Mirroring.MirroringWebServices.GetFailoverMemberInformation.1
+SYS.Monitor.Alert.0 SYS.Monitor.Alert.1 SYS.Monitor.DashboardExporter.0
+SYS.Monitor.DashboardExporter.1         SYS.Monitor.DashboardInstaller.0
+SYS.Monitor.DashboardInstaller.1        SYS.Monitor.DashboardSensors.0
+SYS.Monitor.DashboardSensors.1          SYS.Monitor.FeatureTrackerSensor.0
+SYS.Monitor.FeatureTrackerSensor.1      SYS.Monitor.Health.Chart.0
+SYS.Monitor.Health.Chart.1    SYS.Monitor.Health.Control.0
+SYS.Monitor.Health.Control.1  SYS.Monitor.Health.HealthAlert.0
+SYS.Monitor.Health.HealthAlert.1        SYS.Monitor.Health.Period.0
+SYS.Monitor.Health.Period.1   SYS.Monitor.Health.Rule.0
+SYS.Monitor.Health.Rule.1     SYS.Monitor.Health.SensorClass.0
+SYS.Monitor.Health.SensorClass.1        SYS.Monitor.Health.SensorObject.0
+SYS.Monitor.Health.SensorObject.1       SYS.Monitor.Health.Test.0
+SYS.Monitor.Health.Test.1     SYS.Monitor.Interop.Interface.Utils.0
+SYS.Monitor.Interop.Interface.Utils.1   SYS.Monitor.Interop.Interfaces.0
+SYS.Monitor.Interop.Interfaces.1        SYS.Monitor.SAM.Config.0
+SYS.Monitor.SAM.Config.1      SYS.Monitor.SAM.Sensors.0
+SYS.Monitor.SAM.Sensors.1     SYS.Monitor.SAM.Sensors.SQL.0
+SYS.Monitor.SAM.Sensors.SQL.1 SYS.Monitor.SAM.Sensors.WQM.0
+SYS.Monitor.SAM.Sensors.WQM.1 SYS.Monitor.SystemNotify.0
+SYS.Monitor.SystemNotify.1    SYS.Monitor.SystemSensors.0
+SYS.Monitor.SystemSensors.1   SYS.Monitor.SystemSubscriber.0
+SYS.Monitor.SystemSubscriber.1          SYS.Process.0       SYS.Process.1
+SYS.Shadowing.DataSource.0    SYS.Shadowing.DataSource.1
+SYS.Shadowing.Shadow.0        SYS.Shadowing.Shadow.1        SYS.Stats.Buffer.0
+SYS.Stats.Buffer.1  SYS.Stats.Dashboard.0         SYS.Stats.Dashboard.1
+SYS.Stats.Disk.0    SYS.Stats.Disk.1    SYS.Stats.ECPAppSvr.0
+SYS.Stats.ECPAppSvr.1         SYS.Stats.ECPDataSvr.0
+SYS.Stats.ECPDataSvr.1        SYS.Stats.Global.0  SYS.Stats.Global.1
+SYS.Stats.Manager.0 SYS.Stats.Manager.1 SYS.Stats.Resource.0
+SYS.Stats.Resource.1          SYS.Stats.Routine.0 SYS.Stats.Routine.1
+SYS.Stats.WriteDaemon.0       SYS.Stats.WriteDaemon.1       SYS.VSSWriter.0
+SYS.VSSWriter.1     SYS.WSMon.Client.0  SYS.WSMon.Client.1
+SYS.WSMon.Client.CacheEventSink.0       SYS.WSMon.Client.CacheEventSink.1
+SYS.WSMon.Client.EnumBuffer.0 SYS.WSMon.Client.EnumBuffer.1
+SYS.WSMon.Client.EnumDatabase.0         SYS.WSMon.Client.EnumDatabase.1
+SYS.WSMon.Client.EnumProcess.0          SYS.WSMon.Client.EnumProcess.1
+SYS.WSMon.Client.EnumResource.0         SYS.WSMon.Client.EnumResource.1
+SYS.WSMon.Client.EnumWriteDaemon.0      SYS.WSMon.Client.EnumWriteDaemon.1
+SYS.WSMon.Client.EventCancel.0          SYS.WSMon.Client.EventCancel.1
+SYS.WSMon.Client.EventSubscribe.0       SYS.WSMon.Client.EventSubscribe.1
+SYS.WSMon.Client.GetDashboard.0         SYS.WSMon.Client.GetDashboard.1
+SYS.WSMon.Client.GetDisk.0    SYS.WSMon.Client.GetDisk.1
+SYS.WSMon.Client.GetECPAppSvr.0         SYS.WSMon.Client.GetECPAppSvr.1
+SYS.WSMon.Client.GetECPDataSvr.0        SYS.WSMon.Client.GetECPDataSvr.1
+SYS.WSMon.Client.GetGlobal.0  SYS.WSMon.Client.GetGlobal.1
+SYS.WSMon.Client.GetRoutine.0 SYS.WSMon.Client.GetRoutine.1
+SYS.WSMon.Client.GetSystem.0  SYS.WSMon.Client.GetSystem.1
+SYS.WSMon.EventSink.0         SYS.WSMon.EventSink.1
+SYS.WSMon.EventSink.CacheEventSink.0    SYS.WSMon.EventSink.CacheEventSink.1
+SYS.WSMon.Service.0 SYS.WSMon.Service.1 SYS.WSMon.Service.EnumBuffer.0
+SYS.WSMon.Service.EnumBuffer.1          SYS.WSMon.Service.EnumDatabase.0
+SYS.WSMon.Service.EnumDatabase.1        SYS.WSMon.Service.EnumProcess.0
+SYS.WSMon.Service.EnumProcess.1         SYS.WSMon.Service.EnumResource.0
+SYS.WSMon.Service.EnumResource.1        SYS.WSMon.Service.EnumWriteDaemon.0
+SYS.WSMon.Service.EnumWriteDaemon.1     SYS.WSMon.Service.EventCancel.0
+SYS.WSMon.Service.EventCancel.1         SYS.WSMon.Service.EventSubscribe.0
+SYS.WSMon.Service.EventSubscribe.1      SYS.WSMon.Service.GetDashboard.0
+SYS.WSMon.Service.GetDashboard.1        SYS.WSMon.Service.GetDisk.0
+SYS.WSMon.Service.GetDisk.1   SYS.WSMon.Service.GetECPAppSvr.0
+SYS.WSMon.Service.GetECPAppSvr.1        SYS.WSMon.Service.GetECPDataSvr.0
+SYS.WSMon.Service.GetECPDataSvr.1       SYS.WSMon.Service.GetGlobal.0
+SYS.WSMon.Service.GetGlobal.1 SYS.WSMon.Service.GetRoutine.0
+SYS.WSMon.Service.GetRoutine.1          SYS.WSMon.Service.GetSystem.0
+SYS.WSMon.Service.GetSystem.1 SYS.WSMon.wsDatabase.0
+SYS.WSMon.wsDatabase.1        SYS.WSMon.wsEvent.0 SYS.WSMon.wsEvent.1
+SYS.WSMon.wsProcess.0         SYS.WSMon.wsProcess.1
+SYS.WSMon.wsResource.0        SYS.WSMon.wsResource.1
+SYS.WSMon.wsSystem.0          SYS.WSMon.wsSystem.1
+SYS.WSMon.wse.Delivery.0      SYS.WSMon.wse.Delivery.1
+SYS.WSMon.wse.EndpointReference.0       SYS.WSMon.wse.EndpointReference.1
+SYS.WSMon.wse.Identifier.0    SYS.WSMon.wse.Identifier.1
+SYS.WSMon.wse.MyRefProp.0     SYS.WSMon.wse.MyRefProp.1
+SYS.WSMon.wse.ReferenceProperties.0     SYS.WSMon.wse.ReferenceProperties.1
+SYS.WSMon.wse.Renew.0         SYS.WSMon.wse.Renew.1
+SYS.WSMon.wse.RenewResponse.0 SYS.WSMon.wse.RenewResponse.1
+SYS.WSMon.wse.Subscribe.0     SYS.WSMon.wse.Subscribe.1
+SYS.WSMon.wse.SubscribeResponse.0       SYS.WSMon.wse.SubscribeResponse.1
+SYS.WSMon.wse.Unsubscribe.0   SYS.WSMon.wse.Unsubscribe.1
+SYS.WSMon.wse.UnsubscribeResponse.0     SYS.WSMon.wse.UnsubscribeResponse.1
+SYS.WSMon.wsen.Enumerate.0    SYS.WSMon.wsen.Enumerate.1
+SYS.WSMon.wsen.EnumerateResponse.0      SYS.WSMon.wsen.EnumerateResponse.1
+SYS.WSMon.wsen.Items.0        SYS.WSMon.wsen.Items.1
+SYS.WSMon.wsen.Pull.0         SYS.WSMon.wsen.Pull.1
+SYS.WSMon.wsen.PullResponse.0 SYS.WSMon.wsen.PullResponse.1
+SYS.WSMon.wsen.Release.0      SYS.WSMon.wsen.Release.1
+SYS.WSMon.wsman.Client.0      SYS.WSMon.wsman.Client.1
+SYS.WSMon.wsman.Client.Enumerate.0      SYS.WSMon.wsman.Client.Enumerate.1
+SYS.WSMon.wsman.Client.Notification.0   SYS.WSMon.wsman.Client.Notification.1
+SYS.WSMon.wsman.Client.Pull.0 SYS.WSMon.wsman.Client.Pull.1
+SYS.WSMon.wsman.Client.Release.0        SYS.WSMon.wsman.Client.Release.1
+SYS.WSMon.wsman.Client.Renew.0          SYS.WSMon.wsman.Client.Renew.1
+SYS.WSMon.wsman.Client.Subscribe.0      SYS.WSMon.wsman.Client.Subscribe.1
+SYS.WSMon.wsman.Client.TransferGet.0    SYS.WSMon.wsman.Client.TransferGet.1
+SYS.WSMon.wsman.Client.Unsubscribe.0    SYS.WSMon.wsman.Client.Unsubscribe.1
+SYS.WSMon.wsman.Locale.0      SYS.WSMon.wsman.Locale.1
+SYS.WSMon.wsman.MaxEnvelopeSize.0       SYS.WSMon.wsman.MaxEnvelopeSize.1
+SYS.WSMon.wsman.OperationTimeout.0      SYS.WSMon.wsman.OperationTimeout.1
+SYS.WSMon.wsman.RequestTotalItemsCountEstimate.0
+SYS.WSMon.wsman.RequestTotalItemsCountEstimate.1  SYS.WSMon.wsman.ResourceURI.0
+SYS.WSMon.wsman.ResourceURI.1 SYS.WSMon.wsman.SelectorSet.0
+SYS.WSMon.wsman.SelectorSet.1 SYS.WSMon.wsman.Service.0
+SYS.WSMon.wsman.Service.1     SYS.WSMon.wsman.Service.Enumerate.0
+SYS.WSMon.wsman.Service.Enumerate.1     SYS.WSMon.wsman.Service.Notify.0
+SYS.WSMon.wsman.Service.Notify.1        SYS.WSMon.wsman.Service.Pull.0
+SYS.WSMon.wsman.Service.Pull.1          SYS.WSMon.wsman.Service.Release.0
+SYS.WSMon.wsman.Service.Release.1       SYS.WSMon.wsman.Service.Renew.0
+SYS.WSMon.wsman.Service.Renew.1         SYS.WSMon.wsman.Service.Subscribe.0
+SYS.WSMon.wsman.Service.Subscribe.1     SYS.WSMon.wsman.Service.TransferGet.0
+SYS.WSMon.wsman.Service.TransferGet.1   SYS.WSMon.wsman.Service.Unsubscribe.0
+SYS.WSMon.wsman.Service.Unsubscribe.1
+SYS.WSMon.wsman.TotalItemsCountEstimate.0
+SYS.WSMon.wsman.TotalItemsCountEstimate.1         SYSLOG    SYSWATCH
+Security.Applications.0       Security.Applications.1
+Security.Applications.G1      Security.Datatype.ApplicationType.0
+Security.Datatype.ApplicationType.1     Security.Datatype.Authentication.0
+Security.Datatype.Authentication.1      Security.Datatype.Authentication.G1
+Security.Datatype.BooleanYN.0 Security.Datatype.BooleanYN.1
+Security.Datatype.LDAPFlags.0 Security.Datatype.LDAPFlags.1
+Security.Datatype.LDAPFlags.G1          Security.Datatype.PBKDF2Alg.0
+Security.Datatype.PBKDF2Alg.1 Security.Datatype.Password.0
+Security.Datatype.Password.1  Security.Datatype.Permission.0
+Security.Datatype.Permission.1          Security.Datatype.PrivateKeyType.0
+Security.Datatype.PrivateKeyType.1      Security.Datatype.Protocol.0
+Security.Datatype.Protocol.1  Security.Datatype.ResourceType.0
+Security.Datatype.ResourceType.1        Security.Datatype.SSLType.0
+Security.Datatype.SSLType.1   Security.Datatype.ServiceCapabilities.0
+Security.Datatype.ServiceCapabilities.1 Security.Datatype.TLSVersion.0
+Security.Datatype.TLSVersion.1          Security.DocDBs.0   Security.DocDBs.1
+Security.DocDBs.G1  Security.Domains.0  Security.Domains.1  Security.Domains.G1
+Security.Events.0   Security.Events.1   Security.Events.G1
+Security.KMIPServer.0         Security.KMIPServer.1
+Security.KMIPServer.G1        Security.LDAPConfigs.0
+Security.LDAPConfigs.1        Security.LDAPConfigs.G1       Security.Resource.0
+Security.Resource.1 Security.Resource.G1          Security.Resources.0
+Security.Resources.1          Security.Resources.G1         Security.Roles.0
+Security.Roles.1    Security.Roles.G1   Security.SQL.0      Security.SQL.1
+Security.SQL.G1     Security.SQLAdminPrivilegeSet.0
+Security.SQLAdminPrivilegeSet.1         Security.SQLAdminPrivilegeSet.G1
+Security.SQLPrivileges.0      Security.SQLPrivileges.1
+Security.SQLPrivileges.G1     Security.SQLRoleGrantOption.0
+Security.SQLRoleGrantOption.1 Security.SQLRoleGrantOption.G1
+Security.SSLConfigs.0         Security.SSLConfigs.1
+Security.SSLConfigs.G1        Security.Servers.0  Security.Servers.1
+Security.Servers.G1 Security.Services.0 Security.Services.1
+Security.Services.G1          Security.System.0   Security.System.1
+Security.System.G1  Security.Users.0    Security.Users.1    Security.Users.G1
+Security.X509Users.0          Security.X509Users.1          ShmObj
+SystemCheck         SystemPerformance   TASKMGR   TASKMGR1  TCPTrace.Config.0
+TCPTrace.Config.1   TCPTrace.ConfigUI.0 TCPTrace.ConfigUI.1 TCPTrace.Log.0
+TCPTrace.Log.1      TCPTrace.LogUI.0    TCPTrace.LogUI.1    TERCAP    TRACE
+TTYFREE   UPDATECLASSES       VERSION   VPMON     WSMON     Wcomm     Wpfiles
+Wr        Wr1       Wsback    Wsdba     Wsmkey    XMM       cmprtest
+csr.csp.UIBody.0    csr.csp.UIBody.1    csr.csp.WebStressGrid.0
+csr.csp.WebStressGrid.1       csr.csp.WebStressHead.0
+csr.csp.WebStressHead.1       csr.csp.WebStressTable.0
+csr.csp.WebStressTable.1      mgstat    mrstat
+
+Updating system TEMP and LOCALDATA databases
+
+Loading system classes
+Global ^%IRIS.SASchema loaded
+Global ^%IRIS.StudioTemplate loaded
+Global ^%MV.DICTDICT loaded
+Global ^%MV.DICTMVPIDTAB loaded
+Global ^%MV.DICTSYSTEM loaded
+Global ^%MV.DICTTERMCMP loaded
+Global ^%MV.DICTTERMDEFS loaded
+Global ^%MV.DICTVOC loaded
+Global ^%MV.ERRMSG loaded
+Global ^%MV.NEWACC loaded
+Global ^%MV.TERMDEFS loaded
+Global ^%iKnow loaded
+Global ^mchs loaded
+Global ^mtercap loaded
+Global ^oddCOM loaded
+Global ^oddDEF loaded
+Global ^oddEXTR loaded
+Global ^oddMAP loaded
+Global ^oddPROC loaded
+Global ^oddSQL loaded
+Global ^rINC loaded
+Global ^rINDEX loaded
+Global ^rINDEXCLASS loaded
+Global ^rINDEXSQL loaded
+
+Installing National Language support
+Installing locales from C:\InterSystems\IRIS\mgr\irislib\
+Compiling Locale (enuw)
+Compiled   ^||SYS.NLS("Src","Accent","Unicode","Unicode") in .001768 seconds
+Built-in   ^||SYS.NLS("Src","COL","IRIS standard","Unicode")
+Built-in   ^||SYS.NLS("Src","COL","Unicode","IRIS standard")
+Built-in   ^||SYS.NLS("Src","Ident","Unicode","Latin1")
+Compiled   ^||SYS.NLS("Src","Ident","Unicode","Unicode") in .000466 seconds
+Built-in   ^||SYS.NLS("Src","LowerCase","Unicode","Latin1")
+Compiled   ^||SYS.NLS("Src","LowerCase","Unicode","Unicode") in .00201 seconds
+Built-in   ^||SYS.NLS("Src","Pattern","Unicode","Latin1")
+Compiled   ^||SYS.NLS("Src","Pattern","Unicode","Unicode") in .012877 seconds
+Built-in   ^||SYS.NLS("Src","TitleCase","Unicode","Latin1")
+Compiled   ^||SYS.NLS("Src","TitleCase","Unicode","Unicode") in .002247 seconds
+Built-in   ^||SYS.NLS("Src","UpperCase","Unicode","Latin1")
+Compiled   ^||SYS.NLS("Src","UpperCase","Unicode","Unicode") in .002231 seconds
+Compiled   ^||SYS.NLS("Src","XLT","CP1250","Unicode") in .000154 seconds
+Compiled   ^||SYS.NLS("Src","XLT","CP1251","Unicode") in .000155 seconds
+Compiled   ^||SYS.NLS("Src","XLT","CP1252","Unicode") in .00013 seconds
+Compiled   ^||SYS.NLS("Src","XLT","CP1253","Unicode") in .00013 seconds
+Compiled   ^||SYS.NLS("Src","XLT","CP1255","Unicode") in .000127 seconds
+Compiled   ^||SYS.NLS("Src","XLT","CP437","Unicode") in .000135 seconds
+Compiled   ^||SYS.NLS("Src","XLT","CP850","Unicode") in .00013 seconds
+Compiled   ^||SYS.NLS("Src","XLT","CP852","Unicode") in .000138 seconds
+Compiled   ^||SYS.NLS("Src","XLT","CP866","Unicode") in .000129 seconds
+Compiled   ^||SYS.NLS("Src","XLT","CP874","Unicode") in .000124 seconds
+Compiled   ^||SYS.NLS("Src","XLT","EBCDIC","Unicode") in .000133 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Latin2","Unicode") in .000141 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Latin9","Unicode") in .000134 seconds
+Compiled   ^||SYS.NLS("Src","XLT","LatinC","Unicode") in .000128 seconds
+Compiled   ^||SYS.NLS("Src","XLT","LatinG","Unicode") in .000134 seconds
+Compiled   ^||SYS.NLS("Src","XLT","LatinH","Unicode") in .000125 seconds
+Compiled   ^||SYS.NLS("Src","XLT","LatinT","Unicode") in .000138 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","CP1250") in .000587 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","CP1251") in .000535 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","CP1252") in .000576 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","CP1253") in .000549 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","CP1255") in .000578 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","CP437") in .00067 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","CP850") in .000533 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","CP852") in .000529 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","CP866") in .000572 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","CP874") in .000461 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","EBCDIC") in .000143 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","Latin2") in .000482 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","Latin9") in .000656 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","LatinC") in .000831 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","LatinG") in .000838 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","LatinH") in .000505 seconds
+Compiled   ^||SYS.NLS("Src","XLT","Unicode","LatinT") in .000439 seconds
+Built-in   ^||SYS.NLS("Src","XY","Unicode","Latin1")
+
+Setting current locale to enuw
+Setting current language to en
+
+Updating Security database
+
+Loading system source code
+%SYS.API  %SYS.Access         %SYS.Capture        %SYS.DATABASE
+%SYS.DOCDB          %SYS.Debug          %SYS.FILE %SYS.GCREATE        %SYS.GD
+%SYS.GIFMSM         %SYS.GLO  %SYS.GXLINF1        %SYS.GXLINFO        %SYS.NLS
+%SYS.NOJRN          %SYS.PMODE          %SYS.UNITTEST       %SYS.Wgr  %SYS.Wgs
+%SYS.ikcheck        ARCHIVE   BACKUP    BITMAPSCAN          BLKCHANG  BLKCOL
+BLKDUMP   BROADCAS  COLLATE   COMMCTRL  CSPButtons          CSPGWMGR
+CryptoTest          DATABASE  DATACHECK DATAMOVE  DBACK     DBACKA    DBACKB
+DBACKC    DBACKP    DBREST    DBREST2   DBRESTP   DBRTEXT   DBRTEXT1  DBSIZE
+DISMOUNT  DMREPAIR  DSET      DZCVTFILE DeepSeeButtons      EDITOR    EDITOR1
+EDITOR2   EDITOR3   EDITOR4   EMS       ENVIRON   GBLOCKCOPY
+GBLOCKCOPY1         GCOMPACT  GETPPGINFO          GLOBAL    GLOBUFF   GLOREC
+GLOSTAT   INTEGRIT  Integrity JCONVERT  JOURNAL   JRNARC    JRNRESTB  JRNRESTC
+JRNRESTC2 JRNRESTCHELP        JRNRESTD  JRNRESTF  JRNRESTO  JRNROLL   JRNUTIL
+JRNUTIL2  JRNUTILOLD          JRNZIP    LABEL     LANGZDEF  LANGZINST
+LEGACYNETWORK       LOCKTAB   MIRROR    MIRRORCOMM          MIRRORCTL MIRRORMGR
+MIS1      MIS2      MIS3      MIS4      MIS5      MOUNT     MSU       NETBENCH
+NETDATA   NETWORK   NLS       NLS1      NLS2      NLSCOMP   NLSLOAD
+NSPACTIVATE         NSPMAP    NSPUTIL   ODT       OPER      PERFSAMPLE
+PKI       PRIO      PROFILE   REDEBUG   RELBL     REPAIR    RESJOB    SETQUOTA
+SNMPENS   SNMPTC    SS        ST        STRTENQ   SWSET     SYSLOG    TASKMGR
+TASKMGR1  TERCAP    TRACE     TTYFREE   VERSION   WSMON     Wcomm     Wpfiles
+Wr        Wr1       Wsback    Wsdba     XMM       cmprtest  mgstat    mrstat
+
+
+
+Building system indices
+
+IRIS Terminal IRIS Terminal Wide Characters Linux Mac OS X Terminal SCO ANSI vt100 vt220 vt320 
+No classes were modified.
+
+
+Updating Audit database
+
+Updating Journal directory
+
+Updating User database
+
+Updating Interoperability databases
+
+Updating Task Manager
+
+IRIS initialization complete at 11:13:10AM on Mar 26, 2025

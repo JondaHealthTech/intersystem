@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  ***********************************************************  -->
+<!--  In order to work with the Cache build translation mechanism, -->
+<!--  this file format must be strictly followed:                  -->
+<!--  1. encoding must be "UTF-8"                                  -->
+<!--  2. all tags must have open and close on same line            -->
+<!--  ***********************************************************  -->
+
+<!-- Before placing a single or double quote in a message, check whether -->
+<!-- it needs to be escaped in the Web Gateway code.                     -->
+<MsgFile Language="it">
+
+<MsgDomain Domain="%CSPGateway">
+
+<!--                                      -->
+<!--  Gateway Form's Titles               -->
+<!--                                      -->
+
+<Message Id="Z_ISC">InterSystems Corporation</Message>
+<Message Id="Z_CSP">Pagine server Cach&amp;#233;</Message>
+<Message Id="Z_WGM">Gestione gateway Web</Message>
+<Message Id="Z_CACHE_LOGO">Logo InterSystems IRIS</Message>
+
+
+
+<!--                                      -->
+<!--  Main Menu                           -->
+<!--                                      -->
+
+<Message Id="A_01">Gestione</Message>
+
+<Message Id="T_SYSTEM_STATUS">Stato sistema</Message>
+<Message Id="H_SYSTEM_STATUS">Visualizza le connessioni gateway CSP attive con i server InterSystems IRIS</Message>
+
+<Message Id="T_GATEWAY_INIT">Gateway inizializzato</Message>
+
+<Message Id="T_CLOSE_CONNECTIONS">Chiudi connessioni</Message>
+<Message Id="H_CLOSE_CONNECTIONS">Chiude tutte le connessioni con un particolare server InterSystems IRIS</Message>
+
+<Message Id="T_TEST_SERVER">Prova connessione server</Message>
+<Message Id="H_TEST_SERVER">Verifica che un particolare server InterSystems IRIS sia in grado di rispondere</Message>
+
+<Message Id="T_VIEW_EVENT_LOG">Visualizza log eventi</Message>
+<Message Id="H_VIEW_EVENT_LOG">Visualizza il log degli eventi gateway CSP</Message>
+
+<Message Id="A_02">Configurazione</Message>
+<Message Id="T_DEFAULT_PARAMETERS">Parametri predefiniti</Message>
+<Message Id="H_DEFAULT_PARAMETERS">Imposta i parametri predefiniti del gateway CSP</Message>
+
+<Message Id="T_SERVER_ACCESS">Accesso al server</Message>
+<Message Id="H_SERVER_ACCESS">Configura/aggiunge/elimina l&apos;accesso al server InterSystems IRIS dal gateway CSP</Message>
+
+<Message Id="T_APPLICATION_ACCESS">Accesso all&apos;applicazione</Message>
+<Message Id="H_APPLICATION_ACCESS">Configura/aggiunge/elimina un&apos;applicazione CSP</Message>
+
+<Message Id="T_ABOUT_CSP_GATEWAY">Informazioni sul gateway CSP</Message>
+<Message Id="H_ABOUT_CSP_GATEWAY">Visualizza le informazioni sulla versione del gateway CSP</Message>
+
+<Message Id="T_LANGUAGE">Lingua</Message>
+<Message Id="H_LANGUAGE">Scegliere la lingua in cui visualizzare questi form di configurazione</Message>
+
+<Message Id="A_03">InterSystems IRIS Management</Message>
+
+<Message Id="T_BACK_TO_PORTAL">Torna a Portale di Gestione Sistema</Message>
+<Message Id="H_BACK_TO_PORTAL">Torna al Portale di Gestione di InterSystems IRIS</Message>
+
+
+
+<!--                                      -->
+<!--  System Status                       -->
+<!--                                      -->
+
+<Message Id="A_11">Numero connessione</Message>
+<Message Id="A_13">Indirizzo IP</Message>
+<Message Id="A_14">Porta TCP/IP</Message>
+<Message Id="A_15">PID server</Message>
+<Message Id="A_16">Stato</Message>
+<Message Id="A_16a">Tempo di inattività/Timeout</Message>
+<Message Id="A_17">Attività</Message>
+<Message Id="A_18">PID gateway</Message>
+<Message Id="B_CLOSE">Chiudi</Message>
+
+<Message Id="A_111">Connessioni totali</Message>
+<Message Id="A_112">Connessioni in uso</Message>
+<Message Id="A_113">Connessioni private</Message>
+<Message Id="A_114">Attività totali</Message>
+<Message Id="A_115">Richieste in coda</Message>
+
+<Message Id="T_PATH">Percorso</Message>
+<Message Id="T_PATH_NUMBER">Numero percorso</Message>
+<Message Id="T_ACTION">Azione</Message>
+
+<Message Id="A_121">Form in cache</Message>
+<Message Id="A_122">Dati in cache (byte)</Message>
+<Message Id="A_123">Attività form in cache</Message>
+<Message Id="A_124">Thread in coda</Message>
+
+<Message Id="A_413a5">Blocchi cache totali</Message>
+<Message Id="A_413a6">Blocchi cache in uso</Message>
+<Message Id="A_FORM">Form</Message>
+<Message Id="A_SIZE">Dimensioni</Message>
+
+<Message Id="B_REFRESH">Aggiorna</Message>
+
+<Message Id="B_CLEAR">Cancella</Message>
+
+<Message Id="B_CLEAR_CACHE">Cancella caché</Message>
+
+
+
+<!--                                      -->
+<!--  Close Connections                   -->
+<!--                                      -->
+
+<Message Id="A_21">Chiudi tutte le connessioni del server</Message>
+<Message Id="A_22">Selezionare * per chiudere tutte le connessioni in tutti i server</Message>
+<Message Id="B_CLOSE_CONNECTIONS">Chiudi le connessioni</Message>
+<Message Id="T_INFO_SESSIONS_CLOSED">Tutte le connessioni specificate sono state chiuse</Message>
+
+
+
+<!--                                      -->
+<!--  Test Connection                     -->
+<!--                                      -->
+
+<Message Id="A_31">Visualizza log eventi server-side</Message>
+<Message Id="B_CONNECT">Connessione</Message>
+
+<Message Id="T_TEST_SERVER_SUCCESS">Verifica connessione server completata con successo</Message>
+<Message Id="T_TEST_SERVER_FAILURE">Verifica connessione server non riuscita</Message>
+
+
+
+<!--                                      -->
+<!--  View Event Log                      -->
+<!--                                      -->
+
+<Message Id="B_CLEAR_LOG">Cancella log</Message>
+<Message Id="A_42">Il log eventi è stato cancellato</Message>
+<Message Id="A_43">Impossibile cancellare il log eventi.  Verificare che il gateway abbia i privilegi necessari per scrivere nel file</Message>
+<Message Id="A_TOP">In alto</Message>
+<Message Id="A_MORE">Altro</Message>
+<Message Id="A_LOG_ASCENDING">Ordine data e ora</Message>
+<Message Id="A_LOG_DESCENDING">Inverti ordine data e ora</Message>
+
+
+
+<!--                                      -->
+<!--  View HTTP Trace                     -->
+<!--                                      -->
+
+<Message Id="T_VIEW_HTTP_TRACE">Visualizza analisi HTTP</Message>
+<Message Id="H_VIEW_HTTP_TRACE">Visualizza la funzione di analisi HTTP del gateway CSP</Message>
+<Message Id="A_VHT_TITLE">Funzione di analisi HTTP del gateway Web</Message>
+<Message Id="T_VHT_ON">Analisi attivata</Message>
+<Message Id="H_VHT_ON">Attiva la funzione di analisi.Il livello di log verrà impostato su &apos;v9r&apos;.</Message>
+<Message Id="T_VHT_OFF">Analisi disattivata</Message>
+<Message Id="H_VHT_OFF">Disattiva la funzione di analisi.&apos;v9r&apos; verrà rimosso dal livello di log.</Message>
+<Message Id="H_VHT_REFRESH">Aggiorna il contenuto del frame corrente</Message>
+<Message Id="T_VHT_CLEAR">Cancella</Message>
+<Message Id="H_VHT_CLEAR">Cancella il file di log eventi</Message>
+<Message Id="T_VHT_SHOW_RESPONSE">Mostra risposta</Message>
+<Message Id="T_VHT_SHOW_REQUEST">Mostra richiesta</Message>
+<Message Id="Z_DATE">Data</Message>
+<Message Id="Z_REQUEST_ID">ID richiesta</Message>
+<Message Id="Z_REQUEST">Richiesta</Message>
+<Message Id="Z_SESSION_ID">ID sessione</Message>
+<Message Id="Z_REMOTE_ADDR">Indirizzo remoto</Message>
+
+
+
+<!--                                      -->
+<!--  Default Parameters                  -->
+<!--                                      -->
+
+<Message Id="T_INSTANCE_HOST_NAME">Nome host istanza</Message>
+<Message Id="H_INSTANCE_HOST_NAME">Il nome host di rete per questa particolare istanza del gateway CSP</Message>
+
+<Message Id="T_MAXIMUM_CONNECTIONS">Numero massimo connessioni consentite</Message>
+<Message Id="H_MAXIMUM_CONNECTIONS">Il numero massimo di connessioni a InterSystems IRIS che questa istanza può creare</Message>
+
+<Message Id="T_MAXIMUM_CACHE_SIZE">Dimensioni massime cache</Message>
+<Message Id="H_MAXIMUM_CACHE_SIZE">Il volume massimo di dati del form che può essere contenuto nella cache del gateway</Message>
+
+
+<Message Id="A_51">Sicurezza</Message>
+
+<Message Id="A_51A">Sono i parametri di protezione richiesti dagli amministratori del gateway per consentire l&apos;accesso ai form</Message>
+
+<Message Id="T_SM_SERVICE_STATUS">Accesso a questi form</Message>
+<Message Id="H_SM_SERVICE_STATUS">Accedere a questa suite di form di gestione gateway</Message>
+
+<Message Id="T_USERNAME">Nome utente</Message>
+<Message Id="H_USERNAME">Il nome utente per questo servizio</Message>
+
+<Message Id="T_PASSWORD">Password</Message>
+<Message Id="H_PASSWORD">La password tramite la quale è possibile accedere a questi form</Message>
+<Message Id="T_SR_PASSWORD">Imp./ripris. password</Message>
+
+<Message Id="A_52">Conferma</Message>
+
+<Message Id="Z_PW">Ripris. password</Message>
+<Message Id="Z_PE">Errore password</Message>
+<Message Id="Z_PR">Password rimossa</Message>
+<Message Id="Z_PU">Password non modificata</Message>
+
+<Message Id="T_SM_TIMEOUT">Timeout sessione</Message>
+<Message Id="H_SM_TIMEOUT">Timeout sessione per accesso protetto con password a questi form</Message>
+
+<Message Id="Z_SLO">Logout sessione</Message>
+<Message Id="Z_STO">Timeout sessione (o sessione non valida)</Message>
+
+<Message Id="T_SYSTEM_MANAGER">Computer di gestione sistema</Message>
+<Message Id="H_SYSTEM_MANAGER">Indirizzo IP o nomi DNS dei computer in grado di configurare il gateway CSP, separati da &apos;+&apos; o &apos;,&apos;</Message>
+
+<Message Id="T_SYS_UNPW_OVERRIDE">Escludi nome utente e password</Message>
+<Message Id="H_SYS_UNPW_OVERRIDE">Selezionare questa opzione perché per i client definiti qui non sia necessario immettere Nome utente e Password</Message>
+
+<Message Id="T_SYS_ACCEPT_X_FORWARDED_FOR">Accettare gli indirizzi IP client inoltrati dai proxy server</Message>
+<Message Id="H_SYS_ACCEPT_X_FORWARDED_FOR">Verificare l&apos;opzione per accettare gli indirizzi IP client inoltrati dai proxy server (indicati nell&apos;intestazione della richiesta HTTP &apos;X-Forwarded-For&apos;)</Message>
+
+<Message Id="T_CUSTOM_SM_LOGIN_FORM">Form di accesso personalizzato</Message>
+<Message Id="H_CUSTOM_SM_LOGIN_FORM">Pagina da visualizzare per l&apos;accesso degli amministratori ai form di gestione gateway</Message>
+
+<Message Id="T_LOGIN">Login a Gestione gateway Web</Message>
+<Message Id="B_LOGIN">Login</Message>
+
+<Message Id="T_LOGOUT">Logout</Message>
+<Message Id="H_LOGOUT">Logout da questa suite di gestione</Message>
+
+<Message Id="T_ERROR_NO_SM_ACCESS">Non si è autorizzati a utilizzare questa funzione (o il file di configurazione è illeggibile)</Message>
+
+<Message Id="T_TIMEOUT_ALL_CONNECTIONS">Applicare il timeout a tutte le connessioni</Message>
+<Message Id="H_TIMEOUT_ALL_CONNECTIONS">Verificare questa opzione per applicare il timeout a tutte le connessioni (compresi quelli nel pool minimo)</Message>
+
+<Message Id="T_BACK_TO_PORTAL1">Tornare alla Gestione Enterprise</Message>
+<Message Id="H_BACK_TO_PORTAL1">Tornare al Portale di Gestione Enterprise</Message>
+<Message Id="A_031">Gestione Enterprise</Message>
+
+<Message Id="A_53">Connessioni a InterSystems IRIS</Message>
+
+<Message Id="T_S_RESPONSE_TIMEOUT">Timeout risposta server</Message>
+<Message Id="H_S_RESPONSE_TIMEOUT">Numero massimo di secondi concessi a InterSystems IRIS per rispondere prima che si verifichi l&apos;errore &apos;Server occupato&apos;</Message>
+
+<Message Id="T_QUEUED_REQUEST_TIMEOUT">Timeout richiesta in coda</Message>
+<Message Id="H_QUEUED_REQUEST_TIMEOUT">Numero massimo di secondi durante i quali una richiesta può attendere la connessione con InterSystems IRIS prima che si verifichi l&apos;errore &apos;Server occupato&apos;</Message>
+
+<Message Id="T_NO_ACTIVITY_TIMEOUT">Timeout assenza di attività</Message>
+<Message Id="H_NO_ACTIVITY_TIMEOUT">Nelle sessioni stateless, il processo server InterSystems IRIS viene chiuso se rimane inattivo per il numero di secondi definiti da questo parametro</Message>
+
+<Message Id="T_ENV_PARAMETERS">Livello log eventi</Message>
+<Message Id="H_ENV_PARAMETERS">Quantità di registrazioni eseguite. &apos;E&apos; per la registrazione di errori; &apos;V&apos; per la registrazione verbosa</Message>
+
+<Message Id="T_EVENT_LOG_FILE">File log evento</Message>
+<Message Id="H_EVENT_LOG_FILE">Il nome del file log eventi (se necessario con percorso).</Message>
+
+<Message Id="T_EVENT_LOG_ROTATION_SIZE">Dimensione rotazione log eventi</Message>
+<Message Id="H_EVENT_LOG_ROTATION_SIZE">La dimensione che determina la rotazione dei log (espressa in Byte: n, Kilobyte: nk o Megabyte: nM)</Message>
+
+<Message Id="T_MAX_LOGGED_REQUEST_SIZE">Dimensione massima per richiesta registrata</Message>
+<Message Id="H_MAX_LOGGED_REQUEST_SIZE">La quantità massima di dati registrati per ciascuna richiesta HTTP (per livello di registro v9; espressa in byte: n; o kilobyte: nK; o megabyte: nM).</Message>
+
+<Message Id="T_RETAIN_ALL_LOG_FILES">Conserva tutti i file di log</Message>
+<Message Id="H_RETAIN_ALL_LOG_FILES">Selezionare questa opzione per conservare tutti i file di log inviati</Message>
+
+
+<Message Id="A_54">o succ.</Message>
+<Message Id="A_56">Percorso</Message>
+<Message Id="A_57">File predef.</Message>
+
+
+<Message Id="A_53A">Reindirizzamento ASP</Message>
+
+<Message Id="T_DOCUMENT_ROOT">Directory principale documenti Web</Message>
+<Message Id="H_DOCUMENT_ROOT">Necessario solo in caso di reindirizzamento di CSP tramite ASP. Percorso fisico alla radice del documento del server Web IIS&apos;, ad es. &apos;c:\\inetpub\\wwwroot&apos;</Message>
+
+<Message Id="T_ASP_DIRECTORY">Directory ASP temporanea</Message>
+<Message Id="H_ASP_DIRECTORY">Necessaria solo per il reindirizzamento di CSP attraverso ASP. Percorso fisico verso la directory di scrittura dei file temporanei.</Message>
+
+<Message Id="T_RUN_TIME_SCRIPT">Script runtime</Message>
+<Message Id="H_RUN_TIME_SCRIPT">Posizione del modulo gateway CSP di runtime, usata per provare la connettività del server</Message>
+
+<Message Id="A_58">Script predef.</Message>
+
+
+<Message Id="A_59">Server HTTP interno</Message>
+
+<Message Id="T_WS_SERVICE_STATUS">Stato servizio</Message>
+<Message Id="H_WS_SERVICE_STATUS">Stato del server HTTP interno</Message>
+
+<Message Id="T_NSD_DOCUMENT_ROOT">Radice documento NSD</Message>
+<Message Id="H_NSD_DOCUMENT_ROOT">Percorso fisico alla radice del documento del server Web incorporato nel Network Service Daemon (NSD) ad esempio, &apos;c:\\cachesys\\csp&apos;</Message>
+
+
+<Message Id="A_55">Immettere il nome del file della pagina html da visualizzare o l&apos;URL a cui reindirizzare il browser nel caso in cui si verifichi questo errore</Message>
+
+<Message Id="T_SERVER_ERROR">Errore del server</Message>
+<Message Id="H_SERVER_ERROR">Pagina da visualizzare quando il gateway CSP rileva un errore interno</Message>
+<Message Id="X_SERVER_ERROR">Si è verificato un errore interno nel CSP</Message>
+
+<Message Id="T_SERVER_BUSY">Server occupato</Message>
+<Message Id="H_SERVER_BUSY">Pagina da visualizzare quando tutte le connessioni CSP disponibili sono in uso</Message>
+<Message Id="X_SERVER_BUSY">Il server cache è occupato</Message>
+
+<Message Id="T_SERVER_UNAVAILABLE">Server non disponibile</Message>
+<Message Id="H_SERVER_UNAVAILABLE">Pagina da visualizzare nel caso in cui il server InterSystems IRIS sia stato disattivato intenzionalmente dall&apos;interno della configurazione gateway</Message>
+<Message Id="X_SERVER_UNAVAILABLE">Il server cache al momento non è disponibile</Message>
+
+<Message Id="T_SERVER_TIMEOUT">Timeout server</Message>
+<Message Id="H_SERVER_TIMEOUT">Pagina da visualizzare durante timeout di una richiesta al server InterSystems IRIS</Message>
+<Message Id="X_SERVER_TIMEOUT">Timeout della richiesta</Message>
+
+<Message Id="T_CONNECTION_CLOSED">Connessione chiusa</Message>
+<Message Id="H_CONNECTION_CLOSED">Pagina da visualizzare se il server chiude la sessione in modalità &apos;state aware&apos;</Message>
+<Message Id="X_CONNECTION_CLOSED">La connessione dell&apos;utente al server cache è stata chiusa</Message>
+
+<Message Id="Z_CNS">La configurazione non è stata salvata perché non ne è stato definito il nome</Message>
+<Message Id="Z_CS">Configurazione salvata</Message>
+
+
+<Message Id="T_CON_ALLOC">Assegnazione connessioni</Message>
+<Message Id="H_CON_ALLOC">Metodo di assegnazione delle connessioni alle sessioni state-less</Message>
+<Message Id="R_CON_ALLOC_FF">Primo libero</Message>
+<Message Id="R_CON_ALLOC_RR">Round-robin</Message>
+
+
+
+<!--                                      -->
+<!--  Server Configuration                -->
+<!--                                      -->
+
+<Message Id="A_61">Fare clic su un server esistente e poi modificare, copiare o eliminare la relativa configurazione</Message>
+
+<Message Id="R_EDIT_SERVER">Modifica server</Message>
+<Message Id="H_EDIT_SERVER">Modifica la configurazione del server selezionato</Message>
+
+<Message Id="R_COPY_SERVER">Copia server</Message>
+<Message Id="H_COPY_SERVER">Copia la configurazione del server selezionato</Message>
+
+<Message Id="R_DELETE_SERVER">Elimina server</Message>
+<Message Id="H_DELETE_SERVER">Elimina la configurazione del server selezionato</Message>
+
+<Message Id="A_62">Oppure crea la configurazione di un nuovo server</Message>
+
+<Message Id="B_ADD_SERVER">Aggiungi server</Message>
+<Message Id="H_ADD_SERVER">Crea la configurazione di un nuovo server</Message>
+
+
+<Message Id="T_SERVER_NAME">Nome server</Message>
+<Message Id="H_SERVER_NAME">Il nome del server InterSystems IRIS</Message>
+<Message Id="V_SERVER_NAME">Il nome del server è obbligatorio; non può contenere caratteri riservati `=`, `[`, or `]`; non può iniziare con `APP_PATH:` (senza distinzione tra maiuscole e minuscole); non può essere `--- None ---`; e non può essere `SYSTEM`, `SYSTEM_INDEX` o `APP_PATH_INDEX` (senza distinzione tra maiuscole e minuscole)</Message>
+
+<Message Id="T_SERVER_NUMBER">Numero server</Message>
+
+<Message Id="T_SERVICE_STATUS">Stato servizio</Message>
+<Message Id="H_SERVER_STATUS">Attiva o disattiva il server in questione</Message>
+<Message Id="H_APPLICATION_STATUS">Attiva o disattiva l&apos;applicazione in questione</Message>
+
+<Message Id="T_IP_ADDRESS">Indirizzo TCP/IP</Message>
+<Message Id="H_IP_ADDRESS">Indirizzo TCP/IP del server InterSystems IRIS a cui collegarsi</Message>
+
+<Message Id="T_TCP_PORT">Porta TCP/IP</Message>
+<Message Id="H_TCP_PORT">Porta TCP/IP del server InterSystems IRIS a cui collegarsi; normalmente 1972</Message>
+
+<Message Id="T_MIRROR_AWARE">La configurazione è Mirror Aware</Message>
+<Message Id="H_MIRROR_AWARE">Se selezionata, questa configurazione sarà a conoscenza dei mirror InterSystems IRIS</Message>
+
+<Message Id="A_623">Parametri stateless</Message>
+
+<Message Id="T_MINIMUM_SERVER_SESSIONS">Connessioni server minime</Message>
+<Message Id="H_MINIMUM_SERVER_SESSIONS">Connessioni da avviare prima di riutilizzare un processo esistente</Message>
+
+<Message Id="T_MAXIMUM_SERVER_SESSIONS">N. massimo connessioni server</Message>
+<Message Id="H_MAXIMUM_SERVER_SESSIONS">Numero massimo di connessioni con il server InterSystems IRIS che il gateway esegue prima di mettere in coda le richieste</Message>
+
+<Message Id="T_MAX_SESSION_CONNECTIONS">Numero massimo connessioni per sessione</Message>
+<Message Id="H_MAX_SESSION_CONNECTIONS">Numero massimo di connessioni utilizzabili contemporaneamente da una singola sessione</Message>
+
+
+<Message Id="A_62A">Protez. connessione</Message>
+
+<Message Id="T_SECURITY_LEVEL">Livello di protezione conn.</Message>
+<Message Id="H_SECURITY_LEVEL">Livello di protezione conn.</Message>
+<Message Id="H_SECURITY_LEVEL0">Password</Message>
+<Message Id="H_SECURITY_LEVEL1">Kerberos</Message>
+<Message Id="H_SECURITY_LEVEL2">Kerberos con integrità pacch.</Message>
+<Message Id="H_SECURITY_LEVEL3">Kerberos con crittografia</Message>
+<Message Id="H_SECURITY_LEVEL9">(Bypass CCONNECT)</Message>
+<Message Id="H_SECURITY_LEVEL10">SSL</Message>
+
+<Message Id="H_SPASSWORD">Password di accesso al server</Message>
+
+<Message Id="T_SERVER_TYPE">Tipo server</Message>
+<Message Id="H_SERVER_TYPE">Tipo server</Message>
+<Message Id="H_SERVER_TYPE0">Finestre</Message>
+<Message Id="H_SERVER_TYPE1">Unix</Message>
+<Message Id="H_SERVER_TYPE2">VMS</Message>
+
+<Message Id="T_PRODUCT">Prodotto</Message>
+<Message Id="H_PRODUCT">Prodotto</Message>
+<Message Id="H_PRODUCT0">InterSystems IRIS</Message>
+<Message Id="H_PRODUCT1">Ensemble</Message>
+
+<Message Id="T_SERVICE_PRINCIPAL">Nome principale servizio</Message>
+<Message Id="H_SERVICE_PRINCIPAL">Nome principale servizio</Message>
+
+<Message Id="A_62B">Genera</Message>
+<Message Id="A_62C">Sono le impostazioni di protezione richieste dal gateway per l&apos;accesso al server</Message>
+
+<Message Id="T_KEYTABLE">Tabella chiave</Message>
+<Message Id="H_KEYTABLE">File tabella chiave (compreso percorso completo)</Message>
+
+<Message Id="T_SSL_CONF_NAME">Nome configurazione SSL</Message>
+<Message Id="H_SSL_CONF_NAME">Il nome della configurazione SSL da utilizzare</Message>
+
+<Message Id="T_SSLCC_PROTOCOL_MIN">Versione minima del protocollo SSL/TLS</Message>
+<Message Id="H_SSLCC_PROTOCOL_MIN">Versione minima del protocollo SSL/TLS da utilizzare</Message>
+
+<Message Id="T_SSLCC_PROTOCOL_MAX">Versione massima del protocollo SSL/TLS</Message>
+<Message Id="H_SSLCC_PROTOCOL_MAX">Versione massima del protocollo SSL/TLS da utilizzare</Message>
+
+<Message Id="T_SSLCC_KEY_TYPE">Tipo chiave SSL</Message>
+<Message Id="H_SSLCC_KEY_TYPE">Tipo di file chiave SSL</Message>
+<Message Id="H_SSLCC_KEY_TYPE1">DSA</Message>
+<Message Id="H_SSLCC_KEY_TYPE2">RSA</Message>
+
+<Message Id="T_SSLCC_VERIFY_PEER">Verifica pari livello SSL</Message>
+<Message Id="H_SSLCC_VERIFY_PEER">Richiedere la verifica del certificato di pari livello</Message>
+
+<Message Id="T_SSLCC_CIPHER_SUITES">Pacchetti crittografia SSL/TLS (TLSv1.2 e versioni precedenti)</Message>
+<Message Id="H_SSLCC_CIPHER_SUITES">L'elenco dei pacchetti crittografia (TLSv1.2 e versioni precedenti)</Message>
+
+<Message Id="T_SSLCC_CIPHER_SUITES_1_3">Pacchetti crittografia SSL/TLS (TLSv1.3)</Message>
+<Message Id="H_SSLCC_CIPHER_SUITES_1_3">L'elenco dei pacchetti crittografia (TLSv1.3)</Message>
+
+<Message Id="T_SSLCC_CERTIFICATE_FILE">File certificato SSL</Message>
+<Message Id="H_SSLCC_CERTIFICATE_FILE">Il percorso completo del file del certificato SSL</Message>
+
+<Message Id="T_SSLCC_CERTIFICATE_KEY_FILE">File chiave certificato SSL</Message>
+<Message Id="H_SSLCC_CERTIFICATE_KEY_FILE">Il percorso completo del file chiave del certificato SSL</Message>
+
+<Message Id="T_SSLCC_CA_CERTIFICATE_FILE">File certificato CA SSL</Message>
+<Message Id="H_SSLCC_CA_CERTIFICATE_FILE">Il percorso completo del certificato di autorità di certificazione (CA) attendibile SSL</Message>
+
+<Message Id="T_SSLCC_PRIVATE_KEY_PASSWORD">Password della chiave privata SSL</Message>
+<Message Id="H_SSLCC_PRIVATE_KEY_PASSWORD">La password della chiave privata SSL</Message>
+
+
+<Message Id="A_625">Parametri opzionali</Message>
+
+<Message Id="A_626">Se non si definiscono i parametri in questa schermata, il sistema li ricava dai &apos;Parametri predefiniti&apos; del gateway CSP.</Message>
+
+<Message Id="A_628">Immettere il nome del file della pagina html da visualizzare o l&apos;URL a cui reindirizzare il browser nel caso in cui si verifichi questo errore. Se non si definiscono i valori in questa schermata, il sistema li ricava dai &apos;Parametri predefiniti&apos; del gateway CSP.</Message>
+
+<Message Id="A_631">È impossibile eliminare la configurazione di questo server</Message>
+<Message Id="A_632">È impossibile eliminare la configurazione di questo server perché è usata da un&apos;applicazione</Message>
+<Message Id="A_633">Elimina la configurazione di questo server</Message>
+
+<Message Id="Z_SCNS">La configurazione del server non è stata salvata perché non ne è stato definito il nome</Message>
+
+<Message Id="Z_ECNS">Configurazione non salvata. Controllare autorizzazioni per i file</Message>
+
+
+<Message Id="Z_EWINI">Impossibile scrivere nel file di configurazione</Message>
+<Message Id="Z_SCC">La configurazione del server è stata copiata</Message>
+<Message Id="Z_SCNC">La configurazione del server non è stata copiata perché è stato definito un nuovo nome</Message>
+<Message Id="Z_SCD">La configurazione del server è stata eliminata</Message>
+<Message Id="Z_SCS">Configurazione del server salvata</Message>
+
+<Message Id="T_ERROR_SYS_DISABLED">Il server al momento è disattivato</Message>
+<Message Id="T_ERROR_SYS_UNAVAILABLE">Il server al momento non è disponibile</Message>
+<Message Id="T_ERROR_SYS_NOT_DEFINED">È impossibile identificare il server</Message>
+<Message Id="T_ERROR_SERVER_PROGRAM">Il programma server-side ha restituito condizione di errore. Vedere il log eventi per dettagli</Message>
+<Message Id="T_ERROR_NO_DATA_RETURNED">Il programma server-side non ha restituito dati</Message>
+<Message Id="T_INFO_SA_LOGOUT">Ora si è disconnessi dal server</Message>
+
+
+
+<!--                                      -->
+<!--  Application Configuration           -->
+<!--                                      -->
+
+<Message Id="A_71">Fare clic su un&apos;applicazione esistente e poi modificare, copiare o eliminare la relativa configurazione</Message>
+
+<Message Id="R_EDIT_APPLICATION">Modifica applicazione</Message>
+<Message Id="H_EDIT_APPLICATION">Modifica la configurazione dell&apos;applicazione selezionata</Message>
+
+<Message Id="R_COPY_APPLICATION">Copia applicazione</Message>
+<Message Id="H_COPY_APPLICATION">Copia la configurazione dell&apos;applicazione selezionata</Message>
+
+<Message Id="R_DELETE_APPLICATION">Elimina applicazione</Message>
+<Message Id="H_DELETE_APPLICATION">Elimina la configurazione dell&apos;applicazione selezionata</Message>
+
+<Message Id="A_72">Oppure crea la configurazione di una nuova applicazione</Message>
+
+<Message Id="B_ADD_APPLICATION">Aggiungi applicazione</Message>
+<Message Id="H_ADD_APPLICATION">Crea la configurazione di una nuova applicazione</Message>
+
+
+<Message Id="T_APPLICATION_PATH">Percorso applicazione</Message>
+<Message Id="H_APPLICATION_PATH">Il nome del percorso dell&apos;applicazione</Message>
+<Message Id="V_APPLICATION_PATH">Il percorso dell&apos;applicazione è obbligatorio; non può contenere caratteri riservati `=`, `[`, or `]`; e non può contenere `:` prima del primo `/`, se presente</Message>
+
+<Message Id="T_WSP_PATH">Percorso fisico server Web</Message>
+<Message Id="H_WSP_PATH">Il percorso fisico dell&apos;applicazione sul server Web</Message>
+
+<Message Id="T_EXTRA_CGI">Ulteriori variabili di ambiente CGI</Message>
+<Message Id="H_EXTRA_CGI">Elenco, separato da virgole, delle variabili aggiuntive di ambiente CGI da inviare a InterSystems IRIS</Message>
+
+<Message Id="T_PROC_CLASS">Elaborare con questa classe</Message>
+<Message Id="H_PROC_CLASS">Elaborare i file in questo percorso con la classe specificata</Message>
+
+<Message Id="T_GZIP_COMPRESSION">Compressione GZIP</Message>
+<Message Id="H_GZIP_COMPRESSION">Attiva o disattiva la compressione GZIP per questo percorso</Message>
+
+<Message Id="T_GZIP_MIN_FILE_SIZE">Dimensione minima del file GZIP</Message>
+<Message Id="H_GZIP_MIN_FILE_SIZE">La dimensione minima del file, in byte, per cui verr&amp;#224; richiamata la compressione GZIP</Message>
+
+<Message Id="T_GZIP_EXCLUDE_FILE_TYPES">Tipi di file esclusi da GZIP</Message>
+<Message Id="H_GZIP_EXCLUDE_FILE_TYPES">Evitare di applicare la compressione GZIP ai tipi di file elencati qui</Message>
+
+<Message Id="T_RESPONSE_SIZE">Notifica dimensione risposta</Message>
+<Message Id="H_RESPONSE_SIZE">Selezionare il metodo da utilizzare per notificare al client quanti dati sono previsti per le risposte</Message>
+
+<Message Id="R_RESPONSE_SIZE_CT">Codifica di trasferimento chunked</Message>
+<Message Id="R_RESPONSE_SIZE_CL">Content-Length</Message>
+<Message Id="R_RESPONSE_SIZE_CT_CL">Codifica di trasferimento chunked e Content-Length</Message>
+
+<Message Id="T_RESPONSE_SIZE_ALWAYS">Generare una notifica di dimensione della risposta per tutte le richieste</Message>
+<Message Id="H_RESPONSE_SIZE_ALWAYS">Selezionare questa opzione per generare una notifica di dimensione della risposta per tutte le richieste, anche per i casi in cui non viene utilizzata la connettività Keep-Alive</Message>
+
+<Message Id="T_KEEPALIVE">KeepAlive</Message>
+<Message Id="H_KEEPALIVE">Attiva o disattiva la connettivit&#224; KeepAlive HTTP per questo percorso</Message>
+
+<Message Id="T_NPH">Intestazioni non analizzate</Message>
+<Message Id="H_NPH">Attiva o disattiva il protocollo Intestazioni non analizzate per questo percorso.  Disattivare questa propriet&#224; per consentire al server Web host di elaborare le intestazioni di risposta generate dal CSP</Message>
+
+<Message Id="T_DEFAULT_SERVER">Server predefinito</Message>
+
+<Message Id="T_ALTERNATIVE_SERVERS">Server alternativi</Message>
+
+<Message Id="T_ALTERNATIVE_SERVER">Server alternativo</Message>
+
+<Message Id="R_ALT_LB">Da usare per &apos;load-balancing&apos; e &apos;fail-over&apos;</Message>
+<Message Id="R_ALT_FO">Da usare solo per &apos;fail-over&apos;</Message>
+
+<Message Id="R_ALT_LBx">Utilizza Load-Balancing e fail-over</Message>
+<Message Id="R_ALT_FOx">Utilizza fail-over</Message>
+<Message Id="R_ALT_ONEx">Utilizza solo primo server</Message>
+
+
+<Message Id="A_723">Server</Message>
+<Message Id="A_723x">Server</Message>
+
+<Message Id="A_731">È impossibile eliminare la configurazione del percorso di questa applicazione</Message>
+<Message Id="A_733">Elimina la configurazione del percorso di questa applicazione</Message>
+
+<Message Id="Z_ACNS">La configurazione dell&apos;applicazione non è stata salvata perché non ne è stato definito il nome</Message>
+<Message Id="Z_ACC">La configurazione dell&apos;applicazione è stata copiata</Message>
+<Message Id="Z_ACNC">La configurazione dell&apos;applicazione non è stata copiata perché è stato definito un nuovo nome</Message>
+<Message Id="Z_ACD">La configurazione dell&apos;applicazione è stata eliminata</Message>
+<Message Id="Z_ACS">Configurazione dell&apos;applicazione salvata</Message>
+
+<Message Id="T_ERROR_APP_DISABLED">L&apos;applicazione è correntemente disattivata</Message>
+
+
+
+<!--                                      -->
+<!--  About Web Gateway                   -->
+<!--                                      -->
+
+<Message Id="Z_VERSION">Versione</Message>
+<Message Id="Z_GATEWAY_BUILD">Build gateway</Message>
+<Message Id="Z_OPENSSL_VERSION">Versione OpenSSL</Message>
+<Message Id="Z_WS_NAME">Nome server Web</Message>
+<Message Id="Z_WS_TYPE">Tipo server Web</Message>
+<Message Id="Z_WS_API">Interfaccia attiva</Message>
+<Message Id="Z_COPYRIGHT">Copyright</Message>
+
+<Message Id="Z_WS_INTERNAL">Web server interno al gateway CSP</Message>
+<Message Id="Z_WS_MICROSOFT">Web server Microsoft (o compatibile ISAPI)</Message>
+<Message Id="Z_WS_NETSCAPE">Web server Netscape (o compatibile NSAPI)</Message>
+<Message Id="Z_WS_APACHE">Web server Apache</Message>
+
+
+
+<!--                                      -->
+<!--  Message Groups                      -->
+<!--                                      -->
+
+<Message Id="G_ERROR_WEB_SERVER">Errore server Web</Message>
+<Message Id="G_ERROR_AVAILABILITY">Errore disponibilità server</Message>
+<Message Id="G_ERROR_ACCESS">Violazione di accesso al server</Message>
+<Message Id="G_ERROR_PROGRAM">Errore programma server</Message>
+<Message Id="G_LOGOUT">Logout dal server</Message>
+<Message Id="G_TIMEOUT">Timeout server</Message>
+<Message Id="G_SM">Gestione sistemi</Message>
+
+
+
+<!--                                      -->
+<!--  General Text                        -->
+<!--                                      -->
+
+<Message Id="Z_CSPGW">Gateway CSP</Message>
+
+<Message Id="R_ENABLED">Attivato</Message>
+<Message Id="R_DISABLED">Disattivato</Message>
+<Message Id="R_NOACTION">Nessuna azione</Message>
+
+<Message Id="Z_DEFAULT">Valore predefinito</Message>
+
+<Message Id="B_SAVE_CONFIGURATION">Salva configurazione</Message>
+
+<Message Id="Z_ERINI">Impossibile leggere il file di configurazione</Message>
+<Message Id="Z_ERLOG">Impossibile leggere file di log eventi</Message>
+<Message Id="Z_EWLOG">Impossibile scrivere nel file di log eventi</Message>
+
+<Message Id="B_SUBMIT">Invia</Message>
+<Message Id="H_SUBMIT">Esegue l&apos;azione selezionata</Message>
+
+<Message Id="Z_ARE_YOU_SURE">Procedere?</Message>
+<Message Id="B_YES_DELETE">SÌ: ELIMINA</Message>
+
+<Message Id="Z_SM">Gestione sistemi</Message>
+<Message Id="Z_HELP">?</Message>
+<Message Id="Z_ERROR_PAGES">Pagine di errore</Message>
+
+<Message Id="Z_NONE">Nessuno</Message>
+
+<Message Id="Z_WARNING">Attenzione</Message>
+
+<Message Id="Z_IV">Valore ereditato</Message>
+<Message Id="Z_NIV">Nessun valore da ricavare</Message>
+<Message Id="Z_IP">Pagina ricavata</Message>
+<Message Id="Z_NIP">Nessuna pagina da ricavare</Message>
+
+<Message Id="Z_ILO">Operazione non valida</Message>
+
+<Message Id="Z_SME">Errore gestione sistemi</Message>
+
+<Message Id="Z_CRE">Il gateway non è in grado di leggere il file di configurazione.  Verificare che abbia i privilegi necessari per leggere dal file</Message>
+<Message Id="Z_CWE">Il gateway non è in grado di scrivere nel file di configurazione.  Verificare che abbia i privilegi necessari per scrivere su questo file</Message>
+
+<Message Id="T_S_VERSION">Versione del server o dei server InterSystems IRIS</Message>
+<Message Id="H_S_VERSION">&quot;Versione dei server InterSystems IRIS a cui questa installazione del gateway si connetterà.  Selezionare la versione del server più vecchio</Message>
+
+<Message Id="Z_CONF_RELOAD">Per applicare le più recenti modifiche alla configurazione è necessario riavviare il gateway</Message>
+
+
+
+<!--                                      -->
+<!--  Error Messages                      -->
+<!--                                      -->
+
+<Message Id="M_ERROR_CONDITION">Condizione di errore</Message>
+<Message Id="M_SERVER_TIMEOUT">L&apos;applicazione CSP non ha risposto entro il periodo di timeout</Message>
+<Message Id="M_NO_ACCESS">Accesso al server rifiutato</Message>
+<Message Id="M_CLOSE_CONNECTION">L&apos;applicazione CSP ha terminato la connessione prima di inviare una risposta</Message>
+<Message Id="M_INCOMPLETE_RESPONSE">L&apos;applicazione CSP ha terminato la connessione prima di inviare una risposta completa</Message>
+
+<Message Id="T_ERROR_NO_MEMORY">Memoria insufficiente per soddisfare la richiesta</Message>
+<Message Id="T_ERROR_NO_CHANNEL">Tutti i canali al server sono occupati. Riprovare più tardi</Message>
+<Message Id="T_ERROR_ILLEGAL_SA_ACCESS">Accesso non consentito a una connessione state-aware (privata) tentato dal client</Message>
+<Message Id="T_ERROR_INCORRECT_SA_HANDLE">Identificativo di connessione state-aware (privata) errato specificato dal client</Message>
+<Message Id="T_ERROR_SA_SESSION_CLOSED">La connessione state-aware (privata) a cui si era collegati è stata chiusa</Message>
+<Message Id="T_ERROR_REQ_TIMEOUT">Timeout della richiesta</Message>
+
+
+</MsgDomain>
+</MsgFile>

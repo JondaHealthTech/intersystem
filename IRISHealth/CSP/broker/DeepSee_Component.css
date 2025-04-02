@@ -1,0 +1,2231 @@
+/* @class="%DeepSee.Component.chartLegend" */
+
+.dslegendDiv {
+	overflow: auto;
+	background: white;
+	border: 1px solid #C0C0C0;
+	min-width: 100px;
+}
+
+table.dslegendTable {
+	width: 100%;
+	background: white;
+	font-size: 8pt;
+	text-align: center;
+	color: #404040;
+}
+
+table.dslegendTable th {
+	border-bottom:1px solid #C0C0C0;
+	padding-left: 4px;
+	padding-right: 4px;
+	font-weight: bold;
+}
+
+table.dslegendTable td {
+	padding-right: 4px;
+}
+
+.dslegendBox {
+	border: 1px solid #606060;
+	margin: 3px;
+	font-size: 1px;
+	height: 10px;
+	width: 10px;
+	border-radius: 3px;
+	box-shadow: 2px 2px 2px #D0D0D0;
+}
+
+/* @class="%DeepSee.Component.coverView" */
+
+.dsCoverDiv {
+	overflow: auto;
+	background: none;
+	border: 1px solid #C0C0C0;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+
+.bookCoverCategory {
+	clear: both;
+}
+
+.bookCoverCategoryTitle {
+	color: #606060;
+	font-size: 20px;
+	padding-top: 15px;
+	padding-left: 15px;
+	font-variant:small-caps;
+}
+
+.bookCoverSet {
+}
+
+.bookCover {
+	position: relative;
+	float: left;
+	font-size: 10px;
+	font-family: arial;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: none;
+
+	border: 4px solid rgba(240,240,240,0.8);
+	box-shadow: 2px 2px 2px #808080;
+	border-radius: 4px;
+	width: 134px;
+	height: 190px;
+	font-family: arial;
+	margin: 10px;
+	overflow: hidden;
+}
+
+.bookCover:hover {
+	box-shadow: 2px 2px 8px #8080FF;
+}
+
+.bookCover:active {
+	box-shadow: 2px 2px 8px blue, -2px -2px 8px blue;
+}
+
+.bookCover-activate,
+.bookCover-activatePopup {
+	position:absolute;
+	z-index: 20;
+	font-size: 10px;
+	background: white;
+	padding: 6px;
+	border: 1px solid #808080;
+	border-radius: 25px;
+	left: 42px;
+	top: 136px;
+	box-shadow: 2px 2px 4px #808080;
+}
+
+.bookCover-activate {
+	display: none;
+	opacity: 0.0;
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: 0.5s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: opacity;
+	-moz-transition-duration: 0.5s;
+	-moz-transition-timing-function: ease;
+}
+
+.bookCover-activatePopup {
+	z-index: 120;
+}
+
+.bookCover-activate:hover, .bookCover-activatePopup:hover {
+	background: #FFEEAA;
+}
+
+.bookCoverBackground {
+	position: absolute;
+	width: 134px;
+	height: 190px;
+}
+
+.bookCoverHeader {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	font-family: arial;
+	font-size: 8pt;
+	text-align: center;
+	background: rgb(53,107,141);
+	color: #F0F0F0;
+	z-index: 10;
+	overflow: hidden;
+}
+
+.bookCoverTitle {
+	position: absolute;
+	top: 30px;
+	left: 0px;
+	right: 0px;
+	font-family: arial;
+	font-size: 11pt;
+	color: #404040;
+	text-align: center;
+	z-index: 6;
+	overflow: hidden;
+	word-break: hyphenate;
+}
+
+.bookCoverSubtitle {
+	position: absolute;
+	top: 150px;
+	left: 0px;
+	right: 0px;
+	font-family: arial;
+	font-size: 8pt;
+	color: #606060;
+	text-align: center;
+	z-index: 5;
+	overflow: hidden;
+}
+
+.bookCoverFooter {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	font-family: arial;
+	font-size: 8pt;
+	text-align: center;
+	background: rgb(53,107,141);
+	color: #F0F0F0;
+	z-index: 9;
+	overflow: hidden;
+}
+
+.bookCoverImage {
+	position: absolute;
+	top: 70px;
+	left: 0px;
+	right: 0px;
+	text-align: center;
+	font-family: arial;
+	font-size: 8pt;
+	color: #404040;
+	z-index: 1;
+}
+
+/* selector: indicates current element */
+.bookCoverSelector {
+	z-index: 100;
+	position: absolute;
+	border: 1px dotted #404040;
+	width: 100px;
+	height: 25px;
+	background: none;
+}
+
+/* sizing handle for selector */
+.bookCoverSizeHandle {
+	z-index: 101;
+	position: absolute;
+	border: 1px solid white;
+	border-radius: 2px;
+	background: black;
+	width: 4px;
+	height: 4px;
+}
+
+.bookCover-mouseTrap {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	display: none;
+	opacity: 0.0;
+	background: black;
+	z-index: 100;
+
+	-webkit-transition-property: opacity,height;
+	-webkit-transition-duration: 0.25s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: opacity,height;
+	-moz-transition-duration: 0.25s;
+	-moz-transition-timing-function: ease;
+}
+
+.bookCover-popup {
+	position: fixed;
+	font-size: 15px;
+	font-family: arial;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: none;
+	top: 0px;
+	left: 0px;
+	width: 0px;
+	display: block;
+	opacity: 0.0;
+	background: white;
+	z-index: 101;
+	border: 6px solid rgb(23,87,121);
+	border-radius: 5px;
+	box-shadow: 2px 2px 4px #F0F0F0;
+
+	-webkit-transition-property: opacity,height;
+	-webkit-transition-duration: 0.25s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: opacity,height;
+	-moz-transition-duration: 0.25s;
+	-moz-transition-timing-function: ease;
+}
+
+.bookCover-popupLabel {
+	font-size: 10px;
+	font-weight: bold;
+	color: #606060;
+	padding-top: 5px;
+}
+
+.bookCover-popupValue {
+	font-size: 14px;
+	color: #404040;
+}
+
+.bookCover-popupButton {
+	opacity: 0.8;
+}
+
+.bookCover-popupButton:hover {
+	opacity: 1.0;
+}
+
+.bookCover-popupButton:active {
+	border-radius: 5px;
+	background: #808080;
+	box-shadow: 2px 2px 8px #808080,-2px -2px 8px #808080;
+}
+
+.bookCover-popupAction {
+	opacity: 0.8;
+	padding: 2px;
+	padding-right: 20px;
+	font-size: 18px;
+	font-weight: bold;
+	color: #202060;
+}
+
+.bookCover-popupAction:hover {
+	opacity: 1.0;
+}
+
+.bookCover-popupAction:active {
+	text-shadow: 2px 2px 8px #808080,-2px -2px 8px #808080;
+}
+
+/* @class="%DeepSee.Component.drillIndicator" */
+/* @class="%DeepSee.Component.pivotController" */
+
+/* Table around entire controller */
+table.dsptcTable {
+	border-top: 1px #808080 solid;
+	border-right: 1px #808080 solid;
+	background: white;
+	width:100%;
+	/*height:125px; /* WAL183 */
+	/*width: 100%; WAL176*/ 
+}
+
+table.dsptcTable td {
+	/* width: 25%; WAL176 */
+	border-left: 1px solid gray;
+}
+
+.dspctMessage {
+	border: 1px solid #808080;
+	background: #FFEEAA;
+	border-radius: 4px;
+	padding-left:3px;
+	padding-right:3px;
+	color: #606060;
+}
+
+.dsptcBody {
+	height: 75px;
+	/*height:100%; /* WAL183 */
+	/*height: 75px; /* WAL194 */
+	overflow: auto;
+}
+
+.dsptcBodySelected {
+	background: #D0D0F0;
+	height: 75px;
+	overflow: auto;
+}
+
+.dsptcArrow {
+	font-size: 24px;
+	font-weight: bold;
+	color: #404040;
+}
+
+.dsptcArrow:hover {
+	background: #FFEEAA;
+}
+
+.dsptcArrow:active {
+	text-shadow: -1px 1px 8px #FFFFCC, 1px -1px 8px #FFFFFF;
+}
+
+table.dsptcHeaderTable {
+	font-size: 11pt;
+	font-weight: bold;
+	color: #404040;
+	background: #C0C0C0;
+	background-image: url(images/grad-halfgray-10x30.png);
+	background-repeat: repeat-x;
+	border: none;
+	border-bottom: 1px solid #B0B0B0;
+	width: 100%;
+	height: 30px;
+}
+
+table.dsptcHeaderTable td {
+	padding-left: 5px;
+	padding-right: 5px;
+	border: none;
+	white-space:nowrap; /* WAL218 */
+}
+
+/* item in column */
+.dsptcItem {
+	color: #404040;
+	font-size: 9pt;
+	font-weight: bold;
+	padding-right: 2px;
+}
+
+.dsptcItem a {
+	color: #404040;
+	text-decoration: none;
+}
+
+.dsptcItem input[type=checkbox],
+.dsptcItemSelected input[type=checkbox] {
+	vertical-align: middle;
+	position: relative;
+	bottom: 1px;
+}
+
+.dsptcItem img,
+.dsptcItemSelected img {
+	vertical-align: bottom;
+	position: relative;
+	bottom: 1px;
+}
+
+.dsptcItemSelected {
+	background: #D0D0F0;
+	color: black;
+	font-size: 9pt;
+	font-weight: bold;
+	padding-right: 2px;
+}
+
+.dsptcItemSelected a {
+	color: black;
+	text-decoration: none;
+}
+
+/* drop target */
+.dsptcDrop {
+	font-size: 10pt;
+	padding-right: 2px;
+}
+
+.dsptcDrop a {
+	color: #C0C0C0;
+	font-style: italic;
+	text-decoration: none;
+}
+
+.dsptcItem a:hover,
+.dsptcDrop a:hover {
+	color: #606060;
+	background: #FFEEAA;
+}
+
+/* header area */
+.dsptcHeaderDiv {
+	overflow: hidden;
+	text-align: left;
+	font-weight: bold;
+
+	background: #C0C0C0;
+	background-image: url(images/grad-halfgray-10x100.png);
+	background-repeat: repeat-x;
+	border-right: 1px solid gray;
+	border-bottom: 1px solid gray;
+	height: 100%;
+}
+
+table td.dsptDrillCaption {
+	font-size: 10pt;
+	color: #606060;
+	padding-left:10px;
+}
+
+table td.dsptDrillItem {
+	padding-left:10px;
+	border: 1px solid gray;
+	background: #F0F0F0;
+	border-radius: 3px;
+}
+
+/* dimension name in drill item */
+.dsptDrillDim {
+	font-size: 9px;
+	color: #606060;
+}
+
+/* member name in drill item */
+.dsptDrillMbr {
+	font-size: 9px;
+	color: #404040;
+	font-weight: bold;
+}
+
+.iconSep {
+	margin-left: 7px;
+	margin-right: 7px;
+	color: #F0F0F0;
+	font-size: 18px;
+	text-shadow: #C0C0C0 1px 1px 0px;
+	vertical-align: top;
+}
+
+/* WAL176 */
+.hzResizeBar {
+	position:absolute;
+	top:0px;
+	bottom:0px;
+	width:10px;
+	cursor:ew-resize;
+}
+
+.vtResizeBar {
+	position:absolute;
+	left:0px;
+	right:0px;
+	height:10px;
+	cursor:ns-resize;
+}
+
+#controllerTableArea {
+	position:relative;
+}
+
+/* WAL176 */
+
+/* @class="%DeepSee.Component.pivotTable" */
+
+	/* WAL */
+	/* WAL nub */
+div.dsNub {
+	background: #C0C0C0;
+	background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+	
+	text-align: left;
+	vertical-align: bottom;
+	color: #404040;
+	font-size: 7pt;
+	overflow: hidden;
+}
+
+div.dsNubInner {
+	font-weight: bold;
+	padding-left:2px;
+	vertical-align: bottom;
+	display: table-cell;
+	
+	border-bottom: 1px solid #D0D0D0;
+}	
+
+div.dsNubZebra {
+	
+	border-right: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;
+
+	background: #F0F0F0;
+	background-image: none;
+	text-align: left;
+	vertical-align: bottom;
+
+	color: #404040;
+	font-size: 7pt;
+	
+	padding-left: 2px;
+	overflow: hidden;
+}
+
+div.dsNub:hover,
+div.dsNubZebra:hover {
+	background: #FFEEAA;
+}
+
+div.dsPivotCompleteTable .dsPivotRowEven:hover,
+div.dsPivotCompleteTable .dsPivotRowOdd:hover {
+	background: #FFEEAA;
+}
+
+
+div.dsPivotCompleteTableDiv .dsPivotRowEven:hover,
+div.dsPivotCompleteTableDiv .dsPivotRowOdd:hover {
+	background: #FFEEAA;
+}
+
+.topTable, .sideTable, .dataTable, .nubTable {
+	position: absolute;	
+}
+
+/* column label */
+/*div.dsPivotColumn,*/
+div.dsPivotColumnSort {
+	font-weight: bold;
+	font-size: 10pt;
+	padding: 0px;
+	text-align: center;
+	vertical-align: middle;
+
+	background: #C0C0C0;
+	background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+}
+div.dsPivotColumnSort:hover {
+	background: #FFEEAA;
+}
+
+
+div.dsPivotCompleteTable .dsPivotColumnZebra {
+	border-right: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;
+	font-weight: bold;
+	color: #404040;
+	padding: 0px;
+	text-align: center;
+	vertical-align: middle;
+	background: #F0F0F4;
+	background-image: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+div.dsPivotCompleteTableDiv .dsPivotColumnZebra {
+	border-right: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;
+	font-weight: bold;
+	color: #404040;
+	padding: 0px;
+	text-align: center;
+	vertical-align: middle;
+	background: #F0F0F4;
+	background-image: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.dataTable .dsPivotRowEven {
+	color: #404040;
+	text-align: right;
+	vertical-align: middle;
+	background: #F0F0F4;
+	background-image: none;
+	border-right: none;
+	border-bottom: none;
+}
+
+.dataTable .dsPivotRowOdd {
+	color: #404040;
+	text-align: right;
+	vertical-align: middle;
+	background: white;
+	background-image: none;
+	border-right: none;
+	border-bottom: none;
+}
+.dataTable .dsPivotRowEven:hover{
+	background: #FFEEAA;
+}
+
+.dataTable .dsPivotRowOdd:hover {
+		background: #FFEEAA;
+}
+
+/* zebra stuff */
+div.dsPivotCompleteTable .dsPivotColumnSortZebra {
+	font-weight: bold;
+	color: #404040;
+	padding: 0px;
+	text-align: center;
+	vertical-align: middle;
+	background: #F0F0F4;
+	overflow: hidden;
+	background-image: none;
+
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+div.dsPivotCompleteTableDiv .dsPivotColumnSortZebra {
+	font-weight: bold;
+	font-size: 10pt;
+	color: #404040;
+	padding: 0px;
+	text-align: center;
+	vertical-align: middle;
+	background: #F0F0F4;
+	overflow: hidden;
+	background-image: none;
+
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.sideTable .dsPivotRowEven {
+	font-weight: bold;
+	color: #404040;
+	text-align: left;
+	vertical-align: middle;
+	background: #F0F0F4;
+	background-image: none;
+	border-right: none;
+	border-bottom: none;
+}
+
+.sideTable .dsPivotRowOdd {
+	font-weight: bold;
+	color: #404040;
+	text-align: left;
+	vertical-align: middle;
+	background: white;
+	background-image: none;
+	border-right: none;
+	border-bottom: none;
+}
+
+div.dsPivotCompleteTable .dsPivotColumn:hover,
+div.dsPivotCompleteTable .dsPivotRow:hover	{
+	background: #FFEEAA;
+	color: #404080;
+}
+
+
+div.dsPivotCompleteTableDiv .dsPivotColumn:hover,
+div.dsPivotCompleteTableDiv .dsPivotRow:hover	{
+	background: #FFEEAA;
+	color: #404080;
+}
+
+div.dsPivotCompleteTable .dsPivotNum:hover,
+div.dsPivotCompleteTable .dsPivotColumnZebra:hover,
+div.dsPivotCompleteTable .dsPivotColumnSortZebra:hover {
+	background: #FFEEAA;
+}
+
+div.dsPivotCompleteTableDiv .dsPivotNum:hover,
+div.dsPivotCompleteTableDiv .dsPivotColumnZebra:hover,
+div.dsPivotCompleteTableDiv .dsPivotColumnSortZebra:hover {
+	background: #FFEEAA;
+}
+
+/* wrapper around row header */
+/* WAL */
+/* this makes sure the clickable area takes up the full amount of space */
+/* PFS058 - Add white-space:nowrap to account for 1px difference in WebKit vs Gecko, padding will prevent display errors */
+div.dsPivotRowDiv {
+	padding-top: 2px;
+	padding-left: 2px;
+	padding-right: 10px;
+	height:100%;
+	width:100%;
+	vertical-align: middle;
+	display:table-cell;
+	white-space:nowrap;
+}
+
+/* wrapper around column header */
+/* PFS030 - Add text-align: center; to center column header text */
+div.dsPivotColumnDiv {
+	padding-top: 2px;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-bottom: 2px;
+	overflow: hidden;
+	background: none;
+	text-align: center;
+	display:table-cell;
+}
+
+div.dsPivotColumnOuter {
+	display: table;
+	height: 100%;
+	width: 100%;
+}
+
+/* WAL -- div version */
+div.dsPivotCompleteTable {
+	position: absolute;
+	left:0;
+	top:0;
+	background: #D0D0D0;
+	font-size: 10pt;
+	padding: 0px;
+	height: auto;
+	font-family: Arial;
+	border-collapse: collapse;
+	box-shadow: 2px 2px 25px rgba(0,0,0,0.25);
+	/*border-right: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;*/
+}
+
+/* row label */
+div.dsPivotCompleteTable .dsPivotRow {
+	text-align: left;
+	vertical-align: middle;
+	font-weight: bold;
+	background: #C0C0C0;
+	background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+
+	border-bottom: 1px solid #D0D0D0;
+}	
+
+/* pick up row height from the cell height? */
+div.dsPivotCompleteTable .dsPivotRow {
+	/*height: 22px;*/
+	overflow: hidden;
+	vertical-align: middle;
+
+	border-right: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;
+
+	-webkit-transition-property: background;
+	-webkit-transition-duration: 0s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: background;
+	-moz-transition-duration: 0s;
+	-moz-transition-timing-function: ease;
+	transition-property: background;
+	transition-duration: 0s;
+	transition-timing-function: ease;
+
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+/* row label */
+div.dsPivotCompleteTableDiv .dsPivotRow {
+	text-align: left;
+	vertical-align: middle;
+	font-weight: bold;
+	font-size: 10pt;
+	background: #C0C0C0;
+	background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+
+	border-bottom: 1px solid #D0D0D0;
+}	
+
+/* pick up row height from the cell height? */
+div.dsPivotCompleteTableDiv .dsPivotRow {
+	/*height: 22px;*/
+	overflow: hidden;
+	vertical-align: middle;
+
+	border-right: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;
+
+	-webkit-transition-property: background;
+	-webkit-transition-duration: 0s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: background;
+	-moz-transition-duration: 0s;
+	-moz-transition-timing-function: ease;
+	transition-property: background;
+	transition-duration: 0s;
+	transition-timing-function: ease;
+
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+div.dsPivotCompleteTable .dsPivotColumn {
+	text-align: left;
+	vertical-align: middle;
+	font-weight: bold;
+	background: #C0C0C0;
+	background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+
+	border-bottom: 1px solid #D0D0D0;
+}	
+
+div.dsPivotCompleteTable .dsPivotColumn {
+	/*height: 22px;*/
+	overflow: hidden;
+	vertical-align: middle;
+
+	border-right: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;
+	
+	/*display: inline-block;*/
+
+	-webkit-transition-property: background;
+	-webkit-transition-duration: 0s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: background;
+	-moz-transition-duration: 0s;
+	-moz-transition-timing-function: ease;
+	transition-property: background;
+	transition-duration: 0s;
+	transition-timing-function: ease;
+
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+
+div.dsPivotCompleteTableDiv .dsPivotColumn {
+	font-weight: bold;
+	font-size: 10pt;
+	background: #C0C0C0;
+	background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+
+	border-bottom: 1px solid #D0D0D0;
+}	
+
+div.dsPivotCompleteTableDiv .dsPivotColumn {
+	/*height: 22px;*/
+	overflow: hidden;
+
+	border-right: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;
+	
+	/*display: inline-block;*/
+
+	-webkit-transition-property: background;
+	-webkit-transition-duration: 0s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: background;
+	-moz-transition-duration: 0s;
+	-moz-transition-timing-function: ease;
+	transition-property: background;
+	transition-duration: 0s;
+	transition-timing-function: ease;
+
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.dsPivotNum {
+	text-align: right;
+}
+
+div.dsPivotCompleteTable .dsptCellDiv {
+	width: 100%;
+	height: 100%;
+	padding-top: 1px;
+	/*
+	padding-right: 2px;
+	/*padding-left: 2px;
+	
+	padding-bottom: 1px;
+	*/
+	text-align: right;
+	overflow: hidden;
+	word-wrap: break-word;
+}
+
+div.dsPivotCompleteTable  .dsptCellDiv:hover {
+	background: #FFEEAA;
+}
+
+
+div.dsPivotCompleteTable .dsPivotNum {
+	
+	border-right: 1px solid #E9E9E9;
+	border-bottom: 1px solid #E9E9E9;
+
+	overflow: hidden;
+	vertical-align: middle;
+	
+	background: white;
+	font-size: 10pt;
+
+	-webkit-transition-property: background;
+	-webkit-transition-duration: 0.25s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: background;
+	-moz-transition-duration: 0.25s;
+	-moz-transition-timing-function: ease;
+	transition-property: background;
+	transition-duration: 0.25s;
+	transition-timing-function: ease;
+}
+
+div.dsPivotCompleteTable .dsPivotString {
+	
+	border-right: 1px solid #E9E9E9;
+	border-bottom: 1px solid #E9E9E9;
+
+	overflow: hidden;
+	vertical-align: middle;
+	
+	background: white;
+	font-size: 10pt;
+
+	-webkit-transition-property: background;
+	-webkit-transition-duration: 0.25s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: background;
+	-moz-transition-duration: 0.25s;
+	-moz-transition-timing-function: ease;
+	transition-property: background;
+	transition-duration: 0.25s;
+	transition-timing-function: ease;
+}
+/* WAL */
+
+	.dsPivotEnclosingDiv {
+		/* hack for IE to make scroll bars appear */
+		display: block;
+		overflow: hidden;
+	}
+
+	.dsPivotTableWrapper {
+		position: relative;
+
+		height:100%;
+		width:100%;
+		display:block;
+		overflow:hidden;
+	}
+
+	/* background image within wrapper */
+	.dsPivotTableImage {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		height: 100%;
+		width: 100%;
+		background-image: none;
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		opacity: 0.1;
+		filter: alpha(opacity=10);
+	}
+
+
+	/* used to display error message on bottom */
+	.dsPivotError {
+		position: absolute;
+		padding: 2px;
+		border-top: 1px solid black;
+		font-weight: bold;
+		color: red;
+		background: white;
+	}
+
+	/* error displayed in main body of pivot */
+	.pivotError {
+		color: #404040;
+		font-size: 24px;
+		padding: 10px;
+	}
+
+	table.dsPivotTable {
+		border: none;
+		font-size: 10pt;
+		table-layout:fixed;
+		padding: 0px;
+		height: auto;
+		box-shadow: 2px 2px 25px rgba(0,0,0,0.25);
+	}
+
+	table.dsPivotDataTable {
+		background: white;
+		font-size: 10pt;
+		table-layout:fixed;
+		padding: 0px;
+		box-shadow: 2px 2px 25px rgba(0,0,0,0.25);
+	}
+
+	table.dsPivotDataTableCB {
+		background: white;
+		font-size: 10pt;
+		table-layout:fixed;
+		padding: 0px;
+		box-shadow: 2px 2px 25px rgba(0,0,0,0.25);
+	}
+
+	.dsPivotSummary {
+		font-size: 0.8em;
+		margin: 20px;
+	}
+
+	/* message box displayed while pivot is updating. */
+	.dsPivotMessage {
+		z-index: 3;
+		padding: 10px;
+		top: 100px;
+		left: 100px;
+		position: absolute;
+		border: 1px solid #808080;
+		background: #F0F0FF;
+		opacity: 0.9;
+		color: #404040;
+		padding: 2px;
+		font-size: 1.2em;
+		border-radius: 4px;
+		box-shadow: 2px 2px 2px #808080;
+	}
+
+	/* percentage complete */
+	.dsptPct {
+		font-size: 2.0em;
+		font-weight: bold;
+	}
+
+	.dsptDropMsg:hover {
+		background: #FFEEAA;
+	}
+
+	.dsPivotRowSection {
+		padding-top: 2px;
+		padding-left: 5px;
+		font-weight: bold;
+	}
+
+	/* column label */
+	table th.dsPivotColumn,
+	table th.dsPivotColumnSort {
+		padding: 0px;
+		text-align: center;
+		vertical-align: middle;
+
+		background: #C0C0C0;
+		background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+	}
+
+	/* wrapper around column header */
+	.dsPivotColumnDiv {
+		padding-top: 2px;
+		padding-left: 2px;
+		padding-right: 2px;
+		padding-bottom: 2px;
+		overflow: hidden;
+		background: none;
+		display:table-cell;
+	}
+	
+	/* zebra styles */
+	.dsptRowOdd td {
+		border-right: none;
+		border-bottom: none;
+	}
+
+	.dsptRowEven td {
+		background: #F0F0F4;
+	}
+
+	.dsptRowEven td {
+		border-right: none;
+		border-bottom: none;
+	}
+
+	table.dsPivotTable th.dsPivotColumnZebra {
+		color: #404040;
+		padding: 0px;
+		text-align: center;
+		vertical-align: middle;
+		background: #F0F0F4;
+		background-image: none;
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+
+	table.dsPivotTable th.dsPivotColumnSortZebra {
+		color: #404040;
+		padding: 0px;
+		text-align: center;
+		vertical-align: middle;
+		background: #F0F0F4;
+		overflow: hidden;
+		background-image: none;
+
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+
+	table.dsPivotTable th.dsPivotRowEven {
+		color: #404040;
+		text-align: left;
+		vertical-align: middle;
+		background: #F0F0F4;
+		background-image: none;
+		border-right: none;
+		border-bottom: none;
+	}
+
+	table.dsPivotTable th.dsPivotRowOdd {
+		color: #404040;
+		text-align: left;
+		vertical-align: middle;
+		background: white;
+		background-image: none;
+		border-right: none;
+		border-bottom: none;
+	}
+	
+	/* row label */
+	table.dsPivotTable th.dsPivotRow {
+		text-align: left;
+		vertical-align: middle;
+		background: #C0C0C0;
+		background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+
+		border-bottom: 1px solid #D0D0D0;
+	}
+	
+	th.dsPivotRow {
+		text-align: left;
+		vertical-align: middle;
+		background: #C0C0C0;
+		background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+
+		border-bottom: 1px solid #D0D0D0;
+	}
+
+	/* wrapper around row header */
+	.dsPivotRowDiv {
+		padding-top: 2px;
+		padding-left: 2px;
+		padding-right: 10px;
+	}
+
+	table.dsPivotTable th:hover {
+		background: #FFEEAA;
+		color: #404080;
+	}
+
+	table.dsPivotTable td, 
+	table.dsPivotTable th {
+		height: 22px;
+		overflow: hidden;
+		vertical-align: middle;
+
+		border-right: 1px solid #D0D0D0;
+		border-bottom: 1px solid #D0D0D0;
+
+		-webkit-transition-property: background;
+		-webkit-transition-duration: 0.25s;
+		-webkit-transition-timing-function: ease;
+		-moz-transition-property: background;
+		-moz-transition-duration: 0.25s;
+		-moz-transition-timing-function: ease;
+		transition-property: background;
+		transition-duration: 0.25s;
+		transition-timing-function: ease;
+
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+
+	table.dsPivotDataTable td {
+		border-right: 1px solid #E8E8E8;
+		border-bottom: 1px solid #E8E8E8;
+		width: 100px;
+		height: 22px;
+		overflow: hidden;
+		vertical-align: middle;
+
+		-webkit-transition-property: background;
+		-webkit-transition-duration: 0.25s;
+		-webkit-transition-timing-function: ease;
+		-moz-transition-property: background;
+		-moz-transition-duration: 0.25s;
+		-moz-transition-timing-function: ease;
+		transition-property: background;
+		transition-duration: 0.25s;
+		transition-timing-function: ease;
+	}
+	
+	table.dsPivotDataTable td:hover {
+		background: #FFEEAA;
+	}
+
+	table.dsPivotDataTableCB td {
+		border-right: 1px solid #E8E8E8;
+		border-bottom: 1px solid #E8E8E8;
+		width: 100px;
+		height: 22px;
+		overflow: hidden;
+		vertical-align: middle;
+
+		-webkit-transition-property: background;
+		-webkit-transition-duration: 0.25s;
+		-webkit-transition-timing-function: ease;
+		-moz-transition-property: background;
+		-moz-transition-duration: 0.25s;
+		-moz-transition-timing-function: ease;
+		transition-property: background;
+		transition-duration: 0.25s;
+		transition-timing-function: ease;
+	}
+
+	.dsPivotString {
+	}
+
+	.dsPivotDate {
+	}
+
+	.dsPivotNum {
+		text-align: right;
+	}
+
+	.dsPivotIcon {
+		text-align: center;
+	}
+
+	span.dsptDrillUp {
+		cursor: pointer;
+		padding-left: 4px;
+		padding-right: 4px;
+	}
+
+	span.dsptDrillUp:hover {
+		background: #DDCC88;
+		border-radius: 4px;
+	}
+
+	span.dsptDrillUp:active {
+		background: darkblue;
+		color: white;
+	}
+
+	/* outer-most div used for layout */
+	/* this div will also need to be resized based on the size of the table */
+	.dsptOuterDiv {
+		position: relative;
+		width: 400px;
+		height: 400px;
+		overflow: hidden;
+		visibility: hidden;
+		z-index: 1;
+	}
+	
+	.dsptHeaderDiv {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		right: 0px;
+		height: 22px;
+		overflow: hidden;
+		text-align: center;
+		font-weight: bold;
+
+		border-right: 1px solid gray;
+		border-bottom: 1px solid gray;
+
+		background: #C0C0C0;
+		background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+	}
+
+	.dsptTopLeftDiv {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		overflow: hidden;
+
+		padding: 0px;
+
+		background: #C0C0C0;
+		background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+
+		text-align: center;
+		vertical-align: bottom;
+		border-right: 1px solid #D0D0D0;
+		border-bottom: 1px solid #D0D0D0;
+
+		color: #404040;
+		font-size: 10pt;
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+	.dsptTopLeftDivZebra {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		overflow: hidden;
+
+		padding: 0px;
+		background: #F0F0F0;
+		background-image: none;
+		text-align: center;
+		vertical-align: bottom;
+		border-right: 1px solid #D0D0D0;
+		border-bottom: 1px solid #D0D0D0;
+
+		color: #404040;
+		font-size: 10pt;
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+	.dsptTopLeftDiv:hover,
+	.dsptTopLeftDivZebra:hover {
+		background: #FFEEAA;
+	}
+
+	/* wrapper around nub text */
+	.dsNubDiv {
+		position: absolute;
+		bottom: 0px;
+		left: 0px;
+		text-align: left;
+		vertical-align: bottom;
+		color: #404040;
+		font-size: 9pt;
+		overflow: hidden;
+		padding-bottom: 2px;
+	}
+
+	div.dsNubDiv table td {
+		text-align: left;
+		vertical-align: bottom;
+		color: #404040;
+		font-weight: bold;
+		font-size: 7pt;
+		padding-left: 2px;
+		overflow: hidden;
+	}
+
+	.dsptTopRightDiv {
+		position: absolute;
+		top: 0px;
+		left: 100px;
+		width: 300px;
+		height: 5px;
+		overflow-y: hidden;
+		overflow-x: hidden;
+	}
+
+	.dsptBottomLeftDiv {
+		position: absolute;
+		top: 5px;
+		left: 0px;
+		width: 100px;
+		height: 345px;
+		overflow-y: hidden;
+		overflow-x: hidden;
+		border-bottom: 1px solid #D0D0D0;
+	}
+
+	.dsptBottomRightDiv {
+		position: absolute;
+		top: 5px;
+		left: 100px;
+		width: 300px;
+		height: 345px;
+		overflow: hidden;
+		border-bottom: 1px solid #D0D0D0;
+	}
+
+	/* this runs along the bottom of the component */
+	.dsptStatusDiv {
+		border-top: 1px solid #808080;
+
+		background: #C0C0C0;
+		background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+
+		position: absolute;
+		top: 350px;
+		left: 0px;
+		right: 0px;
+		height: 32px;
+		overflow: hidden;
+		padding: 1px;
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+
+	.dsptStatusLabel {
+		font-size: 11px;
+	}
+
+	.dsptStatusValue {
+		padding-left: 5px;
+		font-weight: bold;
+		font-size: 11px;
+	}
+
+	.dsptDropMsg,
+	.dsptDropMsg:link,
+	.dsptDropMsg:active,
+	.dsptDropMsg:visited {
+		font-size: 0.8em;
+		color: #909090;
+		font-style: italic;	
+		text-decoration: none;
+	}
+
+	.dsptTitle {
+		font-weight: bold;
+		font-size: 1.1em;
+		border-left: 1px solid darkgray;
+	}
+
+	/* image */
+	.dsptIconBar {
+		vertical-align: bottom;
+	}
+
+	.dsptIcon,.dsptIconDisabled,.dsptIconHover,.dsptIconDropdown,.dsptIconDropdownSelect {
+		border: 1px solid transparent;
+		vertical-align: bottom;
+		margin-left: 1px;
+		margin-right: 1px;
+		padding: 1px;
+		border: 1px solid transparent;
+		border-radius: 4px;
+		-webkit-transition-property: background,opacity,transform;
+		-webkit-transition-duration: 0.5s;
+		-webkit-transition-timing-function: ease;
+		-moz-transition-property: background,opacity,transform;
+		-moz-transition-duration: 0.5s;
+		-moz-transition-timing-function: ease;
+		transition-property: background,opacity,transform;
+		transition-duration: 0.5s;
+		transition-timing-function: ease;
+	}
+
+	.dsptIcon {
+		cursor: pointer;
+	}
+
+	.dsptIcon:hover, .dsptIconHover {
+		background: #FFEEAA;
+		border: 1px solid rgba(120,120,120,0.25);
+		vertical-align: bottom;
+	}
+
+	.dsptIcon:active,.dsptIconHover:active {
+		background: white;
+		border: 1px solid white;
+		box-shadow: 2px 2px 2px #FFEEAA, -2px -2px 2px #FFEEAA;
+	}
+
+	.dsptIconDisabled {
+		opacity:0.40;
+		filter:alpha(opacity=40);
+	}
+	
+	.dsptIconDropdown:hover {
+		background: #FFEEAA;
+		border: 1px solid rgba(120,120,120,0.25);
+		vertical-align: bottom;
+	}
+	
+	.dsptIconDropdownSelect {
+		background: #80808040;
+		border: 1px solid rgba(120,120,120,0.25);
+	}
+	
+	.dsptIconDropdownMenu {
+		font-size: 11px;
+		display: none;
+  		position: absolute;
+  		min-width: 120px;
+  		z-index: 1;
+  		background-color: #f1f1f1;
+  		border:0.5px;
+  		border-color:black;
+  		border-style:solid;
+	}
+	
+	.dsptIconDropdownMenu a {
+		display: block;
+		padding:10px;
+	}
+	
+	.dsptIconDropdownMenu a:hover {
+		background-color: #ddd;
+	}
+
+	/* scroll bars: use 22px instead of "auto" for ie! */
+	.dsptVtScroll {
+		z-index: 2;
+		position: absolute;
+		width: 22px;
+		overflow-y: scroll;
+		overflow-x: hidden;
+	}
+	.dsptVtScrollInner {
+		height: 100px;
+		width: 15px;
+	}
+
+	.dsptHzScroll {
+		z-index: 2;
+		position: absolute;
+		height: auto;
+		overflow-x: scroll;
+		overflow-y: hidden;
+		height: 20px;
+	}
+	.dsptHzScrollInner {
+		height: 15px;
+		width: 100px;
+	}
+
+	/* listing table */
+	table.dsListingTable {
+		background: white;
+		font-size: 10pt;
+		table-layout:fixed;
+	}
+
+	table.dsListingTable tr.selectedRow {
+		background: rgb(47,98,128);
+	}
+
+	table.dsListingTable tr.evenRow {
+		background: #F8F8F8;
+	}
+
+	table.dsListingTable tr.oddRow {
+		background: white;
+	}
+
+	table.dsListingTable th {
+		color: #404040;
+		text-align: left;
+		padding: 0px;
+	}
+
+	table.dsListingTable th.dsListingColumn,
+	table.dsListingTable th.dsListingColumnSort {
+		background: #C0C0C0;
+		background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+	}
+
+	table.dsListingTable td {
+		padding: 0px;
+		padding-top: 2px;
+		padding-bottom: 2px;
+		color: #404040;
+	}
+
+	table.dsListingTable td.number {
+		text-align: right;
+		color: #404040;
+	}
+
+	table.dsListingTable tr.selectedRow td {
+		color: white;
+	}
+
+	table.dsListingTable tr.selectedRow td.number {
+		color: white;
+	}
+
+	.dsptCellDiv {
+		padding-right: 2px;
+		padding-left: 2px;
+		padding-top: 1px;
+		padding-bottom: 1px;
+		text-align: right;
+		overflow: hidden;
+		word-wrap: break-word;
+	}
+
+	.dsptListCellDiv {
+		padding-right: 4px;
+		padding-left: 4px;
+		padding-top: 1px;
+		padding-bottom: 1px;
+		background: none;
+		text-align: left;
+		overflow: hidden;
+	}
+
+	.dsptPlanItem {
+		font-size: 11pt;
+		border: 1px solid #404040; 
+		border-radius: 4px;
+		padding: 4px;
+		box-shadow: 2px 2px 2px #808080;
+	}
+
+	table td.dsptShowMore {
+		font-size: 10pt;
+		font-weight: bold;
+		color: #404040;
+		border: 1px solid #808080; 
+		border-radius: 4px;
+		padding: 2px;
+		background: #F0F0F0;
+	}
+
+	.dsptShowMore:hover {
+		background: #FFEEAA;
+	}
+
+	.dsptShowMore:active {
+		background: white;
+		box-shadow: 2px 2px 2px white, -2px -2px 2px white;
+	}
+	
+	/* + WAL106 -- div that wraps the single table */
+	.dsPivotCompleteTableDiv {
+		position: absolute;
+		width: 400px;
+		height: 400px;
+		overflow: hidden;
+		visibility: hidden;
+		z-index: 1;
+	}
+	/* - WAL106 */
+
+	/* + WAL106 -- styling for single pivot table */
+	table.dsPivotCompleteTable {
+		position: relative;
+		/*border: none;*/
+		background: #D0D0D0;
+		font-size: 10pt;
+		table-layout:fixed;
+		padding: 0px;
+		height: auto;
+		font-family: Arial;
+		border-collapse: collapse;
+		box-shadow: 2px 2px 25px rgba(0,0,0,0.25);
+		border-right: 1px solid #D0D0D0;
+		border-bottom: 1px solid #D0D0D0;
+	}
+	/* - WAL106 -- styling for single pivot table */
+	
+	/* WAL -- div version */
+	div.dsPivotCompleteTable {
+		
+		width: 400px;
+		height: 400px;
+		
+		position: relative;
+		/*border: none;*/
+		background: #D0D0D0;
+		font-size: 10pt;
+		padding: 0px;
+		height: auto;
+		font-family: Arial;
+		border-collapse: collapse;
+		box-shadow: 2px 2px 25px rgba(0,0,0,0.25);
+		/*border-right: 1px solid #D0D0D0;
+		border-bottom: 1px solid #D0D0D0;*/
+	}
+	
+	/* WAL */
+	.topLabels {
+		position: absolute;	
+	}
+	
+	/* + WAL106 -- top/side table styling */
+	table.dsPivotCompleteTable th {
+		height: 22px;
+		overflow: hidden;
+		vertical-align: middle;
+
+		border-right: 1px solid #D0D0D0;
+		border-bottom: 1px solid #D0D0D0;
+
+		-webkit-transition-property: background;
+		-webkit-transition-duration: 0.25s;
+		-webkit-transition-timing-function: ease;
+		-moz-transition-property: background;
+		-moz-transition-duration: 0.25s;
+		-moz-transition-timing-function: ease;
+		transition-property: background;
+		transition-duration: 0.25s;
+		transition-timing-function: ease;
+
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	
+	/* row label */
+	table.dsPivotCompleteTable th.dsPivotRow {
+		text-align: left;
+		vertical-align: middle;
+		background: #C0C0C0;
+		background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+
+		border-bottom: 1px solid #D0D0D0;
+	}
+	
+	table.dsPivotCompleteTable th.dsPivotColumnZebra {
+		color: #404040;
+		padding: 0px;
+		text-align: center;
+		vertical-align: middle;
+		background: #F0F0F4;
+		background-image: none;
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	
+	/* zebra stuff */
+	table.dsPivotCompleteTable th.dsPivotColumnSortZebra {
+		color: #404040;
+		padding: 0px;
+		text-align: center;
+		vertical-align: middle;
+		background: #F0F0F4;
+		overflow: hidden;
+		background-image: none;
+
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	
+	table.dsPivotCompleteTable th.dsPivotRowEven {
+		color: #404040;
+		text-align: left;
+		vertical-align: middle;
+		background: #F0F0F4;
+		background-image: none;
+		border-right: none;
+		border-bottom: none;
+	}
+
+	table.dsPivotCompleteTable th.dsPivotRowOdd {
+		color: #404040;
+		text-align: left;
+		vertical-align: middle;
+		background: white;
+		background-image: none;
+		border-right: none;
+		border-bottom: none;
+	}
+	
+	table.dsPivotCompleteTable th:hover {
+		background: #FFEEAA;
+		color: #404080;
+	}
+	/* + WAL106 - top/side table styling */
+	
+	/* + WAL106 data table styling */	 
+	table.dsPivotCompleteTable td {
+		border-right: 1px solid #E8E8E8;
+		border-bottom: 1px solid #E8E8E8;
+		width: 100px;
+		height: 22px;
+		overflow: hidden;
+		vertical-align: middle;
+		
+		background: white;
+		font-size: 10pt;
+
+		-webkit-transition-property: background;
+		-webkit-transition-duration: 0.25s;
+		-webkit-transition-timing-function: ease;
+		-moz-transition-property: background;
+		-moz-transition-duration: 0.25s;
+		-moz-transition-timing-function: ease;
+		transition-property: background;
+		transition-duration: 0.25s;
+		transition-timing-function: ease;
+	}
+	
+	table.dsPivotCompleteTableKPI td {
+		border-right: 1px solid #E8E8E8;
+		border-bottom: 1px solid #E8E8E8;
+		width: 100px;
+		height: 22px;
+		overflow: hidden;
+		vertical-align: middle;
+		
+		background: white;
+		font-size: 10pt;
+
+		-webkit-transition-property: background;
+		-webkit-transition-duration: 0.25s;
+		-webkit-transition-timing-function: ease;
+		-moz-transition-property: background;
+		-moz-transition-duration: 0.25s;
+		-moz-transition-timing-function: ease;
+		transition-property: background;
+		transition-duration: 0.25s;
+		transition-timing-function: ease;
+	}
+
+	/* zebra stuff */
+	table.dsPivotCompleteTable td.dsPivotRowEven {
+		color: #404040;
+		text-align: left;
+		vertical-align: middle;
+		background: #F0F0F4;
+		background-image: none;
+		border-right: none;
+		border-bottom: none;
+	}
+
+	table.dsPivotCompleteTable td.dsPivotRowOdd {
+		color: #404040;
+		text-align: left;
+		vertical-align: middle;
+		background: white;
+		background-image: none;
+		border-right: none;
+		border-bottom: none;
+	}
+	
+	table.dsPivotCompleteTable td:hover {
+		background: #FFEEAA;
+	}
+	/* - WAL106 data table styling */
+	
+	/* + WAL106 nub table styling */
+	table.dsPivotCompleteTable th.dsNub {
+
+		background: #C0C0C0;
+		background: -moz-linear-gradient(top,  #f8f8f8 0%, #c0c0c0 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#c0c0c0)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #f8f8f8 0%,#c0c0c0 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #f8f8f8 0%,#c0c0c0 100%); /* W3C */
+		
+		text-align: left;
+		vertical-align: bottom;
+		color: #404040;
+		font-size: 7pt;
+		padding-left: 2px;
+		overflow: hidden;
+		
+		/*border: none; */
+		/* WAL106 -- override right border when needed in %DrawTable */
+		border-right: 1px solid #D0D0D0;
+		border-bottom: 1px solid #D0D0D0;
+	}
+	
+	table.dsPivotCompleteTable th.dsNubZebra {
+
+		background: #F0F0F0;
+		background-image: none;
+		text-align: left;
+		vertical-align: bottom;
+
+		color: #404040;
+		font-size: 7pt;
+		
+		padding-left: 2px;
+		overflow: hidden;
+	}
+	
+	table.dsPivotCompleteTable th.dsNub:hover,
+	table.dsPivotCompleteTable th.dsNubZebra:hover {
+		background: #FFEEAA;
+	}
+	/* - WAL106 nub table styling */
+
+	/* +DTB701 */
+	.coverPaneActive {
+		position:absolute;
+		left:0px;
+		right:0px;
+		top:0px;
+		bottom:0px;
+		opacity:.2;
+		background:grey;
+		display:block;
+	}
+	
+	.coverPaneInactive {
+		position:absolute;
+		left:0px;
+		top:0px;
+		width:0px;
+		height:0px;
+		display:block;
+	}
+	/* -DTB701 */
+
+/* @class="%DeepSee.Component.styleEdit" */
+
+.seBox {
+	user-select: none;
+	border: 1px solid #D0D0D0;
+	background: #F0F0F0;
+}
+
+.seDropdown {
+	position: absolute;
+	z-index: 2;
+	border: 1px solid #808080;
+	width: 200px;
+	height: 220px;
+	background: #FDFDFD;
+	box-shadow: 2px 2px 2px black;
+	display: none;
+}
+
+.seColorSet {
+	color: #404040;
+	font-size: 10px;
+}
+
+table.seColorTable td {
+}
+
+table.seColorTable td:hover {
+	box-shadow: 1px 1px 1px #4040F0,-1px -1px 1px #4040F0;
+}
+
+/* @class="%DeepSee.Component.searchBox" */
+
+.searchBoxCaption {
+	color: gray;
+	font-size: 8pt;
+	text-align: center;
+}
+
+.searchBoxSearchBox {
+	font-size: 8pt;
+}
+
+.searchBoxDescription {
+	font-size: 12px;
+	color: #606060;
+}
+
+table td.searchBoxTextCellRO {
+	color: #404040;
+	font-size: 9pt;
+	font-weight: bold;
+	padding-left: 2px;
+}
+
+table td.searchBoxTextCell {
+	color: #404040;
+	background: white;
+	font-size: 9pt;
+	font-weight: bold;
+	padding-left: 2px;
+	border-top: 1px solid #D0D0D0;
+	border-left: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;
+}
+
+table td.searchBoxBtn {
+	background: white;
+	border-top: 1px solid #D0D0D0;
+	border-right: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;
+	vertical-align: bottom;
+}
+
+table td.searchBoxBtn img {
+	padding-top: 2px;
+	padding-right: 2px;
+	padding-left: 2px;
+	height: 12px;
+}
+
+/* header in dropdown */
+table.searchBoxHeader {
+	background: #404040;
+	background-image: url(images/grad-gray-10x100.png);
+	background-repeat: repeat-x;
+	border-bottom: 1px solid darkgray; 
+	height: 30px;
+}
+
+/* List within dropdown */
+div.searchBoxList {
+	height: 190px;
+	width: 350px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	background: #F0F0F0;
+}
+
+table.searchBoxTable {
+	width: 100%;
+	border-bottom: 1px solid #D0D0D0;
+}
+
+div.searchBoxItemBarDiv {
+	height: 20px;
+	background: rgb(183,183,204);
+	border-bottom: 1px solid #909090;
+	padding: 3px;
+	font-size: 13px;
+	box-shadow: 0px 2px 10px #808080;
+}
+
+table tr.searchBoxItemBar {
+	background: rgb(183,183,204);
+}
+
+table tr.searchBoxItemBar td {
+	color: #606060;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+table tr.searchBoxItemOdd,
+table tr.searchBoxItemEven {
+	-webkit-transition-property: background;
+	-webkit-transition-duration: 0.3s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: background;
+	-moz-transition-duration: 0.3s;
+	-moz-transition-timing-function: ease;
+	transition-property: background;
+	transition-duration: 0.3s;
+	transition-timing-function: ease;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+table tr.searchBoxItemOdd {
+}
+
+table tr.searchBoxItemEven {
+	background: white;
+}
+
+table tr.searchBoxItemOdd:hover,
+table tr.searchBoxItemEven:hover {
+	background: #FFEEAA;
+}
+
+table.searchBoxTable td.cb {
+}
+
+table.searchBoxTable td {
+	color: #404040;
+	font-family: arial;
+	font-size: 14px;
+	padding: 4px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.searchBoxCustomItemEven, 
+.searchBoxCustomItemOdd {
+	font-size: 14px;
+	padding: 5px;
+	padding-left: 10px;
+	-webkit-transition-property: background;
+	-webkit-transition-duration: 0.3s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: background;
+	-moz-transition-duration: 0.3s;
+	-moz-transition-timing-function: ease;
+	transition-property: background;
+	transition-duration: 0.3s;
+	transition-timing-function: ease;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.searchBoxCustomItemEven {
+	background: #F8F8F8;
+}
+
+.searchBoxCustomItemOdd {
+	background: white;
+}
+
+.searchBoxCustomItemEven:hover,
+.searchBoxCustomItemOdd:hover {
+	background: #FFEEAA;
+}
+
+.searchBoxCustomItemEven:active,
+.searchBoxCustomItemOdd:active {
+	background: #404040;
+	color: #F0F0F0;
+}
+
+#offsetNow1[disabled],
+#offsetNow2[disabled] {
+	visibility: hidden;
+}
+
+/* EOF */

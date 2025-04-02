@@ -1,0 +1,47 @@
+<AutoPageENS domain="Ensemble" parentpage="HL7SchemaMain.csp" pagename="HL7 Raw Message Structure" title="@Ensemble:HL7ManagerRawMessageStructure@HL7 Raw Message Structure">
+<html>
+<head>
+<title>HL7 Raw Message Structure</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+</head>
+<body>
+
+<div class="Text1">HL7 <b>Raw Message Structure</b> definition is displayed below:</div>
+<br>
+
+<script language=Cache runat=server>
+	set ms=%request.Get("MS")
+	set category=$p(ms,":",2)
+	set secondary=$p(ms,":",3)
+	If ((category'="")&&(secondary'="")) {
+		set description=..EscapeHTML(##class(EnsLib.HL7.Schema).GetDescription(ms))
+		if $data(^EnsHL7.Schema(category,"MS",secondary))=0 {
+			write "<b><font size=6>"_ms_" </font> Definition does not exist!</b>",!
+			quit
+		}
+	}
+</script>
+
+<b><font size=6>#(category_":"_secondary)# </font> #($G(description))#</b>
+<br><br>
+
+<script language=Cache runat=server>
+	If ((category'="")&&(secondary'="")) {
+		Set struct=^EnsHL7.Schema(category,"MS",secondary)
+		
+		write "<b>Raw Definition:</b>"
+
+		write "<table border=1 cellpadding=2 cellspacing=0 style=""font-size: 0.8em;""><tbody align=center><tr>",!
+		write "<tr><td>"_struct_"</td></tr>"
+		write "</table>"
+		write "<br>"
+	}
+</script>
+
+<p>
+<a href="#(..Link("HL7SchemaMain.csp"))#">(Show All Categories)</a><br>
+<a href="#(..Link("HL7SchemaList.csp?ELEMENT=MS&CATEGORY="_category))#">(Show All Message Structures in category '#(category)#')</a><br>
+<a href="#(..Link("HL7SchemaMessageStructure.csp?MS="_ms))#">(Show Definition diagram)</a>
+
+</body>
+</html>

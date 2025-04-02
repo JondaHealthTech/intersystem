@@ -1,0 +1,180 @@
+<html>		<!-- Menu under Admin setting in Side Nav -->
+<head>		<!-- no functions yet -->
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+		q 1
+	</script>
+
+	<script language="cache" runat="server">
+		s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+		i r1'=1 s %response.Redirect="cLockDown.csp"
+		d HEAD1^CSP999
+	</script>
+        <link rel="stylesheet" href="assets/styles/cFrame.css">
+</head>
+<body onload="jInitMe()" style="padding:0px;margin:0px">
+<form id="F1" name="F1">
+<div id="wrapper">
+	<div class="bg-wrapper">
+	<div class="bg3">
+	<img src="./assets/images/bg3.png">
+	</div>
+	</div>
+	<div class="main-field" style="width:100%">
+		<img class="logo mobile-active" src="./assets/images/JX Logo.png" alt="JondaX">
+		<h1>
+		Menus
+		</h1>
+		<div>
+			<div class="main-table">
+				<div class="table-border"></div>
+					<div class="table-container">
+					<table>
+						<tr>
+							<td>Code</td>
+							<td><input type="text" id="T1" name="T1" size="10"></td>
+						</tr>
+						<tr>
+							<td>Name</td>
+							<td style="padding:2px"><input type="text" id="T2" name="T2" size="50"></td>
+						</tr>
+					</table>
+					<div>&nbsp;</div>
+					<table style='padding:1px;'>
+						<tr>
+							<td><input type="checkbox" id="C1" name="C1" onclick="jCheckMe(this.id,this.checked)"> Admin Dashboard</td>
+							<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td><input type="checkbox" id="C2" name="C2" onclick="jCheckMe(this.id,this.checked)"> Reviewer Dashboard</td>
+						</tr>
+					</table>
+					<table style='padding:1px'>
+						<tr>
+							<td><input type="checkbox" id="C3" name="C3" onclick="jCheckMe(this.id,this.checked)"> Review Results</td>
+						</tr>                       
+					</table>
+					<table style='padding:1px'>
+						<tr>
+							<td>Diagnostic Test </td>
+							<td>
+								<input type="checkbox" id="C4a" name="C4a" onclick="jCheckMe(this.id,this.checked)"> Insert&nbsp;&nbsp;
+								<input type="checkbox" id="C4b" name="C4b" onclick="jCheckMe(this.id,this.checked)"> Amend&nbsp;&nbsp;
+								<input type="checkbox" id="C4c" name="C4c" onclick="jCheckMe(this.id,this.checked)"> Display&nbsp;&nbsp;
+								<input type="checkbox" id="C4d" name="C4d" onclick="jCheckMe(this.id,this.checked)"> Delete&nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td>Diagnostic Category </td>
+							<td>
+								<input type="checkbox" id="C5a" name="C5a" onclick="jCheckMe(this.id,this.checked)"> Insert&nbsp;&nbsp;
+								<input type="checkbox" id="C5b" name="C5b" onclick="jCheckMe(this.id,this.checked)"> Amend&nbsp;&nbsp;
+								<input type="checkbox" id="C5c" name="C5c" onclick="jCheckMe(this.id,this.checked)"> Display&nbsp;&nbsp;
+								<input type="checkbox" id="C5d" name="C5d" onclick="jCheckMe(this.id,this.checked)"> Delete&nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td>JX Unit </td>
+							<td>
+								<input type="checkbox" id="C6a" name="C6a" onclick="jCheckMe(this.id,this.checked)"> Insert&nbsp;&nbsp;
+								<input type="checkbox" id="C6b" name="C6b" onclick="jCheckMe(this.id,this.checked)"> Amend&nbsp;&nbsp;
+								<input type="checkbox" id="C6c" name="C6c" onclick="jCheckMe(this.id,this.checked)"> Display&nbsp;&nbsp;
+								<input type="checkbox" id="C6d" name="C6d" onclick="jCheckMe(this.id,this.checked)"> Delete&nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td>JX Unit Formula </td>
+							<td>
+								<input type="checkbox" id="C7a" name="C7a" onclick="jCheckMe(this.id,this.checked)"> Insert&nbsp;&nbsp;
+								<input type="checkbox" id="C7b" name="C7b" onclick="jCheckMe(this.id,this.checked)"> Amend&nbsp;&nbsp;
+								<input type="checkbox" id="C7c" name="C7c" onclick="jCheckMe(this.id,this.checked)"> Display&nbsp;&nbsp;
+								<input type="checkbox" id="C7d" name="C7d" onclick="jCheckMe(this.id,this.checked)"> Delete&nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td>Country </td>
+							<td>
+								<input type="checkbox" id="C8a" name="C8a" onclick="jCheckMe(this.id,this.checked)"> Insert&nbsp;&nbsp;
+								<input type="checkbox" id="C8b" name="C8b" onclick="jCheckMe(this.id,this.checked)"> Amend&nbsp;&nbsp;
+								<input type="checkbox" id="C8c" name="C8c" onclick="jCheckMe(this.id,this.checked)"> Display&nbsp;&nbsp;
+								<input type="checkbox" id="C8d" name="C8d" onclick="jCheckMe(this.id,this.checked)"> Delete&nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td>Client Template </td>
+							<td>
+								<input type="checkbox" id="C9a" name="C9a" onclick="jCheckMe(this.id,this.checked)"> Insert&nbsp;&nbsp;
+								<input type="checkbox" id="C9b" name="C9b" onclick="jCheckMe(this.id,this.checked)"> Amend&nbsp;&nbsp;
+								<input type="checkbox" id="C9c" name="C9c" onclick="jCheckMe(this.id,this.checked)"> Display&nbsp;&nbsp;
+								<input type="checkbox" id="C9d" name="C9d" onclick="jCheckMe(this.id,this.checked)"> Delete&nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td>User Details </td>
+							<td>
+								<input type="checkbox" id="C10a" name="C10a" onclick="jCheckMe(this.id,this.checked)"> Insert&nbsp;&nbsp;
+								<input type="checkbox" id="C10b" name="C10b" onclick="jCheckMe(this.id,this.checked)"> Amend&nbsp;&nbsp;
+								<input type="checkbox" id="C10c" name="C10c" onclick="jCheckMe(this.id,this.checked)"> Display&nbsp;&nbsp;
+								<input type="checkbox" id="C10d" name="C10d" onclick="jCheckMe(this.id,this.checked)"> Delete&nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td>Menus </td>
+							<td>
+								<input type="checkbox" id="C11a" name="C11a" onclick="jCheckMe(this.id,this.checked)"> Insert&nbsp;&nbsp;
+								<input type="checkbox" id="C11b" name="C11b" onclick="jCheckMe(this.id,this.checked)"> Amend&nbsp;&nbsp;
+								<input type="checkbox" id="C11c" name="C11c" onclick="jCheckMe(this.id,this.checked)"> Display&nbsp;&nbsp;
+								<input type="checkbox" id="C11d" name="C11d" onclick="jCheckMe(this.id,this.checked)"> Delete&nbsp;
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<p style="text-align:left">
+				<br>
+				<button id="B1" name="B1" class="back-btn green-btn" onclick="jSaveMe()" style="width:80px">Save</button> &nbsp;<button id="B2" name="B2" class="back-btn green-btn" onclick="jDeleteMe()" style="width:80px">Delete</button>
+			</p>
+		</div>
+	</div>
+</div>
+</form>
+<script>
+    var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script language="cache" runat="server">
+	d jQueryCore^CSP999
+</script>
+</body>
+<script type="text/javascript">
+window.onload = jInitMe;
+document.onload = parent.resetTimer;
+document.onmousemove = parent.resetTimer;
+document.onmousedown = parent.resetTimer; // touchscreen presses
+document.ontouchstart = parent.resetTimer;
+//document.onclick = parent.resetTimer; // touchpad clicks
+document.onkeypress = parent.resetTimer;
+document.addEventListener('scroll', parent.resetTimer, true);
+T1=self.F1.T1,T2=self.F1.T2
+C1=self.F1.C1
+
+function jInitMe(e){
+	// session timer resets on page load
+	parent.resetTimer(e);
+	//#server(..cInitMe())#
+}
+
+function jCheckMe(fld,val){
+	alert(fld + " checked is " + val)
+
+}
+
+function jSaveMe(){
+	
+}
+
+function jDeleteMe(){
+	
+}
+
+
+</script>
+</html>

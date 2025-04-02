@@ -1,0 +1,11 @@
+{
+    "HOME.TITLE": "Main",
+    "HOME.SELECT": "Selectar",
+    "header": {
+        "DROPDOWN_LOGOUT": "Cerrar sesión",
+        "ABOUT_DIALOG_HS_TITLE": "Acerca de HealthShare",
+        "ABOUT_DIALOG_HS_VERSION": "Versión: ",
+        "ABOUT_DIALOG_APP_TITLE": "Acerca de ",
+        "ABOUT_DIALOG_APP_VERSION": "Versión: "
+    }
+}

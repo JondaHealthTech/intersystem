@@ -1,0 +1,200 @@
+<html lang="en"> <!--Groot v1.1-->
+    <head>
+    	<script language="cache" runat="server">d HEAD1^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/jxFileUploadB2B.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <h1>Transform your laboratory data with Groot v1.1</h1>
+                    <h2>Drag and drop your file below</h2>
+                    <div id="lab-upload" class="lab-upload">
+                        <h4>Upload laboratory file</h4>
+                        <img src="assets/images/upload.png" alt="Upload">
+                        <p>
+                            Drag and drop here<br>
+                            or<br>
+                        </p>
+                        <input
+                            type="file"
+                            accept="image/*,.pdf,.hl7,.xml,.json,.xlsx"
+                            id="fileupload"
+                            style="display: none"
+                            onchange="changeFile(event)"
+                       >
+                        <button onclick="openFileDialog(event)">Upload</button>
+                        <p class="note">File Formats: <span style="display:none">Interoperatibility <span style="text-decoration:underline;text-decoration-style:dotted;cursor:help" title="HL7 v2, HL7 CDA and HL7 FHIR json/xml">File Standards</span><span>, </span>PDF or <span style="text-decoration:underline;text-decoration-style:dotted;cursor:help" title="bmp, heic, jpg, jpeg, gif, webp">images</span></span>.<br>Max size: 5MB per file</p>
+                    </div>
+                    <div class="hr-group">
+                        <hr>
+                        <p class="num">1</p>
+                    </div></div>
+            </div>
+            <button
+                class="inactive"
+                id="BModal1"
+                data-toggle="modal"
+                data-target="#myModal1"
+                type="button"
+            >
+            </button>
+                Next
+        </div>
+        <div
+            id="myModal1"
+            class="modal fade"
+            aria-labelledby="myModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h2>Hang tight!</h2>
+                        <h3>We're analysing your file...</h3>
+                        <img
+                            class="modal-img"
+                            src="assets/images/analyzeData.png"
+                            alt="Analysing Data"
+                       >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+    <script type="text/javascript">
+		window.onload = parent.resetTimer;
+  		document.onmousemove = parent.resetTimer;
+  		document.onmousedown = parent.resetTimer; // touchscreen presses
+  		document.ontouchstart = parent.resetTimer;
+  		//document.onclick = parent.resetTimer; // touchpad clicks
+  		document.onkeypress = parent.resetTimer;
+  		document.addEventListener('scroll', parent.resetTimer, true);
+  		
+        const fileUpload = document.getElementById("fileupload");
+        const modalBtn = document.getElementById("BModal1");
+        let uploadedFile = undefined;
+        function openFileDialog(e) {
+            fileUpload.click();
+        }
+        function changeFile(e) {
+            if (e.target.value.length != 0) {
+            	uploadedFile = e.target.files[0];
+            	modalBtn.click();
+			// upload to server
+				jUploadFile();
+            }
+        }
+        document.body.addEventListener("drop", (ev) => {
+            ev.preventDefault();
+            if (ev.dataTransfer.items) {
+                if (ev.dataTransfer.items[0].kind === "file") {
+                    uploadedFile = ev.dataTransfer.items[0].getAsFile();
+                }
+            } else {
+                uploadedFile = ev.dataTransfer.files[0];
+            }
+            //removeDragData(ev);
+            modalBtn.click();
+			// upload to server
+			jUploadFile()
+        });
+        document.body.addEventListener("dragover", (e) => {
+            e.preventDefault();
+        });
+        function removeDragData(ev) {
+            if (ev.dataTransfer.items) {
+                ev.dataTransfer.items.clear();
+            } else {
+                ev.dataTransfer.clearData();
+            }
+        }
+        function jUploadFile(){
+	        /// IMPORTANT: CHECK FILE TYPE AND REJECT ANY non-pdf, image, xlsx, json, hl7 extensions
+    		var formData = new FormData();
+    		formData.append("fileupload", uploadedFile);
+			fname=uploadedFile.name
+			fname = fname.replace("&", " ");
+
+  			var xhr = new XMLHttpRequest();
+			// Upload data to server
+			xhr.open("POST", "jxAltUploadRecord.csp?FName=" + fname, true);
+	
+			xhr.send(formData);
+  			xhr.onload = function(e) {
+  				if (this.status == 200){		// added 2022-12-30 DW
+					#server(..cCheckNext(uploadedFile.name.toLowerCase()))#
+  				}	
+    		}
+		} 
+	
+    </script>
+    <script language="cache" method="cCheckNext" arguments="d1:%String">
+    s UserID=$g(%session.Data("UserID"))
+    i $d(^ClaudeError("alt"_UserID)) &js<modalBtn.click(); alert("SORRY!Too Many Biomarkers");> q
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i $d(^ClaudeError("alt"_UserID)) &js<modalBtn.click(); alert("SORRY!Too Many Biomarkers");> q
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i $d(^ClaudeError("alt"_UserID)) &js<modalBtn.click(); alert("SORRY!Too Many Biomarkers ");> q
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i $d(^ClaudeError("alt"_UserID)) &js<modalBtn.click(); alert("SORRY!Too Many Biomarkers ");> q
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i '$d(^jxAltUpload(d1)) h 1		; still waiting
+		i $d(^ClaudeError("alt"_UserID)) &js<modalBtn.click(); alert("SORRY!Too Many Biomarkers ");> q
+		i '$d(^jxAltUpload(d1)) &js<alert("Failed to upload file"), modalBtn.click()> q		; stop waiting after 5s
+		i ^jxAltUpload(d1)=0 &js<alert("Incorrect file type"), modalBtn.click()> q		; wrong file type
+		i ^jxAltUpload(d1)'=0 &js<modalBtn.click(), window.open("jxAltConvertResultTable1.csp","_self")>
+		;i ^jxAltUpload(d1)'=0,($g(%session.Data("UserID"))=16 ! $g(%session.Data("UserID"))=2)  &js<modalBtn.click(), window.open("jxAltConvertResultTable1.csp","_self")> ;for testing martin
+
+	</script>
+	</html>

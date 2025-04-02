@@ -1,0 +1,412 @@
+<html>		<!-- Unit approval under Admin setting in Side Nav -->
+<head>
+<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+	q 1
+</script>
+
+<script language="cache" runat="server">
+	s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+	i r1'=1 s %response.Redirect="cLockDown.csp"
+	d HEAD1^CSP999
+</script>
+	<link rel="stylesheet" href="assets/styles/cUnitApproval.css" />
+</head>
+    <body>
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div id="loader" class="loader">
+            	<div class="loader-content">
+            		<p>Please wait for all the data to be loaded!</p>
+            		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            	</div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;" onclick="openMobileNav(event)"></i>
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <div class="title">
+                    	<h1>Categories for Approval</h1>
+                    </div>
+                    <div id="temp-content" class="temp-content">
+                        <h2>Recently added for approval <span style="font-weight:normal; font-size: 10pt" id="TotalCount"></span></h2>
+                        <div class="table-border"></div>
+                        <p class="no-data">No data is added recently.</p>
+                        <div class="temp-table">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Category Name <div class="category-data img-group"><img src="./assets/images/upArrow.png" alt="Up Arrow" onclick="jSortTable(1)"><img src="./assets/images/downArrow.png" alt="Down Arrow" onclick="jSortTable(2)"></div></th>
+                                        <th>JX Name <div class="category-data img-group"><img src="./assets/images/upArrow.png" alt="Up Arrow" onclick="jSortTable(3)"><img src="./assets/images/downArrow.png" alt="Down Arrow" onclick="jSortTable(4)"></div></th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="category dropdown-data">
+                            <ul>
+                            </ul>
+                        </div>
+                    	<div class="btn-edit-group">
+                    		<button class="green-btn" onclick="saveRow()">Save Changes</button>
+                    		<button class="blue-btn" onclick="approveRow(event)">Save & Approve</button>
+                    		<button class="pink-btn" onclick="cancelEdit()">Cancel</button>
+                    	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Popups -->
+        <div id="popup1" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Are you sure you want to approve and add <span id="save-val"></span> to database?</h4>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="jApproveCategory()">Yes</button>
+                    <button class="pink-btn" onclick="removePopup1()">No</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup2" class="fading-popup inactive">
+            <h4><span id="save-val1"></span> added to database</h4>
+        </div>
+        <div id="popup3" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Are you sure you want to reject <span id="reject-val"></span>?</h4>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="jRejectCategory()">Yes</button>
+                    <button class="pink-btn" onclick="cancelDelete()">No</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup4" class="fading-popup inactive">
+             <h4><span id="reject-val1"></span> entry rejected</h4>
+        </div>
+        <div id="popup5" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Please make sure you fill up <br> both the name and the category!!</h4>
+                <button class="green-btn" onclick="removePopup5()">Okay</button>
+            </div>
+        </div>
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/detect.js"></script>
+        <script src="assets/js/fastclick.js"></script>
+        <script src="assets/js/jquery.slimscroll.js"></script>
+        <script src="assets/js/jquery.blockUI.js"></script>
+        <script src="assets/js/waves.js"></script>
+        <script src="assets/js/wow.min.js"></script>
+        <script src="assets/js/jquery.nicescroll.js"></script>
+        <script src="assets/js/jquery.scrollTo.min.js"></script>
+        <script src="assets/js/jquery.core.js"></script>
+        <script src="assets/js/jquery.app.js"></script>
+    </body>
+    <script type="text/javascript">
+        let mySessionEnd;
+        let currentTr;
+        let popup1 = document.getElementById("popup1");
+        let popup2 = document.getElementById("popup2");
+        let popup3 = document.getElementById("popup3");
+        let popup4 = document.getElementById("popup4");
+        let popup5 = document.getElementById("popup5");
+        let val1;
+        let val2;
+        let val3;
+        let val4;
+        let val5;
+        let val6;
+        let tempVal6;
+        let langArr=[];
+        let val7;
+        let edited=false;
+        let currentDropdown;
+        let categoryData = document.querySelector(".category");
+        let dropDownText = " <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'>"
+        let currentOrder = 1;
+        window.onresize = setTableBorderPos;
+        window.onload = jInitMe;
+        document.onmousemove = resetTimer;
+		document.onmousedown = resetTimer; // touchscreen presses
+		document.ontouchstart = resetTimer;
+		document.onclick = resetTimer; // touchpad clicks
+		document.onkeypress = resetTimer;
+		document.addEventListener('scroll', resetTimer, true); 
+
+		function resetTimer(){
+			// Resets the session timer and trigger jLockDown after 1 hour (3600000 ms) of inactivity.
+			clearTimeout(mySessionEnd);
+			mySessionEnd = setTimeout(jLockDown, 3600000);
+		}
+		function clearTimer(){
+			// Clears the session timeout to prevent jLockDown from being triggered.
+			clearTimeout(mySessionEnd);
+		}
+		function jLockDown(){
+			#server(..cLockDown())#
+		}
+    	function jInitMe(){
+	        #server(..cInitMe())#
+	    	document.getElementById("loader").style.display = "none";
+        }
+        function setTableBorderPos(){
+            let tableBorder = document.querySelector(".table-border");
+            let tempTable = document.querySelector(".temp-table");
+            let table = document.querySelector("table");
+            let filter = document.querySelector(".filters");
+            
+            setTimeout(()=>{
+	            let tablePosition = table.getBoundingClientRect();
+            	if(tempTable.scrollHeight > tempTable.clientHeight){
+                	tableBorder.style.height = "calc(60vh + 4px)"
+            	}
+            	else{
+		        	tableBorder.style.height = tablePosition.height + 4 + "px";
+            	}
+            	tableBorder.style.width = tablePosition.width + 4 + "px";
+            },100);
+        }
+    	function jSortTable(order){
+	    	if(order==currentOrder){ return;}
+		    if(document.querySelectorAll("tbody tr").length<=1){
+		    	return;
+		    }
+	    	document.getElementById("loader").style.display = "block";
+	    	#server(..cLoadUnapprovedCategories(order))#
+	    	currentOrder = order;
+	    	document.getElementById("loader").style.display = "none";
+    	}
+    	// Change text contents to input boxes for editing
+        function editRow(e){
+	        edited=true;
+	    	if(currentTr==null){
+	    		currentTr = e.target.parentElement.parentElement;
+	    		tds = currentTr.querySelectorAll("td");
+	    		val1 = tds[1].textContent;
+	    		val2 = tds[2].textContent;
+	    		tds[1].innerHTML = "<input type='text' name='category' value='"+val1+"' >";
+	    		tds[2].innerHTML = "<input type='text' class='edit-jxcategory' name='jx-category' value='"+val2+"' onkeyup='openJxCategorySuggestion(event)'>";
+	    		
+                document.querySelector(".btn-edit-group").style.display="block";
+
+	    	}
+	    	else{
+		    	alert("You cannot edit multiple testnames at the same time");
+	    	}
+            setTableBorderPos();
+    	}
+    	// Change input boxes to text Contents back
+    	function cancelEdit(){
+	    	if(currentTr==document.querySelector("tbody").firstElementChild && currentTr.classList.contains("new")){
+		    	document.querySelector("tbody").firstElementChild.remove();
+	    	}
+	    	else{
+	    		tds = currentTr.querySelectorAll("td");
+	    		tds[1].innerHTML = val1;
+	    		tds[2].innerHTML = val2;
+	    		tds[3].innerHTML = val3;
+	    	}
+	    	currentTr = null;
+	    	edited = false;
+    		document.querySelector(".btn-edit-group").style.display="none";
+            setTableBorderPos();
+    	}
+    	// set and load JX category suggestion
+    	function openJxCategorySuggestion(e){
+	        let category = e.target.value;
+	        #server(..cLoadJxCategory(category))#
+	        let position = e.target.getBoundingClientRect();
+            categoryData.style.top = position.bottom + 2 + "px";
+            categoryData.style.right = window.innerWidth - position.right + "px";
+            setTimeout(()=>{
+                categoryData.classList.add("active");
+                if(categoryData.getBoundingClientRect().width < position.width){
+                    categoryData.style.width = position.width;
+                }
+            },100);
+        }
+  		// Selecting from  category suggestions 
+		function changeCategory(e){
+			let toCategory = e.target.textContent;
+			document.querySelector(".edit-jxcategory").value=toCategory;
+			removeUnitSuggestions();
+		}
+		// Deactivate unit suggestion
+	 	function removeUnitSuggestions(){
+	        categoryData.classList.remove("active");
+	        
+	    }
+		// save changes in the row
+        function saveRow(){
+	    	let tds = currentTr.querySelectorAll("td");
+	    	if(tds[1].querySelector("input").value=="" || tds[2].querySelector("input").value==""){
+		    	setTimeout(()=>popup5.classList.remove("inactive"),100);
+		    	return;
+	    	}
+	    	jUpdateCategory();
+	    	tds[1].innerHTML = val1;
+	    	tds[2].innerHTML = val2;
+            currentTr.classList.add("edited");
+            edited=false;
+    		document.querySelector(".btn-edit-group").style.display="none";
+    		setTableBorderPos();
+    		currentTr=null;
+        }
+        // Save the row and activate pop up for approval confirmation
+    	function approveRow(e){
+	    	if(currentTr==null){
+		    	currentTr=e.target.closest("tr");
+	    		document.getElementById("save-val").innerHTML = currentTr.querySelector(".category").textContent;
+	    		document.getElementById("save-val1").innerHTML = currentTr.querySelector(".category").textContent;
+	    		setTimeout(()=>popup1.classList.remove("inactive"),100);
+	    		edited=false;
+	    		return;
+	    	}
+	    	let tds = currentTr.querySelectorAll("td");
+	    	if(tds[1].querySelector("input").value=="" || tds[2].querySelector("input").value==""){
+		    	setTimeout(()=>popup5.classList.remove("inactive"),100);
+		    	return;
+	    	}
+	    	document.getElementById("save-val").innerHTML = tds[1].querySelector("input").value;
+	    	document.getElementById("save-val1").innerHTML = tds[1].querySelector("input").value;
+	    	setTimeout(()=>popup1.classList.remove("inactive"),100);
+    	}
+    	// update the approved date in database if approval is confirmed
+    	function jApproveCategory(){
+	    	let id = currentTr.querySelector(".id").textContent;
+	    	if(edited){
+		    	jUpdateCategory();
+		    }
+	    	#server(..cApproveCategory(id))#
+	    	setTimeout(()=>removePopup2(),4000);
+	    	setTableBorderPos();
+	    	currentTr.remove();
+	    	currentTr=null;
+    		document.querySelector(".btn-edit-group").style.display="none";
+	    	edited=false;
+	    	if(document.querySelectorAll("tbody tr").length==0){
+		    	document.querySelector("table").remove();
+				document.querySelector(".no-data").style.display="block";
+				document.querySelector(".table-border").style.opacity=0;
+	    	}
+    	}
+    	// Save the new unit in database or update if exists
+    	function jUpdateCategory(){
+		    //Function to add
+		    let tds=currentTr.querySelectorAll("td");
+		    id = tds[0].textContent;
+	    	val1 = tds[1].querySelector("input").value;
+	    	val2 = tds[2].querySelector("input").value;
+		    #server(..cUpdateCategory(id,val1,val2))#
+    	}
+    	// Activate popup3 to confirm rejection
+    	function rejectRow(e){
+	    	currentTr = e.target.closest("tr")
+	    	document.getElementById("reject-val").innerHTML = currentTr.querySelector(".category").textContent;
+	    	document.getElementById("reject-val1").innerHTML = currentTr.querySelector(".category").textContent;
+	    	setTimeout(()=>popup3.classList.remove("inactive"),100);
+    	}
+    	// Set deletedDate in database if rejection's confirmed
+    	function jRejectCategory(){
+	    	let id = currentTr.querySelector(".id").textContent;
+	    	#server(..cRejectCategory(id))#;
+	    	setTimeout(()=>removePopup4(),4000);
+	    	currentTr.remove();
+	    	currentTr=null;
+	    	setTableBorderPos();
+	    	if(document.querySelectorAll("tbody tr").length==0){
+		    	document.querySelector("table").remove();
+				document.querySelector(".no-data").style.display="block";
+				document.querySelector(".table-border").style.opacity=0;
+	    	}
+    	}
+    	// Activate popups
+    	function openPopup2(){
+	    	setTimeout(()=>popup2.classList.remove("inactive"),100);
+    	}
+    	function openPopup4(){
+	    	setTimeout(()=>popup4.classList.remove("inactive"),100);
+    	}
+    	// Deactivate Popups
+        function cancelDelete(){
+	        removePopup3();
+        }
+    	function removePopup1(){
+            popup1.classList.add("inactive");
+        }
+        function removePopup2(){
+            popup2.classList.add("inactive");
+        }
+        function removePopup3(){
+            popup3.classList.add("inactive");
+        }
+        function removePopup4(){
+            popup4.classList.add("inactive");
+        }
+        function removePopup5(){
+            popup5.classList.add("inactive");
+        }
+        document.addEventListener("click",(e)=>{
+            if(e.target.closest(".popup-dialog")==null){
+                removePopup1();
+                removePopup3();
+                removePopup5();
+            }
+            if(e.target.closest(".dropdown-data")==null && e.target.closest(".category") == null){
+                categoryData.classList.remove("active");
+            }
+            /*
+            if(e.target.closest(".dropdown-data")==null && e.target.closest(".language-dropdown") == null && languageData.classList.contains("active")){
+                closeLanguageSelect();
+            }
+            if(e.target.closest(".dropdown-data")==null && e.target.closest(".rule-dropdown") == null){
+                ruleData.classList.remove("active");
+            }
+            if(e.target.closest(".dropdown-data")==null && e.target.closest(".category-dropdown") == null){
+	            categoryData.classList.remove("active");
+            }
+            if(e.target.closest(".dropdown-data")==null && e.target.closest(".save-category-dropdown") == null){
+	            saveCategoryData.classList.remove("active");
+            }*/
+        })
+    </script>
+<script language="cache" method="cInitMe">
+	
+	d ApprovalInitMe^cDiagnosticCategory
+</script>
+<script language="cache" method="cUpdateCategory" arguments="id,d1,d2:%String">
+	d SaveUpdateCategory^cDiagnosticCategory
+</script>
+<script language="cache" method="cApproveCategory" arguments="id:%String">
+	d ApproveCategory^cDiagnosticCategory
+</script>
+<script language="cache" method="cRejectCategory" arguments="id:%String">
+d RejectCategory^cDiagnosticCategory
+</script>
+<script language="cache" method="cLoadUnapprovedCategories" arguments="orderCol:%String">
+	d LoadUnapprovedCategories^cDiagnosticCategory(orderCol)
+</script>
+<script language="cache" method="cLoadJxCategory" arguments="d1:%String">
+	d LoadJxCategories^cDiagnosticCategory
+</script>
+
+<script language="cache" method="cSaveUpdateUnit" arguments="id,name,jxName,category,saveCategory,jxUnit,language,rule:%String">
+	d UpdateUnit^cSIUnit
+</script>
+<script language="cache" method="cLockDown">	// Log out for inactivity of 1 hour
+	k %session.Data
+	&js<window.open("cLockDown.csp","_self")>
+</script>
+</html>

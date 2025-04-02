@@ -1,0 +1,4 @@
+
+2025-03-26 12:25:37.663 HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace About to Create Database HSCUSTOM
+2025-03-26 12:25:37.817 HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace Created IRIS.DAT in c:\intersystems\irishealth\mgr\HSCUSTOM
+2025-03-26 12:25:37.924 HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace Made Namespace HSCUSTOM

@@ -1,0 +1,847 @@
+<html>
+<head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+		q 1
+	</script>
+
+	<script language="cache" runat="server">
+		s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+		i r1'=1 s %response.Redirect="cLockDown.csp"
+		d HEAD1^CSP999
+	</script>
+	<link rel="stylesheet" href="assets/styles/jxReviewResultsS1.css" />
+    <style type="text/css">
+        @media print {
+            body {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body onload="jInitMe()">
+<form name="F1" id="F1" onsubmit="return false;">
+    <div id="wrapper">
+        <div class="bg-wrapper">
+            <div class="bg3">
+                <img src="./assets/images/bg3.png" />
+            </div>
+        </div>
+            <div id="loader" class="loader">
+            	<div class="loader-content">
+            		<p>Please wait for all the data to be loaded!</p>
+            		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            	</div>
+            </div>
+            <div id="file-loader" class="loader">
+            	<div class="loader-content">
+            		<p>Loading the file now... <br><span>It may take a while to load the file.</span></p>
+            		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            	</div>
+            </div>
+        <div class="content">
+            <div class="main-field">
+                <div class="instruct-area">
+                    <div class="main-title">
+                        <h1>Step 1: Transcription Results <span id="trans-id"></span> <img id="imgJX" src="./assets/images/favicon-32x32.png" height="35px" style="cursor:pointer;border-radius: 65px;border: 1px solid #FF0000;" onclick="jSetJX()" title="JX"> <img id="imgGPT" src="./assets/images/gpt.png" height="35px" style="cursor:pointer" onclick="jSetGPT()" title="GPT"> <img id="imgAWS" src="./assets/images/awsclaude.png" height="35px" style="cursor:pointer" onclick="jSetAWS()" title="Claude"><h1>
+                        <button type="button" type="button" class="pink-btn" onclick="proceedToStep2()">Next <img src="./assets/images/rightArrow.png" alt="Right Arrow"></button>
+                    </div>
+                    <p>Instructions: Cross-check the information transcribed from the OCR with the document in preview below. Ensure all test names, results, units, and ranges are correctly captured. The information in the document in the left should be identical to the data captured on the right.</p>
+                </div>
+                <div class="result-review">
+                    <div class="result">
+                        <div class="result-header">
+                            <div class="title">
+                                <h2><span id="cName">Client Name</span> | <span id="tName">Template Name</span></h2>
+                                <div class="date-picker"> 
+                                	<div class="date-input">dd/mm/yyyy <img src="assets/images/calendar.png" alt="Calendar">
+                                	</div>
+                            		<input type="date" id="report-date" onchange="changeDate(event)">
+                            	</div>
+                            	<button type="button" class="date-apply-btn" onclick="jApplyAll()">Apply to All</button>
+                            </div>
+                            <span id="RowCount" style="position:relative; font-size:14pt"></span>
+                            <div class="report-type">
+                            	<button type="button" class="preview-btn blue-btn" onclick="jPopOriginal()">Preview File</button>
+                                <h2>Report Type:</h2>
+                                <div id="report-btn" class="dropdown report" onclick="toggleSelectReport(event)">Select Type <img src="./assets/images/dropDownDarkBlue.png" alt="Dropdown"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="result-table">
+                            <table id="Tab1" class="table table-striped" >
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Test Name</th>
+                                        <th>Result <img src="./assets/images/dropDownBlue.png" alt="Down Arrow" title="Select Column to Switch Values" onclick="toggleSwitchTable(event)"/></th>
+                                        <th>Unit <img src="./assets/images/dropDownBlue.png" alt="Down Arrow" title="Select Column to Switch Values" onclick="toggleSwitchTable(event)"/></th>
+                                        <th>Lower<br>Range <img src="./assets/images/dropDownBlue.png" alt="Down Arrow" title="Select Column to Switch Values" onclick="toggleSwitchTable(event)"/></th>
+                                        <th>Upper<br>Range <img src="./assets/images/dropDownBlue.png" alt="Down Arrow" title="Select Column to Switch Values" onclick="toggleSwitchTable(event)"/></th>
+                                        <th>-</th>
+                                    </tr>
+                                </thead>
+                                <tbody  id="tableBody">
+								<script language="cache" runat="server">
+									d WriteResults^cReviewResultsS1
+								</script>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="button" class="blue-btn" onclick="addNewRow()">Add row</button>
+                        <div class="testname-dropdown">
+                             <ul>
+                             </ul>
+                        </div>
+                        <div class="unit-dropdown">
+                             <ul>
+                             </ul>
+                        </div>
+                        <div class="column-dropdown">
+                        	<h4>Select a column to switch values</h4>
+                             <ul>
+                             	<li value="Result" onclick="switchValues(event)">Result</li>
+                             	<li value="Unit" onclick="switchValues(event)">Unit</li>
+                             	<li value="LowerRange" onclick="switchValues(event)">Lower Range</li>
+                             	<li value="UpperRange" onclick="switchValues(event)">Upper Range</li>
+                             </ul>
+                        </div>
+                        <div class="FYI"><span>Pink boxes</span> indicate high probability of incorrect transcription. <span>Pink text</span> indicate manually entered data. <span style="color:#56C4C5;">Teal text</span> indicate AI-corrected information.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="report-select" class="collapse-field">
+        <div class="collapse">
+        <script language="cache" runat="server">
+        	d WriteResultTypes^cReviewResultsS1
+        </script>
+            
+            <div class="item" onclick="openPopup1()">
+                <div class="round">
+                    <input autocomplete="off" name="report" id="C18" type="checkbox" value="Other">
+                    <label for="C18"></label>
+                </div>
+                <p>Other</p>
+            </div>
+        </div>
+        <button type="button" onclick="closeReportSelect()">Confirm</button>
+    </div>
+    <div id="popup1" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="Signup Success">
+            <h4>Are you sure this is not <br> a blood result?</h4>
+            <p>As this file is not a blood result,<br> it will not be processed and the client will be notified.</p>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="confirmNonBloodResult()">Yes</button>
+                <button type="button" class="pink-btn" onclick="removePopup1()">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup2" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="Signup Success">
+            <h4>Are you sure you want to proceed to Step 2?</h4>
+            <p>Make sure to double check all fields before continuing to next step.</p>
+            <div class="btn-group">
+                <button type="button" class="green-btn" onclick="saveResultBloodTests()">Yes</button>
+                <button type="button" class="pink-btn" onclick="removePopup2()">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="popup3" class="popup inactive">
+        <div class="popup-dialog">
+            <img src="./assets/images/success.png" alt="Signup Success">
+            <h4>Date Format Error!</h4>
+            <p>Some of the dates are in the incorrect form. Please double check the date field with issues(pink border).</p>
+            <button type="button" class="green-btn" onclick="removePopup3()">Okay</button>
+        </div>
+    </div>
+
+    <script>
+        var resizefunc = [];
+    </script>
+    <!-- jQuery  -->
+	<script language="cache" runat="server">
+		d jQueryCore^CSP999
+	</script>
+    <script src="./assets/js/pdf.min.js"></script>
+</form>
+</body>
+<script type="text/javascript">
+	reportMethod="AWS"
+	C1=self.F1.C1;C2=self.F1.C2;C3=self.F1.C3;C4=self.F1.C4;C5=self.F1.C5;C6=self.F1.C6;
+	let reportSelect = document.getElementById("report-select");
+	let reportBtn = document.getElementById("report-btn");
+	let dropDownText = " <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'>";
+	let calendarText = " <img src='assets/images/calendar.png' alt='Calendar'>";
+	let popup1= document.getElementById("popup1")
+	let popup2 = document.getElementById("popup2")
+	let popup3 = document.getElementById("popup3")
+	let unitDropdown = document.querySelector(".unit-dropdown");
+	let testnameDropdown = document.querySelector(".testname-dropdown");
+	let columnDropdown = document.querySelector(".column-dropdown");
+	let currentUnit;
+	let currentTestname;
+	let currentCol;
+	let currentDropdown;
+	let dropdownActive=-1;
+	let rbt;
+	let tempFile;
+	let fExt="png";
+	let fileDir = ".\\review";
+	let reportType="";
+	let mySessionEnd;
+	// below is already in the <body> section
+	//window.onload = jInitMe;
+	document.onload = resetTimer;
+	document.onmousemove = resetTimer;
+	document.onmousedown = resetTimer; // touchscreen presses
+	document.ontouchstart = resetTimer;
+	document.onclick = resetTimer; // touchpad clicks
+	document.onkeypress = resetTimer;
+	document.addEventListener('scroll', resetTimer, true); 
+	setTimeout(jKeepAlive,300) // call cache every 5 minutes to keep session alive
+	function jKeepAlive(){
+		#server(..cKeepAlive())#	
+	}
+	function resetTimer(e){
+		clearTimeout(mySessionEnd);
+		mySessionEnd = setTimeout(jLockDown, 3600000);
+	}
+	function clearTimer(){
+		clearTimeout(mySessionEnd);
+	}
+	function jLockDown(){
+		#server(..cLockDown())#
+	}
+	function jInitMe(e){
+		resetTimer(e);
+		#server(..cInitMe())#
+		if(reportType!=""){
+			loadReportSelect();
+		}
+	    document.getElementById("loader").style.display = "none";
+	    jCountRows()
+	}
+	function jSetJX(e){
+		resetTimer(e);
+		#server(..cSetJX())#
+		location.reload()
+	}
+
+	function jSetGPT(e){
+		resetTimer(e);
+		#server(..cSetGPT())#
+		location.reload()
+	}
+
+	function jSetAWS(e){
+		resetTimer(e);
+		#server(..cSetAWS())#
+		location.reload()
+	}
+	function jCountRows(){
+		rows=(document.getElementById("Tab1").rows.length)-1
+		document.getElementById("RowCount").innerHTML=rows + " row(s)"
+	}
+	function toggleSelectReport(e){
+		let elemPosition = e.target.getBoundingClientRect();
+		reportSelect.style.top = elemPosition.top + 28 + "px";
+		reportSelect.style.right = window.innerWidth - elemPosition.right + 15 + "px";
+		setTimeout(()=>{
+			reportSelect.classList.toggle("active");
+		},100)
+	}
+	function loadReportSelect(){
+		let report = reportType.split(",");
+		report.forEach(rep=>{
+			if(document.querySelector("input[value='"+rep+"']")!=null){
+				document.querySelector("input[value='"+rep+"']").checked=true
+			}
+		});
+		closeReportSelect();
+	}
+	function closeReportSelect(){
+		let checkedCB=$("#report-select input:checkbox:checked");
+		let checkCount = checkedCB.length;
+		let reportDate = document.getElementById("report-date").value;
+		let reportTypeStr = "";
+		if(checkCount > 1){
+			reportBtn.innerHTML = "Multiple" + dropDownText;
+		}
+		else if(checkCount==0){
+			reportBtn.innerHTML = "None Selected" + dropDownText;
+		}
+		else{
+			reportBtn.innerHTML = $("#report-select input:checkbox:checked")[0].value + dropDownText;
+		}
+		for(let i=0;i<checkedCB.length;i++){
+			if(i==0){
+				reportTypeStr+=checkedCB[i].value;
+			}
+			else{
+				reportTypeStr+=","+checkedCB[i].value;
+			}
+		};
+		//alert(reportTypeStr+","+reportDate+","+rbt);
+		#server(..cSaveReport(reportTypeStr,reportDate,rbt))#;
+		reportSelect.classList.remove("active");
+	}
+	function toggleSwitchTable(e){
+		let th = e.target.closest("th");
+		let thPos = th.getBoundingClientRect();
+		if(columnDropdown.querySelector("li.inactive")){
+			columnDropdown.querySelector("li.inactive").classList.remove("inactive");
+		}
+		currentCol = th.textContent;
+		columnDropdown.style.top=(thPos.bottom - 10) +"px";
+		columnDropdown.style.left=thPos.left + "px";
+		columnDropdown.querySelector("li[value="+currentCol+"]").classList.add("inactive");
+		setTimeout(()=>{
+			columnDropdown.classList.add("active");
+		},100);
+	}
+	function switchValues(e){
+		currentCol = changeValToColName(currentCol);
+		let newCol = changeValToColName(e.target.getAttribute("value"));
+		const tableBody = document.getElementById("tableBody");
+    	const tableRows = tableBody.querySelectorAll('tr');
+    	
+    	tableRows.forEach((row,index) => {
+	    	if(row.classList.contains("deleted")){
+		    	return;
+	    	}
+	    	let currentVal = row.querySelector("."+currentCol + " input");
+	    	let newVal = row.querySelector("."+newCol + " input");
+	    	let tempVal=currentVal.value;
+	    	currentVal.value = newVal.value;
+	    	newVal.value = tempVal;
+	    	if(row.querySelector('td.TName') && row.querySelector('td.TName').innerHTML){
+	    		row.querySelector('td.TName').innerHTML="";
+    			row.querySelector('td.TValue').innerHTML="";
+    			row.querySelector('td.TUnit').innerHTML="";
+    			row.querySelector('td.THiRange').innerHTML="";
+    			row.querySelector('td.TLoRange').innerHTML="";
+	    	}
+	    });
+	    saveForm();
+	    columnDropdown.classList.remove("active");
+	}
+	function changeValToColName(val){
+		switch(val.trim()){
+			case 'Result':val="result-value";break;
+			case 'Unit':val="unit";break;
+			case 'LowerRange':val="l-range";break;
+			case 'UpperRange':val="u-range";break;
+		}
+		return val;
+	}
+	function openPopup1(){
+		let checkedCB=document.querySelectorAll("#report-select input[type='checkbox']:checked");
+		for(var i=0;i<checkedCB.length-1;i++){
+			checkedCB[i].checked=false;
+		}
+		setTimeout(()=>{
+			C18.checked=true;
+			popup1.classList.remove("inactive")
+		},100);
+	}
+	
+	function removePopup1(){
+		popup1.classList.add("inactive");
+		C18.checked=false;
+	}
+	function isValidDate(year, month, day) {
+    	var d = new Date(year, month, day);
+    	if (d.getFullYear() == year && d.getMonth() == month && d.getDate() == day) {
+        	return true;
+    	}
+    	return false;
+	}
+	function dataChange(e){
+		console.log(e)
+		//check valid date - Nyein
+		if(e.target.closest(".date")!=null){
+			if(e.target.value.length==0){
+				e.target.closest(".date").classList.remove("issue");
+			}
+			else{
+				//let dateArr = e.target.value.split("-");
+				let dateArr = e.target.value.split("/");
+				if(!isValidDate(dateArr[2],dateArr[1]-1,dateArr[0])){
+					e.target.closest(".date").classList.add("issue");
+				}
+				else{
+					e.target.closest(".date").classList.remove("issue");
+				}
+			}
+		}
+		if(e.target.closest(".unit")!=null){
+        	currentUnit = e.target;
+        	let position=e.target.getBoundingClientRect();
+        	unitDropdown.style.top=position.bottom + 5 + "px";
+        	unitDropdown.style.left=position.left + "px";
+        	#server(..cLoadUnits(e.target.value))#
+			unitDropdown.classList.add("active");
+			currentDropdown=unitDropdown;
+		}
+		else if(e.target.closest(".test-name")!=null){
+        	currentTestname = e.target;
+        	let position=e.target.getBoundingClientRect();
+        	testnameDropdown.style.top=position.bottom + 5 + "px";
+        	testnameDropdown.style.left=position.left + "px";
+        	#server(..cLoadTestNames(e.target.value))#
+			testnameDropdown.classList.add("active");
+			currentDropdown=testnameDropdown;
+		}
+		e.target.parentElement.classList.add("edited");
+	}
+	function closeNameSuggestions(){
+        testnameDropdown.classList.remove("active");
+        currentDropdown=null;
+    }
+	function changeDate(e){
+		let date = new Date(e.target.value);
+		if(isNaN(date)){
+			document.querySelector(".date-input").innerHTML="dd/mm/yyyy" +calendarText;
+			return;
+		}
+		document.querySelector(".date-input").innerHTML=date.getDate().toString().padStart(2, '0')+"/"+(date.getMonth()+1).toString().padStart(2, '0')+"/"+date.getFullYear()+calendarText;
+	}
+	function jApplyAll(){
+		let date = new Date(document.querySelector("#report-date").value);
+		if(date!="Invalid Date"){
+			let dateCols = document.querySelectorAll("td.date");
+			dateCols.forEach((td,index)=>{
+				td.querySelector("input").value=date.getDate().toString().padStart(2, '0')+"/"+(date.getMonth()+1).toString().padStart(2, '0')+"/"+date.getFullYear();
+			})
+		}
+		else{
+			alert("Date is invalid");
+		}
+	}
+	function changeUnit(e){
+		currentUnit.value = e.target.innerHTML;
+		currentUnit.focus();
+		setTimeout(()=>unitDropdown.classList.remove("active"),100);
+		currentUnit=null;
+		currentDropdown=null;
+	}
+	function changeTestName(e){
+		currentTestname.value = e.target.innerHTML;
+		currentTestname.focus();
+		setTimeout(()=>testnameDropdown.classList.remove("active"),100);
+		currentTestname=null;
+		currentDropdown=null;
+	}
+	function proceedToStep2(){
+		if(document.querySelectorAll(".date.issue").length>0){
+			openPopup3();
+		}
+		else{
+			openPopup2();
+		}
+	}
+	function openPopup2(){
+		setTimeout(()=>{
+			popup2.classList.remove("inactive");
+		},100)
+	}
+	
+	function removePopup2(){
+		popup2.classList.add("inactive");
+	}
+	function openPopup3(){
+		setTimeout(()=>{
+			popup3.classList.remove("inactive");
+		},100)
+	}
+	
+	function removePopup3(){
+		popup3.classList.add("inactive");
+	}
+	function duplicateRow(e){
+		let oldTr = e.target.closest("tr");
+		let newTr = oldTr.cloneNode(true);
+		newTr.classList.add("duplicated");
+		oldTr.parentNode.insertBefore(newTr,oldTr.nextSibling);
+		
+		//Added by Nyein to update form while duplicating rows on 12th Oct
+		saveForm();
+	}
+	function deleteRow(e){
+		let tr = e.target.closest("tr");
+		if(tr.classList.contains("duplicated") || tr.classList.contains("new")){
+			tr.remove();
+		}
+		else{
+			tr.classList.add("deleted");
+			let tds = tr.querySelectorAll("td");
+			for(var i=0;i<tds.length-1;i++){
+				if (tds[i].querySelector("input")){
+					tds[i].querySelector("input").disabled=true;
+				}
+			}
+			let icons = tds[tds.length-1].querySelectorAll("img");
+			icons[0].src="./assets/images/duplicateGrey.png";
+			icons[1].src="./assets/images/undoDelete.png";
+			icons[1].setAttribute("onclick","undoDeleteRow(event)");
+		}
+		//Added by Nyein to update form while delete or undo delete on 12th Oct
+		saveForm();
+	}
+	function undoDeleteRow(e){
+		let tr = e.target.closest("tr");
+		tr.classList.remove("deleted");
+		let tds = tr.querySelectorAll("td");
+		for(var i=0;i<tds.length-1;i++){
+			if (tds[i].querySelector("input")){
+				tds[i].querySelector("input").disabled=false;
+			}
+		}
+		let icons = tds[tds.length-1].querySelectorAll("img");
+		icons[0].src="./assets/images/duplicate.png";
+		icons[1].src="./assets/images/delete.png";
+		icons[1].setAttribute("onclick","deleteRow(event)");
+		//Added by Nyein to update form while delete or undo delete on 12th Oct
+		saveForm();
+	}
+	function addNewRow(){
+		let resultTable = document.querySelector(".result-table");
+		let trStr ="<td class='date'><input autocomplete='off' type='text' onkeyup='dataChange(event)' value=''></td><td class='test-name'><input autocomplete='off' type='text' onkeyup='dataChange(event)' value=''></td><td class='result-value'><input autocomplete='off' type='text' onkeyup='dataChange(event)' value=''></td><td class='unit'><input autocomplete='off' type='text' onkeyup='dataChange(event)' value=''></td><td class='l-range'><input autocomplete='off' type='text' onkeyup='dataChange(event)' value=''></td><td class='u-range'><input autocomplete='off' type='text' onkeyup='dataChange(event)' value=''></td><td><img class='duplicate-icon' src='./assets/images/duplicate.png' alt='Duplicate' onclick='duplicateRow(event)'> <img src='./assets/images/delete.png' alt='Delete' onclick='deleteRow(event)'></td>"
+		let newTr = document.createElement('tr');
+		newTr.classList.add("new");
+		newTr.innerHTML = trStr;
+		document.querySelector("tbody").appendChild(newTr);
+    	resultTable.scrollTop = resultTable.scrollHeight;
+    	jCountRows()
+	}
+	function confirmNonBloodResult(){
+		
+		#server(..cSaveNonBloodResult(rid))#
+	}
+	
+	let rid;
+	
+	function saveResultBloodTests(){
+		
+		//console.log(rid, "-",rbt);
+		
+		let tbody = document.querySelector("tbody");
+		var i = 0;
+		let newRow = false;
+		
+		saveForm();
+		//#server(..cClearRBT(rid))# ;
+		/*
+		const tableBody = document.getElementById("tableBody");
+    	const tableRows = tableBody.querySelectorAll('tr');
+    	let count = 1;
+    	tableRows.forEach((row,index) => {
+	    	if(row.classList.contains("deleted")){
+		    	#server(..cSaveRBT(rid, count, "", "", "", "", "", ""))#;
+		    	count += 1;
+		    	return;
+		    }
+	    	const testName = (row.querySelector('td.test-name') && row.querySelector('td.test-name').querySelector('input').value) ? row.querySelector('td.test-name').querySelector('input').value : "";
+	    	if (testName == ""){return;}
+	    	const testDate = (row.querySelector('td.date') && row.querySelector('td.date').querySelector('input').value) ? row.querySelector('td.date').querySelector('input').value : "";
+	    	const testValue = (row.querySelector('td.result-value') && row.querySelector('td.result-value').querySelector('input').value) ? row.querySelector('td.result-value').querySelector('input').value : "";
+	    	const testUnit = (row.querySelector('td.unit') && row.querySelector('td.unit').querySelector('input').value) ? row.querySelector('td.unit').querySelector('input').value : "";
+	    	const testHiRange = (row.querySelector('td.u-range') && row.querySelector('td.u-range').querySelector('input').value) ? row.querySelector('td.u-range').querySelector('input').value : "";
+	    	const testLoRange = (row.querySelector('td.l-range') && row.querySelector('td.l-range').querySelector('input').value) ? row.querySelector('td.l-range').querySelector('input').value : "";
+    		//console.log(testName, testValue, testUnit, testHiRange, testLoRange);
+    		#server(..cSaveRBT(rid, count, testDate, testName, testValue, testUnit, testHiRange, testLoRange))#;
+    		count += 1;
+    	}
+    	)
+    	*/
+		let checkedCB = document.querySelectorAll("#report-select input[type='checkbox']:checked");
+		let reportDate = document.getElementById("report-date").value;
+		let reportTypeStr="";
+		
+		for(let i=0;i<checkedCB.length;i++){
+			if(i==0){
+				reportTypeStr+=checkedCB[i].value;
+			}
+			else{
+				reportTypeStr+=","+checkedCB[i].value;
+			}
+		};
+		#server(..cSaveReport(reportTypeStr,reportDate,rbt))#;
+		window.open('./cReviewResultsS2.csp','_self');
+	}
+	
+	function jPopOriginal() {
+        document.getElementById("file-loader").style.display = "block";
+
+        // Disable Ctrl+P
+        function disablePrint(event) {
+            if (event.ctrlKey && event.key === 'p') {
+                event.preventDefault();
+                alert("Ctrl+P is blocked");
+            }
+        }
+
+        document.addEventListener('keydown', disablePrint);
+
+        setTimeout(() => {
+            #server(..cPopOriginal())#;
+            document.getElementById("file-loader").style.display = "none";
+
+            // Remove the event listener after the file is opened
+            document.removeEventListener('keydown', disablePrint);
+        }, 10);
+    }
+	
+	function xPopOriginal(){	// replaced with the above
+		document.getElementById("file-loader").style.display="block";
+		setTimeout(()=>{
+			#server(..cPopOriginal())#;
+			document.getElementById("file-loader").style.display="none";
+		},10);
+	}
+	function saveForm(){
+		const tableBody = document.getElementById("tableBody");
+    	const tableRows = tableBody.querySelectorAll('tr');
+    	let count = 1;
+    	var arrOfObj = [];
+    	tableRows.forEach((row,index) => {
+	    	if(row.classList.contains("deleted")){
+		    	//#server(..cSaveRBT(rid, count, "", "", "", "", "", ""))#;
+		    	//count += 1;
+		    	var Obj = {testName:"", testDate:"", testValue: "", testUnit: "", testHiRange: "", testLoRange:"", TName:"", TValue:"",TUnit:"",THiRange:"",TLoRange:""};
+    			arrOfObj.push(Obj);	    	
+		    	return;
+		    }
+		      
+	    	const testName = (row.querySelector('td.test-name') && row.querySelector('td.test-name').querySelector('input').value) ? row.querySelector('td.test-name').querySelector('input').value : "";
+	    	if (testName == ""){return;}
+	    	const testDate = (row.querySelector('td.date') && row.querySelector('td.date').querySelector('input').value) ? row.querySelector('td.date').querySelector('input').value : "";
+	    	const testValue = (row.querySelector('td.result-value') && row.querySelector('td.result-value').querySelector('input').value) ? row.querySelector('td.result-value').querySelector('input').value : "";
+	    	const testUnit = (row.querySelector('td.unit') && row.querySelector('td.unit').querySelector('input').value) ? row.querySelector('td.unit').querySelector('input').value : "";
+	    	const testHiRange = (row.querySelector('td.u-range') && row.querySelector('td.u-range').querySelector('input').value) ? row.querySelector('td.u-range').querySelector('input').value : "";
+	    	const testLoRange = (row.querySelector('td.l-range') && row.querySelector('td.l-range').querySelector('input').value) ? row.querySelector('td.l-range').querySelector('input').value : "";
+    		//console.log(testName, testValue, testUnit, testHiRange, testLoRange);
+    		
+    		if(row.classList.contains("duplicated")){
+		    	//#server(..cSaveRBT(rid, count, "", "", "", "", "", ""))#;
+		    	//count += 1;
+		    	var Obj = {testName:testName, testDate:testDate, testValue: testValue, testUnit: testUnit, testHiRange: testHiRange, testLoRange:testLoRange, TName:"", TValue:"",TUnit:"",THiRange:"",TLoRange:""};
+    			arrOfObj.push(Obj);
+		    	return;
+		    }
+    		const TName = (row.querySelector('td.TName') && row.querySelector('td.TName').innerHTML) ? row.querySelector('td.TName').innerHTML : "";
+    		const TValue = (row.querySelector('td.TValue') && row.querySelector('td.TValue').innerHTML) ? row.querySelector('td.TValue').innerHTML : "";
+    		const TUnit = (row.querySelector('td.TUnit') && row.querySelector('td.TUnit').innerHTML) ? row.querySelector('td.TUnit').innerHTML : "";
+    		const THiRange = (row.querySelector('td.THiRange') && row.querySelector('td.THiRange').innerHTML) ? row.querySelector('td.THiRange').innerHTML : "";
+    		const TLoRange = (row.querySelector('td.TLoRange') && row.querySelector('td.TLoRange').innerHTML) ? row.querySelector('td.TLoRange ').innerHTML : "";
+    		
+    		var Obj = {testName:testName, testDate:testDate, testValue: testValue, testUnit: testUnit, testHiRange: testHiRange, testLoRange:testLoRange, TName:TName, TValue:TValue, TUnit:TUnit, THiRange:THiRange, TLoRange:TLoRange};
+    		arrOfObj.push(Obj);
+    		
+    		//#server(..cSaveRBT(rid, count, testDate, testName, testValue, testUnit, testHiRange, testLoRange))#;
+    		count += 1;
+    	}
+    	)
+    	var obj = {"FormData": arrOfObj};
+    	var jsonStr= JSON.stringify(obj);
+    	jsonStr = jsonStr.replace(/"/g,'"');
+    	console.log(rid);
+    	#server(..cSaveJson(rid, jsonStr))#;
+    	jCountRows()
+    	
+	}
+	document.addEventListener("click",(e)=>{
+		if(e.target.closest(".popup-dialog")==null && document.querySelectorAll('.popup.inactive').length!=3){
+			removePopup1();
+			removePopup2();
+			removePopup3();
+		}
+		if(e.target.closest("#report-select") == null && e.target.closest("#report-btn") == null && e.target.closest(".popup-dialog") == null && reportSelect.classList.contains("active")){
+			closeReportSelect();
+		}
+		if(e.target.closest(".unit-dropdown") == null && unitDropdown.classList.contains("active")){
+			unitDropdown.classList.remove("active");
+			currentUnit=null;
+			currentDropdown=null;
+		}
+		if(e.target.closest(".testname-dropdown") == null && testnameDropdown.classList.contains("active")){
+			testnameDropdown.classList.remove("active");
+			currentTestname=null;
+			currentDropdown=null;
+		}
+		if(e.target.closest(".column-dropdown") == null && columnDropdown.classList.contains("active")){
+			columnDropdown.classList.remove("active");
+		}
+	})
+	document.addEventListener("keydown",(e)=>{
+		if(currentDropdown!=null){
+			let lis = currentDropdown.querySelectorAll("li");
+			if(e.which==40){
+				if(dropdownActive<lis.length-1){
+					dropdownActive++;
+					lis[dropdownActive].focus();
+				}
+			}
+			if(e.which==38){
+				if(dropdownActive>0){
+					dropdownActive--;
+					lis[dropdownActive].focus();
+				} 
+			}
+			if(e.which==13){
+				lis[dropdownActive].click();
+				dropdownActive=-1;
+			}
+		}
+	})
+	
+</script>
+<script language="cache" method="cKeepAlive">
+	s x=$g(x)
+	q
+</script>
+
+<script language="cache" method="cClearRBT" arguments="d1:%String">
+	d ClearRBT^jxResult2HL7(d1)
+	q
+</script>
+<script language="cache" method="cSaveRBT" arguments="d1,d2,d3,d4,d5,d6,d7,d8:%String">
+	// d UpdateRBT^jxResult2HL7(d1, d2, d3, d4, d5, d6) //updated on Sep 13 with globals
+	// rid, count, testDate, testName, testValue, testUnit, testHiRange, testLoRange
+	s userId = %session.Data("UserID")
+	//s ^FormData(userId, d1, d2, "testDate") = d3
+	
+	if ($L(d3)>0){
+		//s formattedDate = $replace(d3, "-","/")
+		s testDateInternal = $zdate($zdateh(formattedDate,15,,,,,,,0),4) //dd/mm/yyyy
+		if (testDateInternal = "31/12/1840"){
+			s ^FormData(userId, d1, d2, "testDate") = ""
+		} else {s ^FormData(userId, d1, d2, "testDate") = testDateInternal}
+		//&js<console.log(`#(^FormData(userId, d1, d2, "testDate"))#`)>
+	} else { s ^FormData(userId, d1, d2, "testDate") = ""}
+	s ^FormData(userId, d1, d2, "testName") = $$H2C^WSP999(d4)
+	s ^FormData(userId, d1, d2, "testValue") = $$H2C^WSP999(d5)
+	s ^FormData(userId, d1, d2, "testUnit") = $$H2C^WSP999(d6)
+	s ^FormData(userId, d1, d2, "testHiRange") = $$H2C^WSP999(d7)
+	s ^FormData(userId, d1, d2, "testLoRange") = $$H2C^WSP999(d8)
+	
+	q
+</script>
+<script language="cache" method="cPopOriginal">
+	d PopOriginal^cReviewResults1
+</script>
+<script language="cache" method="cInitMe">
+	d InitMe^cReviewResultsS1
+</script>
+<script language="cache" method="cSetJX">
+	d SetJX^cReviewResultsS1
+</script>
+<script language="cache" method="cSetGPT">
+	d SetGPT^cReviewResultsS1
+</script>
+<script language="cache" method="cSetAWS">
+	d SetAWS^cReviewResultsS1
+</script>
+<script language="cache" method="cLoadTestNames" arguments="d1:%String">
+	d LoadTestNames^cReviewResultsS1
+</script>
+<script language="cache" method="cLoadUnits" arguments="d1:%String">
+	d LoadUnits^cReviewResultsS1
+</script>
+<script language="cache" method="cSaveResult" arguments="d1,d2,d3,d4,d5,d6,rbt:%String">
+	d SaveResult^cReviewResultsS1
+</script>
+<script language="cache" method="cSaveReport" arguments="d1,d2,rbt:%String">
+	d SaveReport^cReviewResultsS1
+</script>
+<script language="cache" method="cLockDown">
+	k %session.Data
+	&js<window.open("cLockDown.csp","_self")>
+</script>
+<script language="cache" method="cSaveNonBloodResult" arguments="rid:%String">
+
+&sql(SELECT BucketName,OrgFile,Profile->Setting->CliProfileName INTO :bk, :fileName,:CliProfileName FROM MX.Record WHERE ID=:rid)
+
+s errCode = "JX1007"
+s errData = "The "_fileName_" in "_bk_" cannot be processed due to bad content: Not A Blood Test"
+s errName = "BadFileContent"
+s errLocation = "cSaveNonBloodResult^cReviewResultsS1.csp"
+s dt = $zdatetime($h,3)
+
+&sql(INSERT INTO MX.Error (Code, Data, Name, Location, CreatedDate, Record, BucketName) VALUES (:errCode, :errData, :errName, :errLocation, :dt, :rid, :bk))
+;add to bucket
+if (bk["/"){
+	s sourceFolder = $p(bk,"/",2,*)_"/In-Process"
+	s destinationFolder = $p(bk,"/",2,*)_"/Failure"
+	s bk = $p(bk,"/",1)
+} else{
+	s sourceFolder = "/In-Process"
+	s destinationFolder = "/Failure"
+}
+s sts1 = ##class(python.s3Utils).moveFile(CliProfileName,bk,bk, fileName, sourceFolder, destinationFolder)
+
+s status= $$GenerateErrorReportByRid^jxErrorReport(rid)
+i (status '= 0){
+	s sts = ##class(python.s3Utils).uploadFile(CliProfileName, status, bk, destinationFolder)
+	
+	d ##class(%File).Delete(status)	
+	
+}
+s dt = $zdatetime($h,3)
+s uid = %session.Data("UserID")
+//&sql(UPDATE MX.Record SET Status='Failure', ReviewedDate=:dt, ReviewedBy=:uid WHERE ID = :rid)
+//Updating Report type to Other by Nyein  on 9th Oct
+&sql(UPDATE MX.Record SET Status='Failure', ReviewedDate=:dt, ReviewedBy=:uid, Type='Other' WHERE ID = :rid)
+d StripTables^jxBiolytica(rid)
+//Remove RID from session //9th Oct
+s %session.Data("jxTransform","rid")=""
+&js<removePopup1()>
+&js<window.close()>
+</script>
+<script language="cache" method="cSaveJson" arguments="rid, jsonStr:%String">
+	s userId = $g(%session.Data("UserID"))
+	s Obj = {}.%FromJSON(jsonStr)
+	;&js<console.log("#(userId)#")>
+	s iter = Obj."FormData".%GetIterator()
+	
+	while iter.%GetNext(.key, .value, .type ) {
+		s key = key + 1
+		s testDate = value."testDate"
+		s testName = value."testName"
+		s testValue = value."testValue"
+		s testUnit = value."testUnit"
+		s testHiRange = value."testHiRange"
+		s testLoRange = value."testLoRange"
+		
+		s TName = value."TName"
+		s TValue = value."TValue"
+		s TUnit = value."TUnit"
+		s THiRange = value."THiRange"
+		s TLoRange = value."TLoRange"
+		
+		if ($L(testDate)>0){
+			s formattedDate = $replace(testDate, "-","/")
+			s testDateInternal = $zdate($zdateh(formattedDate,15,,,,,,,0),4) //dd/mm/yyyy
+			if (testDateInternal = "31/12/1840"){
+				s ^FormData(userId, rid, key, "testDate") = ""
+			} else {s ^FormData(userId, rid, key, "testDate") = $g(testDateInternal)}
+		} else { i userId'="",rid'="",key'="" s ^FormData(userId, rid, key, "testDate") = ""}
+		s ^FormData(userId, rid, key, "testName") = $$H2C^WSP999(testName)
+		s ^FormData(userId, rid, key, "testValue") = $$H2C^WSP999(testValue)
+		s ^FormData(userId, rid, key, "testUnit") = $$H2C^WSP999(testUnit)
+		s ^FormData(userId, rid, key, "testHiRange") = $$H2C^WSP999(testHiRange)
+		s ^FormData(userId, rid, key, "testLoRange") = $$H2C^WSP999(testLoRange)
+		
+		s ^FormData(userId, rid, key, "TName") = $$H2C^WSP999(TName)
+		s ^FormData(userId, rid, key, "TValue") = $$H2C^WSP999(TValue)
+		s ^FormData(userId, rid, key, "TUnit") = $$H2C^WSP999(TUnit)
+		s ^FormData(userId, rid, key, "THiRange") = $$H2C^WSP999(THiRange)
+		s ^FormData(userId, rid, key, "TLoRange") = $$H2C^WSP999(TLoRange)
+	
+	}
+</script>
+</html>

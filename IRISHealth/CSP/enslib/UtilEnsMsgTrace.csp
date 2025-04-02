@@ -1,0 +1,36 @@
+<!--
+Message Trace Tool
+-->
+
+<AutoPage domain="Ensemble" pagename="Visual Trace" parentpage="UtilEnsMessages.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Visual Trace</Text>
+</Pane>
+
+<Pane name="Detail" type="CSPX.EnsMsgTracePane">
+</Pane>
+
+<Pane name="Info" type="CSPX.EnsMsgTraceFilterPane">
+	<Text>Enter search criteria (this allows you to view a different set of messages within this session):</Text>
+	<FormClass>CSPX.EnsMsgTraceFilterForm</FormClass>
+	<SubmitPage>UtilEnsMsgTrace.csp</SubmitPage>
+	<SubmitTarget>_top</SubmitTarget>
+	<Align>left</Align>
+</Pane>
+
+<!--
+<Pane name="Info" type="CSPX.EnsMsgPane">
+	<Commands>
+		<Action href="UtilEnsHome.csp">
+			<Caption>Home</Caption>
+		</Action>
+
+		<Action href="UtilEnsMessages.csp?$FRAME=Info" targetFrame="Info">
+			<Caption>Filter Messages</Caption>
+		</Action>
+	</Commands>
+</Pane>
+-->
+
+</AutoPage>

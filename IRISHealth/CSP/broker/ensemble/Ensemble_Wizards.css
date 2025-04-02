@@ -1,0 +1,111 @@
+/* 
+	Some styles for Wizards (Production Wizard, Add Host Wizard, etc.)
+*/
+
+/* 
+	container background and box 
+*/
+
+.wizardBox {
+	/* new version - based on searchPanel in EnsPortal.Template.viewerPage */
+	/* unused from searchPanel
+	width: 300px;
+	overflow: hidden;
+	overflow-y: auto;
+	*/
+	padding: 5px;
+	overflow: auto;
+	background: #edece4;
+	border: 1px solid gray;
+	-moz-border-radius:10px;
+}
+
+/* 
+	labels for form fields
+*/
+
+.labelOutline {
+	border-bottom:1px solid gray;
+}
+.labelHidden {
+	display: none;
+}
+.labelRequired {
+	color: black;
+	font-weight: bold;
+	font-size: 0.8em;
+	text-decoration: none;
+	padding-right: 4px;
+}
+/* does not work on IE
+.labelRequired:before {
+	content: "*"; 
+	color: black;
+	font-weight: bold;
+	font-size: 0.8em;
+	text-decoration: none;
+	padding-right: 4px;
+}
+*/
+.labelNormal {
+	color: black;
+	font-size: 0.8em;
+	text-decoration: none;
+	padding-right: 4px;
+}
+
+.labelComment {
+	color: #404040;
+}
+
+/* 
+	tab groups 
+*/
+
+/* Wrapper for body of tabgroup, when tab bar is shown. */
+.tabGroupBody {
+	border-top: none;
+	width: 480px;
+	overflow: auto;
+	-moz-border-radius-bottomleft:10px;
+	-moz-border-radius-bottomright:10px;
+	/* like searchPanel in EnsPortal.Template.viewerPage */
+	padding-left: 5px;
+	padding-right: 5px;
+	background: #edece4;
+	overflow: hidden;
+	overflow-y: auto;
+	border-right: 1px solid gray;
+	border-left: 1px solid gray;
+	border-bottom: 1px solid gray;
+}
+
+/* @doc="Individual tab bar button in On state." */
+td.tabGroupButtonOn {
+	border-top: 1px solid black;
+	border-bottom: none;
+	border-right: 1px solid black;
+	border-left: 1px solid black;
+	font-weight: bold;
+	padding-right: 5px;
+	padding-left: 5px;
+	cursor: pointer;
+	-moz-border-radius-topleft:6px;
+	-moz-border-radius-topright:6px;
+	/* like searchPanel in EnsPortal.Template.viewerPage */
+	background: #edece4;
+}
+
+/* 
+	list boxes
+*/
+
+/* @doc="Wrapper for listBox." */
+.listBox {
+	color: black;
+	background: white;
+	border: 1px #8DA0B2 solid; /* close match to default border color for text and textarea */
+	width: 100%;
+	height: 100px;
+	overflow: auto;
+}

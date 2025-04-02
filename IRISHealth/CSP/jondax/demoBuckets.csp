@@ -1,0 +1,455 @@
+<html>
+<head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		;i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+		q 1
+	</script>
+
+	<script language="cache" runat="server">
+		d HEAD1^CSP999
+	</script>
+        <link rel="stylesheet" href="assets/styles/cFrame.css">
+        <link rel="stylesheet" href="assets/styles/demoBuckets.css">
+</head>
+<body onload="jInitMe()" style="padding:0px;margin:0px">
+<form id="F1" name="F1">
+<div id="wrapper">
+	<div class="bg-wrapper">
+	<div class="bg3">
+	<img src="./assets/images/bg3.png">
+	</div>
+	</div>
+	<div class="main-field" style="width:100%">
+		<img class="logo" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+		<p class="pink-label">Demo</p>
+		<h2>Upload your file into any of the below folders to
+		<br><span>automatically transform your file </span><br>
+		into all the different outbound settings
+		</h2>
+		<div>
+			<div class="main-table">
+				<div class="table-border"></div>
+					<div class="table-container">
+					<table>
+						<tr>
+							<td id="loinc-xml" class="t-cell" on>
+								<img src="jxdemo/folder-pink.png" >
+								<h3>Hospital A</h3>
+								<div class="drag-zone">
+									<p>Drop file to change to <br><span>'FHIR xml - LOINC'</span> Format</p>
+								</div>
+								<table class="format">
+									<tr>
+										<td>Bundle Format:</td>
+										<td>FHIR xml</td>
+									</tr>
+									<tr>
+										<td>Coding Format:</td>
+										<td>LOINC</td>
+									</tr>
+								</table>
+								<div class="t-values">
+								<table class="t-values">
+									<tr>
+										<td colspan=2 style="text-align:center"><b>Template Values</b></td>
+									</tr>
+									<tr>
+										<td>30180-4 Basophils/100 leukocytes</td>
+										<td>%</td>
+									</tr>
+									<tr>
+										<td>26453-1 Erythrocytes</td>
+										<td>10*6/uL</td>
+									</tr>
+									<tr>
+										<td>718-7 Hemoglobin</td>
+										<td>g/L</td>
+									</tr>
+									<tr>
+										<td>20570-8 Hematocrit</td>
+										<td>%</td>
+									</tr>
+									<tr>
+										<td>30428-7 Erythrocyte mean corpuscular volume</td>
+										<td>fl</td>
+									</tr>
+									<tr>
+										<td>28539-5 Erythrocyte mean corpuscular hemoglobin</td>
+										<td>pg</td>
+									</tr>
+									<tr>
+										<td>30385-9 Erythrocyte distribution width</td>
+										<td>%</td>
+									</tr>
+									<tr>
+										<td>28540-3 Erythrocyte mean corpuscular hemoglobin concentration</td>
+										<td>g/dL</td>
+									</tr>
+									<tr>
+										<td>26515-7 Plts</td>
+										<td>10*3/uL</td>
+									</tr>
+									<tr>
+										<td>3016-3 Thyrotropin</td>
+										<td>m[IU]/L</td>
+									</tr>
+									<tr>
+										<td>3024-7 T4 Free</td>
+										<td>ng/dL</td>
+									</tr>
+									<tr>
+										<td>14928-6 Triiodothyronine.free</td>
+										<td>pmol/L</td>
+									</tr>
+									<tr>
+										<td>98981-4 Urate</td>
+										<td>mg/dL</td>
+									</tr>
+									<tr>
+										<td>71426-1 Hs- Crp</td>
+										<td>mg/L</td>
+									</tr>
+									<tr>
+										<td>14798-3 Iron</td>
+										<td>m[IU]/L</td>
+									</tr>
+									<tr>
+										<td>14800-7 Iron binding capacity</td>
+										<td>umol/L</td>
+									</tr>
+									<tr>
+										<td>2502-3 Iron Saturation</td>
+										<td>%</td>
+									</tr>
+								</table>
+								</div>							
+							</td>
+							<td></td>
+							<td class="t-cell" id="custom-json">
+								<img src="jxdemo/folder-teal.png" >
+								<h3>Clinic B</h3>
+								<div class="drag-zone">
+									<p>Drop file to change to <br><span>'FHIR json - Custom'</span> Format</p>
+								</div>
+								<table class="format">
+									<tr>
+										<td>Bundle Format:</td>
+										<td>FHIR json</td>
+									</tr>
+									<tr>
+										<td>Coding Format:</td>
+										<td>Custom</td>
+									</tr>
+								</table>
+								<div class="t-values">
+								<table class="t-values">
+									<tr>
+										<td colspan=2 style="text-align:center"><b>Template Values</b></td>
+									</tr>
+									<tr>
+										<td>Basophil</td>
+										<td>%</td>
+									</tr>
+									<tr>
+										<td>RBC</td>
+										<td>T/L</td>
+									</tr>
+									<tr>
+										<td>Hb</td>
+										<td>g/dL</td>
+									</tr>
+									<tr>
+										<td>Hct</td>
+										<td>%</td>
+									</tr>
+									<tr>
+										<td>MCV</td>
+										<td>fl</td>
+									</tr>
+									<tr>
+										<td>MCH</td>
+										<td>pg</td>
+									</tr>
+									<tr>
+										<td>RBC Distribution Width</td>
+										<td>%</td>
+									</tr>
+									<tr>
+										<td>MCHC</td>
+										<td>umol/L</td>
+									</tr>
+									<tr>
+										<td>Platelets Count</td>
+										<td>G/L</td>
+									</tr>
+									<tr>
+										<td>TSH</td>
+										<td>ulU/mL</td>
+									</tr>
+									<tr>
+										<td>Thyroxine free </td>
+										<td>ng/mL</td>
+									</tr>
+									<tr>
+										<td>Triiodothryonine Free</td>
+										<td>pg/100mL</td>
+									</tr>
+									<tr>
+										<td>Uric Acid</td>
+										<td>mmol/L</td>
+									</tr>
+									<tr>
+										<td>High Sensitive C-reactive Protein</td>
+										<td>mg%</td>
+									</tr>
+									<tr>
+										<td>Iron</td>
+										<td>ng/mL</td>
+									</tr>
+									<tr>
+										<td>TIBC</td>
+										<td>mmol/L</td>
+									</tr>
+									<tr>
+										<td>% Iron Saturation</td>
+										<td>%</td>
+									</tr>
+								</table>
+								</div>							
+							</td>
+							<td></td>
+							<td class="t-cell" id="loinc-hl7">
+								<img src="jxdemo/folder-blue.png" >
+								<h3>Lab C</h3>
+								<div class="drag-zone">
+									<p>Drop file to change to <br><span>'HL7 v2 - LOINC'</span> Format</p>
+								</div>
+								<table class="format">
+									<tr>
+										<td>Bundle Format:</td>
+										<td>HL7 v2</td>
+									</tr>
+									<tr>
+										<td>Coding Format:</td>
+										<td>LOINC</td>
+									</tr>
+								</table>
+								<div class="t-values">
+								<table>
+									<tr>
+										<td colspan=2 style="text-align:center"><b>Template Values</b></td>
+									</tr>
+									<tr>
+										<td>30180-4 Basophils</td>
+										<td>%</td>
+									</tr>
+									<tr>
+										<td>26453-1 Red Blood Cells RBC</td>
+										<td>cells/uL</td>
+									</tr>
+									<tr>
+										<td>59260-0 Hgb</td>
+										<td>mmol/L</td>
+									</tr>
+									<tr>
+										<td>20570-8 Hematocrit</td>
+										<td>%</td>
+									</tr>
+									<tr>
+										<td>30428-7 Mean Corpuscular Volume MCV</td>
+										<td>fl</td>
+									</tr>
+									<tr>
+										<td>28539-5 Mean Cell Hemoglobin</td>
+										<td>pg</td>
+									</tr>
+									<tr>
+										<td>30385-9 Red Cell Distribution Width</td>
+										<td>%</td>
+									</tr>
+									<tr>
+										<td>59467-1 MCH Concentration</td>
+										<td>mmol/L</td>
+									</tr>
+									<tr>
+										<td>26515-7 Plt</td>
+										<td>cells/µL</td>
+									</tr>
+									<tr>
+										<td>3016-3 Thyroid Stimulating Hormone</td>
+										<td>ulU/mL</td>
+									</tr>
+									<tr>
+										<td>14920-3	Free Thyroxine</td>
+										<td>pmol/L</td>
+									</tr>
+									<tr>
+										<td>3051-0 Triiodothryonine T3 Free</td>
+										<td>pg/mL</td>
+									</tr>
+									<tr>
+										<td>14933-6	Uric Acid</td>
+										<td>umol/L</td>
+									</tr>
+									<tr>
+										<td>76486-0	High Sensitive CRP</td>
+										<td>nmol/L</td>
+									</tr>
+									<tr>
+										<td>2498-4 Iron</td>
+										<td>ug/dL</td>
+									</tr>
+									<tr>
+										<td>2500-7 Transferrin IBC</td>
+										<td>ug/dL</td>
+									</tr>
+									<tr>
+										<td>14801-5 %IS</td>
+										<td>%</td>
+									</tr>
+								</table>
+								</div>
+							</td>
+						</tr>
+					</table>
+					<div>&nbsp;</div>
+					</div>
+			</div>
+		</div>
+	</div>
+</div>
+</form>
+    <div id="popup1" class="popup inactive">
+        <div class="popup-dialog">
+            <h2>Hang tight!</h2>
+            <h3>We're analysing your file...</h3>
+            <img class="modal-img" src="assets/images/analyzeData.png" alt="Analysing Data">
+        </div>
+    </div>
+<script>
+    var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script language="cache" runat="server">
+	d jQueryCore^CSP999
+</script>
+</body>
+<script type="text/javascript">
+T1=self.F1.T1,T2=self.F1.T2
+C1a=self.F1.C1a,C1b=self.F1.C1b,C1c=self.F1.C1c,C1d=self.F1.C1d,C1e=self.F1.C1e,C1f=self.F1.C1f
+let uploadedFile;
+let popup1 = document.getElementById("popup1");
+function jInitMe(){
+	//#server(..cInitMe())#
+}
+
+function jCheckMe(fld,val){
+	alert(fld + " checked is " + val)
+
+}
+let loincXML = document.getElementById("loinc-xml");
+loincXML.addEventListener("dragover",(e)=>dragOver(e));
+loincXML.addEventListener("drop",(e)=>drop(e));
+
+let customJSON = document.getElementById("custom-json");
+customJSON.addEventListener("dragover",(e)=>dragOver(e));
+customJSON.addEventListener("drop",(e)=>drop(e));
+
+let loincHL7 = document.getElementById("loinc-hl7");
+loincHL7.addEventListener("dragover",(e)=>dragOver(e));
+loincHL7.addEventListener("drop",(e)=>drop(e));
+function drop(ev){
+    ev.preventDefault();
+    
+   	let currentStatus =  ev.target.closest(".t-cell").id;
+    ev.target.closest(".t-cell").querySelector(".drag-zone").classList.remove("active");
+    if (ev.dataTransfer.items) {
+    if (ev.dataTransfer.items[0].kind === "file") {
+        uploadedFile = ev.dataTransfer.items[0].getAsFile();
+    }
+    } else {
+        uploadedFile = ev.dataTransfer.files[0];
+    }
+    popup1.classList.remove("inactive");
+    setTimeout(()=>{
+	    popup1.classList.add("inactive");
+	    //downloadRespectiveFileAfter3Seconds
+	    let fileName = uploadedFile.name;
+	    fExt = fileName.split(".")[1];
+	    //bobo changed
+	    //fileName = fileName.split(".")[0].toLowerCase();
+	    fileName = fileName.split(".")[0];
+	    let fName;
+	    if(fileName.startsWith("Blood Biochemistry") || fileName.startsWith("Haematology")){
+	    	fileName=fileName.split("y ").length>1?fileName.split("y ")[0]+"y":fileName;
+	    	//console.log("filename: ",fileName);
+		    switch(currentStatus){
+			    case "loinc-xml":fName=fileName + " FHIR_XML.xml";break;
+			    case "custom-json":fName=fileName + " FHIR_JSON.json";break;
+			    case "loinc-hl7":fName=fileName + ".hl7";break;
+		    }
+		    //console.log("fName: ",fName);
+		    downloadFile(fName);
+	    }
+    },3000);
+};
+function dragOver(e){
+	e.preventDefault();
+	let dragZone = e.target.closest(".t-cell").querySelector(".drag-zone");
+	let dragZoneActive = document.querySelector(".drag-zone.active");
+	if(dragZone!=dragZoneActive && dragZoneActive!=null){
+		document.querySelector(".drag-zone.active").classList.remove("active");
+	}
+	dragZone.classList.add("active");
+};
+
+
+let doctxt;
+function downloadFile(filename){
+    var anchor=document.createElement('a');
+   	//anchor.setAttribute('href','./jxDemo/FinalFiles/'+filename);
+   	// bo bo added
+   	let filepath = 'C:/InterSystems/Cache/CSP/jondax/jxDemo/FinalFiles/' +filename; //C:\intersystems\cache\CSP\jondax\FinalFiles
+   	#server(..cReadFile(filepath))#
+   	/*
+   	fs.readFile('C:\InterSystems\Cache\CSP\jondax\jxDemo\FinalFiles\'+filename, function read(err,txt){
+	   	if(err) {console.log("ERROR READING FILE");}
+	   	console.log("downloading: ", 'C:\InterSystems\Cache\CSP\jondax\jxDemo\FinalFiles\'+filename);
+	   	text = txt;
+	});
+   	*/
+   	anchor.setAttribute('href','data:text/plain;charset=utf-8,' +doctxt);
+   	anchor.setAttribute('download',filename);
+   	// end bo bo added
+   	
+   	//anchor.setAttribute('download','');
+   	document.body.appendChild(anchor);
+   	anchor.click();
+   	anchor.parentNode.removeChild(anchor);
+}
+function jSaveMe(){
+	
+}
+
+function jDeleteMe(){
+	
+}
+
+
+</script>
+<script language="cache" method="cReadFile" arguments="filePath:%String">	
+	#include %msql
+	s fs = ##class(%Stream.FileCharacter).%New()
+	s fs.Filename = filePath
+	//&js<console.log(`#(filePath)#`)>
+	s str = fs.Read($$$MaxLocalLength)
+	
+	if ($L(str)>0){
+		&js<doctxt=`#(str)#`>
+	} else {
+		&js<alert("System busy. Please try again later.")>
+	}
+	
+	q
+</script>
+</html>

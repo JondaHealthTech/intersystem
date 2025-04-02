@@ -1,0 +1,1235 @@
+<?xml version="1.0" ?>
+
+<svg xmlns="http://www.w3.org/2000/svg"
+ 	xmlns:xlink="http://www.w3.org/1999/xlink" 
+ 	id="main"
+
+	width="800" height="2000" 
+	viewBox="0 0 800 2000" 
+ 	onload="Initialize()"
+ 	zoomAndPan="disable" > 
+
+
+<style type="text/css"><![CDATA[
+
+.canvas {
+	fill: #CCCCEE;
+	stroke : gray;
+	stroke-width : 1;
+}
+
+rect.mainLabel {
+	fill: white;
+	stroke : black;
+	stroke-width : 1;
+	filter: url(#dropShadow);
+}
+
+text.mainLabel {
+	pointer-events : none;
+	font-size : 10pt;
+	fill: blue;
+	stroke: none;
+}
+
+.hub {
+ 	fill: url(#hubgrad);
+	stroke: green;
+	stroke-width: 2px;
+	filter: url(#dropShadow);
+}
+
+.spoke {
+	fill: none;
+	stroke: green;
+	stroke-width: 2px;
+	stroke-linejoin: round;
+}
+
+.spokeSelected {
+	fill: none;
+	stroke: blue;
+	stroke-width: 3px;
+	stroke-linejoin: round;
+}
+
+.spokeTerm {
+	fill: yellow;
+	stroke: green;
+	stroke-width: 1px;
+	stroke-linejoin: round;
+}
+
+.spokeTermSelected {
+	fill: yellow;
+	stroke: blue;
+	stroke-width: 2px;
+	stroke-linejoin: round;
+}
+
+.spokeBox {
+	fill: #CCCCEE;
+	stroke: gray;
+	stroke-width: 1px;
+	stroke-linejoin: round;
+	opacity: 0.6;
+}
+
+.spokeBoxSelected {
+	fill: url(#hubgrad);
+	stroke: black;
+	stroke-width: 1px;
+	stroke-linejoin: round;
+	opacity: 1.0;
+}
+
+.HubLabel {
+	pointer-events : none;
+	font-size : 18pt;
+	fill: yellow;
+	stroke: blue;
+	stroke-width: 2px;
+}
+
+.HubLabelSmall {
+	pointer-events : none;
+	font-size : 8pt;
+	fill: blue;
+	stroke: none;
+	stroke-width: 2px;
+}
+
+.SpokeLabel {
+	pointer-events : none;
+	font-size : 10pt;
+	fill: black;
+	stroke: none;
+}
+
+]]></style>
+
+<!-- defs -->
+<defs>
+
+<linearGradient id="hubgrad" x1="0%" y1="0%" x2="0%" y2="100%">
+<stop offset="50%" style="stop-color:yellow" />
+<stop offset="90%" style="stop-color:orange" />
+</linearGradient>
+
+<filter id="dropShadow" x="-2%" y="-2%" height="120%" width="120%">
+<feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+<feOffset dx="4px" dy="4px" result="offsetBlur" />
+<feMerge>
+	<feMergeNode in="offsetBlur"/>
+	<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+
+<!-- context menu -->
+<menu id="CanvasMenu" xmlns="http://mynamepsace.com/">
+    <header>Menu</header>
+    <separator/>
+	 <item enabled="yes" id="menu_Add" onactivate="addApplication('service');">Add Business Service</item>
+	 <item enabled="yes" id="menu_Add" onactivate="addApplication('operation');">Add Business Operation</item>
+	 <item enabled="yes" id="menu_Add" onactivate="addApplication('process');">Add Business Process</item>
+    <separator/>
+	 <item enabled="yes" id="menu_Remove" onactivate="removeApplication();">Remove Item</item>
+    <separator/>
+	 <item enabled="yes" id="menu_Copy" onactivate="copyApplication();">Copy Item</item>
+	 <item enabled="yes" id="menu_Rename" onactivate="renameApplication();">Rename Item</item>
+    <separator/>
+    <menu id="menu_zoom">
+	 <header>Zoom</header>
+	 <item id="menu_zoom_33" onactivate="setZoom(33);">33%</item>
+	 <item id="menu_zoom_50" onactivate="setZoom(50);">50%</item>
+	 <item id="menu_zoom_75" onactivate="setZoom(75);">75%</item>
+	 <item id="menu_zoom_88" onactivate="setZoom(88);">88%</item>
+	 <item checked="yes" id="menu_zoom_100" onactivate="setZoom(100);">100%</item>
+	 <item id="menu_zoom_110" onactivate="setZoom(110);">110%</item>
+	 <item id="menu_zoom_125" onactivate="setZoom(125);">125%</item>
+	 <item id="menu_zoom_150" onactivate="setZoom(150);">150%</item>
+	 <item id="menu_zoom_200" onactivate="setZoom(200);">200%</item>
+	 <item id="menu_zoom_500" onactivate="setZoom(500);">500%</item>
+    </menu>
+    <separator/>
+	<item action="Find" id="Find">Find...</item>
+	<item action="FindAgain" id="FindAgain">Find Again</item>
+    <separator/>
+    <item action="About">A&amp;bout SVG Viewer...</item>
+</menu>
+
+</defs>
+
+<script language="text/javascript">
+<![CDATA[
+
+/// Useful constants
+var SVGNS = "http://www.w3.org/2000/svg";
+
+// commands
+
+var appCount = 1;
+
+function addApplication(hostType)
+{
+	if (window.showAddHostWizard) {
+		window.showAddHostWizard(hostType);
+	}
+
+	return;
+}
+
+function copyApplication()
+{
+	if (currSpoke) {
+		var spoke = currHub.copySpoke(currSpoke);
+		selectSpoke(spoke);
+	}
+}
+
+function renameApplication()
+{
+	if (currSpoke) {
+		var name = prompt("Please enter a new name for the selected item:",currSpoke.name);
+		if (name) {
+			currSpoke.setName(name);
+			currSpoke.hub.setModified(true);
+		}
+	}
+}
+
+function removeApplication()
+{
+	if (currSpoke) {
+		currSpoke.hub.removeSpoke(currSpoke);
+		currSpoke = null;
+	}
+}
+
+/// Add a new Host to this model
+function api_addHost(name,hostType,hostClass,bag)
+{
+	var spoke = currHub.addSpoke(name,hostType,hostClass,bag);
+	selectSpoke(spoke);
+
+	return spoke.spokeId;
+}
+
+/// Add a Setting to a host
+function api_addSetting(id,value,bag)
+{
+	var spoke = currHub.findSpoke(id);
+	if (spoke) {
+		spoke.addSetting(value,bag);
+	}
+}
+
+/// Remove the selected item from this model
+function api_removeItem()
+{
+	if (currSpoke) {
+		currSpoke.hub.removeSpoke(currSpoke);
+		currSpoke = null;
+	}
+}
+
+/// Make a copy of the selected item
+function api_copyItem()
+{
+	if (currSpoke) {
+		var spoke = currHub.copySpoke(currSpoke);
+		selectSpoke(spoke);
+	}
+}
+
+/// Set name of production
+function api_setProductionName(name)
+{
+	currHub.setName(name);
+}
+
+function api_setProductionAttributes(attrBag)
+{
+	currHub.attrBag = attrBag;
+}
+
+function api_setProductionElements(elBag)
+{
+	currHub.elementBag = elBag;
+}
+
+/// Return serial state of model
+function api_saveModel()
+{
+	return currHub.save();
+}
+
+/// Return true if this model has been changed since last save.
+function api_isModified()
+{
+	return currHub.isModified();
+}
+
+// holder for external API
+var api = new Object();
+
+// connect API methods to api object
+api.addHost = api_addHost;
+api.addSetting = api_addSetting;
+api.setProductionName = api_setProductionName;
+api.setProductionAttributes = api_setProductionAttributes;
+api.setProductionElements = api_setProductionElements;
+api.saveModel = api_saveModel;
+api.removeItem = api_removeItem;
+api.copyItem = api_copyItem;
+api.isModified = api_isModified;
+
+// number of items before waist expands
+var waistThreshold = 40;
+var dWaist = 22; // spacing along waist
+
+var currHub = null;
+var hubList = new Array();
+
+function Initialize()
+{
+	// replace context menu
+	if (typeof parseXML != 'undefined') {
+		var newMenuRoot = parseXML(printNode(document.getElementById('CanvasMenu')), contextMenu);
+		contextMenu.replaceChild( newMenuRoot, contextMenu.firstChild );
+	}
+
+	// create the central hub
+	hubList[hubList.length] = new Hub(400, 350);
+	currHub = hubList[0];
+	currHub.adjust();
+
+	// find loading div in outer html
+	var loadingDiv = self.document.getElementById("loading");
+	if (loadingDiv) {
+		loadingDiv.api = api;
+		loadingDiv.style.display = 'none';
+	}
+	else {
+		// !!!alert("ASSERT: loadingDiv not found");
+	}
+
+	// notify container
+	if (window.initModel) {
+		window.initModel();
+	}
+	
+	// force mod flag after initial load
+	currHub.setModified(false);
+
+	setZoom(getCookie('modelzoom',100));
+}
+
+// ------------------------------------------------------------------
+// Settings object: contains spoke settings
+
+function Setting(value,bag)
+{
+	this.value = value;
+	this.attrBag = new Object();
+	if (bag) {
+		for (var p in bag) {
+			this.attrBag[p] = bag[p];
+		}
+	}
+
+	this.save = Setting_save;
+}
+
+function Setting_save()
+{
+	var state = '<Setting ';
+	
+	// write out contents of bag
+	if (this.attrBag) {
+		for (var a in this.attrBag) {
+			state += ' ' + a + '="' + escapeXML(this.attrBag[a]) + '"';
+		}
+	}
+
+	state += '>'
+	state += escapeXML(this.value);
+	state += '</Setting>\r\n';
+	return state; 
+}
+
+// ------------------------------------------------------------------
+// Spoke object: each component is represented by a Spoke object
+
+var idCounter = 0;
+
+/// bag is bag of additional attributes
+function Spoke(hub, name, hostType, hostClass, bag)
+{
+	var id = ++idCounter;
+	hostType = hostType ? hostType : 'service';
+	
+	this.hub = hub;
+	this.name = name;
+	this.spokeId = id;
+	this.SVGGroup = null;
+	this.hostType = hostType;  // service|operation|process
+	this.hostClass = hostClass;
+	
+	this.settings = new Array();
+
+	this.attrBag = new Object();
+	if (bag) {
+		for (var p in bag) {
+			this.attrBag[p] = bag[p];
+		}
+	}
+
+	// methods
+	this.adjust = Spoke_adjust;
+	this.updateStyle = Spoke_updateStyle;
+	this.setName = Spoke_setName;
+	this.render = Spoke_render;
+	this.unrender = Spoke_unrender;
+	this.save = Spoke_save;
+	this.addSetting = Spoke_addSetting;
+
+	this.render();
+}
+
+function Spoke_addSetting(value,bag)
+{
+	this.settings[this.settings.length] = new Setting(value,bag);
+}
+
+// return serialized state of this Spoke
+function Spoke_save()
+{
+	var state = '';
+	try {
+
+		state = '<Item Name="' + escapeXML(this.name) + 
+				//'" hostType="' + escapeXML(this.hostType) +
+				'" ClassName="' + escapeXML(this.hostClass) +'"'; 
+
+		// write out contents of bag
+		if (this.attrBag) {
+			for (var a in this.attrBag) {
+				state += ' ' + a + '="' + escapeXML(this.attrBag[a]) + '"';
+			}
+		}
+
+		if (this.settings.length > 0) {
+			state += '>';
+			for (var n in this.settings) {
+				state += this.settings[n].save();
+			}
+			state += '</Item>';
+		}
+		else {
+			state += '/>';
+		}
+	}
+	catch(ex) {
+		alert('Error in Spoke_save:\n' + ex.message);
+	}
+
+	return state;
+}
+
+// create svg for spoke
+function Spoke_render()
+{
+	if (this.SVGGroup) {
+		return;
+	}
+
+	// group with elements inside
+	this.SVGGroup = document.createElementNS(SVGNS,"g");
+	this.SVGGroup.addEventListener("mousedown",spokeMouseDown,false);
+	
+	// id value
+	this.SVGGroup.setAttribute("id", "spoke_" + this.spokeId);
+	var id = this.spokeId;
+	
+	// box: if needed?
+	var box = document.createElementNS(SVGNS,"rect");
+	box.setAttribute("id","box_" + id);
+	box.setAttribute("rx", 2);
+	box.setAttribute("class","spokeBox");
+	this.SVGGroup.appendChild(box);
+
+	// spoke line
+	var line = document.createElementNS(SVGNS,"path");
+	line.setAttribute("id","path_" + id);
+	line.setAttribute("class","spoke");
+	this.SVGGroup.appendChild(line);
+
+	// spoke arrow
+	var arrow;
+	if (this.hostType == 'process') {
+		arrow = document.createElementNS(SVGNS,"circle");
+	}
+	else {
+		arrow = document.createElementNS(SVGNS,"path");
+	}
+
+	arrow.setAttribute("id","arrow_" + id);
+	arrow.setAttribute("class","spoke");
+	this.SVGGroup.appendChild(arrow);
+
+	// spoke terminator
+	if (this.hostType == 'process') {
+		var term = document.createElementNS(SVGNS,"circle");
+		term.setAttribute("cx",0);
+		term.setAttribute("cy",0);
+		term.setAttribute("r",4);
+	}
+	else {
+		var term = document.createElementNS(SVGNS,"rect");
+		term.setAttribute("x",-4);
+		term.setAttribute("y",-4);
+		term.setAttribute("width",8);
+		term.setAttribute("height",8);
+	}
+
+	term.setAttribute("id","term_" + id);
+	term.setAttribute("class","spokeTerm");
+	this.SVGGroup.appendChild(term);
+
+	// label
+	var text = document.createElementNS(SVGNS,"text");
+	text.setAttribute("id","text_" + id);
+	text.setAttribute("class","SpokeLabel");
+
+	// create the text node and append it
+	// if name has dots, use last piece
+	var name = this.name.split(".");
+	name = name[name.length-1];
+
+	var textNode = document.createTextNode(name);
+	text.appendChild(textNode);
+	this.SVGGroup.appendChild(text);	
+
+	// add group to DOM	
+	var parent = document.getElementById("spoke-group");
+	parent.appendChild(this.SVGGroup);
+}
+
+function Spoke_adjust(count, pos)
+{
+	// this is spoke # 'pos' out of 'count'
+	var len = 125;
+	var len2 = 225;
+	var cx = this.hub.cx;
+	var cy = this.hub.cy;
+
+	var	dir = 1;
+	var x1 = cx;
+	var x2 = cx;
+	var x3 = cx;
+	var y1 = cy;
+	var y2 = cy;
+	var apos = "";
+	var id = this.spokeId;
+
+	// determine if we are within the "waist"
+	var acount = count;
+	var hasWaist = false;
+	var wLeft0,wLeft1,wRight0;
+	
+	if (count >= waistThreshold) {
+		acount = waistThreshold;
+		hasWaist = true;
+		
+		// set waist range
+		wLeft0 = (waistThreshold / 2);
+		wLeft1 = (waistThreshold / 2) + ((count - waistThreshold) / 2);
+		
+		wRight0 = count - ((count - waistThreshold) / 2);
+	}
+	
+	if (hasWaist && (pos >= wLeft0 && pos <= wLeft1)) {
+		// use waist on left
+		dir = -1;
+		x1 = cx;
+		y1 = cy + ((pos - (waistThreshold / 2)) * dWaist);
+		y2 = y1;
+		x2 = x1 - len;
+		x3 = x2 - len2;
+	}
+	else if (hasWaist && (pos >= wRight0)) {
+		// use waist on right
+		dir = 1;
+		x1 = cx;
+		y1 = cy + ((count - pos) * dWaist);
+		y2 = y1;
+		x2 = x1 + len;
+		x3 = x2 + len2;
+	}	
+	else {
+	
+		var wo = 0;
+		var apos = pos;
+		if (pos > wLeft1) {
+			wo = (((count - waistThreshold) / 2)) * dWaist;
+			apos = pos - ((count - waistThreshold) / 2);
+		}
+
+		var angle = (Math.PI * 2) * (apos / (acount));
+
+		// which way to point labels
+		if (angle > (Math.PI * 0.5) && angle <= (Math.PI * 1.5)) {
+			dir = -1;
+		}
+		// avoid looking like you-know-what!
+		if (count == 4 && pos == 3) {
+			dir = 1;
+		}
+
+		var cos = Math.cos(angle);
+		var sin = Math.sin(angle);
+
+		x1 = cx;
+		y1 = cy + wo;
+
+		x2 = cx + (len * cos);
+		y2 = cy + wo - (len * sin * (1 + (1 * (1 - Math.abs(cos)))));
+		x3 = x2 + (dir * len2);
+	}
+	
+	// box
+	var box = document.getElementById("box_" + id);
+	if (box) {
+		if (dir > 0) {
+			box.setAttribute("x",x2 + 20);
+		}
+		else {
+			box.setAttribute("x",x3 + 2);
+		}
+		box.setAttribute("width", len2 - 20);
+		box.setAttribute("height", 15);
+		box.setAttribute("y",y2 - 15);
+	}
+
+	// spoke line
+	var path = document.getElementById("path_" + id);
+	if (path) {
+		var d = "M " + x1 + "," + y1 + " L " + x2 + "," + y2 + " " + x3 + "," + y2;
+		path.setAttribute("d",d);
+	}
+	
+	// spoke arrow
+	var arrow = document.getElementById("arrow_" + id);
+	if (this.hostType == 'process') {
+		if (arrow) {
+			var x4 = (x1+3*x2)/4;
+			var y4 = (y1+3*y2)/4;
+			arrow.setAttribute("cx",x4);
+			arrow.setAttribute("cy",y4);
+			arrow.setAttribute("r",4);
+			arrow.setAttribute("style","fill:#DDEEFF;");
+		}
+	}
+	else {
+		// adjust arrow
+		var ang = 0;
+		if (arrow) {
+			// compute direction arrow; add to path
+			var x4 = (x1+3*x2)/4;
+			var y4 = (y1+3*y2)/4;
+			var x5 = x4 + 5;
+			var y5 = y4 + 5;
+			var x6 = x4 - 5;
+			var y6 = y4 + 5;
+			var d2 = " M " + x4 + "," + y4 + " L " + x5 + "," + y5;
+			d2 += " M " + x4 + "," + y4 + " L " + x6 + "," + y6;
+			arrow.setAttribute("d",d2);
+
+			// figure out angle to rotate arrow
+			if (x1 == x2) {
+				if (y1 > y2) {
+					ang = 180;
+				}
+				else {
+					ang = 0;
+				}
+			}
+			else {
+				ang = Math.atan((y2 - y1) / (x2 - x1)) * (180 / Math.PI);
+				ang = (x1<x2) ? 270 + ang : 90 + ang;
+			}
+
+			// flip around for output
+			ang = (this.hostType == 'service') ? ang : ang + 180;
+
+			arrow.setAttribute("transform","rotate(" + ang + "," + x4 + "," + y4 + ")");
+		}
+	}
+
+	// spoke terminator
+	var term = document.getElementById("term_" + id);
+	if (term) {
+		var r = 4;
+		term.setAttribute("transform", "translate(" + (x3*1 + (dir*1 * r)) +","+y2+") rotate(45)");
+	}
+
+	// label
+	var text = document.getElementById("text_" + id);
+	if (text) {
+		text.setAttribute("x", x3 - (dir * 3));
+		text.setAttribute("y", y2 - 2);
+		text.setAttribute("text-anchor", dir < 0 ? "start" : "end");
+	}
+}
+
+function Spoke_updateStyle()
+{
+	var id = this.spokeId;
+
+	// box
+	var box = document.getElementById("box_" + id);
+	if (box) {
+		box.setAttribute("class", (this == currSpoke) ? "spokeBoxSelected" : "spokeBox");
+	}
+
+	// spoke line
+	var path = document.getElementById("path_" + id);
+	if (path) {
+		path.setAttribute("class",(this == currSpoke) ? "spokeSelected" : "spoke");
+	}
+
+	// spoke arrow
+	var path = document.getElementById("arrow_" + id);
+	if (path) {
+		path.setAttribute("class",(this == currSpoke) ? "spokeSelected" : "spoke");
+	}
+
+	// spoke terminator
+	var term = document.getElementById("term_" + id);
+	if (term) {
+		term.setAttribute("class",(this == currSpoke) ? "spokeTermSelected" : "spokeTerm");
+	}
+}
+
+// delete SVG for this spoke
+function Spoke_unrender()
+{
+	// remove SVG elements
+	var group = document.getElementById("spoke_" + this.spokeId);
+	var parent = group.parentNode;
+	if (group && parent) {
+		parent.removeChild(group);
+	}
+}
+
+// 
+function Spoke_setName(name)
+{
+	this.name = name;
+	setTextNode("text_" + this.spokeId,name,false);
+}
+
+// ------------------------------------------------------------------
+// Hub object
+
+function Hub(cx, cy)
+{
+	var id = ++idCounter;
+
+	// list of spokes
+	this.spokeList = new Array();
+
+	// methods
+	this.addSpoke = Hub_addSpoke;
+	this.removeSpoke = Hub_removeSpoke;
+	this.copySpoke = Hub_copySpoke;
+	this.findSpoke = Hub_findSpoke;
+	this.adjust = Hub_adjust;
+	this.save = Hub_save;
+	this.setName = Hub_setName;
+	this.isModified = Hub_isModified;
+	this.setModified = Hub_setModified;
+
+	this.hubId = id;	
+	this.cx = cx;
+	this.cy = cy;
+	this.name = '';
+	this.modifiedFlag = false;
+	
+	this.attrBag = null;
+	this.elementBag = null;
+
+	// create corresponding SVG shape
+
+	// group with elements inside
+	this.SVGGroup = document.createElementNS(SVGNS,"g");
+	
+	// id value
+	this.SVGGroup.setAttribute("id", "hub_" + id);
+	
+	// hub
+	var hub = document.createElementNS(SVGNS,"path");
+	hub.setAttribute("id","hub_path_" + id);
+	hub.setAttribute("class","hub");
+	this.SVGGroup.appendChild(hub);
+	
+	// label
+	var text = document.createElementNS(SVGNS,"text");
+	text.setAttribute("id","hub_text1_" + id);
+	text.setAttribute("class","HubLabel");
+	
+	// create the text node and append it
+	var textNode = document.createTextNode("Ensemble");
+	text.appendChild(textNode);
+	this.SVGGroup.appendChild(text);
+	
+	// sub-label
+	var text = document.createElementNS(SVGNS,"text");
+	text.setAttribute("id","hub_text2_" + id);
+	text.setAttribute("class","HubLabelSmall");
+	
+	// create the text node and append it
+	var textNode = document.createTextNode("Integration Platform");
+	text.appendChild(textNode);
+	this.SVGGroup.appendChild(text);
+
+	// add group to DOM	
+	var parent = document.getElementById("hub-group");
+	parent.appendChild(this.SVGGroup);
+}
+
+function Hub_setName(name)
+{
+	this.name = name;
+	this.setModified(true); // (this will update title)
+}
+
+function Hub_setModified(flag)
+{
+	this.modifiedFlag = flag;
+	setTextNode('mainLabel',this.name + (this.modifiedFlag ? '*' : ''));
+}
+
+function Hub_isModified()
+{
+	return this.modifiedFlag;
+}
+
+// return serialized state of this Hub
+function Hub_save()
+{
+	var state = '';
+	
+	// process info
+	state += '<Production Name="' + escapeXML(this.name) + '"';
+	
+	// write out contents of bag
+	if (this.attrBag) {
+		for (var a in this.attrBag) {
+			state += ' ' + a + '="' + escapeXML(this.attrBag[a]) + '"';
+		}
+	}
+
+	state += '>\r\n';
+
+	// write out contents of element bag
+	if (this.elementBag) {
+		for (var el in this.elementBag) {
+			state += '<' + el + '>' + escapeXML(this.elementBag[el]) + '</'+ el + '>\r\n';
+		}
+	}
+
+	for (var n = 0; n < this.spokeList.length; n++) {
+		state += this.spokeList[n].save();
+		state += '\r\n';
+	}
+
+	state += '</Production>';
+
+	this.setModified(false);
+	return state;
+}
+
+// adjust size of hub for number of spokes
+function Hub_adjust()
+{
+	var id = this.hubId;
+
+	// adjust spokes
+	for (var n = 0; n < this.spokeList.length; n++) {
+		this.spokeList[n].adjust(this.spokeList.length, n);
+	}
+	
+	// adjust size of hub
+
+	// size of waist depends on number of items
+	var count = this.spokeList.length;
+	var waist = (count < waistThreshold) ? 0 : ((count - waistThreshold) / 2) * dWaist;
+	
+	var hub = document.getElementById("hub_path_" + id);
+	var d = "M" + (this.cx - 75) + " " + this.cy + " A 75 75 0 1 1 " + (this.cx + 75) + " " + this.cy + " L " + (this.cx + 75) + " " + (this.cy + waist) +" A 75 75 0 1 1 " + (this.cx - 75) + " " + (this.cy + waist) +" z";
+	hub.setAttribute("d",d);
+	
+	// label
+	var text = document.getElementById("hub_text1_" + id);
+	text.setAttribute("x", this.cx);
+	text.setAttribute("y", this.cy + waist/2 + 10);
+	text.setAttribute("text-anchor", "middle");
+	
+	// sub-label
+	var text = document.getElementById("hub_text2_" + id);
+	text.setAttribute("x", this.cx);
+	text.setAttribute("y", this.cy + waist/2 + 25);
+	text.setAttribute("text-anchor", "middle");
+}
+
+// make a copy of a spoke and add it
+function Hub_copySpoke(spoke)
+{
+	var copy = this.addSpoke('CopyOf'+spoke.name, spoke.hostType, spoke.hostClass, spoke.attrBag);
+	// get settings as well
+	copy.settings = spoke.settings
+	return copy;
+}
+
+
+function Hub_addSpoke(name, hostType, hostClass, bag)
+{
+	var spoke = new Spoke(this, name, hostType, hostClass, bag);
+	this.setModified(true);
+	var done = false;
+
+	// insert before first element of same type 
+	for (var n in this.spokeList) {
+		if (this.spokeList[n].hostType == hostType) {
+			this.spokeList.splice(n,0,spoke);
+			done = true;
+			break;
+		}
+	}
+
+	if (!done) {
+		// add services to end/ operations to start of list
+		if ('operation' != hostType) {
+			this.spokeList[this.spokeList.length] = spoke;
+		}
+		else {
+			this.spokeList.unshift(spoke);
+		}
+	}
+
+	this.adjust();
+
+	return spoke;
+}
+
+function Hub_removeSpoke(spoke)
+{
+	// find the spoke
+	var idx = -1;
+	
+	for (var n = 0; n < this.spokeList.length; n++) {
+		if (spoke == this.spokeList[n]) {
+			idx = n;
+			break;
+		}
+	}
+
+	if (idx >= 0) {
+		// remove spoke from list
+		spoke.unrender();
+		this.spokeList.splice(idx,1);
+		this.adjust();
+	}
+
+	this.setModified(true);
+}
+
+// find the spoke with the given id #
+function Hub_findSpoke(id)
+{
+	var spoke;
+
+	for (var n = 0; n < this.spokeList.length; n++) {
+		spoke = this.spokeList[n];
+		if (spoke.spokeId == id) {
+			return spoke;
+		}
+	}
+	
+	return null;
+}
+
+// ------------------------------------------------------------------------
+// event handlers
+
+function canvasMouseDown(evt)
+{
+	evt.stopPropagation();
+	if (evt.button != 0) {
+		// only select for primary mouse button
+		return;
+	}
+
+	selectSpoke(null);
+}
+
+function spokeMouseDown(evt)
+{
+	evt.stopPropagation();
+
+	var el = evt.target;
+
+	var id = el.parentNode.id;
+	var s = id.split("_");
+	
+	// look amongst all hubs
+	var spoke = null;
+	for (var n = 0; n < hubList.length; n++) {
+		spoke = hubList[n].findSpoke(s[1]);
+		if (spoke) {
+			break;
+		}
+	}
+	
+	selectSpoke(spoke);
+}
+
+var currSpoke = null;
+
+// select the given spoke
+function selectSpoke(spoke)
+{
+	if (currSpoke != spoke) {
+		var old = currSpoke;
+		currSpoke = spoke;
+
+		// unhilite
+		if (old) {
+			old.updateStyle();
+		}
+		
+		// hilite
+		if (spoke) {
+			spoke.updateStyle();
+		}
+
+
+		// notify container
+		if (window.setDetailsBox) {
+			if (spoke) {
+				window.setDetailsBox(spoke.spokeId, spoke.name, spoke.hostType, spoke.hostClass);
+			}
+			else {
+				window.setDetailsBox(null);
+			}
+		}
+
+	}
+}
+
+// -------------------------------------------------------------------
+// Utility methods:
+
+// Set the contents of text element id to str
+function setTextNode(id,str,wordwrap)
+{
+	var text = document.getElementById(id);
+	if (!text) {
+		return;
+	}
+	
+	if (!wordwrap) {
+		// show first line only
+		// create next text node and replace the current one
+		var oldNode = text.firstChild;
+		text.removeChild(oldNode);
+
+		var txt = '';
+		if (str) {
+			var t = str.split('\n');
+			txt = t[0];
+		}
+
+		var textNode;
+		textNode = document.createTextNode(txt);
+		text.appendChild(textNode);
+	}
+	else {
+		// wrap
+		// create a new text node
+		var oldtext = text;
+		var parent = oldtext.parentNode;
+		var x = oldtext.getAttribute("x");
+		var cls = oldtext.getAttribute("class");
+		
+		text = document.createElementNS(SVGNS,"text");
+		text.setAttribute("id",oldtext.getAttribute("id"));
+		text.setAttribute("class",oldtext.getAttribute("class"));
+		text.setAttribute("x",oldtext.getAttribute("x"));
+		text.setAttribute("y",oldtext.getAttribute("y"));
+		
+		// remove the old text		
+		parent.removeChild(oldtext);
+
+		// create a set of tspans
+		var maxrows = 3
+		var t = str.split('\n');
+		for (var i = 0; i < t.length && i <= maxrows; i++) {
+			var span = document.createElementNS(SVGNS,'tspan');
+			span.setAttribute("class", cls);
+			span.setAttribute("x", x);
+			span.setAttribute("dy", i == 0 ? "0" : "1.1em");
+			text.appendChild(span);
+
+			textNode = document.createTextNode(i < maxrows ? t[i] : "...");
+			span.appendChild(textNode);
+		}
+
+		parent.appendChild(text);
+	}
+}
+
+// quote any special xml characters within text
+function escapeXML(text)
+{
+	var out = '';
+	
+	// don't escape numbers
+	if (text == (text * 1)) {
+		return text;
+	}
+
+	// skip null values
+	if (text == null || text == '') {
+		return '';
+	}
+
+	for (var p = 0; p < text.length; p++) {
+		var ch = text.charAt(p);
+		switch (ch) {
+		case '&':
+			out += '&amp;';
+			break;
+		case '<':
+			out += '&lt;';
+			break;
+		case '>':
+			out += '&gt;';
+			break;
+		case '"':
+			out += '&quot;';
+			break;
+		default:
+			out += ch;
+			break;
+		}
+	}
+
+	return out;
+}
+// set the option for the given menu item
+function setMenuItemOption(pOption, pItemId, pSubMenuId, value)
+{
+	var menuItems = contextMenu.childNodes.item(0).childNodes;
+	var tItem;
+      
+	for (i = 0; i != menuItems.length - 1; i++) {
+		if (menuItems.item(i).nodeType == 1) {
+			tItem = menuItems.item(i);
+			if (!pSubMenuId) {
+				// top-level menu item
+				if (tItem.getAttribute('id') == pItemId) {
+					tItem.setAttribute(pOption,value ? 'yes' : 'no');
+				}
+			}
+            else if ((tItem.nodeName == 'menu') && (tItem.getAttribute('id') == pSubMenuId)) {
+				// submenu
+
+				// loop over items in submenu
+				var submenuItems = tItem.childNodes;
+               
+				for (j = 0; j != submenuItems.length - 1; j++) {
+					tSubItem = submenuItems.item(j)
+					if (tSubItem.nodeType == 1) {
+						if (tSubItem.getAttribute('id') == pItemId) {
+							tSubItem.setAttribute(pOption,value ? 'yes' : 'no');
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+var currZoom = 0;
+
+// Set the zoom level
+function setZoom(zoom)
+{	
+	if (zoom == currZoom) return;
+	
+	var oldzoom = currZoom;
+	currZoom = zoom;
+
+	var main = document.getElementById("main");
+	var width = main.getAttribute("width");
+	var height = main.getAttribute("height");
+	
+	var embed = self.document.getElementById("SVGEmbed");
+	if (embed) {
+		embed.height = 0.75 * height * (zoom / 100);
+		embed.width = 0.75 * width * (zoom / 100);
+	}
+ 
+ 	// update context menu
+ 	if (oldzoom == 0) {
+	 	oldzoom = 100;
+ 	}
+	setMenuItemOption("checked","menu_zoom_" + oldzoom, "menu_zoom", false);
+ 	setMenuItemOption("checked","menu_zoom_" + zoom, "menu_zoom", true);
+
+ 	self.document.cookie = 'modelzoom=' + currZoom;
+ 	
+ 	// notify studio
+ 	// canvas_setResultsDiv("ZOOM",currZoom);
+}
+
+function getCookie(name,def)
+{
+	if ('undefined' == typeof cookies) return '';
+
+	var value = def; // default value
+	var cookies = self.document.cookie;
+	var pos = cookies.indexOf(name + '=');
+	if (pos != -1) {
+		var start = pos + 1 + name.length;
+		var end = cookies.indexOf(';',start);
+		if (end == -1) end = cookies.length;
+		var value = unescape(cookies.substring(start,end));
+	}
+
+	return value;
+}
+
+]]>
+</script>
+
+<g id="canvas" 
+	onmousedown="canvasMouseDown(evt);"
+>
+
+<rect class="canvas" x="0" y="0" width="100%" height="100%" />
+
+<rect class="mainLabel" x="0" y="0" width="50%" height="25" />
+<text id="mainLabel" class="mainLabel" x="10" y="20">
+</text>
+
+<g id="spoke-group" />
+
+<g id="hub-group" />
+
+</g>
+
+</svg>

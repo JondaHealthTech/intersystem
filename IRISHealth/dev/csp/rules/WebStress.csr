@@ -1,0 +1,94 @@
+<csr:rule name="WebStressHead" match="WebStress:head">
+<csr:action>
+<csr:section name="HEAD">
+<head>
+<script language="cache" runat="compiler">
+	// Put the title in
+	do ..WriteText("<title>",1)
+	do ..WriteText("Webstress")
+	do ..WriteText("</title>",1)
+	
+	new len,plen,shortpage
+	// We'll need the name of the page being compiled for later
+	set len=$length(%pageName,"/")
+	set page=$piece(%pageName,"/",len)
+	set plen=$length(page,".")
+	set shortpage=$piece(page,".",1,plen-1)
+	
+	// This will be used by the grid compiler to insert just one copy of the javascript arrays etc.
+	kill ^%WebStress.UI.Page($job,%pageName)
+	
+</script>
+<script language="Cache" runat="server">
+	write "<script language='JavaScript' src='webstress.js'><"_"/script>",!
+	write "<script language='JavaScript' src='webstress_menu.js'></"_"script>",!
+	do ##class(%WebStress.UI.Menu).MenuJScript()
+	write "<link href=""webstress.css"" rel=""stylesheet"" type=""text/css"">",!
+
+</script>
+<csr:children>
+</head>
+</csr:section>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="UIBody" match="WebStress:body">
+<csr:attribute name="Title" description="Specify the page title">
+<csr:action>
+<script language="cache" runat="compiler">
+	new bodyAtts,atts,ref,attName,data,name,value,quote,text
+	do ..GetAttributesOrdered(.bodyAtts)
+	set ref=1
+	while $data(bodyAtts(ref)) {
+		set attName=$zcvt($li(bodyAtts(ref),1),"U")
+		if (attName'="TITLE") {
+			set atts(attName)=bodyAtts(ref)
+		}
+		set ref=ref+1
+	}
+	for attName="LEFTMARGIN","TOPMARGIN","MARGINWIDTH","MARGINHEIGHT" if '$data(atts(attName)) set atts(attName)=$lb(attName,0,"""")
+	
+	set text="<body"
+	set attName=""
+	for  {
+		set attName=$order(atts(attName))
+		if attName="" quit
+		set data=atts(attName)
+		set name=$li(data,1),value=$li(data,2),quote=$li(data,3)
+		set text=text_" "_$li(atts(attName),1)
+		if (value'="")||(quote'="") set text=text_"="_quote_value_quote
+	}
+	set text=text_" onkeydown=""javascript:key_down();"">"
+	do ..WriteText(text,1)
+</script>
+<script language="JavaScript1.2">mmLoadMenus();</script>
+<table width="100%">
+ <tr>
+  <td align="left"><h1>Web Stress Tool</h1></td>
+  <td>
+   <table width="100%">
+    <tr>
+     <td align="right"><a href="http://www.intersystems.com"><img src="http://www.intersystems.com/images/intersystems-header-logo.gif" border="0"></a></td>
+    </tr>
+    <tr>
+     <td align="right" class="VersionScript">Version: 2.0.1 2009-05-27 10:23</td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+ <tr>
+  <td>
+   <script language="cache" runat="server">
+   	do ##class(%WebStress.UI.Menu).DisplayMenu()
+   </script>
+  </td>
+ </tr>
+</table>
+<h2>##(..GetAttribute("Title"))##</h2>
+<csr:children>
+</body>
+</html>
+</csr:action>
+</csr:rule>

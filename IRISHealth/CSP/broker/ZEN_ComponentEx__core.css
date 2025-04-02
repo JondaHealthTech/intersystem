@@ -1,0 +1,50 @@
+/* @class="%ZEN.ComponentEx.documentView" */
+
+.dvEnclosingClass {
+	overflow: auto;
+	background: none;
+	border: 1px solid #C0C0C0;
+}
+
+.dvBody {
+	color: #404040;
+	font-family: arial;
+	padding: 10px;
+}
+
+.dvTitle {
+	padding-top: 5px;
+	font-weight: bold;
+	color: #606060;
+}
+
+.dvBlock {
+	overflow: hidden;
+}
+
+.dvPara {
+}
+
+table.dvTable th {
+	padding: 2px;
+	padding-right: 5px;
+	text-align: left;
+}
+
+table.dvTable td {
+	text-align: left;
+}
+
+.dvGenericTitle {
+	padding-top: 10px;
+	color: #606060;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.dvGenericValue {
+	color: #404040;
+	font-size: 14px;
+}
+
+/* EOF */

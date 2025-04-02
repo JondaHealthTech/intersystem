@@ -1,0 +1,105 @@
+<?xml version="1.0" ?>
+
+<svg id="svgRoot" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+zoomAndPan="disable" width="800" height="305.6" onload="Initialize()"> 
+
+<script type='text/ecmascript' xlink:href='cspchart.js'/>
+
+<style type="text/css">
+<![CDATA[
+
+.Chart-InnerPanel { 
+	fill: #000040;
+	stroke: gray;
+	stroke-width: 1px;
+}
+
+.Chart-OuterPanel { 
+	fill: gray;
+	stroke: gray;
+	stroke-width: 1;
+}
+
+.Chart-PlotArea { 
+	fill: black;
+	stroke: none;
+}
+
+.Chart-Axis { 
+	stroke: gray;
+	stroke-width: 1px;
+	stroke-linecap: round;
+	fill: none;
+}
+
+.Chart-GridLine { 
+	stroke: gray;
+	stroke-width: 1px;
+	opacity: 0.7;
+}
+
+.Chart-Series { 
+	stroke-width: 1.2px;
+	fill: none;
+	fill-opacity: 0.4;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.Chart-Bars { 
+	fill: green;
+	stoke: gray;
+	stroke-width: 0.5px;
+}
+
+.Chart-yLabel { 
+	pointer-events: none;
+	font-size: 12pt;
+	fill: yellow;
+	stroke: none;
+	font-family: arial;
+}
+
+.Chart-xLabel { 
+	pointer-events: none;
+	font-size: 12pt;
+	fill: lightgreen;
+	stroke: none;
+	font-family: arial;
+}
+
+]]></style>
+
+<!-- scripts -->
+
+<script language="text/javascript">
+<![CDATA[
+
+var theGraph = null;
+
+function Initialize()
+{
+	try {
+		var root = document.getElementById('svgRoot');
+		
+
+		theGraph = new LineChart(1,root,self.graphWidth ? self.graphWidth : 800,self.graphHeight ? self.graphHeight : 305.6,15,30,50,10);
+		theGraph.showAxes();
+
+		// call external init function
+		if (self.parent.initGraphData) {
+			self.parent.initGraphData();
+		}
+		else {
+			self.initGraphData();
+		}
+	}
+	catch (ex) {
+		alert('Error in cspgraph.Initialize:\n' + ex.message);
+	}
+}
+
+]]>
+</script>
+
+</svg>

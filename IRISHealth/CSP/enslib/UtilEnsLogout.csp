@@ -1,0 +1,27 @@
+<AutoPageENS domain="Ensemble" parentpage="UtilEnsHome.csp" pagename="Logout" title="@Ensemble:EnsPortal@Management Portal" >
+<CSP:CLASS INCLUDES="Ensemble">
+<html>
+<head>
+<script language="cache" runat="server">
+	Set %session.EndSession = 1
+
+	//Set tDescription = "You are logged out from the Management Portal."
+	//Set tDescription2 = "To login, go to the <nobr><a href=""UtilEnsHome.csp"">Home Page.</a></nobr>"
+	
+</script>
+<LINK REL="stylesheet" TYPE="text/css" HREF="/csp/sys/csputils.css" TITLE="Standard Style" >
+<title><csp:text TextId="LogOut" Domain="Ensemble"></csp:text></title>
+</head>
+<body>
+
+<table border="0" class="LayoutMain" width="100%" height="100%" cellpadding="0" cellspacing="0">
+<tr height="100%">
+<td class="LayoutContentCol" width="80%" >
+
+<div style="margin-left:22%;margin-right:22%;" class="text1" TextId="LogoutDescription" Domain="Ensemble"></div>
+<div style="margin-left:22%;margin-right:22%;" class="text"><csp:text TextId="LogoutDescription2" Domain="Ensemble"></csp:text> <nobr><a href="UtilEnsHome.csp"><csp:text TextId="HomePage" Domain="Ensemble"></csp:text></a></nobr></div>
+
+</td></tr></table>
+
+</body>
+</html>

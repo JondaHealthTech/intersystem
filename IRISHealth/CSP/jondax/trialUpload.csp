@@ -1,0 +1,67 @@
+<html lang="en"> <!--Groot v1.1-->
+    <head>
+    	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+		q 1
+		</script>
+    	<script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/trialUpload.css">
+        <link rel="stylesheet" href="assets/styles/trialFooter.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <h1>Step 1: Upload a blood biomarker file</h1>
+                    <h2>You have <span id="tCount"></span> remaining file transformations</h2>
+                 <iframe src="" name="iFrame1" id="iFrame1" style="" scrolling="no" onload="">
+					<!-- trialUploadProgress.csp "trialExceededQuota.csp"-->
+                 </iframe>
+                    
+                 </div>
+                 <p id="acknowledgment">By uploading this file, I acknowledge and agree that (1) I possess the required permissions to upload this file and (2) I verify that the uploaded file has been anonymized.<br> <span style='font-style:italic;'>For your security, JondaX does not keep uploaded files after processing.</span>
+                    </p>   
+                 <script language="cache" runat="server">
+          			d SetFooter^trialHome
+          		</script>   
+                  
+
+           </div>
+                    
+       </div> 
+            
+    </body>
+    <script type="text/javascript">
+    window.onload = jInit();
+    iFrame1=document.getElementById("iFrame1");
+	document.onmousemove = parent.resetTimer;
+	document.onmousedown = parent.resetTimer; // touchscreen presses
+	document.ontouchstart = parent.resetTimer;
+	document.onkeypress = parent.resetTimer;
+	document.addEventListener('scroll', parent.resetTimer, true);
+	let fileCount;
+
+	const fileUpload = document.getElementById("fileupload");
+	const modalBtn = document.getElementById("BModal1");
+	let uploadedFiles = [];
+	
+	function jInit() {
+		parent.resetTimer();
+		#server(..cInit())# 
+	}
+    </script>
+     <script language="cache" method="cInit">
+     	d Init^trialUpload
+    </script>
+    <script language="cache" method="cLockDown">
+		k %session.Data
+		&js<window.open("trialLockDown.csp","_parent")>
+	</script>
+  
+	</html>

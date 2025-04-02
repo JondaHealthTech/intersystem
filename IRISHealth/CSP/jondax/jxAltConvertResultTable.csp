@@ -1,0 +1,239 @@
+<html lang="en">
+    <head>
+    	<script language="cache" runat="server">d HEAD1^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/jxConvertResultTableB2B.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div id="loader" class="loader">
+            	<div class="loader-content">
+            		<p>Please wait for all the data to be loaded!</p>
+            		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            	</div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;" onclick="openMobileNav(event)"></i>
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <h1>
+                        Data Transformation
+                    </h1>
+                    <div id="lab-result" class="lab-result">
+                        <div class="result-title">
+                            <h2>Converted Result</h2>
+                            <h3>Template: <span id="templateName" name="templateName" style="color:#ff0066; cursor:pointer" onclick="jPopTemplates()"></span></h3>
+                            <button class="pink-btn" onclick="jDownloadFile()">Download<span id="file-type"></span> File</button>
+                        </div>
+                        <div class="result-table">
+                            <div class="table-border"></div>
+                            <div class="table-container">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                        	<th>Date</th>
+                                        	<th>Original Name</th>
+                                            <th>Converted Name</th>
+                                            <th>Units</th>
+                                            <th>Value</th>
+                                            <th>Low Range</th>
+                                            <th>High Range</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <script language="cache" runat="server">
+										do WriteTable1^jxAltConvertResultTable
+                            		</script>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <button class="back-btn green-btn" onclick="toUploadScreen(event)">Go Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="popup1" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="Signup Success">
+                <h4>Return to file upload screen?</h4>
+                <p>You cannot go back to the current page <br> to download this converted file.</p>
+                <div class="agree">
+                    <div class="round">
+                        <input name="C1" id="C1" type="checkbox" checked>
+                        <label for="C1"></label>
+                    </div>
+                    <p>Do not show this again</p>
+                </div>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="jDoNotShow();window.frameElement.src = './jxAltFileUpload.csp'">Okay</button>
+                    <button class="pink-btn" onclick="removePopup(event)">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+    <script type="text/javascript">
+    	DoNotShow=0
+    	
+		window.onload = jInitMe;
+  		document.onmousemove = parent.resetTimer;
+  		document.onmousedown = parent.resetTimer; // touchscreen presses
+  		document.ontouchstart = parent.resetTimer;
+  		//document.onclick = parent.resetTimer; // touchpad clicks
+  		document.onkeypress = parent.resetTimer;
+  		document.addEventListener('scroll', parent.resetTimer, true);
+    	
+    	function jInitMe(){
+	    	parent.resetTimer();
+	    	#server(..cInitMe())#;
+	    	document.getElementById("loader").style.display = "none";
+	    	setTableBorderPos();
+    	}
+        let height = screen.height;
+        let popup = document.getElementById("popup1")
+        let tableContainer = document.getElementsByClassName("table-container")[0];
+        let tableBorder = document.getElementsByClassName("table-border")[0];
+		let downloadStr;
+		let fileType;
+		let fileName;
+		let fileExt="csv";
+		let formalFileExt;
+		window.onresize = setTableBorderPos;
+        window.onload = jInitMe;
+        
+		function jDownloadFile(){
+			#server(..cConvertResults())#
+			
+			checkFileType();
+    		var blob = new Blob([downloadStr], {type: 'text/plain'});
+    		var link = document.createElement('a');
+    		link.href = URL.createObjectURL(blob);
+    		link.href="elfieDemo/"+fileName+"."+fileExt
+    		link.download = fileName+"."+fileExt;
+    		link.click();
+    		URL.revokeObjectURL(link.href);
+		}
+		function checkFileType(){
+			fileExt = "csv";
+		}
+        function setTableBorderPos(){
+            let resultTable = document.querySelector(".result-table");
+            let table = document.querySelector("table");
+            let tablePosition = table.getBoundingClientRect();
+            if(resultTable.scrollHeight > resultTable.clientHeight){
+                tableBorder.style.height = "calc(100% + 4px)"
+            }
+            else{
+                tableBorder.style.height = tablePosition.height + 4 + "px";
+            }
+            tableBorder.style.width = tablePosition.width + 4 + "px";
+        }
+        function toUploadScreen(e){
+	        if (DoNotShow==1){
+				window.frameElement.src = './jxAltFileUpload.csp'
+		        return false
+		    }
+            setTimeout(()=>{
+                popup.classList.remove("inactive")
+            },100);
+        }
+        function removePopup(e){
+            popup.classList.add("inactive");
+        }
+        function openDropdown(e){
+            let collapseData = e.target.closest("td").querySelector(".collapse-data");
+            let resultTablePosition = document.querySelector(".result-table").getBoundingClientRect();
+            
+            let ul = collapseData.querySelector("ul");
+            let collapsePosition = e.target.getBoundingClientRect();
+            if(height - e.target.getBoundingClientRect().bottom <360){
+                collapseData.style.bottom = "1.7vw";
+                ul.style.maxHeight = (collapsePosition.top - resultTablePosition.top -70  ) + "px";
+                collapseData.style.maxHeight = (collapsePosition.top - resultTablePosition.top -40) + "px";
+            }
+            else{
+                ul.style.maxHeight = (resultTablePosition.bottom  - collapsePosition.bottom - 30) + "px";
+                collapseData.style.maxHeight = (resultTablePosition.bottom  - collapsePosition.bottom - 10) + "px";
+            }
+            setTimeout(()=>{
+                collapseData.classList.add("active");
+            },100);
+        }
+		function jChangeUnit(e){
+    		e.stopPropagation();
+			let tr = e.target.closest("tr");
+    		$(".collapse-data.active").removeClass("active");
+    		d1 = e.target.innerText,d2 = tr.dataset.key;
+    		#server(..cChangeUnit(d1,d2))#
+		}
+		function jChangeName(e){
+			e.stopPropagation();
+			let tr = e.target.closest("tr");
+    		$(".collapse-data.active").removeClass("active");
+    		d1 = e.target.innerText,d2= tr.dataset.key;
+    		#server(..cChangeName(d1,d2))#
+		}
+        document.addEventListener("click",(e)=>{
+            let collapseData = e.target.closest(".collapse-data.active");
+            if(collapseData == null){
+                $(".collapse-data.active").removeClass("active");
+            } 
+            if(e.target.closest(".popup-dialog") == null){
+                popup.classList.add("inactive");
+            }
+        })
+        
+        function jDoNotShow(){
+	        if (document.getElementById("C1").checked==true){
+		        #server(..cDoNotShow())#
+	        }
+        }
+        
+        function jPopTemplates(){
+	     	#server(..cPopTemplates())#
+	     	location.reload()
+        }
+	</script>
+</script>
+<script language="cache" method="cInitMe">
+	d InitMe^jxAltConvertResultTable
+	i '$d(%session.Data("jxAltConvertResultTable","Template")) s %session.Data("jxAltConvertResultTable","Template")="JondaX"
+	&js<document.getElementById("templateName").innerHTML="#(%session.Data("jxAltConvertResultTable","Template"))#">
+</script>
+
+<script language="cache" method="cChangeUnit" arguments="d1,d2:%String">
+	d ChangeUnit^jxAltConvertResultTable
+	</script>
+
+<script language="cache" method="cChangeName" arguments="d1,d2:%String">
+	d ChangeName^jxAltConvertResultTable
+	</script>
+
+<script language="cache" method="cConvertResults">
+	d ConvertResults^jxAltConvertResultTable
+</script>
+
+<script language="cache" method="cDoNotShow">
+	d DoNotShow^jxAltConvertResultTable
+</script>
+
+<script language="cache" method="cPopTemplates">
+	i %session.Data("jxAltConvertResultTable","Template")="JondaX" s %session.Data("jxAltConvertResultTable","Template")="Biolytica" 
+	e  i %session.Data("jxAltConvertResultTable","Template")="Biolytica" s %session.Data("jxAltConvertResultTable","Template")="Elfie" 
+	e  s %session.Data("jxAltConvertResultTable","Template")="JondaX"
+	
+</script>
+</html>

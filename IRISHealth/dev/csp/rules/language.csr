@@ -1,0 +1,138 @@
+<!-- Language Localization CSP Tags -->
+<!-- Copyright (c) 2001 InterSystems Inc. ALL RIGHTS RESERVED. -->
+
+<!-- CSP:MATCHLANGUAGE tag for localization -->
+<csr:rule name="%CSPMATCHLANGUAGE" match="csp:matchlanguage" class=%CSP.MatchLanguage empty language="any">
+<csr:description>
+    The <b>csp:matchlanguage</b> tag forces a single call to %response.MatchLanguage
+    to be added to the PREHTML section.  This tag is a way for the programmer to
+    force setting of %response.Language for the current page.
+</csr:description>
+</csr:rule>
+
+<!-- CSP:TEXT tag for localization ------------ -->
+<csr:rule name="%CSPTEXT" match="csp:text" class=%CSP.TagLanguage textonly language="any">
+<csr:attribute name=Language description="The optional RFC 1766 format language name for looking up this text.  %response.Language is used if not specified." type="language:STRING">
+<csr:attribute name=Domain description="The optional application domain for looking up this text.  %response.Domain is used if not specified." type="domain:STRING">
+<csr:attribute name=TextId description="The id that idenfies the text string." type="id:STRING">
+<csr:description>
+    The <b>csp:text</b> tag replaces itself and its contents with text identified by TextId
+    in the %MessageDictionary specified by Language and Domain attributes.
+    Attributes ARGn, where n is an integer, are substituted for %n in the message text.
+</csr:description>
+</csr:rule>
+
+<!-- Localized SPAN tag ------------------------- -->
+<csr:rule name="%SPAN" match="span[TextId]" textonly language="any">
+<csr:attribute name=Language description="The optional RFC 1766 format language name for looking up this text.  %response.Language is used if not specified." type="language:STRING">
+<csr:attribute name=Domain description="The optional application domain for looking up this text.  %response.Domain is used if not specified." type="domain:STRING">
+<csr:attribute name=TextId description="The id that idenfies the text string." type="id:STRING">
+<csr:description>
+    The <b>span</b> tag replaces its contents (including any child tags) with text identified by TextId
+    in the %MessageDictionary specified by Language and Domain attributes.  
+    Attributes ARGn, where n is an integer, are substituted for %n in the message text.
+</csr:description>
+<csr:action>
+<script language="Cache" runat="compiler">
+	If (%compiler.IsBasic) && (..GetAttribute("TEXTID")="") {
+		Set %statuscode=$$$ERROR($$$AttributeRequired,..TagName,"TEXTID",..LineNumber)
+		Quit
+	}
+	// Get text now since GetText routine will cleanup attributes.
+	Set %text=##class(%CSP.TagLanguage).GetText(##this,..InnerText())
+</script>
+<csr:starttag>
+<script language="Cache" runat="compiler">
+	Do ..WriteExpressionText(%text,0)
+</script>
+<csr:endtag>
+</csr:action>
+</csr:rule>
+
+<!-- Localized DIV tag ------------------------ -->
+<csr:rule name="%DIV" match="div[TextId]" textonly language="any">
+<csr:attribute name=Language description="The optional RFC 1766 format language name for looking up this text.  %response.Language is used if not specified." type="language:STRING">
+<csr:attribute name=Domain description="The optional application domain for looking up this text.  %response.Domain is used if not specified." type="domain:STRING">
+<csr:attribute name=TextId description="The id that idenfies the text string." type="id:STRING">
+<csr:description>
+    The <b>div</b> tag replaces its contents (including any child tags) with text identified by TextId
+    in the %MessageDictionary specified by Language and Domain attributes.  
+    Attributes ARGn, where n is an integer, are substituted for %n in the message text.
+</csr:description>
+<csr:action>
+<script language="Cache" runat="compiler">
+	If (%compiler.IsBasic) && (..GetAttribute("TEXTID")="") {
+		Set %statuscode=$$$ERROR($$$AttributeRequired,..TagName,"TEXTID",..LineNumber)
+		Quit
+	}
+	// Get text now since GetText routine will cleanup attributes.
+	Set %text=##class(%CSP.TagLanguage).GetText(##this,..InnerText())
+</script>
+<csr:starttag>
+<script language="Cache" runat="compiler">
+	Do ..WriteExpressionText(%text,0)
+</script>
+<csr:endtag>
+</csr:action>
+</csr:rule>
+
+<!-- Localized VALUE attribute of INPUT TYPE=SUBMIT tag ------------ -->
+<csr:rule name="%LOC.SUBMIT" match="input[TextId,type=submit]" empty language="any">
+<csr:attribute name=Language description="The optional RFC 1766 format language name for looking up this text.  %response.Language is used if not specified." type="language:STRING">
+<csr:attribute name=Domain description="The optional application domain for looking up this text.  %response.Domain is used if not specified." type="domain:STRING">
+<csr:attribute name=TextId description="The id that idenfies the text string." type="id:STRING">
+<csr:description>
+    The <b>input type=submit</b> tag replaces the value of its <b>value</b> attribute with text identified by TextId
+    in the %MessageDictionary specified by Language and Domain attributes.  
+    Attributes ARGn, where n is an integer, are substituted for %n in the message text.
+    This tag is used to localize the text of a button by specifying the value attribute.
+</csr:description>
+<csr:action>
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	Do rule.SetAttribute("value","#("_##class(%CSP.TagLanguage).GetText(rule,rule.GetAttribute("VALUE"))_")#")
+	Quit $$$OK
+</script>
+<csr:default>
+</csr:action>
+</csr:rule>
+
+<!-- Localized VALUE attribute of INPUT TYPE=RESET tag ------------ -->
+<csr:rule name="%LOC.RESET" match="input[TextId,type=reset]" empty language="any">
+<csr:attribute name=Language description="The optional RFC 1766 format language name for looking up this text.  %response.Language is used if not specified." type="language:STRING">
+<csr:attribute name=Domain description="The optional application domain for looking up this text.  %response.Domain is used if not specified." type="domain:STRING">
+<csr:attribute name=TextId description="The id that idenfies the text string." type="id:STRING">
+<csr:description>
+    The <b>input type=reset</b> tag replaces the value of its <b>value</b> attribute with text identified by TextId
+    in the %MessageDictionary specified by Language and Domain attributes.  
+    Attributes ARGn, where n is an integer, are substituted for %n in the message text.
+    This tag is used to localize the text of a button by specifying the value attribute.
+</csr:description>
+<csr:action>
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	Do rule.SetAttribute("value","#("_##class(%CSP.TagLanguage).GetText(rule,rule.GetAttribute("VALUE"))_")#")
+	Quit $$$OK
+</script>
+<csr:default>
+</csr:action>
+</csr:rule>
+
+<!-- Localized VALUE attribute of INPUT TYPE=BUTTON tag ------------ -->
+<csr:rule name="%LOC.BUTTON" match="input[TextId,type=button]" empty language="any">
+<csr:attribute name=Language description="The optional RFC 1766 format language name for looking up this text.  %response.Language is used if not specified." type="language:STRING">
+<csr:attribute name=Domain description="The optional application domain for looking up this text.  %response.Domain is used if not specified." type="domain:STRING">
+<csr:attribute name=TextId description="The id that idenfies the text string." type="id:STRING">
+<csr:description>
+    The <b>input type=button</b> tag replaces the value of its <b>value</b> attribute with text identified by TextId
+    in the %MessageDictionary specified by Language and Domain attributes.  
+    Attributes ARGn, where n is an integer, are substituted for %n in the message text.
+    This tag is used to localize the text of a button by specifying the value attribute.
+</csr:description>
+<csr:action>
+<script language="Cache" method="OnMatch" arguments="rule:%CSP.Rule" returntype="%Status">
+	Do rule.SetAttribute("value","#("_##class(%CSP.TagLanguage).GetText(rule,rule.GetAttribute("VALUE"))_")#")
+	Quit $$$OK
+</script>
+<csr:default>
+</csr:action>
+</csr:rule>
+

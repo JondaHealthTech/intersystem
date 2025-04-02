@@ -1,0 +1,39 @@
+<!--
+Utilities: Business Metric viewer
+-->
+
+<AutoPage domain="Ensemble" pagename="Business Metrics" parentpage="UtilEnsHome.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Business Metric Values</Text>
+</Pane>
+
+<Pane name="Navigator" extends="UtilEnsHome.csp" />
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>Contents of Business Metric Cache for {$ID1}:</Text>
+	<Query>Ens.Util.Statistics:EnumerateMetrics</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>false</ShowZebra>
+	<AutoRefresh>true</AutoRefresh>
+
+	<Actions>
+		<Action href="UtilEnsBusinessMetricProperties.csp" name="$A">
+			<Caption>Properties</Caption>
+			<Popup>View properties of this Business Metric.</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+	</Actions>
+
+	<Conditions>
+		<Condition>
+			<ColumnName>IsRunning</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>0</Value>
+			<RowStyle>background: silver;</RowStyle>
+		</Condition>
+	</Conditions>
+
+</Pane>
+
+</AutoPage>

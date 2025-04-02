@@ -1,0 +1,220 @@
+.main-field{
+    width: 100%;
+}
+h1{
+    font-weight: 700;
+    font-size: 2vw;
+    line-height: 2.5vw;
+    margin-bottom: 1.5vw;
+}
+h2,h4{
+    font-weight: 600;
+    font-style: italic;
+    font-size: 1.8vw;
+    line-height: 2.2vw;
+    margin-top: 1vw;
+    margin-bottom: 1.2vw;
+}
+h4{
+    text-align: left;
+    color:white;
+    font-weight: 400;
+    margin-bottom: 1.5vw;
+}
+.results{
+    width: 100%;
+    height: 70vh;
+    background: white;
+    border-radius: 15px;
+    padding: 1.5vw;
+    position: relative;
+}
+.result-table{
+    max-height: 100%;
+    overflow-y: auto;
+    padding-right: 1.2vw;
+    position: relative;
+    z-index: 10;
+}
+.table-border{
+    position: absolute;
+    width: calc(100% - 5vw + 4px);
+    border: 2px solid #9B9B9B;
+    z-index: 0;
+    top:calc(1.5vw - 2px);
+    left:calc(1.5vw - 2px)
+}
+.table{
+    margin-bottom: 0;
+}
+thead{
+    background: #384A62;
+    position: sticky;
+    top:0;
+    z-index: 100;
+}
+th{
+    z-index: 100;
+    color:white;
+    font-size: 1.1vw;
+    font-weight: 700;
+    line-height: 1.5vw !important;
+    text-align: left;
+    border-bottom: none !important;
+    padding:1vw !important;
+    vertical-align: middle !important;
+}
+th:last-child{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+tr{
+    height: 3.3vw;
+}
+td{
+    font-size: 1.1vw;
+    font-weight: 500;
+    line-height: 1.5vw !important;
+    color:#405470;
+    padding-left:1vw !important;
+    padding-right:1vw !important;
+    height: 3.8vw;
+    text-align: left;
+    vertical-align: middle !important;
+}
+th img{
+    height: 2vw;
+}
+td img{
+    height: 2.2vw;
+}
+td span{
+    font-weight: 600;
+}
+td:last-child{
+    text-align: left;
+    width: 15%;
+}
+.reviewed td{
+    color:#979797;
+
+}
+.table-striped>tbody>tr:nth-child(odd)>td{
+ background: white;
+}
+.table-striped>tbody>tr:nth-child(even)>td{
+ background: #F1F7FD;
+}
+.blue-btn{
+    padding:0.5vw 1vw;
+    color:white;
+    background: #405470;
+    border-radius: 15px;
+    border: none;
+}
+
+/* width */
+.result-table::-webkit-scrollbar {
+    width: 0.8vw;
+}
+/* Track */
+.result-table::-webkit-scrollbar-track{
+    background: #d9d9d9;
+    border-radius: 20px;
+}
+
+/* Handle */
+.result-table::-webkit-scrollbar-thumb {
+    background: #405470;
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+.result-table::-webkit-scrollbar-thumb:hover {
+    background: #384A62;
+}
+
+.collapse-field{
+    position: absolute;
+    right:9vw;
+    z-index: 100;
+    background: white;
+    border: 1px solid #384A62;
+    box-shadow: 5px 5px 5px #88888833;
+    padding:1vw 1.5vw;
+    border-radius: 15px;
+    min-width: 12vw;
+    display: none;
+}
+.collapse-field.active{
+    display: block;
+}
+.collapse-field.active .collapse{
+    display: block;
+}
+.item{
+    display: flex;
+    align-items: center;
+    gap:1vw;
+    padding:0.6vw 0;
+}
+.item p{
+    color:#384A62;
+    font-weight: 700;
+    font-size: 0.95vw;
+    white-space: nowrap;
+}
+.collapse-field button{
+    min-width: unset;
+    width: 100%;
+    margin-top: 0.5vw;
+    padding:0.5vw 0;
+    background: #384A62;
+    font-weight: 700;
+    font-size: 1.1vw;
+    border-radius: 40px;
+    color:white;
+    border: none;
+}
+.round {
+    position: relative;
+    margin-top: 0;
+    height: 20px;
+}
+.round label {
+    background-color: #fff;
+    border: 1px solid #e63876;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 20px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    min-width: 20px;
+    margin: 0;
+}
+.round label:after {
+    border: 2px solid #fff;
+    border-top: none;
+    border-right: none;
+    content: "";
+    height: 6.5px;
+    left: 3.5px;
+    opacity: 0;
+    position: absolute;
+    top: 5px;
+    transform: rotate(-45deg);
+    width: 11px;
+}
+.round input[type="radio"],.round input[type="checkbox"] {
+    visibility: hidden;
+    width: 20px;
+}
+.round input[type="radio"]:checked + label,.round input[type="checkbox"]:checked + label {
+    background: #e63876;
+    border: 1px solid #e63876;
+}
+.round input[type="radio"]:checked + label:after,.round input[type="checkbox"]:checked + label:after {
+    opacity: 1;
+}

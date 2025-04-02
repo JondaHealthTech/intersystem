@@ -1,0 +1,11 @@
+/* @class="%ZEN.Component.link" */
+/* @doc="Style for link." */
+.link {
+}
+
+/* @doc="Style for disabled link." */
+.linkDisabled {
+	color: gray;
+	text-decoration: none;
+}
+/* EOF */

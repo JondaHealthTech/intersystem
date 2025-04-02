@@ -1,0 +1,139 @@
+<html lang="en"> <!--Groot v1.1-->
+    <head>
+    	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+		q 1
+		</script>
+    	<script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/trialDownload.css">
+    </head>
+    <body>
+  
+<div id="wrapper">
+    <div class="bg-wrapper">
+        <div class="bg3">
+            <img src="./assets/images/bg3.png" alt="Background Image">
+        </div>
+    </div>
+    <div class="content">
+        <!-- Logo and header section -->
+        <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health Logo">
+        <h1>Download your processed files</h1>
+        <h2>You have transformed <span id='fileCount'>0</span> file(s) successfully</h2>
+        
+        <!-- Results table section -->
+        <div class="results">
+            <div class="result-table">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Upload Date/Time</th>
+                            <th>File Name</th>
+                            <th>Format</th>
+                            <th>Units</th>
+                            <th>Status</th>
+                            <th class="action"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Server-side script to write records -->
+                        <script language="cache" runat="server">
+                            d WriteRecords^trialDownload
+                        </script>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <p id="acknowledgment">Transformed files are available for download while your trial profile is active.</p>
+        <script language="cache" runat="server">
+          	d SetFooter^trialHome
+        </script>
+    </div>
+
+    <!-- Hidden button to trigger the modal (can be used in JS) -->
+    <button
+        class="inactive"
+        id="BModal1"
+        data-toggle="modal"
+        data-target="#myModal1"
+        type="button"
+    ></button>
+</div>
+
+<!-- Modal section -->
+<div
+    id="myModal1"
+    class="modal fade"
+    aria-labelledby="myModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2>Hang tight!</h2>
+                <h3>We're analyzing your file...</h3>
+                <img
+                    class="modal-img"
+                    src="assets/images/analyzeData.png"
+                    alt="Analyzing Data Image"
+                >
+            </div>
+        </div>
+    </div>
+</div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+    <script type="text/javascript">
+    window.onload = jInit;
+	document.onmousemove =parent.resetTimer; 
+	document.onmousedown = parent.resetTimer; // touchscreen presses
+	document.ontouchstart = parent.resetTimer;
+	document.onkeypress = parent.resetTimer;
+	document.addEventListener('scroll', parent.resetTimer, true);
+	let filePath;
+	let fName;
+	let downloadStr;
+	
+	function jInit() {
+		parent.resetTimer;
+		#server(..cInit())# 
+	}
+	function jDownload(event) {
+		let tr= event.target.closest("tr");
+		let fileName=tr.querySelector(".file-name").innerHTML;
+		let record=tr.querySelector(".rid").innerHTML;
+		//alert(record);
+		#server(..cDownload(fileName,record))# 
+		
+	    var blob = new Blob([downloadStr], {type: 'text/plain'});
+		var link = document.createElement('a');
+		link.href = URL.createObjectURL(blob);
+		link.href = filePath+"\\"+fName; 
+		link.download = fName;
+		link.click();
+		URL.revokeObjectURL(link.href);
+		#server(..cDelete())#
+	}
+    </script>
+    
+    <script language="cache" method="cInit">
+    	d Init^trialDownload
+    </script>
+    <script language="cache" method="cDownload" arguments="d1,d2:%String">
+    	d Download^trialDownload
+    </script>
+    <script language="cache" method="cDelete" >
+    	d DeleteCopy^trialDownload
+    </script>
+    <script language="cache" method="cLockDown">
+		k %session.Data
+		&js<window.open("trialLockDown.csp","_parent")>
+</script>
+	</html>

@@ -1,0 +1,88 @@
+.logo{
+    display:block;
+    margin: 1.5vw auto 1vw;
+}
+.pink-label{
+    padding:0.3vw 1.5vw;
+    border-radius:5px;
+    background: #E63876;
+    color:white;
+    display:inline-block;
+    margin:0.5vw 0 1vw;
+    font-size:1.1vw;
+    font-weight:500;
+}
+h2{
+    font-size:2.5vw;
+    line-height:3.5vw;
+    margin-bottom:2.5vw;
+}
+h2 span{
+    font-weight:700;
+    color:#E63876;
+}
+td{
+    color:black;
+}
+.t-cell{
+    background:white;
+    border-radius:15px;
+    padding:1.5vw 1vw;
+    width:32%;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+}
+.t-cell img{
+    width:6vw;
+}
+.drag-zone{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    opacity:0.8;
+    border-radius:15px;
+    border: 2px dashed white;
+    display:none;
+    align-items:center;
+    justify-content: center;
+}
+.drag-zone.active{
+    display:flex;
+}
+.drag-zone p{
+    color:white;
+    font-weight:500;
+    font-size: 1.3vw;
+    padding:1vw;
+}
+.drag-zone p span{
+    font-weight:700;
+    color:#e63876;
+}
+h3{
+    margin:0.3vw;
+    font-size:1.1vw;
+    font-weight:500;
+}
+td table{
+    margin:0 auto;
+}
+td table td{
+    padding:0.3vw;
+}
+td table tr:first-child td{
+    padding-top:1vw;
+}
+td table tr:nth-child(2) td{
+    padding-bottom:1vw;
+}
+td table tr:nth-child(-n+2) td:first-child{
+    font-weight: 600;x
+}
+td table tr:nth-child(3) td{
+    padding-bottom:0.5vw;
+}

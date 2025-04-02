@@ -1,0 +1,32 @@
+<!--
+Utilities: counters
+-->
+
+<AutoPage domain="Ensemble" pagename="Counters" parentpage="UtilEnsHome.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>System Counters:</Text>
+</Pane>
+
+<Pane name="Navigator" extends="UtilEnsHome.csp" />
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>System Counters:</Text>
+	<Query>Ens.Util.Statistics:EnumerateCounters</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>false</ShowZebra>
+	<AutoRefresh>true</AutoRefresh>
+
+	<Conditions>
+		<Condition>
+			<ColumnName>Item</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Total</Value>
+			<RowStyle>font-weight: bold;</RowStyle>
+		</Condition>
+	</Conditions>
+
+
+</Pane>
+
+</AutoPage>

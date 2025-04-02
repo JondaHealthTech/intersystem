@@ -1,0 +1,44 @@
+<!--
+Workflow: List of tasks for specific user
+-->
+
+<AutoPage domain="Ensemble" pagename="Workflow Tasks" parentpage="WFUsers.csp" useframes="1">
+
+<Pane name="Info" type="%CSP.Util.TablePane">
+	<Text>The following tasks are currently assigned to the user {$ID1}.</Text>
+	<Query>EnsLib.Workflow.Engine:ListTasksForUser</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>false</ShowZebra>
+	<ShowRowNumbers>true</ShowRowNumbers>
+	<AutoRefresh>true</AutoRefresh>
+	
+	<Conditions>
+		<!-- new task -->
+		<Condition>
+			<ColumnName>New</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>New</Value>
+			<CellStyle>font-weight: bold;</CellStyle>
+		</Condition>
+
+		<!-- assigned -->
+		<Condition>
+			<ColumnName>AssignedTo</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>{UserName}</Value>
+			<RowStyle>background: #AAAAFF;</RowStyle>
+		</Condition>
+
+		<!-- unassigned -->
+		<Condition>
+			<ColumnName>AssignedTo</ColumnName>
+			<Predicate>NEQ</Predicate>
+			<Value>{UserName}</Value>
+			<RowStyle>background: yellow;</RowStyle>
+		</Condition>
+
+	</Conditions>
+	
+</Pane>
+
+</AutoPage>

@@ -1,0 +1,225 @@
+
+
+
+*** Recovery started at Wed Mar 26 11:13:01 2025
+     Current default directory: c:\intersystems\iris\mgr
+     Log file directory: .\
+     WIJ file spec: c:\intersystems\iris\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\iris\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\iris\mgr\IRIS.WIJ'.
+WIJ file not found.
+Exiting with status 3 (Success)
+03/26/25-11:13:02:133 (19040) 0 [Generic.Event] Global buffer setting requires attention.  Auto-selected 25% of total memory.
+03/26/25-11:13:02:135 (19040) 2 [Generic.Event] Failed to allocate 5146MB shared memory using large pages.  Switching to small pages.
+03/26/25-11:13:02:136 (19040) 0 [Generic.Event] Allocated 5146MB shared memory
+03/26/25-11:13:02:136 (19040) 0 [Generic.Event] 4041MB global buffers, 404MB routine buffers, 64MB journal buffers, 314MB buffer descriptors, 300MB heap, 5MB ECP, 17MB miscellaneous
+03/26/25-11:13:02:142 (19040) 0 [Crypto.IntelSandyBridgeAESNI] Intel Sandy Bridge AES-NI instructions detected.
+03/26/25-11:13:02:143 (19040) 0 [SIMD] SIMD optimization level: DEFAULT
+03/26/25-11:13:02:261 (19040) 0 [WriteDaemon.UsingWIJFile] Using WIJ file: c:\intersystems\iris\mgr\IRIS.WIJ
+03/26/25-11:13:02:261 (19040) 0 [Generic.Event] No journaling info from prior system
+03/26/25-11:13:02:261 (19040) 0 [WriteDaemon.CreatingNewWIJ] Creating a new WIJ file
+03/26/25-11:13:02:352 (19040) 0 [WriteDaemon.CreatedNewWIJ] New WIJ file created
+03/26/25-11:13:02:375 (19040) 0 [Generic.Event] 
+Startup of InterSystems IRIS [IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST]
+	in c:\intersystems\iris\bin\
+	with mgr: c:\intersystems\iris\mgr
+	with wij: c:\intersystems\iris\mgr\IRIS.WIJ
+	from: c:\intersystems\iris\mgr\
+  OS=[NT], version=[6.2.9200], 8 processors.
+  Processor architecture=[9], level=[6], revision=[8c01], active processor mask=[ff].
+  System Initialized.
+03/26/25-11:13:02:401 (33044) 0 [WriteDaemon.Started] Write daemon started.
+03/26/25-11:13:04:190 (25348) 0 [Database.MountedRW] Mounted database c:\intersystems\iris\mgr\ (SFN 0) read-write.
+03/26/25-11:13:04:442 (29776) 0 [Utility.Event] Starting ^INSTALL procedure
+03/26/25-11:13:04:444 (28712) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\iris\mgr\. 39 MB requested.
+03/26/25-11:13:04:476 (28712) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\iris\mgr\. Expanded by 39 MB.
+03/26/25-11:13:04:551 (29776) 0 [Utility.Event] Switching to temporary %SYS Namespace
+03/26/25-11:13:04:618 (29776) 0 [Database.MountedRO] Mounted database c:\intersystems\iris\mgr\irislib\ (SFN 1) read-only. Database label is marked read-only. 
+03/26/25-11:13:05:005 (29776) 0 [Utility.Event] Creating missing IRISTEMP database in C:\InterSystems\IRIS\mgr\iristemp
+03/26/25-11:13:05:041 (29776) 0 [Database.MountedRW] Mounted database c:\intersystems\iris\mgr\iristemp\ (SFN 2) read-write.
+03/26/25-11:13:05:048 (29776) 0 [Utility.Event] Creating IRISLOCALDATA database in C:\InterSystems\IRIS\mgr\irislocaldata\
+03/26/25-11:13:05:085 (29776) 0 [Database.MountedRW] Mounted database c:\intersystems\iris\mgr\irislocaldata\ (SFN 3) read-write.
+03/26/25-11:13:05:102 (29776) 0 [Utility.Event] Switching to default %SYS Namespace
+03/26/25-11:13:05:102 (29776) 0 [Utility.Event] Loading DLLs
+03/26/25-11:13:05:632 (29776) 0 [Utility.Event] Loading Locale enuw (English, United States, Unicode) from objects
+03/26/25-11:13:07:761 (29776) 0 [Database.MountedRW] Mounted database c:\intersystems\iris\mgr\irisaudit\ (SFN 4) read-write.
+03/26/25-11:13:07:900 (29776) 0 [Database.MountedRW] Mounted database c:\intersystems\iris\mgr\user\ (SFN 5) read-write.
+03/26/25-11:13:10:156 (29776) 0 [Utility.Event] Finishing ^INSTALL procedure
+03/26/25-11:13:10:457 (18164) 0 [Utility.Event] Shutting down InterSystems IRIS
+03/26/25-11:13:10:496 (18164) 0 [Utility.Event] Notifying Clients
+03/26/25-11:13:10:496 (18164) 0 [Utility.Event] No user shutdown routines to execute
+03/26/25-11:13:10:496 (18164) 0 [Utility.Event] Stopping User Jobs
+03/26/25-11:13:10:499 (18164) 0 [Utility.Event] Stopping Network Servers
+03/26/25-11:13:10:500 (18164) 0 [Utility.Event] Withdrawing from License Domain
+03/26/25-11:13:10:500 (18164) 0 [Utility.Event] Waiting for users to stop
+03/26/25-11:13:10:501 (18164) 0 [Utility.Event] Stopping Client Networking
+03/26/25-11:13:10:501 (18164) 0 [Utility.Event] Updating Journal File
+03/26/25-11:13:10:502 (18164) 0 [Utility.Event] Journal restore not required at next startup
+03/26/25-11:13:10:502 (18164) 0 [Utility.Event] Transaction rollback not required at next startup
+03/26/25-11:13:12:526 (18164) 0 [Utility.Event] Removing database locks
+03/26/25-11:13:12:532 (18164) 0 [Utility.Event] Waiting for database updates to complete
+03/26/25-11:13:12:532 (18164) 0 [Utility.Event] Database updates complete
+03/26/25-11:13:12:532 (18164) 0 [Utility.Event] Stopping System Jobs
+03/26/25-11:13:12:636 (28712) 0 [Generic.Event] EXPDMN exited due to system shutdown
+03/26/25-11:13:12:637 (26220) 0 [Generic.Event] JRNDMN exited due to system shutdown
+03/26/25-11:13:12:637 (19776) 0 [Generic.Event] GARCOL exited due to system shutdown
+03/26/25-11:13:13:266 (33044) 0 [Generic.Event] No blocks pending in WIJ file
+03/26/25-11:13:13:272 (33044) 0 [Generic.Event] WRTDMN exited due to system shutdown
+03/26/25-11:13:13:356 (19040) 0 [Generic.Event] CONTROL exited due to system shutdown
+03/26/25-11:13:14:470 (18164) 0 [Utility.Event] Shutdown complete
+
+
+
+*** Recovery started at Wed Mar 26 11:13:14 2025
+     Current default directory: c:\intersystems\iris\mgr
+     Log file directory: c:\intersystems\iris\mgr\
+     WIJ file spec: c:\intersystems\iris\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\iris\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\iris\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+
+
+
+*** Recovery started at Wed Mar 26 11:13:15 2025
+     Current default directory: c:\intersystems\iris\mgr
+     Log file directory: c:\intersystems\iris\mgr\
+     WIJ file spec: c:\intersystems\iris\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\iris\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\iris\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+03/26/25-11:13:15:090 (13348) 0 [Generic.Event] Global buffer setting requires attention.  Auto-selected 25% of total memory.
+03/26/25-11:13:15:091 (13348) 2 [Generic.Event] Failed to allocate 5146MB shared memory using large pages.  Switching to small pages.
+03/26/25-11:13:15:091 (13348) 2 [Generic.Event] Failed to allocate 5146MB shared memory: 4041MB global buffers, 404MB routine buffers
+03/26/25-11:13:15:092 (13348) 2 [Generic.Event] Failed to allocate 4554MB shared memory using large pages.  Switching to small pages.
+03/26/25-11:13:15:092 (13348) 1 [Generic.Event] Allocated 4554MB shared memory
+03/26/25-11:13:15:092 (13348) 0 [Generic.Event] 3535MB global buffers, 353MB routine buffers, 64MB journal buffers, 279MB buffer descriptors, 300MB heap, 5MB ECP, 16MB miscellaneous
+03/26/25-11:13:15:098 (13348) 0 [Crypto.IntelSandyBridgeAESNI] Intel Sandy Bridge AES-NI instructions detected.
+03/26/25-11:13:15:098 (13348) 0 [SIMD] SIMD optimization level: DEFAULT
+03/26/25-11:13:15:171 (13348) 0 [WriteDaemon.UsingWIJFile] Using WIJ file: c:\intersystems\iris\mgr\IRIS.WIJ
+03/26/25-11:13:15:171 (13348) 0 [Generic.Event] No journaling info from prior system
+03/26/25-11:13:15:189 (13348) 0 [Generic.Event] 
+Startup of InterSystems IRIS [IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST]
+	in c:\intersystems\iris\bin\
+	with mgr: c:\intersystems\iris\mgr
+	with wij: c:\intersystems\iris\mgr\IRIS.WIJ
+	from: c:\intersystems\iris\mgr\
+  OS=[NT], version=[6.2.9200], 8 processors.
+  Processor architecture=[9], level=[6], revision=[8c01], active processor mask=[ff].
+  System Initialized.
+03/26/25-11:13:15:212 (23192) 0 [WriteDaemon.Started] Write daemon started.
+03/26/25-11:13:16:613 (27600) 0 [Database.MountedRW] Mounted database c:\intersystems\iris\mgr\ (SFN 0) read-write.
+03/26/25-11:13:16:626 (27600) 0 [Utility.Event] Instance 'IRIS' starting on node Tech by user SYSTEM on 03/26/2025 05:43:16.626 UTC
+03/26/25-11:13:16:626 (27600) 0 [Utility.Event] Using parameters from file 'C:\InterSystems\IRIS\iris.cpf'
+03/26/25-11:13:16:627 (27600) 0 [Utility.Event] Loading DLLs
+03/26/25-11:13:16:630 (27600) 0 [Database.MountedRO] Mounted database c:\intersystems\iris\mgr\irislib\ (SFN 1) read-only. Database label is marked read-only. 
+03/26/25-11:13:16:632 (27600) 0 [Utility.Event] Switching to temporary %SYS Namespace
+03/26/25-11:13:16:636 (27600) 0 [Utility.Event] Loading Locale enuw (English, United States, Unicode) from objects
+03/26/25-11:13:16:654 (27600) 0 [Database.MountedRW] Mounted database c:\intersystems\iris\mgr\irislocaldata\ (SFN 2) read-write.
+03/26/25-11:13:16:657 (27600) 0 [Utility.Event] Using OpenSSL 3.1.4 24 Oct 2023
+03/26/25-11:13:16:695 (27600) 0 [Database.MountedRW] Mounted database c:\intersystems\iris\mgr\iristemp\ (SFN 3) read-write.
+03/26/25-11:13:16:699 (27600) 0 [Utility.Event] C:\InterSystems\IRIS\mgr\iristemp\ initialized as IRISTEMP
+03/26/25-11:13:16:701 (27600) 0 [Utility.Event] Switching to default %SYS Namespace
+03/26/25-11:13:16:812 (4124) 0 [Utility.Event] Log Monitor Started
+03/26/25-11:13:16:937 (21452) 0 [Utility.Event] Clean Daemon Started
+03/26/25-11:13:17:102 (27600) 0 [Utility.Event] Updating configuration information from C:\InterSystems\IRIS\iris.cpf
+03/26/25-11:13:17:121 (27600) 0 [Utility.Event] No archives configured
+03/26/25-11:13:17:125 (27600) 0 [Utility.Event] Performing Journal Recovery
+03/26/25-11:13:17:126 (27600) 0 [Utility.Event] Graceful system shutdown, journal restore not required
+03/26/25-11:13:17:126 (27600) 0 [Utility.Event] Graceful system shutdown, transaction rollback not required
+03/26/25-11:13:17:135 (27600) 0 [Utility.Event] START: C:\InterSystems\IRIS\mgr\journal\20250326.001
+03/26/25-11:13:17:142 (27600) 0 [Generic.Event] INTERSYSTEMS IRIS JOURNALING SYSTEM MESSAGE
+Journaling started to: c:\intersystems\iris\mgr\journal\20250326.001
+03/26/25-11:13:17:142 (27600) 0 [Utility.Event] Journaling to C:\InterSystems\IRIS\mgr\journal\20250326.001 started.
+03/26/25-11:13:17:143 (27600) 0 [Utility.Event] Processing WorkQueues section
+03/26/25-11:13:17:144 (27600) 0 [Utility.Event] Processing Startup section
+03/26/25-11:13:17:161 (8884) 0 [Utility.Event] Purging old application errors
+03/26/25-11:13:17:163 (27600) 0 [Utility.Event] Created temp directory C:\InterSystems\IRIS\mgr\Temp
+03/26/25-11:13:17:163 (27600) 0 [Utility.Event] Processing config section
+03/26/25-11:13:17:164 (27600) 2 [Utility.Event] LMF Error: No valid license key. No valid local file found and LicenseID not defined.
+03/26/25-11:13:17:245 (27600) 0 [Utility.Event] Initializing Security system
+03/26/25-11:13:17:302 (27600) 0 [Utility.Event] Processing Network section
+03/26/25-11:13:17:303 (27600) 0 [Utility.Event] Activating Network
+03/26/25-11:13:17:321 (27600) 0 [Utility.Event] Processing Databases section
+03/26/25-11:13:17:326 (27600) 0 [Utility.Event] Processing Namespaces section
+03/26/25-11:13:17:326 (27600) 0 [Utility.Event] Loading all namespaces
+03/26/25-11:13:17:347 (27600) 0 [Utility.Event] Activating namespaces
+03/26/25-11:13:17:348 (27600) 0 [Utility.Event] Activating new namespace map
+03/26/25-11:13:17:353 (27600) 0 [Utility.Event] Namespace changes have been activated
+03/26/25-11:13:17:372 (29956) 0 [Utility.Event] Starting superserver on port 1972
+03/26/25-11:13:17:372 (27600) 0 [Utility.Event] Network Lock Upload Phase Starting
+03/26/25-11:13:17:373 (27600) 0 [Utility.Event] Lock Upload Phase Complete
+03/26/25-11:13:17:373 (27600) 0 [Utility.Event] Processing Miscellaneous section
+03/26/25-11:13:17:418 (2680) 0 [Utility.Event] Starting Servers
+03/26/25-11:13:17:419 (2680) 0 [Utility.Event] Processing Terminal daemon section
+03/26/25-11:13:17:426 (2680) 0 [Utility.Event] Processing Telnet section
+03/26/25-11:13:17:427 (2680) 0 [Utility.Event] Processing Com section
+03/26/25-11:13:17:427 (2680) 0 [Utility.Event] Processing Shadows section (this system as shadow)
+03/26/25-11:13:17:418 (27600) 0 [Utility.Event] Processing Devices section
+03/26/25-11:13:17:430 (27600) 0 [Utility.Event] Processing DeviceSubTypes section
+03/26/25-11:13:17:430 (27600) 0 [Utility.Event] Processing MagTape section
+03/26/25-11:13:17:431 (27600) 0 [Utility.Event] Processing IO section
+03/26/25-11:13:17:431 (27600) 0 [Utility.Event] Processing SQL section
+03/26/25-11:13:17:432 (27600) 0 [Utility.Event] Processing Macro Pre-Processor (MPP) section
+03/26/25-11:13:17:435 (27600) 0 [Database.MountedRW] Mounted database c:\intersystems\iris\mgr\user\ (SFN 4) read-write.
+03/26/25-11:13:17:429 (2680) 0 [Utility.Event] Processing Monitor section
+03/26/25-11:13:17:477 (27600) 0 [Utility.Event] Auditing is disabled
+03/26/25-11:13:17:482 (27600) 0 [Utility.Event] Interoperability: Installing IRIS
+03/26/25-11:13:17:510 (24636) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor started in %SYS
+03/26/25-11:13:17:513 (27336) 0 [Generic.Event] VSS writer "InterSystems IRIS IRIS Writer" started
+03/26/25-11:13:17:550 (2680) 0 [Utility.Event] Shard license: 0
+03/26/25-11:13:17:550 (29360) 0 [Utility.Event] WorkQueue: Starting work queue daemon parent=2680
+03/26/25-11:13:17:552 (26792) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\iris\mgr\irislocaldata\. 10 MB requested.
+03/26/25-11:13:17:562 (26792) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\iris\mgr\irislocaldata\. Expanded by 10 MB.
+03/26/25-11:13:17:572 (26792) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\iris\mgr\iristemp\. 10 MB requested.
+03/26/25-11:13:17:580 (26792) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\iris\mgr\iristemp\. Expanded by 10 MB.
+03/26/25-11:13:18:800 (27600) 0 [Generic.Event] Switched database c:\intersystems\iris\mgr\irislib\ (SFN 1) to read-write.
+03/26/25-11:13:18:804 (27600) 0 [Database.MountedRO] Mounted database c:\intersystems\iris\mgr\enslib\ (SFN 5) read-only. Database label is marked read-only. 
+03/26/25-11:13:21:856 (27600) 0 [Generic.Event] Switched database c:\intersystems\iris\mgr\enslib\ (SFN 5) to read-write.
+03/26/25-11:13:23:604 (26792) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\iris\mgr\enslib\. 17 MB requested.
+03/26/25-11:13:23:617 (26792) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\iris\mgr\enslib\. Expanded by 17 MB.
+03/26/25-11:13:31:485 (27600) 0 [Generic.Event] Switched database c:\intersystems\iris\mgr\irislib\ (SFN 1) to read-only.
+03/26/25-11:13:31:487 (27600) 0 [Generic.Event] Switched database c:\intersystems\iris\mgr\enslib\ (SFN 5) to read-only.
+03/26/25-11:13:31:487 (27600) 0 [Utility.Event] Executing ^ZSTU routine
+03/26/25-11:13:31:488 (27600) 0 [Utility.Event] Executing ^%ZSTART routine
+03/26/25-11:13:31:489 (27600) 0 [Utility.Event] Enabling logons
+03/26/25-11:13:31:546 (27600) 0 [Utility.Event] Initializing Interoperability during system startup
+03/26/25-11:13:31:546 (27600) 0 [Utility.Event] Not licensed for Interoperability, auto-start skipped.
+03/26/25-11:13:32:596 (32820) 0 [Utility.Event] Starting TASKMGR
+03/26/25-11:27:40:893 (20912) 0 [Utility.Event] Shutting down InterSystems IRIS
+03/26/25-11:27:40:949 (24636) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor stopped in %SYS
+03/26/25-11:27:41:955 (20912) 0 [Utility.Event] Notifying Clients
+03/26/25-11:27:41:955 (20912) 0 [Utility.Event] No user shutdown routines to execute
+03/26/25-11:27:41:957 (20912) 0 [Utility.Event] Stopping User Jobs
+03/26/25-11:27:41:959 (27336) 0 [Generic.Event] VSS Writer exiting
+03/26/25-11:27:41:962 (20912) 0 [Utility.Event] Stopping Network Servers
+03/26/25-11:27:41:964 (20912) 0 [Utility.Event] Withdrawing from License Domain
+03/26/25-11:27:41:964 (20912) 0 [Utility.Event] Waiting for users to stop
+03/26/25-11:27:43:970 (20912) 0 [Utility.Event] 0 user processes remain
+03/26/25-11:27:45:977 (20912) 0 [Utility.Event] Stopping Client Networking
+03/26/25-11:27:45:978 (20912) 0 [Utility.Event] Updating Journal File
+03/26/25-11:27:46:209 (20912) 0 [Utility.Event] Journal restore not required at next startup
+03/26/25-11:27:46:210 (20912) 0 [Utility.Event] Transaction rollback not required at next startup
+03/26/25-11:27:47:434 (20912) 0 [Utility.Event] Removing database locks
+03/26/25-11:27:47:438 (20912) 0 [Utility.Event] Waiting for database updates to complete
+03/26/25-11:27:47:438 (20912) 0 [Utility.Event] Database updates complete
+03/26/25-11:27:47:439 (20912) 0 [Utility.Event] Stopping System Jobs
+03/26/25-11:27:47:544 (26792) 0 [Generic.Event] EXPDMN exited due to system shutdown
+03/26/25-11:27:47:544 (3500) 0 [Generic.Event] GARCOL exited due to system shutdown
+03/26/25-11:27:47:544 (26336) 0 [Generic.Event] JRNDMN exited due to system shutdown
+03/26/25-11:27:48:185 (23192) 0 [Generic.Event] No blocks pending in WIJ file
+03/26/25-11:27:48:200 (23192) 0 [Generic.Event] WRTDMN exited due to system shutdown
+03/26/25-11:27:48:271 (13348) 0 [Generic.Event] CONTROL exited due to system shutdown
+03/26/25-11:27:49:377 (20912) 0 [Utility.Event] Shutdown complete
+
+
+
+*** Recovery started at Wed Mar 26 11:27:49 2025
+     Current default directory: c:\intersystems\iris\mgr
+     Log file directory: c:\intersystems\iris\mgr\
+     WIJ file spec: c:\intersystems\iris\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\iris\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\iris\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)

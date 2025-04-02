@@ -1,0 +1,80 @@
+body {
+    font-family: 'MONTSERRAT';
+    margin: 0;
+    padding: 0;
+}
+.bg-wrapper {
+	background: #405470;
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	z-index: -1;
+}
+
+.bg-wrapper img {
+	width: 100%;
+	height: fit-content;
+	position: relative;
+	top: 155px;
+}
+.logo1{
+	width: 200px;
+	height: 75px;
+
+}
+.container {
+    width: 100%;
+    height:100vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+
+.content-box {
+	width: 1200px;
+	height: 500px;
+	background-color: white;
+	border-radius: 8px;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.iframe-container {
+	top: 20px;
+	/* position: absolute; */
+	padding: 0px 10px 0px 10px;
+	margin: 15px;
+	width: 1150px;
+	height: 80%;
+	overflow: hidden;
+	z-index: 10;
+    
+}
+
+iframe {
+	padding: 12px 10px 0px 10px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border: none;
+}
+.btn {
+	align-self: center;
+}
+.blue-btn{
+	position:abolute;
+	color:white;
+	width:200px;
+	height:40px;
+	font-size:18px;
+	background: #405470;
+	border-radius: 15px;
+	border: none;
+	margin-top: 5px;
+	padding:5px 10px;
+}

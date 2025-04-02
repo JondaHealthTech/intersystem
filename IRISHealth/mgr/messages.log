@@ -1,0 +1,1448 @@
+
+
+
+*** Recovery started at Wed Mar 26 12:25:06 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: .\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+WIJ file not found.
+Exiting with status 3 (Success)
+03/26/25-12:25:06:500 (18268) 0 [Generic.Event] Global buffer setting requires attention.  Auto-selected 25% of total memory.
+03/26/25-12:25:06:501 (18268) 2 [Generic.Event] Failed to allocate 5146MB shared memory using large pages.  Switching to small pages.
+03/26/25-12:25:06:501 (18268) 0 [Generic.Event] Allocated 5146MB shared memory
+03/26/25-12:25:06:502 (18268) 0 [Generic.Event] 4041MB global buffers, 404MB routine buffers, 64MB journal buffers, 314MB buffer descriptors, 300MB heap, 5MB ECP, 17MB miscellaneous
+03/26/25-12:25:06:505 (18268) 0 [Crypto.IntelSandyBridgeAESNI] Intel Sandy Bridge AES-NI instructions detected.
+03/26/25-12:25:06:506 (18268) 0 [SIMD] SIMD optimization level: DEFAULT
+03/26/25-12:25:06:595 (18268) 0 [WriteDaemon.UsingWIJFile] Using WIJ file: c:\intersystems\irishealth\mgr\IRIS.WIJ
+03/26/25-12:25:06:595 (18268) 0 [Generic.Event] No journaling info from prior system
+03/26/25-12:25:06:596 (18268) 0 [WriteDaemon.CreatingNewWIJ] Creating a new WIJ file
+03/26/25-12:25:06:680 (18268) 0 [WriteDaemon.CreatedNewWIJ] New WIJ file created
+03/26/25-12:25:06:699 (18268) 0 [Generic.Event] 
+Startup of InterSystems IRIS [IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST]
+	in c:\intersystems\irishealth\bin\
+	with mgr: c:\intersystems\irishealth\mgr
+	with wij: c:\intersystems\irishealth\mgr\IRIS.WIJ
+	from: c:\intersystems\irishealth\mgr\
+  OS=[NT], version=[6.2.9200], 8 processors.
+  Processor architecture=[9], level=[6], revision=[8c01], active processor mask=[ff].
+  System Initialized.
+03/26/25-12:25:06:723 (10064) 0 [WriteDaemon.Started] Write daemon started.
+03/26/25-12:25:08:544 (14980) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\ (SFN 0) read-write.
+03/26/25-12:25:08:799 (10920) 0 [Utility.Event] Starting ^INSTALL procedure
+03/26/25-12:25:08:802 (1908) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\. 39 MB requested.
+03/26/25-12:25:08:837 (1908) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\. Expanded by 39 MB.
+03/26/25-12:25:08:908 (10920) 0 [Utility.Event] Switching to temporary %SYS Namespace
+03/26/25-12:25:08:977 (10920) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\irislib\ (SFN 1) read-only. Database label is marked read-only. 
+03/26/25-12:25:09:336 (10920) 0 [Utility.Event] Creating missing IRISTEMP database in C:\InterSystems\IRISHealth\mgr\iristemp
+03/26/25-12:25:09:373 (10920) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\iristemp\ (SFN 2) read-write.
+03/26/25-12:25:09:379 (10920) 0 [Utility.Event] Creating IRISLOCALDATA database in C:\InterSystems\IRISHealth\mgr\irislocaldata\
+03/26/25-12:25:09:416 (10920) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irislocaldata\ (SFN 3) read-write.
+03/26/25-12:25:09:432 (10920) 0 [Utility.Event] Switching to default %SYS Namespace
+03/26/25-12:25:09:432 (10920) 0 [Utility.Event] Loading DLLs
+03/26/25-12:25:09:929 (10920) 0 [Utility.Event] Loading Locale enuw (English, United States, Unicode) from objects
+03/26/25-12:25:11:767 (10920) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irisaudit\ (SFN 4) read-write.
+03/26/25-12:25:11:923 (10920) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\user\ (SFN 5) read-write.
+03/26/25-12:25:12:307 (16436) 0 [Utility.Event] WorkQueue: Starting work queue daemon parent=10920
+03/26/25-12:25:12:316 (1908) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\irislocaldata\. 10 MB requested.
+03/26/25-12:25:12:325 (1908) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\irislocaldata\. Expanded by 10 MB.
+03/26/25-12:25:12:334 (1908) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\iristemp\. 10 MB requested.
+03/26/25-12:25:12:343 (1908) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\iristemp\. Expanded by 10 MB.
+03/26/25-12:25:13:283 (10920) 0 [Utility.Event] Setting Routine Cache to 300
+03/26/25-12:25:13:335 (10920) 0 [Utility.Event] Routine Cache Set to 300 OK
+03/26/25-12:25:15:449 (10920) 0 [Utility.Event] Finishing ^INSTALL procedure
+03/26/25-12:25:15:750 (19252) 0 [Utility.Event] Shutting down InterSystems IRIS
+03/26/25-12:25:15:789 (19252) 0 [Utility.Event] Notifying Clients
+03/26/25-12:25:15:789 (19252) 0 [Utility.Event] No user shutdown routines to execute
+03/26/25-12:25:15:789 (19252) 0 [Utility.Event] Stopping User Jobs
+03/26/25-12:25:15:793 (19252) 0 [Utility.Event] Stopping Network Servers
+03/26/25-12:25:15:793 (19252) 0 [Utility.Event] Withdrawing from License Domain
+03/26/25-12:25:15:794 (19252) 0 [Utility.Event] Waiting for users to stop
+03/26/25-12:25:15:794 (19252) 0 [Utility.Event] Stopping Client Networking
+03/26/25-12:25:15:795 (19252) 0 [Utility.Event] Updating Journal File
+03/26/25-12:25:15:795 (19252) 0 [Utility.Event] Journal restore not required at next startup
+03/26/25-12:25:15:796 (19252) 0 [Utility.Event] Transaction rollback not required at next startup
+03/26/25-12:25:17:812 (19252) 0 [Utility.Event] Removing database locks
+03/26/25-12:25:17:815 (19252) 0 [Utility.Event] Waiting for database updates to complete
+03/26/25-12:25:17:815 (19252) 0 [Utility.Event] Database updates complete
+03/26/25-12:25:17:816 (19252) 0 [Utility.Event] Stopping System Jobs
+03/26/25-12:25:17:923 (1908) 0 [Generic.Event] EXPDMN exited due to system shutdown
+03/26/25-12:25:17:924 (17764) 0 [Generic.Event] JRNDMN exited due to system shutdown
+03/26/25-12:25:17:924 (22648) 0 [Generic.Event] GARCOL exited due to system shutdown
+03/26/25-12:25:18:566 (10064) 0 [Generic.Event] No blocks pending in WIJ file
+03/26/25-12:25:18:571 (10064) 0 [Generic.Event] WRTDMN exited due to system shutdown
+03/26/25-12:25:18:654 (18268) 0 [Generic.Event] CONTROL exited due to system shutdown
+03/26/25-12:25:19:771 (19252) 0 [Utility.Event] Shutdown complete
+
+
+
+*** Recovery started at Wed Mar 26 12:25:19 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: c:\intersystems\irishealth\mgr\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+
+
+
+*** Recovery started at Wed Mar 26 12:25:20 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: c:\intersystems\irishealth\mgr\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+03/26/25-12:25:20:352 (12036) 0 [Generic.Event] Global buffer setting requires attention.  Auto-selected 25% of total memory.
+03/26/25-12:25:20:353 (12036) 2 [Generic.Event] Failed to allocate 5038MB shared memory using large pages.  Switching to small pages.
+03/26/25-12:25:20:354 (12036) 0 [Generic.Event] Allocated 5038MB shared memory
+03/26/25-12:25:20:354 (12036) 0 [Generic.Event] 4041MB global buffers, 300MB routine buffers, 64MB journal buffers, 311MB buffer descriptors, 300MB heap, 5MB ECP, 16MB miscellaneous
+03/26/25-12:25:20:358 (12036) 0 [Crypto.IntelSandyBridgeAESNI] Intel Sandy Bridge AES-NI instructions detected.
+03/26/25-12:25:20:358 (12036) 0 [SIMD] SIMD optimization level: DEFAULT
+03/26/25-12:25:20:422 (12036) 0 [WriteDaemon.UsingWIJFile] Using WIJ file: c:\intersystems\irishealth\mgr\IRIS.WIJ
+03/26/25-12:25:20:423 (12036) 0 [Generic.Event] No journaling info from prior system
+03/26/25-12:25:20:441 (12036) 0 [Generic.Event] 
+Startup of InterSystems IRIS [IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST]
+	in c:\intersystems\irishealth\bin\
+	with mgr: c:\intersystems\irishealth\mgr
+	with wij: c:\intersystems\irishealth\mgr\IRIS.WIJ
+	from: c:\intersystems\irishealth\mgr\
+  OS=[NT], version=[6.2.9200], 8 processors.
+  Processor architecture=[9], level=[6], revision=[8c01], active processor mask=[ff].
+  System Initialized.
+03/26/25-12:25:20:462 (4048) 0 [WriteDaemon.Started] Write daemon started.
+03/26/25-12:25:21:872 (19784) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\ (SFN 0) read-write.
+03/26/25-12:25:21:883 (19784) 0 [Utility.Event] Instance 'IRISHEALTH' starting on node Tech by user SYSTEM on 03/26/2025 06:55:21.883 UTC
+03/26/25-12:25:21:884 (19784) 0 [Utility.Event] Using parameters from file 'C:\InterSystems\IRISHealth\iris.cpf'
+03/26/25-12:25:21:885 (19784) 0 [Utility.Event] Loading DLLs
+03/26/25-12:25:21:887 (19784) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\irislib\ (SFN 1) read-only. Database label is marked read-only. 
+03/26/25-12:25:21:890 (19784) 0 [Utility.Event] Switching to temporary %SYS Namespace
+03/26/25-12:25:21:893 (19784) 0 [Utility.Event] Loading Locale enuw (English, United States, Unicode) from objects
+03/26/25-12:25:21:908 (19784) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irislocaldata\ (SFN 2) read-write.
+03/26/25-12:25:21:910 (19784) 0 [Utility.Event] Using OpenSSL 3.1.4 24 Oct 2023
+03/26/25-12:25:21:948 (19784) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\iristemp\ (SFN 3) read-write.
+03/26/25-12:25:21:953 (19784) 0 [Utility.Event] C:\InterSystems\IRISHealth\mgr\iristemp\ initialized as IRISTEMP
+03/26/25-12:25:21:955 (19784) 0 [Utility.Event] Switching to default %SYS Namespace
+03/26/25-12:25:22:083 (14932) 0 [Utility.Event] Log Monitor Started
+03/26/25-12:25:22:212 (19516) 0 [Utility.Event] Clean Daemon Started
+03/26/25-12:25:22:390 (19784) 0 [Utility.Event] Updating configuration information from C:\InterSystems\IRISHealth\iris.cpf
+03/26/25-12:25:22:409 (19784) 0 [Utility.Event] No archives configured
+03/26/25-12:25:22:415 (19784) 0 [Utility.Event] Performing Journal Recovery
+03/26/25-12:25:22:416 (19784) 0 [Utility.Event] Graceful system shutdown, journal restore not required
+03/26/25-12:25:22:416 (19784) 0 [Utility.Event] Graceful system shutdown, transaction rollback not required
+03/26/25-12:25:22:423 (19784) 0 [Utility.Event] START: C:\InterSystems\IRISHealth\mgr\journal\20250326.001
+03/26/25-12:25:22:429 (19784) 0 [Generic.Event] INTERSYSTEMS IRIS JOURNALING SYSTEM MESSAGE
+Journaling started to: c:\intersystems\irishealth\mgr\journal\20250326.001
+03/26/25-12:25:22:429 (19784) 0 [Utility.Event] Journaling to C:\InterSystems\IRISHealth\mgr\journal\20250326.001 started.
+03/26/25-12:25:22:430 (19784) 0 [Utility.Event] Processing WorkQueues section
+03/26/25-12:25:22:431 (19784) 0 [Utility.Event] Processing Startup section
+03/26/25-12:25:22:448 (22880) 0 [Utility.Event] Purging old application errors
+03/26/25-12:25:22:449 (19784) 0 [Utility.Event] Created temp directory C:\InterSystems\IRISHealth\mgr\Temp
+03/26/25-12:25:22:449 (19784) 0 [Utility.Event] Processing config section
+03/26/25-12:25:22:451 (19784) 2 [Utility.Event] LMF Error: No valid license key. No valid local file found and LicenseID not defined.
+03/26/25-12:25:22:526 (19784) 0 [Utility.Event] Initializing Security system
+03/26/25-12:25:22:584 (19784) 0 [Utility.Event] Processing Network section
+03/26/25-12:25:22:585 (19784) 0 [Utility.Event] Activating Network
+03/26/25-12:25:22:603 (19784) 0 [Utility.Event] Processing Databases section
+03/26/25-12:25:22:607 (19784) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irisaudit\ (SFN 4) read-write.
+03/26/25-12:25:22:613 (19784) 0 [Utility.Event] Processing Namespaces section
+03/26/25-12:25:22:613 (19784) 0 [Utility.Event] Loading all namespaces
+03/26/25-12:25:22:632 (19784) 0 [Utility.Event] Activating namespaces
+03/26/25-12:25:22:633 (19784) 0 [Utility.Event] Activating new namespace map
+03/26/25-12:25:22:638 (19784) 0 [Utility.Event] Namespace changes have been activated
+03/26/25-12:25:22:659 (13456) 0 [Utility.Event] Starting superserver on port 1972
+03/26/25-12:25:22:659 (19784) 0 [Utility.Event] Network Lock Upload Phase Starting
+03/26/25-12:25:22:659 (19784) 0 [Utility.Event] Lock Upload Phase Complete
+03/26/25-12:25:22:659 (19784) 0 [Utility.Event] Processing Miscellaneous section
+03/26/25-12:25:22:705 (12800) 0 [Utility.Event] Starting Servers
+03/26/25-12:25:22:705 (12800) 0 [Utility.Event] Processing Terminal daemon section
+03/26/25-12:25:22:719 (12800) 0 [Utility.Event] Processing Telnet section
+03/26/25-12:25:22:720 (12800) 0 [Utility.Event] Processing Com section
+03/26/25-12:25:22:720 (12800) 0 [Utility.Event] Processing Shadows section (this system as shadow)
+03/26/25-12:25:22:722 (12800) 0 [Utility.Event] Processing Monitor section
+03/26/25-12:25:22:705 (19784) 0 [Utility.Event] Processing Devices section
+03/26/25-12:25:22:723 (19784) 0 [Utility.Event] Processing DeviceSubTypes section
+03/26/25-12:25:22:723 (19784) 0 [Utility.Event] Processing MagTape section
+03/26/25-12:25:22:724 (19784) 0 [Utility.Event] Processing IO section
+03/26/25-12:25:22:724 (19784) 0 [Utility.Event] Processing SQL section
+03/26/25-12:25:22:725 (19784) 0 [Utility.Event] Processing Macro Pre-Processor (MPP) section
+03/26/25-12:25:22:727 (19784) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\user\ (SFN 5) read-write.
+03/26/25-12:25:22:767 (19784) 0 [Generic.Event] Auditing to c:\intersystems\irishealth\mgr\irisaudit\
+03/26/25-12:25:22:778 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\irisaudit\. 10 MB requested.
+03/26/25-12:25:22:786 (14296) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor started in %SYS
+03/26/25-12:25:22:787 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\irisaudit\. Expanded by 10 MB.
+03/26/25-12:25:22:788 (19284) 0 [Generic.Event] VSS writer "InterSystems IRIS IRISHEALTH Writer" started
+03/26/25-12:25:22:830 (19784) 0 [Utility.Event] Interoperability: Installing IRISHealth
+03/26/25-12:25:22:833 (12800) 0 [Utility.Event] Shard license: 0
+03/26/25-12:25:22:833 (23016) 0 [Utility.Event] WorkQueue: Starting work queue daemon parent=12800
+03/26/25-12:25:24:357 (19784) 0 [Generic.Event] Switched database c:\intersystems\irishealth\mgr\irislib\ (SFN 1) to read-write.
+03/26/25-12:25:24:362 (19784) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\enslib\ (SFN 6) read-only. Database label is marked read-only. 
+03/26/25-12:25:27:403 (19784) 0 [Generic.Event] Switched database c:\intersystems\irishealth\mgr\enslib\ (SFN 6) to read-write.
+03/26/25-12:25:28:717 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\enslib\. 23 MB requested.
+03/26/25-12:25:28:736 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\enslib\. Expanded by 23 MB.
+03/26/25-12:25:34:684 (19784) 0 [Generic.Event] Switched database c:\intersystems\irishealth\mgr\irislib\ (SFN 1) to read-only.
+03/26/25-12:25:34:687 (19784) 0 [Generic.Event] Switched database c:\intersystems\irishealth\mgr\enslib\ (SFN 6) to read-only.
+03/26/25-12:25:34:687 (19784) 0 [Utility.Event] Installation initialization sequence starting
+03/26/25-12:25:35:008 (19784) 0 [Utility.Event] Activating HSLIB namespace map
+03/26/25-12:25:35:015 (19784) 0 [Utility.Event] Namespace HSLIB changes have been activated
+03/26/25-12:25:35:153 (19784) 0 [Utility.Event] Activating HSLIB namespace map
+03/26/25-12:25:35:156 (19784) 0 [Utility.Event] Namespace HSLIB changes have been activated
+03/26/25-12:25:35:245 (19784) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hslib\ (SFN 7) read-write.
+03/26/25-12:25:35:260 (19784) 0 [Utility.Event] Activating HSLIB namespace map
+03/26/25-12:25:35:266 (19784) 0 [Utility.Event] Namespace HSLIB changes have been activated
+03/26/25-12:25:36:235 (19784) 0 [Utility.Event] Activating HSLIB namespace map
+03/26/25-12:25:36:243 (19784) 0 [Utility.Event] Namespace HSLIB changes have been activated
+03/26/25-12:25:36:347 (19784) 0 [Utility.Event] Activating HSLIB namespace map
+03/26/25-12:25:36:352 (19784) 0 [Utility.Event] Namespace HSLIB changes have been activated
+03/26/25-12:25:36:493 (19784) 0 [Utility.Event] Activating HSLIB namespace map
+03/26/25-12:25:36:498 (19784) 0 [Utility.Event] Namespace HSLIB changes have been activated
+03/26/25-12:25:36:621 (19784) 0 [Utility.Event] Activating HSLIB namespace map
+03/26/25-12:25:36:634 (19784) 0 [Utility.Event] Namespace HSLIB changes have been activated
+03/26/25-12:25:36:738 (19784) 0 [Utility.Event] Activating HSLIB namespace map
+03/26/25-12:25:36:743 (19784) 0 [Utility.Event] Namespace HSLIB changes have been activated
+03/26/25-12:25:36:848 (19784) 0 [Utility.Event] Activating HSLIB namespace map
+03/26/25-12:25:36:856 (19784) 0 [Utility.Event] Namespace HSLIB changes have been activated
+03/26/25-12:25:36:907 (19784) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hssys\ (SFN 8) read-write.
+03/26/25-12:25:37:102 (19784) 0 [Utility.Event] Activating HSSYS namespace map
+03/26/25-12:25:37:105 (19784) 0 [Utility.Event] Namespace HSSYS changes have been activated
+03/26/25-12:25:37:260 (19784) 0 [Utility.Event] Activating HSSYS namespace map
+03/26/25-12:25:37:267 (19784) 0 [Utility.Event] Namespace HSSYS changes have been activated
+03/26/25-12:25:37:417 (19784) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hssyslocaltemp\ (SFN 9) read-write.
+03/26/25-12:25:37:614 (19784) 0 [Utility.Event] Activating HSSYSLOCALTEMP namespace map
+03/26/25-12:25:37:619 (19784) 0 [Utility.Event] Namespace HSSYSLOCALTEMP changes have been activated
+03/26/25-12:25:37:707 (19784) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hscustom\ (SFN 10) read-write.
+03/26/25-12:25:37:916 (19784) 0 [Utility.Event] Activating HSCUSTOM namespace map
+03/26/25-12:25:37:922 (19784) 0 [Utility.Event] Namespace HSCUSTOM changes have been activated
+03/26/25-12:25:38:096 (19784) 0 [Utility.Event] Activating HSCUSTOM namespace map
+03/26/25-12:25:38:099 (19784) 0 [Utility.Event] Namespace HSCUSTOM changes have been activated
+03/26/25-12:25:38:214 (19784) 0 [Utility.Event] Activating %SYS namespace map
+03/26/25-12:25:38:217 (19784) 0 [Utility.Event] Namespace %SYS changes have been activated
+03/26/25-12:25:38:326 (19784) 0 [Utility.Event] Activating HSSYS namespace map
+03/26/25-12:25:38:329 (19784) 0 [Utility.Event] Namespace HSSYS changes have been activated
+03/26/25-12:25:39:258 (19784) 0 [Utility.Event] Activating HSLIB namespace map
+03/26/25-12:25:39:262 (19784) 0 [Utility.Event] Namespace HSLIB changes have been activated
+03/26/25-12:25:40:268 (19784) 0 [Utility.Event] Activating HSSYS namespace map
+03/26/25-12:25:40:273 (19784) 0 [Utility.Event] Namespace HSSYS changes have been activated
+03/26/25-12:25:41:954 (19784) 0 [Utility.Event] Activating HSCUSTOM namespace map
+03/26/25-12:25:41:959 (19784) 0 [Utility.Event] Namespace HSCUSTOM changes have been activated
+03/26/25-12:25:42:111 (19784) 0 [Utility.Event] Activating HSCUSTOM namespace map
+03/26/25-12:25:42:115 (19784) 0 [Utility.Event] Namespace HSCUSTOM changes have been activated
+03/26/25-12:25:42:237 (19784) 0 [Utility.Event] Activating HSCUSTOM namespace map
+03/26/25-12:25:42:252 (19784) 0 [Utility.Event] Namespace HSCUSTOM changes have been activated
+03/26/25-12:25:42:371 (19784) 0 [Utility.Event] Activating HSSYS namespace map
+03/26/25-12:25:42:387 (19784) 0 [Utility.Event] Namespace HSSYS changes have been activated
+03/26/25-12:25:42:496 (19784) 0 [Utility.Event] Activating HSLIB namespace map
+03/26/25-12:25:42:502 (19784) 0 [Utility.Event] Namespace HSLIB changes have been activated
+03/26/25-12:25:44:100 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\hscustom\. 10 MB requested.
+03/26/25-12:25:44:112 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\hscustom\. Expanded by 10 MB.
+03/26/25-12:26:08:396 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\hscustom\. 10 MB requested.
+03/26/25-12:26:08:417 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\hscustom\. Expanded by 10 MB.
+03/26/25-12:26:10:576 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\iristemp\. 10 MB requested.
+03/26/25-12:26:10:583 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\iristemp\. Expanded by 10 MB.
+03/26/25-12:26:30:224 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\hssys\. 10 MB requested.
+03/26/25-12:26:30:232 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\hssys\. Expanded by 10 MB.
+03/26/25-12:26:38:562 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\hssys\. 10 MB requested.
+03/26/25-12:26:38:570 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\hssys\. Expanded by 10 MB.
+03/26/25-12:26:44:692 (19784) 0 [Generic.Event] Switched database c:\intersystems\irishealth\mgr\hslib\ (SFN 7) to read-only.
+03/26/25-12:26:44:775 (19784) 0 [Utility.Event] Installation initialization sequence complete 
+03/26/25-12:26:44:775 (19784) 0 [Utility.Event] Executing ^ZSTU routine
+03/26/25-12:26:44:776 (19784) 0 [Utility.Event] Executing ^%ZSTART routine
+03/26/25-12:26:44:776 (19784) 0 [Utility.Event] Enabling logons
+03/26/25-12:26:44:776 (19784) 0 [Utility.Event] Rebuilding Extent index for namespace %SYS
+03/26/25-12:26:45:796 (19784) 0 [Utility.Event] Rebuilding Extent index for namespace HSCUSTOM
+03/26/25-12:26:48:998 (19784) 0 [Utility.Event] Rebuilding Extent index for namespace HSLIB
+03/26/25-12:26:48:999 (19784) 0 [Utility.Event] Rebuilding Extent index for namespace HSSYS
+03/26/25-12:26:49:196 (19784) 0 [Utility.Event] Rebuilding Extent index for namespace HSSYSLOCALTEMP
+03/26/25-12:26:49:236 (19784) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-12:26:49:324 (19784) 0 [Utility.Event] %ZHSLIB.HealthShareMgr started items for Failover context. Check relevant log files and Event Logs for outcomes.
+03/26/25-12:26:49:325 (19784) 0 [Utility.Event] IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST [Health:7.2.0-3.m2024.1.2]
+03/26/25-12:26:49:325 (19784) 0 [Utility.Event] Initializing Interoperability during system startup
+03/26/25-12:26:49:326 (19784) 0 [Utility.Event] Not licensed for Interoperability, auto-start skipped.
+03/26/25-12:26:50:485 (10244) 0 [Utility.Event] Starting TASKMGR
+03/26/25-12:56:21:887 (14296) 0 [Utility.Event] [SYSTEM MONITOR] Alert state cleared.
+03/26/25-13:00:10:682 (19020) 0 [Database.MountedRW] Mounted database c:\intersystems\ (SFN 11) read-write.
+03/26/25-13:00:25:914 (19020) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:00:25:920 (19020) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:00:25:944 (19020) 0 [Utility.Event] Enabling namespace 'JONDAX' for Interoperability
+03/26/25-13:00:28:361 (19020) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:00:28:390 (19020) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:00:28:391 (19020) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:00:28:772 (19020) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:00:29:126 (19020) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:00:29:155 (19020) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:00:29:156 (19020) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:00:29:591 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\. 10 MB requested.
+03/26/25-13:00:29:606 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\. Expanded by 10 MB.
+03/26/25-13:00:29:767 (19020) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:00:30:052 (19020) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:00:30:065 (19020) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:00:31:172 (19020) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:00:31:211 (19020) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:00:31:212 (19020) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:00:31:494 (19020) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:00:31:783 (19020) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:00:31:796 (19020) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:00:33:979 (19020) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:00:34:026 (19020) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:00:34:029 (19020) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:00:34:426 (19020) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:00:35:989 (19020) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:00:36:019 (19020) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:01:46:700 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\. 10 MB requested.
+03/26/25-13:01:46:726 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\. Expanded by 10 MB.
+03/26/25-13:01:57:584 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\. 10 MB requested.
+03/26/25-13:01:57:596 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\. Expanded by 10 MB.
+03/26/25-13:02:54:426 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\. 10 MB requested.
+03/26/25-13:02:54:436 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\. Expanded by 10 MB.
+03/26/25-13:04:01:517 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\. 10 MB requested.
+03/26/25-13:04:01:556 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\. Expanded by 10 MB.
+03/26/25-13:04:09:978 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\. 10 MB requested.
+03/26/25-13:04:09:991 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\. Expanded by 10 MB.
+03/26/25-13:04:21:835 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\. 10 MB requested.
+03/26/25-13:04:21:860 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\. Expanded by 10 MB.
+03/26/25-13:04:27:198 (16372) 0 [Utility.Event] Shutting down InterSystems IRIS
+03/26/25-13:04:27:284 (14296) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor stopped in %SYS
+03/26/25-13:04:28:289 (16372) 0 [Utility.Event] Notifying Clients
+03/26/25-13:04:28:289 (16372) 0 [Utility.Event] No user shutdown routines to execute
+03/26/25-13:04:28:291 (16372) 0 [Utility.Event] Waiting for open transactions to commit
+03/26/25-13:04:36:069 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:04:36:072 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+
+The following processes still have open transactions:
+Job#  NSpace   Routine     Commands    Globals State    PID      Current device
+   6  JONDAX   %Stream.<   18972039    1202740 OPEN     19020    |TCP|1972|19020
+03/26/25-13:04:42:091 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:04:42:092 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+03/26/25-13:04:49:127 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:04:49:128 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+03/26/25-13:04:49:515 (14932) 2 [Utility.Event] Process 21660 generated 3 alerts in 14 seconds. Suspending alert notifications for this process.
+03/26/25-13:04:56:333 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:04:56:333 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+03/26/25-13:05:01:343 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:05:01:344 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+03/26/25-13:05:06:353 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:05:06:354 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+03/26/25-13:05:11:371 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:05:11:372 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+03/26/25-13:05:16:382 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:05:16:383 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+03/26/25-13:05:21:394 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:05:21:395 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+03/26/25-13:05:24:063 (18580) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\. 10 MB requested.
+03/26/25-13:05:24:072 (18580) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\. Expanded by 10 MB.
+03/26/25-13:05:26:402 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:05:26:403 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+03/26/25-13:05:32:414 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:05:32:415 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+03/26/25-13:05:37:433 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:05:37:433 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+
+The following processes still have open transactions:
+Job#  NSpace   Routine     Commands    Globals State    PID      Current device
+   6  JONDAX   %Stream.<   20872024    1233054 OPEN     19020    |TCP|1972|19020
+03/26/25-13:05:47:453 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:05:47:454 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+03/26/25-13:05:58:472 (21660) 2 [Utility.Event] ISCLOG: Server Superserver job failure ns=%SYS rtn=%SYS.SERVER 
+03/26/25-13:05:58:473 (21660) 1 [Utility.Event] Superserver failed to start, Port: "Port:      1972
+The following processes with open transactions will be rolled back:
+Job#  NSpace   Routine     Commands    Globals State    PID      Current device
+   6  JONDAX   %Stream.<   21231357    1237414 OPEN     19020    |TCP|1972|19020
+03/26/25-13:06:41:159 (16372) 0 [Utility.Event] Stopping User Jobs
+03/26/25-13:06:41:677 (19284) 0 [Generic.Event] VSS Writer exiting
+03/26/25-13:06:41:678 (16372) 0 [Utility.Event] Stopping Network Servers
+03/26/25-13:06:41:680 (16372) 0 [Utility.Event] Withdrawing from License Domain
+03/26/25-13:06:41:681 (16372) 0 [Utility.Event] Waiting for users to stop
+03/26/25-13:06:43:684 (16372) 0 [Utility.Event] 0 user processes remain
+03/26/25-13:06:45:708 (16372) 0 [Generic.Event] Auditing stopped
+03/26/25-13:06:45:709 (16372) 0 [Utility.Event] Stopping Client Networking
+03/26/25-13:06:45:710 (16372) 0 [Utility.Event] Updating Journal File
+03/26/25-13:06:45:947 (16372) 0 [Utility.Event] Journal restore not required at next startup
+03/26/25-13:06:45:948 (16372) 0 [Utility.Event] Transaction rollback not required at next startup
+03/26/25-13:06:47:267 (16372) 0 [Utility.Event] Removing database locks
+03/26/25-13:06:47:332 (16372) 0 [Utility.Event] Waiting for database updates to complete
+03/26/25-13:06:47:333 (16372) 0 [Utility.Event] Database updates complete
+03/26/25-13:06:47:334 (16372) 0 [Utility.Event] Stopping System Jobs
+03/26/25-13:06:47:467 (23508) 0 [Generic.Event] JRNDMN exited due to system shutdown
+03/26/25-13:06:47:467 (22652) 0 [Generic.Event] GARCOL exited due to system shutdown
+03/26/25-13:06:47:467 (18580) 0 [Generic.Event] EXPDMN exited due to system shutdown
+03/26/25-13:06:48:096 (4048) 0 [Generic.Event] No blocks pending in WIJ file
+03/26/25-13:06:48:109 (4048) 0 [Generic.Event] WRTDMN exited due to system shutdown
+03/26/25-13:06:48:206 (12036) 0 [Generic.Event] CONTROL exited due to system shutdown
+03/26/25-13:06:49:317 (16372) 0 [Utility.Event] Shutdown complete
+
+
+
+*** Recovery started at Wed Mar 26 13:06:49 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: c:\intersystems\irishealth\mgr\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+
+
+
+*** Recovery started at Wed Mar 26 13:06:56 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: c:\intersystems\irishealth\mgr\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+03/26/25-13:06:56:448 (17484) 0 [Generic.Event] Global buffer setting requires attention.  Auto-selected 25% of total memory.
+03/26/25-13:06:56:449 (17484) 2 [Generic.Event] Failed to allocate 5038MB shared memory using large pages.  Switching to small pages.
+03/26/25-13:06:56:450 (17484) 0 [Generic.Event] Allocated 5038MB shared memory
+03/26/25-13:06:56:451 (17484) 0 [Generic.Event] 4041MB global buffers, 300MB routine buffers, 64MB journal buffers, 311MB buffer descriptors, 300MB heap, 5MB ECP, 16MB miscellaneous
+03/26/25-13:06:56:455 (17484) 0 [Crypto.IntelSandyBridgeAESNI] Intel Sandy Bridge AES-NI instructions detected.
+03/26/25-13:06:56:455 (17484) 0 [SIMD] SIMD optimization level: DEFAULT
+03/26/25-13:06:56:544 (17484) 0 [WriteDaemon.UsingWIJFile] Using WIJ file: c:\intersystems\irishealth\mgr\IRIS.WIJ
+03/26/25-13:06:56:544 (17484) 0 [Generic.Event] Jrn info from prior WIJ (imflags: 0):
+	wdpass: 0
+	jrnwdpass: 215
+	fspec: c:\intersystems\irishealth\mgr\journal\20250326.001
+	filecnt: 1
+	fileoff: 0
+	prevfcnt: 1
+	prevfileoeff: 0
+	min trans cnt: 1
+	min trans index: 316290128
+03/26/25-13:06:56:570 (17484) 0 [Generic.Event] 
+Startup of InterSystems IRIS [IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST]
+	in c:\intersystems\irishealth\bin\
+	with mgr: c:\intersystems\irishealth\mgr
+	with wij: c:\intersystems\irishealth\mgr\IRIS.WIJ
+	from: c:\intersystems\irishealth\mgr\
+  OS=[NT], version=[6.2.9200], 8 processors.
+  Processor architecture=[9], level=[6], revision=[8c01], active processor mask=[ff].
+  System Initialized.
+03/26/25-13:06:56:591 (5400) 0 [WriteDaemon.Started] Write daemon started.
+03/26/25-13:06:57:969 (5652) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\ (SFN 0) read-write.
+03/26/25-13:06:57:984 (5652) 0 [Utility.Event] Instance 'IRISHEALTH' starting on node Tech by user SYSTEM on 03/26/2025 07:36:57.984 UTC
+03/26/25-13:06:57:984 (5652) 0 [Utility.Event] Using parameters from file 'C:\InterSystems\IRISHealth\iris.cpf'
+03/26/25-13:06:57:987 (5652) 0 [Utility.Event] Loading DLLs
+03/26/25-13:06:57:989 (5652) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\irislib\ (SFN 1) read-only. Database label is marked read-only. 
+03/26/25-13:06:57:992 (5652) 0 [Utility.Event] Switching to temporary %SYS Namespace
+03/26/25-13:06:57:996 (5652) 0 [Utility.Event] Loading Locale enuw (English, United States, Unicode) from objects
+03/26/25-13:06:58:016 (5652) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irislocaldata\ (SFN 2) read-write.
+03/26/25-13:06:58:018 (5652) 0 [Utility.Event] Using OpenSSL 3.1.4 24 Oct 2023
+03/26/25-13:06:58:057 (5652) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\iristemp\ (SFN 3) read-write.
+03/26/25-13:06:58:062 (5652) 0 [Utility.Event] C:\InterSystems\IRISHealth\mgr\iristemp\ initialized as IRISTEMP
+03/26/25-13:06:58:065 (5652) 0 [Utility.Event] Switching to default %SYS Namespace
+03/26/25-13:06:58:117 (21360) 0 [Utility.Event] Log Monitor Started
+03/26/25-13:06:58:242 (10980) 0 [Utility.Event] Clean Daemon Started
+03/26/25-13:06:58:252 (5652) 0 [Utility.Event] No archives configured
+03/26/25-13:06:58:268 (5652) 0 [Utility.Event] Performing Journal Recovery
+03/26/25-13:06:58:275 (5652) 0 [Utility.Event] WIJ indicates no open transactions
+03/26/25-13:06:58:299 (5652) 0 [Utility.Event] START: C:\InterSystems\IRISHealth\mgr\journal\20250326.002
+03/26/25-13:06:58:299 (5652) 1 [Generic.Event] Warning: Alternate and primary journal directories are the same
+03/26/25-13:06:58:306 (5652) 0 [Generic.Event] INTERSYSTEMS IRIS JOURNALING SYSTEM MESSAGE
+Journaling started to: c:\intersystems\irishealth\mgr\journal\20250326.002
+03/26/25-13:06:58:307 (5652) 0 [Utility.Event] Journaling to C:\InterSystems\IRISHealth\mgr\journal\20250326.002 started.
+03/26/25-13:06:58:307 (5652) 0 [Utility.Event] Processing WorkQueues section
+03/26/25-13:06:58:309 (5652) 0 [Utility.Event] Processing Startup section
+03/26/25-13:06:58:329 (1928) 0 [Utility.Event] Purging old application errors
+03/26/25-13:06:58:330 (5652) 0 [Utility.Event] Processing config section
+03/26/25-13:06:58:334 (5652) 2 [Utility.Event] LMF Error: No valid license key. No valid local file found and LicenseID not defined.
+03/26/25-13:06:58:362 (5652) 0 [Utility.Event] Initializing Security system
+03/26/25-13:06:58:388 (5652) 0 [Utility.Event] Processing Network section
+03/26/25-13:06:58:391 (5652) 0 [Utility.Event] Activating Network
+03/26/25-13:06:58:410 (5652) 0 [Utility.Event] Processing Databases section
+03/26/25-13:06:58:420 (5652) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irisaudit\ (SFN 4) read-write.
+03/26/25-13:06:58:426 (5652) 0 [Utility.Event] Processing Namespaces section
+03/26/25-13:06:58:427 (5652) 0 [Utility.Event] Namespaces are up to date
+03/26/25-13:06:58:427 (5652) 0 [Utility.Event] Activating namespaces
+03/26/25-13:06:58:428 (5652) 0 [Utility.Event] Activating new namespace map
+03/26/25-13:06:58:557 (5652) 0 [Utility.Event] Namespace changes have been activated
+03/26/25-13:06:58:584 (19764) 0 [Utility.Event] Starting superserver on port 1972
+03/26/25-13:06:58:585 (5652) 0 [Utility.Event] Network Lock Upload Phase Starting
+03/26/25-13:06:58:585 (5652) 0 [Utility.Event] Lock Upload Phase Complete
+03/26/25-13:06:58:585 (5652) 0 [Utility.Event] Processing Miscellaneous section
+03/26/25-13:06:58:662 (18732) 0 [Utility.Event] Starting Servers
+03/26/25-13:06:58:662 (18732) 0 [Utility.Event] Processing Terminal daemon section
+03/26/25-13:06:58:664 (5652) 0 [Utility.Event] Processing Devices section
+03/26/25-13:06:58:666 (5652) 0 [Utility.Event] Processing DeviceSubTypes section
+03/26/25-13:06:58:667 (5652) 0 [Utility.Event] Processing MagTape section
+03/26/25-13:06:58:668 (5652) 0 [Utility.Event] Processing IO section
+03/26/25-13:06:58:670 (5652) 0 [Utility.Event] Processing SQL section
+03/26/25-13:06:58:672 (5652) 0 [Utility.Event] Processing Macro Pre-Processor (MPP) section
+03/26/25-13:06:58:680 (18732) 0 [Utility.Event] Processing Telnet section
+03/26/25-13:06:58:682 (18732) 0 [Utility.Event] Processing Com section
+03/26/25-13:06:58:683 (18732) 0 [Utility.Event] Processing Shadows section (this system as shadow)
+03/26/25-13:06:58:686 (18732) 0 [Utility.Event] Processing Monitor section
+03/26/25-13:06:58:711 (18232) 0 [Utility.Event] Starting TASKMGR
+03/26/25-13:06:58:759 (8940) 0 [Generic.Event] VSS writer "InterSystems IRIS IRISHEALTH Writer" started
+03/26/25-13:06:58:765 (4468) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor started in %SYS
+03/26/25-13:06:58:796 (5652) 0 [Generic.Event] Auditing to c:\intersystems\irishealth\mgr\irisaudit\
+03/26/25-13:06:58:805 (3148) 0 [Utility.Event] WorkQueue: Starting work queue daemon parent=18732
+03/26/25-13:06:58:805 (18732) 0 [Utility.Event] Shard license: 0
+03/26/25-13:06:58:815 (5652) 0 [Utility.Event] Executing ^ZSTU routine
+03/26/25-13:06:58:816 (5652) 0 [Utility.Event] Executing ^%ZSTART routine
+03/26/25-13:06:58:817 (5652) 0 [Utility.Event] Enabling logons
+03/26/25-13:06:58:821 (5652) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hssys\ (SFN 5) read-write.
+03/26/25-13:06:58:825 (5652) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\hslib\ (SFN 6) read-only. Database label is marked read-only. 
+03/26/25-13:06:58:850 (5652) 0 [Utility.Event] %ZHSLIB.HealthShareMgr started items for Failover context. Check relevant log files and Event Logs for outcomes.
+03/26/25-13:06:58:851 (5652) 0 [Utility.Event] IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST [Health:7.2.0-3.m2024.1.2]
+03/26/25-13:06:58:851 (5652) 0 [Utility.Event] Initializing Interoperability during system startup
+03/26/25-13:06:58:851 (5652) 0 [Utility.Event] Not licensed for Interoperability, auto-start skipped.
+03/26/25-13:06:58:876 (15880) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hssyslocaltemp\ (SFN 7) read-write.
+03/26/25-13:07:00:562 (1908) 0 [Utility.Event] Journal File Compression: Compressed C:\InterSystems\IRISHealth\mgr\journal\20250326.001 from 320864256 bytes to 31571968 bytes, compression ratio = 10.2
+03/26/25-13:08:41:838 (8892) 0 [Database.MountedRW] Mounted database c:\intersystems\ (SFN 8) read-write.
+03/26/25-13:14:24:204 (22516) 0 [Utility.Event] Shutting down InterSystems IRIS
+03/26/25-13:14:24:282 (4468) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor stopped in %SYS
+03/26/25-13:14:25:294 (22516) 0 [Utility.Event] Notifying Clients
+03/26/25-13:14:25:295 (22516) 0 [Utility.Event] No user shutdown routines to execute
+03/26/25-13:14:25:309 (22516) 0 [Utility.Event] Stopping User Jobs
+03/26/25-13:14:28:901 (8940) 0 [Generic.Event] VSS Writer exiting
+03/26/25-13:14:28:925 (22516) 0 [Utility.Event] Stopping Network Servers
+03/26/25-13:14:28:928 (22516) 0 [Utility.Event] Withdrawing from License Domain
+03/26/25-13:14:28:928 (22516) 0 [Utility.Event] Waiting for users to stop
+03/26/25-13:14:28:938 (22516) 0 [Generic.Event] Auditing stopped
+03/26/25-13:14:28:939 (22516) 0 [Utility.Event] Stopping Client Networking
+03/26/25-13:14:28:940 (22516) 0 [Utility.Event] Updating Journal File
+03/26/25-13:14:29:167 (22516) 0 [Utility.Event] Journal restore not required at next startup
+03/26/25-13:14:29:168 (22516) 0 [Utility.Event] Transaction rollback not required at next startup
+03/26/25-13:14:30:395 (22516) 0 [Utility.Event] Removing database locks
+03/26/25-13:14:30:404 (22516) 0 [Utility.Event] Waiting for database updates to complete
+03/26/25-13:14:30:405 (22516) 0 [Utility.Event] Database updates complete
+03/26/25-13:14:30:405 (22516) 0 [Utility.Event] Stopping System Jobs
+03/26/25-13:14:30:520 (20268) 0 [Generic.Event] EXPDMN exited due to system shutdown
+03/26/25-13:14:30:521 (9780) 0 [Generic.Event] GARCOL exited due to system shutdown
+03/26/25-13:14:30:520 (3720) 0 [Generic.Event] JRNDMN exited due to system shutdown
+03/26/25-13:14:31:155 (5400) 0 [Generic.Event] No blocks pending in WIJ file
+03/26/25-13:14:31:161 (5400) 0 [Generic.Event] WRTDMN exited due to system shutdown
+03/26/25-13:14:31:249 (17484) 0 [Generic.Event] CONTROL exited due to system shutdown
+03/26/25-13:14:32:363 (22516) 0 [Utility.Event] Shutdown complete
+
+
+
+*** Recovery started at Wed Mar 26 13:14:32 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: c:\intersystems\irishealth\mgr\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+
+
+
+*** Recovery started at Wed Mar 26 13:14:46 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: c:\intersystems\irishealth\mgr\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+03/26/25-13:14:46:688 (23140) 0 [Generic.Event] Global buffer setting requires attention.  Auto-selected 25% of total memory.
+03/26/25-13:14:46:689 (23140) 2 [Generic.Event] Failed to allocate 5038MB shared memory using large pages.  Switching to small pages.
+03/26/25-13:14:46:690 (23140) 0 [Generic.Event] Allocated 5038MB shared memory
+03/26/25-13:14:46:691 (23140) 0 [Generic.Event] 4041MB global buffers, 300MB routine buffers, 64MB journal buffers, 311MB buffer descriptors, 300MB heap, 5MB ECP, 16MB miscellaneous
+03/26/25-13:14:46:697 (23140) 0 [Crypto.IntelSandyBridgeAESNI] Intel Sandy Bridge AES-NI instructions detected.
+03/26/25-13:14:46:697 (23140) 0 [SIMD] SIMD optimization level: DEFAULT
+03/26/25-13:14:46:781 (23140) 0 [WriteDaemon.UsingWIJFile] Using WIJ file: c:\intersystems\irishealth\mgr\IRIS.WIJ
+03/26/25-13:14:46:782 (23140) 0 [Generic.Event] Jrn info from prior WIJ (imflags: 0):
+	wdpass: 0
+	jrnwdpass: 48
+	fspec: c:\intersystems\irishealth\mgr\journal\20250326.002
+	filecnt: 2
+	fileoff: 0
+	prevfcnt: 2
+	prevfileoeff: 0
+	min trans cnt: 2
+	min trans index: 235184
+03/26/25-13:14:46:813 (23140) 0 [Generic.Event] 
+Startup of InterSystems IRIS [IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST]
+	in c:\intersystems\irishealth\bin\
+	with mgr: c:\intersystems\irishealth\mgr
+	with wij: c:\intersystems\irishealth\mgr\IRIS.WIJ
+	from: c:\intersystems\irishealth\mgr\
+  OS=[NT], version=[6.2.9200], 8 processors.
+  Processor architecture=[9], level=[6], revision=[8c01], active processor mask=[ff].
+  System Initialized.
+03/26/25-13:14:46:833 (19720) 0 [WriteDaemon.Started] Write daemon started.
+03/26/25-13:14:48:210 (15268) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\ (SFN 0) read-write.
+03/26/25-13:14:48:228 (15268) 0 [Utility.Event] Instance 'IRISHEALTH' starting on node Tech by user SYSTEM on 03/26/2025 07:44:48.228 UTC
+03/26/25-13:14:48:228 (15268) 0 [Utility.Event] Using parameters from file 'C:\InterSystems\IRISHealth\iris.cpf'
+03/26/25-13:14:48:232 (15268) 0 [Utility.Event] Loading DLLs
+03/26/25-13:14:48:234 (15268) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\irislib\ (SFN 1) read-only. Database label is marked read-only. 
+03/26/25-13:14:48:237 (15268) 0 [Utility.Event] Switching to temporary %SYS Namespace
+03/26/25-13:14:48:241 (15268) 0 [Utility.Event] Loading Locale enuw (English, United States, Unicode) from objects
+03/26/25-13:14:48:261 (15268) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irislocaldata\ (SFN 2) read-write.
+03/26/25-13:14:48:263 (15268) 0 [Utility.Event] Using OpenSSL 3.1.4 24 Oct 2023
+03/26/25-13:14:48:313 (15268) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\iristemp\ (SFN 3) read-write.
+03/26/25-13:14:48:317 (15268) 0 [Utility.Event] C:\InterSystems\IRISHealth\mgr\iristemp\ initialized as IRISTEMP
+03/26/25-13:14:48:319 (15268) 0 [Utility.Event] Switching to default %SYS Namespace
+03/26/25-13:14:48:375 (19120) 0 [Utility.Event] Log Monitor Started
+03/26/25-13:14:48:498 (7120) 0 [Utility.Event] Clean Daemon Started
+03/26/25-13:14:48:511 (15268) 0 [Utility.Event] No archives configured
+03/26/25-13:14:48:521 (15268) 0 [Utility.Event] Performing Journal Recovery
+03/26/25-13:14:48:526 (15268) 0 [Utility.Event] WIJ indicates no open transactions
+03/26/25-13:14:48:555 (15268) 0 [Utility.Event] START: C:\InterSystems\IRISHealth\mgr\journal\20250326.003
+03/26/25-13:14:48:556 (15268) 1 [Generic.Event] Warning: Alternate and primary journal directories are the same
+03/26/25-13:14:48:564 (15268) 0 [Generic.Event] INTERSYSTEMS IRIS JOURNALING SYSTEM MESSAGE
+Journaling started to: c:\intersystems\irishealth\mgr\journal\20250326.003
+03/26/25-13:14:48:565 (15268) 0 [Utility.Event] Journaling to C:\InterSystems\IRISHealth\mgr\journal\20250326.003 started.
+03/26/25-13:14:48:566 (15268) 0 [Utility.Event] Processing WorkQueues section
+03/26/25-13:14:48:569 (15268) 0 [Utility.Event] Processing Startup section
+03/26/25-13:14:48:593 (14276) 0 [Utility.Event] Purging old application errors
+03/26/25-13:14:48:594 (15268) 0 [Utility.Event] Processing config section
+03/26/25-13:14:48:597 (15268) 2 [Utility.Event] LMF Error: No valid license key. No valid local file found and LicenseID not defined.
+03/26/25-13:14:48:630 (15268) 0 [Utility.Event] Initializing Security system
+03/26/25-13:14:48:658 (15268) 0 [Utility.Event] Processing Network section
+03/26/25-13:14:48:661 (15268) 0 [Utility.Event] Activating Network
+03/26/25-13:14:48:683 (15268) 0 [Utility.Event] Processing Databases section
+03/26/25-13:14:48:696 (15268) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irisaudit\ (SFN 4) read-write.
+03/26/25-13:14:48:702 (15268) 0 [Utility.Event] Processing Namespaces section
+03/26/25-13:14:48:702 (15268) 0 [Utility.Event] Namespaces are up to date
+03/26/25-13:14:48:702 (15268) 0 [Utility.Event] Activating namespaces
+03/26/25-13:14:48:704 (15268) 0 [Utility.Event] Activating new namespace map
+03/26/25-13:14:48:849 (15268) 0 [Utility.Event] Namespace changes have been activated
+03/26/25-13:14:48:879 (17404) 0 [Utility.Event] Starting superserver on port 1972
+03/26/25-13:14:48:879 (15268) 0 [Utility.Event] Network Lock Upload Phase Starting
+03/26/25-13:14:48:900 (15268) 0 [Utility.Event] Lock Upload Phase Complete
+03/26/25-13:14:48:900 (15268) 0 [Utility.Event] Processing Miscellaneous section
+03/26/25-13:14:48:979 (22476) 0 [Utility.Event] Starting Servers
+03/26/25-13:14:48:980 (22476) 0 [Utility.Event] Processing Terminal daemon section
+03/26/25-13:14:48:981 (15268) 0 [Utility.Event] Processing Devices section
+03/26/25-13:14:48:983 (15268) 0 [Utility.Event] Processing DeviceSubTypes section
+03/26/25-13:14:48:984 (15268) 0 [Utility.Event] Processing MagTape section
+03/26/25-13:14:48:986 (15268) 0 [Utility.Event] Processing IO section
+03/26/25-13:14:48:988 (15268) 0 [Utility.Event] Processing SQL section
+03/26/25-13:14:48:990 (15268) 0 [Utility.Event] Processing Macro Pre-Processor (MPP) section
+03/26/25-13:14:48:993 (22476) 0 [Utility.Event] Processing Telnet section
+03/26/25-13:14:48:995 (22476) 0 [Utility.Event] Processing Com section
+03/26/25-13:14:48:996 (22476) 0 [Utility.Event] Processing Shadows section (this system as shadow)
+03/26/25-13:14:48:998 (22476) 0 [Utility.Event] Processing Monitor section
+03/26/25-13:14:49:031 (8428) 0 [Utility.Event] Starting TASKMGR
+03/26/25-13:14:49:078 (2420) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor started in %SYS
+03/26/25-13:14:49:078 (19936) 0 [Generic.Event] VSS writer "InterSystems IRIS IRISHEALTH Writer" started
+03/26/25-13:14:49:114 (15268) 0 [Generic.Event] Auditing to c:\intersystems\irishealth\mgr\irisaudit\
+03/26/25-13:14:49:122 (22476) 0 [Utility.Event] Shard license: 0
+03/26/25-13:14:49:134 (15268) 0 [Utility.Event] Executing ^ZSTU routine
+03/26/25-13:14:49:135 (15268) 0 [Utility.Event] Executing ^%ZSTART routine
+03/26/25-13:14:49:122 (22524) 0 [Utility.Event] WorkQueue: Starting work queue daemon parent=22476
+03/26/25-13:14:49:136 (15268) 0 [Utility.Event] Enabling logons
+03/26/25-13:14:49:164 (15268) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hssys\ (SFN 5) read-write.
+03/26/25-13:14:49:178 (15268) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\hslib\ (SFN 6) read-only. Database label is marked read-only. 
+03/26/25-13:14:49:200 (15268) 0 [Utility.Event] %ZHSLIB.HealthShareMgr started items for Failover context. Check relevant log files and Event Logs for outcomes.
+03/26/25-13:14:49:200 (15268) 0 [Utility.Event] IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST [Health:7.2.0-3.m2024.1.2]
+03/26/25-13:14:49:201 (15268) 0 [Utility.Event] Initializing Interoperability during system startup
+03/26/25-13:14:49:201 (15268) 0 [Utility.Event] Not licensed for Interoperability, auto-start skipped.
+03/26/25-13:14:49:220 (19192) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hssyslocaltemp\ (SFN 7) read-write.
+03/26/25-13:14:49:725 (6720) 0 [Utility.Event] Journal File Compression: Compressed C:\InterSystems\IRISHealth\mgr\journal\20250326.002 from 1048576 bytes to 81920 bytes, compression ratio = 12.8
+03/26/25-13:16:59:406 (23964) 0 [Utility.Event] Deleting JONDAX namespace map
+03/26/25-13:16:59:408 (23964) 0 [Utility.Event] Namespace JONDAX has been deleted
+03/26/25-13:18:12:396 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:18:12:422 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:18:12:455 (23964) 0 [Utility.Event] Enabling namespace 'JONDAX' for Interoperability
+03/26/25-13:18:12:564 (23964) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\enslib\ (SFN 8) read-only. Database label is marked read-only. 
+03/26/25-13:18:12:609 (23964) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\jondax\ (SFN 9) read-write.
+03/26/25-13:18:15:277 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:18:15:286 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:18:15:287 (23964) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:18:18:746 (23964) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:18:19:293 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:18:19:333 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:18:19:336 (23964) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:18:23:871 (23964) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:18:24:244 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:18:24:256 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:18:24:286 (23964) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hscustom\ (SFN 10) read-write.
+03/26/25-13:18:25:491 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:18:25:527 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:18:25:528 (23964) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:18:26:005 (23964) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:18:26:456 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:18:26:469 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:18:28:879 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:18:28:924 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:18:28:925 (23964) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:18:29:250 (23964) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:18:30:405 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:18:30:442 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:19:11:731 (23140) 0 [Generic.Event] The WIJ expanded 1 time(s) and added 10MB
+03/26/25-13:20:00:548 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 10 MB requested.
+03/26/25-13:20:00:570 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 10 MB.
+03/26/25-13:21:34:042 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 11 MB requested.
+03/26/25-13:21:34:075 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 11 MB.
+03/26/25-13:23:13:936 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 12 MB requested.
+03/26/25-13:23:13:963 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 12 MB.
+03/26/25-13:23:55:881 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:23:55:903 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:23:55:904 (23964) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:23:56:227 (23964) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:27:04:273 (23964) 0 [Utility.Event] Deleting JONDAX namespace map
+03/26/25-13:27:04:274 (23964) 0 [Utility.Event] Namespace JONDAX has been deleted
+03/26/25-13:27:22:373 (23964) 0 [Generic.Event] Dismounted database c:\intersystems\irishealth\mgr\jondax\ (SFN 9)
+03/26/25-13:28:33:435 (23964) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\jondax\ (SFN 9) read-write.
+03/26/25-13:28:40:759 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:28:40:767 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:28:40:789 (23964) 0 [Utility.Event] Enabling namespace 'JONDAX' for Interoperability
+03/26/25-13:28:43:067 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:28:43:079 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:28:43:080 (23964) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:28:43:197 (23964) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:28:43:528 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:28:43:546 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:28:43:547 (23964) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:28:43:763 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 10 MB requested.
+03/26/25-13:28:43:786 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 10 MB.
+03/26/25-13:28:43:850 (23964) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:28:44:104 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:28:44:117 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:28:44:900 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:28:44:915 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:28:44:916 (23964) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:28:45:181 (23964) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:28:45:458 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:28:45:472 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:28:47:050 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:28:47:066 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:28:47:067 (23964) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:28:47:325 (23964) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:28:48:538 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:28:48:570 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:29:00:247 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 10 MB requested.
+03/26/25-13:29:00:259 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 10 MB.
+03/26/25-13:29:02:049 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 10 MB requested.
+03/26/25-13:29:02:061 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 10 MB.
+03/26/25-13:29:10:025 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 10 MB requested.
+03/26/25-13:29:10:037 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 10 MB.
+03/26/25-13:29:19:864 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 10 MB requested.
+03/26/25-13:29:19:875 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 10 MB.
+03/26/25-13:29:21:662 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 10 MB requested.
+03/26/25-13:29:21:674 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 10 MB.
+03/26/25-13:29:23:647 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 10 MB requested.
+03/26/25-13:29:23:666 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 10 MB.
+03/26/25-13:29:23:853 (23140) 0 [Generic.Event] The WIJ expanded 1 time(s) and added 11MB
+03/26/25-13:29:33:742 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 10 MB requested.
+03/26/25-13:29:33:754 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 10 MB.
+03/26/25-13:29:38:296 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 10 MB requested.
+03/26/25-13:29:38:309 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 10 MB.
+03/26/25-13:29:39:337 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 11 MB requested.
+03/26/25-13:29:39:346 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 11 MB.
+03/26/25-13:29:40:625 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 12 MB requested.
+03/26/25-13:29:40:641 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 12 MB.
+03/26/25-13:29:45:742 (23964) 0 [Utility.Event] Activating JONDAX namespace map
+03/26/25-13:29:45:779 (23964) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/26/25-13:29:45:780 (23964) 0 [Utility.Event] Rebuilding Extent index for namespace JONDAX
+03/26/25-13:29:46:040 (23964) 0 [Utility.Event] Rebuild of Extent index completed
+03/26/25-13:45:11:874 (2420) 0 [Utility.Event] [SYSTEM MONITOR] Alert state cleared.
+03/27/25-10:26:03:972 (27040) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\user\ (SFN 11) read-write.
+03/27/25-10:26:14:912 (10936) 1 [Generic.Event] Warning: Alternate and primary journal directories are the same
+03/27/25-10:26:14:953 (26260) 0 [Generic.Event] INTERSYSTEMS IRIS JOURNALING SYSTEM MESSAGE
+Journaling switched to: c:\intersystems\irishealth\mgr\journal\20250327.001
+03/27/25-10:26:14:982 (3460) 0 [Utility.Event] Purging old application errors
+03/27/25-10:26:15:054 (5156) 2 [Generic.Event] License limit exceeded 1 times since instance start.
+03/27/25-10:26:20:370 (26632) 0 [Utility.Event] Journal File Compression: Compressed c:\intersystems\irishealth\mgr\journal\20250326.003 from 247463936 bytes to 23089152 bytes, compression ratio = 10.7
+03/27/25-10:42:00:600 (12304) 2 [Generic.Event] License limit exceeded 32 times since Thu Mar 27 10:26:15 2025.
+03/27/25-10:57:00:130 (29624) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 10:42:00 2025.
+03/27/25-11:12:00:591 (28088) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 10:57:00 2025.
+03/27/25-11:27:00:056 (26564) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 11:12:00 2025.
+03/27/25-11:42:00:485 (27024) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 11:27:00 2025.
+03/27/25-11:57:00:895 (4352) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 11:42:00 2025.
+03/27/25-12:12:00:376 (19744) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 11:57:00 2025.
+03/27/25-12:27:00:786 (15788) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 12:12:00 2025.
+03/27/25-12:42:00:257 (7312) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 12:27:00 2025.
+03/27/25-12:57:00:690 (11436) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 12:42:00 2025.
+03/27/25-13:12:00:171 (3480) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 12:57:00 2025.
+03/27/25-13:27:00:591 (26080) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 13:12:00 2025.
+03/27/25-13:42:00:072 (24900) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 13:27:00 2025.
+03/27/25-13:57:00:511 (27400) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 13:42:00 2025.
+03/27/25-14:12:00:904 (27776) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 13:57:00 2025.
+03/27/25-14:27:00:385 (25676) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 14:12:00 2025.
+03/27/25-14:42:00:852 (8508) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 14:27:00 2025.
+03/27/25-14:55:56:110 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 14 MB requested.
+03/27/25-14:55:56:130 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 14 MB.
+03/27/25-14:57:00:339 (11980) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 14:42:00 2025.
+03/27/25-15:12:00:848 (18744) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 14:57:00 2025.
+03/27/25-15:13:34:546 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 16 MB requested.
+03/27/25-15:13:34:567 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 16 MB.
+03/27/25-15:13:34:721 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 18 MB requested.
+03/27/25-15:13:34:737 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 18 MB.
+03/27/25-15:13:34:908 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 20 MB requested.
+03/27/25-15:13:34:933 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 20 MB.
+03/27/25-15:13:35:109 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 22 MB requested.
+03/27/25-15:13:35:133 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 22 MB.
+03/27/25-15:13:35:323 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\jondax\. 25 MB requested.
+03/27/25-15:13:35:373 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\jondax\. Expanded by 25 MB.
+03/27/25-15:13:36:214 (23140) 0 [Generic.Event] The WIJ expanded 1 time(s) and added 12MB
+03/27/25-15:27:00:376 (14512) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 15:12:00 2025.
+03/27/25-15:30:54:421 (8632) 0 [Database.StartExpansion] Starting Expansion for database c:\intersystems\irishealth\mgr\. 10 MB requested.
+03/27/25-15:30:54:449 (8632) 0 [Database.FullExpansion] Expansion completed for database c:\intersystems\irishealth\mgr\. Expanded by 10 MB.
+03/27/25-15:34:32:073 (7788) 2 [Utility.Event] ISCLOG: CSPServer [OnCallback]Error in MX.SessionEvents OnStartSession() ns=JONDAX rtn=%SYS.cspServer QZS720T9ST data="$Zerror: <PROTECT>^%SYS.cspServer *^|^^c:\intersystems\irishealth\mgr\jondax\|MX.SessionEvents.1"
+03/27/25-15:42:00:923 (24044) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 15:27:00 2025.
+03/27/25-15:57:00:398 (9424) 2 [Generic.Event] License limit exceeded 30 times since Thu Mar 27 15:42:00 2025.
+03/27/25-16:08:12:879 (7948) 0 [Utility.Event] Shutting down InterSystems IRIS
+03/27/25-16:08:12:908 (7948) 2 [Utility.Event] ISCLOG: CSPServer [OnCallback]Error in MX.SessionEvents OnTimeout() ns=JONDAX rtn=%SYS.cspServer QZS720T9ST data="$Zerror: <PROTECT>^%SYS.cspServer *^|^^c:\intersystems\irishealth\mgr\jondax\|MX.SessionEvents.1"
+03/27/25-16:08:12:993 (2420) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor stopped in %SYS
+03/27/25-16:08:14:012 (7948) 0 [Utility.Event] Notifying Clients
+03/27/25-16:08:14:012 (7948) 0 [Utility.Event] No user shutdown routines to execute
+03/27/25-16:08:14:014 (7948) 0 [Utility.Event] Stopping User Jobs
+03/27/25-16:08:17:593 (19936) 0 [Generic.Event] VSS Writer exiting
+03/27/25-16:08:17:606 (7948) 0 [Utility.Event] Stopping Network Servers
+03/27/25-16:08:17:608 (7948) 0 [Utility.Event] Withdrawing from License Domain
+03/27/25-16:08:17:608 (7948) 0 [Utility.Event] Waiting for users to stop
+03/27/25-16:08:19:611 (7948) 0 [Utility.Event] 0 user processes remain
+03/27/25-16:08:21:634 (7948) 0 [Generic.Event] Auditing stopped
+03/27/25-16:08:21:635 (7948) 0 [Utility.Event] Stopping Client Networking
+03/27/25-16:08:21:636 (7948) 0 [Utility.Event] Updating Journal File
+03/27/25-16:08:21:871 (7948) 0 [Utility.Event] Journal restore not required at next startup
+03/27/25-16:08:21:871 (7948) 0 [Utility.Event] Transaction rollback not required at next startup
+03/27/25-16:08:23:105 (7948) 0 [Utility.Event] Removing database locks
+03/27/25-16:08:23:271 (7948) 0 [Utility.Event] Waiting for database updates to complete
+03/27/25-16:08:23:272 (7948) 0 [Utility.Event] Database updates complete
+03/27/25-16:08:23:273 (7948) 0 [Utility.Event] Stopping System Jobs
+03/27/25-16:08:23:390 (8632) 0 [Generic.Event] EXPDMN exited due to system shutdown
+03/27/25-16:08:23:392 (10936) 0 [Generic.Event] JRNDMN exited due to system shutdown
+03/27/25-16:08:23:393 (17888) 0 [Generic.Event] GARCOL exited due to system shutdown
+03/27/25-16:08:24:015 (19720) 0 [Generic.Event] No blocks pending in WIJ file
+03/27/25-16:08:24:024 (19720) 0 [Generic.Event] WRTDMN exited due to system shutdown
+03/27/25-16:08:24:110 (23140) 0 [Generic.Event] CONTROL exited due to system shutdown
+03/27/25-16:08:25:225 (7948) 0 [Utility.Event] Shutdown complete
+
+
+
+*** Recovery started at Thu Mar 27 16:08:25 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: c:\intersystems\irishealth\mgr\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+
+
+
+*** Recovery started at Thu Mar 27 16:08:32 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: c:\intersystems\irishealth\mgr\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+03/27/25-16:08:32:963 (22416) 0 [Generic.Event] Global buffer setting requires attention.  Auto-selected 25% of total memory.
+03/27/25-16:08:32:969 (22416) 2 [Generic.Event] Failed to allocate 5038MB shared memory using large pages.  Switching to small pages.
+03/27/25-16:08:32:970 (22416) 0 [Generic.Event] Allocated 5038MB shared memory
+03/27/25-16:08:32:970 (22416) 0 [Generic.Event] 4041MB global buffers, 300MB routine buffers, 64MB journal buffers, 311MB buffer descriptors, 300MB heap, 5MB ECP, 16MB miscellaneous
+03/27/25-16:08:32:976 (22416) 0 [Crypto.IntelSandyBridgeAESNI] Intel Sandy Bridge AES-NI instructions detected.
+03/27/25-16:08:32:976 (22416) 0 [SIMD] SIMD optimization level: DEFAULT
+03/27/25-16:08:33:078 (22416) 0 [WriteDaemon.UsingWIJFile] Using WIJ file: c:\intersystems\irishealth\mgr\IRIS.WIJ
+03/27/25-16:08:33:079 (22416) 0 [Generic.Event] Jrn info from prior WIJ (imflags: 0):
+	wdpass: 0
+	jrnwdpass: 3575
+	fspec: c:\intersystems\irishealth\mgr\journal\20250327.001
+	filecnt: 4
+	fileoff: 0
+	prevfcnt: 4
+	prevfileoeff: 0
+	min trans cnt: 4
+	min trans index: 155829728
+03/27/25-16:08:33:111 (22416) 0 [Generic.Event] 
+Startup of InterSystems IRIS [IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST]
+	in c:\intersystems\irishealth\bin\
+	with mgr: c:\intersystems\irishealth\mgr
+	with wij: c:\intersystems\irishealth\mgr\IRIS.WIJ
+	from: c:\intersystems\irishealth\mgr\
+  OS=[NT], version=[6.2.9200], 8 processors.
+  Processor architecture=[9], level=[6], revision=[8c01], active processor mask=[ff].
+  System Initialized.
+03/27/25-16:08:33:130 (26432) 0 [WriteDaemon.Started] Write daemon started.
+03/27/25-16:08:34:488 (23264) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\ (SFN 0) read-write.
+03/27/25-16:08:34:502 (23264) 0 [Utility.Event] Instance 'IRISHEALTH' starting on node Tech by user SYSTEM on 03/27/2025 10:38:34.502 UTC
+03/27/25-16:08:34:502 (23264) 0 [Utility.Event] Using parameters from file 'C:\InterSystems\IRISHealth\iris.cpf'
+03/27/25-16:08:34:505 (23264) 0 [Utility.Event] Loading DLLs
+03/27/25-16:08:34:508 (23264) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\irislib\ (SFN 1) read-only. Database label is marked read-only. 
+03/27/25-16:08:34:511 (23264) 0 [Utility.Event] Switching to temporary %SYS Namespace
+03/27/25-16:08:34:515 (23264) 0 [Utility.Event] Loading Locale enuw (English, United States, Unicode) from objects
+03/27/25-16:08:34:530 (23264) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irislocaldata\ (SFN 2) read-write.
+03/27/25-16:08:34:534 (23264) 0 [Utility.Event] Using OpenSSL 3.1.4 24 Oct 2023
+03/27/25-16:08:34:575 (23264) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\iristemp\ (SFN 3) read-write.
+03/27/25-16:08:34:579 (23264) 0 [Utility.Event] C:\InterSystems\IRISHealth\mgr\iristemp\ initialized as IRISTEMP
+03/27/25-16:08:34:582 (23264) 0 [Utility.Event] Switching to default %SYS Namespace
+03/27/25-16:08:34:637 (5740) 0 [Utility.Event] Log Monitor Started
+03/27/25-16:08:34:769 (24588) 0 [Utility.Event] Clean Daemon Started
+03/27/25-16:08:34:774 (23264) 1 [Utility.Event] Configuration file C:\InterSystems\IRISHealth\iris.cpf is not the same as when last shut down
+03/27/25-16:08:35:967 (23264) 0 [Utility.Event] Updating configuration information from C:\InterSystems\IRISHealth\iris.cpf
+03/27/25-16:08:36:005 (23264) 0 [Utility.Event] No archives configured
+03/27/25-16:08:36:033 (23264) 0 [Utility.Event] Performing Journal Recovery
+03/27/25-16:08:36:049 (23264) 0 [Utility.Event] WIJ indicates no open transactions
+03/27/25-16:08:36:073 (23264) 0 [Utility.Event] START: C:\InterSystems\IRISHealth\mgr\journal\20250327.002
+03/27/25-16:08:36:074 (23264) 1 [Generic.Event] Warning: Alternate and primary journal directories are the same
+03/27/25-16:08:36:091 (23264) 0 [Generic.Event] INTERSYSTEMS IRIS JOURNALING SYSTEM MESSAGE
+Journaling started to: c:\intersystems\irishealth\mgr\journal\20250327.002
+03/27/25-16:08:36:107 (23264) 0 [Utility.Event] Journaling to C:\InterSystems\IRISHealth\mgr\journal\20250327.002 started.
+03/27/25-16:08:36:107 (23264) 0 [Utility.Event] Processing WorkQueues section
+03/27/25-16:08:36:109 (23264) 0 [Utility.Event] Processing Startup section
+03/27/25-16:08:36:130 (10968) 0 [Utility.Event] Purging old application errors
+03/27/25-16:08:36:131 (23264) 0 [Utility.Event] Processing config section
+03/27/25-16:08:36:132 (23264) 2 [Utility.Event] LMF Error: No valid license key. No valid local file found and LicenseID not defined.
+03/27/25-16:08:36:161 (23264) 0 [Utility.Event] Initializing Security system
+03/27/25-16:08:36:195 (23264) 0 [Utility.Event] Processing Network section
+03/27/25-16:08:36:197 (23264) 0 [Utility.Event] Activating Network
+03/27/25-16:08:36:221 (23264) 0 [Utility.Event] Processing Databases section
+03/27/25-16:08:36:231 (23264) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irisaudit\ (SFN 4) read-write.
+03/27/25-16:08:36:239 (23264) 0 [Utility.Event] Processing Namespaces section
+03/27/25-16:08:36:239 (23264) 0 [Utility.Event] Namespaces are up to date
+03/27/25-16:08:36:240 (23264) 0 [Utility.Event] Activating namespaces
+03/27/25-16:08:36:240 (23264) 0 [Utility.Event] Activating new namespace map
+03/27/25-16:08:36:344 (23264) 0 [Utility.Event] Namespace changes have been activated
+03/27/25-16:08:36:372 (25648) 0 [Utility.Event] Starting superserver on port 1972
+03/27/25-16:08:36:372 (23264) 0 [Utility.Event] Network Lock Upload Phase Starting
+03/27/25-16:08:36:374 (23264) 0 [Utility.Event] Lock Upload Phase Complete
+03/27/25-16:08:36:375 (23264) 0 [Utility.Event] Processing Miscellaneous section
+03/27/25-16:08:36:431 (19572) 0 [Utility.Event] Starting Servers
+03/27/25-16:08:36:432 (19572) 0 [Utility.Event] Processing Terminal daemon section
+03/27/25-16:08:36:433 (23264) 0 [Utility.Event] Processing Devices section
+03/27/25-16:08:36:434 (23264) 0 [Utility.Event] Processing DeviceSubTypes section
+03/27/25-16:08:36:435 (23264) 0 [Utility.Event] Processing MagTape section
+03/27/25-16:08:36:436 (23264) 0 [Utility.Event] Processing IO section
+03/27/25-16:08:36:436 (23264) 0 [Utility.Event] Processing SQL section
+03/27/25-16:08:36:437 (23264) 0 [Utility.Event] Processing Macro Pre-Processor (MPP) section
+03/27/25-16:08:36:449 (19572) 0 [Utility.Event] Processing Telnet section
+03/27/25-16:08:36:450 (19572) 0 [Utility.Event] Processing Com section
+03/27/25-16:08:36:450 (19572) 0 [Utility.Event] Processing Shadows section (this system as shadow)
+03/27/25-16:08:36:453 (19572) 0 [Utility.Event] Processing Monitor section
+03/27/25-16:08:36:484 (27968) 0 [Utility.Event] Starting TASKMGR
+03/27/25-16:08:36:508 (23264) 0 [Generic.Event] Auditing to c:\intersystems\irishealth\mgr\irisaudit\
+03/27/25-16:08:36:527 (27828) 0 [Generic.Event] VSS writer "InterSystems IRIS IRISHEALTH Writer" started
+03/27/25-16:08:36:529 (29396) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor started in %SYS
+03/27/25-16:08:36:534 (23264) 0 [Utility.Event] Executing ^ZSTU routine
+03/27/25-16:08:36:535 (23264) 0 [Utility.Event] Executing ^%ZSTART routine
+03/27/25-16:08:36:536 (23264) 0 [Utility.Event] Enabling logons
+03/27/25-16:08:36:541 (23264) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hssys\ (SFN 5) read-write.
+03/27/25-16:08:36:545 (23264) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\hslib\ (SFN 6) read-only. Database label is marked read-only. 
+03/27/25-16:08:36:579 (23264) 0 [Utility.Event] %ZHSLIB.HealthShareMgr started items for Failover context. Check relevant log files and Event Logs for outcomes.
+03/27/25-16:08:36:580 (23264) 0 [Utility.Event] IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST [Health:7.2.0-3.m2024.1.2]
+03/27/25-16:08:36:580 (23264) 0 [Utility.Event] Initializing Interoperability during system startup
+03/27/25-16:08:36:580 (23264) 0 [Utility.Event] Not licensed for Interoperability, auto-start skipped.
+03/27/25-16:08:36:580 (19572) 0 [Utility.Event] Shard license: 0
+03/27/25-16:08:36:581 (8180) 0 [Utility.Event] WorkQueue: Starting work queue daemon parent=19572
+03/27/25-16:08:36:616 (28188) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hssyslocaltemp\ (SFN 7) read-write.
+03/27/25-16:08:37:839 (23876) 0 [Utility.Event] Journal File Compression: Compressed C:\InterSystems\IRISHealth\mgr\journal\20250327.001 from 158334976 bytes to 23830528 bytes, compression ratio = 6.6
+03/27/25-16:10:19:313 (27312) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\jondax\ (SFN 8) read-write.
+03/27/25-16:10:19:335 (27312) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\enslib\ (SFN 9) read-only. Database label is marked read-only. 
+03/27/25-16:10:19:436 (27312) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hscustom\ (SFN 10) read-write.
+03/27/25-16:14:20:515 (26200) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\user\ (SFN 11) read-write.
+03/27/25-16:17:54:039 (26200) 2 [Utility.Event] ISCLOG: CSPServer [OnCallback]Error in MX.SessionEvents OnStartSession() ns=JONDAX rtn=%SYS.cspServer 3jehs9NgxN data="$Zerror: <PROTECT>^%SYS.cspServer *^|^^c:\intersystems\irishealth\mgr\jondax\|MX.SessionEvents.1"
+03/27/25-17:00:30:899 (8832) 2 [Generic.Event] License limit exceeded 1 times since instance start.
+03/27/25-17:19:28:021 (12672) 2 [Generic.Event] License limit exceeded 4 times since Thu Mar 27 17:00:30 2025.
+03/27/25-17:20:42:736 (25252) 2 [Utility.Event] ISCLOG: CSPServer [OnCallback]Error in MX.SessionEvents OnTimeout() ns=JONDAX rtn=%SYS.cspServer 3jehs9NgxN data="$Zerror: <PROTECT>^%SYS.cspServer *^|^^c:\intersystems\irishealth\mgr\jondax\|MX.SessionEvents.1"
+03/27/25-17:42:07:805 (28288) 2 [Generic.Event] License limit exceeded 2 times since Thu Mar 27 17:19:28 2025.
+03/27/25-17:57:49:213 (23656) 2 [Generic.Event] License limit exceeded 2 times since Thu Mar 27 17:42:07 2025.
+03/27/25-18:25:19:025 (9940) 2 [Generic.Event] License limit exceeded 4 times since Thu Mar 27 17:57:49 2025.
+03/27/25-18:47:51:608 (22300) 2 [Generic.Event] License limit exceeded 2 times since Thu Mar 27 18:25:19 2025.
+03/27/25-20:17:07:933 (27324) 2 [Generic.Event] License limit exceeded 4 times since Thu Mar 27 18:47:51 2025.
+03/27/25-21:08:17:173 (10884) 2 [Generic.Event] License limit exceeded 2 times since Thu Mar 27 20:17:07 2025.
+03/27/25-21:33:48:719 (27448) 2 [Generic.Event] License limit exceeded 2 times since Thu Mar 27 21:08:17 2025.
+03/27/25-22:22:44:395 (19292) 2 [Generic.Event] License limit exceeded 4 times since Thu Mar 27 21:33:48 2025.
+03/27/25-22:54:08:454 (28380) 2 [Generic.Event] License limit exceeded 4 times since Thu Mar 27 22:22:44 2025.
+03/28/25-08:14:28:742 (16716) 2 [Generic.Event] License limit exceeded 2 times since Thu Mar 27 22:54:08 2025.
+03/28/25-08:14:29:040 (27912) 1 [Generic.Event] Warning: Alternate and primary journal directories are the same
+03/28/25-08:14:29:063 (4444) 0 [Generic.Event] INTERSYSTEMS IRIS JOURNALING SYSTEM MESSAGE
+Journaling switched to: c:\intersystems\irishealth\mgr\journal\20250328.001
+03/28/25-08:14:29:579 (18200) 0 [Utility.Event] Purging old application errors
+03/28/25-08:14:33:527 (7796) 0 [Utility.Event] Journal File Compression: Compressed c:\intersystems\irishealth\mgr\journal\20250327.002 from 1048576 bytes to 122880 bytes, compression ratio = 8.5
+03/28/25-08:16:08:619 (11784) 2 [Utility.Event] ISCLOG: CSPServer [OnCallback]Error in MX.SessionEvents OnStartSession() ns=JONDAX rtn=%SYS.cspServer 3jehs9NgxN data="$Zerror: <PROTECT>^%SYS.cspServer *^|^^c:\intersystems\irishealth\mgr\jondax\|MX.SessionEvents.1"
+03/28/25-08:20:14:342 (11784) 0 [Utility.Event] Activating JONDAX namespace map
+03/28/25-08:20:14:392 (11784) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/28/25-08:20:43:395 (25420) 0 [Utility.Event] Shutting down InterSystems IRIS
+03/28/25-08:20:43:398 (25420) 2 [Utility.Event] ISCLOG: CSPServer [OnCallback]Error in MX.SessionEvents OnTimeout() ns=JONDAX rtn=%SYS.cspServer 3jehs9NgxN data="$Zerror: <PROTECT>^%SYS.cspServer *^|^^c:\intersystems\irishealth\mgr\jondax\|MX.SessionEvents.1"
+03/28/25-08:20:43:474 (29396) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor stopped in %SYS
+03/28/25-08:20:44:474 (25420) 0 [Utility.Event] Notifying Clients
+03/28/25-08:20:44:475 (25420) 0 [Utility.Event] No user shutdown routines to execute
+03/28/25-08:20:44:492 (25420) 0 [Utility.Event] Stopping User Jobs
+03/28/25-08:20:48:066 (27828) 0 [Generic.Event] VSS Writer exiting
+03/28/25-08:20:48:080 (25420) 0 [Utility.Event] Stopping Network Servers
+03/28/25-08:20:48:082 (25420) 0 [Utility.Event] Withdrawing from License Domain
+03/28/25-08:20:48:083 (25420) 0 [Utility.Event] Waiting for users to stop
+03/28/25-08:20:48:099 (25420) 0 [Generic.Event] Auditing stopped
+03/28/25-08:20:48:100 (25420) 0 [Utility.Event] Stopping Client Networking
+03/28/25-08:20:48:102 (25420) 0 [Utility.Event] Updating Journal File
+03/28/25-08:20:48:312 (25420) 0 [Utility.Event] Journal restore not required at next startup
+03/28/25-08:20:48:313 (25420) 0 [Utility.Event] Transaction rollback not required at next startup
+03/28/25-08:20:49:532 (25420) 0 [Utility.Event] Removing database locks
+03/28/25-08:20:49:544 (25420) 0 [Utility.Event] Waiting for database updates to complete
+03/28/25-08:20:49:545 (25420) 0 [Utility.Event] Database updates complete
+03/28/25-08:20:49:546 (25420) 0 [Utility.Event] Stopping System Jobs
+03/28/25-08:20:49:665 (27912) 0 [Generic.Event] JRNDMN exited due to system shutdown
+03/28/25-08:20:49:665 (25920) 0 [Generic.Event] GARCOL exited due to system shutdown
+03/28/25-08:20:49:665 (25780) 0 [Generic.Event] EXPDMN exited due to system shutdown
+03/28/25-08:20:50:303 (26432) 0 [Generic.Event] No blocks pending in WIJ file
+03/28/25-08:20:50:311 (26432) 0 [Generic.Event] WRTDMN exited due to system shutdown
+03/28/25-08:20:50:391 (22416) 0 [Generic.Event] CONTROL exited due to system shutdown
+03/28/25-08:20:51:495 (25420) 0 [Utility.Event] Shutdown complete
+
+
+
+*** Recovery started at Fri Mar 28 08:20:51 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: c:\intersystems\irishealth\mgr\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+
+
+
+*** Recovery started at Fri Mar 28 08:20:58 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: c:\intersystems\irishealth\mgr\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+03/28/25-08:20:58:478 (11316) 0 [Generic.Event] Global buffer setting requires attention.  Auto-selected 25% of total memory.
+03/28/25-08:20:58:478 (11316) 2 [Generic.Event] Failed to allocate 5038MB shared memory using large pages.  Switching to small pages.
+03/28/25-08:20:58:479 (11316) 0 [Generic.Event] Allocated 5038MB shared memory
+03/28/25-08:20:58:479 (11316) 0 [Generic.Event] 4041MB global buffers, 300MB routine buffers, 64MB journal buffers, 311MB buffer descriptors, 300MB heap, 5MB ECP, 16MB miscellaneous
+03/28/25-08:20:58:482 (11316) 0 [Crypto.IntelSandyBridgeAESNI] Intel Sandy Bridge AES-NI instructions detected.
+03/28/25-08:20:58:483 (11316) 0 [SIMD] SIMD optimization level: DEFAULT
+03/28/25-08:20:58:543 (11316) 0 [WriteDaemon.UsingWIJFile] Using WIJ file: c:\intersystems\irishealth\mgr\IRIS.WIJ
+03/28/25-08:20:58:543 (11316) 0 [Generic.Event] Jrn info from prior WIJ (imflags: 0):
+	wdpass: 0
+	jrnwdpass: 211
+	fspec: c:\intersystems\irishealth\mgr\journal\20250328.001
+	filecnt: 6
+	fileoff: 0
+	prevfcnt: 6
+	prevfileoeff: 0
+	min trans cnt: 6
+	min trans index: 1493524
+03/28/25-08:20:58:561 (11316) 0 [Generic.Event] 
+Startup of InterSystems IRIS [IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST]
+	in c:\intersystems\irishealth\bin\
+	with mgr: c:\intersystems\irishealth\mgr
+	with wij: c:\intersystems\irishealth\mgr\IRIS.WIJ
+	from: c:\intersystems\irishealth\mgr\
+  OS=[NT], version=[6.2.9200], 8 processors.
+  Processor architecture=[9], level=[6], revision=[8c01], active processor mask=[ff].
+  System Initialized.
+03/28/25-08:20:58:588 (25516) 0 [WriteDaemon.Started] Write daemon started.
+03/28/25-08:21:00:021 (29332) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\ (SFN 0) read-write.
+03/28/25-08:21:00:035 (29332) 0 [Utility.Event] Instance 'IRISHEALTH' starting on node Tech by user SYSTEM on 03/28/2025 02:51:00.035 UTC
+03/28/25-08:21:00:035 (29332) 0 [Utility.Event] Using parameters from file 'C:\InterSystems\IRISHealth\iris.cpf'
+03/28/25-08:21:00:039 (29332) 0 [Utility.Event] Loading DLLs
+03/28/25-08:21:00:041 (29332) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\irislib\ (SFN 1) read-only. Database label is marked read-only. 
+03/28/25-08:21:00:044 (29332) 0 [Utility.Event] Switching to temporary %SYS Namespace
+03/28/25-08:21:00:048 (29332) 0 [Utility.Event] Loading Locale enuw (English, United States, Unicode) from objects
+03/28/25-08:21:00:066 (29332) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irislocaldata\ (SFN 2) read-write.
+03/28/25-08:21:00:069 (29332) 0 [Utility.Event] Using OpenSSL 3.1.4 24 Oct 2023
+03/28/25-08:21:00:114 (29332) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\iristemp\ (SFN 3) read-write.
+03/28/25-08:21:00:119 (29332) 0 [Utility.Event] C:\InterSystems\IRISHealth\mgr\iristemp\ initialized as IRISTEMP
+03/28/25-08:21:00:122 (29332) 0 [Utility.Event] Switching to default %SYS Namespace
+03/28/25-08:21:00:166 (14660) 0 [Utility.Event] Log Monitor Started
+03/28/25-08:21:00:298 (25868) 0 [Utility.Event] Clean Daemon Started
+03/28/25-08:21:00:311 (29332) 0 [Utility.Event] No archives configured
+03/28/25-08:21:00:326 (29332) 0 [Utility.Event] Performing Journal Recovery
+03/28/25-08:21:00:333 (29332) 0 [Utility.Event] WIJ indicates no open transactions
+03/28/25-08:21:00:358 (29332) 0 [Utility.Event] START: C:\InterSystems\IRISHealth\mgr\journal\20250328.002
+03/28/25-08:21:00:359 (29332) 1 [Generic.Event] Warning: Alternate and primary journal directories are the same
+03/28/25-08:21:00:366 (29332) 0 [Generic.Event] INTERSYSTEMS IRIS JOURNALING SYSTEM MESSAGE
+Journaling started to: c:\intersystems\irishealth\mgr\journal\20250328.002
+03/28/25-08:21:00:366 (29332) 0 [Utility.Event] Journaling to C:\InterSystems\IRISHealth\mgr\journal\20250328.002 started.
+03/28/25-08:21:00:367 (29332) 0 [Utility.Event] Processing WorkQueues section
+03/28/25-08:21:00:369 (29332) 0 [Utility.Event] Processing Startup section
+03/28/25-08:21:00:388 (18264) 0 [Utility.Event] Purging old application errors
+03/28/25-08:21:00:389 (29332) 0 [Utility.Event] Processing config section
+03/28/25-08:21:00:394 (29332) 2 [Utility.Event] LMF Error: No valid license key. No valid local file found and LicenseID not defined.
+03/28/25-08:21:00:422 (29332) 0 [Utility.Event] Initializing Security system
+03/28/25-08:21:00:450 (29332) 0 [Utility.Event] Processing Network section
+03/28/25-08:21:00:453 (29332) 0 [Utility.Event] Activating Network
+03/28/25-08:21:00:472 (29332) 0 [Utility.Event] Processing Databases section
+03/28/25-08:21:00:482 (29332) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irisaudit\ (SFN 4) read-write.
+03/28/25-08:21:00:489 (29332) 0 [Utility.Event] Processing Namespaces section
+03/28/25-08:21:00:489 (29332) 0 [Utility.Event] Namespaces are up to date
+03/28/25-08:21:00:489 (29332) 0 [Utility.Event] Activating namespaces
+03/28/25-08:21:00:491 (29332) 0 [Utility.Event] Activating new namespace map
+03/28/25-08:21:00:602 (29332) 0 [Utility.Event] Namespace changes have been activated
+03/28/25-08:21:00:624 (23048) 0 [Utility.Event] Starting superserver on port 1972
+03/28/25-08:21:00:624 (29332) 0 [Utility.Event] Network Lock Upload Phase Starting
+03/28/25-08:21:00:625 (29332) 0 [Utility.Event] Lock Upload Phase Complete
+03/28/25-08:21:00:625 (29332) 0 [Utility.Event] Processing Miscellaneous section
+03/28/25-08:21:00:675 (21872) 0 [Utility.Event] Starting Servers
+03/28/25-08:21:00:675 (21872) 0 [Utility.Event] Processing Terminal daemon section
+03/28/25-08:21:00:676 (29332) 0 [Utility.Event] Processing Devices section
+03/28/25-08:21:00:678 (29332) 0 [Utility.Event] Processing DeviceSubTypes section
+03/28/25-08:21:00:679 (29332) 0 [Utility.Event] Processing MagTape section
+03/28/25-08:21:00:682 (29332) 0 [Utility.Event] Processing IO section
+03/28/25-08:21:00:683 (29332) 0 [Utility.Event] Processing SQL section
+03/28/25-08:21:00:685 (29332) 0 [Utility.Event] Processing Macro Pre-Processor (MPP) section
+03/28/25-08:21:00:690 (21872) 0 [Utility.Event] Processing Telnet section
+03/28/25-08:21:00:691 (21872) 0 [Utility.Event] Processing Com section
+03/28/25-08:21:00:693 (21872) 0 [Utility.Event] Processing Shadows section (this system as shadow)
+03/28/25-08:21:00:695 (21872) 0 [Utility.Event] Processing Monitor section
+03/28/25-08:21:00:721 (12604) 0 [Utility.Event] Starting TASKMGR
+03/28/25-08:21:00:760 (25984) 0 [Generic.Event] VSS writer "InterSystems IRIS IRISHEALTH Writer" started
+03/28/25-08:21:00:762 (6168) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor started in %SYS
+03/28/25-08:21:00:791 (29332) 0 [Generic.Event] Auditing to c:\intersystems\irishealth\mgr\irisaudit\
+03/28/25-08:21:00:798 (12156) 0 [Utility.Event] WorkQueue: Starting work queue daemon parent=21872
+03/28/25-08:21:00:810 (29332) 0 [Utility.Event] Executing ^ZSTU routine
+03/28/25-08:21:00:810 (29332) 0 [Utility.Event] Executing ^%ZSTART routine
+03/28/25-08:21:00:811 (29332) 0 [Utility.Event] Enabling logons
+03/28/25-08:21:00:798 (21872) 0 [Utility.Event] Shard license: 0
+03/28/25-08:21:00:815 (29332) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hssys\ (SFN 5) read-write.
+03/28/25-08:21:00:818 (29332) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\hslib\ (SFN 6) read-only. Database label is marked read-only. 
+03/28/25-08:21:00:841 (29332) 0 [Utility.Event] %ZHSLIB.HealthShareMgr started items for Failover context. Check relevant log files and Event Logs for outcomes.
+03/28/25-08:21:00:841 (29332) 0 [Utility.Event] IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST [Health:7.2.0-3.m2024.1.2]
+03/28/25-08:21:00:842 (29332) 0 [Utility.Event] Initializing Interoperability during system startup
+03/28/25-08:21:00:842 (29332) 0 [Utility.Event] Not licensed for Interoperability, auto-start skipped.
+03/28/25-08:21:00:867 (25612) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hssyslocaltemp\ (SFN 7) read-write.
+03/28/25-08:21:01:531 (27384) 0 [Utility.Event] Journal File Compression: Compressed C:\InterSystems\IRISHealth\mgr\journal\20250328.001 from 6291456 bytes to 200704 bytes, compression ratio = 31.3
+03/28/25-08:21:14:291 (3104) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\jondax\ (SFN 8) read-write.
+03/28/25-08:21:14:333 (3104) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hscustom\ (SFN 9) read-write.
+03/28/25-08:21:14:340 (3104) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\enslib\ (SFN 10) read-only. Database label is marked read-only. 
+03/28/25-08:21:14:457 (3104) 0 [Utility.Event] Activating JONDAX namespace map
+03/28/25-08:21:14:501 (3104) 0 [Utility.Event] Namespace JONDAX changes have been activated
+03/28/25-08:22:41:856 (12832) 2 [Utility.Event] ISCLOG: CSPServer [OnCallback]Error in MX.SessionEvents OnStartSession() ns=JONDAX rtn=%SYS.cspServer 3jehs9NgxN data="$Zerror: <PROTECT>^%SYS.cspServer *^|^^c:\intersystems\irishealth\mgr\jondax\|MX.SessionEvents.1"
+03/28/25-08:23:35:687 (12832) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\user\ (SFN 11) read-write.
+03/28/25-08:37:30:567 (15212) 0 [Utility.Event] Shutting down InterSystems IRIS
+03/28/25-08:37:30:640 (6168) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor stopped in %SYS
+03/28/25-08:37:31:648 (15212) 0 [Utility.Event] Notifying Clients
+03/28/25-08:37:31:649 (15212) 0 [Utility.Event] No user shutdown routines to execute
+03/28/25-08:37:31:680 (15212) 0 [Utility.Event] Stopping User Jobs
+03/28/25-08:37:35:256 (25984) 0 [Generic.Event] VSS Writer exiting
+03/28/25-08:37:35:257 (15212) 0 [Utility.Event] Stopping Network Servers
+03/28/25-08:37:35:259 (15212) 0 [Utility.Event] Withdrawing from License Domain
+03/28/25-08:37:35:259 (15212) 0 [Utility.Event] Waiting for users to stop
+03/28/25-08:37:35:284 (15212) 0 [Generic.Event] Auditing stopped
+03/28/25-08:37:35:285 (15212) 0 [Utility.Event] Stopping Client Networking
+03/28/25-08:37:35:287 (15212) 0 [Utility.Event] Updating Journal File
+03/28/25-08:37:35:502 (15212) 0 [Utility.Event] Journal restore not required at next startup
+03/28/25-08:37:35:502 (15212) 0 [Utility.Event] Transaction rollback not required at next startup
+03/28/25-08:37:36:746 (15212) 0 [Utility.Event] Removing database locks
+03/28/25-08:37:36:760 (15212) 0 [Utility.Event] Waiting for database updates to complete
+03/28/25-08:37:36:761 (15212) 0 [Utility.Event] Database updates complete
+03/28/25-08:37:36:762 (15212) 0 [Utility.Event] Stopping System Jobs
+03/28/25-08:37:36:871 (10420) 0 [Generic.Event] EXPDMN exited due to system shutdown
+03/28/25-08:37:36:871 (15240) 0 [Generic.Event] JRNDMN exited due to system shutdown
+03/28/25-08:37:36:871 (14548) 0 [Generic.Event] GARCOL exited due to system shutdown
+03/28/25-08:37:37:494 (25516) 0 [Generic.Event] No blocks pending in WIJ file
+03/28/25-08:37:37:521 (25516) 0 [Generic.Event] WRTDMN exited due to system shutdown
+03/28/25-08:37:37:593 (11316) 0 [Generic.Event] CONTROL exited due to system shutdown
+03/28/25-08:37:38:712 (15212) 0 [Utility.Event] Shutdown complete
+
+
+
+*** Recovery started at Fri Mar 28 08:37:39 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: c:\intersystems\irishealth\mgr\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+
+
+
+*** Recovery started at Fri Mar 28 08:37:45 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: c:\intersystems\irishealth\mgr\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)
+03/28/25-08:37:45:610 (7928) 0 [Generic.Event] Global buffer setting requires attention.  Auto-selected 25% of total memory.
+03/28/25-08:37:45:611 (7928) 2 [Generic.Event] Failed to allocate 5038MB shared memory using large pages.  Switching to small pages.
+03/28/25-08:37:45:611 (7928) 0 [Generic.Event] Allocated 5038MB shared memory
+03/28/25-08:37:45:612 (7928) 0 [Generic.Event] 4041MB global buffers, 300MB routine buffers, 64MB journal buffers, 311MB buffer descriptors, 300MB heap, 5MB ECP, 16MB miscellaneous
+03/28/25-08:37:45:616 (7928) 0 [Crypto.IntelSandyBridgeAESNI] Intel Sandy Bridge AES-NI instructions detected.
+03/28/25-08:37:45:617 (7928) 0 [SIMD] SIMD optimization level: DEFAULT
+03/28/25-08:37:45:704 (7928) 0 [WriteDaemon.UsingWIJFile] Using WIJ file: c:\intersystems\irishealth\mgr\IRIS.WIJ
+03/28/25-08:37:45:705 (7928) 0 [Generic.Event] Jrn info from prior WIJ (imflags: 0):
+	wdpass: 0
+	jrnwdpass: 88
+	fspec: c:\intersystems\irishealth\mgr\journal\20250328.002
+	filecnt: 7
+	fileoff: 0
+	prevfcnt: 7
+	prevfileoeff: 0
+	min trans cnt: 7
+	min trans index: 1282612
+03/28/25-08:37:45:726 (7928) 0 [Generic.Event] 
+Startup of InterSystems IRIS [IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST]
+	in c:\intersystems\irishealth\bin\
+	with mgr: c:\intersystems\irishealth\mgr
+	with wij: c:\intersystems\irishealth\mgr\IRIS.WIJ
+	from: c:\intersystems\irishealth\mgr\
+  OS=[NT], version=[6.2.9200], 8 processors.
+  Processor architecture=[9], level=[6], revision=[8c01], active processor mask=[ff].
+  System Initialized.
+03/28/25-08:37:45:744 (23328) 0 [WriteDaemon.Started] Write daemon started.
+03/28/25-08:37:47:153 (13420) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\ (SFN 0) read-write.
+03/28/25-08:37:47:211 (13420) 0 [Utility.Event] Instance 'IRISHEALTH' starting on node Tech by user SYSTEM on 03/28/2025 03:07:47.211 UTC
+03/28/25-08:37:47:211 (13420) 0 [Utility.Event] Using parameters from file 'C:\InterSystems\IRISHealth\iris.cpf'
+03/28/25-08:37:47:215 (13420) 0 [Utility.Event] Loading DLLs
+03/28/25-08:37:47:219 (13420) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\irislib\ (SFN 1) read-only. Database label is marked read-only. 
+03/28/25-08:37:47:222 (13420) 0 [Utility.Event] Switching to temporary %SYS Namespace
+03/28/25-08:37:47:226 (13420) 0 [Utility.Event] Loading Locale enuw (English, United States, Unicode) from objects
+03/28/25-08:37:47:244 (13420) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irislocaldata\ (SFN 2) read-write.
+03/28/25-08:37:47:247 (13420) 0 [Utility.Event] Using OpenSSL 3.1.4 24 Oct 2023
+03/28/25-08:37:47:285 (13420) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\iristemp\ (SFN 3) read-write.
+03/28/25-08:37:47:290 (13420) 0 [Utility.Event] C:\InterSystems\IRISHealth\mgr\iristemp\ initialized as IRISTEMP
+03/28/25-08:37:47:293 (13420) 0 [Utility.Event] Switching to default %SYS Namespace
+03/28/25-08:37:47:341 (27260) 0 [Utility.Event] Log Monitor Started
+03/28/25-08:37:47:464 (24324) 0 [Utility.Event] Clean Daemon Started
+03/28/25-08:37:47:477 (13420) 0 [Utility.Event] No archives configured
+03/28/25-08:37:47:493 (13420) 0 [Utility.Event] Performing Journal Recovery
+03/28/25-08:37:47:498 (13420) 0 [Utility.Event] WIJ indicates no open transactions
+03/28/25-08:37:47:525 (13420) 0 [Utility.Event] START: C:\InterSystems\IRISHealth\mgr\journal\20250328.003
+03/28/25-08:37:47:526 (13420) 1 [Generic.Event] Warning: Alternate and primary journal directories are the same
+03/28/25-08:37:47:535 (13420) 0 [Generic.Event] INTERSYSTEMS IRIS JOURNALING SYSTEM MESSAGE
+Journaling started to: c:\intersystems\irishealth\mgr\journal\20250328.003
+03/28/25-08:37:47:536 (13420) 0 [Utility.Event] Journaling to C:\InterSystems\IRISHealth\mgr\journal\20250328.003 started.
+03/28/25-08:37:47:537 (13420) 0 [Utility.Event] Processing WorkQueues section
+03/28/25-08:37:47:540 (13420) 0 [Utility.Event] Processing Startup section
+03/28/25-08:37:47:569 (23464) 0 [Utility.Event] Purging old application errors
+03/28/25-08:37:47:570 (13420) 0 [Utility.Event] Processing config section
+03/28/25-08:37:47:573 (13420) 2 [Utility.Event] LMF Error: No valid license key. No valid local file found and LicenseID not defined.
+03/28/25-08:37:47:601 (13420) 0 [Utility.Event] Initializing Security system
+03/28/25-08:37:47:624 (13420) 0 [Utility.Event] Processing Network section
+03/28/25-08:37:47:626 (13420) 0 [Utility.Event] Activating Network
+03/28/25-08:37:47:645 (13420) 0 [Utility.Event] Processing Databases section
+03/28/25-08:37:47:659 (13420) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\irisaudit\ (SFN 4) read-write.
+03/28/25-08:37:47:665 (13420) 0 [Utility.Event] Processing Namespaces section
+03/28/25-08:37:47:666 (13420) 0 [Utility.Event] Namespaces are up to date
+03/28/25-08:37:47:666 (13420) 0 [Utility.Event] Activating namespaces
+03/28/25-08:37:47:667 (13420) 0 [Utility.Event] Activating new namespace map
+03/28/25-08:37:47:760 (13420) 0 [Utility.Event] Namespace changes have been activated
+03/28/25-08:37:47:792 (9728) 0 [Utility.Event] Starting superserver on port 1972
+03/28/25-08:37:47:793 (13420) 0 [Utility.Event] Network Lock Upload Phase Starting
+03/28/25-08:37:47:805 (13420) 0 [Utility.Event] Lock Upload Phase Complete
+03/28/25-08:37:47:806 (13420) 0 [Utility.Event] Processing Miscellaneous section
+03/28/25-08:37:47:851 (21672) 0 [Utility.Event] Starting Servers
+03/28/25-08:37:47:851 (21672) 0 [Utility.Event] Processing Terminal daemon section
+03/28/25-08:37:47:852 (13420) 0 [Utility.Event] Processing Devices section
+03/28/25-08:37:47:854 (13420) 0 [Utility.Event] Processing DeviceSubTypes section
+03/28/25-08:37:47:855 (13420) 0 [Utility.Event] Processing MagTape section
+03/28/25-08:37:47:857 (13420) 0 [Utility.Event] Processing IO section
+03/28/25-08:37:47:858 (13420) 0 [Utility.Event] Processing SQL section
+03/28/25-08:37:47:860 (13420) 0 [Utility.Event] Processing Macro Pre-Processor (MPP) section
+03/28/25-08:37:47:868 (21672) 0 [Utility.Event] Processing Telnet section
+03/28/25-08:37:47:869 (21672) 0 [Utility.Event] Processing Com section
+03/28/25-08:37:47:870 (21672) 0 [Utility.Event] Processing Shadows section (this system as shadow)
+03/28/25-08:37:47:873 (21672) 0 [Utility.Event] Processing Monitor section
+03/28/25-08:37:47:901 (1920) 0 [Utility.Event] Starting TASKMGR
+03/28/25-08:37:47:940 (23384) 0 [Generic.Event] VSS writer "InterSystems IRIS IRISHEALTH Writer" started
+03/28/25-08:37:47:944 (26144) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor started in %SYS
+03/28/25-08:37:47:968 (13420) 0 [Generic.Event] Auditing to c:\intersystems\irishealth\mgr\irisaudit\
+03/28/25-08:37:47:987 (21672) 0 [Utility.Event] Shard license: 0
+03/28/25-08:37:47:987 (29532) 0 [Utility.Event] WorkQueue: Starting work queue daemon parent=21672
+03/28/25-08:37:47:994 (13420) 0 [Utility.Event] Executing ^ZSTU routine
+03/28/25-08:37:47:995 (13420) 0 [Utility.Event] Executing ^%ZSTART routine
+03/28/25-08:37:47:996 (13420) 0 [Utility.Event] Enabling logons
+03/28/25-08:37:48:002 (13420) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hssys\ (SFN 5) read-write.
+03/28/25-08:37:48:005 (13420) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\hslib\ (SFN 6) read-only. Database label is marked read-only. 
+03/28/25-08:37:48:032 (13420) 0 [Utility.Event] %ZHSLIB.HealthShareMgr started items for Failover context. Check relevant log files and Event Logs for outcomes.
+03/28/25-08:37:48:033 (13420) 0 [Utility.Event] IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST [Health:7.2.0-3.m2024.1.2]
+03/28/25-08:37:48:033 (13420) 0 [Utility.Event] Initializing Interoperability during system startup
+03/28/25-08:37:48:033 (13420) 0 [Utility.Event] Not licensed for Interoperability, auto-start skipped.
+03/28/25-08:37:48:055 (880) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hssyslocaltemp\ (SFN 7) read-write.
+03/28/25-08:37:48:707 (13076) 0 [Utility.Event] Journal File Compression: Compressed C:\InterSystems\IRISHealth\mgr\journal\20250328.002 from 6291456 bytes to 176128 bytes, compression ratio = 35.7
+03/28/25-08:56:00:654 (26144) 1 [Utility.Event] [SYSTEM MONITOR] CPUusage Warning: CPUusage = 75 ( Warnvalue is 75).
+03/28/25-09:06:07:462 (26144) 0 [Utility.Event] [SYSTEM MONITOR] CPUusage ok
+03/28/25-09:08:08:804 (26144) 0 [Utility.Event] [SYSTEM MONITOR] Alert state cleared.
+03/28/25-09:09:56:544 (20084) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\jondax\ (SFN 8) read-write.
+03/28/25-09:09:56:558 (20084) 0 [Utility.Event] OnStartSession()
+03/28/25-09:09:56:575 (20084) 0 [Database.MountedRO] Mounted database c:\intersystems\irishealth\mgr\enslib\ (SFN 9) read-only. Database label is marked read-only. 
+03/28/25-09:11:18:062 (26988) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\hscustom\ (SFN 10) read-write.
+03/28/25-09:36:43:281 (20084) 0 [Database.MountedRW] Mounted database c:\intersystems\irishealth\mgr\user\ (SFN 11) read-write.
+03/28/25-10:00:00:898 (25496) 2 [Generic.Event] License limit exceeded 1 times since instance start.
+03/28/25-10:15:00:426 (13084) 2 [Generic.Event] License limit exceeded 30 times since Fri Mar 28 10:00:00 2025.
+03/28/25-10:30:00:865 (19956) 2 [Generic.Event] License limit exceeded 30 times since Fri Mar 28 10:15:00 2025.
+03/28/25-10:45:00:342 (18692) 2 [Generic.Event] License limit exceeded 30 times since Fri Mar 28 10:30:00 2025.
+03/28/25-11:00:00:861 (27500) 2 [Generic.Event] License limit exceeded 30 times since Fri Mar 28 10:45:00 2025.
+03/28/25-11:15:00:412 (6136) 2 [Generic.Event] License limit exceeded 30 times since Fri Mar 28 11:00:00 2025.
+03/28/25-11:30:00:954 (14192) 2 [Generic.Event] License limit exceeded 30 times since Fri Mar 28 11:15:00 2025.
+03/28/25-12:44:12:040 (8856) 2 [Generic.Event] License limit exceeded 14 times since Fri Mar 28 11:30:00 2025.
+03/30/25-17:11:39:816 (29748) 2 [Generic.Event] License limit exceeded 2 times since Fri Mar 28 12:44:12 2025.
+03/30/25-17:27:00:976 (30148) 2 [Generic.Event] License limit exceeded 32 times since Sun Mar 30 17:11:39 2025.
+03/30/25-17:33:27:299 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\) Warning: DiskPercentFull = 95.17 ( Warnvalue is 95).
+03/30/25-17:33:27:314 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\enslib\) Warning: DiskPercentFull = 95.17 ( Warnvalue is 95).
+03/30/25-17:33:27:314 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hscustom\) Warning: DiskPercentFull = 95.17 ( Warnvalue is 95).
+03/30/25-17:33:27:315 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hslib\) Warning: DiskPercentFull = 95.17 ( Warnvalue is 95).
+03/30/25-17:33:27:315 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hssys\) Warning: DiskPercentFull = 95.17 ( Warnvalue is 95).
+03/30/25-17:33:27:317 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hssyslocaltemp\) Warning: DiskPercentFull = 95.17 ( Warnvalue is 95).
+03/30/25-17:33:27:318 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\irisaudit\) Warning: DiskPercentFull = 95.17 ( Warnvalue is 95).
+03/30/25-17:33:27:319 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\iristemp\) Warning: DiskPercentFull = 95.17 ( Warnvalue is 95).
+03/30/25-17:33:27:320 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\jondax\) Warning: DiskPercentFull = 95.17 ( Warnvalue is 95).
+03/30/25-17:33:27:320 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\user\) Warning: DiskPercentFull = 95.17 ( Warnvalue is 95).
+03/30/25-17:42:00:505 (24400) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 17:27:00 2025.
+03/30/25-17:55:42:723 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\) ok
+03/30/25-17:55:42:724 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\enslib\) ok
+03/30/25-17:55:42:725 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hscustom\) ok
+03/30/25-17:55:42:725 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hslib\) ok
+03/30/25-17:55:42:726 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hssys\) ok
+03/30/25-17:55:42:726 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hssyslocaltemp\) ok
+03/30/25-17:55:42:727 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\irisaudit\) ok
+03/30/25-17:55:42:728 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\iristemp\) ok
+03/30/25-17:55:42:728 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\jondax\) ok
+03/30/25-17:55:42:729 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\user\) ok
+03/30/25-17:57:00:960 (21700) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 17:42:00 2025.
+03/30/25-18:12:00:465 (11824) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 17:57:00 2025.
+03/30/25-18:27:00:885 (9152) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 18:12:00 2025.
+03/30/25-18:40:13:548 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\) Warning: DiskPercentFull = 95.00 ( Warnvalue is 95).
+03/30/25-18:40:13:549 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\enslib\) Warning: DiskPercentFull = 95.00 ( Warnvalue is 95).
+03/30/25-18:40:13:549 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hscustom\) Warning: DiskPercentFull = 95.00 ( Warnvalue is 95).
+03/30/25-18:40:13:549 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hslib\) Warning: DiskPercentFull = 95.00 ( Warnvalue is 95).
+03/30/25-18:40:13:550 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hssys\) Warning: DiskPercentFull = 95.00 ( Warnvalue is 95).
+03/30/25-18:40:13:550 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hssyslocaltemp\) Warning: DiskPercentFull = 95.00 ( Warnvalue is 95).
+03/30/25-18:40:13:550 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\irisaudit\) Warning: DiskPercentFull = 95.00 ( Warnvalue is 95).
+03/30/25-18:40:13:551 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\iristemp\) Warning: DiskPercentFull = 95.00 ( Warnvalue is 95).
+03/30/25-18:40:13:552 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\jondax\) Warning: DiskPercentFull = 95.00 ( Warnvalue is 95).
+03/30/25-18:40:13:552 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\user\) Warning: DiskPercentFull = 95.00 ( Warnvalue is 95).
+03/30/25-18:42:00:329 (24944) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 18:27:00 2025.
+03/30/25-18:57:00:806 (10480) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 18:42:00 2025.
+03/30/25-18:58:56:692 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\) ok
+03/30/25-18:58:56:693 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\enslib\) ok
+03/30/25-18:58:56:694 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hscustom\) ok
+03/30/25-18:58:56:694 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hslib\) ok
+03/30/25-18:58:56:695 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hssys\) ok
+03/30/25-18:58:56:696 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hssyslocaltemp\) ok
+03/30/25-18:58:56:696 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\irisaudit\) ok
+03/30/25-18:58:56:697 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\iristemp\) ok
+03/30/25-18:58:56:697 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\jondax\) ok
+03/30/25-18:58:56:698 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\user\) ok
+03/30/25-19:12:00:253 (4660) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 18:57:00 2025.
+03/30/25-19:27:00:694 (11720) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 19:12:00 2025.
+03/30/25-19:42:00:119 (27548) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 19:27:00 2025.
+03/30/25-19:57:00:554 (29096) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 19:42:00 2025.
+03/30/25-20:12:00:989 (25188) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 19:57:00 2025.
+03/30/25-20:27:00:454 (29672) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 20:12:00 2025.
+03/30/25-20:42:00:894 (26060) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 20:27:00 2025.
+03/30/25-20:57:00:309 (18184) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 20:42:00 2025.
+03/30/25-21:12:00:719 (20020) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 20:57:00 2025.
+03/30/25-21:27:00:150 (476) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 21:12:00 2025.
+03/30/25-21:42:00:581 (17684) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 21:27:00 2025.
+03/30/25-21:57:01:012 (5792) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 21:42:00 2025.
+03/30/25-22:13:00:504 (2908) 2 [Generic.Event] License limit exceeded 32 times since Sun Mar 30 21:57:01 2025.
+03/30/25-22:28:00:997 (7268) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 22:13:00 2025.
+03/30/25-22:43:00:450 (28920) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 22:28:00 2025.
+03/30/25-22:58:01:021 (10140) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 22:43:00 2025.
+03/30/25-23:14:00:591 (30136) 2 [Generic.Event] License limit exceeded 32 times since Sun Mar 30 22:58:01 2025.
+03/30/25-23:29:00:092 (11608) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 23:14:00 2025.
+03/30/25-23:44:00:642 (10184) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 23:29:00 2025.
+03/30/25-23:59:00:181 (2768) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 23:44:00 2025.
+03/31/25-00:00:00:338 (3140) 1 [Generic.Event] Warning: Alternate and primary journal directories are the same
+03/31/25-00:00:00:378 (19052) 0 [Generic.Event] INTERSYSTEMS IRIS JOURNALING SYSTEM MESSAGE
+Journaling switched to: c:\intersystems\irishealth\mgr\journal\20250331.001
+03/31/25-00:00:06:591 (20788) 0 [Utility.Event] Journal File Compression: Compressed c:\intersystems\irishealth\mgr\journal\20250328.003 from 6291456 bytes to 323584 bytes, compression ratio = 19.4
+03/31/25-00:14:00:767 (21128) 2 [Generic.Event] License limit exceeded 30 times since Sun Mar 30 23:59:00 2025.
+03/31/25-00:29:00:274 (16172) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 00:14:00 2025.
+03/31/25-00:30:00:348 (16040) 0 [Utility.Event] DELETE: C:\InterSystems\IRISHealth\mgr\journal\20250326.001
+03/31/25-00:30:00:349 (16040) 0 [Utility.Event] DELETE: C:\InterSystems\IRISHealth\mgr\journal\20250326.002
+03/31/25-00:30:00:351 (16040) 0 [Utility.Event] DELETE: c:\intersystems\irishealth\mgr\journal\20250326.003
+03/31/25-00:30:00:352 (16040) 0 [Utility.Event] DELETE: C:\InterSystems\IRISHealth\mgr\journal\20250327.001
+03/31/25-00:30:00:353 (16040) 0 [Utility.Event] DELETE: c:\intersystems\irishealth\mgr\journal\20250327.002
+03/31/25-00:30:00:354 (16040) 0 [Utility.Event] DELETE: C:\InterSystems\IRISHealth\mgr\journal\20250328.001
+03/31/25-00:30:00:355 (16040) 0 [Utility.Event] DELETE: c:\intersystems\irishealth\mgr\journal\20250328.002
+03/31/25-00:44:00:764 (22724) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 00:29:00 2025.
+03/31/25-00:59:00:293 (15020) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 00:44:00 2025.
+03/31/25-01:00:00:363 (12524) 0 [Utility.Event] Purging old application errors
+03/31/25-01:14:00:879 (14212) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 00:59:00 2025.
+03/31/25-01:29:00:387 (6720) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 01:14:00 2025.
+03/31/25-01:44:00:957 (30092) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 01:29:00 2025.
+03/31/25-01:59:00:506 (1636) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 01:44:00 2025.
+03/31/25-02:14:00:060 (14584) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 01:59:00 2025.
+03/31/25-02:29:00:573 (5424) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 02:14:00 2025.
+03/31/25-02:44:00:972 (27912) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 02:29:00 2025.
+03/31/25-02:59:00:511 (14584) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 02:44:00 2025.
+03/31/25-03:14:01:040 (27476) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 02:59:00 2025.
+03/31/25-03:30:00:614 (17232) 2 [Generic.Event] License limit exceeded 32 times since Mon Mar 31 03:14:01 2025.
+03/31/25-03:45:00:124 (23100) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 03:30:00 2025.
+03/31/25-04:00:00:682 (4848) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 03:45:00 2025.
+03/31/25-04:15:00:188 (25048) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 04:00:00 2025.
+03/31/25-04:30:00:700 (8760) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 04:15:00 2025.
+03/31/25-04:45:00:269 (14460) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 04:30:00 2025.
+03/31/25-05:00:00:786 (8728) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 04:45:00 2025.
+03/31/25-05:15:00:322 (11564) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 05:00:00 2025.
+03/31/25-05:30:00:858 (2796) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 05:15:00 2025.
+03/31/25-05:45:00:398 (27256) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 05:30:00 2025.
+03/31/25-06:00:00:919 (6672) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 05:45:00 2025.
+03/31/25-06:15:00:400 (27264) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 06:00:00 2025.
+03/31/25-06:30:01:068 (16900) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 06:15:00 2025.
+03/31/25-06:46:00:752 (2956) 2 [Generic.Event] License limit exceeded 32 times since Mon Mar 31 06:30:01 2025.
+03/31/25-07:01:00:419 (29364) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 06:46:00 2025.
+03/31/25-07:03:56:458 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\) Warning: DiskPercentFull = 95.01 ( Warnvalue is 95).
+03/31/25-07:03:56:462 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\enslib\) Warning: DiskPercentFull = 95.01 ( Warnvalue is 95).
+03/31/25-07:03:56:464 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hscustom\) Warning: DiskPercentFull = 95.01 ( Warnvalue is 95).
+03/31/25-07:03:56:469 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hslib\) Warning: DiskPercentFull = 95.01 ( Warnvalue is 95).
+03/31/25-07:03:56:474 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hssys\) Warning: DiskPercentFull = 95.01 ( Warnvalue is 95).
+03/31/25-07:03:56:476 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hssyslocaltemp\) Warning: DiskPercentFull = 95.01 ( Warnvalue is 95).
+03/31/25-07:03:56:485 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\irisaudit\) Warning: DiskPercentFull = 95.01 ( Warnvalue is 95).
+03/31/25-07:03:56:490 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\iristemp\) Warning: DiskPercentFull = 95.01 ( Warnvalue is 95).
+03/31/25-07:03:56:496 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\jondax\) Warning: DiskPercentFull = 95.01 ( Warnvalue is 95).
+03/31/25-07:03:56:500 (26144) 1 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\user\) Warning: DiskPercentFull = 95.01 ( Warnvalue is 95).
+03/31/25-07:14:03:711 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\) ok
+03/31/25-07:14:03:712 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\enslib\) ok
+03/31/25-07:14:03:713 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hscustom\) ok
+03/31/25-07:14:03:714 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hslib\) ok
+03/31/25-07:14:03:714 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hssys\) ok
+03/31/25-07:14:03:715 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\hssyslocaltemp\) ok
+03/31/25-07:14:03:716 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\irisaudit\) ok
+03/31/25-07:14:03:717 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\iristemp\) ok
+03/31/25-07:14:03:718 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\jondax\) ok
+03/31/25-07:14:03:718 (26144) 0 [Utility.Event] [SYSTEM MONITOR] DiskPercentFull(c:\intersystems\irishealth\mgr\user\) ok
+03/31/25-07:16:00:844 (18252) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 07:01:00 2025.
+03/31/25-07:31:00:510 (2732) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 07:16:00 2025.
+03/31/25-07:46:00:151 (28104) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 07:31:00 2025.
+03/31/25-08:01:00:808 (20024) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 07:46:00 2025.
+03/31/25-08:16:00:478 (31684) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 08:01:00 2025.
+03/31/25-08:31:00:197 (5728) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 08:16:00 2025.
+03/31/25-08:46:00:876 (24208) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 08:31:00 2025.
+03/31/25-09:01:00:538 (27096) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 08:46:00 2025.
+03/31/25-09:16:00:197 (11436) 2 [Generic.Event] License limit exceeded 30 times since Mon Mar 31 09:01:00 2025.
+04/01/25-09:04:12:389 (724) 2 [Generic.Event] License limit exceeded 2 times since Mon Mar 31 09:16:00 2025.
+04/01/25-09:04:12:619 (3140) 1 [Generic.Event] Warning: Alternate and primary journal directories are the same...(repeated 1 times)
+04/01/25-09:04:12:691 (31804) 0 [Generic.Event] INTERSYSTEMS IRIS JOURNALING SYSTEM MESSAGE
+Journaling switched to: c:\intersystems\irishealth\mgr\journal\20250401.001
+04/01/25-09:04:15:288 (32072) 0 [Utility.Event] Purging old application errors
+04/01/25-09:04:16:802 (33592) 0 [Utility.Event] Journal File Compression: Compressed c:\intersystems\irishealth\mgr\journal\20250331.001 from 6291456 bytes to 143360 bytes, compression ratio = 43.9
+04/01/25-09:05:23:704 (26144) 1 [Utility.Event] [SYSTEM MONITOR] CPUusage Warning: CPUusage = 75 ( Warnvalue is 75).
+04/01/25-09:10:54:496 (32800) 0 [Utility.Event] Shutting down InterSystems IRIS
+04/01/25-09:10:54:613 (26144) 0 [Utility.Event] [SYSTEM MONITOR] System Monitor stopped in %SYS
+04/01/25-09:10:55:619 (32800) 0 [Utility.Event] Notifying Clients
+04/01/25-09:10:55:620 (32800) 0 [Utility.Event] No user shutdown routines to execute
+04/01/25-09:10:55:621 (32800) 0 [Utility.Event] Stopping User Jobs
+04/01/25-09:10:55:645 (23384) 0 [Generic.Event] VSS Writer exiting
+04/01/25-09:10:55:647 (32800) 0 [Utility.Event] Stopping Network Servers
+04/01/25-09:10:55:649 (32800) 0 [Utility.Event] Withdrawing from License Domain
+04/01/25-09:10:55:650 (32800) 0 [Utility.Event] Waiting for users to stop
+04/01/25-09:10:57:661 (32800) 0 [Utility.Event] 0 user processes remain
+04/01/25-09:10:59:688 (32800) 0 [Generic.Event] Auditing stopped
+04/01/25-09:10:59:689 (32800) 0 [Utility.Event] Stopping Client Networking
+04/01/25-09:10:59:690 (32800) 0 [Utility.Event] Updating Journal File
+04/01/25-09:10:59:917 (32800) 0 [Utility.Event] Journal restore not required at next startup
+04/01/25-09:10:59:917 (32800) 0 [Utility.Event] Transaction rollback not required at next startup
+04/01/25-09:11:01:142 (32800) 0 [Utility.Event] Removing database locks
+04/01/25-09:11:01:249 (32800) 0 [Utility.Event] Waiting for database updates to complete
+04/01/25-09:11:01:250 (32800) 0 [Utility.Event] Database updates complete
+04/01/25-09:11:01:250 (32800) 0 [Utility.Event] Stopping System Jobs
+04/01/25-09:11:01:366 (30644) 0 [Generic.Event] EXPDMN exited due to system shutdown
+04/01/25-09:11:01:366 (2572) 0 [Generic.Event] GARCOL exited due to system shutdown
+04/01/25-09:11:01:366 (3140) 0 [Generic.Event] JRNDMN exited due to system shutdown
+04/01/25-09:11:01:989 (23328) 0 [Generic.Event] No blocks pending in WIJ file
+04/01/25-09:11:01:995 (23328) 0 [Generic.Event] WRTDMN exited due to system shutdown
+04/01/25-09:11:02:098 (7928) 0 [Generic.Event] CONTROL exited due to system shutdown
+04/01/25-09:11:03:222 (32800) 0 [Utility.Event] Shutdown complete
+
+
+
+*** Recovery started at Tue Apr  1 09:11:03 2025
+     Current default directory: c:\intersystems\irishealth\mgr
+     Log file directory: c:\intersystems\irishealth\mgr\
+     WIJ file spec: c:\intersystems\irishealth\mgr\IRIS.WIJ
+Recovering local (c:\intersystems\irishealth\mgr\IRIS.WIJ) image journal file...
+Starting WIJ recovery for 'c:\intersystems\irishealth\mgr\IRIS.WIJ'.
+  0 blocks pending in this WIJ.
+Exiting with status 3 (Success)

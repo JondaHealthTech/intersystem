@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Workbook xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:o="urn:schemas-microsoft-com:office:office" xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:user="urn:my-scripts"
+          xmlns:x="urn:schemas-microsoft-com:office:excel">
+    <Styles>
+        <Style ss:ID="Default"/>
+        <Style ss:ID="DateTime">
+            <NumberFormat ss:Format="General Date"/>
+        </Style>
+        <Style ss:ID="Time">
+            <NumberFormat ss:Format="hh:mm:ss AM/PM"/>
+        </Style>
+    </Styles>
+</Workbook>

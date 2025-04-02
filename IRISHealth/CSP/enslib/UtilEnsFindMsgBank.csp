@@ -1,0 +1,84 @@
+<!--
+Redirect page to Enterprise Message Bank Portal
+-->
+
+<AutoPageENS domain="Ensemble" pagename="MsgBank" parentpage="UtilEnsMA.csp" title="@Ensemble:MsgBankRedirTitle@Go to Message Bank portal">
+
+<script language="Cache" method="getBankAddr" arguments="&pWebSvr,&pWebPort,&pBankNS,&pUseSSL" >
+	#; If in the MsgBank namespace itself, just go to our own MsgBank portal
+	Set tProd=$G(^Ens.Configuration("csp","LastProduction"))
+	Set (pWebSvr,pWebPort,pBankNS)=""
+	If ""'=tProd&&##class(%Dictionary.CompiledClass).%ExistsId(tProd)&&$classmethod(tProd,"%Extends","Ens.Enterprise.MsgBank.Production") {
+		Set Status=##Class(%Library.RoutineMgr).GetWebServerPort(.Port,.Server,.URLPrefix,.URL)
+		Set pWebSvr=Server Set pWebPort=Port, tWebPrefix=URLPrefix
+		Set pBankNS=$namespace
+		Set pUseSSL=$S(22=pWebPort:1,1:"")
+		Set:""=pWebSvr pWebSvr="localhost"
+	}
+	If (""=pWebPort)||(""=pWebSvr)||(""=pBankNS) {
+		Set pWebSvr=$G(^Ens.MsgBank("WebSvr")) Set pWebPort=$P(pWebSvr,"|",2), tWebPrefix=$P(pWebSvr,"|",3), pWebSvr=$P(pWebSvr,"|")
+		Set tIPAddr=$G(^Ens.MsgBank("IPAddr")), tIPAddr=$P(tIPAddr,"|")
+		Set tBank=$G(^Ens.MsgBank), pBankNS=$P(tBank,"|",3), tBank=$P(tBank,"|")
+		Set pUseSSL=$G(^Ens.MsgBank("UseSSL"),$S(22=pWebPort:1,1:""))
+		Set:""=pWebSvr pWebSvr=tIPAddr
+		Set:""=pWebSvr pWebSvr=tBank
+	}
+	Quit
+</script>
+<script language="Cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	Do ..getBankAddr(.tWebSvr,.tWebPort,.tBankNS,.tUseSSL)
+	Set action=$G(%request.Data("action",1))
+	If action="GO" { ; confirmation page
+		Set txWebSvr=$G(%request.Data("WEBIP",1))
+		Set txWebPort=$G(%request.Data("WEBPORT",1))
+		Set txBankNS=$G(%request.Data("BANKNS",1))
+		Set txUseSSL=$Case($ZCVT($G(%request.Data("USESSL",1)),"L"),"true":1,"on":1,1:1,:0)
+		Set:""'=txWebSvr $P(^Ens.MsgBank("WebSvr"),"|")=txWebSvr, tWebSvr=txWebSvr
+		Set:""'=txWebPort $P(^Ens.MsgBank("WebSvr"),"|",2)=txWebPort, tWebPort=txWebPort
+		Set:""'=txBankNS $P(^Ens.MsgBank,"|",3)=txBankNS, tBankNS=txBankNS
+		Set ^Ens.MsgBank("UseSSL")=txUseSSL, tUseSSL=txUseSSL
+	}
+	#; Redirect if we can figure out the target
+	If (""'=tWebPort)&&(""'=tWebSvr)&&(""'=tBankNS)&&((action="GO")||'$G(^Ens.Config("EnsFindMsgBank","NeverStraightThrough"))) {
+		Set tURL="http"_$S(tUseSSL:"s",1:"")_"://"_$S(tWebSvr[":":"["_tWebSvr_"]",1:tWebSvr)_":"_tWebPort_"/csp/"_$ZCVT(tBankNS,"L")_"/Ens.Enterprise.Portal.SystemList.cls"
+		Set %response.Redirect = tURL
+	}
+	Quit 1
+</script>
+
+<html>
+<head>
+<script language="cache" runat="server">
+	Do ##class(%CSP.Util.AutoPage).DrawAutoLogout()
+</script>
+<title>Go To Enterprise Message Bank portal</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+</head>
+<body>
+<csp:class Includes="EnsUI">
+<form name="theForm" method="get" action="UtilEnsFindMsgBank.csp">
+<script language=Cache runat=server>
+	Do ..getBankAddr(.tWebSvr,.tWebPort,.tBankNS,.tUseSSL)
+	
+	Set msgGreeting = $$$LocalizeText("Ensemble","msgFMBGreeting","Enter the addressing information for your Enterprise Monitor and Message Bank Server")
+	Set msgWebSvrAddress = $$$LocalizeText("Ensemble","msgFMBWebSvrAddress","Enterprise Message Bank Webserver IP Address")
+	Set msgWebPort = $$$LocalizeText("Ensemble","msgFMBWebPort","Enterprise Message Bank Webserver IP Port number")
+	Set msgNamespace = $$$LocalizeText("Ensemble","msgFMBNamespace","Enterprise Message Bank Webserver execution Namespace")
+	Set msgUseSSL = $$$LocalizeText("Ensemble","msgFMBUseSSL","Use SSL to connect to the Enterprise Message Bank Webserver")
+	Set msgGo = $$$LocalizeText("Ensemble","msgFMBbtnGo","Go")
+	
+	&html<<div class="Text1">
+		<h3>#(msgGreeting)#</h3>
+		<table border="0" cellpadding="0" cellspacing="0"><tr>
+		<tr><td>#(msgWebSvrAddress)#</td><td><input type="text" name="WEBIP" size="40" value="#(tWebSvr)#"/></td></tr>
+		<tr><td>#(msgWebPort)#</td><td><input type="text" name="WEBPORT" size="40" value="#(tWebPort)#"/></td></tr>
+		<tr><td>#(msgNamespace)#</td><td><input type="text" name="BANKNS" size="40" value="#(tBankNS)#"/></td></tr>
+		<tr><td>#(msgUseSSL)#</td><td><input type="checkbox" name="USESSL" #($S(tUseSSL:" checked",1:""))#/></td></tr>
+		<tr><td></td><td><input type="submit" value=" #(msgGo)# " name="go"></td></tr>
+		</table>
+		<input type="hidden" name="action" value="GO">
+	</div>>
+</script>
+</form>
+</body>
+</html>

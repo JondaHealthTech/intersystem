@@ -1,0 +1,71 @@
+<!--Studio Template -->
+<csp:StudioInteractiveTemplate>
+<csp:class DOMAIN="%TemplateMessages">
+<html>
+<head>
+<style type="text/css">
+<!--
+
+span.Label	{	
+					font-size: 9pt;
+					font-weight: bold;
+				}
+
+span.Unknown	{	
+					font-size: 12pt;
+				}
+
+
+a.Help		{	font-size: 9pt;
+					font-weight: bold;
+					text-decoration: none;
+					
+				}
+
+-->
+</style>
+
+</head>
+<body>
+
+<script language="cache" runat="server">
+	Do ##class(%template.htmlcolor).DrawTitle($$$Text("Insert New Tag"))
+</script>
+<!-- YSD2449<h1>#($$$Text("Insert New Tag"))#</h1>-->
+
+<form name="theForm" action="HTMLTag.csp">
+
+<table cellspacing="3" cellpadding="1">
+
+<tr><td class="Label"><a class="Help" name="help" title='#($$$Text("Select an HTML tag to insert."))#'>#($$$Text("Tag to insert"))#:</A></td>
+<td>
+<select name="SelectedText">
+<script language="Cache" runat="server">
+	&SQL(DECLARE TAGS CURSOR FOR 
+			SELECT Tag,IsEmpty INTO :tag1, :empty
+			FROM %Studio_Template.HTMLElement 
+			ORDER BY TAG)
+	&SQL(OPEN TAGS)
+
+	&SQL(FETCH TAGS)
+
+	While (SQLCODE = 0) {
+		Set tag=$zcvt(tag1,"L")
+		Write "<option value=""&lt;",tag,"&gt;"
+		Write:'(empty=1) "&lt;/",tag,"&gt;"
+		Write """>",tag,!
+		&SQL(FETCH TAGS)
+ 	}
+</script>
+</select></td></tr>
+</table>
+
+<hr>
+
+<div align="right">
+<input type="submit" value=" OK " name="INSERTBTN" textid="">
+</div>
+
+</form>
+</body>
+</html>

@@ -1,0 +1,88 @@
+/* @class="%ZEN.Component.buttonView" */
+
+/* @doc="Table used to group buttons." */
+.bvwTable {
+	border: 1px solid black;
+	font-family: lucida sans unicode, verdana, sans-serif;
+	table-layout: fixed;
+	width: 100%;
+	background: #D0D0D0;
+	font-size: 0.8em;
+}
+
+/* @doc="Item within buttonView." */
+.bvwItem {
+	border: 1px solid black;
+	width: 125px;
+	overflow: hidden;
+	background: #404040;
+	background-image: url(images/grad-gray-10x100.png);
+	background-repeat: repeat-x;
+}
+
+/* @doc="Selected item within buttonView." */
+.bvwItemSelected {
+	border: 1px solid black;
+	background: #000040;
+	background-image: url(images/grad-blue-10x30.png);
+	background-repeat: repeat-x;
+	width: 125px;
+	overflow: hidden;
+}
+
+/* @doc="Reset button within buttonView." */
+.bvwItemReset {
+	border: 1px solid black;
+	background: #404000;
+	background-image: url(images/grad-yellow-10x100.png);
+	background-repeat: repeat-x;
+	width: 125px;
+	overflow: hidden;
+	font-weight: bold;
+}
+
+/* @doc="Disabled item within buttonView." */
+.bvwItemDisabled, .bvwItemDisabledAlways {
+	border: 1px solid gray;
+	width: 125px;
+	overflow: hidden;
+	background: #404040;
+	background-image: url(images/grad-gray-10x100.png);
+	background-repeat: repeat-x;
+}
+
+.bvwTable a {
+	text-align: center;
+	display: block;
+	padding: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.bvwItem a, .bvwItemReset a {
+	color: black;
+}
+
+.bvwItemSelected a {
+	color: white;
+}
+
+.bvwItemDisabled a, .bvwItemDisabledAlways a {
+	color: #808080;
+}
+
+.bvwTable a:link, .bvwTable a:visited {
+	text-decoration: none;
+}
+
+.bvwItem a:hover,.bvwItemReset a:hover {
+	background: #FFEEAA;
+	color: darkblue;
+	height: 100%;
+}
+
+.bvwItemSelected a:hover {
+	color: #FFEEAA;
+}
+
+/* EOF */

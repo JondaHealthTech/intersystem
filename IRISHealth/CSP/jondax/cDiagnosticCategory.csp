@@ -1,0 +1,160 @@
+<html>		<!-- Diagnostic Category under System setting in Side Nav -->
+<head>
+<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+	q 1
+</script>
+
+<script language="cache" runat="server">
+	s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+	i r1'=1 s %response.Redirect="cLockDown.csp"
+	d HEAD1^CSP999
+</script>
+</head>
+<body onload="jPopTab1();T1.focus()">
+<form name="F1" id="F1">
+	<h3 style="font-color:black"><span>Diagnostic Categories</span></h3>	
+	&nbsp;<span id="AlertText" Name="AlertText" class="alerttext"></span>
+	<table cellpadding="0" cellspacing="0" style="width: 100%">
+		<tr>
+			<td>
+				<input type="button" value="All" onclick="jSortMe('')" style="font-size:8pt;">
+				<input type="button" value="0-9" onclick="jSortMe('0')" style="font-size:8pt;">
+				<input type="button" value="A" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="B" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="C" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="D" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="E" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="F" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="G" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="H" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="I" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="J" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="K" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="L" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="M" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="N" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="O" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="P" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="Q" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="R" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="S" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="T" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="U" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="V" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="W" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="X" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="Y" onclick="jSortMe(this.value)" style="font-size:8pt;">
+				<input type="button" value="Z" onclick="jSortMe(this.value)" style="font-size:8pt;">
+			</td>
+		</tr>
+	</table>
+	<table name="Tab1" id="Tab1" width="100%" border="1">
+		<tr>
+			<td>ID</td>
+			<td>Category Name*</td>
+			<td>Save as Name*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input name="T1" id="T1" type="text" size="25" maxlength="80" style="font-family:montserrat; font-size:8pt" onblur="jValT1()"></td>
+			<td><input name="T2" id="T2" type="text" size="25" maxlength="50" style="font-family:montserrat; font-size:8pt"></td>
+			<td><input name="B1" id="B1" type="button" value="Save" style="font-family:montserrat; font-size:10pt" onclick="jSaveMe()"></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+</form>
+</body>
+<script type="text/javascript">
+T1=self.F1.T1,T2=self.F1.T2,B1=self.F1.B1
+SortVal=""
+window.load=jInit;
+
+// Pop table, sorted with name
+function jInit(){
+	jPopTab1()
+}
+
+// set sorting value
+function jSortMe(val){
+	SortVal=val
+	jPopTab1();
+}
+
+// Pop table by selected character or num
+function jPopTab1(){
+	jClearTab1();
+	#server(..cPopTab1(SortVal))#
+	
+}
+
+function jClearTab1(){
+	// clear the table
+	rows=document.getElementById('Tab1').rows
+	RowNo=rows.length
+	if (RowNo>2){
+		while (RowNo>2){
+			document.getElementById('Tab1').deleteRow(RowNo-1)
+			RowNo=RowNo-1
+		}
+	}
+
+}
+
+// Copy value of input box(T1) to T2 on onblur event
+function jValT1(){
+	T2.value=T1.value
+}
+
+// Pop input boxes with clicked row data
+function jPopFields(id){
+	#server(..cPopFields(id))#
+}
+
+// Delete the row and update table
+function jDeleteMe(id){
+	ans=confirm("Are you sure you want to Delete this record?")
+	if (ans==true){
+		#server(..cDeleteMe(id))#
+		jPopTab1()
+	}
+	
+}
+// Save new row
+function jSaveMe(){
+	document.getElementById("AlertText").innerHTML=""
+	#server(..cSaveMe(T1.value,T2.value))#
+	jPopTab1()
+}
+</script>
+
+<script language="cache" method="cInit" arguments="d1:%String">
+	d PopTab1^cDiagnosticCategory
+</script>
+<script language="cache" method="cPopTab1" arguments="d1:%String">
+	d PopTab1^cDiagnosticCategory
+</script>
+
+<script language="cache" method="cPopFields" arguments="d1:%String">
+	d PopFields^cDiagnosticCategory
+</script>
+
+<script language="cache" method="cDeleteMe" arguments="d1:%String">
+	d DeleteMe^cDiagnosticCategory
+</script>
+
+<script language="cache" method="cSaveMe" arguments="d1,d2:%String">
+	s errmsg=""
+	i d1="" s errmsg=$s(errmsg'="":errmsg_", ",1:"")_"Diagnostic Name"
+	i d2="" s errmsg=$s(errmsg'="":errmsg_", ",1:"")_"Save as Name"
+	i errmsg'="" s errmsg="Missing Required Fields: "_errmsg &js<document.getElementById("AlertText").innerHTML="#(errmsg)#"> q
+	d SaveMe^cDiagnosticCategory
+</script>
+</html>
+

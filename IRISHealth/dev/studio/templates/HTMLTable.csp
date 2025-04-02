@@ -1,0 +1,64 @@
+<!--Studio Template -->
+<csp:StudioInteractiveTemplate name="HTML Table" type="CSP,CLS" description="Inserts an HTML table." id="HTMLTable">
+<csp:class DOMAIN="%TemplateMessages">
+<html>
+<head>
+
+<!-- script for popup -->
+#($$$cspBrokerInsertJS)#
+
+<style type="text/css">
+<!--
+-->
+</style>
+
+<script language="JavaScript" type="text/javascript">
+function previewPop()
+{
+	var form = self.document.theForm;
+	
+	var values = 'rows=' + cspEncodeUTF8(form.rows.value) +
+					 '&cols=' + cspEncodeUTF8(form.cols.value) +
+					 '&border=' + cspEncodeUTF8(form.border.value) +
+					 '&bgcolor=' + cspEncodeUTF8(form.bgcolor.value) +
+					 '&cellpadding=' + cspEncodeUTF8(form.cellpadding.value) +
+					 '&cellspacing=' + cspEncodeUTF8(form.cellspacing.value) +
+ 					 '&content=' + cspEncodeUTF8(form.content.value) +
+ 					 '&headers=' + (form.headers.checked ? '1' : '0');
+
+   var url = 'HTMLTablePreview.csp?' + values;
+	url +='&CSPCHD=' + cspEncodeUTF8('#(%session.CSPSessionCookie)#') + '&CSPSHARE=1';
+
+   self.cspPopupWindow = window.open(url,'cspPopup','width=400,height=400,status,scrollbars,resizable');
+   self.cspPopupWindow.focus();
+   return true;
+}
+</script>
+
+</head>
+<body>
+<script language="cache" runat="server">
+	Do ##class(%template.htmlcolor).DrawTitle($$$Text("HTML Table Wizard"))
+</script>
+<!-- YSD2449<h1>#($$$Text("HTML Table Wizard"))#</h1>-->
+<div class="Description">#($$$Text("Specify the properties of the HTML table in the form below and then press OK."))#</div>
+<hr>
+<form name="theForm" action="HTMLTable2.csp">
+<table cellspacing="5" cellpadding="0">
+<tr><td class="Label">#($$$Text("Rows"))#:</td><td><input type="text" name="rows" size="5" value="1"></td><td></td><td></td></tr>
+<tr><td class="Label">#($$$Text("Columns"))#:</td><td><input type="text" name="cols" size="5" value="1"></td>
+	<td class="Label">#($$$Text("Headers"))#:</td><td><input type="checkbox" name="headers" value="headers"></td></tr>
+<tr><td class="Label">#($$$Text("Cell Content"))#:</td><td><input type="text" size="20" name="content" value="#(..EscapeHTML($get(%request.Data("SelectedText",1),$$$Text("cell"))))#"></td><td></td><td></td></tr>
+<tr><td class="Label">#($$$Text("Border Width"))#:</td><td><input type="text" size="5" name="border" value="1"></td><td></td><td></td></tr>
+<tr><td class="Label">#($$$Text("Cell Spacing"))#:</td><td><input type="text" size="5" name="cellspacing"></td><td></td><td></td></tr>
+<tr><td class="Label">#($$$Text("Cell Padding"))#:</td><td><input type="text" size="5" name="cellpadding"></td><td></td><td></td></tr>
+<tr><td class="Label">#($$$Text("Table Color"))#:</td><td><input type="text" size="10" name="bgcolor"></td><td></td><td></td></tr>
+</table>
+<hr>
+<div align="right">
+<input type="button" value="Preview" name="preview" onclick="previewPop();" textid="">&nbsp;
+<input type="submit" value=" OK " name="submit" textid=""></div>
+</form>
+
+</BODY>
+</HTML>

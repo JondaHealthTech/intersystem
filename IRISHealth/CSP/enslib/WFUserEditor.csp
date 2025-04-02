@@ -1,0 +1,15 @@
+<!--
+Workflow: Workflow role editor
+-->
+
+<AutoPage domain="Ensemble" pagename="Workflow Users" parentpage="WFHome.csp" useframes="1">
+
+<Pane name="Info" type="%CSP.Util.FormPane">
+	<Text>Edit User definition:</Text>
+	<FormClass>EnsLib.Workflow.UserDefinition</FormClass>
+	<SubmitPage>WFUsers.csp</SubmitPage>
+	<SubmitTarget>_top</SubmitTarget>
+	<Align>left</Align>
+</Pane>
+
+</AutoPage>

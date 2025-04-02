@@ -1,0 +1,15 @@
+<!--
+Workflow: Task Assign form
+-->
+
+<AutoPage domain="Ensemble" pagename="Task Assignment" parentpage="WFHome.csp" useframes="1">
+
+<Pane name="Info" type="%CSP.Util.FormPane">
+	<Text>Assign / Reassign task:</Text>
+	<FormClass>EnsLib.Workflow.UI.TaskAssignForm</FormClass>
+	<SubmitPage>WFTasklist.csp</SubmitPage>
+	<SubmitTarget>_top</SubmitTarget>
+	<Align>left</Align>
+</Pane>
+
+</AutoPage>

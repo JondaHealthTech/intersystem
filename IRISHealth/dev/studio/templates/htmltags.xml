@@ -1,0 +1,962 @@
+<?xml version="1.0"?>
+<!-- List of HTML elements/attributes used by HTML Tag Inspector -->
+<!-- Copyright (c) 2001, InterSystems Corp. ALL RIGHTS RESERVED -->
+<!DOCTYPE elementlist SYSTEM "htmltags.dtd">
+<elementlist>
+	<!-- FORMATTING TAGS -->
+	<!-- SPAN TAG -->
+	<element ename="SPAN" edesc="SPAN Tag">
+		<attrs>
+&attrs;
+&csptext;
+</attrs>
+	</element>
+	<!-- SUP TAG -->
+	<element ename="SUP" edesc="Superscript Tag">
+		<attrs>
+&attrs;
+</attrs>
+	</element>
+	<!-- SUB TAG -->
+	<element ename="SUB" edesc="Subscript Tag">
+		<attrs>
+&attrs;
+</attrs>
+	</element>
+	<!-- BDO TAG -->
+	<element ename="BDO" edesc="Overrides bidirectional algorithms for content display">
+		<attrs>
+&attrs;
+<attr name="dir" type="enum" enum="rtl|ltr" desc="Text direction."/>
+			<attr name="lang" type="string" desc="Language."/>
+		</attrs>
+	</element>
+	<!-- B TAG -->
+	<element ename="B" edesc="Boldface Tag">
+		<attrs>
+&attrs;
+</attrs>
+	</element>
+	<!-- I TAG -->
+	<element ename="I" edesc="Italics Tag">
+		<attrs>
+&attrs;
+</attrs>
+	</element>
+	<!-- STRONG TAG -->
+	<element ename="STRONG" edesc="Strong Tag">
+		<attrs>
+&attrs;
+</attrs>
+	</element>
+	<!-- EM TAG -->
+	<element ename="EM" edesc="Emphasis Tag">
+		<attrs>
+&attrs;
+</attrs>
+	</element>
+	<!-- BASEFONT TAG -->
+	<element ename="BASEFONT" edesc="base font size" empty="1">
+		<attrs>
+			<attr name="id" type="string" desc="Id."/>
+			<attr name="size" type="string" desc="Base font size."/>
+			<attr name="color" type="color" desc="Text color."/>
+			<attr name="face" type="string" desc="Comma-separated list of font names."/>
+		</attrs>
+	</element>
+	<!-- FONT TAG -->
+	<element ename="FONT" edesc="Local change to font">
+		<attrs>
+&attrs;
+<attr name="size" type="string" desc="Font size."/>
+			<attr name="color" type="color" desc="Text color."/>
+			<attr name="face" type="string" desc="Comma-separated list of font names."/>
+		</attrs>
+	</element>
+	<!-- LIST TAGS -->
+	<!-- FLOW TAGS -->
+	<!-- BR TAG -->
+	<element ename="BR" edesc="Forced line break" empty="1">
+		<attrs>
+&attrs;
+<attr name="clear" type="enum" enum="left|all|right|none" desc="Control of text flow."/>
+		</attrs>
+	</element>
+	<!-- NOBR TAG -->
+	<element ename="NOBR" edesc="Define a non-breaking region" empty="1">
+		<attrs>
+</attrs>
+	</element>
+	<!-- PRE TAG -->
+	<element ename="PRE" edesc="Define a region with no formatting">
+		<attrs>
+&attrs;
+<attr name="width" type="number" desc="Width."/>
+		</attrs>
+	</element>
+	<!-- HR TAG -->
+	<element ename="HR" edesc="Horizontal line" empty="1">
+		<attrs>
+&attrs;
+<attr name="align" type="enum" enum="left|right|center" desc="Alignment."/>
+			<attr name="noshade" type="boolean" desc="No shading."/>
+			<attr name="size" type="number" desc="Size."/>
+			<attr name="width" type="number" desc="Override width."/>
+		</attrs>
+	</element>
+	<!-- P TAG -->
+	<element ename="P" edesc="Paragraph">
+		<attrs>
+&attrs;
+<attr name="align" type="enum" enum="left|center|right|justify" desc="Alignment."/>
+		</attrs>
+	</element>
+	<!-- H1 TAG -->
+	<element ename="H1" edesc="Heading 1">
+		<attrs>
+&attrs;
+<attr name="align" type="enum" enum="left|center|right|justify" desc="Alignment."/>
+		</attrs>
+	</element>
+	<!-- H2 TAG -->
+	<element ename="H2" edesc="Heading 2">
+		<attrs>
+&attrs;
+<attr name="align" type="enum" enum="left|center|right|justify" desc="Alignment."/>
+		</attrs>
+	</element>
+	<!-- H3 TAG -->
+	<element ename="H3" edesc="Heading 3">
+		<attrs>
+&attrs;
+<attr name="align" type="enum" enum="left|center|right|justify" desc="Alignment."/>
+		</attrs>
+	</element>
+	<!-- H4 TAG -->
+	<element ename="H4" edesc="Heading 4">
+		<attrs>
+&attrs;
+<attr name="align" type="enum" enum="left|center|right|justify" desc="Alignment."/>
+		</attrs>
+	</element>
+	<!-- H5 TAG -->
+	<element ename="H5" edesc="Heading 5">
+		<attrs>
+&attrs;
+<attr name="align" type="enum" enum="left|center|right|justify" desc="Alignment."/>
+		</attrs>
+	</element>
+	<!-- H6 TAG -->
+	<element ename="H6" edesc="Heading 6">
+		<attrs>
+&attrs;
+<attr name="align" type="enum" enum="left|center|right|justify" desc="Alignment."/>
+		</attrs>
+	</element>
+	<!-- Q TAG -->
+	<element ename="Q" edesc="inline quotes">
+		<attrs>
+&attrs;
+<attr name="cite" type="uri" desc="URI for source document or message."/>
+		</attrs>
+	</element>
+	<!-- BLOCKQUOTE TAG -->
+	<element ename="BLOCKQUOTE" edesc="long quotation">
+		<attrs>
+&attrs;
+<attr name="cite" type="uri" desc="URI for source document or message."/>
+		</attrs>
+	</element>
+	<!-- INS TAG -->
+	<element ename="INS" edesc="inserted text">
+		<attrs>
+&attrs;
+<attr name="cite" type="uri" desc="Reason for change."/>
+			<attr name="datetime" type="datetime" desc="Date and time of the change."/>
+		</attrs>
+	</element>
+	<!-- DEL TAG -->
+	<element ename="DEL" edesc="deleted text">
+		<attrs>
+&attrs;
+<attr name="cite" type="uri" desc="Reason for change."/>
+			<attr name="datetime" type="datetime" desc="Date and time of the change."/>
+		</attrs>
+	</element>
+	<!-- ANCHOR TAG -->
+	<element ename="A" edesc="Anchor Tag">
+		<attrs>
+&attrs;
+
+<attr name="charset" type="string" desc="Char encoding of linked resource."/>
+			<attr name="type" type="string" desc="Advisory content type."/>
+			<attr name="name" type="string" desc="Named link end."/>
+			<attr name="href" type="uri" desc="URI for linked resource."/>
+			<attr name="hreflang" type="string" desc="Language code."/>
+			<attr name="target" type="string" desc="Render in this frame."/>
+			<attr name="rel" type="string" desc="Forward link types."/>
+			<attr name="rev" type="string" desc="Reverse link types."/>
+			<attr name="accesskey" type="char" desc="Accessibility key character."/>
+			<attr name="shape" type="string" desc="For use with client-side image maps."/>
+			<attr name="coords" type="string" desc="For use with client-side image maps."/>
+			<attr name="tabindex" type="number" desc="Position in tabbing order."/>
+			<attr name="onfocus" cat="Event" type="script" desc="The element got the focus."/>
+			<attr name="onblur" cat="Event" type="script" desc="The element lost the focus."/>
+		</attrs>
+	</element>
+	<!-- UL TAG -->
+	<element ename="UL" edesc="Unordered List Tag">
+		<attrs>
+&attrs;
+</attrs>
+	</element>
+	<!-- OL TAG -->
+	<element ename="OL" edesc="Ordered List Tag">
+		<attrs>
+&attrs;
+<attr name="start" type="number" desc="Starting value for list."/>
+			<attr name="type" type="enum" enumlist="A|a|I|i|1" desc="Numbering style for list."/>
+		</attrs>
+	</element>
+	<!-- LI TAG -->
+	<element ename="LI" edesc="List Item Tag">
+		<attrs>
+&attrs;
+<attr name="type" type="enum" enumlist="A|a|I|i|1" desc="Numbering style for list item."/>
+			<attr name="value" type="string" desc="Value for list item."/>
+		</attrs>
+	</element>
+	<!-- STRUCTURE TAGS -->
+	<!-- HTML TAG -->
+	<element ename="HTML" edesc="Defines a complete HTML document.">
+		<attrs>
+&i18n;
+</attrs>
+	</element>
+	<!-- HEAD TAG -->
+	<element ename="HEAD" edesc="Defines an HTML document header.">
+		<attrs>
+&i18n;
+</attrs>
+	</element>
+	<!-- META TAG -->
+	<element ename="META" edesc="Supply additional information about a document." empty="1">
+		<description>
+Supplies information that a HTTP-server can use to generate extra HTTP headers, from the HTML data.
+CSP supports http-equiv=content-type and http-equiv-expires.
+</description>
+		<attrs>
+&i18n;
+
+<attr name="http-equiv" type="enum" enum="content-type|expires|refresh|set-cookie" desc="Type of information supplied."/>
+			<attr name="name" type="string" desc="Name of the meta data being defined."/>
+			<attr name="content" type="string" desc="The value of the meta data for http-equiv or name."/>
+			<attr name="scheme" type="string" desc="The format of the meta data for name."/>
+		</attrs>
+	</element>
+	<!-- TITLE TAG -->
+	<element ename="TITLE" edesc="Defines an HTML document title.">
+		<attrs>
+&i18n;
+</attrs>
+	</element>
+	<!-- BODY TAG -->
+	<element ename="BODY" edesc="Body Tag">
+		<attrs>
+&attrs;
+
+<attr name="bgcolor" type="color" desc="Document background color."/>
+			<attr name="text" type="color" desc="Document text color."/>
+			<attr name="link" type="color" desc="Color of links."/>
+			<attr name="vlink" type="color" desc="Color of visited links."/>
+			<attr name="alink" type="color" desc="Color of selected links."/>
+			<attr name="background" type="uri" desc="Texture tile for document background."/>
+			<attr name="onload" cat="Event" type="script" desc="The document has been loaded."/>
+			<attr name="onunload" cat="Event" type="script" desc="The document has been removed."/>
+		</attrs>
+	</element>
+	<!-- ADDRESS TAG -->
+	<element ename="ADDRESS" edesc="Author information">
+		<attrs>
+&attrs;
+</attrs>
+	</element>
+	<!-- DIV TAG -->
+	<element ename="DIV" edesc="DIV Tag">
+		<attrs>
+&attrs;
+&csptext;
+<attr name="align" type="enum" enum="&align;" desc="Text alignment."/>
+		</attrs>
+	</element>
+	<!-- CENTER TAG -->
+	<element ename="CENTER" edesc="Centered block">
+		<attrs>
+&attrs;
+</attrs>
+	</element>
+	<!-- IMAGE MAPS -->
+	<!-- MAP -->
+	<element ename="MAP" edesc="Client-side image map">
+		<attrs>
+&attrs;
+<attr name="name" type="string" desc="Name of map."/>
+		</attrs>
+	</element>
+	<!-- AREA -->
+	<element ename="AREA" edesc="Client-side image map area">
+		<attrs>
+&attrs;
+<attr name="name" type="string" desc="name of map"/>
+			<attr name="shape" type="string" desc="For use with client-side image maps."/>
+			<attr name="coords" type="string" desc="For use with client-side image maps."/>
+			<attr name="href" type="uri" desc="URI for linked resource."/>
+			<attr name="target" type="string" desc="Render in this frame."/>
+			<attr name="nohref" type="boolean" desc="This region has no action."/>
+			<attr name="alt" type="string" desc="Short description."/>
+			<attr name="tabindex" type="number" desc="Position in tabbing order."/>
+			<attr name="accesskey" type="char" desc="Accessibility key character."/>
+			<attr name="onfocus" cat="Event" type="script" desc="The element got the focus."/>
+			<attr name="onblur" cat="Event" type="script" desc="The element lost the focus."/>
+		</attrs>
+	</element>
+	<!-- THE LINK TAG -->
+	<!-- LINK -->
+	<element ename="LINK" edesc="media-independent link">
+		<attrs>
+&attrs;
+<attr name="charset" type="string" desc="char encoding of linked resource."/>
+			<attr name="href" type="uri" desc="URI for linked resource."/>
+			<attr name="hreflang" type="string" desc="language code for linked resource."/>
+			<attr name="type" type="string" desc="advisory content type."/>
+			<attr name="rel" type="string" desc="forward link types."/>
+			<attr name="rev" type="string" desc="reverse link types."/>
+			<attr name="media" type="string" desc="for rendering on these media."/>
+			<attr name="target" type="string" desc="render in this frame."/>
+		</attrs>
+	</element>
+	<!-- IMAGE TAGS -->
+	<!-- IMG -->
+	<element ename="IMG" edesc="image tag" empty="1">
+		<attrs>
+&attrs;
+&cspbind;
+<attr name="src" type="uri" desc="for fields with images."/>
+			<attr name="alt" cat="Other" type="string" desc="short description."/>
+			<attr name="longdesc" type="uri" desc="link to long description."/>
+			<attr name="name" type="string" desc="name of image."/>
+			<attr name="height" type="number" desc="override height."/>
+			<attr name="width" type="number" desc="override width."/>
+			<attr name="usemap" type="uri" desc="use client-side image map."/>
+			<attr name="ismap" type="boolean" desc="use server-side image map."/>
+			<attr name="align" type="enum" enum="top|middle|bottom|left|right" desc="Alignment."/>
+			<attr name="border" type="number" desc="link border width."/>
+			<attr name="hspace" type="number" desc="horizontal gutter."/>
+			<attr name="vspace" type="number" desc="vertical gutter."/>
+		</attrs>
+	</element>
+	<!-- OBJECT / APPLETS -->
+	<!-- OBJECT -->
+	<element ename="OBJECT" edesc="object tag">
+		<attrs>
+&attrs;
+<attr name="declare" type="boolean" desc="declare but don't instantiate flag."/>
+			<attr name="classid" type="uri" desc="identifies an implementation."/>
+			<attr name="codebase" type="uri" desc="base URI for classid, data, archive."/>
+			<attr name="data" type="uri" desc="reference to object's data."/>
+			<attr name="type" cat="Other" type="string" desc="content type for data."/>
+			<attr name="codetype" cat="Other" type="string" desc="content type for code."/>
+			<attr name="archive" cat="Other" type="string" desc="space-separated list of URIs."/>
+			<attr name="standby" cat="Other" type="string" desc="text to show while loading."/>
+			<attr name="height" type="number" desc="override height."/>
+			<attr name="width" type="number" desc="override width."/>
+			<attr name="usemap" type="uri" desc="use client-side image map."/>
+			<attr name="name" type="string" desc="name for submit."/>
+			<attr name="tabindex" cat="Other" type="number" desc="position in tabbing order."/>
+			<attr name="align" type="enum" enum="top|middle|bottom|left|right" desc="Alignment."/>
+			<attr name="border" type="number" desc="link border width."/>
+			<attr name="hspace" type="number" desc="horizontal gutter."/>
+			<attr name="vspace" type="number" desc="vertical gutter."/>
+		</attrs>
+	</element>
+	<!-- PARAM TAG -->
+	<element ename="PARAM" edesc="named property value">
+		<attrs>
+			<attr name="id" type="string" desc="id."/>
+			<attr name="name" type="string" desc="property name."/>
+			<attr name="value" type="string" desc="property value."/>
+			<attr name="valuetype" type="enum" enum="DATA|REF|OBJECT" desc="How to interpret value."/>
+			<attr name="type" type="string" desc="content type for value when valuetype=ref."/>
+		</attrs>
+	</element>
+	<!-- APPLET -->
+	<element ename="APPLET" edesc="Java applet tag">
+		<attrs>
+&attrs;
+<attr name="codebase" type="uri" desc="base URI for classid, data, archive."/>
+			<attr name="archive" cat="Other" type="string" desc="space-separated list of URIs."/>
+			<attr name="code" type="string" desc="applet class file."/>
+			<attr name="object" type="string" desc="serialized applet file."/>
+			<attr name="alt" cat="Other" type="string" desc="short description."/>
+			<attr name="name" type="string" desc="name used for applet."/>
+			<attr name="height" type="number" desc="initial height."/>
+			<attr name="width" type="number" desc="initial width."/>
+			<attr name="align" type="enum" enum="top|middle|bottom|left|right" desc="Alignment."/>
+			<attr name="hspace" type="number" desc="horizontal gutter."/>
+			<attr name="vspace" type="number" desc="vertical gutter."/>
+		</attrs>
+	</element>
+	<!-- FORMS -->
+	<!-- FORM TAG -->
+	<element ename="FORM" edesc="FORM Tag">
+		<description>
+An HTML FORM tag that may contain a CSPBIND attribute to represent a data-bound form.
+This tag with CSPBIND will automatically generate save, search, and validation functionality for the form.
+</description>
+		<attrs>
+&attrs;
+
+<attr name="cspbind" cat="CSPBind" type="string" desc="The name of a CSP:OBJECT tag to which this form is bound."/>
+			<attr name="cspevent" cat="CSPBind" type="enum" enum="server|call" desc="The type of call to be used for HyperEvents:  server (default) or call."/>
+			<attr name="cspjs" cat="CSPBind" type="enum" enum="All|Validate|None" desc="Specifies which Javascript code is to be generated.  Possibilities are All (default, new and save buttons and validation code), Validate (validation cpde only), None (No Javascript)."/>
+			<attr name="name" type="string" desc="name of form for scripting."/>
+			<attr name="action" type="uri" desc="server-side form handler."/>
+			<attr name="method" type="enum" enum="GET|POST" desc="HTTP method used to submit the form."/>
+			<attr name="enctype" type="enum" enum="application/x-www-form-urlencoded|multipart/form-data|text/plain" desc="data encoding scheme."/>
+			<attr name="accept" type="string" desc="list of MIME types for file upload."/>
+			<attr name="name" type="string" desc="name of form for scripting."/>
+			<attr name="onsubmit" cat="Event" type="script" desc="the form was submitted."/>
+			<attr name="onreset" cat="Event" type="script" desc="the form was reset."/>
+			<attr name="target" type="string" desc="render in this frame."/>
+			<attr name="accept-charset" type="string" desc="list of supported charsets."/>
+		</attrs>
+	</element>
+	<!-- INPUT TAG -->
+	<element ename="INPUT" edesc="INPUT Tag" empty="1">
+		<attrs>
+&attrs;
+&cspbind;
+&csptext;
+
+<attr name="type" type="enum" enum="TEXT|PASSWORD|CHECKBOX|RADIO|SUBMIT|RESET|FILE|HIDDEN|IMAGE|BUTTON" desc="what kind of widget is needed."/>
+			<attr name="name" type="string" desc="submit as part of form."/>
+			<attr name="value" type="string" desc="Specify for radio buttons and checkboxes."/>
+			<attr name="checked" type="boolean" desc="for radio buttons and check boxes."/>
+			<attr name="disabled" type="boolean" desc="Mark this control as disabled."/>
+			<attr name="readonly" type="boolean" desc="for text and password."/>
+			<attr name="size" type="number" desc="specific to each type of field."/>
+			<attr name="maxlength" type="number" desc="max chars for text fields."/>
+			<attr name="src" type="uri" desc="for fields with images."/>
+			<attr name="alt" cat="Other" type="string" desc="short description."/>
+			<attr name="usemap" cat="Other" type="uri" desc="use client-side image map."/>
+			<attr name="ismap" cat="Other" type="boolean" desc="use server-side image map."/>
+			<attr name="tabindex" cat="Other" type="number" desc="position in tabbing order."/>
+			<attr name="accesskey" cat="Other" type="string" desc="accessibility key character."/>
+			<attr name="onfocus" cat="Event" type="script" desc="the element got the focus."/>
+			<attr name="onblur" cat="Event" type="script" desc="the element lost the focus."/>
+			<attr name="onselect" cat="Event" type="script" desc="some text was selected."/>
+			<attr name="onchange" cat="Event" type="script" desc="the element value was changed."/>
+			<attr name="accept" cat="Other" type="string" desc="list of MIME types for file upload."/>
+			<attr name="align" cat="Other" type="enum" enum="top|middle|bottom|left|right" desc="vertical or horizontal alignment."/>
+		</attrs>
+	</element>
+	<!-- SELECT TAG -->
+	<element ename="SELECT" edesc="SELECT Tag">
+		<attrs>
+&attrs;
+&cspbind;
+
+<attr name="classname" cat="CSPBind" type="string" desc="The class from which values will be obtained to fill a select list."/>
+			<attr name="query" cat="CSPBind" type="string" desc="The query to be run to fill a select list. Must be present if field or classname is present."/>
+			<attr name="field" cat="CSPBind" type="string" desc="The property of the class specified by classname whose values will appear in the select list."/>
+			<attr name="defaulttext" cat="CSPBind" type="string" desc="The text to use for the default option that is generated for a non-list property that is not required."/>
+			<attr name="name" type="string" desc="submit as part of form."/>
+			<attr name="size" type="number" desc="number of visible rows."/>
+			<attr name="multiple" type="boolean" desc="allow multiple choices."/>
+			<attr name="disabled" type="boolean" desc="unavailable in this context."/>
+			<attr name="tabindex" cat="Other" type="number" desc="position in tabbing order."/>
+			<attr name="onfocus" cat="Event" type="script" desc="the element got the focus."/>
+			<attr name="onblur" cat="Event" type="script" desc="the element lost the focus."/>
+			<attr name="onchange" cat="Event" type="script" desc="the element value was changed."/>
+		</attrs>
+	</element>
+	<!-- OPTION TAG -->
+	<element ename="OPTION" edesc="OPTION Tag" empty="1">
+		<attrs>
+&attrs;
+
+<attr name="label" type="string" desc="group label."/>
+			<attr name="value" type="string" desc="value."/>
+			<attr name="checked" type="boolean" desc="for radio buttons and check boxes."/>
+			<attr name="selected" type="boolean" desc="selected item."/>
+		</attrs>
+	</element>
+	<!-- OPTGROUP TAG -->
+	<element ename="OPTGROUP" edesc="OPTGROUP Tag">
+		<attrs>
+&attrs;
+
+<attr name="label" type="string" desc="group label."/>
+			<attr name="disabled" type="boolean" desc="unavailable in this context."/>
+		</attrs>
+	</element>
+	<!-- TEXTAREA TAG -->
+	<element ename="TEXTAREA" edesc="TEXTAREA Tag">
+		<attrs>
+&attrs;
+&cspbind;
+
+<attr name="name" type="string" desc="submit as part of form."/>
+			<attr name="rows" type="number" desc="number of rows."/>
+			<attr name="cols" type="number" desc="number of columns."/>
+			<attr name="disabled" type="boolean" desc="unavailable in this context."/>
+			<attr name="readonly" type="boolean" desc="for text and passwd."/>
+			<attr name="tabindex" cat="Other" type="number" desc="position in tabbing order."/>
+			<attr name="accesskey" cat="Other" type="string" desc="accessibility key character."/>
+			<attr name="onfocus" cat="Event" type="script" desc="the element got the focus."/>
+			<attr name="onblur" cat="Event" type="script" desc="the element lost the focus."/>
+			<attr name="onselect" cat="Event" type="script" desc="some text was selected."/>
+			<attr name="onchange" cat="Event" type="script" desc="the element value was changed."/>
+		</attrs>
+	</element>
+	<!-- TABLES -->
+	<!-- TABLE TAG -->
+	<element ename="TABLE" edesc="Table Tag">
+		<attrs>
+&attrs;
+
+<attr name="summary" type="string" desc="purpose/structure for speech output."/>
+			<attr name="width" type="number" desc="table width."/>
+			<attr name="border" type="number" desc="controls frame width around table."/>
+			<attr name="frame" type="string" desc="which parts of frame to render."/>
+			<attr name="rules" type="string" desc="rulings between rows and cols."/>
+			<attr name="cellspacing" type="number" desc="spacing between cells."/>
+			<attr name="cellpadding" type="number" desc="spacing within cells."/>
+			<attr name="align" type="enum" enum="left|center|right" desc="table position relative to window."/>
+			<attr name="bgcolor" type="color" desc="background color for cells."/>
+		</attrs>
+	</element>
+	<!-- TR TAG -->
+	<element ename="TR" edesc="TR Tag">
+		<attrs>
+&attrs;
+
+<attr name="char" cat="Other" type="string" desc="alignment character."/>
+			<attr name="charoff" cat="Other" type="number" desc="offset for alignment char."/>
+			<attr name="align" type="enum" enum="left|center|right" desc="Alignment of row relative to table."/>
+			<attr name="valign" type="enum" enum="top|center|bottom|baseline" desc="Vertical alignment of row relative to table."/>
+			<attr name="bgcolor" type="color" desc="background color for cells."/>
+		</attrs>
+	</element>
+	<!-- TD TAG -->
+	<element ename="TD" edesc="TD Tag">
+		<attrs>
+&attrs;
+
+<attr name="abbr" cat="Other" type="string" desc="abbreviation for header cell."/>
+			<attr name="axis" cat="Other" type="string" desc="comma-separated list of related headers."/>
+			<attr name="headers" cat="Other" type="string" desc="list of id's for header cells."/>
+			<attr name="scope" cat="Other" type="string" desc="scope covered by header cells."/>
+			<attr name="rowspan" type="number" desc="number of rows spanned by cell."/>
+			<attr name="colspan" type="number" desc="number of columns spanned by cell."/>
+			<attr name="nowrap" type="boolean" desc="suppress word wrap."/>
+			<attr name="width" type="number" desc="width of cell."/>
+			<attr name="height" type="number" desc="height of cell."/>
+			<attr name="char" cat="Other" type="string" desc="alignment character."/>
+			<attr name="charoff" cat="Other" type="number" desc="offset for alignment char."/>
+			<attr name="align" type="enum" enum="left|center|right" desc="Alignment of row relative to table."/>
+			<attr name="valign" type="enum" enum="top|center|bottom|baseline" desc="Vertical alignment of row relative to table."/>
+			<attr name="bgcolor" type="color" desc="background color for cells."/>
+		</attrs>
+	</element>
+	<!-- TH TAG -->
+	<element ename="TH" edesc="TH Tag">
+		<attrs>
+&attrs;
+
+<attr name="abbr" cat="Other" type="string" desc="abbreviation for header cell."/>
+			<attr name="axis" cat="Other" type="string" desc="comma-separated list of related headers."/>
+			<attr name="headers" cat="Other" type="string" desc="list of id's for header cells."/>
+			<attr name="scope" cat="Other" type="string" desc="scope covered by header cells."/>
+			<attr name="rowspan" type="number" desc="number of rows spanned by cell."/>
+			<attr name="colspan" type="number" desc="number of columns spanned by cell."/>
+			<attr name="nowrap" type="boolean" desc="suppress word wrap."/>
+			<attr name="width" type="number" desc="width of cell."/>
+			<attr name="height" type="number" desc="height of cell."/>
+			<attr name="char" cat="Other" type="string" desc="alignment character."/>
+			<attr name="charoff" cat="Other" type="number" desc="offset for alignment char."/>
+			<attr name="align" type="enum" enum="left|center|right" desc="Alignment of row relative to table."/>
+			<attr name="valign" type="enum" enum="top|center|bottom|baseline" desc="Vertical alignment of row relative to table."/>
+			<attr name="bgcolor" type="color" desc="background color for cells."/>
+		</attrs>
+	</element>
+	<!-- CAPTION TAG -->
+	<element ename="CAPTION" edesc="Table Caption Tag">
+		<attrs>
+&attrs;
+
+<attr name="align" type="enum" enum="left|center|right" desc="Alignment of row relative to table."/>
+			<attr name="valign" type="enum" enum="top|center|bottom|baseline" desc="Vertical alignment of row relative to table."/>
+		</attrs>
+	</element>
+	<!-- FRAMES -->
+	<!-- FRAME TAG -->
+	<element ename="FRAME" edesc="Frame Tag">
+		<attrs>
+&attrs;
+
+<attr name="longdesc" type="uri" desc="link to long description."/>
+			<attr name="name" type="string" desc="name of frame for targetting."/>
+			<attr name="src" type="uri" desc="source of frame content."/>
+			<attr name="frameborder" type="number" desc="request frame borders."/>
+			<attr name="marginwidth" type="number" desc="margin width in pixels."/>
+			<attr name="marginheight" type="number" desc="margin height in pixels."/>
+			<attr name="noresize" type="boolean" desc="allow users to resize frames?."/>
+			<attr name="scrolling" type="enum" enum="yes|no|auto" desc="scrollbar or no."/>
+		</attrs>
+	</element>
+	<!-- FRAMESET TAG -->
+	<element ename="FRAMESET" edesc="Frame set Tag">
+		<attrs>
+&attrs;
+<attr name="rows" type="string" desc="list of sizes."/>
+			<attr name="cols" type="string" desc="list of sizes."/>
+			<attr name="onload" cat="Event" type="script" desc="all the frames have been loaded."/>
+			<attr name="onunload" cat="Event" type="script" desc="all the frames have been removed."/>
+		</attrs>
+	</element>
+	<!-- NOFRAMES TAG -->
+	<element ename="NOFRAMES" edesc="No frames Tag">
+		<attrs>
+&attrs;
+</attrs>
+	</element>
+	<!-- IFRAME TAG -->
+	<element ename="IFRAME" edesc="Inline Frame Tag">
+		<attrs>
+&attrs;
+
+<attr name="longdesc" type="uri" desc="link to long description."/>
+			<attr name="name" type="string" desc="name of frame for targetting."/>
+			<attr name="src" type="uri" desc="source of frame content."/>
+			<attr name="frameborder" type="number" desc="request frame borders."/>
+			<attr name="marginwidth" type="number" desc="margin width in pixels."/>
+			<attr name="marginheight" type="number" desc="margin height in pixels."/>
+			<attr name="scrolling" type="enum" enum="yes|no|auto" desc="scrollbar or no."/>
+			<attr name="align" type="enum" enum="top|middle|bottom" desc="Alignment of frame."/>
+			<attr name="width" type="number" desc="frame width."/>
+			<attr name="height" type="number" desc="frame height."/>
+		</attrs>
+	</element>
+	<!-- CSP TAGS -->
+	<!-- SCRIPT TAG -->
+	<element ename="SCRIPT" edesc="Server and client script tag">
+		<description>
+The SCRIPT tag is used to define to define server-side Cache scripts,
+server-side SQL scripts or client side JavaScript scripts.
+The runat or method attribute is used with Cache.
+The name or cursor attributes are used with SQL.
+No attributes are used with ESQL.
+The remaining attributes are used with Javascript.
+</description>
+		<attrs>
+			<attr name="language" type="enum" enum="cache|sql|esql|javascript" desc="Script language."/>
+			<attr name="runat" cat="Cache" type="enum" enum="server|compiler" desc="When to run Cache script."/>
+			<attr name="method" cat="Cache" type="string" desc="Name of Cache method being defined."/>
+			<attr name="name" cat="SQL" type="string" desc="For dynamic SQL, the name of local variable to hold reference to %ResultSet object."/>
+			<attr name="cursor" cat="SQL" type="string" desc="For embedded SQL, the name of cursor to create."/>
+			<attr name="P1" cat="SQL" type="string" desc="For dynamic SQL, value of the first query parameter."/>
+			<attr name="P2" cat="SQL" type="string" desc="For dynamic SQL, value of the second query parameter."/>
+			<attr name="P3" cat="SQL" type="string" desc="For dynamic SQL, value of the third query parameter."/>
+			<attr name="P4" cat="SQL" type="string" desc="For dynamic SQL, value of the fourth query parameter."/>
+			<attr name="mode" cat="SQL" type="enum" enum="LOGICAL|ODBC|DISPLAY|SYSTEM" desc="Runtime mode of the query."/>
+			<attr name="type" cat="JavaScript" type="string" desc="Defines the language being used for this script. You must supply a MIME-type for this attribute. Some known values are text/javascript and text/vbscript. May be used instead of language=javascript."/>
+			<attr name="charset" cat="JavaScript" type="string" desc="Specifies the character encoding used to write the script."/>
+			<attr name="defer" cat="JavaScript" type="string" desc="With this attribute you can signal to the browser that this script doesn't generate content that must be included dynamically in the document."/>
+			<attr name="src" cat="JavaScript" type="string" desc="Specifies a file as the script source (rather than embedding the script in the HTML)."/>
+		</attrs>
+	</element>
+	<!-- CSP:QUERY TAG -->
+	<element ename="CSP:QUERY" edesc="Run a predefined query" empty="1">
+		<description>
+The CSP:QUERY tag creates a %ResultSet object based on
+a query defined within a Cache class.
+This tag defines a server-side variable, whose name is specified
+by the tag's name attribute, that refers to a %ResultSet object.
+The %ResultSet object is automatically executed (by calling its
+Execute method using the parameter values given by the various
+Pn attributes of the tag) and is ready for use within the page.
+</description>
+		<attrs>
+			<attr name="name" type="string" desc="Name of local variable used to refer to the %ResultSet object created for this query."/>
+			<attr name="classname" type="string" desc="Name of the class containing the query."/>
+			<attr name="queryname" type="string" desc="Name of the query."/>
+			<attr name="mode" type="enum" enum="LOGICAL|ODBC|DISPLAY|SYSTEM" desc="Runtime mode of the query."/>
+			<attr name="P1" type="string" desc="Value of the first query parameter."/>
+			<attr name="P2" type="string" desc="Value of the second query parameter."/>
+			<attr name="P3" type="string" desc="Value of the third query parameter."/>
+			<attr name="P4" type="string" desc="Value of the fourth query parameter."/>
+		</attrs>
+	</element>
+	<!-- CSP:SQLQUERY TAG -->
+	<element ename="CSP:SQLQUERY" edesc="Run a dynamic SQL query">
+		<description>
+The CSP:SQLQUERY tag creates a %ResultSet object based on
+a dynamic query defined by an SQL statement.
+This tag defines a server-side variable, whose name is specified
+by the tag's name attribute, that refers to a %ResultSet object.
+This tag is identical to the SCRIPT LANGUAGE=SQL tag except that it
+may be used to redirect the query to an external database using the Cache
+Relational Gateway.
+</description>
+		<attrs>
+			<attr name="name" type="string" desc="Name of local variable used to refer to the %ResultSet object created for this query."/>
+			<attr name="mode" type="enum" enum="LOGICAL|ODBC|DISPLAY|SYSTEM" desc="Runtime mode of the query."/>
+			<attr name="datasource" type="string" desc="This specifies the name of an external data source to be used for this query."/>
+			<attr name="username" type="string" desc="Optional user name for the external data source."/>
+			<attr name="password" type="string" desc="Optional password for the external data source."/>
+			<attr name="P1" type="string" desc="Value of the first query parameter."/>
+			<attr name="P2" type="string" desc="Value of the second query parameter."/>
+			<attr name="P3" type="string" desc="Value of the third query parameter."/>
+			<attr name="P4" type="string" desc="Value of the fourth query parameter."/>
+		</attrs>
+	</element>
+	<!-- CSP:TEXT TAG -->
+	<element ename="CSP:TEXT" edesc="Localize text" empty="1">
+		<description>
+The CSP:TEXT tag replaces itself and its contents with text identified by TextId
+in the %MessageDictionary specified by Language and Domain attributes.
+Attributes ARGn, where n is an integer, are substituted for %n in the message text.
+</description>
+		<attrs>
+&csptext;
+</attrs>
+	</element>
+	<!-- CSP:SECTION TAG -->
+	<element ename="CSP:SECTION" edesc="Put tag in specified section of document.">
+		<attrs>
+			<attr name="name" type="enum" enum="prehtml|head|body|posthtml" desc="Name of section"/>
+			<attr name="block" type="number" desc="Relative position in section. Default is 0.  Negative is beginning of section or positive is end of section."/>
+		</attrs>
+	</element>
+	<!-- CSP:CLASS TAG -->
+	<element ename="CSP:CLASS" edesc="CSP class parameters" empty="1">
+		<description>
+The CSP:CLASS tag specifies characteristics of the class that is generated when a CSP page is compiled.
+</description>
+		<attrs>
+			<attr name="private" type="enum" enum="public|private" desc="Specifies whether this page is PUBLIC or PRIVATE."/>
+			<attr name="encoded" type="enum" enum="0|1|2" desc="Query parameters for this page will be encrypted (0=no,1=yes,2=yes and remove unencrypted)."/>
+			<attr name="errorpage" type="string" desc="Name of custom CSP error page."/>
+			<attr name="expires" type="string" desc="Default value for %response.Expires."/>
+			<attr name="super" type="string" desc="A comma-delimited list of super classes."/>
+			<attr name="import" type="string" desc="A comma-delimited list of imported packages."/>
+			<attr name="includes" type="string" desc="A comma-delimited list of include files for the generated CSP class."/>
+			<attr name="domain" type="string" desc="Default value for message domain in %response.Domain."/>
+		</attrs>
+	</element>
+	<!-- CSP:COMMENT TAG -->
+	<element ename="CSP:COMMENT" edesc="CSP comment.">
+		<description>
+The CSP:COMMENT tag lets you specify comments that are not rendered to the client.
+</description>
+		<attrs>
+</attrs>
+	</element>
+	<!-- CSP:CONTENT TAG -->
+	<element ename="CSP:CONTENT" edesc="CSP content type defaults." empty="1">
+		<description>
+The CSP:CONTENT tag specifies the default content characteristics of the generated page.
+</description>
+		<attrs>
+			<attr name="type" type="string" desc="Specifies the default Content-Type."/>
+			<attr name="charset" type="string" desc="Specifies the default charset."/>
+			<attr name="nocharsetconvert" type="enum" enum="0|1" desc="Turns off the charset conversion."/>
+		</attrs>
+	</element>
+	<!-- CSP:INCLUDE TAG -->
+	<element ename="CSP:INCLUDE" edesc="Runtime include of CSP file." empty="1">
+		<description>
+The CSP:INCLUDE tag includes another csp page or file at runtime. If there is a problem
+with the include then it will call the error page to display the error, setting the parameter
+"Error:IncludePage" to the page it was trying to include.
+</description>
+		<attrs>
+			<attr name="page" type="string" desc="The csp page or file to include at this point."/>
+		</attrs>
+	</element>
+	<!-- CSP:IF TAG -->
+	<element ename="CSP:IF" edesc="IF tag">
+		<description>
+The CSP:IF tag displays its contents if the Cache expression specified by the CONDITION attribute evaluates to TRUE at run-time.
+</description>
+		<attrs>
+			<attr name="condition" type="string" desc="A run-time COS expression to be evaluated."/>
+		</attrs>
+	</element>
+	<!-- CSP:ELSE TAG -->
+	<element ename="CSP:ELSE" edesc="ELSE tag" empty="1">
+		<description>
+The CSP:ELSE tag, placed within a CSP:IF> block, specifies that the text between it
+and the end of the CSP:IF are displayed if the CSP:IF CONDITION evaluates to FALSE at run-time.
+</description>
+		<attrs>
+</attrs>
+	</element>
+	<!-- CSP:ELSEIF TAG -->
+	<element ename="CSP:ELSEIF" edesc="ELSEIF tag" empty="1">
+		<description>
+The CSP:ELSEIF tag, placed within a CSP:IF block, specifies that the text between it
+and the end of the CSP:IF (or the next CSP:ELSEIF or CSP:ELSE)
+are displayed if the CSP:ELSEIF CONDITION evaluates to TRUE at run-time.
+</description>
+		<attrs>
+			<attr name="condition" type="string" desc="A run-time COS expression to be evaluated."/>
+		</attrs>
+	</element>
+	<!-- CSP:NEW TAG -->
+	<element ename="CSP:NEW" edesc="New COS variables" empty="1">
+		<description>
+The CSP:NEW tag executes a new command for the comma separated list of variables.
+If the vars attribute is not specified, then the New command is not generated.
+</description>
+		<attrs>
+			<attr name="vars" type="string" desc="A list of variables to New in the format of the COS New command."/>
+		</attrs>
+	</element>
+	<!-- CSP:LOOP TAG -->
+	<element ename="CSP:LOOP" edesc="LOOP tag">
+		<description>
+The CSP:LOOP tag repeatedly executes its contents based on its attribute values.
+</description>
+		<attrs>
+			<attr name="counter" type="string" desc="The name of the counter variable used by this loop."/>
+			<attr name="from" type="number" desc="The starting value of the loop counter."/>
+			<attr name="to" type="number" desc="The ending value of the loop counter."/>
+			<attr name="step" type="number" desc="The amount the loop counter is changed by on each iteration."/>
+		</attrs>
+	</element>
+	<!-- CSP:WHILE TAG -->
+	<element ename="CSP:WHILE" edesc="WHILE tag">
+		<description>
+The CSP:WHILE tag repeatedly executes its contents while the COS expression
+specified by the condition attribute is true.
+Upon each iteration, a local variable specified by the counter attribute
+is incremented. The counter variable is initialized to 0 before the loop and
+is incremented at the beginning of each interation.
+If the counter attribute is not specfied, no counter will be generated.
+The CSP:WHILE tag may also be used to loop over a cursor defined for enbedded SQL
+using the SCRIPT LANGUAGE=SQL CURSOR= tag.
+</description>
+		<attrs>
+			<attr name="condition" type="string" desc="A COS expression evaluated after each iteration. If the expression evaluated to true, then the loop is iterated again."/>
+			<attr name="counter" type="string" desc="The name of a local variable that is automatically incremented upon each iteration."/>
+			<attr name="cursor" type="string" desc="For use with embedded SQL only. An SQL cursor that gets the row for the next iteration."/>
+			<attr name="into" type="string" desc="For use with embedded SQL only. Comma sparated INTO list for the SQL FETCH of the next row.  Specifies the variables to receive the row's data."/>
+		</attrs>
+	</element>
+	<!-- CSP:QUIT TAG -->
+	<element ename="CSP:QUIT" edesc="QUIT tag" empty="1">
+		<description>
+The CSP:QUIT quits the containing CSP:WHILE or CSP:LOOP block.
+</description>
+	</element>
+	<!-- CSP:CONTINUE TAG -->
+	<element ename="CSP:CONTINUE" edesc="CONTINUE tag" empty="1">
+		<description>
+The CSP:CONTINUE executes the next iteration of the containing 
+CSP:WHILE or CSP:LOOP block.
+</description>
+	</element>
+	<!-- CSP:OBJECT TAG -->
+	<element ename="CSP:OBJECT" edesc="Get a CSP object" empty="1">
+		<description>
+The CSP:OBJECT tag places a Cache object on a page.
+Specifically, it ensures that a local variable, whose name is specified by the name attribute
+attribute, contains a reference to an instance of the class specified by the classname attribute.
+If the objid attribute has a non-null value, then the object instance is created by
+calling the %OpenId() method using the value of the objid attribute.
+</description>
+		<attrs>
+			<attr name="name" type="string" desc="The name of the local variable used to refer to the object."/>
+			<attr name="classname" type="string" desc="The class name of the object."/>
+			<attr name="objid" type="string" desc="Object Identifier value used to open the object."/>
+		</attrs>
+	</element>
+	<element ename="CSP:SEARCH" edesc="CSP search page" empty="1">
+		<description>
+The CSP:SEARCH tag defines defines a client-side JavaScript function that invokes a search
+page.  The name of the function is specified by the value of the NAME attribute.
+</description>
+		<attrs>
+			<attr name="name" type="string" desc="The name of the search function. The default name is search."/>
+			<attr name="classname" type="string" desc="Class name upon which the search is performed."/>
+			<attr name="objid" type="string" desc="Object Identifier value used to identify an object on the initial page."/>
+			<attr name="objidattr" type="string" desc="Name of the object identifier attribute of the associated form.  Default is OBJID."/>
+			<attr name="where" type="string" desc="A comma-delimited list of fields to search on."/>
+			<attr name="select" type="string" desc="A comma-delimited list of fields to display in the search result table. If not specified, the where list is used as the select list."/>
+			<attr name="predicates" type="string" desc="A comma-delimited list of predicates (such as =,%startswith,select) associated with each item in the where list."/>
+			<attr name="order" type="string" desc="A comma-delimited list of fields used to sort the search results."/>
+			<attr name="maxrows" type="string" desc="Specifies the maximum number of rows to display in the search results table. The default is 100."/>
+			<attr name="target" type="string" desc="Specifies the page to which the links in the search result window point. The default is the page invoking the search."/>
+			<attr name="options" type="string" desc="A comma-separated list of search window options. These include popup, clearbtn, nodisplay, display, nopredicates, predicates, sortbox, leaveopen, showcount."/>
+			<attr name="caption" type="string" desc="An optional caption string displayed within the standard search page."/>
+			<attr name="features" type="string" desc="The features argument to the window.open call for the popup search window."/>
+			<attr name="onselect" type="string" desc="The Javascript function to execute after item has been selected."/>
+			<attr name="startvalues" type="string" desc="A comma-delimited list of fields whose initial value should come from the form."/>
+			<attr name="idname" type="string" desc="The name of the id field of the object being searched."/>
+			<attr name="form" type="string" desc="The name of theform associated with the search."/>
+			<attr name="showsql" type="enum" enum="0|1" desc="Show SQL used for search."/>
+		</attrs>
+	</element>
+	<element ename="XSQL:QUERY" edesc="Oracle XSQL tag">
+		<attrs>
+			<attr name="XMLNS:XSQL" type="string" desc="Must be URN:ORACLE-XSQL for CSP support of Oracle"/>
+			<attr name="connection" type="string" desc="Connection identifier."/>
+			<attr name="rowset-element" type="string" desc="Specifies the XML tag for the row set, the default is ROWSET."/>
+			<attr name="row-element" type="string" desc="Specifies the XML tag for each row, the default is ROW."/>
+			<attr name="skip-rows" type="string" desc="Specifies the number of rows to skip before returning data."/>
+			<attr name="max-rows" type="string" desc="Specifies the maximum number of rows to return (not including any rows skipped by skip-rows)."/>
+			<attr name="tag-case" type="string" desc="Controls the case of the XML tags, 'upper' means uppercase and 'lower' specifies lowercase.  The default is to use the case of the column names."/>
+		</attrs>
+	</element>
+	<element ename="SQL:QUERY" edesc="Microsoft SQL tag">
+		<attrs>
+			<attr name="XMLNS:SQL" type="string" desc="Must be URN:SCHEMAS-MICROSOFT-COM:XML-SQL for CSP support of Microsoft."/>
+		</attrs>
+	</element>
+	<element ename="CSP:StudioInteractiveTemplate" edesc="Studio template" empty="1">
+		<description>
+Insert this tag into the page that you wish to be included in the templates available in Studio.
+All templates live in the '/apps/templates' path. Items that include this tag will show up under the
+templates menu and will consist of several CSP pages which then generates the text to include.
+</description>
+		<attrs>
+			<attr name="name" type="string" desc="Name of the template to show in Studio."/>
+			<attr name="description" type="string" desc="Descriptions of this Studio template type."/>
+			<attr name="type" type="enum" enum="CSP|CSR|MAC|INT|INC|BAS|CLS" desc="The type of code this template generates."/>
+			<attr name="new" type="enum" enum="0|1" desc="True if this template is for new routines, the default is false if this template is just to be inserted in the current document."/>
+		</attrs>
+	</element>
+	<element ename="CSP:StudioGenerateTemplate" edesc="Studio template" empty="1">
+		<description>
+Insert this tag into the page that generates the actual template text. This ensures it
+outputs the correct tags for the Studio to know this is the final template to be inserted
+at the current cursor position.
+</description>
+		<attrs>
+</attrs>
+	</element>
+	<element ename="CSP:StudioSimpleTemplate" edesc="Simple Studio template" empty="1">
+		<description>
+Insert this tag into a simple template. It is to be used if you have a simple block of text that you
+wish to insert that does not require any questions.
+</description>
+		<attrs>
+			<attr name="name" type="string" desc="Name of the template to show in Studio."/>
+			<attr name="description" type="string" desc="Descriptions of this Studio template type."/>
+			<attr name="type" type="enum" enum="CSP|CSR|MAC|INT|INC|BAS|CLS" desc="The type of code this template generates."/>
+			<attr name="new" type="enum" enum="0|1" desc="True if this template is for new routines, the default is false if this template is just to be inserted in the current document."/>
+		</attrs>
+	</element>
+</elementlist>

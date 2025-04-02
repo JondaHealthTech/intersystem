@@ -1,0 +1,28 @@
+<!--
+
+Message Details Viewer for Message Bank Browser
+
+-->
+
+<AutoPage domain="Ensemble" pagename="Message Bank Message Details"  parentpage="EnsEntMessages.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>@Ensemble:MsgBankDetails@Message Bank Message Details</Text>
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.FormPane">
+	<Text>Message Details</Text>
+	<Align>left</Align>
+</Pane>
+
+<Pane name="Info" type="CSPX.Enterprise.Portal.MsgPane">
+	<!--
+	<Commands>
+		<Action href="EnsEntMessages.csp?$FRAME=Info" targetFrame="Info">
+			<Caption>Filter Messages</Caption>
+		</Action>
+	</Commands>
+	-->
+
+</Pane>
+</AutoPage>

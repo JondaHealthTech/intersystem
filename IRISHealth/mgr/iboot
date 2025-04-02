@@ -1,0 +1,1788 @@
+INSTALL ; Installation routine ;; Change #: $Change: 7440104 $
+	; Copyright (c) 2025 by InterSystems Corporation.
+	; Cambridge, Massachusetts, U.S.A.  All rights reserved.
+	; Confidential property of InterSystems Corporation.
+ ;; Revision: $Id: //iris/2024.1.3/databases/sys/rtn/sysconfig/install.mac#1 $
+ ; GXLATE.INC
+ ; =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ ; Install Cache for UNIX, Windows, or VMS
+ ;
+ ; Local variables that may be defined by the calling environment:
+ ;     SrcDir   -> path to directory containing flat files to load
+ ;     LocaleDir-> path to directory containing <loc>_obj.goq
+ ;     Update   -> zero if this is an initial installation
+ ;     LoadUtil -> zero if system utility sources should not be loaded
+ ;     Locale   -> installation locale name (3-letter abbreviation)
+ ;     Product  -> Product name (e.g. "Cache", Ensemble", etc)
+ ;     Samples  -> zero if SAMPLES databases will not be installed
+ ;     Docbook  -> zero if DOCBOOK databases will not be installed
+ ;     User     -> zero if USER databases will not be installed
+ ; =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+START
+ s $zt="err"
+ d $zu(163,(2**31))
+ s File=$zu(12)_"DEBUG_INSTALL.INT" 
+ i $zu(140,4,File)=0 {
+	d $zu(9,"","Running debug install file "_File,0,0  /* Informational message */)
+	o File
+	s X="u File zl  u 0 c File zs INSTALL g START1^INSTALL"
+	X X
+	d $zu(9,"","Exiting debug install file",0,0  /* Informational message */)
+	q
+ }
+START1
+ s CacheToIRISUpgrade=+$g(CacheToIRISUpgrade)
+ n a s a=$zu(78,21)
+ i $p(a,",",2)="",'$p(a,",",3) d $zu(78,58) 
+ if $ZBITGET($ZVERSION(0),46) { 
+	 d $zu(9,"","Starting Globals install procedure",0,0  /* Informational message */)
+	 n %io,%f  ;these are used by the DS loader
+ } else {
+	 d $zu(9,"","Starting ^INSTALL procedure",0,0  /* Informational message */)
+ }
+ i CacheToIRISUpgrade {
+	 d $zu(9,"","Conversion from Cache to IRIS detected",0,0  /* Informational message */)
+	 i ($zversion(1)=2),($g(WindowsUserAccount)'="") {
+		 d $zu(9,"","Unable to update Windows Service controller with username "_WindowsUserAccount_", now running as 'Local System Account' user",1 /* broadcast and log message*/,2  /* Severe error */)
+		 d $zu(9,"","You will need to update the Windows Service named 'InterSystems IRIS controller for "_$p($zu(86),"*",2)_"' with username "_WindowsUserAccount_" and password",1 /* broadcast and log message*/,2  /* Severe error */)
+	 }
+ }
+ d SaveParams
+ d Messages
+ d InitVars
+ d InitLog
+ if $ZBITGET($ZVERSION(0),46) { 
+    do InstallGlobalsDB() 
+ } else {
+	 d Manager
+	 d Audit
+	 d Journal
+	 d Databases
+	 d EnsembleDB
+	 d EMS
+	 d UpdateTaskMgr
+	 d installer
+	 d bootensemble
+	 d bootuser
+ }
+ s TIM2=$H,ET=TIM2-TIM1*86400+$P(TIM2,",",2)-$P(TIM1,",",2)\60
+ s ET=$s(ET>1:MiscMsg(9)_ET_MiscMsg(10),ET=1:MiscMsg(9)_ET_MiscMsg(10.5),1:"")
+ u %Log w !!,StepMsg(1),ET,$$%DT,!
+ i '($zversion(1)=2) u 0 w !,StepMsg(1),ET,!
+ i ($zversion(1)=2) s BasePct=100,StepPct=0 d InitStep(1)
+ k ^ROUTINE("BOOT")
+ k ^rINDEX("BOOT")
+ k ^rOBJ("BOOT")
+ k ^rINDEX("INSTALL","INT")
+ k ^ROUTINE("INSTALL") ; if you are stepping in the debugger, your source code vanishes here
+ i $d(TurnOnDBEncrypt) {
+	 u %Log
+	 w !!,"There were problems activating your Database Encryption Key."
+	 w !,"You will need to restart your system and change 'Interactive' encryption"
+	 w !,"key startup to 'Unattended', and then re-install. See the release notes for"
+	 w !,"more information."
+	 u 0
+	 s $ze="Error activating database encryption during install, see "_%Log_" for more info"
+	 k TurnOnDBEncrypt
+	 g err1
+ }
+ c %Log
+ k ^||ISC.EMS.DOWNLOAD
+ d $zu(9,"","Finishing ^INSTALL procedure",0,0  /* Informational message */)
+ q
+  ;=================================================================== 
+Manager ; Update manager's database as required
+ s ^SYS("UCI",$zu(12,""))=""
+ s ^%SYS("bindir")=$System.Util.BinaryDirectory()
+ s ^SYS("mnemonic","DTM")="%XDTM"_$c(1)_"DATATREE PC CONSOLE"
+ s ^SYS("MAGTAPE")="%XMAG"_$c(1)_"MAGNETIC TAPE BINDING"
+ s ^SYS("X3.64")="%X364"_$c(1)_"ANSI X3.64 BINDING"
+ i Update {
+	d NextStep(2)
+	d chgsize($zu(12))
+	d $zu(5,"^^"_$zu(12))
+	s x=""
+	f  s x=$o(^ROUTINE(x)) q:x=""  i ('($e(x)="z"||($e(x)="Z")||($e(x,1,2)="%z")||($e(x,1,2)="%Z"&&($e(x,1,5)'="%ZEN.")&&($e(x,1,8)'="%ZHSLIB.")))),(x'=$zn),(x'="BOOT"),'$D(^%MV.RTN(x)) k ^ROUTINE(x)
+	f  s x=$o(^rOBJ(x)) q:x=""  i ('($e(x)="z"||($e(x)="Z")||($e(x,1,2)="%z")||($e(x,1,2)="%Z"&&($e(x,1,5)'="%ZEN.")&&($e(x,1,8)'="%ZHSLIB.")))),(x'=$zn),(x'="BOOT"),'$D(^%MV.RTN(x)) k ^rOBJ(x)
+	k ^rINDEX,^rINDEXCLASS
+	k ^|"^^"_$zu(12)|oddBIND,^|"^^"_$zu(12)|oddCOM,^|"^^"_$zu(12)|oddDEP,^|"^^"_$zu(12)|oddEXT,^|"^^"_$zu(12)|oddEXTR,^|"^^"_$zu(12)|oddMAP,^|"^^"_$zu(12)|oddMETA,^|"^^"_$zu(12)|oddPKG,^|"^^"_$zu(12)|oddPROC,^|"^^"_$zu(12)|oddSQL,^|"^^"_$zu(12)|oddTSQL,^|"^^"_$zu(12)|oddXML,^|"^^"_$zu(12)|rINDEXSQL("TABLE"),^|"^^"_$zu(12)|rINDEXSQL("VIEW"),^|"^^"_$zu(12)|rINDEXSQL("rv"),^|"^^"_$zu(12)|rINDEXSQL("SCHEMA"),^|"^^"_$zu(12)|rINDEXSQL("SERVER"),^|"^^"_$zu(12)|rINDEXEXT
+	s cn=""
+	f  {
+		s cn=$o(^oddDEF(cn)) q:cn=""
+		i ('($e(cn)="z"||($e(cn)="Z")||($e(cn,1,2)="%z")||($e(cn,1,2)="%Z"&&($e(cn,1,5)'="%ZEN.")&&($e(cn,1,8)'="%ZHSLIB.")))) {
+			k ^oddDEF(cn)
+		} else {
+			s x="",cnx=cn_".",cnl=$l(cnx)
+			f  s x=$o(^ROUTINE(x)) q:x=""  i $e(x,1,cnl)=cnx k ^ROUTINE(x)
+			f  {
+				s x=$o(^rOBJ(x)) q:x=""
+				i $e(x,1,cnl)=cnx {
+					if ('$s($d(^oddDEF(cn,72))#2:^(72),1:0)) {
+						k ^rOBJ(x)
+					} else {
+						s keptobj(x)=""
+					}
+				}
+			}
+		}
+	}
+	d NextStep(3)
+	s x="" f  s x=$o(^rOBJ(x)) q:x=""  i (x'=$zn),(x'="BOOT")&&'$d(keptobj(x)) d RecompileMgr(x)
+	k keptobj
+ }
+ d Expand($zu(12),65)
+ d NextStep(4)
+ s io=SrcDir_"iutil.mro" d mri
+ d NextStep(13)
+ d $zu(5,"^^"_$zu(12))
+ d $zu(90,-1)
+ s ok=$$MAP^%SYS.NAMESPACE("%SYS",,,$zu(12))
+ d $zu(9,"","Switching to temporary %SYS Namespace",0,0  /* Informational message */)
+ d $zu(5,"%SYS")
+ d NextStep(5)
+ k ^||rINC
+ k ^||oddDEF
+ i +$g(^|"^^"_$zu(12)|oddDEF)'=0 s ^||oddDEF=^oddDEF
+ s cn="" f  s cn=$o(^|"^^"_$zu(12)|oddDEF(cn)) q:cn=""  i ($e(cn)="z"||($e(cn)="Z")||($e(cn,1,2)="%z")||($e(cn,1,2)="%Z"&&($e(cn,1,5)'="%ZEN.")&&($e(cn,1,8)'="%ZHSLIB."))) m ^||oddDEF(cn)=^|"^^"_$zu(12)|oddDEF(cn) k ^|"^^"_$zu(12)|oddDEF(cn)
+ s cn="" f  s cn=$o(^|"^^"_$zu(12)|rINC(cn)) q:cn=""  i ($e(cn)="z"||($e(cn)="Z")||($e(cn,1,2)="%z")||($e(cn,1,2)="%Z"&&($e(cn,1,5)'="%ZEN.")&&($e(cn,1,8)'="%ZHSLIB."))) m ^||rINC(cn)=^|"^^"_$zu(12)|rINC(cn) k ^|"^^"_$zu(12)|rINC(cn)
+ s io=SrcDir_"iutil.goq" d gif
+ s cn="" f  s cn=$o(^||oddDEF(cn)) q:cn=""  i $d(^|"^^"_$zu(12)|oddDEF(cn)) k ^||oddDEF(cn)
+ s cn="" f  s cn=$o(^||rINC(cn)) q:cn=""  i $d(^|"^^"_$zu(12)|rINC(cn)) k ^||rINC(cn)
+ m ^|"^^"_$zu(12)|oddDEF=^||oddDEF
+ m ^|"^^"_$zu(12)|rINC=^||rINC
+ k ^||rINC
+ k ^||oddDEF
+	kill ^|"^^"_$zu(12)|%SYS("sql","data model") merge ^|"^^"_$zu(12)|%SYS("sql","data model") = ^|"^^"_$zu(12)|sqldatamodel
+	kill ^|"^^"_$zu(12)|sqldatamodel
+ d CheckDBEncryption
+ s ok=$$Start^DATABASE()
+ i 'ok {
+	s $ze="Error activating Database Encryption Key"
+	g err
+ }
+ i Update d LoadLocale()
+ d GetCacheDirs^STU(.IRISTemp,.IRISLocalData,.IRISAudit)
+ i 'Update {
+	i ##class(%Library.File).Exists(IRISTemp_"IRIS.DAT") d ##class(%Library.File).Delete(IRISTemp_"IRIS.DAT")	 
+	i ##class(%Library.File).Exists(IRISLocalData_"IRIS.DAT") d ##class(%Library.File).Delete(IRISLocalData_"IRIS.DAT")	 
+ }
+ i CacheToIRISUpgrade {
+	 d ConvertSystemDatabases(.IRISTemp,.IRISLocalData,.IRISAudit)
+ } else {
+ s rc=$$MakeIRISTemp^%SYS.DATABASE(IRISTemp)
+ i '(''rc) {
+	 d $zu(9,"","Error initializing "_"IRIS"_"TEMP->"_IRISTemp,1 /* broadcast and log message*/,2  /* Severe error */)
+	 s $ze=$SYSTEM.Status.GetErrorText(rc)
+	 g err
+ }
+ }
+ s rc=$$MakeIRISLocalData^%SYS.DATABASE(IRISLocalData)
+ i '(''rc) {
+	 d $zu(9,"","Error initializing IRISLOCALDATA->"_IRISLocalData,1 /* broadcast and log message*/,2  /* Severe error */)
+	 s $ze=$SYSTEM.Status.GetErrorText(rc)
+	 g err
+ }
+ d ResetDBEncryption
+ d $zu(5,"^^"_$zu(12))
+ d $zu(90,-1)
+ s ok=$$MAP^%SYS.NAMESPACE("%SYS","","",IRISTemp,"",IRISLocalData)
+ d $zu(9,"","Switching to default %SYS Namespace",0,0  /* Informational message */)
+ d $zu(5,"%SYS")
+ s QUIETLY=1 d LoadDLLs^STU()
+ s ^||ISC.EMS.DOWNLOAD="INSTALL"
+ d NLS
+ d NextStep(6)
+ s Status=##Class(Security.System).CheckSecurityTables(1)
+ i '(''Status) {
+ 	 s $ze="Error in security tables, Error: "_$SYSTEM.Status.GetErrorText(Status) 
+ 	 g err
+ }
+DebugUsingStudio
+ ;d $zu(9,"","Starting Debug Server on Port "_$g(^%SYS("SSPort"),SSPort),0,0)
+ ;J ServerMaster^%SYS.SERVER($g(^%SYS("SSPort"),SSPort)):(:10):5
+ ;i '$t d $zu(9,"","Unable to start Server",0,0)
+ ;V $ZU(40,2,93):-2:1:0  ; Allow users to log in
+ ;h 180                  ; Wait for 3 minutes for debugger to attach
+ i CacheToIRISUpgrade d CacheToIRISUpgrade()
+ i Update d UpdateUserDatabases(CacheToIRISUpgrade)
+ d NextStep(7)
+ i LoadUtil d LoadSources
+ s io=SrcDir_"update.rsa" o io:"RS":$$Timeout i  d ri(1)
+ s io=SrcDir_"update.mro" o io:"RU":$$Timeout i  d mri
+ s txmode=$$SetTransactionMode^%apiOBJ(0)
+ d ##class(SYS.Database).CreateDefaultGlobals($zu(12,""))
+ d NextStep(8)
+ i NeedToReindex {
+	s Status=$$RebuildIndex^%R()
+	i +Status=0 d $zu(9,"","Error: "_Status_" rebuilding routine index for %SYS namespace",1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN
+ }
+ i '$$UpdateCPFFile(SSPort,WSPort,Update) {
+	s zmsg="Unable to update CPF file, see the messages.log file for errors"
+	d $zu(9,"",zmsg,1 /* broadcast and log message*/,1  /* Warning */)
+ 	u %Log w !,zmsg u 0
+ 	i '($zversion(1)=2) w !,zmsg
+ }
+ u %Log w !! d INSTALL^TERCAP
+ i $d(^mchs) k ^%SYS("NLS","Chs") m ^%SYS("NLS","Chs")=^mchs k ^mchs
+ d RegisterMonitor(Update)
+ u %Log d ^EDITOR
+ d SetWebAllowedCode(Update)
+ d $SYSTEM.OBJ.Upgrade()
+ k cmpcls
+ s x="" f  s x=$o(^||oddDEF(x)) q:x=""  s cmpcls(x)=""
+ i $d(cmpcls) s zz=$SYSTEM.OBJ.Compile(.cmpcls,"ck") i +zz=0 d
+ . s zmsg="Recompile of user's class failed with "_$SYSTEM.Status.GetErrorText(zz)
+ . d $zu(9,"",zmsg,1 /* broadcast and log message*/,1  /* Warning */)
+ . u %Log w !,zmsg u 0
+ . i '($zversion(1)=2) w !,zmsg
+ k ^||oddDEF,cmpcls
+ i Update {
+	do PurgeUpgrade^%SYS.SQLSRV()	// DPV3496= d $SYSTEM.SQL.Purge(0)	// DPV3426, this deletes old ^mcq cached queries in %SYS
+	do PurgeAllNamespacesUpgrade^%SYS.SQLSRV()	// DPV3426 Need to call this once during upgrade to purge all new-style cached queries on this system
+	s x="",zmsg1=""
+	f {
+		s x=$O(^|"^^"_$zu(12)|rMAC(x)) q:x=""
+		i $d(^|"^^"_$zu(12)|rMAC(x,0,"GENERATED")) continue
+		i $d(^%SYS("SourceRoot","%SYS")),'(("Z,z"[$e(x))||("%Z,%z"[$e(x,1,2))) continue
+		i $d(^|"^^"_$zu(12)|rOBJ(x)) continue
+		i '$$ROUTINE^%R(x_".mac",,.errs,"LCS") {
+			s zmsg="Recompile of routine "_x_".mac failed"
+			d $zu(9,"",zmsg,1 /* broadcast and log message*/,1  /* Warning */)
+			u %Log w !,zmsg u 0
+			u %Log f i=1:1:$LL(errs) { w !,"  "_$LG($LI(errs,i),5) } u 0
+			i '($zversion(1)=2) w !,zmsg
+			i zmsg1="" {
+				s zmsg1="Error details are in "_%Log
+				d $zu(9,"",zmsg1,1 /* broadcast and log message*/,1  /* Warning */)
+				i '($zversion(1)=2) w !,zmsg1
+			}
+		}
+	}
+	s x="",zmsg1="" f {
+		s x=$O(^%MV.RTN(x)) q:x=""
+		i $D(^ROUTINE(x,0)),'$$ROUTINE^%R(x_".mvi",,.errs,"LCS",,,,,1) {
+			s zmsg="Recompile of globally cataloged "_$LG(^%MV.RTN(x),4)_" as "_x_" failed"
+			d $zu(9,"",zmsg,1 /* broadcast and log message*/,1  /* Warning */)
+			u %Log w !,zmsg u 0
+			u %Log f i=1:1:$LL(errs) { w !,"  "_$LG($LI(errs,i),5) } u 0
+			i '($zversion(1)=2) w !,zmsg
+			i zmsg1="" {
+				s zmsg1="Error details are in "_%Log
+				d $zu(9,"",zmsg1,1 /* broadcast and log message*/,1  /* Warning */)
+				i '($zversion(1)=2) w !,zmsg1
+			}
+		}
+	}
+	d UpgradeIRISSYS()
+ } else {
+	s ^SYS("SystemDBVersion")=2023.1
+	s ^SYS("BACKUPDB","IRISSYS")=""
+	s ^SYS("BACKUPDB","IRISAUDIT")=""
+	i User=1 s ^SYS("BACKUPDB","USER")=""
+ 	d $Zutil(1,$zu(12),0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,"%DB_IRISSYS")
+ }
+ s x=$$List^Wsback(.ll,"")
+ q
+UpdateUserDatabases(CacheToIRISUpgrade=0) Public {
+ s $zt="Error"
+ s IRISSYSVersion=+$g(^SYS("SystemDBVersion"))
+ i IRISSYSVersion>=2023.1 q
+ s db="" 
+ f  {
+	s db=$o(^SYS("UCI",db)) q:db=""
+ 	d UpdateUserDatabase(db,CacheToIRISUpgrade)
+ }
+ q
+Error s $zt=""
+ d $zu(9,"","Error: "_$ze_" updating database "_$g(db)_", all routines and classes should be recompiled after the installation.",1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN 
+ q
+}
+UpdateMirrorDatabases() Public {
+ s $zt="Error"
+ if '$SYSTEM.Mirror.IsPrimary() {
+    d $zu(9,"","Error: "_"UpdateMirrorDatabases called to update "_db1_" on non-Primary mirror member",1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN 
+	quit
+ }
+ s IRISMirrorVersion=+$g(^SYS("IRISEMirrorVersion"))
+ i IRISMirrorVersion>=2023.1 q
+ s db="" 
+ f  {
+	s db=$o(^SYS("UCI",db)) q:db=""
+	s Obj=##Class(SYS.Database).%OpenId(db,,.Status)
+    If ('Status) {
+	   d $zu(9,"","Error: "_$SYSTEM.Status.GetErrorText(Status)_" failed to open mirrored database: "_db,1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN 
+    } else {
+	   s mirrored=Obj.Mirrored
+	   s Obj=""
+ 	   if mirrored {
+	 	   do UpdateUserDatabase(db)
+ 	   }
+    }
+ }
+ q
+Error s $zt=""
+ d $zu(9,"","Error: "_$ze_" updating mirrored database "_$g(db)_", UpdateUserDatabase^INSTALL("""_$G(db)_""") should be called when the problem is resolved",1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN 
+ q
+}
+UpdateUserDatabase(db,CacheToIRISUpgrade=0) Public {
+ s $zt="Error"
+ s db1=$zu(12,db)
+ q:db1=$zu(12)
+ q:db1=$zu(12,##Class(%Library.File).SubDirectoryName($zu(12),"iristemp"))
+ q:db1=$zu(12,##Class(%Library.File).SubDirectoryName($zu(12),"irisaudit"))
+ q:db1=$zu(12,##Class(%Library.File).SubDirectoryName($zu(12),"irislib"))
+ q:db1=$zu(12,##Class(%Library.File).SubDirectoryName($zu(12),"irislocaldata"))
+ q:db1=$zu(12,##Class(%Library.File).SubDirectoryName($zu(12),"hslib"))
+ q:db1=$zu(12,##Class(%Library.File).SubDirectoryName($zu(12),"enslib"))
+ s installmgr=$zu(12,##Class(%Library.File).SubDirectoryName($system.Util.InstallDirectory(),"mgr"))
+ If ($zu(12)'=installmgr) {
+ 	q:db1=$zu(12,##Class(%Library.File).SubDirectoryName(installmgr,"irislib"))
+ 	q:db1=$zu(12,##Class(%Library.File).SubDirectoryName(installmgr,"hslib"))
+ 	q:db1=$zu(12,##Class(%Library.File).SubDirectoryName(installmgr,"enslib"))
+ }
+ ;
+ s Obj=##Class(SYS.Database).%OpenId(db1,,.Status)
+ If ('Status) {
+	d $zu(9,"","Error: "_$SYSTEM.Status.GetErrorText(Status)_" failed to open database: "_db1_", you may need to execute DO UpdateUserDatabase^INSTALL("""_db1_""","_CacheToIRISUpgrade_")",1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN 
+ 	d $zu(9,"","You may need to execute: Set tSC = ##class(%EnsembleMgr).Install(1,"""_$g(^SYS("InstallParams","Product"))_""") after the database has been mounted",1 /* broadcast and log message*/,1  /* Warning */)
+	quit
+ }
+ If Obj.Mirrored,'$SYSTEM.Mirror.IsPrimary() {
+	d $zu(9,"","Update of mirrored database "_db1_" deferred",0,0  /* Informational message */)
+	quit
+ }
+ If Obj.ReadOnly {
+	d $zu(9,"","Could not update ReadOnly database: "_db1_", you may need to execute DO UpdateUserDatabase^INSTALL("""_db1_""","_CacheToIRISUpgrade_")",1 /* broadcast and log message*/,1  /* Warning */)
+ 	d $zu(9,"","You may need to execute: Set tSC = ##class(%EnsembleMgr).Install(1,"""_$g(^SYS("InstallParams","Product"))_""") after the database has been mounted",1 /* broadcast and log message*/,1  /* Warning */)
+	quit
+ }
+ k Obj
+ d $zu(9,"","Updating user database "_db1,0,0  /* Informational message */)
+ Try {
+ 	s Status=$zu(17,db1)
+ } catch {
+	s Status=$$Error^%apiOBJ(5001,$ze)
+ }
+ i Status<0 s Status=$$Error^%apiOBJ(-Status)
+ i '(''Status) {
+	 d $zu(9,"","Could not mount database: "_db1_", error="_$SYSTEM.Status.GetErrorText(Status)_", you may need to execute DO UpdateUserDatabase^INSTALL("""_db1_""","_CacheToIRISUpgrade_")",1 /* broadcast and log message*/,1  /* Warning */)
+ 	 d $zu(9,"","You may need to execute: Set tSC = ##class(%EnsembleMgr).Install(1,"""_$g(^SYS("InstallParams","Product"))_""") after the database has been mounted",1 /* broadcast and log message*/,1  /* Warning */)
+	 q
+ }
+ s Obj=##Class(SYS.Database).%OpenId(db1,,.Status)
+ If ('Status) {
+		d $zu(9,"","Error: "_$SYSTEM.Status.GetErrorText(Status)_" failed to open database: "_db1_", you may need to execute DO UpdateUserDatabase^INSTALL("""_db1_""","_CacheToIRISUpgrade_")",1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN
+ 	 	d $zu(9,"","You may need to execute: Set tSC = ##class(%EnsembleMgr).Install(1,"""_$g(^SYS("InstallParams","Product"))_""") after the database has been mounted",1 /* broadcast and log message*/,1  /* Warning */)
+		quit
+ }
+ If Obj.ReadOnlyMounted {
+	d $zu(9,"","Could not update ReadOnly database: "_db1_", you may need to execute DO UpdateUserDatabase^INSTALL("""_db1_""","_CacheToIRISUpgrade_")",1 /* broadcast and log message*/,1  /* Warning */)
+ 	d $zu(9,"","You may need to execute: Set tSC = ##class(%EnsembleMgr).Install(1,"""_$g(^SYS("InstallParams","Product"))_""") after the database has been mounted",1 /* broadcast and log message*/,1  /* Warning */)
+	quit
+ }
+ d ##class(SYS.Database).CreateDefaultGlobals(db1)
+ d ##class(SYS.Database).FixDefaultGlobalCollation(db1,38)
+ i 'CacheToIRISUpgrade {
+	zn "^^"_db1
+	do PurgeUpgrade^%SYS.SQLSRV()	// DPV3496= d $SYSTEM.SQL.Purge(0) // DPV3426, this deletes old ^mcq cached queries in this namespace
+	try { if $D(^rPYC) kill ^rPYC }
+	catch { d $zu(9,"",$ze_" killing ^rPYC in database "_$g(db1),0,0  /* Informational message */) }
+ 	d $zu(5,"%SYS")
+ }
+ i CacheToIRISUpgrade {
+	zn "^^"_db1
+	m ^IRIS.Msg=^CacheMsg
+	k ^CacheMsg
+ 	m ^IRIS.MsgNames=^CacheMsgNames
+ 	k ^CacheMsgNames
+ 	d $zu(5,"%SYS")
+ }
+ d $ZU(51,1)
+ q
+Error s $zt=""
+ d $zu(9,"","Error: "_$ze_" updating database "_$g(db1),1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN 
+ d $zu(5,"%SYS")
+ q
+}
+NLS d NextStep(9)
+ i CacheToIRISUpgrade d DelCacheStandard()
+ n newtyp,newloc,oldtyp,oldloc
+ q:$g(Locale)=""  
+ s newtyp=$s($ZBITGET($ZVERSION(0),1):"w",1:"8")
+ s oldloc=$g(^|"^^"_$zu(12)|%SYS("LOCALE","CURRENT"))           ;Check prior locale
+ i oldloc="" s oldloc=$zcvt($e(Locale,1,3),"L")
+ e  d
+ . s oldtyp=$e(oldloc,$l(oldloc))
+ . i (oldtyp="w")!(oldtyp="8") d
+ . . i oldtyp="w",newtyp="8" s $ze=nlsMsg(3) d err
+ . . s $e(oldloc,$l(oldloc))=""
+ . . i $e(oldloc)="y" s oldloc=$zcvt($e(Locale,1,3),"L") s:oldloc="rus"&(newtyp="8") oldloc="ruw"
+ i Update s:oldloc="ruw"&(newtyp="w") oldloc="rus"   ; Allow ruw8->rusw
+ e  i oldloc="rus",newtyp="8" s oldloc="ruw"         ; New 8-bit Russian installations use ruw8
+ e  i oldloc="jpn",newtyp="w",($zversion(1)=2) s oldloc="jpw" ; New Japanese/Unicode/Windows -> jpww
+ s newloc=oldloc_newtyp
+ u %Log s Locale=newloc,^%nlsmisc("DEBUG")=1 d INSTALL^NLSLOAD() k ^%nlsmisc("DEBUG")
+ q
+LoadLocale() Private {
+ i $D(^|"^^"_$zu(12)|%SYS("LOCALE","CURRENT"),locale) {
+	d Start^ShmObj,Locale^NLSLOAD(locale)
+ 	i $d(^|"^^"_$zu(12)|SYS("NLS","Errors")) w !,"Error loading locale "_locale_", see the messages.log file"
+ }
+ q
+}
+DelCacheStandard() PRIVATE {
+ s ref=$Name(^|"^^"_$zu(12)|SYS("NLS","TablesD")),ref=$Name(@ref@("COL","Cache standard"))
+ s chs=$O(@ref@(""))
+ while chs'="" {
+   d ##class(Config.NLS.Tables).Delete("COL","Cache standard",chs)
+   d ##class(Config.NLS.Tables).Delete("COL",chs,"Cache standard")
+   s chs=$O(@ref@(chs))
+ }
+ d $zu(9,"","Deleted Cache standard collation",0,0  /* Informational message */)
+}
+RegisterMonitor(Update) PRIVATE {
+ s $zt="Error"
+ s x="%Monitor.System.Sample"
+ f  s x=$o(^oddCOM(x)) q:$extract(x,1,22)'="%Monitor.System.Sample"  d
+ . s class=$p(x,".",4)
+ . s monclass="%Monitor.System."_class
+ . d ##class(%Monitor.Manager).Register(monclass,Update)
+ d ##class(%Monitor.Manager).Remove("%Monitor.System.Dashboard")
+ d ##class(%Monitor.Manager).Remove("%Monitor.System.Dashboard2")
+ i $d(^ISCMonitor("Monitor","SmtpPassword")) {
+	s pwd=^ISCMonitor("Monitor","SmtpPassword")
+	k ^ISCMonitor("Monitor","SmtpPassword")
+ 	i pwd'="" s ^ISCMonitor("Monitor","SmtpPasswordE") = $system.Encryption.Base64Encode(pwd)
+ }
+ i $d(^ISCMonitor("Monitor","AppSmtpPassword")) {
+	s pwd=^ISCMonitor("Monitor","AppSmtpPassword")
+	k ^ISCMonitor("Monitor","AppSmtpPassword")
+ 	i pwd'="" s ^ISCMonitor("Monitor","AppSmtpPasswordE") = $system.Encryption.Base64Encode(pwd)
+ }
+ i 'Update {
+ 	s int="" d ##class(%Monitor.Manager).ClassInterval("%Monitor.System.HistoryPerf",.int)
+ 	i 'int d ##class(%Monitor.Manager).ClassInterval("%Monitor.System.HistoryPerf",30)
+ 	s int="" d ##class(%Monitor.Manager).ClassInterval("%Monitor.System.HistorySys",.int)
+ 	i 'int d ##class(%Monitor.Manager).ClassInterval("%Monitor.System.HistorySys",300)
+ }
+ i $d(^ISC.Monitor.Health.Loglevel) {
+	i ^ISC.Monitor.Health.Loglevel=2 s ^ISC.Monitor.Debug = 1
+	k ^ISC.Monitor.Health.Loglevel
+ }
+ i 'Update d ##class(SYS.Monitor.Health.Control).ClearDefaults()
+ i 'Update d ##class(%SYS.Monitor).ResetDefault()
+ k ^SYS("FeatureTracker","Setup")
+ d ##class(%SYS.Monitor).AddComponentClass("SYS.Monitor.FeatureTrackerSensor")
+ q 
+Error s $zt=""
+ d $zu(9,"","Error: "_$ze,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ q
+}
+UpdateCPFFile(SSPort,WSPort,Update) Public {
+ s $zt="Error"
+ if Update {
+	do ##class(Config.Startup).Get(.OldProperties)
+	set OldWebServer=$Get(OldProperties("WebServer"))
+	set OldWSPort=$Get(OldProperties("WebServerPort"))
+ }
+ k ^CONFIG
+ k ^SYS("CONFIG")
+ s ^CONFIG("Update")=1
+ i 'Update {
+	i SSPort'=0 s Properties("DefaultPort")=SSPort
+ 	s Status=##Class(Security.Servers).Initialize(SSPort,1)
+ 	i '(''Status) d $zu(9,"","Unable to create Super Server Port "_SSPort_", Error="_$SYSTEM.Status.GetErrorText(Status),1 /* broadcast and log message*/,2  /* Severe error */)
+ 	s Properties("WebServerPort")=WSPort
+	i (($$PlatformId^%SYS.LICENSE'=66) && (WSPort'=0)) {
+		s Properties("WebServerURLPrefix")=$ZCVT(##class(%SYS.System).GetInstanceName(),"L")
+	}
+ }
+ else {
+	if (OldWebServer&&(WSPort'=OldWSPort)&&($$PlatformId^%SYS.LICENSE'=66)) {
+		set Properties("WebServer")=0
+		if ((WSPort=80)||(WSPort=8080)) {
+			set Properties("WebServerPort")=WSPort
+			set Properties("WebServerURLPrefix")=$ZCVT(##class(%SYS.System).GetInstanceName(),"L")
+		}
+	}
+ }
+ If $zu(140,4,"/usr/lib64/libcrypto.so.1.1")=0||($zu(140,4,"/usr/lib64/libcrypto.so.3")=0) {
+	 s fipsfile="/proc/sys/crypto/fips_enabled"
+	 open fipsfile:"R":0
+	 if $T {
+		 s SaveIO=$I
+		 Try {
+		 Use fipsfile Read fipsmode
+		 s Properties("FIPSMode")=(fipsmode'=0)
+		 close fipsfile
+		 } catch {
+		 }
+		 Use SaveIO
+	 }
+ }
+ i $d(^||Databases) {
+	 s Database=""
+	 f  {
+		 s Database=$o(^||Databases(Database),1,Value) q:Database=""
+		 s Properties("Databases",Database)=Value
+	 }
+ }
+ s Status=##Class(Config.CPF).Read(.CPFFile,1024,,,.Properties)
+ k ^CONFIG("Update")
+ i '(''Status) {
+	 d ##Class(Config.CPF).GetErrorText(Status,2)
+	 q 0
+ }
+ s Status=##Class(Config.CPF).MoveToActive()
+ i '(''Status) d ##Class(Config.CPF).GetErrorText(Status,2)
+ q 1
+Error s $zt=""
+ d $zu(9,"","Error: "_$ze,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ q 0
+}
+SetWebAllowedCode(Update) Public {
+	Set CurrentAllowedVersion = $$GetWebAllowedClassesAndVersion(.AllowClasses)
+	If $get(^SYS("Security","CSP"),0) < CurrentAllowedVersion {
+		Set app=""
+		For {
+			Set app=$order(AllowClasses(app))
+			Quit:app=""
+			Set class=""
+			For {
+				Set class=$order(AllowClasses(app,class),1,allowed)
+				Quit:class=""
+				If 'Update||'$data(^SYS("Security","CSP","AllowClass",app,class)) {
+					Set ^SYS("Security","CSP","AllowClass",app,class)=allowed
+				}
+			}
+		}
+		If Update {
+			Kill ^SYS("Security","CSP","AllowClass","/api/document/","%Api.Document")
+			Kill ^SYS("Security","CSP","AllowClass","/api/interop-editors/","%Api.InteropEditors.v1.disp")
+			Set app=""
+			For {
+				Set app=$order(^SYS("Security","CSP","AllowPrefix",app))
+				Quit:app=""
+				If $get(^SYS("Security","CSP","AllowPrefix",app,"%DeepSee."))=1 {
+					If '$data(^SYS("Security","CSP","AllowPrefix",app,"%ZEN.Dialog.")) Set ^SYS("Security","CSP","AllowPrefix",app,"%ZEN.Dialog.")=1
+				}
+			}
+		}
+		Set ^SYS("Security","CSP")=CurrentAllowedVersion
+	}
+}
+GetWebAllowedClassesAndVersion(AllowClasses) PUBLIC {
+	Set CurrentAllowedVersion = 12
+	Set AllowClasses("/api/atelier/","%Api.Atelier")=1
+	Set AllowClasses("/api/deepsee/","%Api.DeepSee")=1
+	Set AllowClasses("/api/iknow/","%Api.iKnow")=1
+	Set AllowClasses("/api/uima/","%Api.UIMA")=1
+	Set AllowClasses("/api/docdb/","%Api.DocDB")=1
+	Set AllowClasses("/api/mgmnt/","%Api.Mgmnt.v2.disp")=1
+	Set AllowClasses("/api/monitor/","%Api.Monitor")=1
+	Set AllowClasses("/api/iam/","%Api.IAM.v1.disp")=1
+	Set AllowClasses("/api/interop-editors/","%Api.InteropEditors")=1
+	Set AllowClasses("0", "%SYS.Python.WSGI")=1
+	Quit CurrentAllowedVersion
+}
+UpgradeIRISSYS() PUBLIC {
+ d IRISSYS20181()
+ s ^SYS("SystemDBVersion")=2023.1
+}
+IRISSYS20181() PUBLIC {
+ s $zt="Error"
+ s IRISSYSVersion=+$g(^SYS("SystemDBVersion"))
+ i IRISSYSVersion>=2019.1 q
+ s Task="Converting IRISSYS to 2019.1"
+ d $zu(9,"",Task,0,0  /* Informational message */)
+ q
+Error s $zt=""
+ d $zu(9,"","Error: "_$ze,1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN
+ q
+}
+ConvertODBCINI() Private {
+ s $zt="EndOfFile"
+ q:'($zversion(1)=3)
+ s File="irisodbc.ini"
+ i $zu(140,4,File) q
+ o File:"RS":5 i '$t q
+ s TmpFile=File_+$J
+ o TmpFile:"WNS":5 i '$t c File q
+ f  {
+	u File
+ 	r Record q:$zeof
+ 	i $zstrip(Record,"*W")="Samples=Samples" continue
+ 	i $zstrip(Record,"*W")="[Samples]" {
+	 	f  {
+		 	r Record q:$zeof
+			i $e($zstrip(Record,"*W"))="[" q			
+	 	}
+	 	q:$zeof
+ 	}
+ 	i $zstrip(Record,"*W")="Namespace=SAMPLES" s Record="Namespace       = USER"
+ 	s Record=$replace(Record,"libcacheodbcu35.so","libirisodbcu35.so")
+ 	s Record=$replace(Record,"libcacheodbc35.so","libirisodbc35.so")
+ 	s Record=$replace(Record,"libcacheodbcu25.so","libirisodbcu35.so")
+ 	s Record=$replace(Record,"libcacheodbc25.so","libirisodbc35.so")
+ 	s Record=$replace(Record,"libcacheodbciw35.so","libirisodbciw35.so")
+ 	s Record=$replace(Record,"libcacheodbcuw35.so","libirisodbcuw35.so")
+ 	s Record=$replace(Record,"libcacheodbcur6435.so","libirisodbcur6435.so")
+	s Record=$replace(Record," libcacheodbc.so","libirisodbc35.so")
+	s Record=$replace(Record," libcacheodbcu.so","libirisodbcu35.so")
+	s Record=$replace(Record," libcacheodbciw.so","libirisodbciw35.so")
+	s Record=$replace(Record," libcacheodbcur64.so","libirisodbcur6435.so")
+ 	s Record=$replace(Record,"Samplesunixodbc","Userunixodbc")
+ 	s Record=$replace(Record,"Cache ODBC driver","IRIS ODBC driver")
+ 	u TmpFile w Record,!
+ } 
+End
+ c File
+ c TmpFile
+ d $zu(140,11,TmpFile,File)
+ d $zu(140,5,TmpFile)
+ q 
+EndOfFile s $zt=""
+ i $ZE["ENDOFFILE" g End
+ i $d(File) c File
+ i $d(TmpFile) {
+	c TmpFile
+	d $zu(140,5,TmpFile)
+ }
+ q
+}
+MVRenameAll() Private { 
+ Set $ZT="Error"
+ Set Namespace=""
+ For { 
+ 	Set Namespace=$O(^%MV.SYS("N",Namespace)) 
+ 	Quit:Namespace=""  
+ 	Do MVRenameNamespace(Namespace)
+ }
+ q
+Error Set $ZT=""
+ d $zu(9,"","Error: "_$ze,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ q
+}
+CheckUpgrade(CacheToIRISUpgrade,Errors) Public {
+ s $zt="Error"
+ s Errors=""
+ zn "%SYS"
+ d LoadLocale()
+ s CRLF=$c(13,10)
+ i CacheToIRISUpgrade {
+  s CPFFile=$zu(12,"..")_"cache.cpf"
+ } else {
+  s CPFFile=$zu(12,"..")_"iris.cpf"
+ }
+ i 'CacheToIRISUpgrade g Upgrade
+ s User=""
+ f  {
+	s User=$o(^SYS("Security","UsersD",User),1,Record) q:User=""
+	s Roles=$li(Record,21)
+	f i=1:1:$ll(Roles) {
+		s Role=$li(Roles,i)
+		i ",%DB_IRISSYS,%DB_IRISTEMP,%DB_IRISAUDIT,%DB_IRISLIB,%DB_IRISLOCALDATA,"[(","_Role_",") {
+			s Errors=Errors_"User "_$li(Record,17)_" has role "_Role_" assigned, this must be deleted before converting"_CRLF
+		}
+	}
+ }
+ s Role=""
+ f  {
+	s Role=$o(^SYS("Security","RolesD",Role),1,RoleRecord) q:Role=""
+	i ",%db_irissys,%db_iristemp,%db_irisaudit,%db_irislib,%db_irislocaldata,"[(","_Role_",") {
+		s Errors=Errors_"Role "_$li(RoleRecord,4)_" already exists, you must delete it and the use of it before converting"_CRLF
+	}
+	s Num=""
+	f  {
+		s Num=$o(^SYS("Security","RolesD",Role,"Resources",Num),1,Data) q:Num=""
+		i $g(Data)="" continue
+		s Resource=$li(Data,2)
+		i ",%DB_IRISSYS,%DB_IRISTEMP,%DB_IRISAUDIT,%DB_IRISLIB,%DB_IRISLOCALDATA,"[(","_Resource_",") {
+			s Errors=Errors_"Role:Resource pair "_$li(RoleRecord,4)_":"_Resource_", already exists, you must delete it before converting"_CRLF
+		}
+	}
+ }
+ s Role=""
+ f  {
+	s Role=$o(^SYS("Security","SQL","role-user",Role)) q:Role=""
+	i ",%DB_IRISSYS,%DB_IRISTEMP,%DB_IRISAUDIT,%DB_IRISLIB,%DB_IRISLOCALDATA,"[(","_Role_",") {
+		s User=""
+		f  {
+			s User=$o(^SYS("Security","SQL","role-user",Role,User)) q:User=""
+			s Errors=Errors_"Role "_Role_" is in use by SQL user "_User_", you must delete it before converting"_CRLF
+		}
+	}
+ }
+ s Resource=""
+ f  {
+	s Resource=$o(^SYS("Security","ResourcesD",Resource),1,Record) q:Resource=""
+	i ",%db_irissys,%db_iristemp,%db_irisaudit,%db_irislib,%db_irislocaldata,"[(","_Resource_",") {
+		s Errors=Errors_"Resource "_$li(Record,3)_" already exists, you must delete it and the use of it before converting"_CRLF
+	}
+ }
+ s Application=""
+ f  {
+	s Application=$o(^SYS("Security","ApplicationsD",Application),1,ApplicationRecord) q:Application=""
+	s Resources=$li(ApplicationRecord,13)
+	f i=1:1:$ll(Resources) {
+		s ResourceList=$li(Resources,i)
+		s OldResourceList=ResourceList
+		s ResourceList=$replace(ResourceList,"%DB_IRISSYS","")
+		s ResourceList=$replace(ResourceList,"%DB_IRISLIB","")
+		s ResourceList=$replace(ResourceList,"%DB_IRISTEMP","")
+		s ResourceList=$replace(ResourceList,"%DB_IRISAUDIT","")
+		s ResourceList=$replace(ResourceList,"%DB_IRISLOCALDATA","")
+		i ResourceList'=OldResourceList {
+			s Errors=Errors_"Application "_Application_" is using IRIS system roles, you must delete the roles and the use of them before converting"_CRLF
+			q
+		}
+	}
+ }
+ d CheckDatabases
+ If ($zversion(1)=3) {
+ 	i $lg($g(^SYS("Security","SystemD","SYSTEM")),9)=1 {
+ 		s Space=$zu(140,13,$zu(12))
+		i +Space>0 {
+			If ($zversion(1)=3) {
+				Set MBSpace=$piece(Space,",",1)*$piece(Space,",",4)/(1024*1024)
+			} Else {
+				Set MBSpace=$piece(Space,",",2)*$piece(Space,",",4)/(1024*1024)
+			}
+			i MBSpace<550 s Errors=Errors_"550 MB of free space required in MGR Directory "_$zu(12)_", "_MBSpace_"MB available"_CRLF
+ 		}
+ 	}
+ }
+Upgrade
+ i '$zu(140,4,CPFFile) {
+	s Status=##Class(Config.CPF).Validate(CPFFile,4,.CPFErrors)
+	i 'Status f i=1:1:CPFErrors s Errors=Errors_CPFErrors(i)_CRLF
+ }
+ i ($d(^%SYS("Shut"))=0)||$d(^%SYS("Shut","Fail")) {
+	s Errors=Errors_"Instance was not shut down correctly, may have been forced or crashed"_CRLF
+	s Errors=Errors_"You must restart the instance and shut it down cleanly before proceeding"
+ }
+ i $d(^SYS("CONFIG","CACHE","config","config"),Record) {
+	s Wijdir=$li(Record,56)
+ } else {
+	i $d(^SYS("CONFIG","IRIS","config","config"),Record) {
+		s Wijdir=$li(Record,56)
+	} 
+ }
+ i $g(Wijdir)="" s Wijdir=$zu(12)
+ s Space=$zu(140,13,Wijdir)
+ i +Space>0 {
+	If ($zversion(1)=3) {
+		Set MBSpace=$piece(Space,",",1)*$piece(Space,",",4)/(1024*1024)
+	} Else {
+		Set MBSpace=$piece(Space,",",2)*$piece(Space,",",4)/(1024*1024)
+	}
+	i MBSpace<200 s Errors=Errors_"200 MB of free space required in WIJ Directory "_Wijdir_", "_MBSpace_"MB available"_CRLF
+ }
+ i Errors'="" {
+	i CacheToIRISUpgrade {
+		s Msg="The following errors were detected during conversion verification."_CRLF
+ 		s Msg=Msg_"You must correct these errors before continuing with the conversion."_CRLF_CRLF
+	} else {
+		s Msg="The following errors were detected during upgrade verification."_CRLF
+ 		s Msg=Msg_"You must correct these errors before continuing with the upgrade."_CRLF_CRLF
+	}
+ 	s Errors=Msg_Errors
+ }
+ q
+Error Set $ZT=""
+ d $zu(9,"","Error: "_$ze_" validating Cache system before upgrade - Continuing",1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ q
+CheckDatabases
+ set $zt="EndOfFile1"
+ s DBErrors=""
+ close CPFFile
+ open CPFFile:"RSK\UTF8\":5 if '$t { d $zu(9,"","Error: "_"Unable to open "_CPFFile_", continuing",1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN q }
+ for  {
+	use CPFFile
+	read Record quit:$zeof
+	set Record=$zstrip(Record,"<>W")
+	continue:Record=""
+	if $e(Record)="[" {
+		set Section=$p($e(Record,2,*),"]")
+		set Sectionup=$zcvt(Section,"U")
+		continue
+	}
+	if (Sectionup'="DATABASES") continue
+	s Database=$p(Record,"=",1)
+	i ",IRISSYS,IRISLIB,IRISTEMP,IRISAUDIT,IRISLOCALDATA,"[(","_Database_",") s DBErrors=DBErrors_"Database "_Database_" is defined in the CPF file "_CPFFile_CRLF
+ } 
+End1
+ close CPFFile
+ i DBErrors'="" {
+	s Errors=Errors_DBErrors
+ 	s Errors=Errors_"You must remove these databases from your system before"_CRLF_"continuing the conversion"_CRLF
+ }
+ QUIT
+EndOfFile1
+ set $zt=""
+ goto:$ZE["ENDOFFILE" End1
+ if $d(CPFFile) { close CPFFile }
+ d $zu(9,"","Error: "_$ze_" checking for IRIS system databases, continuing...",1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ g End1
+}
+ConvertSystemDatabases(IRISTemp,IRISLocalData,IRISAudit) Private {
+ s Info=$zu(49,$zu(12))
+ i +Info>=0 {
+	s Resource=$p(Info,",",25)
+	i Resource="%DB_CACHESYS" D ChangeDBResource("IRISSYS",$zu(12),"%DB_IRISSYS")
+ } else {
+	d $zu(9,"","Unable to change resource of database IRISSYS, directory "_$zu(12)_" to "_"%DB_IRISSYS",1 /* broadcast and log message*/,2  /* Severe error */)
+ }
+ Try {
+ 	s CacheTemp=##class(%Library.File).NormalizeDirectory("cachetemp",$zu(12))
+	i CacheTemp=IRISTemp {
+		s IRISTemp=##class(%Library.File).NormalizeDirectory("iristemp",$zu(12))
+		i ##class(%Library.File).DirectoryExists(CacheTemp),('##class(%Library.File).DirectoryExists(IRISTemp)) {
+			d $zu(9,"","Converting "_CacheTemp_" to "_IRISTemp,0,0  /* Informational message */)
+			s Status=##class(%Library.File).Rename(CacheTemp,IRISTemp,.Error)
+			i 'Status d $zu(9,"","Error: "_Error_" converting "_CacheTemp_" to "_IRISTemp,1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN
+		}
+	}
+	i ##class(%Library.File).Exists(IRISTemp_"CACHE.DAT"),'##class(%Library.File).Exists(IRISTemp_"IRIS.DAT") {
+		d $zu(9,"","Converting "_IRISTemp_"CACHE.DAT"_" to "_IRISTemp_"IRIS.DAT",0,0  /* Informational message */)
+		s Status=##class(%Library.File).Rename(IRISTemp_"CACHE.DAT",IRISTemp_"IRIS.DAT",.Error)
+		i 'Status d $zu(9,"","Error: "_Error_" converting "_IRISTemp_"CACHE.DAT to "_IRISTemp_"IRIS.DAT",1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN
+	}
+	d ##class(%Library.File).Delete(IRISTemp_"cache.lck")
+	s rc=$$MakeIRISTemp^%SYS.DATABASE(IRISTemp)
+ 	i '(''rc) {
+		d $zu(9,"","Error initializing "_"IRIS"_"TEMP->"_IRISTemp_" "_$SYSTEM.Status.GetErrorText(rc),1 /* broadcast and log message*/,2  /* Severe error */)
+ 	}
+	i ##class(%Library.File).Exists(IRISTemp_"IRIS.DAT") {
+		s Info=$zu(49,IRISTemp)
+		i Info>=-1 {
+			s Resource=$p(Info,",",25)
+			i Resource="%DB_CACHETEMP" D ChangeDBResource("IRISTEMP",IRISTemp,"%DB_IRISTEMP")
+		} else {
+			d $zu(9,"","Unable to verify resource on database "_IRISTemp,0,0  /* Informational message */)
+		}
+	}
+	s ^||Databases("IRISTEMP")=IRISTemp ; For CPF directory update
+ } catch {
+	d $zu(9,"","Error: "_$ze_" converting "_CacheTemp_" to "_IRISTemp,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN	 
+ }
+ Try{
+ 	s Cache=##class(%Library.File).NormalizeDirectory("cache",$zu(12))
+	i Cache=IRISLocalData {
+		s IRISLocalData=##class(%Library.File).NormalizeDirectory("irislocaldata",$zu(12))
+		i ##class(%Library.File).DirectoryExists(Cache),('##class(%Library.File).DirectoryExists(IRISLocalData)) {
+			d $zu(9,"","Converting "_Cache_" to "_IRISLocalData,0,0  /* Informational message */)
+			s Status=##class(%Library.File).Rename(Cache,IRISLocalData,.Error)
+			i 'Status d $zu(9,"","Error: "_Error_" converting "_Cache_" to "_IRISLocalData,1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN
+		}
+	}
+	i ##class(%Library.File).Exists(IRISLocalData_"CACHE.DAT"),'##class(%Library.File).Exists(IRISLocalData_"IRIS.DAT") {
+		d $zu(9,"","Converting "_IRISLocalData_"CACHE.DAT"_" to "_IRISLocalData_"IRIS.DAT",0,0  /* Informational message */)
+		s Status=##class(%Library.File).Rename(IRISLocalData_"CACHE.DAT",IRISLocalData_"IRIS.DAT",.Error)
+		i 'Status d $zu(9,"","Error: "_Error_" converting "_IRISLocalData_"CACHE.DAT to "_IRISLocalData_"IRIS.DAT",1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN
+	}
+	d ##class(%Library.File).Delete(IRISLocalData_"cache.lck")
+	i ##class(%Library.File).Exists(IRISLocalData_"IRIS.DAT") {
+		s Info=$zu(49,IRISLocalData)
+		i Info>=-1 {
+			s Resource=$p(Info,",",25)
+			i Resource="%DB_CACHE" D ChangeDBResource("IRISLOCALDATA",IRISLocalData,"%DB_IRISLOCALDATA")
+		} else {
+			d $zu(9,"","Unable to verify resource on database "_IRISLocalData,0,0  /* Informational message */)
+		}
+	}
+	s ^||Databases("IRISLOCALDATA")=IRISLocalData ; For CPF directory update
+ } catch {
+	d $zu(9,"","Error: "_$ze_" converting "_Cache_" to "_IRISLocalData,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN	 
+ }
+ Try {
+ 	s CacheAudit=##class(%Library.File).NormalizeDirectory("cacheaudit",$zu(12))
+	i CacheAudit=IRISAudit {
+		s IRISAudit=##class(%Library.File).NormalizeDirectory("irisaudit",$zu(12))
+		i ##class(%Library.File).DirectoryExists(CacheAudit),('##class(%Library.File).DirectoryExists(IRISAudit)) {
+			d $zu(9,"","Converting "_CacheAudit_" to "_IRISAudit,0,0  /* Informational message */)
+			s Status=##class(%Library.File).Rename(CacheAudit,IRISAudit,.Error)
+			i 'Status d $zu(9,"","Error: "_Error_" converting "_CacheAudit_" to "_IRISAudit,1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN
+		}
+	}
+	i ##class(%Library.File).Exists(IRISAudit_"CACHE.DAT"),'##class(%Library.File).Exists(IRISAudit_"IRIS.DAT") {
+		d $zu(9,"","Converting "_IRISAudit_"CACHE.DAT"_" to "_IRISAudit_"IRIS.DAT",0,0  /* Informational message */)
+		s Status=##class(%Library.File).Rename(IRISAudit_"CACHE.DAT",IRISAudit_"IRIS.DAT",.Error)
+		i 'Status d $zu(9,"","Error: "_Error_" converting "_IRISAudit_"CACHE.DAT to "_IRISAudit_"IRIS.DAT",1 /* broadcast and log message*/,1  /* Warning */),BACK^%ETN
+	}
+	d ##class(%Library.File).Delete(IRISAudit_"cache.lck")
+	i ##class(%Library.File).Exists(IRISAudit_"IRIS.DAT") {
+		s Info=$zu(49,IRISAudit)
+		i Info>=-1 {
+			s Resource=$p(Info,",",25)
+			i Resource="%DB_CACHEAUDIT" D ChangeDBResource("IRISAUDIT",IRISAudit,"%DB_IRISAUDIT")
+		} else {
+			d $zu(9,"","Unable to verify resource on database "_IRISAudit,0,0  /* Informational message */)
+		}
+	}
+	s ^||Databases("IRISAUDIT")=IRISAudit ; For CPF directory update
+ } catch {
+	d $zu(9,"","Error: "_$ze_" converting "_CacheAudit_" to "_IRISAudit,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN	 
+ }
+}
+CacheToIRISUpgrade() Public {
+ s $zt="Error"
+ q:'$d(^SYS("CONFIG","CACHE"))
+ k ^SYS("UCI-TMP")
+ s Database=""
+ f  {
+	s Database=$o(^SYS("CONFIG","CACHE","Databases",Database),1,Record) q:Database=""
+	continue:",CACHE,CACHELIB,CACHEAUDIT,CACHESYS,CACHETEMP,SAMPLES,DOCBOOK,ENSDEMO,ENSLIB,"[(","_Database_",")
+  	continue:$li(Record,6)'=""
+	s Directory=$li(Record,3)
+	i $zcvt($e(Directory,1,8),"L")=":mirror:" continue
+	d ConvertCACHEDBToIRISDB(Directory,Database) ;Errors are logged in messages.log
+	continue:",CACHE,CACHEAUDIT,CACHELIB,CACHESYS,CACHETEMP,SAMPLES,DOCBOOK,ENSDEMO,HSLIB,"[(","_Database_",")
+	s ^SYS("UCI-TMP",Directory)=""
+ }
+ k ^SYS("UCI")
+ m ^SYS("UCI")=^SYS("UCI-TMP")
+ k ^SYS("UCI-TMP")
+ Merge ^PKI.CAServerD("IRIS CA")=^PKI.CAServerD("Cache CA")
+ Merge ^PKI.CAClientD("IRIS CA")=^PKI.CAClientD("Cache CA")
+ Kill ^PKI.CAServerD("Cache CA") 
+ Kill ^PKI.CAClientD("Cache CA")
+ Set PKIFile=$g(^%SYS("sysdir"))_"openssl.cnf"
+ If ##class(%Library.File).Exists(PKIFile) {
+	d $zu(9,"",PKIFile_" renamed to "_PKIFile_"_old",0,0  /* Informational message */)
+	d ##class(%Library.File).CopyFile(PKIFile,PKIFile_"_old")
+ 	d $zu(9,"",##Class(PKI.CAServer).Configure(),0,0  /* Informational message */)
+ }
+ s Driver=""
+ f  {
+	 s Driver=$o(^%SYS("sql","ODBCCONNECTION","DATA",Driver),1,Record) q:Driver=""
+	 i $li(Record,9)="com.intersys.jdbc.CacheDriver" s $li(Record,9)="com.intersystems.jdbc.IRISDriver"
+	 i $e($li(Record,8),1,11)="jdbc:Cache:" s $li(Record,8)="jdbc:IRIS:"_$e($li(Record,8),12,*)
+	 s ^%SYS("sql","ODBCCONNECTION","DATA",Driver)=Record
+ }
+ d ConvertODBCINI()
+ s ^SYS("BACKUPDB","IRISSYS")=""
+ s ^SYS("BACKUPDB","IRISAUDIT")=""
+ i $d(^SYS("BACKUPDB","CACHE")) {
+ 	k ^SYS("BACKUPDB","CACHE")
+ 	s ^SYS("BACKUPDB","IRISLOCALDATA")=""
+ }
+ k ^SYS("BACKUPDB","DOCBOOK")
+ k ^SYS("BACKUPDB","SAMPLES")
+ k ^SYS("BACKUPDB","CACHESYS")
+ k ^SYS("BACKUPDB","CACHEAUDIT")
+ k ^SYS("BACKUPDB","ENSLIB")
+ k ^SYS("BUHISTORY")
+ k ^SYS("BACKUP","LASTFULL")
+ k ^SYS("BACKUP","HISTORY")
+ k ^SYS("BACKUP","LASTDIRECTORIES")
+ k ^SYS("BACKUP","WIJINFO")
+ q
+Error s $zt=""
+ d $zu(9,"","Error: "_$ze_" unable to convert Cache Databases to IRIS",1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ q
+}
+ConvertCACHEDBToIRISDB(Dir,Database) Private{
+ s $zt="Error"
+ i ##class(%Library.File).Exists(Dir_"IRIS.DAT") {
+ 	d $zu(9,"","File "_Dir_"CACHE.DAT already converted to IRIS.DAT",0,0  /* Informational message */)
+	i ##class(%Library.File).Exists(Dir_"CACHE.DAT") {
+		d $zu(9,"","Warning: IRIS.DAT and CACHE.DAT both exist in the same directory "_Dir,1 /* broadcast and log message*/,1  /* Warning */)
+	}
+	q
+ }	
+ i ##class(%Library.File).Exists(Dir_"CACHE.DAT",.e) {
+    d $zu(9,"","Converting "_Dir_"CACHE.DAT to IRIS.DAT",0,0  /* Informational message */)
+	s Status=##class(%Library.File).Rename(Dir_"CACHE.DAT",Dir_"IRIS.DAT",.Error)
+	i 'Status {
+		d $zu(9,"","Error: "_Error_" Unable to convert "_Dir_"CACHE.DAT to IRIS.DAT",1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+		d $zu(9,"","Error: "_"You may need to convert "_Dir_"CACHE.DAT after the install completes",1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+	}
+	d ##class(%Library.File).Delete(Dir_"cache.lck")
+ } else {
+	i Database'="CACHEAUDIT" {
+	 	d $zu(9,"","Unable to convert "_Dir_"CACHE.DAT",1 /* broadcast and log message*/,1  /* Warning */)
+ 		d $zu(9,"","File "_Dir_"CACHE.DAT does not exist, error="_$g(e),1 /* broadcast and log message*/,1  /* Warning */)
+	}
+ }
+ q
+Error s $zt=""
+ d $zu(9,"","Error: "_$ze_" unable to convert database "_Dir,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ q
+}
+ChangeDBResource(Database,Dir,Resource) Public {
+ s $zt="Error"
+ i '##class(%Library.File).Exists(Dir_"IRIS.DAT") q
+ d $zu(9,"","Changing resource of "_Database_" to "_Resource,0,0  /* Informational message */)
+ s Obj=##Class(SYS.Database).%OpenId(Dir)
+ i '$isobject(Obj) {
+	d $zu(9,"","Unable to change resource of database "_Database_" directory "_Dir_" to "_Resource,1 /* broadcast and log message*/,2  /* Severe error */)
+	q
+ }
+ s Obj.ResourceName=Resource
+ s Status=Obj.%Save()
+ i '(''Status) d $zu(9,"","Error: "_$system.Status.GetErrorText(Status)_" unable to change resource of database "_Database_" directory "_Dir_" to "_Resource,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ q
+Error s $zt=""
+ d $zu(9,"","Error: "_$ze_" unable to change resource of database "_Database_" directory "_Dir_" to "_Resource,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ q
+}
+MVRenameNamespace(Namespace) Private { 
+ Set $ZT="Error"
+ d $zu(9,"","Updating MV names in namespace "_Namespace,0,0  /* Informational message */)
+ Set OldNamespace=$namespace
+ Do $ZU(5,Namespace)
+ s n=""
+ For { 
+ 	Set n=$O(^MV.VOC(n),1,rec) 
+ 	Quit:n=""
+	If $ZCVT($MV(rec,1),"U")="F" {
+	    Set dir=$MV(rec,2)
+	    If (dir'=""),($E(dir)'="^")	Do MVRenameDir(dir)
+ 	}
+ }
+ Do $ZU(5,OldNamespace)
+ q
+Error Set $ZT="" 
+ i $d(OldNamespace) Do $ZU(5,OldNamespace)
+ d $zu(9,"","Error: "_$ze,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ q
+}
+MVRenameDir(dir) Private {
+ s $zt="Error" 
+ Set dir=$ZU(12,dir,2,1)
+ Quit:dir=""
+ Set beg=$L(dir)+1,nam=$ZSE(dir_"*")
+ While nam'="" {
+	Set fil=$E(nam,beg,*)
+	If fil'=".",fil'=".." {
+	    Set new=$zu(198,2,$$MVConvertName(fil))
+	    Do:new'=fil $ZU(140,6,nam,$E(nam,1,beg-1)_new)
+	}
+	Set nam=$ZSE("")
+ }
+ q
+Error Set $ZT="" 
+ d $zu(9,"","Error: "_$ze,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ q
+}
+MVConvertName(nam) Private { 
+ s $zt="Error"
+ Quit:nam'["_" nam
+ Set new="",prv=1
+ For { 
+ 	Set pos=$F(nam,"_",prv) Quit:'pos
+	Set chr=$E(nam,pos,pos+1)
+	If $l(chr)=2,$TR(chr,"0123456789ABCDEF","")="" {
+	   Set num=$ZH(chr) If num'<32,"_?""*:<|>/\"'[$C(num) Goto notq
+	   Set new=new_$E(nam,prv,pos-2)_$C($ZH(chr)),prv=pos+2
+	} Else {
+notq   Set new=new_$E(nam,prv,pos-1),prv=pos
+	}
+ }
+ Quit new_$E(nam,prv,*)
+Error s $zt=""
+ d $zu(9,"","Error: "_$ze,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ q nam
+}
+ ;=================================================================== 
+Audit d NextStep(11)
+ s dir=$g(IRISAudit,##class(%Library.File).SubDirectoryName($zu(12),"irisaudit"))
+ s x=$zu(49,dir) 
+ i x>-2 q
+ i '##Class(%Library.File).DirectoryExists(dir) {
+    s x=##Class(%Library.File).CreateDirectory(dir)
+    i 'x s $ze="Error creating directory "_dir g err
+ }
+ s x=##class(SYS.Database).CreateDatabase(dir)
+ i '(''x) s $ze="Error creating IRISAUDIT "_dir_", Error: "_$SYSTEM.Status.GetErrorText(x) g err
+ s x=$Zutil(1,dir,0,0,0,0,0,0,0,0,0,0,0,0,0,3,5,0,"%DB_IRISAUDIT")
+ i x<0 s $ze="Error labeling IRISAUDIT "_dir_", Error: "_x g err
+ q
+ ;=================================================================== 
+Journal
+ d NextStep(12)
+ n jrndir
+ s jrndir=##class(%Library.File).SubDirectoryName($zu(12),"journal")
+ i '##Class(%Library.File).DirectoryExists(jrndir) {
+    s x=##Class(%Library.File).CreateDirectory(jrndir)
+    i 'x s $ze="Error creating directory "_jrndir g err
+ }
+ n dirlist,ent,nam,dir,lockfn
+ s ent="" f  s ent=$o(^%SYS("JOURNAL","HISTORY",ent)) q:ent=""  d
+ . f nam="CURDIR","ALTDIR" d
+ . . s dir=$g(^%SYS("JOURNAL","HISTORY",ent,nam))
+ . . s:dir]"" dirlist($zu(12,dir))=""
+ f nam="CURDIR","ALTDIR" d
+ . s dir=$g(^%SYS("JOURNAL",nam))
+ . s:dir]"" dirlist($zu(12,dir))=""
+ s dirlist(jrndir)=""
+ s dir="" f  s dir=$o(dirlist(dir)) q:dir=""  d
+ . s lockfn=dir_"iris"_".lck"
+ . d remjrnlocks 
+ q
+remjrnlocks s $zt="remjrnlocksE"
+ o lockfn:"r":0 i  c lockfn:"d"
+ q
+remjrnlocksE s $zt=""
+ q
+Databases ; Update USER databases definitions and create USER database when needed
+ d NextStep(14)
+ s $zt="Error"
+ s Status=1
+ If User {
+	i '##Class(Config.Databases).Exists("USER") {
+		k Properties
+		s Properties("Directory")="user"
+		s Status=##Class(Config.Databases).Create("USER",.Properties,,1+2+8192)
+		i '(''Status) d $zu(9,"","Error: "_$SYSTEM.Status.GetErrorText(Status)_" creating USER database",1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+	}
+	i (Status=1),('##Class(Config.Namespaces).Exists("USER")) {
+		k Properties
+		s Properties("Globals")="USER"
+		s Status=##Class(Config.Namespaces).Create("USER",.Properties,,1+2)
+		i '(''Status) d $zu(9,"","Error: "_$SYSTEM.Status.GetErrorText(Status)_" creating USER namespace",1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+	}
+	s dir=##class(%Library.File).SubDirectoryName($zu(12),"user")
+	s x=$zu(49,dir) 
+	i x>-2 g Exit
+	i '##Class(%Library.File).DirectoryExists(dir) {
+		s x=##Class(%Library.File).CreateDirectory(dir)
+		i 'x d $zu(9,"","Error: "_"Creating directory "_dir,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN g Exit
+ 	}
+ 	s x=##class(SYS.Database).CreateDatabase(dir)
+	i '(''x) d $zu(9,"","Error: "_$SYSTEM.Status.GetErrorText(Status)_" creating USER database "_dir,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN g Exit
+	 s x=$Zutil(1,dir,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,"%DB_USER")
+	 i x<0 d $zu(9,"","Error: "_x_" labeling USER database "_dir,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN g Exit
+ }
+Exit
+ q
+Error s $zt=""
+ d $zu(9,"","Error: "_$ze,1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ q
+EnsembleDB ; Load and execute Interoperability database upgrade code
+ q:Product="Cache"
+ q:Product="EMS"
+ d NextStep(17)
+ Set Status = ##class(%Library.EnsembleMgr).Install(Update,Product,SrcDir)
+ i ('Status) {
+	Try {
+		s FatalMsg=$SYSTEM.Status.GetErrorText(Status)_" during "_Product_" Install"
+		d $zu(9,"","Error: "_FatalMsg,1 /* broadcast and log message*/,3  /* Fatal */),BACK^%ETN
+ 		i '($zversion(1)=2) w !,FatalMsg
+ 		u %Log w !,FatalMsg u 0
+ 	} catch { u 0 }
+ }
+ q
+ ;=================================================================== 
+EMS
+ q:(Product'="EMS")
+ d $zu(9,"","Enterprise Manager Install",0,0  /* Informational message */)
+ s Status=##class(EMS.Manager.LifeCycle).Install(Update)
+ i ('Status) d $zu(9,"","Error: "_$SYSTEM.Status.GetErrorText(Status)_" during Enterprise Manager Install",1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ q
+ ;===================================================================
+installer ; load and execute installer manifest if present
+ i $G(InstallerManifest) '= "" {
+	 d NextStep(20)
+	 s:'$d(InstallerManifestParams) InstallerManifestParams=""
+	 s:'$d(InstallerManifestLogLevel) InstallerManifestLogLevel="1"
+	 s:'$d(InstallerManifestLogFile) InstallerManifestLogFile=""
+	 s ^SYS("Installer","Manifest")=InstallerManifest
+	 s ^SYS("Installer","Params")=InstallerManifestParams
+	 s ^SYS("Installer","LogLevel")=InstallerManifestLogLevel
+	 s ^SYS("Installer","LogFile")=InstallerManifestLogFile
+ } else {
+	 k ^SYS("Installer","Manifest")
+	 k ^SYS("Installer","Params")
+	 k ^SYS("Installer","LogLevel")
+	 k ^SYS("Installer","LogFile")
+	 q
+ }
+ d $zu(9,"","Installer Manifest is: "_InstallerManifest,0,0  /* Informational message */)
+ d $zu(9,"","Installer Manifest Parameters are: "_InstallerManifestParams,0,0  /* Informational message */)
+ k Properties
+ s InstallerManifestParamsUC=","_$zcvt(InstallerManifestParams,"U")
+ s bbsiz=$p($p(InstallerManifestParamsUC,"BBSIZ=",2),",",1)
+ i bbsiz'="" s Properties("bbsiz")=+$zstrip(bbsiz,"<>W")
+ s globals4kb=$p($p(InstallerManifestParamsUC,"GLOBALS4KB=",2),",",1)
+ i globals4kb'="" s Properties("globals4kb")=+$zstrip(globals4kb,"<>W")
+ s globals8kb=$p($p(InstallerManifestParamsUC,"GLOBALS8KB=",2),",",1)
+ i globals8kb'="" s Properties("globals8kb")=+$zstrip(globals8kb,"<>W")
+ s globals16kb=$p($p(InstallerManifestParamsUC,"GLOBALS16KB=",2),",",1)
+ i globals16kb'="" s Properties("globals16kb")=+$zstrip(globals16kb,"<>W")
+ s globals32kb=$p($p(InstallerManifestParamsUC,"GLOBALS32KB=",2),",",1)
+ i globals32kb'="" s Properties("globals32kb")=+$zstrip(globals32kb,"<>W")
+ s globals64kb=$p($p(InstallerManifestParamsUC,"GLOBALS64KB=",2),",",1)
+ i globals64kb'="" s Properties("globals64kb")=+$zstrip(globals64kb,"<>W")
+ s gmheap=$p($p(InstallerManifestParamsUC,"GMHEAP=",2),",",1)
+ i gmheap'="" s Properties("gmheap")=+$zstrip(gmheap,"<>W")
+ s locksiz=$p($p(InstallerManifestParamsUC,"LOCKSIZ=",2),",",1)
+ i locksiz'="" s Properties("locksiz")=+$zstrip(locksiz,"<>W")
+ s MaxServerConn=$p($p(InstallerManifestParamsUC,"MAXSERVERCONN=",2),",",1)
+ i MaxServerConn'="" s Properties("MaxServerConn")=+$zstrip(MaxServerConn,"<>W")
+ s routines=$p($p(InstallerManifestParamsUC,"ROUTINES=",2),",",1)
+ i routines'="" s Properties("routines")=+$zstrip(routines,"<>W")
+ s ZFSize=$p($p(InstallerManifestParamsUC,"ZFSIZE=",2),",",1)
+ i ZFSize'="" s Properties("ZFSize")=+$zstrip(ZFSize,"<>W")
+ s ZFString=$p($p(InstallerManifestParamsUC,"ZFSTRING=",2),",",1)
+ i ZFString'="" s Properties("ZFString")=+$zstrip(ZFString,"<>W")
+ s LibPath=$f(InstallerManifestParamsUC,"LIBPATH=")
+ i LibPath'=0 s Properties("LibPath")=$zstrip($p($e(InstallerManifestParams,LibPath-1,*),",",1),"<>W")
+ s Path=$f(InstallerManifestParamsUC,",PATH=")  ; Note comma here to find it easy
+ i Path'=0 s Properties("Path")=$zstrip($p($e(InstallerManifestParams,Path-1,*),",",1),"<>W")
+ i $d(Properties) {
+	s Status=##Class(Config.config).Modify(.Properties)
+	i '(''Status) d $zu(9,"","Error: "_$SYSTEM.Status.GetErrorText(Status)_" during Manifest Install Setup",1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ }
+ q
+ ;=================================================================== 
+bootuser ; Load and execute cbootuser if present
+ s io=SrcDir_"ibootuser.rsa" 
+ o io:"RS":$$Timeout i '$t q
+ d NextStep(19)
+ d ri(1,1)
+ q
+ ;=================================================================== 
+bootensemble ; Load and execute ensemble upgrade code
+ s io=SrcDir_"ibootens.rsa" 
+ o io:"RS":$$Timeout i '$t q
+ d NextStep(19)
+ d ri(1,1)
+ q
+ ;=================================================================== 
+UpdateTaskMgr ; Update the task mgr
+ d NextStep(18)
+ d $SYSTEM.Status.DisplayError(##class(%SYS.Task).Upgrade())
+ q
+ ;=================================================================== 
+chgsize(dir) ; Configure "unlimited" database expansion
+ n stat s stat=$zu(49,dir) q:'$p(stat,",",6)
+ i @("$zu(1,dir,"_$p(stat,",",2,5)_",0,"_$p(stat,",",7,12)_")")
+ q
+Expand(Dir,Size) ; Expand db to a specific size
+ s x=$Zutil(1,Dir,-1,-1,Size)
+ q
+ ;=================================================================== 
+err s $zt="err2" ; Fatal installation error
+ d $zu(9,"","Error "_$ze_" during installation",1 /* broadcast and log message*/,3  /* Fatal */)
+ d ResetDBEncryption
+ Try {
+	s saveze=$ze
+ 	i $d(^rOBJ("SYSLOG")) {
+		s DEV="messages.log"
+ 		o DEV:"WAS":1 
+ 		i '$t {
+	 		d $zu(9,"","Failed to open messages.log to write SYSLOG",1 /* broadcast and log message*/,1  /* Warning */)
+ 		} else {
+	 		u DEV
+ 			d INT^SYSLOG
+ 		} 
+ 		u 0 c DEV 
+ 	} else {
+		d $zu(9,"","SYSLOG information unavailable",1 /* broadcast and log message*/,1  /* Warning */)
+ 	}
+ } catch {
+	u 0 
+ 	i $d(DEV) c DEV
+ 	d $zu(9,"","Error "_$ze_" while writing SYSLOG info",1 /* broadcast and log message*/,1  /* Warning */)
+	i $d(saveze) s $ze=saveze
+ }
+err1
+ if $d(^rOBJ("%ETN")) {
+	 d $zu(9,"","Error: "_$ze_" Exiting ^INSTALL procedure "_$zu(56,2),1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+ } else {
+	 d $zu(9,"",$ze_" Exiting ^INSTALL procedure "_$zu(56,2),1 /* broadcast and log message*/,2  /* Severe error */)
+ }
+ u %Log w !!,StepMsg(30),$ze,!
+ If '$ZBITGET($ZVERSION(0),1) {
+     If Language'="" {
+         Set ^%SYS("LANGUAGE","CURRENT")=Language,$mvv(58)=Language
+     } Else {
+	 Kill ^%SYS("LANGUAGE","CURRENT")
+	 Set $mvv(58)=""
+     }
+ }
+ c %Log
+err2 s $zt="err3"
+ d $ZU(51,1)
+ i '($zversion(1)=2) u 0 w !!,StepMsg(30),$ze,!!,*7,*7 h 5
+ i ($zversion(1)=2) u 0 w $c(0)_"@@@,-1,"_$ze_$c(0) h 5
+ f i=1:1:60 q:$ZU(51,1)>-1  h 1
+err3 s $zt=""
+ d $zu(4,$j,7) q  ; Return a 7 which causes CFORCE to run
+ ;=================================================================== 
+%DT() ; Return current date and time
+ n %D,%T s %D=$h,%T=$p(%D,",",2)
+ q MiscMsg(11)_$zt(%T,3)_MiscMsg(12)_$zd(%D,5)
+ ;=================================================================== 
+NextStep(step) ; Output info for start of next step
+ u %Log w !!,StepMsg(step)
+ i '($zversion(1)=2) u 0 w !,StepMsg(step) q
+ d InitStep(step)
+ q
+InitStep(step) ; Prime progress bar info for new step
+ 	s BasePct=BasePct+StepPct,TotalPct=BasePct,StepPct=StepPct(step)
+ 	s ItemCnt=ItemCnt(step),ItemNbr=0
+ if '$ZBITGET($ZVERSION(0),46) {
+ 	u 0 w $c(0)_"@@@,"_TotalPct_","_step_$c(0) h 0 
+ }
+ s LastTotalPct=TotalPct
+ q
+IncrItem ; Increment current item count, update progress bar
+ n pct
+ s ItemNbr=ItemNbr+1 q:ItemNbr>ItemCnt
+ s pct=StepPct*ItemNbr\ItemCnt+BasePct q:pct=TotalPct  s TotalPct=pct
+ i TotalPct'=LastTotalPct u 0 w $c(0)_"@@@,"_TotalPct_$c(0) h 0 s LastTotalPct=TotalPct
+ q
+ ;=================================================================== 
+Timeout() n t s t=OpenTime,OpenTime=1 q t ; Return timeout for file OPENs
+ ;=================================================================== 
+RtnRename(old,new) ; Rename routine if it exists
+ q:'$d(^ROUTINE(old))&'$d(^rOBJ(old))
+ q:$d(^ROUTINE(new))!$d(^rOBJ(new))
+ m ^ROUTINE(new)=^ROUTINE(old),^rOBJ(new)=^rOBJ(old)
+ k ^ROUTINE(old),^rOBJ(old)
+ u %Log w !!,MiscMsg(13),old,MiscMsg(14),new
+ i '($zversion(1)=2) u 0 w !!,MiscMsg(13),old,MiscMsg(14),new
+ q
+ ;=================================================================== 
+RecompileMgr(rtn) ; Recompile routine if needed and have source for OBJ
+ i '$d(^ROUTINE(rtn)) d  q              ; If source not available
+ . u %Log w !,rtn,MiscMsg(17)
+ . i '($zversion(1)=2) u 0 w !,rtn,MiscMsg(17)
+ i $d(^ROUTINE(rtn,0,"GENERATED")),$d(^rMAC(rtn)) q
+ s $zt="recerr"
+ n Lang,Errors,Status
+ s Lang=+$g(^ROUTINE(rtn,"LANG"),0)
+ i Lang=11 q  ; skip MVI routines (global catalog)
+ s Status=$compile(^ROUTINE(rtn,0),Lang,Errors,,,,rtn)
+recerr q
+ ;=================================================================== 
+LoadSources ; Load routine sources into IRISSYS
+ s io=SrcDir_"iutil.rtn" d ri(0)
+ q
+ ;=================================================================== 
+ri(comp,exec) ; Load file "io" in routine source code format, optionally compile and run
+ o io:"RS":$$Timeout e  s $ze=MiscMsg(2)_io g err
+ i Debug { 
+ 	u %Log 
+ 	w !
+ }
+ n ye s ye=0
+ u io 
+ r x,x 
+ f  {
+	 u io 
+	 r p 
+	 q:p=""  
+	 s delim=$s(p["^":"^",1:".")
+	 s r=$p(p,delim)
+ 	 i Debug {
+ 		u %Log 
+ 		w:$x\10+1*10+$l(r)>79 ! 
+ 		w:$x ?$x\10+1*10 
+ 		w r
+ 	 }
+ 	 u io 
+ 	 f n=1:1  {
+	 	 r x 
+	 	 q:x=""  
+	 	 s ROUTINE(n)=x
+ 	 }
+ 	 s ROUTINE(0)=n-1
+ 	 if $ZBITGET($ZVERSION(0),46) { 
+ 	    ;USEDSONLY can't run %R so generate the global nodes
+ 	    ; and use the bootstrap recompile
+ 	    k ^ROUTINE(r)
+ 	    merge ^ROUTINE(r,0)=ROUTINE
+ 	 	do RecompileMgr(r) 
+ 	 	s e=""  ;no errors
+ 	 } else { 
+ 	 	s x=$$ROUTINE^%R(r_".INT",.ROUTINE,.e,"S"_$s(comp=1:"C",1:"")) 
+ 	 }
+ 	 i $ll(e) {
+	 	 s ye=ye+1
+		 i Debug {
+			 u %Log 
+			 w !,$$FMTERR^%R(e),!
+		 }
+ 	 }
+ 	 k ROUTINE
+ 	 i comp,$g(exec) {
+	 	 d rirun
+ 	 }
+ 	 d:($zversion(1)=2) IncrItem
+ }
+ c io
+ i ye d $zu(9,"",ye_" routine load error(s) were reported from file "_io,1 /* broadcast and log message*/,1  /* Warning */)
+ q
+rirun ; Run user installation routine
+ s $zt="rierr"
+ u %Log x "n (SrcDir) d ^"_r
+ q
+rierr s $zt="" ; Log error running user routine
+ u %Log w !,"Error running ^"_r_": "_$ze,!
+ i '($zversion(1)=2) u 0 w !,"Error running ^"_r_": "_$ze,!
+ q
+ ;=================================================================== 
+mri ; Load file "io" in routine object code format
+ new max,rdlen
+ o io:"RU":$$Timeout e  s $ze=MiscMsg(2)_io g err
+ i Debug d
+ . u %Log w !
+ s $zt="endmri"
+ u io r C#256 s F=$p(C,"~",2) i F'="%ROMFV2",F'="%ROMFV3",F'="%ROMFV4" d  s $ze=mriMsg(1) g err
+ . u %Log w !,mriMsg(1),io,!
+ . i '($zversion(1)=2) u 0 w !,mriMsg(1),io,!,*7
+ if F="%ROMFV2" { r D#18,V#2 s VER=3 }
+ else { r D#20,V#2 s VER=+$E(F,7) }
+rptmri ;
+ for {
+   u io r *rnl q:'rnl  r rn#rnl s pad=(4-((rnl+1)#4))#4 r:pad pad#pad
+   i Debug {
+     u %Log w:$x\10+1*10+$l(rn)>79 ! w:$x ?$x\10+1*10 w rn
+   }
+   k ^ROUTINE(rn),rl u io r rl#4 s rl=$zla(rl)
+   if VER=3 {
+     s p=2,sub=0,max(1)=32767,max(2)=32767,max(3)=256,rdlen(1)=32656,rdlen(2)=32656,rdlen(3)=256
+     s i=$S(rl>max(1):rdlen(1),1:rl) r ^rOBJ(rn)#i
+     s rl=rl-i
+     while (rl > 0) {
+       s i=$S(rl>max(p):rdlen(p),1:rl)
+       r ^rOBJ(rn,sub)#i
+       s rl=rl-i,sub=sub+1,p=p+1 i p>3 s p=1 i sub<3 s max(3)=272,rdlen(3)=272
+     }
+   } else {
+     r rdlen#4 s rdlen=$zla(rdlen)
+     r ^rOBJ(rn)#rdlen
+     s rl=rl-rdlen-4,sub=0
+     while (rl > 0) {
+       r rdlen#4 s rdlen=$zla(rdlen)
+       r ^rOBJ(rn,sub)#rdlen
+       s rl=rl-rdlen-4,sub=sub+1
+     }
+   }
+   i ($zversion(1)=2) d IncrItem
+   s NeedToReindex=1
+ }
+donemri c io q
+endmri g:$ze'["<ROUT" donemri
+ u %Log w !,mriMsg(2),rn,mriMsg(3),!
+ i '($zversion(1)=2) u 0 w !,mriMsg(2),rn,mriMsg(3),!,*7
+ i ($zversion(1)=2) d IncrItem
+ u io 
+ g rptmri
+gif ; Load globals in %GOF format from file "io"
+ s x=$$Import^%GIF(io,1,"*",.gloname)
+ s gloname="" f  s gloname=$o(gloname(gloname)) q:gloname=""  k @("^[""^^""]"_$p(gloname,"^",2,99999))
+ k gloname
+ s x=$$Import^%GIF(io,0,"*",.gloname,1)
+ i x'="" s $ze=x g err
+ i Debug d
+ . u %Log
+ . s gloname="" f  s gloname=$o(gloname(gloname)) q:gloname=""  w !,"Global "_gloname_" loaded"
+ q
+CheckDBEncryption
+ q:'Update
+ i (+$lg($g(^SYS("Security","SystemD","SYSTEM")),9)=1),($System.Util.GetEnviron("DBEncStartKeyFile")="") {
+	s $li(^SYS("Security","SystemD","SYSTEM"),9)=0
+	s TurnOnDBEncrypt=1
+	s EncryptIRISTemp=+$lg($g(^SYS("Security","SystemD","SYSTEM")),5)
+	s $li(^SYS("Security","SystemD","SYSTEM"),5)=0
+	d $zu(9,"","Disabling database encryption",1 /* broadcast and log message*/,1  /* Warning */)
+ }
+ i CacheToIRISUpgrade,($zversion(1)=3) {
+	try {
+		n KeyFile,i,Owner,Status
+		s KeyFile=$System.Util.GetEnviron("DBEncStartKeyFile")
+		i KeyFile'="" {
+			s KeyFile=$zu(12,KeyFile,0,1)
+			i '$zu(140,4,KeyFile)=0 {
+				d $zu(9,"","Encryption key file "_KeyFile_" specified by environment variable 'DBEncStartKeyFile' does not exist",1 /* broadcast and log message*/,2  /* Severe error */)
+				d $zu(9,"","You may need to change this to access your encrypted databases",1 /* broadcast and log message*/,2  /* Severe error */)
+			}
+		} else {
+			s KeyFile=$li($g(^SYS("Security","SystemD","SYSTEM"),$lb(,,,,,,,"")),8)
+			i KeyFile'="" {
+				s KeyFile=$zu(12,KeyFile,0,1)
+				i '$zu(140,4,KeyFile)=0 {
+					d $zu(9,"","Encryption key file "_KeyFile_" specified by the security database does not exist",1 /* broadcast and log message*/,2  /* Severe error */)
+					d $zu(9,"","You may need to change this to access your encrypted databases",1 /* broadcast and log message*/,2  /* Severe error */)
+				}
+			}
+		}
+	} catch {
+		d $zu(9,"","Error: "_$ze_" getting database encryption key file "_$g(KeyFile),1 /* broadcast and log message*/,2  /* Severe error */),BACK^%ETN
+	}
+ }
+ i $d(^Security.KMIPServerD) {
+	Merge ^SYS("Security","KMIPServerD")=^Security.KMIPServerD
+	k ^Security.KMIPServerD
+ }	 
+ q
+ResetDBEncryption
+ q:'Update
+ i $d(TurnOnDBEncrypt) {
+	s $li(^SYS("Security","SystemD","SYSTEM"),9)=1
+	s $li(^SYS("Security","SystemD","SYSTEM"),5)=EncryptIRISTemp
+	d $zu(9,"","Re-Enabling database encryption",1 /* broadcast and log message*/,1  /* Warning */)
+ }
+ q
+Messages
+ s StepMsg(0)="Start of IRIS initialization"
+ s StepMsg(1)="IRIS initialization complete"
+ s StepMsg(2)="Initializing Manager database"
+ s StepMsg(3)="Recompiling routines in Manager database"
+ s StepMsg(4)="Loading system routines"
+ s StepMsg(5)="Loading system classes"
+ s StepMsg(6)="Updating Security database"
+ s StepMsg(7)="Loading system source code"
+ s StepMsg(8)="Building system indices" 
+ s StepMsg(9)="Installing National Language support"
+ s StepMsg(10)="Updating SQL database"
+ s StepMsg(11)="Updating Audit database"
+ s StepMsg(12)="Updating Journal directory"
+ s StepMsg(13)="Updating system TEMP and LOCALDATA databases"
+ s StepMsg(14)="Updating User database"
+ s StepMsg(15)="Compiling user routines"
+ s StepMsg(16)="Waiting for compiles to finish"
+ s StepMsg(17)="Updating Interoperability databases"
+ s StepMsg(18)="Updating Task Manager"
+ s StepMsg(19)="Loading and executing ibootuser.rsa"
+ s StepMsg(20)="Loading and executing %Installer manifest"
+ s StepMsg(30)="ERROR HAS OCCURRED:  "
+ i ($zversion(1)=2) {
+	s ItemCnt(0)=0,StepPct(0)=0
+	s ItemCnt(1)=0,StepPct(1)=0
+	s ItemCnt(2)=0,StepPct(2)=5
+	s ItemCnt(3)=0,StepPct(3)=1
+	s ItemCnt(4)=4000,StepPct(4)=25
+	s ItemCnt(5)=20,StepPct(5)=45
+	s ItemCnt(6)=0,StepPct(6)=2
+	s ItemCnt(7)=500,StepPct(7)=3
+	s ItemCnt(8)=0,StepPct(8)=3
+	s ItemCnt(9)=0,StepPct(9)=1
+	s ItemCnt(10)=0,StepPct(10)=1
+	s ItemCnt(11)=0,StepPct(11)=1
+	s ItemCnt(12)=0,StepPct(12)=1
+	s ItemCnt(13)=0,StepPct(13)=1
+	s ItemCnt(14)=0,StepPct(14)=1
+	s ItemCnt(15)=0,StepPct(15)=1
+	s ItemCnt(16)=0,StepPct(16)=1
+	s ItemCnt(17)=0,StepPct(17)=1
+	s ItemCnt(18)=0,StepPct(18)=1
+	s ItemCnt(19)=0,StepPct(19)=1
+	s ItemCnt(20)=0,StepPct(20)=1
+ }
+ s MiscMsg(0)="Source directory is "
+ s MiscMsg(1)=" failed with error "
+ s MiscMsg(2)="Missing file "
+ s MiscMsg(3)="Changing maximum size of "
+ s MiscMsg(4)=" database to <unlimited>."
+ s MiscMsg(5)="done."
+ s MiscMsg(6)="<Exhausted global list>"
+ s MiscMsg(7)="Error setting Manager global protections: "
+ s MiscMsg(8)="PRESS RETURN TO CONTINUE: "
+ s MiscMsg(9)=" in "
+ s MiscMsg(10)=" minutes"
+ s MiscMsg(10.5)=" minute"
+ s MiscMsg(11)=" at "
+ s MiscMsg(12)=" on "
+ s MiscMsg(13)="Routine "
+ s MiscMsg(14)=" has been renamed to "
+ s MiscMsg(15)="Locale setting is "
+ s MiscMsg(16)="Recompiling user routines in Manager database: [%Z,%z,Z,z]* ..."
+ s MiscMsg(17)=".INT source is not available, routine object code may be out of date"
+ s mriMsg(1)="Incompatible format, unable to use file "
+ s mriMsg(2)="*** Warning: routine "
+ s mriMsg(3)=" not loaded ***"
+ s gifMsg(1)="Wrong GOF header"
+ s gifMsg(2)="Expecting record type 1, not "
+ s gifMsg(3)="Expecting system type of 1, not "
+ s gifMsg(4)="Expecting volume 1, not "
+ s gifMsg(5)="DOS/MAC/UNIX conversion"
+ s gifMsg(6)="8-bit character truncation"
+ s gifMsg(7)="Expecting record type 2, not "
+ s gifMsg(8)="Expecting record type 3, not "
+ s gifMsg(9)="Not expecting continuation record"
+ s gifMsg(10)=" blocks restored."
+ s gifMsg(11)=" globals restored in "
+ s gifMsg(12)=" seconds."
+ s nlsMsg(1)="^%nls mixes old and new structures"
+ s nlsMsg(2)="Upgrading from old ^%nls structure"
+ s nlsMsg(3)="Cannot downgrade a Unicode locale to 8-bit"
+ s nlsMsg(4)="Locale name '"
+ s nlsMsg(5)="' not supported, defaulting to standard English."
+ q
+SaveParams
+ k (SrcDir,LocaleDir,Update,LoadUtil,Locale,Debug,Product,Docbook,Samples,User,SSPort,WSPort,CacheToIRISUpgrade,RootPriv,InstallerManifest,InstallerManifestParams,InstallerManifestLogLevel,InstallerManifestLogFile,WindowsUserAccount)
+ k ^SYS("InstallParams")
+ m ^SYS("InstallParams","SrcDir")=SrcDir
+ m ^SYS("InstallParams","LocaleDir")=LocaleDir
+ m ^SYS("InstallParams","Update")=Update
+ m ^SYS("InstallParams","LoadUtil")=LoadUtil
+ m ^SYS("InstallParams","Locale")=Locale
+ m ^SYS("InstallParams","Debug")=Debug
+ m ^SYS("InstallParams","Product")=Product
+ m ^SYS("InstallParams","Docbook")=Docbook
+ m ^SYS("InstallParams","Samples")=Samples
+ m ^SYS("InstallParams","User")=User
+ m ^SYS("InstallParams","CacheToIRISUpgrade")=CacheToIRISUpgrade
+ m ^SYS("InstallParams","RootPriv")=RootPriv
+ m ^SYS("InstallParams","SSPort")=SSPort
+ m ^SYS("InstallParams","WSPort")=WSPort
+ m ^SYS("InstallParams","InstallerManifest")=InstallerManifest
+ m ^SYS("InstallParams","InstallerManifestParams")=InstallerManifestParams
+ m ^SYS("InstallParams","InstallerManifestLogLevel")=InstallerManifestLogLevel
+ m ^SYS("InstallParams","InstallerManifestLogFile")=InstallerManifestLogFile
+ m ^SYS("InstallParams","WindowsUserAccount")=WindowsUserAccount
+ q
+SetParams
+ k
+ m SrcDir=^SYS("InstallParams","SrcDir")
+ m LocaleDir=^SYS("InstallParams","LocaleDir")
+ m Update=^SYS("InstallParams","Update")
+ m LoadUtil=^SYS("InstallParams","LoadUtil")
+ m Locale=^SYS("InstallParams","Locale")
+ m Debug=^SYS("InstallParams","Debug")
+ m Product=^SYS("InstallParams","Product")
+ m Docbook=^SYS("InstallParams","Docbook")
+ m Samples=^SYS("InstallParams","Samples")
+ m User=^SYS("InstallParams","User")
+ m CacheToIRISUpgrade=^SYS("InstallParams","CacheToIRISUpgrade")
+ m RootPriv=^SYS("InstallParams","RootPriv")
+ m SSPort=^SYS("InstallParams","SSPort")
+ m WSPort=^SYS("InstallParams","WSPort")
+ m InstallerManifest=^SYS("InstallParams","InstallerManifest")
+ m InstallerManifestParams=^SYS("InstallParams","InstallerManifestParams")
+ m InstallerManifestLogLevel=^SYS("InstallParams","InstallerManifestLogLevel")
+ m InstallerManifestLogFile=^SYS("InstallParams","InstallerManifestLogFile")
+ m WindowsUserAccount=^SYS("InstallParams","WindowsUserAccount")
+ i '($zu(12,SrcDir,2)'="") {
+	 w !,"WARNING: Installation source directory does not exist"
+	 w !,"Running START^INSTALL will corrupt your system"
+ }
+ q
+InitVars
+ s SrcDir=$zu(12,$g(SrcDir))
+ s LocaleDir=$zu(12,$g(LocaleDir))
+ k ^SYS("FirstRestartSinceInstall")
+ s:'$d(Update) Update=$d(^SYS)
+ s ^SYS("FirstRestartSinceInstall")=1
+ s LoadUtil=+$g(LoadUtil)
+ s:'$d(Locale) Locale="enu8"
+ s:'$d(Debug) Debug=1
+ s:'$d(Product) Product="Cache"
+ s Docbook=+$g(Docbook)
+ s Samples=+$g(Samples)
+ s User=+$g(User)
+ s SSPort=+$g(SSPort)
+ s WSPort=+$g(WSPort)
+ i (Product="EMS") s User=0,Samples=0
+ i '$ZBITGET($ZVERSION(0),1) s Language=$G(^%SYS("LANGUAGE","CURRENT")),^%SYS("LANGUAGE","CURRENT")="en",$mvv(58)="en"
+ s TIM1=$H
+ s OpenTime=30 ; Set initial file OPEN timeout
+ s %Log="iboot.log"
+ s BasePct=0,StepPct=0 
+ s NeedToReindex=0
+ q
+InitLog
+ o %Log:"WNS"
+ u %Log w StepMsg(0),$$%DT,!,$zv,!,MiscMsg(15),$g(Locale),!,MiscMsg(0),SrcDir
+ i ($zversion(1)=2) {
+	d InitStep(0)
+ } else {
+	u 0 w StepMsg(0)
+ }
+ q
+INIT
+ d SetParams
+ d Messages
+ d InitVars
+ s %Log=0
+ q
+SaveDEBUGINSTALL() Public {
+ s $zt="Error"
+ s File=$zu(12)_"DEBUG_INSTALL.INT"
+ Open File:"WNS":2 e  w !!,"ERROR: Unable to create ",File," file",! Quit
+ Use File Set lin=^ROUTINE("INSTALL",0,0) For i=1:1:lin Write ^ROUTINE("INSTALL",0,i),!
+ Write ! Close File Use 0 Quit
+Error s $zt=""
+ i $d(File) c File
+ u 0 
+ w !,"Error "_$ze
+ q
+}
+ ;=================================================================== 
+InstallGlobalsDB() ;GlobalsDB install when $$$USEDSONLY is defined
+ s $zt="dserr"
+ s io=SrcDir_"globalsutil.mro" 
+ s allok=1
+ if Debug {
+	 u %Log
+	 w !!,"Loading ",io
+ }
+ try {
+	 d mri
+ } catch {
+	 s allok=0
+	 s msg="Failed to load "_io_", error = "_$ze
+	 u %Log w !,msg,!
+ 	 i '($zversion(1)=2) u 0 w !,msg,!
+	 ;$$$ErrorMsg(msg)
+ }
+ ;
+ d $zu(5,"^^"_$zu(12))
+ d $zu(90,-1)
+ s rc=$$MAP^%SYS.NAMESPACE("%SYS",,$ZU(12),$zu(12))
+ d $zu(9,"","Switching to %SYS Namespace",0,0  /* Informational message */)
+ d $zu(5,"%SYS")
+ ;
+ ; there may not be a goq file so skip it if it doesn't exist
+ s io=SrcDir_"globalsutil.goq" 
+ if $ZU(140,4,io)=0 {  ;=0 means file exists
+ 	try {
+    	d gif
+ 	} catch {
+	 	s allok=0
+	 	s msg="Failed to load "_io_", error = "_$ze
+	 	u %Log w !,msg,!
+ 	 	i '($zversion(1)=2) u 0 w !,msg,!
+	 	;$$$ErrorMsg(msg)
+ 	}
+ }
+ s io=SrcDir_"globalsutil.rtn" 
+ if $ZU(140,4,io)=0 {  ;=0 means file exists
+	 if Debug {
+		 u %Log
+		 w !!,"Loading ",io
+	 }
+	 try {
+		 d ri(0)
+	 } catch {
+		 s allok=0
+		 s msg="Failed to load "_io_", error = "_$ze
+		 u %Log w !,msg,!
+		 i '($zversion(1)=2) u 0 w !,msg,!
+		 ;$$$ErrorMsg(msg)
+	 }
+ }
+ if $D(^rOBJ("EDITOR")) {
+	 d ^EDITOR
+ }
+ if $D(^rOBJ("MIS5")),'$D(^%IS) {
+	 d ^MIS5
+ }
+ if allok=0 {
+	 d $zu(9,"","Some components failed to load - check "_%Log_"for details",1 /* broadcast and log message*/,1  /* Warning */)
+ }
+ quit
+dserr ;
+ s $zt=""
+ s msg="Globals Install caught unexpected error: "_$ZE
+ d $zu(9,"",msg,1 /* broadcast and log message*/,2  /* Severe error */)
+ u %Log w !,msg,!
+ i '($zversion(1)=2) u 0 w !,msg,!
+ quit 
+

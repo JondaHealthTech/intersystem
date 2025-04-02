@@ -1,0 +1,48 @@
+<AutoPageENS domain="Ensemble" parentpage="ASTMSchemaMain.csp" pagename="ASTM Raw Document Structure" title="@Ensemble:ASTMManagerRawDocumentStructure@ASTM Raw Document Structure">
+<html>
+<head>
+<title>ASTM Raw Document Structure</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+</head>
+<body>
+
+<div class="Text1">ASTM <b>Raw Document Structure</b> definition is displayed below:</div>
+<br>
+
+<script language=Cache runat=server>
+	#include EnsEDIASTM
+	set ds=%request.Get("DS")
+	set category=$p(ds,":",2)
+	set secondary=$p(ds,":",3)
+	If ((category'="")&&(secondary'="")) {
+		set description=..EscapeHTML(##class(EnsLib.EDI.ASTM.Schema).GetDescription(ds))
+		if $data($$$vaSchemaGbl(category,"DS",secondary))=0 {
+			write "<b><font size=6>"_ds_" </font> Definition does not exist!</b>",!
+			quit
+		}
+	}
+</script>
+
+<b><font size=6>#(category_":"_secondary)# </font> #($G(description))#</b>
+<br><br>
+
+<script language=Cache runat=server>
+	If ((category'="")&&(secondary'="")) {
+		Set struct=$$$vaSchemaGbl(category,"DS",secondary)
+		
+		write "<b>Raw Definition:</b>"
+
+		write "<table border=1 cellpadding=2 cellspacing=0 style=""font-size: 0.8em;""><tbody align=center><tr>",!
+		write "<tr><td>"_struct_"</td></tr>"
+		write "</table>"
+		write "<br>"
+	}
+</script>
+
+<p>
+<a href="#(..Link("ASTMSchemaMain.csp"))#">(Show All Categories)</a><br>
+<a href="#(..Link("ASTMSchemaList.csp?ELEMENT=DS&CATEGORY="_category))#">(Show All Document Structures in category '#(category)#')</a><br>
+<a href="#(..Link("ASTMSchemaDocumentStructure.csp?DS="_ds))#">(Show Definition diagram)</a>
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+		q 1
+	</script>
+	<script language="cache" runat="server">
+		d HEADTRIAL^WSP999
+	</script>
+	<link rel="stylesheet" href="assets/styles/trialHomeT.css">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div class="bg-wrapper">
+			<div class="bg3">
+				<img src="./assets/images/trial/bg.png">
+			</div>
+		</div>
+		<div class="content">
+			<div class="main-field">
+				<img class="menu" src="./assets/images/trial/three-dots.png" alt="menu" onclick='toggleMenu(event)'>
+				<div class="dropdown-menu" id="menuDropdown">
+					<button type='button' class='deleteProfile-btn pink-btn' onclick='openPopup1()'>Delete Profile</button>
+					<div class="option"></div>
+				</div>
+				<h1 id='greeting'>Hi there, <span id='uName'></span>!</h1>
+				<h3 class='sub'> Your trial profile will expire on <span id='days'></span>. <img class="info" src="./assets/images/trial/info.png" title="If you would like to extend your trial, contact us via partnerships@jonda.health"></h3>
+				<!--<h3 class='sub'>If you would like to extend your trial, contact us via partnerships@jonda.health</h3>-->
+				<h2>What would you like to do?</h2>
+				<!-- Cards Container -->
+				<div class="cards-container">
+					<!-- Upload & Transform Files Card -->
+					<div class="card">
+						<h3>Upload & Transform files</h3>
+						<div class="card-img">
+							<img src="assets/images/trial/Upload.png" alt="Upload Icon">
+						</div>
+						<p>Upload a blood biomarker file and choose a template to transform it into.</p>
+						<ul>
+							<li>JondaX can handle different medical file formats, such as HL7 and FHIR, as well as common formats such as PDFs and image files.</li>
+							<li>Our proprietary AI-powered solution recognizes and harmonizes health data with different units and naming conventions, transforming them into customized, useable data to fit your needs.</li>
+						</ul>
+						<button onclick="jPopMain('trialUpload.csp')">Upload files</button>
+					</div>
+					<!-- Download Files Card -->
+					<div class="card">
+						<h3>Download files</h3>
+						<div class="card-img">
+							<img id='dImg' src="assets/images/trial/Download.png" alt="Download Icon">
+						</div>
+						<p>Download your transformed file into your computer or workstation.</p>
+						<ul>
+							<li>Once your file is successfully processed, you will receive an email with a download link. Follow the link to download your files.</li>
+							<li>You may download your files as many times as you want while your JondaX Trial profile is active.</li>
+						</ul>
+						<button onclick="jPopMain('trialDownload.csp')">Download files</button>
+					</div>
+					<!-- Learn More Card -->
+					<div class="card">
+						<h3>Learn more</h3>
+						<div class="card-img">
+							<img id='jx' src="assets/images/trial/LearnMore1.png" alt="Learn More Icon">
+						</div>
+						<p>Find out how JondaX can work for you.
+							<br>
+							<br>
+						</p>
+						<ul>
+							<li>JondaX is a robust data transformation engine that harnesses AI processing capabilities alongside human expertise.</li>
+							<li>JondaX is vendor-independent and promotes interoperability by allowing data to be ingested or output irrespective of you or your clients? system data standard needs.</li>
+						</ul>
+						<button onclick="jContactUs(event)">Contact us</button>
+					</div>
+				</div>
+			</div>
+			<script language="cache" runat="server">
+				d SetFooter^trialHome
+			</script>
+		</div>
+	</div>
+	<div id="popup1" class="popup inactive">
+		<div class="popup-dialog">
+			<img src="./assets/images/trial/cross.png" alt="Close" class="close-btn" onclick="removePopup1()">
+			<img src="./assets/images/success.png" alt="FYI">
+			<h4>Do you really want to delete your JondaX Trial Profile?</h4>
+			<p class="pink-text">Once you delete your profile, it can't be undone. All your transformed files will be permanently deleted.</p>
+			<p>To continue deletion, type <b>delete</b> in the box and click confirm button.</p>
+			<input type="text" class="delete-text" placeholder="DELETE" onkeyup="jAbleDelete(event)">
+			<button type="button" class="blue-btn" onclick="jDeleteProfile()" disabled>Confirm</button>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	window.onload = jInitMe;
+	document.onmousemove = parent.resetTimer;
+	document.onmousedown = parent.resetTimer; // touchscreen presses
+	document.ontouchstart = parent.resetTimer;
+	//document.onclick = parent.resetTimer; // touchpad clicks
+	document.onkeypress = parent.resetTimer;
+	document.addEventListener('scroll', parent.resetTimer, true);
+	
+	function jInitMe(){
+		parent.resetTimer;
+		#server(..cInitMe())#	
+	}
+	
+	function jContactUs(){
+	#server(..cCheckSession())#
+	 window.location.href = "mailto:partnerships@jonda.health?subject=More%20Information%20About%20JondaX&body=I%20would%20like%20to%20know%20more%20about%20JondaX.";
+	}
+		
+	function jPopMain(val){
+	#server(..cCheckSession())#
+	window.open(val,"_self");
+	}
+	function openPopup1(){
+    	setTimeout(()=>{
+      	 popup1.classList.remove("inactive")
+    	},100);
+	}
+	function removePopup1(){
+    	popup1.classList.add("inactive");
+	}
+	function toggleMenu(e){
+     //   let position = e.target.getBoundingClientRect();
+        let dropdown = document.getElementsByClassName("dropdown-menu")[0];
+        dropdown.style.top = "6vh";
+        dropdown.style.left = "155vh";
+        setTimeout(()=>{
+            dropdown.classList.toggle("show");
+        },100)
+    }
+	function toggleMenu1() {
+		    alert("HI");
+            var menu = document.getElementById("menuDropdown");
+            menu.classList.toggle("show");
+      }
+
+        // Optional: Close the menu if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.menu-btn')) {
+                var dropdown = document.getElementById("menuDropdown");
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        }
+	function jAbleDelete(event){
+		let deleteInput=event.target.value;
+		let text =deleteInput.toLowerCase();
+		if(text=== "delete") {
+			document.querySelector(".blue-btn").disabled = false;	
+		}
+	else{
+		document.querySelector(".blue-btn").disabled = true;
+	}
+}
+	function jDeleteProfile(){
+		#server(..cDeleteProfile())#
+		window.open("trialDeleteAccSurvey.csp","_self")
+}
+</script>
+<script language="cache" method="cCheckSession">
+	if ($g(%session.Data("UserID"))=""){
+		   &js<window.open("jxLockDown.csp","_self")>
+	   }
+</script>
+<script language="cache" method="cInitMe">
+	d InitMe^trialHome
+</script>
+<script language="cache" method="cDeleteProfile">
+	s uid=$g(%session.Data("UserID"))
+	   s dt= $zdatetime($h,3)
+	   &sql(UPDATE MX."User" SET DeletedDate=:dt WHERE ID=:uid)
+</script>
+
+</html>

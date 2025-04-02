@@ -1,0 +1,27 @@
+<!--
+Utilities: Data Transformation list
+-->
+<AutoPage domain="Ensemble" pagename="Data Transformations" parentpage="UtilEnsHome.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Data Transformations</Text>
+</Pane>
+
+<Pane name="Navigator" extends="UtilEnsHome.csp" />
+
+<Pane name="Detail" type="CSPX.EnsDTLListTablePane">
+	<Text>Defined Data Transformations:</Text>
+	<Sortable>true</Sortable>
+	<ShowZebra>true</ShowZebra>
+	
+	<Actions>
+		<Action href="UtilEnsDTLDefinition.csp" name="$A">
+			<Caption>Definition</Caption>
+			<Popup>View the definition of this Data Transformation.</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+	</Actions>
+	
+</Pane>
+
+</AutoPage>

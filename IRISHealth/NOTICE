@@ -1,0 +1,13 @@
+InterSystems IRIS HTTP Server
+
+This is an installation of the Apache HTTP Server Project code configured for use with InterSystems IRIS.
+Inclusion of it in this version is covered under http://www.apache.org/licenses/LICENSE-2.0.
+
+CGLIB
+Inclusion of this Apache project is covered under http://www.apache.org/licenses/LICENSE-2.0.
+
+Xalan
+Inclusion of this Apache project is covered under http://www.apache.org/licenses/LICENSE-2.0.
+
+Xerces
+Inclusion of this Apache project is covered under http://www.apache.org/licenses/LICENSE-2.0.

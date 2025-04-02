@@ -1,0 +1,29 @@
+<html lang="en"> <!--Groot v1.1-->
+    <head>
+    	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+		q 1
+		</script>
+    	<script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/trialExceededQuota.css">
+    </head>
+    <body>
+    <div id="lab-upload" class="lab-upload">
+                        <h4>You have exceeded your upload quota</h4>
+                        
+                        <p>
+                           You have used up your 10 file upload quota. To continue using JondaX, get in touch with us by clicking on the button below.
+                        </p>                          
+                        
+                        <button class="blue-btn" onclick="jOpenContact()">Continue</button>
+                        
+                    </div>
+                    
+ <script type="text/javascript">
+ 	function jOpenContact(){
+		window.location.href = "mailto:partnerships@jonda.health?subject=More%20Information%20About%20JondaX&body=I%20would%20like%20to%20know%20more%20about%20JondaX."; 	
+	 	}
+ </script>
+</body>
+	
+</html>	 

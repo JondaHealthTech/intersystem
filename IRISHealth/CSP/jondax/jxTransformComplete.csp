@@ -1,0 +1,126 @@
+<html>
+    <head>
+    	<script language="cache" runat="server">d HEAD1^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/jxTransformCompleteB2B.css">
+    </head>
+    <body onload="jLoadProfile()">
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div class="content">
+                <div class="side-nav">
+	                <img class="close-nav mobile-active" src="./assets/images/cross.png" alt="Cross" onclick="closeMobileNav(event)">
+	                <img class="logo" src="./assets/images/Jonda X Logo Blue Pink.png" alt="Jonda Health">
+	                <img class="logo-small" src="./assets/images/X Blue Pink.png" alt="Jonda Health">
+                    <br>
+                    <img class="profile" src="./assets/images/profileBordered.png" alt="Profile">
+                    <h3><script language="cache" runat="server">w $s($g(%session.Data("CompanyName"))'="":$g(%session.Data("CompanyName")),1:"")</script></h3>
+                    <p class="location"><script language="cache" runat="server">w $s($g(%session.Data("City"))'="":$g(%session.Data("City")),1:""),$s($g(%session.Data("City"))'="":", ",1:""),$s($g(%session.Data("Country"))'="":$g(%session.Data("Country")),1:"")</script></p>
+                    <p class="plan">Trial Plan</p>
+                    <div class="nav-items">
+                    	<script language="cache" runat="server">
+                    		d WriteMenu^jxSideNav("Transform",0)
+                    	</script>
+                    </div>
+                    <div class="nav-footer">
+                        <div class="logout" onclick="jLogout()"><img src="./assets/images/logout.png" alt="Log Out"><p>Log Out</p></div>
+                        <div class="copyright">Jonda Health &copy; 2023 </div>
+                    </div>
+                    <div class="collapseBtn active" >
+                        <img class="collapseClose" src="./assets/images/collapseClose.png" alt="collapse" onclick="toggleSideNav(event)">
+                        <img class="collapseOpen" src="./assets/images/collapseOpen.png" alt="collapse" onclick="toggleSideNav(event)">
+                    </div>
+                </div>
+                <div class="main-field">
+                    <i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;" onclick="openMobileNav(event)"></i>
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <h1>
+                        Your file has been successfully converted <br>into a
+                        <span>FHIR</span> file with <span>LOINC</span> coding!
+                    </h1>
+                    <button class="green-btn" onclick="downloadFile()">
+                        Download
+                    </button>
+                    <div id="lab-compare" class="lab-compare">
+                        <div class="lab1 lab">
+                            <div class="lab-type left">
+                                HL7 V2 Custom
+                            </div>
+                            <div class="lab-result">
+                                <p>xxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxxx</p>
+                                <p>xxxxxxxxx</p>
+                                <p>xxxxxxxx</p>
+                                <p>xxxxxxx</p>
+                                <p>xxxxxx</p>
+                                <p>xxxxx</p>
+                                <p>xxxxxx</p>
+                            </div>
+                        </div>
+                        <div class="lab2 lab">
+                            <div class="lab-type right">
+                                FHIR LOINC
+                            </div>
+                            <div class="lab-result">
+                                <p>xxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxxx</p>
+                                <p>xxxxxxxxx</p>
+                                <p>xxxxxxxx</p>
+                                <p>xxxxxxx</p>
+                                <p>xxxxxx</p>
+                                <p>xxxxx</p>
+                                <p>xxxxxx</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-group">
+                        <hr>
+                        <p class="num">3</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+	<script language="cache" runat="server">
+		d jScript^jxScripts
+		d jScript2^jxScripts
+	</script>
+    <script type="text/javascript">
+    	function jLoadProfile(){
+	    	#server(..cLoadProfile())#
+    	}
+        function downloadFile() {
+            alert("Downloading File");
+        }
+        function jLogout(){
+	        #server(..cLogout())#
+        }
+	
+	function openTemplatePages(e){
+		e.stopPropagation();
+		let pageName = e.target.id;
+		window.open('jxViewTemp.csp','_self');
+		#server(..cSaveBucket(pageName))#
+    }
+    </script>
+    <script language="cache" method="cLoadProfile">
+    	d LoadProfile^jxSideNav
+    </script>
+    <script language="cache" method="cLogout">
+    	d Logout^jxLogin
+    </script>
+    <script language="cache" method="cSaveBucket" arguments="d1:%String">
+    	s %session.Data("bk")=d1
+    </script>
+</html>

@@ -1,0 +1,41 @@
+<AutoPageENS domain="Ensemble" parentpage="HL7SchemaMain.csp" pagename="HL7 Message Type" title="@Ensemble:HL7ManagerMessageType@HL7 Message Type">
+<html>
+<head>
+<title>HL7 Message Type</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+</head>
+<body>
+
+<div class="Text1">HL7 <b>Message Type</b> definition is displayed below:</div>
+
+<script language=Cache runat=server>
+	set mt=%request.Get("MT")
+	set category=$p(mt,":",2)
+	set secondary=$p(mt,":",3)
+	set description=..EscapeHTML(##class(EnsLib.HL7.Schema).GetDescription(mt))
+</script>
+
+<table border=2 cellpadding=4 cellspacing=0  style="font-size: 1.0em;">
+
+<tr><td colspan=2 align=center><b><font size=6>#(category_":"_secondary)#</font> #(description)#</b></td></tr>
+
+<script language=Cache runat=server>
+	If (mt '= "") {
+		write "<tr><td>Message Structure</td><td>",!
+		set ms=$get(^EnsHL7.Schema(category,"MT",secondary))
+		if ms="" set ms=category_":"_$p(secondary,"_",1)
+		write "<a href='"_..Link("HL7SchemaMessageStructure.csp?MS=MS:"_ms)_"'>"_ms_"</a></td></tr>",!
+		set mt=$g(^EnsHL7.Schema(category,"MT",secondary,"rettype"))
+		write "<tr><td>Return Message Type</td><td>",!
+		write $s(mt="":"&nbsp;",1:"<a href='"_..Link("HL7SchemaMessageType.csp?MT=MT:"_mt)_"'>"_mt_"</a>"),"</td></tr>",!
+	}
+</script>
+
+</table>
+
+<p>
+<a href="#(..Link("HL7SchemaMain.csp"))#">(Show All Categories)</a><br>
+<a href="#(..Link("HL7SchemaList.csp?ELEMENT=MT&CATEGORY="_category))#">(Show All Message Types in category '#(category)#')</a>
+
+</body>
+</html>

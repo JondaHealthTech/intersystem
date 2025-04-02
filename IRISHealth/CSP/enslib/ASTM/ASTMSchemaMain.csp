@@ -1,0 +1,236 @@
+<AutoPageENS domain="Ensemble" parentpage="../UtilEnsEDIMain.csp" pagename="ASTM Schemas" title="@Ensemble:ASTMManagerSchemas@ASTM Schemas">
+<html>
+<head>
+<title>ASTM Schemas</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+<style>
+/* apply some uniformity to buttons */
+select, input {
+	width: 20.0em;
+}
+</style>
+
+<script language=Cache runat=server>
+	#Include EnsEDIASTM
+	Set SubmitOperation=$G(%request.Data("SUBMIT_OPERATION",1))
+	Set:""=SubmitOperation SubmitOperation=$G(%session.Data("SUBMIT_OPERATION"))
+	Kill %session.Data("SUBMIT_OPERATION")
+	Set Filename="", (tSCImport,tSCExport)=$$$OK
+	If "Import"=SubmitOperation {
+		Set Filename=$G(%request.Data("FILE",1))
+	
+		If ""=Filename||'##class(%File).Exists(Filename) {
+			Set tSCImport=$$$ERROR($$$EnsErrGeneral,"Unable to open file '"_Filename_"'")
+		}
+		If ""'=Filename&&$$$ISOK(tSCImport) {
+	        Set tSCImport=##class(EnsLib.EDI.ASTM.SchemaXML).Import(Filename,.tCatImported)
+		}
+	} ElseIf "Export"=SubmitOperation {
+		Set OutFilename=$G(%request.Data("OUTFILE",1))
+		Set OutCategory=$G(%request.Data("CATEGORY",1))
+        Set:""'=(OutFilename_OutCategory) tSCExport=$System.OBJ.Export(OutCategory_".AST",OutFilename,"-d")
+	} ElseIf "Remove"=SubmitOperation {
+		Set OutCategory=$G(%request.Data("CATEGORY",1))
+		Set tKilled=$D($$$vaSchemaGbl(OutCategory))
+		Kill:""'=OutCategory $$$vaSchemaGbl(OutCategory),$$$vaSchemaDescGbl(OutCategory)
+	}
+</script>
+
+<csp:IF CONDITION=($$$ISERR(tSCImport))>
+<script language="javascript">
+function onLoadBody()
+{
+	alert("Error importing from file '#($ZCVT(Filename,"O","JS"))#': #($ZCVT($$$StatusDisplayString(tSCImport),"O","JS"))#");
+}
+</script>
+<csp:ELSEIf CONDITION=($$$ISERR(tSCExport))>
+<script language="javascript">
+function onLoadBody()
+{
+	alert("Error exporting category '#($ZCVT(OutCategory,"O","JS"))#' to file '#($ZCVT(Filename,"O","JS"))#': #($ZCVT($$$StatusDisplayString(tSCExport),"O","JS"))#");
+}
+</script>
+<csp:ELSEIf CONDITION=(("Import"=SubmitOperation)&&(""'=Filename))>
+<script language="javascript">
+function onLoadBody()
+{
+	alert("Imported schema category #($ZCVT(tCatImported,"O","JS"))# from file '#($ZCVT(Filename,"O","JS"))#'");
+}
+</script>
+<csp:ELSEIf CONDITION=(("Export"=SubmitOperation)&&(""'=(OutFilename_OutCategory)))>
+<script language="javascript">
+function onLoadBody()
+{
+	alert("Exported schema category '#($ZCVT(OutCategory,"O","JS"))#' to file '#($ZCVT(OutFilename,"O","JS"))#'");
+}
+</script>
+<csp:ELSEIf CONDITION=(("Remove"=SubmitOperation)&&(""'=OutCategory)&&tKilled)>
+<script language="javascript">
+function onLoadBody()
+{
+	alert("Removed schema category '#($ZCVT(OutCategory,"O","JS"))#'");
+}
+</script>
+<csp:ELSE>
+<script language="javascript">
+function onLoadBody()
+{
+}
+</script>
+</csp:IF>
+
+<script language="javascript">
+
+function btnRemove()
+{
+	var form = self.document.theForm;
+	if (form.CATEGORY.value == '') {
+		alert("Please select a Category");
+		return false;
+	}
+	var a = (confirm('Remove Category '+form.CATEGORY.value+' ?'));
+	if (!a) {
+		return false;
+	}
+	form.FILE.value = "";
+	form.OUTFILE.value = "";
+	setSessionOperation("Remove");
+	//form.SUBMIT_OPERATION.value = "Remove";
+	form.submit();
+	return true;
+}
+
+function btnExport()
+{
+	var form = self.document.theForm;
+	if (form.CATEGORY.value == '') {
+		alert("Please select a Category");
+		return false;
+	}
+	if (form.OUTFILE.value == '') {
+		alert("Please specify a filename");
+		return false;
+	}
+	form.FILE.value = "";
+	setSessionOperation("Export");
+	//form.SUBMIT_OPERATION.value = "Export";
+	form.submit();
+	return true;
+}
+
+function getFileCat()
+{
+	var x = #server(EnsLib.EDI.ASTM.SchemaXML.GetImportCategory(self.document.theForm.FILE.value))#;
+	return x; 
+}
+
+function setSessionOperation(OperationName)
+{
+	var x = #server(..SetSessionSubmitOperation(OperationName))#
+	return x; 
+}
+
+</script>
+<script language=Cache runat=server>
+	#Include EnsEDIASTM
+
+	Write "<script language=""javascript"">",!
+	&html<
+	function btnImport()
+	{>
+	Write "    var catList = new Array();",!
+	Set cat="" For { Set cat=$o($$$vaSchemaGbl(cat)) Quit:cat=""
+		Write "    catList['"_cat_"'] = 1;",!
+	}
+	&html<
+		var form = self.document.theForm;
+		if (form.FILE.value == '') {
+			alert("Please specify a filename");
+			return false;
+		}
+		var fileCat = getFileCat();
+		if ((fileCat != '') && (catList[fileCat] != null)) {
+			var a = (confirm('Overwrite Category '+fileCat+' by loading from file '+form.FILE.value+' ?'));
+			if (!a) {
+				return false;
+			}
+		}
+		form.CATEGORY.value = "";
+		setSessionOperation("Import");
+		//form.SUBMIT_OPERATION.value = "Import";
+		form.submit();
+		return true;
+	}>
+	Write "<"_$C(47)_"script>",!
+</script>
+
+</head>
+<body onload="onLoadBody();">
+
+<div class="Text1">ASTM categories / schema versions are displayed below:</div>
+
+<table border=1 cellpadding=4 cellspacing=0><tr>
+
+<tr><th>Category</th><th>Base</th><th colspan=5>Links</th></tr>
+
+<script language=Cache runat=server>
+	#Include EnsEDIASTM
+
+	Set cat="" For { Set cat=$o($$$vaSchemaGbl(cat)) Quit:cat=""
+		Set sorted("="_cat)=""
+	}
+	Set sortcat="" For { Set sortcat=$o(sorted(sortcat)) Quit:sortcat=""
+		set cat=$e(sortcat,2,99999)
+		set base=$get($$$vaSchemaGbl(cat,"base"))
+		&html<<tr>>
+		&html<<td valign=top><b>#(cat)#</b></td>>
+		&html<<td valign=top><i>&nbsp;#(base)#&nbsp;</i></td>>
+		&html<<td><a href='#(..Link("ASTMSchemaList.csp?ELEMENT=DS&CATEGORY="_cat))#'>Document Structures / <i>DocTypes</i></a></td>>
+		&html<<td><a href='#(..Link("ASTMSchemaList.csp?ELEMENT=SS&CATEGORY="_cat))#'>Segment Structures</a></td>>
+		&html<<td><a href='#(..Link("ASTMSchemaList.csp?ELEMENT=CS&CATEGORY="_cat))#'>Component Structures</a></td>>
+		&html<<td><a href='#(..Link("ASTMSchemaList.csp?ELEMENT=CT&CATEGORY="_cat))#'>Code Tables</a></td>>
+		&html<</tr>>
+	}
+</script>
+
+</table>
+<form name="theForm" action="ASTMSchemaMain.csp" method=get>
+	<input type="hidden" name="SUBMIT_OPERATION" value="">
+	<table class="AutoForm" cellpadding=4><tr>
+		<td>
+		</td><td align=center>
+ 			<input type="button" name="BTN_Import" value="Import From File" onclick="btnImport();">&nbsp;
+		</td><td>
+ 			<input TYPE="file" NAME="FILE" VALUE="" SIZE="30">
+		</td>
+	</tr><tr>
+		<td rowspan=2>Choose Category<br><select name="CATEGORY">
+		<script language=Cache runat=server>
+			&html<<option value=""></option>>
+			Set sortcat="" For { Set sortcat=$o(sorted(sortcat)) Quit:sortcat=""
+				set cat=$e(sortcat,2,99999)
+				&html<<option value="#(cat)#">#(cat)#</option>>
+			}
+		</script>
+		</select></td>
+		<td align=center>
+			<input type="button" name="BTN_Export" value="Export To File" onclick="btnExport();">&nbsp;
+		</td><td>
+			<input TYPE="text" NAME="OUTFILE" VALUE="" SIZE="30">
+    	</td>
+	</tr><tr>
+		<td align=center>
+			<input type="button" name="BTN_Remove" value="Remove Category" onclick="btnRemove();">
+		</td><td>
+		</td>
+    </tr></table>	
+</form>
+
+</body>
+
+<SCRIPT LANGUAGE="Cache" METHOD="SetSessionSubmitOperation" RUNAT="server" ARGUMENTS="pOperationName">
+	Set %session.Data("SUBMIT_OPERATION")=pOperationName
+	Quit 1
+</SCRIPT>
+
+</html>

@@ -1,0 +1,234 @@
+/* @class="%CSP.UI.Component.RoleMemberTab" */
+.Text2:first-letter {
+    font-size:1.4em;
+}
+.Text2 {
+    font-size:13px;
+    max-width:575px;
+    margin-bottom:5px;
+}
+.sectionLabel {
+	font-size:13px;
+	font-weight:normal;
+	color:black;
+	margin-top:15px;
+}
+/* @class="%CSP.UI.Component.SQLPrivileges" */
+.Text2:first-letter {
+    font-size:1.4em;
+}
+.Text2 {
+    font-size:13px;
+    max-width:575px;
+    margin-bottom:5px;
+}
+.sectionLabel {
+	font-size:13px;
+	font-weight:normal;
+	color:black;
+	margin-top:15px;
+}
+/* @class="%CSP.UI.Component.SQLTables" */
+.Text2:first-letter {
+    font-size:1.4em;
+}
+.Text2 {
+    font-size:13px;
+    max-width:575px;
+    margin-bottom:5px;
+}
+.sectionLabel {
+	font-size:13px;
+	font-weight:normal;
+	color:black;
+	margin-top:15px;
+}
+/* @class="%CSP.UI.Component.abstractRoleTab" */
+.Text2:first-letter {
+    font-size:1.4em;
+}
+.Text2 {
+    font-size:13px;
+    max-width:575px;
+    margin-bottom:5px;
+}
+.sectionLabel {
+	font-size:13px;
+	font-weight:normal;
+	color:black;
+	margin-top:15px;
+}
+/* @class="%CSP.UI.Component.certificateViewer" */
+.certlbl {
+	text-align: right;
+	vertical-align: top;
+	font-weight: bold;
+}
+/* @class="%CSP.UI.Component.ApplicationRoles" */
+.innerTable {
+	border:1px solid #888;
+}
+/* @class="%CSP.UI.Component.SMPDynaTree" */
+/* override for tree item style */
+#tree {
+	border: 1px solid #cbcbcb;
+	border-radius: 5px;	
+	width: 370px;
+	overflow-x: auto;
+	overflow-y: auto;
+}
+.dynaTreeNode {
+	border-bottom: 1px solid #cbcbcb;
+	color: #000000;
+	font-size: 14px;
+	font-family: Futura,Arial,sans-serif;
+	margin: 0px;
+	padding: 7px 2px 7px 2px;
+	text-decoration: none;
+	white-space: nowrap;
+}
+.columnImageSpace {
+	width:5%;
+	float:right;
+	cursor: pointer;
+}
+/* @doc="div for node in tree when showLines is true." */
+.dynaTreeNodeLines {
+	text-decoration:  none;
+	white-space: nowrap;
+	vertical-align: middle;
+	font-size: 12px;
+	height: 16px;
+	overflow: visible;
+	font-family: Futura,Arial,sans-serif;
+	margin: 0px;
+	padding: 0px;
+}
+/* @doc="Caption for node (a) in tree." */
+a.dynaTreeItem {
+	color: #333695;
+	font-size: 14px;
+	text-decoration: underline;
+	white-space: nowrap;
+	vertical-align: middle;
+	padding: 2px;
+}
+
+/* @doc="Current selected node (a) in tree." */
+a.dynaTreeItemSelected {
+	color: black;
+	font-weight: bold;
+	background: #ffffff;
+	border: 1px dotted #333695;
+	padding: 0px;
+	text-decoration: none;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.dynaTreeNode img, .dynaTreeNodeLines img {
+	border: none;
+}
+
+a.dynaTreeItem:hover {
+	color: black;
+	background: #ffffff;
+	border: 1px dotted #cbcbcb;
+	padding: 0px;
+}
+a.dynaTreeItem:active {
+	text-decoration: none;
+}
+.dynaTreeItem:focus {
+	color: #333695;
+	background: #ffffff;
+}
+
+/* @class="%CSP.UI.Component.SMPFinderPane" */
+.finderColumn {
+	overflow-x: hidden;
+	overflow-y: scroll;
+	border-right: 1px solid #CBCBCB;
+	top: 0px;
+	height: 100%;
+}
+.finderItem a,.finderItemOdd a {
+	color: #000000;
+	font-size: 14px;
+	font-weight: 600;
+	padding: 10px;
+}
+/*  this new design no longer distinguishes Odd/Even */
+.finderItemOdd {
+	background: #FFFFFF;  /*#EEEEEE;*/
+}
+.finderItemSelected a {
+	font-size: 14px;
+	padding: 10px;
+}
+.finderItemSelected a:hover {
+	background: #BFE4E3;
+	color: #000000;
+	font-size: 14px;
+	padding: 10px;
+}
+.finderItem a:hover,
+.finderItemOdd a:hover {
+	background: #F7F7F7;
+	color: #000000;
+	font-size: 14px;
+	font-weight: 600;
+	padding: 10px;	
+}
+.finderItemDisabled a {
+	color: #000000;
+	font-size: 14px;
+	padding: 10px;
+}
+.finderListRowSelected .finderListName {
+	text-decoration: underline;
+	color: white;
+}
+table.finderListTable {
+	font-size: 14px;
+}
+/* category name for List View with kids */
+.finderListCategory {
+	color: black;
+	font-family: Futura,Arial,sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+}
+.finderListDisabled {
+	color:#D0D0D0;
+}
+.finderListName {
+	text-decoration: underline;
+	color: #333695;
+}
+.finderListName:hover {
+	background: #F7F7F7;
+}
+.finderListRowSelected {
+	background: white;
+	color: #000000;
+}
+tr.finderListRowSelected:hover {
+	background: #F7F7F7;
+}
+tr.finderListRowOdd:hover,
+tr.finderListRowEven:hover {
+	background: #F7F7F7;
+}
+
+tr.finderListRowSelected:hover {
+	background: rgb(73,127,161);
+}
+.columnImageSpace {
+	width:5%;
+	float:right;
+}
+/* @class="%CSP.UI.Component.UserRoles" */
+/* @class="%CSP.UI.Component.tableNavBar" */
+/* EOF */

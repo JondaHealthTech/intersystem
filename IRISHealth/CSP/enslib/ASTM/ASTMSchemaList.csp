@@ -1,0 +1,61 @@
+<AutoPageENS domain="Ensemble" parentpage="ASTMSchemaMain.csp" pagename="ASTM Schema Contents" title="@Ensemble:ASTMManagerSchemaContents@ASTM Schema Contents">
+<html>
+<head>
+<title>ASTM Schema Contents</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+
+<script language=Cache runat=server>
+#Include EnsEDIASTM
+	set category=%request.Get("CATEGORY") Set:""=category category=0
+	set element=%request.Get("ELEMENT")
+	set base=$get($$$vaSchemaGbl(category,"base"))
+</script>
+</head>
+
+<body>
+<script language=Cache runat=server>
+#Include EnsEDIASTM
+	If ((category'="") && (element'="")) {
+		set name=$case(element, "DS":"Document Structure / DocType", "SS":"Segment Structure", "CS":"Component Structure", "CT":"Code Table", :"Unknown Structure")
+		set caption=name_"s"
+		set csppage="ASTMSchema"_$tr($P(name,"/")," ")
+		&html<<div class="Text1">ASTM <b>#(caption)#</b> in Category '<b>#(category)#</b>'#($S(""=base:"",1:" (base category '<i><a href="_..Link("ASTMSchemaList.csp?ELEMENT="_element_"&CATEGORY="_base)_">"_base_"</a></i>')"))# are displayed below:</div>>
+
+		Set max=0
+		Set next=$o($$$vaSchemaGbl(category,element,""))
+		Set n1st=$ZCVT($E(next),"U")
+		write "<table cellpadding=0 cellspacing=0 style=""margin-left: 20px;""><tr><td>"_$S(+next=next:"Num",1:n1st)_"</td><td><table border=1 cellpadding=4 cellspacing=0 style=""margin-left: 20px;"">"_$C(13,10)
+		For cnt=1:1 { Set item=next,i1st=n1st  Quit:item=""  Set next=$o($$$vaSchemaGbl(category,element,item)), n1st=$ZCVT($E(next),"U")
+			if cnt=1 write "<tr>"
+			set:cnt>max max=cnt
+			set tDesc=..EscapeHTML(##class(EnsLib.EDI.ASTM.Schema).GetDescription(element_":"_category_":"_item))
+			write "<td><a title='"_$S(""'=tDesc:tDesc, 1:element_":"_category_":"_item)_"' href='"_..Link(csppage_".csp?"_element_"="_element_":"_category_":"_item)_"'>"
+			write item,"</a></td>"_$C(13,10) 
+			if i1st'=n1st&&'((+item=item)&&(+next=next)) {
+				While cnt#max {
+					write "<td>&nbsp;</td>"
+					set cnt=cnt+1
+				}
+				set max=0,cnt=0
+				write "</tr></table></td></tr><tr><td>&nbsp;</td></tr>"_$C(13,10)_
+				"<tr><td>"_$S(+next=next:"Num",1:n1st)_"</td><td><table border=1 cellpadding=4 cellspacing=0 style=""margin-left: 20px;"">"
+			}
+			Elseif cnt#10=0 { set cnt=0  write "</tr>"_$C(13,10) }
+		}
+		for  {
+			if cnt#10=1 quit
+			write "<td>&nbsp;</td>"
+			if cnt#10=0 quit
+			set cnt=cnt+1
+		}
+	}
+</script>
+
+</tr></table></td></tr></table>
+
+<p>
+<div style="margin-left: 20px; margin-right: 20px;">
+<a href="#(..Link("ASTMSchemaMain.csp"))#">(Show All Categories)</a><br>
+</div>
+</body>
+</html>

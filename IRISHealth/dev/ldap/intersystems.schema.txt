@@ -1,0 +1,51 @@
+# intersystems.schema -- 
+# intersystems.schema v 1.0.1.2 2011/02/18 15:16:11 Andreas
+# AD004 03/02/11 created
+
+## Copyright 1998-2011 InterSystems Corporation
+## All rights reserved.
+## Please consult the InterSystems Security Administration guide for details
+##
+
+# intersystems-Namespace
+# The name of the user's default namespace
+attributetype ( 1.2.840.113556.1.8000.2448.2.1
+	NAME 'intersystems-Namespace'
+	DESC 'Default namespace a user connects to'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+# intersystems-Routine
+# The name of the user's default routine
+attributetype ( 1.2.840.113556.1.8000.2448.2.2
+	NAME 'intersystems-Routine'
+	DESC 'Defines the default Routine which gets called upon login'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+
+# intersystems-Roles
+# The name of the user's login roles
+attributetype ( 1.2.840.113556.1.8000.2448.2.3
+	NAME 'intersystems-Roles'
+	DESC 'Initial login Roles'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	 )
+
+# InterSystems
+# The InterSystems objectclass represents attributes specific to InterSystems products.
+# It allows and defines the following attributes Namespace, Routine and Roles
+objectclass	( 1.2.840.113556.1.8000.2448.1.1
+    NAME 'InterSystems'
+	DESC 'InterSystems Login Attributes for Users'
+        AUXILIARY  
+	MAY (
+		intersystems-Namespace $ intersystems-Routine $
+		intersystems-Roles)
+	)

@@ -1,0 +1,116 @@
+<csp:class DOMAIN="%TemplateMessages">
+<html>
+<head>
+
+<title>#($$$Text("SQL Wizard Preview Page")_" "_$namespace)#</title>
+
+<style type="text/css">
+<!--
+
+table		{ border: black solid 1px; font-size: 0.8em; }
+
+th.Row	{ border-bottom: black solid 1px;  }
+th.Data	{ border-left: gray solid 1px; border-bottom: black solid 1px;  }
+
+td.Row 	{ border-bottom: black solid 1px; padding-right: 3px;}
+td.Data 	{ border-left: gray solid 1px; border-bottom: black solid 1px; 
+				padding-left: 3px; 
+			}
+
+tr.DarkRow { background: #FFFFFF; }
+tr.LightRow { background: #DDEEEE; }
+tr.Preview { background: #FFFFFF; }
+			 
+
+-->
+</style>
+
+<script language="JavaScript">
+function btnCancel() {
+	opener.cspPopupWindow = null;
+	window.close();
+	return true;
+}
+
+</script>
+
+
+
+</head>
+<body>
+<script language="cache" runat="server">
+	Do ##class(%template.htmlcolor).DrawTitle($$$Text("Table Preview"))
+</script>
+<!-- YSD2449<h1>#($$$Text("Table Preview"))#</h1>-->
+
+<script language="Cache" runat="server">
+	Set ns = $G(%request.Data("Namespace",1))
+	If (ns '= "") {
+		ZN ns
+	}
+
+
+	Set max = $G(%request.Data("MAX",1),100)
+	Set sql = $G(%request.Data("sql",1))
+	Set ok = 1
+ 
+	Set query = ##class(%ResultSet).%New()
+	Set sc = query.Prepare(sql,0,"DISPLAY")
+	If $$$ISERR(sc) {
+		Set ok = 0
+		Write $$$Text("Error in SQL Query")_":<br><br><table broder=""0""><tr class=""Preview""><td>",!
+		Set EscapeObj = ##class(%CSP.HTMLEscape).%New()
+		Do $system.OBJ.DisplayError(sc)
+		Kill EscapeObj
+		Write "</td></tr></table>",!
+	}
+
+	If (ok) {
+		Do query.Execute()
+	}
+ 
+</script>
+
+<form name="theForm">
+
+<div align="center">
+<csp:if condition="ok">
+	<input type="hidden" name="sql" value="#(..EscapeHTML(sql))#">
+	#($$$Text("Max Rows"))#: <input type="text" name="max" value="#(..EscapeHTML(max))#" size="6">
+	<nobr>&nbsp;<input type="submit" name="Go" value=" Go " textid="">&nbsp;
+</csp:if>
+<input type="button" name="Close" value=" Close " onclick="btnCancel();" textid=""></nobr>
+</div>
+</form>
+<hr>
+
+<!-- CREATE A TABLE TO DISPLAY THE RESULTS -->
+
+<csp:if condition="ok">
+<table border="0" cellspacing="0" bgcolor=#DDDDFF>
+<tr>
+	<!-- LOOP OVER COLUMNS TO CREATE COLUMN HEADERS -->
+	<th class="Row">#</th>
+	<csp:while counter="col" condition="(col<query.GetColumnCount())">
+	<th class="Data" align="left"><b>#(query.GetColumnName(col))#</b></th>
+	</csp:while>
+</tr>
+
+<!-- NOW LOOP OVER ALL ROWS IN THE RESULT SET -->
+<csp:while counter="row" condition="((query.Next())&&(row<max))">
+
+<!-- USE ALTERNATING STYLES FOR ROW FOR ZEBRA EFFECT (# is modulo operator) -->
+<tr class=#($S(row#2:"DarkRow",1:"LightRow"))#>
+
+	<!-- LOOP OVER COLUMNS TO SHOW DATA -->
+	<td class="Row">#(row)#</td>
+	<csp:while counter="col" condition="(col<query.GetColumnCount())">
+	<td class="Data">#(query.GetData(col))#</TD>
+	</csp:while>
+</tr>
+</csp:while>
+</table>
+</csp:if>
+
+</body>
+</html>

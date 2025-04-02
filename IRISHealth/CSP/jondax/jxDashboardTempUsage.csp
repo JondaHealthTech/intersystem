@@ -1,0 +1,711 @@
+<html>
+    <head>
+    	<script language="cache" runat="server">d HEAD1^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/jxDashboardTempUsageB2B.css">
+    </head>
+    <body onload="initMe()">
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;" onclick="openMobileNav(event)"></i>
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <div class="title">
+                    	<h2>Template Usage</h2>
+                    	<button class="back-btn" onclick="window.frameElement.src='jxDashboard.csp'"><img src="./assets/images/leftArrow.png" alt="Arrow"> Back</button>
+                    </div>
+                    <div class="stats">
+                        <div class="temp-usage-stat stat-block">
+                            <div class="block-title">
+                                <h4>Overview</h4>
+                                <img src="./assets/images/optionHorizontal.png" alt="Option" onclick="togglePopup(event)">
+                            </div>
+                            <div class="stat">
+                                
+                            	<script language="cache" runat="server">
+                            		d WriteTempStat^jxDashboardTempUsage
+                            	</script>
+                                <div class="prev mobile-active" onclick="togglePrev(event)"><i class="fa fa-chevron-left"></i></div>
+                                <div class="next mobile-active" onclick="toggleNext(event)"><i class="fa fa-chevron-right"></i></div>
+                            </div>
+                        </div>
+                        <div class="temp-usage-chart stat-block">
+                            <div class="block-title">
+                                <h4>Usage Chart</h4>
+                                <img src="./assets/images/optionHorizontal.png" alt="Option" onclick="togglePopup(event)">
+                            </div><div class="dropdowns">
+                                <div class="dropdown">
+                                    <button id="time-select-btn" onclick="toggleTimeSelect()">All Time <img src="./assets/images/dropDrownWhite.png" alt="Dropdown"></button>
+                                    <div id="time-select" class="collapse-field">
+                                        <div class="collapse">
+                                            <div class="item">
+                                                <div class="round">
+                                                    <input name="time" id="R1" type="radio" value="All Time" checked onclick="getAllTimeChart()">
+                                                    <label for="R1"></label>
+                                                </div>
+                                                <p>All Time</p>
+                                            </div>
+                                            <div class="item">
+                                                <div class="round">
+                                                    <input name="time" id="R2" type="radio" value="Selected Range" onclick="toggleMonthSelector()">
+                                                    <label for="R2"></label>
+                                                </div>
+                                                <p>Select Range</p>
+                                            </div>
+                                            <button onclick="closeTimeSelect()">Confirm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dropdown">
+                                    <button id="temp-select-btn" onclick="toggleTempSelect()">All Templates <img src="./assets/images/dropDrownWhite.png" alt="Dropdown"></button>
+                                    <div id="temp-select" class="collapse-field">
+                                        <div class="collapse">
+                                            <div class="item">
+                                                <div class="round">
+                                                    <input name="temp" id="C1" type="checkbox" checked onclick="uncheckOthers()" value="All Templates">
+                                                    <label for="C1"></label>
+                                                </div>
+                                                <p>All Templates</p>
+                                            </div>
+                                            
+                                            <script language="cache" runat="server">
+                                            	d WriteTemplates^jxDashboardSuccess
+                                            </script>
+                                            <button onclick="closeTempSelect()">Confirm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart">
+                                <div class="col-small">
+                                    <canvas id="temp-chart-tick"></canvas>
+                                </div>
+                                <div class="col-large">
+                                    <div class="box">
+                                        <canvas id="temp-chart" height="300"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div id="popup1" class="popup inactive">
+                <div class="popup-dialog">
+                    <button class="download-btn" onclick="downloadCSV()">Download CSV file</button>
+                    <button class="cancel-btn" onclick="removePopup()">Cancel</button>
+                </div>
+            </div>
+
+            <div id="popup2" class="popup inactive">
+                <div class="popup-dialog">
+                    <img class="close-btn" src="./assets/images/cross.png" alt="Close" onclick="removePopup2()">
+                    <h4>Select Range</h4>
+                    <div class="from-date date-selector">
+                        <p>From</p>
+                        <div class="from-month">
+                            <button id="from-month-btn" class="date-collapse" onclick="toggleMenu(event)">March <img src="./assets/images/dropDownSharp.png" alt=""></button>
+                            <div class="collapse-data month-collapse">
+                                <ul>
+                                    <li onclick="changeDate(event,'from-month')">January</li>
+                                    <li onclick="changeDate(event,'from-month')">February</li>
+                                    <li onclick="changeDate(event,'from-month')">March</li>
+                                    <li onclick="changeDate(event,'from-month')">April</li>
+                                    <li onclick="changeDate(event,'from-month')">May</li>
+                                    <li onclick="changeDate(event,'from-month')">June</li>
+                                    <li onclick="changeDate(event,'from-month')">July</li>
+                                    <li onclick="changeDate(event,'from-month')">August</li>
+                                    <li onclick="changeDate(event,'from-month')">September</li>
+                                    <li onclick="changeDate(event,'from-month')">October</li>
+                                    <li onclick="changeDate(event,'from-month')">November</li>
+                                    <li onclick="changeDate(event,'from-month')">December</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="from-year">
+                            <button id="from-year-btn" class="date-collapse" onclick="toggleMenu(event)">2023 <img src="./assets/images/dropDownSharp.png" alt=""></button>
+                            <div class="collapse-data year-collapse">
+                                <ul>
+                                    <li onclick="changeDate(event,'from-year')">2023</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="to-date date-selector">
+                        <p>To</p>
+                        <div class="to-month">
+                            <button id="to-month-btn" class="date-collapse" onclick="toggleMenu(event)">July <img src="./assets/images/dropDownSharp.png" alt=""></button>
+                            <div class="collapse-data month-collapse">
+                                <ul>
+                                    <li onclick="changeDate(event,'to-month')">January</li>
+                                    <li onclick="changeDate(event,'to-month')">February</li>
+                                    <li onclick="changeDate(event,'to-month')">March</li>
+                                    <li onclick="changeDate(event,'to-month')">April</li>
+                                    <li onclick="changeDate(event,'to-month')">May</li>
+                                    <li onclick="changeDate(event,'to-month')">June</li>
+                                    <li onclick="changeDate(event,'to-month')">July</li>
+                                    <li onclick="changeDate(event,'to-month')">August</li>
+                                    <li onclick="changeDate(event,'to-month')">September</li>
+                                    <li onclick="changeDate(event,'to-month')">October</li>
+                                    <li onclick="changeDate(event,'to-month')">November</li>
+                                    <li onclick="changeDate(event,'to-month')">December</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="to-year">
+                            <button id="to-year-btn" class="date-collapse" onclick="toggleMenu(event)">2023 <img src="./assets/images/dropDownSharp.png" alt=""></button>
+                            <div class="collapse-data year-collapse">
+                                <ul>
+                                    <li onclick="changeDate(event,'to-year')">2023</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="ok-btn" onclick="changeChartBasedOnTime()">Okay</button>
+                    <div id="error-text">This is the error text</div>
+                </div>
+            </div>
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+    <script type="text/javascript">
+    
+        C1=self.C1;C2=self.C2;C3=self.C3;C4=self.C4;C5=self.C5;C6=self.C6;
+        const popup = document.getElementById("popup1");
+        const popup2 = document.getElementById("popup2");
+        const popupDialog = document.getElementsByClassName("popup-dialog")[0];
+        const timeSelect = document.getElementById("time-select");
+        const tempSelect = document.getElementById("temp-select");
+        const tempSelectBtn = document.getElementById("temp-select-btn");
+        const timeSelectBtn = document.getElementById("time-select-btn");
+        const fromMonthBtn = document.getElementById("from-month-btn");
+        const toMonthBtn = document.getElementById("to-month-btn");
+        const fromYearBtn = document.getElementById("from-year-btn");
+        const toYearBtn = document.getElementById("to-year-btn");
+        const dropdownText = " <img src='./assets/images/dropDrownWhite.png' alt='Dropdown'>";
+        const dropdownSharpText = " <img src='./assets/images/dropDownSharp.png' alt=''>";
+        let currentActive = document.getElementsByClassName("stat-active")[0];  
+        const colorArr = ["#586D93","#4DCEC9","#F39CBB","#E63876","#ADAFC1"];
+        const totalMonthlyStat = document.getElementsByClassName("temp-stat").length; 
+        const nextBtn = document.getElementsByClassName("next")[0];
+        const prevBtn = document.getElementsByClassName("prev")[0];
+        let prevFMonth;
+        let prevFYear; 
+        let prevTMonth; 
+        let prevTYear;
+        let curDate=new Date();
+        let startDate;
+        let max=70;
+        let initialTimeSelection;
+        let labels = [];
+        let premadeChart =[];
+        const dataset=[];
+        
+		window.onload = jInitMe;
+  		document.onmousemove = parent.resetTimer;
+  		document.onmousedown = parent.resetTimer; // touchscreen presses
+  		document.ontouchstart = parent.resetTimer;
+  		//document.onclick = parent.resetTimer; // touchpad clicks
+  		document.onkeypress = parent.resetTimer;
+  		document.addEventListener('scroll', parent.resetTimer, true);
+  		
+    	function initMe(){
+	    	parent.resetTimer();
+	    	#server(..cLoadStartDate())#;
+	    	if(curDate.getMonth()-startDate.getMonth()<3){
+		    	startDate.setMonth(curDate.getMonth()-4);
+	    	}
+	    	getAllTimeChart();
+	    	prevFMonth=startDate.getMonth()+1;
+	    	prevFYear=startDate.getFullYear();
+	    	prevTMonth=curDate.getMonth()+1;
+	    	prevTYear=curDate.getFullYear();
+	    	fromMonthBtn.innerHTML = startDate.toLocaleString('default',{month:'long'}) + dropdownSharpText;
+	    	toMonthBtn.innerHTML = curDate.toLocaleString('default',{month:'long'}) + dropdownSharpText;
+	    	fromYearBtn.innerHTML = prevFYear + dropdownSharpText;
+	    	toYearBtn.innerHTML = prevTYear + dropdownSharpText;
+	    	
+    	}
+        function checkToDisable(curKey){
+            if(curKey>=totalMonthlyStat){
+                nextBtn.classList.add("disabled")
+            }
+            else if(curKey<=1){
+                prevBtn.classList.add("disabled")
+            }
+            else{
+                nextBtn.classList.remove("disabled");
+                prevBtn.classList.remove("disabled")
+            }
+            if(document.querySelectorAll(".temp-stat").length < 4){
+	            document.querySelector(".stat").style.justifyContent="start";
+            }
+        }
+        checkToDisable(currentActive.dataset.key);
+        function togglePrev(e){
+            let currentActive = document.getElementsByClassName("stat-active")[0];
+            currentActive.classList.remove("stat-active");
+            let curKey = parseInt(currentActive.dataset.key);
+            document.querySelector(".temp-stat[data-key='"+(curKey-1)+"']").classList.add("stat-active");
+            checkToDisable(curKey-1);
+        }
+        function toggleNext(e){
+            let currentActive = document.getElementsByClassName("stat-active")[0];
+            currentActive.classList.remove("stat-active");
+            let curKey = parseInt(currentActive.dataset.key);
+            document.querySelector(".temp-stat[data-key='"+(curKey + 1)+"']").classList.add("stat-active");
+            checkToDisable(curKey+1);
+        }
+        function toggleTimeSelect(){
+            initialTimeSelection=document.querySelector('input[name="time"]:checked');  
+            setTimeout(()=>{
+                timeSelect.classList.toggle("active");
+            },100)
+        }
+        function toggleTempSelect(){
+            setTimeout(()=>{
+                tempSelect.classList.toggle("active");
+            },100)
+        }
+        function toggleMonthSelector(){
+            setTimeout(()=>{
+                popup2.classList.toggle("inactive");
+            },100);
+        }
+        function togglePopup(e){
+            if(popup.classList.contains("inactive")){
+                curStatblock = e.target.closest(".stat-block");
+                let position=e.target.getBoundingClientRect();
+                popupDialog.style.top=position.y + 10 + "px";
+                popupDialog.style.left="calc(" +position.right + "px - 25vw)" ;
+            }
+            setTimeout(()=>{
+                popup.classList.toggle("inactive");
+            },100);
+        }
+        function closeTempSelect(){
+            let checkedCount = $("#temp-select input:checkbox:checked").length;
+            if(checkedCount == 1){
+                tempSelectBtn.innerHTML = $("#temp-select input:checkbox:checked")[0].value + dropdownText;
+            }
+            else if(checkedCount == 0){
+	            tempSelectBtn.innerHTML = "None Selected"+dropdownText;
+            }
+            else{
+                tempSelectBtn.innerHTML = "Multiple"+dropdownText;
+            }
+            tempSelect.classList.remove("active");
+        }
+        function closeTimeSelect(){
+            timeSelectBtn.innerHTML =  $("#time-select input:radio:checked")[0].value + dropdownText;
+            timeSelect.classList.remove("active");
+        }
+        function removePopup(){
+            popup.classList.add("inactive");
+        }
+        function removePopup2(){
+            initialTimeSelection.checked=true;
+            popup2.classList.add("inactive");
+        }
+        function uncheckOthers(){
+            let temp=document.querySelectorAll("[name='temp']")
+            for(var i=1;i<temp.length;i++){
+	            	temp[i].checked=false;
+	       	}
+            dataset.splice(0,dataset.length);
+            if(C1.checked){
+	            console.log(premadeChart);
+            	dataset.push(...premadeChart);
+            }
+            tempChart.update();
+        }
+        function toggleMenu(e){
+            document.getElementById("error-text").style.display="none";
+            if(document.querySelector(".collapse-data.active")!=null){
+                if(e.target.nextElementSibling!=document.querySelector(".collapse-data.active")){
+                    document.querySelector(".collapse-data.active").classList.remove("active");
+                }
+            }
+            setTimeout(()=>{
+                e.target.nextElementSibling.classList.toggle("active");
+            },100)
+        }
+        function getMonthNumberFromName(monthName) {
+            return new Date(`${monthName} 1, 2022`).getMonth() + 1;
+        }
+        function changeDate(event,type){
+            const fromMonth = document.getElementById("from-month-btn").innerHTML.split(" ")[0];
+            const toMonth = document.getElementById("to-month-btn").innerHTML.split(" ")[0];
+            const fromYear = parseInt(document.getElementById("from-year-btn").innerHTML.split(" ")[0]);
+            const toYear = parseInt(document.getElementById("to-year-btn").innerHTML.split(" ")[0]);
+            const date = new Date();
+            const curMonth = date.getMonth()+1;
+            const curYear = date.getFullYear();
+            const errorText  =document.getElementById("error-text");
+            let allowChange = true;
+            switch(type){
+                case "from-month":{
+                    if(fromYear==toYear){
+                        if(getMonthNumberFromName(event.target.innerHTML) > getMonthNumberFromName(toMonth)){
+                            errorText.innerHTML="The selected month should be less than the end date";
+                            allowChange=false;
+                        }
+                    }
+                    break;
+                }
+                case "to-month":{
+                    if(fromYear==toYear){
+                        if(getMonthNumberFromName(event.target.innerHTML) < getMonthNumberFromName(fromMonth)){
+                            errorText.innerHTML="The selected month should be greater than the start date";
+                            allowChange=false;
+                        }
+                    }
+                    if(toYear==curYear){
+	                    if(getMonthNumberFromName(event.target.innerHTML)>curMonth){
+		                    errorText.innerHTML="The selected month should not be greater than the current date";
+	                    	allowChange=false;
+	                    }
+                    }
+                    break;
+                }
+                case "from-year":{
+                    if(parseInt(event.target.innerHTML)>toYear){
+                        errorText.innerHTML="The selected year should be less than the end date";
+                        allowChange=false;
+                    }
+                    break;
+                }
+                case "to-year":{
+                    if(parseInt(event.target.innerHTML)<fromYear){
+                        errorText.innerHTML="The selected year should be greater than start date";
+                        allowChange=false;
+                    }
+                    break;
+                }
+            }
+            if(allowChange){
+                document.getElementById(type+"-btn").innerHTML = event.target.innerHTML + dropdownSharpText;
+            }
+            else{
+                errorText.style.display="block";
+            }
+            event.target.closest(".collapse-data").classList.remove("active");
+        }
+        function addChart(e){
+	        let allCheck=true;
+            if(C1.checked){
+                dataset.splice(0,dataset.length);
+                C1.checked=false;
+            }
+            if(e.target.checked){
+	            dataset.push(premadeChart[premadeChart.findIndex(elem=>elem.label==e.target.value)]);
+            }
+            else{
+                dataset.splice(dataset.findIndex((elem)=>elem.label==e.target.value),1);
+            }
+            let temp=document.querySelectorAll("[name='temp']")
+            for(var i=1;i<temp.length;i++){
+	            if(!temp[i].checked){
+		            allCheck=false;
+	            }
+            }
+            if(allCheck){
+	            temp[0].checked=true;
+	            for(var i=1;i<temp.length;i++){
+	            	temp[i].checked=false;
+	            }
+            }
+            tempChart.update();
+        }
+        function changeChartBasedOnTime(){
+            const fromMonth = getMonthNumberFromName(document.getElementById("from-month-btn").innerHTML.split(" ")[0]);
+            const toMonth = getMonthNumberFromName(document.getElementById("to-month-btn").innerHTML.split(" ")[0]);
+            const fromYear = document.getElementById("from-year-btn").innerHTML.split(" ")[0];
+            const toYear = document.getElementById("to-year-btn").innerHTML.split(" ")[0];
+            initialTimeSelection = document.querySelector('input[name="time"]:checked')  
+            popup2.classList.add("inactive");
+            if(prevFMonth!=fromMonth || prevTMonth!=toMonth || prevFYear!=fromYear || prevTYear!=toYear){
+            	#server(..cChangeChartBasedOnTime(fromMonth,fromYear,toMonth,toYear))#
+            	resizeChart();
+           		prevFMonth = fromMonth;
+            	prevTMonth = toMonth;
+            	prevFYear = fromYear;
+            	prevTYear = toYear;
+            }
+        }
+        function getAllTimeChart(){
+	        #server(..cChangeChartBasedOnTime(startDate.getMonth()+1,startDate.getFullYear(),curDate.getMonth()+1,curDate.getFullYear()))#
+            resizeChart();
+        }
+        function changeSelection(){
+            initialTimeSelection = document.querySelector('input[name="time"]:checked')  
+        }
+        function downloadCSV(){
+            if(curStatblock.className.split(" ")[0] == "temp-usage-stat"){
+                const data ={
+                    headers:["Template Name"],
+                    values:["Template Usage"]
+                }
+                let tempStat = document.querySelectorAll(".temp-stat");
+                for(var i=0;i<tempStat.length;i++){
+                    let p = tempStat[i].querySelectorAll("p");
+                    data.headers.push(p[1].innerHTML);
+                    data.values.push(p[0].innerHTML);
+                }
+                console.log(data);
+                const csvData = csvmaker(data);
+                download(csvData);
+            }
+            else{
+                const data = {
+                    headers:["Template Name",...Object.values(labels)],
+                    values:dataset.map(row=>({
+                        label:row.label,
+                        result:row.data
+                    }))
+                }
+                const csvData = csvmaker(data);
+                download(csvData);
+            }
+            removePopup();
+        }
+        const csvmaker = function (data) {
+            csvRows = [];
+            const headers = Object.values(data.headers);
+            csvRows.push(headers);
+            if(data.values[0].result!=undefined){
+                for(const row of data.values){
+                    if(row.label!=""){
+                        const values = [row.label,...Object.values(row.result)];
+                        csvRows.push(values.join(","));
+                    }
+                    else{
+                        const values = Object.values(row.result);
+                        csvRows.push(values.join(","));
+                    }
+                }
+            }
+            else{
+                const values = Object.values(data.values);
+                csvRows.push(values.join(","))
+            }
+            return csvRows.join('\n')
+        }
+        const download = function (data) {
+            const blob = new Blob([data], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.setAttribute('href', url)
+  			a.setAttribute('download', 'TemplateUsageStatistics.csv');
+            a.click()
+        }
+        // setup
+      Chart.defaults.font.family = "Montserrat";
+      const tempData = {
+        labels: labels,
+        datasets: dataset,
+      };
+
+      // config
+      const tempConfig = {
+        type: "bar",
+        data: tempData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout:{
+            padding:{
+                top:10,
+                bottom:10
+            }
+          },
+          scales: {
+            x: {
+                stacked:true,
+              grid: {
+                offset: false,
+                drawOnChartArea: false,
+                tickColor:"white"
+              },
+              ticks:{
+                font:{
+                    size:13,
+                    weight:500,
+                },
+                color: "#405470",
+              },
+              border: {
+                display: false,
+              },
+            },
+            y: {
+                stacked:true,
+              max: 70,
+              border: {
+                display: false,
+                dash:function(context){
+                    if(context.tick.value == 35){
+                        return [6,6];
+                    }
+                    else{
+                        return [];
+                    }
+                }
+              },
+              grid:{
+                lineWidth:3,
+                color:"#9B9B9B80",
+                drawTicks:false
+              },
+              ticks: {
+                display:false,
+                stepSize: 35,
+                callback: (t, i) => (t % 35 ? "" : t),
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              display: false,
+            },
+          },
+        },
+      };
+      // render init block
+      const tempChart = new Chart(document.getElementById("temp-chart"), tempConfig);
+
+      const tempData2 = {
+        labels: labels,
+        datasets: dataset,
+      };
+
+      const tempConfig2 = {
+        type: "bar",
+        data: tempData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout:{
+            padding:{
+                bottom:20,
+            }
+          },
+          scales: {
+            x: {
+                stacked:true,
+              grid: {
+                offset: false,
+                drawOnChartArea: false,
+                tickColor:"white"
+              },
+              ticks:{
+                display:false,
+              },
+              border: {
+                display: false,
+              },
+            },
+            y: {
+                stacked:true,
+              max: 70,
+              border: {
+                display: false,
+                dash:function(context){
+                    if(context.tick.value == 35){
+                        return [6,6];
+                    }
+                    else{
+                        return [];
+                    }
+                }
+              },
+              grid:{
+                lineWidth:3,
+                color:"#9B9B9B80",
+                tickColor:"white"
+              },
+              ticks: {
+                font:{
+                    size:13,
+                    weight:500,
+                },
+                color: "#405470",
+                stepSize: 35,
+              },
+              afterFit: (ctx) =>{
+                ctx.width=40
+              }
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              display: false,
+            },
+          },
+        },
+      };
+      // render init block
+      const tempChart2 = new Chart(document.getElementById("temp-chart-tick"), tempConfig2);
+      
+      function resizeChart(){
+	      const box = document.querySelector(".box");
+	      const barLength = tempChart.data.labels.length;
+	      if(barLength >5){
+		      const chartWidth = 100 + (barLength - 5) * 20;
+		      box.style.width = chartWidth+"%";
+			  document.querySelector(".col-small").style.marginBottom="20px";
+		  }
+		  else{
+			  box.style.width = "100%";
+			  document.querySelector(".col-small").style.marginBottom="10px";
+		  }
+		  if(max>70){
+			  max=Math.ceil(max/10)*10;
+			  tempConfig.options.scales.y.max = max;
+			  tempConfig.options.scales.y.ticks.stepSize = max/2;
+			  tempConfig2.options.scales.y.max = max;
+			  tempConfig2.options.scales.y.ticks.stepSize = max/2;
+		}
+		tempChart.update();
+		tempChart2.update();
+			
+      }
+      document.addEventListener("click",(e)=>{
+            if(e.target.closest(".popup-dialog") == null){
+                popup.classList.add("inactive");
+                popup2.classList.add("inactive");
+            }
+            if(e.target.closest("#time-select") == null && e.target.closest("#time-select-btn") == null && e.target.closest(".popup-dialog") == null){
+                closeTimeSelect();
+            }
+            if(e.target.closest("#temp-select") == null && e.target.closest("#temp-select-btn") == null){
+                closeTempSelect();
+            }
+            if(e.target.closest(".collapse-data.active") == null && e.target.closest(".date-collapse")==null && document.querySelector(".collapse-data.active")!=null){
+                document.querySelector(".collapse-data.active").classList.remove("active");
+            }
+        })
+    </script>
+    <script language="cache" method="cLoadStartDate">
+    	d GetStartDate^jxDashboardTempUsage
+    </script>
+    <script language="cache" method="cChangeChartBasedOnTime" arguments="d1:%String,d2:%String,d3:%String,d4:%String">
+    	d changeChartBasedOnTime^jxDashboardTempUsage
+    </script>
+</html>

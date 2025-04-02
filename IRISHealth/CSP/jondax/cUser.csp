@@ -1,0 +1,236 @@
+<html>		<!-- User Details under Admin setting in Side Nav -->
+<head>		<!-- Add user, delete user -->
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+		q 1
+	</script>
+
+	<script language="cache" runat="server">
+		s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+		i r1'=1 s %response.Redirect="cLockDown.csp"
+		d HEAD1^CSP999
+	</script>
+	<link rel="stylesheet" href="assets/styles/cFrame.css">
+</head>
+<body onload="jInitMe()" style="padding:0px;margin:0px">
+<form id="F1" name="F1">
+<div id="wrapper">
+	<div class="bg-wrapper">
+	<div class="bg3">
+	<img src="./assets/images/bg3.png">
+	</div>
+	</div>
+	<div class="main-field" style="width:100%">
+		<img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="JondaX">
+		<h1>User Details</h1>
+		<div>
+			<div class="main-table">
+				<div class="table-border"></div>
+					<div class="table-container">
+					<table>
+						<tr>
+							<td style="width:100px">Name</td>
+							<td colspan="3"><input type="text" id="T1" name="T1" size="35"></td>
+						</tr>
+						<tr>
+							<td>Email</td>
+							<td style="width:250px"><input type="text" id="T2" name="T2" size="35"></td>
+							<td style="width:150px">User ID*</td>
+							<td><input type="text" id="T3" name="T3" size="35"></td>
+					</tr>
+						<tr>
+							<td>Password</td>
+							<td><input type="text" id="T4" name="T4" size="35"></td>
+							<td>Repeat Password</td>
+							<td><input type="text" id="T5" name="T5" size="35"></td>
+						</tr>
+						<tr>
+							<td>Company</td>
+							<td colspan="3">
+								<select id="S1" name="S1">
+									<option value=""></option>
+									<script language="cache" runat="server">
+										&sql(DECLARE C1 CURSOR FOR
+											SELECT DISTINCT %Exact(CompanyName) 
+											INTO :r1
+											FROM MX."User"
+											ORDER BY 1
+										)
+										&sql(OPEN C1)
+										&sql(FETCH C1)
+										WHILE SQLCODE=0{
+											w "<option value='"_r1_"'>"_r1_"</option>",!
+											&sql(FETCH C1)	
+										}
+										&sql(FETCH C1)
+										&sql(CLOSE C1)
+									</script>	
+								</select>&nbsp;&nbsp;
+								<input type="checkbox" name="C1" id="C1" onclick="jCheckMe1()"> Has access to Admin Portal
+							</td>
+						</tr>
+						not use
+						<tr>
+							<td>Menu</td>
+							<td>
+								<select name="S2" id="S2" disabled>
+									<option value=""></option>
+									<script language="cache" runat="server">
+										&sql(DECLARE C2 CURSOR FOR
+											SELECT ID,Code,Name INTO :r1,:r2,:r3
+											FROM MX.AdminMenu
+											ORDER BY 2
+										)
+										&sql(OPEN C2)
+										&sql(FETCH C2)
+										WHILE SQLCODE=0{
+											w "<option value="_r1_">("_r2_") "_r3_"</option>",!
+											&sql(FETCH C2)
+										}
+										&sql(CLOSE C2)
+									</script>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" style="text-align:center">
+								<input type="button" id="B1" name="B1" class="back-btn green-btn" onclick="jSaveMe()" value="Save"> &nbsp;
+								<input type="button" id="B2" name="B2" class="back-btn green-btn" onclick="jDeleteMe()" value="Delete">
+							</td>
+						</tr>
+					</table>
+					<br>
+					<table name="Tab1" id="Tab1">
+						<tr>
+							<td>ID</td>
+							<td>Name <input type="radio" id="byName" name="R1" value="1" onclick="jSortMe(1)"></td>
+							<td>Email</td>
+							<td>Company <input type="radio" id="byCompany" name="R1" value="2" checked=1 onclick="jSortMe(2)"></td>
+							<td>Menu</td>
+							<td>Admin Access</td>
+							<td>&nbsp;</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</form>
+<script>
+    var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script language="cache" runat="server">
+	d jQueryCore^CSP999
+</script>
+</body>
+<script type="text/javascript">
+window.onload = jInitMe;
+document.onload = parent.resetTimer;
+document.onmousemove = parent.resetTimer;
+document.onmousedown = parent.resetTimer; // touchscreen presses
+document.ontouchstart = parent.resetTimer;
+//document.onclick = parent.resetTimer; // touchpad clicks
+document.onkeypress = parent.resetTimer;
+document.addEventListener('scroll', parent.resetTimer, true); 
+T1=self.F1.T1,T2=self.F1.T2,T3=self.F1.T3,T4=self.F1.T4,T5=self.F1.T5
+C1=self.F1.C1,S1=self.F1.S1,S2=self.F1.S2,R1=self.F1.R1,R2=self.F1.R2
+
+
+function jInitMe(e){
+	// session timer resets on page load
+	parent.resetTimer(e);
+	jSortMe("2")
+}
+
+function jCheckMe1(){
+	if (C1.checked){
+		S2.disabled=false
+	} else
+	{
+		S2.disabled=true
+	}
+}
+
+function jPopTab1(){
+	jClearTab1();
+	#server(..cPopTab1())#
+}
+
+function jClearTab1(){
+	// clear the table
+	rows=document.getElementById('Tab1').rows
+	RowNo=rows.length
+	if (RowNo>1){
+		while (RowNo>1){
+			document.getElementById('Tab1').deleteRow(RowNo-1)
+			RowNo=RowNo-1
+		}
+	}
+}
+
+// Populate sorted table (1=name, 2=Company)
+function jSortMe(sortby){
+	jClearTab1()
+	if (sortby=="2"){
+		jPopTab1()
+		return false	
+	}
+	#server(..cSortMe(sortby))#
+}
+
+// Pop input boxes with data of clicked row
+function jPopFields(id){
+	#server(..cPopFields(id))#
+}
+
+// delete user
+function jDeleteMe(){
+	if (T3.value==""){
+		alert("No matching User ID found")
+		return false	
+	}
+	ans=confirm("Are you sure you want to Delete this record?")
+	if (ans==true){
+		#server(..cDeleteMe(T3.value))#
+		jPopTab1()
+	}
+}
+
+// Save new user
+function jSaveMe(){
+	if (T3.value==""){
+		alert("User ID is a required field");
+		return false	
+	}
+	if (T5.value!=T4.value){
+		alert("Password does not match");
+		return false	
+	}
+	#server(..cSaveMe(T1.value,T2.value,T3.value,T4.value,S1.value,S2.value,C1.checked))#
+	jSortMe(R1.value);
+}
+</script>
+
+<script language="cache" method="cPopTab1">
+	d PopTab1^cUser
+</script>
+
+<script language="cache" method="cPopFields" arguments="d1:%String">
+	d PopFields^cUser
+</script>
+
+<script language="cache" method="cSortMe" arguments="d1:%String">
+	d SortMe^cUser
+</script>
+
+<script language="cache" method="cDeleteMe" arguments="d1:%String">
+	d DeleteMe^cUser
+</script>
+
+<script language="cache" method="cSaveMe" arguments="d1,d2,d3,d4,d5,d6,d7:%String">
+	s errmsg=""
+	d SaveMe^cUser
+</script></script>
+</html>

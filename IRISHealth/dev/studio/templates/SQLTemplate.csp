@@ -1,0 +1,91 @@
+<!--Studio Template -->
+<csp:StudioInteractiveTemplate name="SQL Statement" type="CLS"  description="Inserts an SQL Statement." id="SQLStatement">
+<csp:class DOMAIN="%TemplateMessages">
+<html>
+<head>
+
+<script language="JavaScript">
+function launchQueryBuilder()
+{
+	var form = self.document.theForm;
+	
+	var values = '$ID1=' + encodeURIComponent(form.sql.value) +
+						'&$NAMESPACE=' + '#($ZCVT($ZCVT($namespace,"O","URL"),"O","JS"))#';
+	var url = '#(QueryBuilderPage)#' + values;
+
+	var wid = self.screen.width * 0.8;
+	var hgt = self.screen.height * 0.8;
+	var top = self.screen.height * 0.1;
+	var left = self.screen.width * 0.1;
+
+	self.cspPopupWindow = window.open(url,'cspPopup','left='+left+',top='+top+',width='+wid+',height='+hgt+'resizable');
+	return true;
+}
+
+function previewSQL()
+{
+	var form = self.document.theForm;
+	
+	var values = '$ID1=' + encodeURIComponent(form.sql.value) +
+						'&$NAMESPACE=' + '#($ZCVT($ZCVT($namespace,"O","URL"),"O","JS"))#';
+	var url = '#(PreviewPage)#' + values;
+
+	var wid = self.screen.width * 0.8;
+	var hgt = self.screen.height * 0.8;
+	var top = self.screen.height * 0.1;
+	var left = self.screen.width * 0.1;
+
+	self.cspPopupWindow = window.open(url,'cspPopup','left='+left+',top='+top+',width='+wid+',height='+hgt+'resizable');
+	self.cspPopupWindow.focus();
+	return true;
+}
+</script>
+
+
+<style type="text/css">
+<!--
+				
+textarea		{ color: blue; font-size: 0.7em; }
+
+-->
+</style>
+</head>
+<body>
+<script language="cache" runat="server">
+	Do ##class(%template.htmlcolor).DrawTitle($$$Text("SQL Statement Wizard"))
+</script>
+<!-- YSD2449<h1>#($$$Text("SQL Statement Wizard"))#</h1>-->
+<div class="Description">#($$$Text("Enter an SQL SELECT statement then press OK."))#</div>
+<hr>
+<form name="theForm" action="SQLTemplate2.csp">
+
+<table cellspacing="5" cellpadding="0">
+<tr valign="top"><td class="Label" nowrap>#($$$Text("Namespace"))#:</td><td valign="top" style="font-size: 0.8em;">#($ZCVT($namespace,"O","HTML"))#</td></tr>
+<tr valign="top"><td class="Label" nowrap title='#($$$Text("Specifies what code the Wizard will generate."))#'>#($$$Text("Generate"))#:</td><td>
+<select name="generate">
+<option value="STATEMENT" selected>#($$$Text("SQL Statement Only"))#
+<option value="CURSOR">#($$$Text("Embedded SQL Cursor"))#
+<option value="CURSORLOOP">#($$$Text("Embedded SQL Cursor and Loop"))#
+<option value="RESULTSET">#($$$Text("ResultSet Object"))#
+</select>
+</td></tr>
+
+<tr valign="top"><td class="Label" nowrap title='#($$$Text("Name of Cursor or ResultSet variable."))#'>#($$$Text("Cursor/ResultSet"))#:</td><td><input type="text" name="cursor" value="sql1"></td></tr>
+<tr valign="top"><td class="Label" nowrap title='#($$$Text("An SQL SELECT Statement (with no host variables)."))#'>#($$$Text("SQL Statement"))#:</td>
+<td><textarea name="sql" id="Query" rows="8" cols="60">#($G(%request.Data("SelectedText",1)))#</textarea></td></tr>
+</table>
+<hr>
+<div align="right">
+<input type="submit" value=" OK " name="submit" textid="">&nbsp;
+<input type="button" value="Preview" NAME="preview" onclick="previewSQL();" textid="">&nbsp;
+<input type="button" value="Query Builder" NAME="builder" onclick="launchQueryBuilder();" textid=""></div>
+</form>
+</body>
+<script language="Cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	Set QueryBuilderPage = ..Link("%25CSP.UI.SQL.QueryBuilderWindow.cls?CSPSHARE=1",,1)
+	Set PreviewPage = ..Link("%25CSP.UI.SQL.QueryResultsWindow.cls?CSPSHARE=1",,1)
+	Quit 1
+</script>
+</html>
+
+

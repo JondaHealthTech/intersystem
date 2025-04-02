@@ -1,0 +1,209 @@
+/*
+	skin_roswell.css
+	Additional CSS for "Roswell" color scheme
+	Copyright (c) 2009 InterSystems Corp. ALL RIGHTS RESERVED.
+*/
+
+.zenLabel {
+	color: #409040;
+}
+
+body {
+	background: #808080;
+}
+
+#desktop {
+	background: black;
+}
+
+.dragHeader {
+	background: #C0C0C0;
+	background-image: none;
+}
+
+.dragChildren {
+	background: #C0C0C0;
+	background-image: none;
+}
+
+
+.contentsOuter {
+	background: black;
+}
+
+/* div around left-hand column */
+#contentsLeft {
+	color: #404040;
+	background: #404040;
+}
+
+#worklistTitle {
+	color: #F0F020;
+}
+
+.worklistGroup {
+	border-top: 1px solid #202020;
+}
+
+tr.worklistRowOdd {
+	background: #B0B0B0;
+}
+
+tr.worklistRowHover {
+	background: #EEFFAA;
+}
+
+
+#foldersList {
+	background: #D0D0D0;
+}
+
+#foldersHeader {
+	background: #404040;
+	background-image: none;
+}
+
+tr.listRowOdd {
+	background: #B0B0B0;
+}
+
+.rowHover {
+	background: #EEFFAA;
+}
+
+
+.commandButton {
+	background: black;
+}
+
+.dsActionButton {
+	background: black;
+}
+
+
+/* widget frame */
+.dswidgetHeader {
+	background: #C0C0C0;
+}
+
+.dswidgetSidebar {
+	background: #C0C0C0;
+}
+
+.dswidgetFooter {
+	background: #C0C0C0;
+}
+
+
+.worklistHeaderDiv {
+	background: #D0D0D0;
+}
+
+.worklistDiv, .worklistGroup {
+	background: #D0D0D0;
+}
+
+#dashboardForm input,
+#dashboardForm select {
+	background: black;
+	color: #F0F020;
+	border: 1px solid green;
+}
+
+#btnUpdate input {
+	background: #B0B0B0;
+	color: black;
+}
+
+#dashboardForm {
+	background: black;
+}
+
+
+#alertsDiv {
+	background: #202020;
+}
+
+/* filters div */
+#filtersDiv {
+	background: #202020;
+}
+
+/* favorites div */
+#favoritesDiv {
+	background: #202020;
+}
+
+
+td.portalTitleInfoLabel {
+	color: #90D080;
+}
+
+
+td.portalTitleInfoVal {
+	color: #90F080;
+}
+
+.portalTitleLink {
+	color: #F0F020;
+}
+
+td.portalLogo {
+	color: #F0F020;
+}
+
+.toolRibbon {
+	background: #808080;
+}
+
+.ribbonLabel {
+	color: #202020;
+}
+
+.expandoNode a {
+	color: #808080;
+}
+
+.expandoNode a:hover {
+	background: #808080;
+	color: white;
+}
+
+.expandoImg {
+	background: #808080;
+}
+
+/* pivot table */
+table th.dsPivotColumn,
+table th.dsPivotRow,
+.dsptTopLeftDiv {
+	background: #808080;
+	color: #1B1C87;
+	background-image: none;
+	font-family: arial;
+	font-size: 10pt;
+}
+
+.dsptTopLeftDiv {
+	border-right: 1px solid #606060;
+	border-bottom: 1px solid #606060;
+}
+
+table.dsPivotTable td,
+table.dsPivotTable th {
+	border-right: 1px solid #606060;
+	border-bottom: 1px solid #606060;
+}
+
+table.dsPivotDataTable td {
+	border-right: 1px solid #606060;
+	border-bottom: 1px solid #606060;
+	font-family: arial;
+	font-size: 10pt;
+	color: #90D080;
+	background: #404040;
+}
+
+table.dsPivotDataTable td:hover {
+	background: #EEFFAA;
+}

@@ -1,0 +1,30 @@
+<!--
+PubSub: Subscription editor
+-->
+
+<AutoPage domain="Ensemble" pagename="Edit Subscription Definition" parentpage="UtilEnsSubscriptions.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Edit Subscription Definition</Text>
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.FormPane">
+	<Text>Edit a subscription definition using the form below. A subscription associates a specific topic string with a specific subscriber. A topic string may contain one or more subtopics (A.B.C) and may contain * as a wild card (A.*). When an incoming message has a topic that matches the topic string for a subscription, the message is routed to the associated subscriber.</Text>
+	<FormClass>EnsLib.PubSub.SubscriptionForm</FormClass>
+	<SubmitPage>UtilEnsSubscriptions.csp</SubmitPage>
+	<Align>left</Align>
+	
+	<Commands>
+		<Action href="UtilEnsPubSubDomains.csp">
+			<Caption>Show Domains</Caption>
+		</Action>
+		<Action href="UtilEnsSubscribers.csp">
+			<Caption>Show Subscribers</Caption>
+		</Action>
+		<Action href="UtilEnsSubscriptions.csp">
+			<Caption>Show Subscriptions</Caption>
+		</Action>
+	</Commands>
+</Pane>
+
+</AutoPage>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="7px" viewBox="0 0 10 7" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61.2 (89653) - https://sketch.com -->
+    <title>App collapse icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M4.48598131,6.33333333 L0.249221184,2.09657321 C-0.0436137072,1.80373832 -0.0436137072,1.33021807 0.249221184,1.04049844 L0.953271028,0.336448598 C1.24610592,0.0436137072 1.71962617,0.0436137072 2.00934579,0.336448598 L5.01246106,3.33956386 L8.01557632,0.336448598 C8.30841121,0.0436137072 8.78193146,0.0436137072 9.07165109,0.336448598 L9.77570093,1.04049844 C10.0685358,1.33333333 10.0685358,1.80685358 9.77570093,2.09657321 L5.53894081,6.33333333 C5.25233645,6.62616822 4.7788162,6.62616822 4.48598131,6.33333333 L4.48598131,6.33333333 Z" id="path-1"></path>
+    </defs>
+    <g id="Side-Nav-Designs-Cleaned-Up" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Focus-State" transform="translate(-7.000000, -289.000000)">
+            <g id="Side-nav" transform="translate(-3.000000, 42.000000)">
+                <g id="Icons" transform="translate(10.000000, 14.000000)">
+                    <g id="App-collapse-icon" transform="translate(0.000000, 233.000000)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <g id="Mask"></g>
+                        <g id="Color/Black" mask="url(#mask-2)" fill="#636363">
+                            <g transform="translate(0.000000, -1.666667)" id="Black">
+                                <rect x="0" y="0" width="10" height="10"></rect>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

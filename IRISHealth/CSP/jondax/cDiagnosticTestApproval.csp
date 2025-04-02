@@ -1,0 +1,717 @@
+<html>		<!-- Diagnostic Test Approval under Admin setting in Side Nav -->
+<head>
+<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+	q 1
+</script>
+
+<script language="cache" runat="server">
+	s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+	i r1'=1 s %response.Redirect="cLockDown.csp"
+	d HEAD1^CSP999
+</script>
+	<link rel="stylesheet" href="assets/styles/cDiagnosticTestApproval.css" />
+</head>
+    <body>
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div id="loader" class="loader">
+            	<div class="loader-content">
+            		<p>Please wait for all the data to be loaded!</p>
+            		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            	</div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;" onclick="openMobileNav(event)"></i>
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <div class="title">
+                    	<h1>Diagnostic Tests for Approval</h1>
+                    </div>
+                    <div id="temp-content" class="temp-content">
+                        <!-- Search bar -->
+                       <div class='temp-title'>
+                       	 <div>
+                       		<h2>Recently added for approval <span style="font-weight:normal; font-size: 10pt" id="TotalCount"></span></h2>
+                       	 </div>
+                      	 <div class="search-group">     
+                            <input type="text" id="search" placeholder="Enter Search Keyword" onkeyup="searchDataChange(event)">
+                            <img src="./assets/images/search icon.png" alt="Search" class="search-icon" onclick="jLoadSearchResults(1)">
+                            <!--<div class="search-filter" onclick="openFilterDropdown(event)"><img src="./assets/images/filter-blue.png" alt="Filter"></div>-->
+                         	<div class="search-data dropdown-data">
+                            <ul>
+                            </ul>
+                        </div>
+                         </div>
+                        </div>
+                        <div class="table-border"></div>
+                        <p class="no-data">No data is added recently.</p>
+                        <div class="temp-table">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Diagnostic Name <div class="img-group"><img src="./assets/images/upArrow.png" alt="Up Arrow" onclick="jSortTable(1)"><img src="./assets/images/downArrow.png" alt="Down Arrow" onclick="jSortTable(2)"></div></th>
+                                        <th>JX Name <div class="img-group"><img src="./assets/images/upArrow.png" alt="Up Arrow" onclick="jSortTable(3)"><img src="./assets/images/downArrow.png" alt="Down Arrow" onclick="jSortTable(4)"></div></th>
+                                        <th>Category</th>
+                                        <th>Save Category As</th>
+                                        <th>JX Unit</th>
+                                        <th>Language  <div class="img-group"><img src="./assets/images/upArrow.png" alt="Up Arrow" onclick="jSortTable(5)"><img src="./assets/images/downArrow.png" alt="Down Arrow" onclick="jSortTable(6)"></div></th>
+                                        <th>Rule</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="category-data dropdown-data">
+                            <ul>
+                            </ul>
+                        </div>
+                        <div class="save-category-data dropdown-data">
+                            <ul>
+                            </ul>
+                        </div>
+                        <div class="unit-data dropdown-data">
+                            <ul>
+                            <script language="cache" runat="server">
+                            d WriteUnits^cDiagnosticTest
+                            </script>
+                            </ul>
+                        </div>
+                        <div class="language-data dropdown-data">
+                            <div class="collapse">
+                                
+                            </div>
+                        </div>
+                        <div class="rule-data dropdown-data">
+                            <ul>
+                                <li onclick="changeRule(event)">1</li>
+                                <li onclick="changeRule(event)">2</li>
+                                <li onclick="changeRule(event)">3</li>
+                                <li onclick="changeRule(event)">4</li>
+                            </ul>
+                        </div>
+                    	<div class="btn-edit-group">
+                    		<button class="green-btn" onclick="saveRow()">Save Changes</button>
+                    		<button class="blue-btn" onclick="approveRow(event)">Save & Approve</button>
+                    		<button class="pink-btn" onclick="cancelEdit()">Cancel</button>
+                    	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="popup1" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Are you sure you want to add <span id="save-val"></span> to database?</h4>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="jApproveDiagnosticTest()">Yes</button>
+                    <button class="pink-btn" onclick="removePopup1()">No</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup2" class="fading-popup inactive">
+            <h4><span id="save-val1"></span> added to database</h4>
+        </div>
+        <div id="popup3" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Are you sure you want to reject <span id="reject-val"></span>?</h4>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="jRejectDiagnosticTest()">Yes</button>
+                    <button class="pink-btn" onclick="cancelDelete()">No</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup4" class="fading-popup inactive">
+             <h4><span id="reject-val1"></span> entry rejected</h4>
+        </div>
+        <div id="popup5" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Please make sure you fill up <br> both the name and the unit!!</h4>
+                <button class="green-btn" onclick="removePopup5()">Okay</button>
+            </div>
+        </div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/detect.js"></script>
+        <script src="assets/js/fastclick.js"></script>
+        <script src="assets/js/jquery.slimscroll.js"></script>
+        <script src="assets/js/jquery.blockUI.js"></script>
+        <script src="assets/js/waves.js"></script>
+        <script src="assets/js/wow.min.js"></script>
+        <script src="assets/js/jquery.nicescroll.js"></script>
+        <script src="assets/js/jquery.scrollTo.min.js"></script>
+        <script src="assets/js/jquery.core.js"></script>
+        <script src="assets/js/jquery.app.js"></script>
+    </body>
+    <script type="text/javascript">
+    	let mySessionEnd;
+        let currentTr;
+        let popup1 = document.getElementById("popup1");
+        let popup2 = document.getElementById("popup2");
+        let popup3 = document.getElementById("popup3");
+        let popup4 = document.getElementById("popup4");
+        let popup5 = document.getElementById("popup5");
+        let val1;
+        let val2;
+        let val3;
+        let val4;
+        let val5;
+        let val6;
+        let tempVal6;
+        let langArr=[];
+        let val7;
+        let edited=false;
+        let prevSearchData;
+        let searchData = document.querySelector(".search-data");
+        let categoryData = document.querySelector(".category-data");
+        let saveCategoryData = document.querySelector(".save-category-data");
+        let unitData = document.querySelector(".unit-data");
+        let languageData = document.querySelector(".language-data");
+        let ruleData = document.querySelector(".rule-data");
+        let dropDownText = " <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'>"
+        let currentOrder = 1;
+        window.onresize = setTableBorderPos;
+        window.onload = jInitMe;
+        document.onmousemove = resetTimer;
+		document.onmousedown = resetTimer; // touchscreen presses
+		document.ontouchstart = resetTimer;
+		document.onclick = resetTimer; // touchpad clicks
+		document.onkeypress = resetTimer;
+		document.addEventListener('scroll', resetTimer, true); 
+
+		function resetTimer(){
+			// Resets the session timer and trigger jLockDown after 1 hour (3600000 ms) of inactivity.
+			clearTimeout(mySessionEnd);
+			mySessionEnd = setTimeout(jLockDown, 900000);  //15mins  ,3600000
+		}
+		function clearTimer(){
+			// Clears the session timeout to prevent jLockDown from being triggered.
+			clearTimeout(mySessionEnd);
+		}
+		function jLockDown(){
+			#server(..cLockDown())#
+		}
+        
+        // Pop table and set ^LastViewDate
+    	function jInitMe(e){
+	        #server(..cInitMe())#
+	    	document.getElementById("loader").style.display = "none";
+        }
+        // Set and adjust table border
+        function setTableBorderPos(){
+            let tableBorder = document.querySelector(".table-border");
+            let tempTable = document.querySelector(".temp-table");
+            let table = document.querySelector("table");
+            let filter = document.querySelector(".filters");
+            
+            setTimeout(()=>{
+	            let tablePosition = table.getBoundingClientRect();
+            	if(tempTable.scrollHeight > tempTable.clientHeight){
+                	tableBorder.style.height = "calc(60vh + 4px)"
+            	}
+            	else{
+		        	tableBorder.style.height = tablePosition.height + 4 + "px";
+            	}
+            	tableBorder.style.width = tablePosition.width + 4 + "px";
+            },100);
+        }
+        // Pop sorted table (1,2=Diagnostic name, 3,4= JXName)
+    	function jSortTable(order){
+	    	if(order==currentOrder){ return;}
+		    if(document.querySelectorAll("tbody tr").length<=1){
+		    	return;
+		    }
+	    	document.getElementById("loader").style.display = "block";
+	    	#server(..cLoadUnapprovedDiagnosticTests(order))#
+	    	currentOrder = order;
+	    	document.getElementById("loader").style.display = "none";
+    	}
+    	// Create input boxes for editing
+        function editRow(e){
+	        edited=true;
+	    	if(currentTr==null){
+	    		currentTr = e.target.parentElement.parentElement;
+	    		tds = currentTr.querySelectorAll("td");
+	    		val1 = tds[1].textContent;
+	    		val2 = tds[2].textContent;
+                val3 = tds[3].textContent;
+                val4 = tds[4].textContent;
+                val5 = tds[5].textContent;
+                val6 = tds[6].textContent;
+                tempVal6 = tds[6].textContent;
+                val7 = tds[7].textContent;
+	    		tds[1].innerHTML = "<input type='text' name='diagnostic-name' value='"+val1+"'>";
+	    		tds[2].innerHTML = "<input type='text' name='jx-name' value='"+val2+"'>";
+	    		tds[3].innerHTML = "<input type='text' name='category' value='"+val3+"' onkeyup='openCategorySuggestion(event)'>";
+	    		tds[4].innerHTML = "<input type='text' name='save-category' value='"+val4+"' onkeyup='openSaveCategorySuggestion(event)'>";
+	    		tds[5].innerHTML = "<div class='unit-dropdown dropdown-btn' onclick='openUnitDropdown(event)'>"+val5 + dropDownText+"</div>";
+	    		tds[6].innerHTML = "<div class='language-dropdown dropdown-btn' onclick='openLanguageDropdown(event)'>"+val6 + dropDownText+"</div>";
+	    		tds[7].innerHTML = "<div class='rule-dropdown dropdown-btn' onclick='openRuleDropdown(event)'>"+val7 + dropDownText+"</div>";
+	    		tds[8].classList.add("hidden");
+                document.querySelector(".btn-edit-group").style.display="block";
+                setLanguage();
+	    	}
+	    	else{
+		    	alert("You cannot edit multiple testnames at the same time");
+	    	}
+            setTableBorderPos();
+    	}
+    	// Cancel edit row
+    	function cancelEdit(){
+	    	if(currentTr==document.querySelector("tbody").firstElementChild && currentTr.classList.contains("new")){
+		    	document.querySelector("tbody").firstElementChild.remove();
+	    	}
+	    	else{
+	    		tds = currentTr.querySelectorAll("td");
+	    		tds[1].innerHTML = val1;
+	    		tds[2].innerHTML = val2;
+	    		tds[3].innerHTML = val3;
+	    		tds[4].innerHTML = val4;
+	    		tds[5].innerHTML = val5;
+	    		tds[6].innerHTML = val6;
+	    		tds[7].innerHTML = val7;
+	    		tds[8].classList.remove("hidden");
+	    	}
+	    	currentTr = null;
+	    	edited = false;
+            languageData.classList.remove("active");
+            unitData.classList.remove("active");
+            ruleData.classList.remove("active");
+            categoryData.classList.remove("active");
+            saveCategoryData.classList.remove("active");
+    		document.querySelector(".btn-edit-group").style.display="none";
+            setTableBorderPos();
+    	}
+    	// Activate unit dropdown
+    	function openUnitDropdown(e){
+            let position = e.target.closest(".dropdown-btn").getBoundingClientRect();
+            unitData.style.top = position.bottom + 2 + "px";
+            unitData.style.left = position.left;
+            setTimeout(()=>{
+                unitData.classList.toggle("active");
+                if(unitData.getBoundingClientRect().width < position.width){
+                    unitData.style.width = position.width;
+                }
+            },100);
+        }
+        // Activate Language dropdown
+        function openLanguageDropdown(e){
+            let position = e.target.closest(".dropdown-btn").getBoundingClientRect();
+            languageData.style.top = position.bottom + 2 + "px";
+            languageData.style.left = position.left;
+            setTimeout(()=>{
+                languageData.classList.toggle("active");
+            },100);
+
+        }
+        // Activate Rule dropdown
+        function openRuleDropdown(e){
+            let position = e.target.closest(".dropdown-btn").getBoundingClientRect();
+            ruleData.style.top = position.bottom + 2 + "px";
+            ruleData.style.left = position.left;
+            setTimeout(()=>{
+                ruleData.classList.toggle("active");
+                if(ruleData.getBoundingClientRect().width < position.width){
+                    ruleData.style.width = position.width;
+                }
+            },100);
+        }
+        // Activate Category dropdown
+        function openCategorySuggestion(e){
+	        let category = e.target.value;
+	        #server(..cLoadCategoryNames(category))#
+            let position = e.target.getBoundingClientRect();
+            categoryData.style.top = position.bottom + 2 + "px";
+            categoryData.style.left = position.left;
+            setTimeout(()=>{
+		        if(categoryData.querySelector("ul").scrollWidth > categoryData.querySelector("ul").clientWidth){
+            		categoryData.style.width = "auto";
+            	}
+            	else if(categoryData.getBoundingClientRect().width < position.width){
+                    categoryData.style.width = position.width;
+                }
+	        },100);
+            if(categoryData.classList.contains("active")){return;}
+            setTimeout(()=>{
+		        categoryData.classList.add("active");
+                if(categoryData.getBoundingClientRect().width < position.width){
+                    categoryData.style.width = position.width;
+                }
+	        },100);
+        }
+        // Activate Save Category As dropdown
+        function openSaveCategorySuggestion(e){
+	        let category = e.target.value;
+	        #server(..cLoadCategoryResultTypes(category))#
+            let position = e.target.getBoundingClientRect();
+            saveCategoryData.style.top = position.bottom + 2 + "px";
+            saveCategoryData.style.left = position.left;
+            setTimeout(()=>{
+		        if(saveCategoryData.querySelector("ul").scrollWidth > saveCategoryData.querySelector("ul").clientWidth){
+            		saveCategoryData.style.width = "auto";
+            	}
+            	else if(saveCategoryData.getBoundingClientRect().width < position.width){
+                    saveCategoryData.style.width = position.width;
+                }
+	        },100);
+            if(saveCategoryData.classList.contains("active")){return;}
+	        setTimeout(()=>{
+		        saveCategoryData.classList.add("active");
+                if(saveCategoryData.getBoundingClientRect().width < position.width){
+                    saveCategoryData.style.width = position.width;
+                }
+	        },100);
+        }
+        // Selecting from dropdowns
+        function changeCategory(e){
+	        currentTr.querySelector(".category input").value = e.target.textContent;
+	        categoryData.classList.remove("active");
+        }
+        function changeSaveCategory(e){
+	        currentTr.querySelector(".save-category input").value = e.target.textContent;
+	        saveCategoryData.classList.remove("active");
+        }
+        function changeUnit(e){
+            currentTr.querySelector(".unit-dropdown").innerHTML = e.target.textContent + dropDownText;
+            unitData.classList.remove("active");
+        }
+        function changeRule(e){
+            currentTr.querySelector(".rule-dropdown").innerHTML = e.target.textContent + dropDownText;
+            ruleData.classList.remove("active");
+        }
+        function setLanguage(){
+	        let languages = tempVal6==""?"English":tempVal6;
+	        let LCs = document.querySelectorAll("input[name='language']");
+	        langArr.forEach((val,index)=>{
+		        if(languages.search(val)!=-1){
+			        LCs[index].checked=true;
+		        }
+		        else{
+			        LCs[index].checked=false;
+		        }
+	        })
+        }
+        // Set dimension and open Language dropdown
+        function openLanguageDropdown(e){
+            let position = e.target.closest(".dropdown-btn").getBoundingClientRect();
+            setLanguage();
+            languageData.style.top = position.bottom + 2 + "px";
+            languageData.style.left = position.left;
+            setTimeout(()=>{
+                languageData.classList.add("active");
+            },100);
+
+        }
+        // Save edited row
+        function saveRow(){
+	    	let tds = currentTr.querySelectorAll("td");
+	    	if(tds[1].querySelector("input").value=="" || tds[2].querySelector("input").value==""){
+		    	setTimeout(()=>popup5.classList.remove("inactive"),100);
+		    	return;
+	    	}
+	    	jUpdateDiagnosticTest();
+	    	tds[1].innerHTML = val1;
+	    	tds[2].innerHTML = val2;
+	    	tds[3].innerHTML = val3;
+	    	tds[4].innerHTML = val4;
+	    	tds[5].innerHTML = val5;
+	    	tds[6].innerHTML = tempVal6;
+	    	tds[7].innerHTML = val7;
+            tds[8].classList.remove("hidden");
+            currentTr.classList.add("edited");
+            edited=false;
+    		document.querySelector(".btn-edit-group").style.display="none";
+    		setTableBorderPos();
+    		currentTr=null;
+        }
+        // Open popup1 to confirm approval
+    	function approveRow(e){
+	    	if(currentTr==null){
+		    	currentTr=e.target.closest("tr");
+	    		document.getElementById("save-val").innerHTML = currentTr.querySelector(".diagnostic-name").textContent;
+	    		document.getElementById("save-val1").innerHTML = currentTr.querySelector(".diagnostic-name").textContent;
+	    		setTimeout(()=>popup1.classList.remove("inactive"),100);
+	    		edited=false;
+	    		return;
+	    	}
+	    	let tds = currentTr.querySelectorAll("td");
+	    	if(tds[1].querySelector("input").value=="" || tds[2].querySelector("input").value==""){
+		    	setTimeout(()=>popup5.classList.remove("inactive"),100);
+		    	return;
+	    	}
+	    	document.getElementById("save-val").innerHTML = tds[1].querySelector("input").value;
+	    	document.getElementById("save-val1").innerHTML = tds[1].querySelector("input").value;
+	    	setTimeout(()=>popup1.classList.remove("inactive"),100);
+    	}
+    	// Confirm and approve diagnostic test
+    	function jApproveDiagnosticTest(){
+	    	let id = currentTr.querySelector(".id").textContent;
+	    	if(edited){
+		    	jUpdateDiagnosticTest();
+		    }
+	    	#server(..cApproveDiagnosticTest(id))#
+	    	setTimeout(()=>removePopup2(),4000);
+	    	setTableBorderPos();
+	    	currentTr.remove();
+	    	currentTr=null;
+    		document.querySelector(".btn-edit-group").style.display="none";
+	    	edited=false;
+	    	if(document.querySelectorAll("tbody tr").length==0){
+		    	document.querySelector("table").remove();
+				document.querySelector(".no-data").style.display="block";
+				document.querySelector(".table-border").style.opacity=0;
+	    	}
+    	}
+    	// Update edited data
+    	function jUpdateDiagnosticTest(){
+		    //Function to add
+		    let tds=currentTr.querySelectorAll("td");
+		    id = tds[0].textContent;
+	    	val1 = tds[1].querySelector("input").value;
+	    	val2 = tds[2].querySelector("input").value;
+	    	val3 = tds[3].querySelector("input").value;
+	    	val4 = tds[4].querySelector("input").value;
+	    	val5 = tds[5].querySelector(".dropdown-btn").textContent;
+	    	val6 = tempVal6;
+	    	val7 = tds[7].querySelector(".dropdown-btn").textContent;
+		    #server(..cUpdateDiagnosticTest(id,val1,val2,val3,val4,val5,val6,val7))#
+    	}
+    	// Open popup3 to confirm rejection
+    	function rejectRow(e){
+	    	currentTr = e.target.closest("tr")
+	    	document.getElementById("reject-val").innerHTML = currentTr.querySelector(".diagnostic-name").textContent;
+	    	document.getElementById("reject-val1").innerHTML = currentTr.querySelector(".diagnostic-name").textContent;
+	    	setTimeout(()=>popup3.classList.remove("inactive"),100);
+    	}
+    	// Reject to approve new diagnostic test
+    	function jRejectDiagnosticTest(){
+	    	let id = currentTr.querySelector(".id").textContent;
+	    	#server(..cRejectDiagnosticTest(id))#;
+	    	setTimeout(()=>removePopup4(),4000);
+	    	currentTr.remove();
+	    	currentTr=null;
+	    	setTableBorderPos();
+	    	if(document.querySelectorAll("tbody tr").length==0){
+		    	document.querySelector("table").remove();
+				document.querySelector(".no-data").style.display="block";
+				document.querySelector(".table-border").style.opacity=0;
+	    	}
+    	}
+    	// Set Language and close Language dropdown
+        function closeLanguageSelect(){
+	        let languageChecked = document.querySelectorAll("input[name=language]:checked");
+	        if(languageChecked.length==0){
+		        currentTr.querySelector(".language-dropdown").innerHTML = "English" + dropDownText;
+	        }
+	        else if(languageChecked.length==1){
+		        currentTr.querySelector(".language-dropdown").innerHTML = languageChecked[0].value + dropDownText;
+	        }
+	        else{
+		        currentTr.querySelector(".language-dropdown").innerHTML = "Multiple" + dropDownText;
+	        }
+	        tempVal6="";
+	        for(let i=0;i<languageChecked.length;i++){
+		        if(i!=0){tempVal6=tempVal6+", ";}
+		        tempVal6 = tempVal6+languageChecked[i].value;
+	        }
+	        languageData.classList.remove("active");
+        }
+        function jLoadSearchResults(order){
+	    	document.getElementById("loader").style.display = "block";
+	        #server(..cLoadSearchResults(order))#
+	        currentOrder = order;
+			searchData.classList.remove("active");
+	    	document.getElementById("loader").style.display = "none";
+        }
+        function searchDataChange(e){
+	        searching = true;
+	        if(e.keyCode==13){
+		        currentLoadData = e.target.value;
+		        jLoadSearchResults(1);
+		        setTableBorderPos();
+			    return;
+	        }
+	        if(e.target.value.length==0){
+		        
+		        searchData.classList.remove("active");
+		        currentOrder=1
+		        #server(..cLoadUnapprovedDiagnosticTests(1))#
+		        console.log("");
+		        return;
+	        }
+	        let position = e.target.closest(".search-group").getBoundingClientRect();
+            searchData.style.top = position.bottom + 75 + "px";
+            searchData.style.left = position.left;
+           	if(e.target.value==prevSearchData){}
+	        else{
+		        prevSearchData=e.target.value;
+	        	#server(..cClearSearchData())#
+	        	#server(..cSearchDiagnosticName(e.target.value))#
+	        	/*
+	        	if(FC1.checked){
+	        		#server(..cSearchDiagnosticName(e.target.value))#
+	        	}
+	        	if(FC2.checked){
+	        		#server(..cSearchJXName(e.target.value))#
+	        	}
+	        	if(FC3.checked){
+	        		#server(..cSearchCategory(e.target.value))#
+	        	}
+	        	if(FC4.checked){
+	        		#server(..cSearchSaveCategory(e.target.value))#
+	        	}
+	        	if(FC5.checked){
+	        		#server(..cSearchJXUnit(e.target.value))#
+	        	}
+	        	if(FC6.checked){
+	        		#server(..cSearchLanguage(e.target.value))#
+	        	}
+	        	if(FC7.checked){
+	        		#server(..cSearchRule(e.target.value))#
+	        	}*/
+	        	#server(..cLoadSearchSuggestions())#
+	        	setTimeout(()=>{
+              		searchData.classList.add("active");
+               		if(searchData.getBoundingClientRect().width < position.width){
+                   		searchData.style.width = position.width;
+               		}
+           		},100);
+	        }
+        }
+                // Select from search suggestions
+        function jLoadSearchData(e){
+	        searching = true;
+	        let searchVal = e.target.textContent;
+	        document.getElementById("search").value = searchVal;
+            searchData.classList.remove("active");
+	        let search = e.target.getAttribute("value").split(":");
+	        let searchType = search[0];
+	        let searchId = search[1];
+	        #server(..cClearSearchData())#
+	        switch(searchType){
+		        case 'Name':#server(..cSearchDiagnosticName(searchVal))#;break;
+		        case 'JX Name':#server(..cSearchJXName(searchVal))#;break;
+		        case 'Category':#server(..cSearchCategory(searchVal))#;break;
+		        case 'Save Category':#server(..cSearchSaveCategory(searchVal))#;break;
+		        case 'JX Unit':#server(..cSearchJXUnit(searchVal))#;break;
+		        case 'Language':#server(..cSearchLanguage(searchVal))#;break;
+		        case 'Rule':#server(..cSearchRule(searchVal))#;break;
+	        }
+	        currentLoadData=searchVal;
+	        jLoadSearchResults(1);
+            setTableBorderPos();
+        }
+        // Close Popup3
+        function cancelDelete(){
+	        removePopup3();
+        }
+        // Activate popups
+    	function openPopup2(){
+	    	setTimeout(()=>popup2.classList.remove("inactive"),100);
+    	}
+    	function openPopup4(){
+	    	setTimeout(()=>popup4.classList.remove("inactive"),100);
+    	}
+    	
+    	// Deactivate popups
+    	function removePopup1(){
+            popup1.classList.add("inactive");
+        }
+        function removePopup2(){
+            popup2.classList.add("inactive");
+        }
+        function removePopup3(){
+            popup3.classList.add("inactive");
+        }
+        function removePopup4(){
+            popup4.classList.add("inactive");
+        }
+        function removePopup5(){
+            popup5.classList.add("inactive");
+        }
+        // Deactivate dropdowns
+        document.addEventListener("click",(e)=>{
+            if(e.target.closest(".popup-dialog")==null){
+                removePopup1();
+                removePopup3();
+                removePopup5();
+            }
+            if(e.target.closest(".dropdown-data")==null && e.target.closest(".unit-dropdown") == null){
+                unitData.classList.remove("active");
+            }
+            if(e.target.closest(".dropdown-data")==null && e.target.closest(".language-dropdown") == null && languageData.classList.contains("active")){
+                closeLanguageSelect();
+            }
+            if(e.target.closest(".dropdown-data")==null && e.target.closest(".rule-dropdown") == null){
+                ruleData.classList.remove("active");
+            }
+            if(e.target.closest(".dropdown-data")==null && e.target.closest(".category-dropdown") == null){
+	            categoryData.classList.remove("active");
+            }
+            if(e.target.closest(".dropdown-data")==null && e.target.closest(".save-category-dropdown") == null){
+	            saveCategoryData.classList.remove("active");
+            }
+	        if(e.target.closest(".dropdown-data")==null && e.target.closest(".search-data") == null){
+	            searchData.classList.remove("active");   
+            }
+        })
+        
+    </script>
+<script language="cache" method="cInitMe">
+	d ApprovalInitMe^cDiagnosticTest
+</script>
+<script language="cache" method="cLockDown">	// Log out for inactivity of 1 hour
+	k %session.Data
+	&js<window.open("cLockDown.csp","_self")>
+</script>
+<script language="cache" method="cUpdateDiagnosticTest" arguments="id,name,jxName,category,saveCategory,jxUnit,language,rule:%String">
+	d SaveUpdateDiagnosticTest^cDiagnosticTest
+</script>
+<script language="cache" method="cApproveDiagnosticTest" arguments="id:%String">
+	d ApproveDiagnosticTest^cDiagnosticTest
+</script>
+<script language="cache" method="cRejectDiagnosticTest" arguments="id:%String">
+	d RejectDiagnosticTest^cDiagnosticTest
+</script>
+<script language="cache" method="cLoadUnapprovedDiagnosticTests" arguments="orderCol:%String">
+	d LoadUnapprovedDiagnosticTests^cDiagnosticTest(orderCol)
+</script>
+<script language="cache" method="cLoadCategoryNames" arguments="name:%String">
+	d LoadCategoryNames^cDiagnosticTest
+</script>
+<script language="cache" method="cLoadCategoryResultTypes" arguments="resultType:%String">
+	d LoadCategoryResultTypes^cDiagnosticTest
+</script>
+<script language="cache" method="cLoadSearchResults" arguments="orderCol:%String">
+	d LoadSearchResultsApproval^cDiagnosticTest
+</script>
+<script language="cache" method="cClearSearchData">
+	k ^SearchData
+	k ^SearchName
+	k ^SearchJXName
+</script>
+<script language="cache" method="cSearchDiagnosticName" arguments="searchVal:%String">
+	d SearchDiagnosticNameApproval^cDiagnosticTest
+</script>
+<script language="cache" method="cLoadSearchSuggestions" arguments="searchVal:%String">
+	d LoadSearchSuggestions^cDiagnosticTest
+</script>
+<script language="cache" method="cSaveUpdateDiagnosticTest" arguments="id,name,jxName,category,saveCategory,jxUnit,language,rule:%String">
+	; not using
+	d UpdateDiagnosticTest^cDiagnosticTest
+</script>
+</html>

@@ -1,0 +1,1911 @@
+<!-- CSP OBJECT and FORM Rules -->
+<!-- Copyright (c) 2000 InterSystems Corp. ALL RIGHTS RESERVED. -->
+
+<!-- OBJECT TAG --------------------------------------------- -->
+
+<csr:rule name="%OBJECT" match="csp:object" empty language="any">
+
+<csr:description>
+The <b>csp:object</b> tag places a Cache object on a page. 
+Specifically, it ensures that a local variable, whose name is specified by the <var>name</var> 
+attribute, contains a reference to an instance of the class specified by the <var>classname</var> attribute. 
+If the <var>OBJID</var> attribute has a non-null value, then the object instance is created by 
+calling the %OpenId() method using the value of <var>OBJID</var>.
+</csr:description>
+
+<csr:attribute name=Name required description="Name of local variable used to refer to the object." type="VariableName:STRING" >
+<csr:attribute name=ClassName required description="Class name of the object." type="ClassName:QUERY(%CSP.DwxUtils.ClassList)" >
+<csr:attribute name=OBJID description="Object Identifier value used to open the object." type="ObjectId:STRING" >
+
+<csr:action>
+<script language="Cache" runat="compiler">
+	// test if name is valid
+	If ('$zname(..GetAttribute("NAME"))) {
+		Set %statuscode=$$$ERROR($$$CSPInvalidObjectName,..GetAttribute("NAME"),..LineNumber)
+		Quit
+	}
+
+	If ('##class(%ClassDefinition).%ExistsId(..GetAttribute("CLASSNAME"))) {
+		Set %statuscode=$$$ERROR($$$CSPInvalidObjectClass,..GetAttribute("CLASSNAME"),..GetAttribute("NAME"),..LineNumber)
+		Quit
+	}
+	
+	If %compiler.IsDefinedByKey("%CSPbind",..GetAttribute("NAME")) {
+		Set %statuscode=$$$ERROR($$$CSPOBJECTDuplicate,..GetAttribute("NAME"),..LineNumber)
+		Quit
+	}
+	
+	// set up mapping for form BINDings
+	Do %compiler.SetByKey("%CSPbind",..GetAttribute("NAME"),..GetAttribute("CLASSNAME"))
+</script>
+<script language="Cache" runat="server">
+	If (##'..GetAttribute("OBJID")'##'="") {
+		Set ##(..GetAttribute("NAME"))## = ##class(##(..GetAttribute("CLASSNAME"))##).%OpenId(##'..GetAttribute("OBJID")'##)
+	} Else {
+		Set ##(..GetAttribute("NAME"))## = ##class(##(..GetAttribute("CLASSNAME"))##).%New()
+	}
+
+</script>
+<script language="Basic" runat="server">
+	If (##'..GetAttribute("OBJID")'## <> "") Then
+		##(..GetAttribute("NAME"))## = OpenId ##(..GetAttribute("CLASSNAME"))##(##'..GetAttribute("OBJID")'##)
+	Else
+		##(..GetAttribute("NAME"))## = New ##(..GetAttribute("CLASSNAME"))##()
+	End If
+
+</script>
+<script language="MVBasic" runat="server">
+	If (##'..GetAttribute("OBJID")'## <> '') Then
+		##(..GetAttribute("NAME"))## = "##(..GetAttribute("CLASSNAME"))##"->%OpenId(##'..GetAttribute("OBJID")'##)
+	End Else
+		##(..GetAttribute("NAME"))## = "##(..GetAttribute("CLASSNAME"))##"->%New()
+	End
+
+</script>
+<csr:section name="PREHTML">
+<script language="Cache" runat="server">
+	Set ##(..GetAttribute("NAME"))##=$$$NULLOREF
+</script>
+<script language="Basic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+<script language="MVBasic" runat="server">
+	##(..GetAttribute("NAME"))##=''
+</script>
+</csr:section>
+
+<csr:section name="POSTHTML">
+<script language="Cache" runat="server">
+	Set ##(..GetAttribute("NAME"))##=$$$NULLOREF
+</script>
+<script language="Basic" runat="server">
+	##(..GetAttribute("NAME"))##=""
+</script>
+<script language="MVBasic" runat="server">
+	##(..GetAttribute("NAME"))##=''
+</script>
+</csr:section>
+
+</csr:action>
+</csr:rule>
+
+<!-- FORM TAG --------------------------------------------- -->
+<!-- We look for a FORM tag with a CSPBIND attribute -->
+<!-- This tells us how to bind the Form's elements to data of the bound object -->
+
+<csr:rule name="%FORM" match="form[cspbind]" language="any">
+<csr:description>
+An html <b>form</b> tag containing a <var>cspbind</var> attribute represents a data-bound form. 
+This rule will automatically generate save, search, and validation functionality for the form.
+</csr:description>
+<csr:attribute name=cspbind description="The name of a <b>csp:object</b> to which this form is bound." type="ObjectName:STRING">
+<csr:attribute name=cspevent description="The type of call to be used for HyperEvents:  server (default) or call." type="EventType:STRING">
+<csr:attribute name=cspJS description="Specifies which JavaScript code is to be generated.  Possibilities are All (default, new and save buttons and validation code), Validate (validation cpde only), None (No JavaScript)" type="JSUsage:STRING">
+<csr:attribute name=cspSaveMsgEscape description="Controls the escaping of formSave messages.  Possibilites are None, JS and HTML (the default)." type="Option:STRING">
+<csr:attribute name=cspNoJSComment description="If true the comment describing generated #server is suppressed." type="Option:BOOLEAN">
+
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	New handle,code,methodname,i,j,el,bind,info,type,expr,name,argno,class,v,q,
+	    ismulti,idx,tagname,tagtype,skiptag,arglist,mtype,numextra,req,
+	    formalspec,varname,subscript,defaultDelim,methoderror,list,listmode,
+	    writeCmd,writeEnd,quitCmd,JSmethodname,member,linesOut,line,esc,escEnd,
+	    boundref
+	    
+	// Specify default value for NAME, if necessary
+	If ('..IsDefined("NAME")) {
+		Do ..SetAttribute("name","FORM")
+	}
+
+	// name of form etc.
+	Set %form = ..GetAttribute("NAME")
+	Set %formobj = ..GetAttribute("CSPBIND")
+	Set %formJS = $case($zcvt(..GetAttribute("CSPJS"),"U"), "NONE":0, "VALIDATE":1, :2)
+	Set %formEvent = $case($zcvt(..GetAttribute("CSPEVENT"),"U"), "CALL":"call", :"server")
+	Set %formSaveCallback=..GetAttribute("SAVECALLBACK")
+	Set %formSaveMsgEscape=$zcvt(..GetAttribute("CSPSAVEMSGESCAPE","html"),"L")
+	Set %formJSComment='..GetAttribute("CSPNOJSCOMMENT")
+
+	If ($length(%form)>25) {
+		Set %statuscode=$$$ERROR($$$CSPFormNameLength,%form,..LineNumber)
+		Do ..cleanup()
+		Quit
+	}
+	
+	If ('$zname(%formobj)) || ('%compiler.IsDefinedByKey("%CSPbind",%formobj)) {
+		Set %statuscode=$$$ERROR($$$CSPFormObject,%formobj,%form,..LineNumber)
+		Do ..cleanup()
+		Quit
+	}
+
+	Set %formclass = %compiler.GetByKey("%CSPbind",%formobj)
+	If (%formclass="") {
+		Set %statuscode=$$$ERROR($$$CSPFormObjectClass,%form,..LineNumber)
+		Do ..cleanup()
+		Quit
+	}
+	
+	// Indicate that event broker needed
+	If %formJS>1 {	
+		Set %compiler.Get("%cspDocObject").NeedJS=1
+ 	}
+ 	
+ 	If (%formSaveCallback'="") && ($extract(%formSaveCallback,1,2)'="..") {
+		Set class=$Piece(%formSaveCallback,".",1,$Length(%formSaveCallback,".")-1)
+		Set member=$Piece(%formSaveCallback,".",$Length(%formSaveCallback,"."))
+		If (class="") || (member="") {
+			Set %statuscode=$$$ERROR($$$CSPSaveCallback,%form)
+			Do ..cleanup()
+			Quit
+		}
+		Set class=$$$NormalizeClassname(class)
+		Set %formSaveCallback="##class("_class_")."_member
+	}
+	
+	If $case(%formSaveMsgEscape,"none":0,"js":0,"html":0,:1) {
+		Set %statuscode=$$$ERROR($$$CSPInvalidSaveEscape,..LineNumber)
+		Do ..cleanup()
+		Quit
+	}
+ 	
+
+	// build list of children (non-atoms!) of this this form
+	Set %formchildren = ""
+	Do ##class(%CSP.DwxUtils).GetElementChildren(##this,.%formchildren)
+	
+	// HEAD section
+	Set JSmethodname = %form_"GenJS"
+	Do ..PushDefaultSection("HEAD")
+	Do ..WriteServer($case(%compiler.PageLanguage,"basic":" me.","mvbasic":" """_%compiler.Get("%classname")_"""->",:"	Do ..")_JSmethodname_"()")
+	Do ..PopDefaultSection()
+
+	//-----------------------------------------------------------------------------------------
+	// method to generate client-side required checks
+
+	Set handle = %compiler.Get("%classhandle")
+
+	Set linesOut=0
+	$$$cspStartMethodImplementation(handle,JSmethodname)
+If %formJS>0 {
+	If %compiler.Get("%cspHTML4STRICT") {
+		$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write !,""<script type=""""text/javascript"""">"",!")
+	} Else {
+		$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write !,""<script language=""""JavaScript"""" type=""""text/javascript"""">"",!")
+	}
+	If %compiler.Get("%cspXHTML") {
+		$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""//<![CDATA["",!")
+	} Else {
+		$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""<!--"",!")
+	}
+If %formJS>1 {	
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""function "_%form_"_new()"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""{"",!")
+	If %formJSComment $$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   // invoke #"_%formEvent_"("_%compiler.Get("%classname")_"."_%form_"Load())"",!")
+	If %formEvent="server" {
+		Set line="	Write ""   return (""_"_$$$cspBrokerRunCode_"_"""
+	} Else {
+		Set line="	Write ""   return (""_"_$$$cspBrokerCallCode_"_"""
+	}
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),line_"('"",$$$cspEncodeBroker(%session.Key,$listbuild("""_%compiler.Get("%classname")_"."_%form_"Load""))_$select(%session.UseSessionCookie'=2:""&CSPCHD=""_%session.CSPSessionCookie,1:""""),""','') == 1);"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""}"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""function "_%form_"_save()"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""{"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   var form = self.document."_%form_";"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   var objid = form.OBJID.value;"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   var result = 0;"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   if ("_%form_"_validate()) {"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Do .."_%form_"SavJS()")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   }"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   return (result == 1);"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""}"",!")
+}	
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""function "_%form_"_validate()"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""{"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   var errorMsg = '';"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   var missingMsg = '';"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   var invalidMsg = '';"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   var missingArray = new Array();"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   var invalidArray = new Array();"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   var valid;"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   missingMsg = "_%form_"_testRequired(missingArray);"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   invalidMsg = "_%form_"_testValid(invalidArray);"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   if ((missingMsg == '') && (invalidMsg == '')) {"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""      return true;"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   }"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   errorMsg   = ""_..QuoteJS(%response.GetText("""",""%CSPBind"",""SaveErrorLine"",""_______________________________________________________________""))_""+'\n\n';"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   errorMsg  += ""_..QuoteJS(%response.GetText("""",""%CSPBind"",""SaveError"",""The form was not saved because of the following error(s).""))_""+'\n';"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   errorMsg  += ""_..QuoteJS(%response.GetText("""",""%CSPBind"",""SaveCorrect"",""Please correct these error(s) and try again.""))_""+'\n';"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   errorMsg  += ""_..QuoteJS(%response.GetText("""",""%CSPBind"",""SaveErrorLine"",""_______________________________________________________________""))_""+'\n\n';"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   if (missingMsg!= '') {"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""      errorMsg += ""_..QuoteJS(%response.GetText("""",""%CSPBind"",""SaveRequiredError"",""The following required field(s) are empty: ""))_"" + missingMsg + '\n';"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   }"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   if (invalidMsg != '') {"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""      errorMsg += ""_..QuoteJS(%response.GetText("""",""%CSPBind"",""SaveInvalidError"",""The following field(s) contain invalid values: ""))_"" + invalidMsg + '\n';"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   }"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   alert(errorMsg);"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   return false;"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""}"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""function "_%form_"_testRequired(missingArray)"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""{"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   var missingMsg = '';"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Do .."_%form_"ReqJS()")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   return missingMsg;"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""}"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""function "_%form_"_testValid(invalidArray)"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""{"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   var valid;"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   var invalidMsg = '';"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Do .."_%form_"ValJS()")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""   return invalidMsg;"",!")
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""}"",!")
+	If %compiler.Get("%cspXHTML") {
+		$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""//]]>"",!")
+	} Else {
+		$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""// -->"",!")
+	}
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Write ""<"_"/script>"",!")
+}	
+
+	$$$cspAddMethodLine(handle,JSmethodname,$i(linesOut),"	Quit")
+	$$$cspFinishMethodImplementation(handle,JSmethodname,linesOut)
+	Do SetMethod^%apiCDL(handle,JSmethodname,$$$cMETHlanguage,"cache")
+	Do SetMethod^%apiCDL(handle,JSmethodname,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+	Do SetMethod^%apiCDL(handle,JSmethodname,$$$cMETHreturntype,"")
+	Do SetMethod^%apiCDL(handle,JSmethodname,$$$cMETHclassmethod,1)
+	Do SetMethod^%apiCDL(handle,JSmethodname,$$$cMETHdescription,"Called to render JavaScript code that is required for form <var>"_%form_"</var>.")
+
+	If %compiler.PageLanguage="basic" {
+		Set writeCmd=" PrintLn "
+		Set writeEnd=""
+		Set quitCmd=" Return"
+	} ElseIf %compiler.PageLanguage="mvbasic" {
+		Set writeCmd=" Print "
+		Set writeEnd=""
+		Set quitCmd=" Return"
+	} Else {
+		Set writeCmd="	Write "
+		Set writeEnd=",!"
+		Set quitCmd="	Quit"
+	}
+
+	// ismulti tells us if a form element name is used multiple times
+	// idx is the current # of a multi-used name
+
+	// loop over elements and find which are multi (this assumes that all elements generate a CSPElement)
+	// also, assign a default name if the user forget to give one
+
+	For i=1:1:%formchildren {
+		Set el=%formchildren(i)
+		// only test UI elements
+		If ".INPUT.SELECT.TEXTAREA."[("."_$zcvt(el.TagName,"U")_".") {
+			Set name = el.GetAttribute("NAME")
+			If (name="") {
+				If el.IsDefined("CSPBIND") {
+					Set name = $TR(el.GetAttribute("CSPBIND"),".()%","_")
+				}
+				Else {
+					Set name = "%noname" // place holder for unnamed/unbound elements
+				}
+				Do el.SetAttribute("name",name)
+			}
+			Set idx(name)=$G(idx(name))+1
+			If (idx(name)>1) {
+				Set ismulti(name) = 1
+			}
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// Generate formSubmit()
+	// server-side submit method for form used for form submits
+
+	Set methodname = %form_"Submit"
+	Set formalspec = "&errmsg:%String="""",objid"
+	Set handle = %compiler.Get("%classhandle")
+	Set linesOut=1
+	$$$cspStartMethodImplementation(handle,methodname)
+	Set arglist = ""
+	Set numextra = 0
+
+	Kill idx
+	For i=1:1:%formchildren {
+		Set el = %formchildren(i)
+		Set name = el.GetAttribute("NAME")
+		Set:(name'="") idx(name) = $G(idx(name))+1
+		Set bind = el.GetAttribute("CSPBIND")
+		Set tagname=$zcvt(el.TagName,"U")
+		Set tagtype=$zcvt(el.GetAttribute("TYPE"),"U")
+		Set skiptag=((tagname="INPUT") && ((tagtype="RADIO")||(tagtype="CHECKBOX")) && (idx(name)>1))
+		// for radio buttons, only one value is submitted
+		If (name'="") && (bind'="") && ('skiptag) {
+			Set info=##class(%CSP.DwxUtils).GetReferenceInfo(%formclass,bind)
+			Set list = ((info="LIST")!((info="LISTOBJ")&(tagname="SELECT")))
+			If ('el.IsDefined("READONLY")),((info="LITERAL")!list!(info="PERSISTENT")!(info="SERIAL")!(info="STREAM")) { // non-readonly, property
+				If (list && ( ((tagname="SELECT")&&(el.IsDefined("MULTIPLE"))) || ((tagname="INPUT")&&(tagtype="CHECKBOX")) )) {
+					Set numextra = numextra + 1
+					Set req = "%request.Data("""_name_""")"
+					$$$cspAddMethodLine(handle,methodname,$i(linesOut)," Merge v"_numextra_"="_req)
+					Set arglist = arglist_$S(arglist'="":",",1:"")_".v"_numextra
+				} Else {
+					Set varname = $S($D(ismulti(name)):bind_"#"_idx(name),1:bind)
+					Set req = "$get(%request.Data("""_name_""","_idx(name)_"))"
+					If (tagname="INPUT") {
+						If ((tagtype="TEXT")!(tagtype="HIDDEN")) {
+							If ('el.IsDefined("CSPNOTRIM")) Set req="$ZSTRIP("_req_","">W"")"
+						} ElseIf (tagtype="CHECKBOX") {
+							Set req="("_req_"'="""")"	// if literal convert to boolean
+						}
+					}
+					$$$cspAddMethodLine(handle,methodname,$i(linesOut)," Set v("""_varname_""")="_req)
+					Set arglist = arglist_$S(arglist'="":",",1:"")_"v("""_varname_""")"
+				}
+			}
+		}
+	}
+
+	Set code=" New v"
+	For i=1:1:numextra {
+		Set code=code_",v"_i
+	}
+	$$$cspAddMethodLine(handle,methodname,1,code)
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	If $get(objid)="""" Set objid=$get(%request.Data(""OBJID"",1))")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Quit .."_%form_"Save(0,.errmsg,objid,"_arglist_")")
+
+	$$$cspFinishMethodImplementation(handle,methodname,linesOut)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHlanguage,"cache")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHformalspec,formalspec)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHreturntype,"%Boolean")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHclassmethod,1)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHdescription,"Translates a submit request from form <var>"_%form_"</var> into a call to <METHOD>"_%form_"Save</METHOD>.")
+
+	//-----------------------------------------------------------------------------------------
+	// Generate formSave()
+	// server-side save method for form used by broker requests
+
+	// construct formal spec
+	Set formalspec = "respond:%Boolean=0,&errmsg:%String="""",objid:%String="""""
+	Set methodname = %form_"Save"
+	Set handle = %compiler.Get("%classhandle")
+	Set linesOut=0
+	$$$cspStartMethodImplementation(handle,methodname)
+	Kill idx
+
+	// build formal spec for method
+	Set argno = 1
+
+	For i=1:1:%formchildren {
+		Set el = %formchildren(i)
+		Set name = el.GetAttribute("NAME")
+		If (name'="") { 
+			Set idx(name) = $G(idx(name)) + 1
+		}
+		Set bind = el.GetAttribute("CSPBIND")
+		Set tagname=$zcvt(el.TagName,"U")
+		Set tagtype=$zcvt(el.GetAttribute("TYPE"),"U")
+		Set skiptag=((tagname="INPUT") && ((tagtype="RADIO")||(tagtype="CHECKBOX")) && (idx(name)>1))
+		// only get one arg per radio or checkbox group
+		If (name'="") && (bind'="") && ('skiptag) {
+			Set info = ##class(%CSP.DwxUtils).GetReferenceInfo(%formclass,bind)
+			If ('el.IsDefined("READONLY"))&((info="LITERAL")!(info="LIST")!((info="LISTOBJ")&(tagname="SELECT"))!(info="PERSISTENT")!(info="SERIAL")!(info="STREAM")) {
+				//#; **Set formalspec = formalspec_",%in"_argno_":"_$G($$$PROPtype($$$pDEF,%formclass,bind),"%String")
+				Set mtype=$$$comMemberKeyGet(%formclass,$$$cCLASSproperty,bind,$$$cPROPtype)
+				Set:mtype="" mtype="%String"
+				Set formalspec = formalspec_",%in"_argno_":"_mtype
+				Set argno = argno + 1
+			}
+		}
+	}
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	New obj,sc,value,in,error,sverror,err,i,ok")
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Set sc=$$$OK")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Set ok=1")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Set error=""""")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Set sverror=""""")
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	If (objid="""") {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Set obj = ##class("_%formclass_").%New()")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	} ElseIf '$isobject(objid) {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Set obj = ##class("_%formclass_").%OpenId(objid)")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	} Else {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Set obj = objid")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	}")
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	If (obj=$$$NULLOREF) {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		If (respond) {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Write ""CSPPage.alert(""_..QuoteJS(%response.GetText("""",""%CSPBind"",""SaveObjectError"",""Unable to open object for saving""))_"");"",!")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		} Else {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set errmsg = %response.GetText("""",""%CSPBind"",""SaveObjectError"",""Unable to open object for saving"")")
+	If %formSaveCallback'="" {
+		$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Do "_%formSaveCallback_"(0,errmsg,objid)")
+	}
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		}")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Quit 0")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	}")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Try {")
+
+	If %formSaveMsgEscape="none" {
+		Set esc=""
+		Set escEnd=""
+	} ElseIf %formSaveMsgEscape="js" {
+		Set esc="..QuoteJS("
+		Set escEnd=")"
+	} Else {
+		Set esc="..EscapeHTML("
+		Set escEnd=")"
+	}
+
+	Kill idx
+	Set argno = 1
+	For i=1:1:%formchildren {
+		Set el = %formchildren(i)
+		Set name = el.GetAttribute("NAME")
+		If (name'="") {
+			Set idx(name) = $G(idx(name))+1
+		}
+		Set bind = el.GetAttribute("CSPBIND")
+		Set tagname=$zcvt(el.TagName,"U")
+		Set tagtype=$zcvt(el.GetAttribute("TYPE"),"U")
+		Set skiptag=((tagname="INPUT") && ((tagtype="RADIO")||(tagtype="CHECKBOX")) && (idx(name)>1))
+		// for radio buttons and checkboxes, only one value is submitted
+		If (name'="") && (bind'="") && ('skiptag) {
+			Set info = ##class(%CSP.DwxUtils).GetReferenceInfo(%formclass,bind,.type)
+			Set list = ((info="LIST")!((info="LISTOBJ")&(tagname="SELECT")))
+			Set class = %formclass
+			If ('el.IsDefined("READONLY"))&((info="LITERAL")!list!(info="PERSISTENT")!(info="SERIAL")!(info="STREAM")) {
+				// non-readonly, property
+				Set varname = "%in"_argno
+				Set argno = argno+1
+				Set defaultDelim=$S($zcvt(el.TagName,"U")="TEXTAREA":"",1:",")
+				Set listmode=$select(((tagname="SELECT")||((tagname="INPUT")&&(tagtype="CHECKBOX"))):"L",1:"S"_el.GetAttribute("DELIMITER",defaultDelim))
+				Set code=##class(%CSP.DwxUtils).GetSetCode(class,bind,"obj",varname,el.GetAttribute("CSPCAPTION",name),,listmode)
+				For j=1:1:$length(code,$$$EOL) {
+					Set line=$piece(code,$$$EOL,j)
+					if line'="" $$$cspAddMethodLine(handle,methodname,$i(linesOut),line)
+				}
+			}
+		}
+	}
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Set:error'="""" ok=0")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Set:error="""" sc=obj.%Save()")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	} Catch ex {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Set ok=0")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		If ($classname(ex)'=""%Exception.SystemException"") || (ex.Name'=""<MAXSTRING>"") || (error="""") {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set sc=ex.AsStatus(),error=""""")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		}")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	}")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	If $$$ISERR(sc) {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Set ok=0")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Do DecomposeStatus^%apiOBJ(sc,.err,"""",%response.MatchLanguage())")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		For i=1:1:err {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			If (respond) {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"				Set sverror=sverror_"" + ""_..QuoteJS(err(i))_"" + '\n'""")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			} Else {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"				Set sverror=sverror_"_esc_"err(i)"_escEnd_"_""\n""")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			}")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		}")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	}")
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	If (respond) {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		If (ok) {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Do .."_%form_"Load("""",obj)")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		} Else {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Write ""CSPPage.alert("",!")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Write ..QuoteJS(%response.GetText("""",""%CSPBind"",""SaveErrorLine"",""_______________________________________________________________""))_""+'\n\n'+"",!")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Write ..QuoteJS(%response.GetText("""",""%CSPBind"",""SaveError"",""The form was not saved because of the following error(s).""))_""+'\n'+"",!")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Write ..QuoteJS(%response.GetText("""",""%CSPBind"",""SaveCorrect"",""Please correct these error(s) and try again.""))_""+'\n'+"",!")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Write ..QuoteJS(%response.GetText("""",""%CSPBind"",""SaveErrorLine"",""_______________________________________________________________""))_""+'\n\n'+"",!")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Write ""'"",error,""'"",sverror,"");"",!")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		}")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	} Else {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Set errmsg="_esc_"error"_escEnd_"_sverror")
+	If %formSaveCallback'="" {
+		$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		If objid="""" Set objid=obj.%Id()")
+		$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Do "_%formSaveCallback_"(ok,errmsg,objid)")
+	}
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	}")
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Quit ok")
+
+	$$$cspFinishMethodImplementation(handle,methodname,linesOut)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHlanguage,"cache")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHformalspec,formalspec)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHreturntype,"%Boolean")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHclassmethod,1)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHdescription,"Saves the data sent from the form <var>"_%form_"</var> into the specified object instance. If successful, updates the values on the form.")
+
+	//-----------------------------------------------------------------------------------------
+	// Generate formLoad()
+	// copies contents of object to client form
+
+	// construct formal spec
+	Set formalspec = "objid:%String,obj:%Integer="""""
+	Set methodname = %form_"Load"
+	Set handle = %compiler.Get("%classhandle")
+	Set linesOut=0
+	$$$cspStartMethodImplementation(handle,methodname)
+	Kill idx
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	If '.."_%form_"LoadJS(.objid,obj) {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Write ""CSPPage.alert(""_..QuoteJS("""_methodname_": ""_%response.GetText("""",""%CSPBind"",""OpenObjectError"",""Unable to open object.""))_"");"",!")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Do .."_%form_"LoadJS(objid,obj,1)")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	}")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Quit 1")
+
+	$$$cspFinishMethodImplementation(handle,methodname,linesOut)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHlanguage,"cache")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHformalspec,formalspec)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHreturntype,"%Boolean")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHclassmethod,1)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHdescription,"Updates the form <var>"_%form_"</var> from the specified object instance by sending JavaScript to the client.")
+
+	//-----------------------------------------------------------------------------------------
+	// Generate formLoadJS()
+	// copies contents of object to client form base call with no JavaScript if error
+
+	// construct formal spec
+	Set formalspec = "objid:%String,obj:%Integer="""",alwaysLoad:%Boolean=0"
+	Set methodname = %form_"LoadJS"
+	Set handle = %compiler.Get("%classhandle")
+	Set linesOut=0
+	$$$cspStartMethodImplementation(handle,methodname)
+	Kill idx
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	New close,ok")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Set close=0,ok=1")
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	If (obj'=$$$NULLOREF) {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Set objid = obj.%Id()")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	} Else {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		If (objid'="""") {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set obj = ##class("_%formclass_").%OpenId(objid)")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		} Else {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set obj = ##class("_%formclass_").%New()")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		}")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		If (obj=$$$NULLOREF) {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			If 'alwaysLoad Quit 0")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set ok=0")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		} Else {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set close=1")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		}")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	}")
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""var form = CSPPage.document."_%form_";"",!")
+
+	For i=1:1:%formchildren  { 
+		Set el = %formchildren(i)
+		Set name=el.GetAttribute("NAME")
+		If (name'="") { 
+			Set idx(name) = $G(idx(name))+1
+		}
+		Set bind = el.GetAttribute("CSPBIND")
+		If ((name'="")&&(bind'="")) {
+			Set tagname=$zcvt(el.TagName,"U")
+			Set tagtype=$zcvt(el.GetAttribute("TYPE"),"U")
+			Set defaultDelim=$S(tagname="TEXTAREA":"",1:",")
+			Set listmode="S"_el.GetAttribute("DELIMITER",defaultDelim)
+			If tagname="SELECT" {
+				Set info = ##class(%CSP.DwxUtils).GetReferenceInfo(%formclass,bind)
+				Set list = ((info="LIST") || (info="LISTOBJ"))
+				Set listmode="L"
+			} ElseIf (tagname="INPUT")&&(tagtype="CHECKBOX") {
+				Set info = ##class(%CSP.DwxUtils).GetReferenceInfo(%formclass,bind)
+				Set list = (info="LIST")
+				Set listmode="L"
+			}
+			Set expr = ##class(%CSP.DwxUtils).GetValueExpression(%formclass,bind,"obj","JS",listmode,,1)
+			If (expr'="") {
+				Set subscript = $S($D(ismulti(name)):"["_(idx(name)-1)_"]",1:"")
+				If (tagname="INPUT")&&(tagtype="RADIO") {
+					$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (form."_name_" != null && form."_name_subscript_" != null) { form."_name_subscript_".checked = "",(("_expr_")="""_el.GetAttribute("VALUE")_"""),"";}"",!")
+				}
+				ElseIf (tagname="IMG")!(tagname="IMAGE") {
+					$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (CSPPage.document.images['"_name_"'] != null) { CSPPage.document.images['"_name_"'].src = """"_CSP.StreamServer.cls?STREAMOID="",..Encrypt("_expr_"),"""""";}"",!")
+				}
+				ElseIf (tagname="SELECT") || ((tagname="INPUT")&&(tagtype="CHECKBOX")) {
+					If list {
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (form."_name_" != null && form."_name_subscript_" != null) {"",!")
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""  var valList = new Array("",!")
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	New ref,key,val,sep Set ref="_expr_",key="""",sep=""""")
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	If ref'="""" {")
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Do {")
+						If info="LIST" {
+							$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set val=ref.GetNext(.key)")
+						} Else {
+							$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set val=ref.GetObjectIdNext(.key)")
+						}
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			If key'="""" Write ""    "",sep,..QuoteJS(val),!")
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set sep="",""")
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		} While key'=""""")
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	}")
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""  );"",!")
+						If tagname="SELECT" {
+							$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""  CSPPage.cspSetSelectList(form."_name_subscript_", valList);"",!")
+						} Else {
+							$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""  CSPPage.cspSetCheckList(form."_name_", valList);"",!")
+						}
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""}"",!")
+					} Else {
+						If tagname="SELECT" {
+							$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (form."_name_" != null && form."_name_subscript_" != null) { CSPPage.cspSetSelectValue(form."_name_subscript_", "",..QuoteJS("_expr_"),"");}"",!")
+						} Else {
+							$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (form."_name_" != null && form."_name_subscript_" != null) { form."_name_subscript_".checked = "",(''("_expr_")=1),"";}"",!")
+						}
+					}
+				}
+				Else  {
+					$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (form."_name_" != null && form."_name_subscript_" != null) { form."_name_subscript_".value = "",..QuoteJS("_expr_"),"";}"",!")
+				}
+			}
+		}
+	}
+
+	// update the hidden OBJID field
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (form.OBJID != null) { form.OBJID.value = "",..QuoteJS(objid),"";}"",!")
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	If close=1 Set obj=""""")
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Quit ok")
+
+	$$$cspFinishMethodImplementation(handle,methodname,linesOut)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHlanguage,"cache")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHformalspec,formalspec)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHreturntype,"%Boolean")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHclassmethod,1)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHdescription,"Updates the form <var>"_%form_"</var> from the specified object instance by sending JavaScript to the client.  Error reporting is left to the caller.")
+
+	//-----------------------------------------------------------------------------------------
+	// Generate [Reference]Load() methods
+	// refresh fields belonging to a reference object
+
+	// find all bound reference fields
+	kill boundref
+	For i=1:1:%formchildren { 
+		Set el = %formchildren(i)
+		Set name = el.GetAttribute("NAME")
+		Set bind = el.GetAttribute("CSPBIND")
+		// note: we don't support references within references
+		If ((name'="")&&(bind'="")&&(bind '[ "."))&&'$data(boundref(bind)) {
+			Set type = ##class(%CSP.DwxUtils).GetMemberInfo(%formclass,bind,.mtype)
+			If (type = "PERSISTENT") {
+				set boundref(bind)=""
+				// Generate formLoad()
+				// copies contents of object to client form
+
+				// construct formal spec
+				Set formalspec = "objid:%String,obj:%Integer="""""
+				Set methodname = %form_bind_"Load"
+				Set handle = %compiler.Get("%classhandle")
+				Set linesOut=0
+				$$$cspStartMethodImplementation(handle,methodname)
+				Kill idx
+
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	If '.."_%form_bind_"LoadJS(.objid,obj) {")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Write ""CSPPage.alert(""_..QuoteJS("""_methodname_": ""_%response.GetText("""",""%CSPBind"",""OpenObjectError"",""Unable to open object.""))_"");"",!")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Do .."_%form_bind_"LoadJS(objid,obj,1)")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	}")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Quit 1")
+
+				$$$cspFinishMethodImplementation(handle,methodname,linesOut)
+				Do SetMethod^%apiCDL(handle,methodname,$$$cMETHlanguage,"cache")
+				Do SetMethod^%apiCDL(handle,methodname,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+				Do SetMethod^%apiCDL(handle,methodname,$$$cMETHformalspec,formalspec)
+				Do SetMethod^%apiCDL(handle,methodname,$$$cMETHreturntype,"%Boolean")
+				Do SetMethod^%apiCDL(handle,methodname,$$$cMETHclassmethod,1)
+				Do SetMethod^%apiCDL(handle,methodname,$$$cMETHdescription,"Updates the form <var>"_%form_"</var> from the specified object instance by sending JavaScript to the client.")
+				
+				// generate a base load method for this property
+				// construct formal spec
+				Set formalspec = "objid:%String,obj:%Integer="""",alwaysLoad:%Boolean=0"
+				Set methodname = %form_bind_"LoadJS"
+				Set methoderror=""
+				If ($length(methodname)>31) {
+					Set methoderror=$c(13,10)_"<br><b>The name of this method was truncated from "_methodname_"</b>"
+					Set methodname=$extract(methodname,1,31)
+				}
+				Set handle = %compiler.Get("%classhandle")
+				Set linesOut=0
+				$$$cspStartMethodImplementation(handle,methodname)
+
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	New close,ok")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Set close=0,ok=1")
+
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	If (obj'=$$$NULLOREF) {")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Set objid = obj.%Id()")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	} Else {")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		If (objid'="""") {")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set obj = ##class("_mtype_").%OpenId(objid)")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		} Else {")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set obj = ##class("_mtype_").%New()")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		}")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		If (obj=$$$NULLOREF) {")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			If 'alwaysLoad Quit 0")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set ok=0")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		} Else {")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set close=1")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		}")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	}")
+
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""var form = CSPPage.document."_%form_";"",!")
+
+				// update the reference field
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (form." _ name _ " != null) { form." _ name _ ".value = "",..QuoteJS(objid),"";}"",!")
+
+				// now loop over all fields and look for ones dependent to the reference
+				New i2,el2,name2,bind2
+				Kill idx
+				For i2 = 1:1:%formchildren  { 
+					Set el2 = %formchildren(i2)
+					Set name2 = el2.GetAttribute("NAME")
+					If (name2'="") { 
+						Set idx(name2) = $G(idx(name2))+1
+					}
+					Set bind2 = el2.GetAttribute("CSPBIND")
+					If ((name2'="")&&(bind2'="")&&($E(bind2,1,$L(bind)+1) = (bind _ "."))) {
+						Set bind2 = $E(bind2,$L(bind)+2,*)
+						Set tagname=$zcvt(el2.TagName,"U")
+						Set tagtype=$zcvt(el2.GetAttribute("TYPE"),"U")
+						Set defaultDelim=$S(tagname="TEXTAREA":"",1:",")
+						Set listmode="S"_el2.GetAttribute("DELIMITER",defaultDelim)
+						If tagname="SELECT" {
+							Set info = ##class(%CSP.DwxUtils).GetReferenceInfo(mtype,bind2)
+							Set list = ((info="LIST") || (info="LISTOBJ"))
+							Set listmode="L"
+						} ElseIf (tagname="INPUT")&&(tagtype="CHECKBOX") {
+							Set info = ##class(%CSP.DwxUtils).GetReferenceInfo(mtype,bind2)
+							Set list = (info="LIST")
+							Set listmode="L"
+						}
+						Set expr = ##class(%CSP.DwxUtils).GetValueExpression(mtype,bind2,"obj","JS",listmode)
+						
+						If (expr'="") {
+							Set subscript = $S($D(ismulti(name2)):"["_(idx(name2)-1)_"]",1:"")
+							If (tagname="INPUT"),(tagtype="RADIO") {
+								$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (form."_name2_" != null && form."_name2_subscript_" != null) { form."_name2_subscript_".checked = "",(("_expr_")="""_el2.GetAttribute("VALUE")_"""),"";}"",!")
+							}
+							ElseIf (tagname="IMG")!(tagname="IMAGE") {
+								$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (CSPPage.document.images['"_name2_"'] != null) { CSPPage.document.images['"_name2_"'].src = '_CSP.StreamServer.cls?STREAMOID=' + '"",..Encrypt("_expr_"),""';}"",!")
+							}
+							ElseIf (tagname="SELECT") || ((tagname="INPUT")&&(tagtype="CHECKBOX")) {
+								if list {
+									$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (form."_name2_" != null && form."_name2_subscript_" != null) {"",!")
+									$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""  var valList = new Array("",!")
+									$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	New ref,key,val,sep Set ref="_expr_",key="""",sep=""""")
+									$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	If ref'="""" {")
+									$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Do {")
+									If info="LIST" {
+										$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set val=ref.GetNext(.key)")
+									} Else {
+										$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set val=ref.GetObjectIdNext(.key)")
+									}
+									$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			If key'="""" Write ""    "",sep,..QuoteJS(val),!")
+									$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set sep="",""")
+									$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		} While key'=""""")
+									$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	}")
+									$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""  );"",!")
+									If tagname="SELECT" {
+										$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""  CSPPage.cspSetSelectList(form."_name2_subscript_", valList);"",!")
+									} Else {
+										$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""  CSPPage.cspSetCheckList(form."_name2_", valList);"",!")
+									}
+									$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""}"",!")
+								} else {
+									If tagname="SELECT" {
+										$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (form."_name2_" != null && form."_name2_subscript_" != null) { CSPPage.cspSetSelectValue(form."_name2_subscript_", "",..QuoteJS("_expr_"),"");}"",!")
+									} Else {
+										$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (form."_name2_" != null && form."_name2_subscript_" != null) { form."_name2_subscript_".checked = "",(("_expr_")=1),"";}"",!")
+									}
+								}
+							}
+							Else  {
+								$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""if (form."_name2_" != null && form."_name2_subscript_" != null) { form."_name2_subscript_".value = "",..QuoteJS("_expr_"),"";}"",!")
+							}
+						}
+					}
+				}
+
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	If close=1 Set obj=""""")
+				$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Quit ok")
+
+				$$$cspFinishMethodImplementation(handle,methodname,linesOut)
+				Do SetMethod^%apiCDL(handle,methodname,$$$cMETHlanguage,"cache")
+				Do SetMethod^%apiCDL(handle,methodname,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+				Do SetMethod^%apiCDL(handle,methodname,$$$cMETHformalspec,formalspec)
+				Do SetMethod^%apiCDL(handle,methodname,$$$cMETHreturntype,"%Boolean")
+				Do SetMethod^%apiCDL(handle,methodname,$$$cMETHclassmethod,1)
+				Do SetMethod^%apiCDL(handle,methodname,$$$cMETHdescription,"Updates all the fields within the form <var>"_%form_"</var> dependent on the property " _ bind _ " by sending JavaScript to the client.  Error reporting is left to the caller."_methoderror)
+
+			} // if type=persistent
+		}
+	}
+
+If %formJS>0 {	
+	//-----------------------------------------------------------------------------------------
+	// method to generate client-side required checks
+
+	Set methodname = %form_"ReqJS"
+	Set handle = %compiler.Get("%classhandle")
+	Set linesOut=0
+	$$$cspStartMethodImplementation(handle,methodname)
+	Kill idx
+
+	For i=1:1:%formchildren {
+		Set el = %formchildren(i)
+		Set name = el.GetAttribute("NAME")
+		If (name'="") {
+			Set idx(name) = $G(idx(name))+1
+		}
+		If ((name'="")&&(el.IsDefined("CSPREQUIRED"))&&('el.IsDefined("READONLY"))) {
+			$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""   if (cspIsFieldEmpty('"_%form_"','"_el.GetAttribute("NAME")_"')) {"",!")
+			$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""      missingMsg = missingMsg + '\n     "_el.GetAttribute("CSPCAPTION",el.GetAttribute("NAME"))_"';"",!")
+			$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""      if (missingArray != null) { missingArray[missingArray.length] = '"_el.GetAttribute("NAME")_"'; }"",!")
+			$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""   }"",!")
+		}
+	}
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Quit")
+	$$$cspFinishMethodImplementation(handle,methodname,linesOut)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHlanguage,"cache")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHreturntype,"")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHclassmethod,1)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHdescription,"Called during rendering of this page to write out JavaScript code to do required field tests for form <var>"_%form_"</var>.")
+
+	//-----------------------------------------------------------------------------------------
+	// method to generate client-side validation
+	Set methodname = %form_"ValJS"
+	Set handle = %compiler.Get("%classhandle")
+	Set linesOut=0
+	$$$cspStartMethodImplementation(handle,methodname)
+	Kill idx
+
+	For i=1:1:%formchildren {
+		Set el = %formchildren(i)
+		Set name=el.GetAttribute("NAME")
+		If (name'="") {
+			Set idx(name) = $G(idx(name))
+		}
+		If ((name'="")&&(el.HasValue("CSPVALID"))) {
+			$$$cspAddMethodLine(handle,methodname,$i(linesOut),writeCmd_"""   valid = "" "_$case(%compiler.PageLanguage,"basic":"& ","mvbasic":": ",:"_ ")_$$QuoteCSP^%cspQuote(el.GetAttribute("CSPVALID"))_writeEnd)
+			$$$cspAddMethodLine(handle,methodname,$i(linesOut),writeCmd_"""   if (valid != '') {"""_writeEnd)
+			$$$cspAddMethodLine(handle,methodname,$i(linesOut),writeCmd_"""      invalidMsg = invalidMsg + '\n    -' + valid;"""_writeEnd)
+			$$$cspAddMethodLine(handle,methodname,$i(linesOut),writeCmd_"""      if (invalidArray != null) { invalidArray[invalidArray.length] = '"_el.GetAttribute("NAME")_"'; }"""_writeEnd)
+			$$$cspAddMethodLine(handle,methodname,$i(linesOut),writeCmd_"""   }"""_writeEnd)
+		}
+	}
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),quitCmd)
+
+	$$$cspFinishMethodImplementation(handle,methodname,linesOut)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHlanguage,%compiler.PageLanguage)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHreturntype,"")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHclassmethod,1)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHdescription,"Called during rendering of this page to write out JavaScript code to do field validation tests for form <var>"_%form_"</var>.")
+}
+
+If %formJS>1 {	
+	//-----------------------------------------------------------------------------------------
+	// method to generate client-side invokation of server-side save code
+	Set methodname = %form_"SavJS"
+	Set handle = %compiler.Get("%classhandle")
+	Set linesOut=0
+	$$$cspStartMethodImplementation(handle,methodname)
+	Set arglist = ""
+	Kill idx
+
+	If %formJSComment $$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""      //invoke #"_%formEvent_"("_%compiler.Get("%classname")_"."_%form_"Save())""")
+	If %formEvent="server" {
+		Set line="	Write !,""      result = ""_"_$$$cspBrokerRunCode_"_"""
+	} Else {
+		Set line="	Write !,""      result = ""_"_$$$cspBrokerCallCode_"_"""
+	}
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),line_"('"",$$$cspEncodeBroker(%session.Key,$listbuild("""_%compiler.Get("%classname")_"."_%form_"Save""))_$select(%session.UseSessionCookie'=2:""&CSPCHD=""_%session.CSPSessionCookie,1:""""),""',"_(%formSaveCallback="")_",'',objid""")
+	Set argno = 1
+
+	For i=1:1:%formchildren {
+		Set el = %formchildren(i)
+		Set name = el.GetAttribute("NAME")
+		If (name'="") {
+			Set idx(name) = $G(idx(name)) + 1
+		}
+		Set bind = el.GetAttribute("CSPBIND")
+		Set tagname=$zcvt(el.TagName,"U")
+		Set tagtype=$zcvt(el.GetAttribute("TYPE"),"U")
+		Set skiptag=((tagname="INPUT") && ((tagtype="RADIO")||(tagtype="CHECKBOX")) && (idx(name)>1))
+		If (name'="") && (bind'="") && ('skiptag) {
+			Set info = ##class(%CSP.DwxUtils).GetReferenceInfo(%formclass,bind)
+			If ('el.IsDefined("READONLY"))&&((info="LITERAL")!(info="LIST")!((info="LISTOBJ")&(tagname="SELECT"))!(info="PERSISTENT")!(info="SERIAL")!(info="STREAM")) {
+				Set subscript = $S($D(ismulti(name)):"["_(idx(name)-1)_"]",1:"")
+				If (tagname="INPUT") {
+					If ((tagtype="TEXT")!(tagtype="HIDDEN")) {
+						If (el.IsDefined("CSPNOTRIM")) {
+							// Use workaround for IE5 bug where otherwise arg is passed as null
+							$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write "","",!,""         (form."_name_" == null || form."_name_subscript_" == null) ? null : cspString(form."_name_subscript_".value)"" ;%in"_argno)
+							Set argno=argno+1
+						}
+						Else {
+							$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write "","",!,""         (form."_name_" == null || form."_name_subscript_" == null) ? null : cspTrim(form."_name_subscript_".value)"" ;%in"_argno)
+							Set argno=argno+1
+						}
+					} ElseIf (tagtype="PASSWORD")!(tagtype="FILE") {
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write "","",!,""         (form."_name_" == null || form."_name_subscript_" == null) ? null : cspString(form."_name_subscript_".value)"" ;%in"_argno)
+						Set argno=argno+1
+					} ElseIf (tagtype="CHECKBOX") {
+						If (info="LIST") {
+							$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write "","",!,""         cspGetCheckList(form."_name_")"" ;%in"_argno)
+							Set argno=argno+1
+						} Else {
+							$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write "","",!,""         (form."_name_" == null || form."_name_subscript_" == null) ? null : (form."_name_subscript_".checked ? 1 : 0)"" ;%in"_argno)
+							Set argno=argno+1
+						}
+					} ElseIf (tagtype="RADIO") {
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write "","",!,""         cspGetRadioValue(form."_name_")"" ;%in"_argno)
+						Set argno=argno+1
+					} Else {
+						$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write "", null"" ;%in"_argno)
+						Set argno=argno+1
+					}
+				} ElseIf (tagname="SELECT") {
+					$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write "","",!,""         cspGetSelect"_$select(((info="LIST")||(info="LISTOBJ")):"List",1:"Value")_"(form."_name_subscript_")"" ;%in"_argno)
+					Set argno=argno+1
+				} ElseIf (tagname="TEXTAREA") {
+					// Use workaround for IE5 bug where otherwise arg is passed as null
+					// Also workaround for Mozilla passing textarea value with \n instead of \r\n line ends.
+					$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write "","",!,""         (form."_name_" == null || form."_name_subscript_" == null) ? null : cspNormalizeString(form."_name_subscript_".value)"" ;%in"_argno)
+					Set argno=argno+1
+				}
+			}
+		}
+	}
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write "");"",!")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Quit")
+
+	$$$cspFinishMethodImplementation(handle,methodname,linesOut)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHlanguage,"cache")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHreturntype,"")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHclassmethod,1)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHdescription,"Called during rendering of this page to write out JavaScript code to invoke the server-side save method for form <var>"_%form_"</var>.")
+}
+	// Set up attributes for FORM tag so that it generates correctly
+
+	// remove cspbind
+	Do ..TagAttributes.RemoveAt("CSPBIND")
+	Do ..TagAttributes.RemoveAt("CSPJS")
+	Do ..TagAttributes.RemoveAt("CSPEVENT")
+	Do ..TagAttributes.RemoveAt("CSPSAVEMSGESCAPE")
+	Do ..TagAttributes.RemoveAt("CSPNOJSCOMMENT")
+
+	// onSubmit should invoke validation function
+	// If onSubmit was specified keep the specified value.
+	If ('..IsDefined("ONSUBMIT")) && (%formJS>0) {
+		Do ..SetAttribute("onsubmit","return "_%form_"_validate();")
+	}
+	
+	// add a hidden field to the form to hold the OBJID
+	Set el = ##class(%CSP.Element).%New()
+	Set el.TagName = "input"
+	Do el.SetAttribute("type","hidden")
+	Do el.SetAttribute("name","OBJID")
+	Do el.SetAttribute("id","OBJID")
+	If %compiler.PageLanguage="basic" {
+		Do el.SetAttribute("value","#(case("_%formobj_","""":"""",:"_%formobj_".%Id()))#")
+	} ElseIf %compiler.PageLanguage="mvbasic" {
+		Do el.SetAttribute("value","#(IF "_%formobj_"='' THEN '' ELSE "_%formobj_"->%Id())#")
+	} Else {
+		Do el.SetAttribute("value","#($select("_%formobj_"="""":"""",1:"_%formobj_".%Id()))#")
+	}
+	// Force the element to be closed if xhtml
+	If %compiler.Get("%cspXHTML") Set el.Closed=1
+
+	Do ..Children.Insert(el)
+	Set el=""  // Close element
+
+	Quit
+</script>
+
+<csr:default>
+
+<script language="Cache" runat="compiler">
+	// cleanup!!
+	Do ..cleanup()
+</script>
+
+<script language=cache method="cleanup" arguments="">
+	Kill %form,%formobj,%formclass,%formJS,%formEvent,%showerr,%searchlink,%formchildren,%formSaveCallback,%formSaveMsgEscape,%formJSComment
+</script>
+
+</csr:action>
+</csr:rule>
+
+<!-- INPUT TAG --------------------------------------------- -->
+<!-- CSPBIND tells us how to bind the field -->
+
+<csr:rule name="%INPUT" match="form/*/input[cspbind]" empty language="any">
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	// set up correct attributes
+	If $get(%formobj)="" {
+		Set %statuscode=$$$ERROR($$$CSPNoForm,"input",..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+
+	New expr
+	Set expr = ##class(%CSP.DwxUtils).GetValueExpression(%formclass,..GetAttribute("CSPBIND"),%formobj,"HTMLSTRING","S"_..GetAttribute("DELIMITER",","),%compiler.PageLanguage)
+
+	// this is to work-around quote ' problems!!!
+
+	Do ..SetAttribute("value","#(%value)#")
+
+	If (expr="") {
+		// bad or missing property
+		If %compiler.PageLanguage="mvbasic" {
+			Set expr = "''"
+		} Else {
+		Set expr = """"""
+		}
+	} ElseIf (..IsDefined("CSPNOTRIM")) {
+		If %compiler.PageLanguage="basic" {
+			Set expr = "me.EscapeHTML(%request.Get("""_..GetAttribute("NAME")_""","_expr_"))"
+		} ElseIf %compiler.PageLanguage="mvbasic" {
+			Set expr = """%CSP.Page""->EscapeHTML(%request->Get('"_..GetAttribute("NAME")_"',"_expr_"))"
+		} Else {
+			Set expr = "$$$HTMLENCODE($get(%request.Data("""_..GetAttribute("NAME")_""",1),"_expr_"))"
+		}
+		Do ..TagAttributes.RemoveAt("CSPNOTRIM")
+	} Else {
+		If %compiler.PageLanguage="basic" {
+			Set expr = "me.EscapeHTML(%request.Get("""_..GetAttribute("NAME")_""",RTrim("_expr_")))"
+		} ElseIf %compiler.PageLanguage="mvbasic" {
+			Set expr = """%CSP.Page""->EscapeHTML(%request->Get('"_..GetAttribute("NAME")_"',TrimB("_expr_")))"
+		} Else {
+			Set expr = "$$$HTMLENCODE($get(%request.Data("""_..GetAttribute("NAME")_""",1),$ZSTRIP("_expr_","">W"")))"
+		}
+	}
+	
+	Do ..WriteServer($select(%compiler.IsBasic:" ",1:"	Set ")_"%value = "_expr)
+	
+	// Get rid of cspbind, set expression for VALUE
+	Do ..TagAttributes.RemoveAt("CSPBIND")
+
+	// Cleanup CSP attributes
+	If (..IsDefined("CSPREQUIRED")) Do ..TagAttributes.RemoveAt("CSPREQUIRED")
+	If (..IsDefined("CSPVALID")) Do ..TagAttributes.RemoveAt("CSPVALID")
+	If (..IsDefined("CSPCAPTION")) Do ..TagAttributes.RemoveAt("CSPCAPTION")
+	If (..IsDefined("DELIMITER")) Do ..TagAttributes.RemoveAt("DELIMITER")
+</script>
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+
+<!-- CHECKBOX TAG --------------------------------------------- -->
+
+<csr:rule name="%CHECKBOX" match="form/*/input[cspbind,type=checkbox]" empty language="any">
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	New expr,test,name,el,info,list,num,value,i,pagelanguage,dot
+	Set pagelanguage=%compiler.PageLanguage
+	Set dot=$select(pagelanguage["mv":"->",1:".")
+
+	// set up correct attributes
+	If $get(%formobj)="" {
+		Set %statuscode=$$$ERROR($$$CSPNoForm,"input",..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+
+	Set name=..GetAttribute("NAME","%noname")
+	If name="%noname" {
+		Set %statuscode=$$$ERROR($$$CSPTagName,name,%form,..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+	
+	// Check that name used for CHECKBOX is only used for this CHECKBOX
+	Set num=0
+	For i=1:1:%formchildren {
+		Set el=%formchildren(i)
+		If (el.GetAttribute("NAME")=name) {
+			If ($zcvt(el.TagName,"U")="INPUT") && ($zcvt(el.GetAttribute("TYPE"),"U")="CHECKBOX") {
+				Set num=num+1
+			} Else {
+				Set %statuscode=$$$ERROR($$$CSPTagName,name,%form,..LineNumber)
+				Quit
+			}
+		}
+	}
+	If $$$ISERR(%statuscode) Do ##class(%csr.csp.FORM).cleanup() Quit
+
+	Set info = ##class(%CSP.DwxUtils).GetReferenceInfo(%formclass,..GetAttribute("CSPBIND"))
+	Set list = (info="LIST")
+	If (num>1) && ('list) {
+		Set %statuscode=$$$ERROR($$$CSPCheckboxNotList,..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+	
+	Set expr = ##class(%CSP.DwxUtils).GetValueExpression(%formclass,..GetAttribute("CSPBIND"),%formobj,,"L.Find(#-#)",pagelanguage)
+
+	Set value=$$QuoteCSP^%cspQuote(..GetAttribute("VALUE","on"))
+	If pagelanguage="basic" {
+ 		Set test="(%request.Find("""_name_""","_value_")<>"""")"
+	} ElseIf pagelanguage="mvbasic" {
+ 		Set test="(%request->Find('"_name_"',"_value_")<>'')"
+	} Else {
+ 		Set test="(%request.Find("""_name_""","_value_"))"
+	}
+	
+	If (expr="") {
+		If pagelanguage="mvbasic" {
+			Set expr="''"
+		} Else {
+		Set expr=""""""
+	}
+	}
+
+	If (expr'="") {
+		If pagelanguage="basic" {
+			Set test = test_" Or ((%request.Get("""_name_""")="""") And ("
+		} ElseIf pagelanguage="mvbasic" {
+			Set test = test_" Or ((%request->Get('"_name_"')='') And ("
+		} Else {
+			Set test = test_"||(($get(%request.Data("""_name_""",1))="""")&&("
+		}
+		If list {
+			Set test=test_$piece(expr,"#-#",1,$length(expr,"#-#")-1)_value_$piece(expr,"#-#",$length(expr,"#-#"))
+			If pagelanguage="basic" {
+				Set test=test_"<>""""))"
+			} ElseIf pagelanguage="mvbasic" {
+				Set test=test_"<>''))"
+			} Else {
+				Set test=test_"'=""""))"
+			}
+		} Else {
+			Set test = test_expr_"))"
+		}
+	}
+	If pagelanguage="basic" {
+		Set expr = "case(("_test_"),1:"" checked"_$select(%compiler.Get("%cspXHTML"):"=""""checked""""",1:"")_""",:"""")"
+	} ElseIf pagelanguage="mvbasic" {
+		Set expr = "IF ("_test_") THEN ' checked"_$select(%compiler.Get("%cspXHTML"):"=""""checked""""",1:"")_"' ELSE ''"
+	} Else {
+		Set expr = "$select("_test_":"" checked"_$select(%compiler.Get("%cspXHTML"):"=""""checked""""",1:"")_""",1:"""")"
+	}
+	
+	// Get rid of cspbind, set expression for CHECKED
+	Do ..TagAttributes.RemoveAt("CSPBIND")
+	Do ..TagAttributes.RemoveAt("CHECKED")
+	Do ..SetAttribute("#("_expr_")#")
+	
+	// Cleanup CSP attributes
+	If (..IsDefined("CSPREQUIRED")) Do ..TagAttributes.RemoveAt("CSPREQUIRED")
+	If (..IsDefined("CSPVALID")) Do ..TagAttributes.RemoveAt("CSPVALID")
+	If (..IsDefined("CSPCAPTION")) Do ..TagAttributes.RemoveAt("CSPCAPTION")
+	If (..IsDefined("DELIMITER")) Do ..TagAttributes.RemoveAt("DELIMITER")
+	If (..IsDefined("CSPNOTRIM")) Do ..TagAttributes.RemoveAt("CSPNOTRIM")
+</script>
+
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+<!-- RADIO TAG --------------------------------------------- -->
+
+<csr:rule name="%RADIO" match="form/*/input[cspbind,type=radio]" empty language="any">
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	// set up correct attributes
+	New expr,test,name,value,el,i,pagelanguage
+	Set pagelanguage=%compiler.PageLanguage
+
+	If $get(%formobj)="" {
+		Set %statuscode=$$$ERROR($$$CSPNoForm,"input",..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+
+	Set expr = ##class(%CSP.DwxUtils).GetValueExpression(%formclass,..GetAttribute("CSPBIND"),%formobj,,"S"_..GetAttribute("DELIMITER",","),pagelanguage)
+	Set name=..GetAttribute("NAME","%noname")
+	If name="%noname" {
+		Set %statuscode=$$$ERROR($$$CSPTagName,name,%form,..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+	
+	// Check that name used for RADIO is only used for this RADIO
+	For i=1:1:%formchildren {
+		Set el=%formchildren(i)
+		If (el.GetAttribute("NAME")=name) && (($zcvt(el.TagName,"U")'="INPUT")||($zcvt(el.GetAttribute("TYPE"),"U")'="RADIO")) {
+			Set %statuscode=$$$ERROR($$$CSPTagName,name,%form,..LineNumber)
+			Quit
+		}
+	}
+	If $$$ISERR(%statuscode) Do ##class(%csr.csp.FORM).cleanup() Quit
+
+	Set value=$$QuoteCSP^%cspQuote(..GetAttribute("VALUE","on"))
+	Set test=""
+	If name'="" {
+		If pagelanguage="basic" {
+			Set test="(%request.Get("""_name_""")="_value_") Or "
+		} ElseIf pagelanguage="mvbasic" {
+			Set test="(%request->Get('"_name_"')="_value_") Or "
+		} Else {
+			Set test="($get(%request.Data("""_name_""",1))="_value_")||"
+		}
+	}
+	
+	If (expr="") {
+		If pagelanguage="mvbasic" {
+			Set expr="''"
+		} Else {
+		Set expr=""""""
+	}
+	}
+
+	If pagelanguage="basic" {
+		Set test = test_"((%request.Get("""_name_"""))="""") And (("_expr_")="_value_"))"
+		Set expr = "case(("_test_"),1:"" checked"_$select(%compiler.Get("%cspXHTML"):"=""""checked""""",1:"")_""",:"""")"
+	} ElseIf pagelanguage="mvbasic" {
+		Set test = test_"((%request->Get('"_name_"'))='') And (("_expr_")="_value_"))"
+		Set expr = "IF ("_test_") THEN ' checked"_$select(%compiler.Get("%cspXHTML"):"=""""checked""""",1:"")_"' ELSE ''"
+	} Else {
+		Set test = test_"(($get(%request.Data("""_name_""",1))="""")&&(("_expr_")="_value_"))"
+		Set expr = "$select("_test_":"" checked"_$select(%compiler.Get("%cspXHTML"):"=""""checked""""",1:"")_""",1:"""")"
+	}
+	
+	// Get rid of cspbind, set expression for CHECKED
+	Do ..TagAttributes.RemoveAt("CSPBIND")
+	Do ..TagAttributes.RemoveAt("CHECKED")
+	Do ..SetAttribute("#("_expr_")#")
+	
+	// Cleanup CSP attributes
+	If (..IsDefined("CSPREQUIRED")) Do ..TagAttributes.RemoveAt("CSPREQUIRED")
+	If (..IsDefined("CSPVALID")) Do ..TagAttributes.RemoveAt("CSPVALID")
+	If (..IsDefined("CSPCAPTION")) Do ..TagAttributes.RemoveAt("CSPCAPTION")
+	If (..IsDefined("DELIMITER")) Do ..TagAttributes.RemoveAt("DELIMITER")
+	If (..IsDefined("CSPNOTRIM")) Do ..TagAttributes.RemoveAt("CSPNOTRIM")
+</script>
+
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+<!-- SELECT TAG --------------------------------------------- -->
+
+<csr:rule name="%MULTICHOICE" match="form/*/select[cspbind]" language="any">
+<csr:action>
+<script language="Cache" runat="compiler">
+	; set up correct attributes
+	New expr,expr2,count,el,i,test,req,noreq,value,name,multiple,info,list,num,
+	    pagelanguage,dot,or,and
+	Set pagelanguage=%compiler.PageLanguage
+	Set dot=$select(pagelanguage["mv":"->",1:".")
+
+	If $get(%formobj)="" {
+		Set %statuscode=$$$ERROR($$$CSPNoForm,"select",..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+
+	Set multiple=..IsDefined("MULTIPLE")
+	Set info = ##class(%CSP.DwxUtils).GetReferenceInfo(%formclass,..GetAttribute("CSPBIND"))
+	Set list = ((info="LIST") || (info="LISTOBJ"))
+	Set expr = ##class(%CSP.DwxUtils).GetValueExpression(%formclass,..GetAttribute("CSPBIND"),%formobj,,"L.Find(#-#)",pagelanguage)
+	Set name=..GetAttribute("NAME","%noname")
+	If name="%noname" {
+		Set %statuscode=$$$ERROR($$$CSPTagName,name,%form,..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+	
+	// Check for two SELECT tags with the same name
+	Set num=0
+	For i=1:1:%formchildren {
+		Set el=%formchildren(i)
+		If el.GetAttribute("NAME")=name Set num=num+1
+	}
+	If num>1 {
+		Set %statuscode=$$$ERROR($$$CSPTagName,name,%form,..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+
+	If multiple {
+		Set req="%request"_dot_"Find("""_name_""","
+	} else {
+		If pagelanguage="basic" {
+			Set req="%request.Get("""_name_""")"
+		} ElseIf pagelanguage="mvbasic" {
+			Set req="%request->Get('"_name_"')"
+		} Else {
+			Set req="$get(%request.Data("""_name_""",1))"
+		}
+	}
+	If pagelanguage="basic" {
+		Set noreq="(%request.IsDefined("""_name_"""))"
+		Set or=" Or "
+		Set and=" And "
+	} ElseIf pagelanguage="mvbasic" {
+		Set noreq="(%request->IsDefined('"_name_"'))"
+		Set or=" Or "
+		Set and=" And "
+	} Else {
+		Set noreq="'$data(%request.Data("""_name_"""))"
+		Set or="||"
+		Set and="&&"
+	}
+
+	; set SELECTED flag for correct option
+	Set count = ..Children.Count()
+	For i=1:1:count {
+		Set el = ..Children.GetAt(i)
+		If ((el.TagName'="")&&($zcvt(el.TagName,"U")="OPTION")) {
+			Set value=$$QuoteCSP^%cspQuote(el.GetAttribute("VALUE"))
+			If multiple {
+				If pagelanguage="basic" {
+					Set test="("_req_value_")<>"""")"
+				} ElseIf pagelanguage="mvbasic" {
+					Set test="("_req_value_")<>'')"
+				} Else {
+					Set test="("_req_value_"))"
+				}
+			} Else {
+				Set test="("_req_"="_value_")"
+			}
+			If (expr'="") {
+				If list {
+					Set test=test_or_"(("_noreq_")"_and_"("
+					Set test=test_$piece(expr,"#-#",1,$length(expr,"#-#")-1)_value_$piece(expr,"#-#",$length(expr,"#-#"))
+					If pagelanguage="basic" {
+						Set test=test_"<>""""))"
+					} ElseIf pagelanguage="mvbasic" {
+						Set test=test_"<>''))"
+					} Else {
+						Set test=test_"'=""""))"
+					}
+				} else {
+					Set test=test_or_"(("_noreq_")"_and_"("_expr_"="_value_"))"
+				}
+			}
+
+			If pagelanguage="basic" {
+				Set expr2 = "case(("_test_"),1:"" selected"_$select(%compiler.Get("%cspXHTML"):"=""""selected""""",1:"")_""",:"""")"
+			} ElseIf pagelanguage="mvbasic" {
+				Set expr2 = "IF ("_test_") THEN ' selected"_$select(%compiler.Get("%cspXHTML"):"=""""selected""""",1:"")_"' ELSE ''"
+			} Else {
+				Set expr2 = "$select("_test_":"" selected"_$select(%compiler.Get("%cspXHTML"):"=""""selected""""",1:"")_""",1:"""")"
+			}
+			Do el.TagAttributes.RemoveAt("SELECTED")
+			Do el.SetAttribute("#("_expr2_")#")
+		}
+	}
+
+	Do ..TagAttributes.RemoveAt("CSPBIND")
+	
+	// Cleanup CSP attributes
+	If (..IsDefined("CSPREQUIRED")) Do ..TagAttributes.RemoveAt("CSPREQUIRED")
+	If (..IsDefined("CSPVALID")) Do ..TagAttributes.RemoveAt("CSPVALID")
+	If (..IsDefined("CSPCAPTION")) Do ..TagAttributes.RemoveAt("CSPCAPTION")
+	If (..IsDefined("DELIMITER")) Do ..TagAttributes.RemoveAt("DELIMITER")
+	If (..IsDefined("CSPNOTRIM")) Do ..TagAttributes.RemoveAt("CSPNOTRIM")
+</script>
+
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+<!-- OPTION TAG WITHIN BOUND SELECT --------------------------------------------- -->
+<csr:rule name="%MULTICHOICEOPTION" match="form/*/select[cspbind]/option" empty language="any">
+<csr:action>
+<csr:default>
+</csr:action>
+</csr:rule>
+
+<!-- SELECT TAG --------------------------------------------- -->
+<!-- CLASSNAME is name of class containing query -->
+<!-- QUERY is name of query -->
+<!-- FIELD is name of column to display -->
+
+<csr:rule name="%SELECT" match="form/*/select[cspbind,query]" language="any">
+<csr:description>
+The <b>query</b> attribute associated with a <b>select cspbind</b> tag creates a 
+<b>%ResultSet</b> object based on the specified query that is defined within 
+a Cach&eacute; class from the <b>classname</b> attribute.
+The <b>%ResultSet</b> object is automatically executed (by calling its 
+<b>Execute</b> method using the parameter values given by the various
+<i>Pn</i> attributes of the tag) and is used to populate the option
+list from the property given by the <b>fields</b> attribute.
+The <i>DefaultText</i> attribute specifies the text to use for the default
+option that is generated for a property that is not required.
+</csr:description>
+<csr:attribute name=ClassName description="The class from which values will be obtained to fill a select list." type="Name:STRING" >
+<csr:attribute name=Query description="The query to be run to fill a select list. Must be present if field or classname is present." type="Name:STRING" >
+<csr:attribute name=Field description="The property of the class specified by classname whose values will appear in the select list." type="Name:STRING" >
+<csr:attribute name=cspbind description="The name of the object property to be bound." type="Name:STRING" >
+<csr:attribute name=DefaultText description="The text to use for the default option that is generated for a non-list property that is not required." type="String:STRING" >
+<csr:action>
+<script language=cache runat=compiler>
+	If $get(%formobj)="" {
+		Set %statuscode=$$$ERROR($$$CSPNoForm,"select",..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+
+	New seltest,fldcode,cspfldcode,jsfldcode,fld,i,sep,jssep,key,args,max,name,
+	    req,noreq,multiple,list,info,expr,num,el,mode,
+	    methodname,handle,select,methoderror,query,cspbind,csprequired,
+	    pagelanguage,dot,or,and,linesOut
+	Set pagelanguage=%compiler.PageLanguage
+	Set dot=$select(pagelanguage["mv":"->",1:".")
+
+	Set name=..GetAttribute("NAME","%noname")
+	If name="%noname" {
+		Set %statuscode=$$$ERROR($$$CSPTagName,name,%form,..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+	
+	// Check for two SELECT tags with the same name
+	Set num=0
+	For i=1:1:%formchildren {
+		Set el=%formchildren(i)
+		If el.GetAttribute("NAME")=name Set num=num+1
+	}
+	If num>1 {
+		Set %statuscode=$$$ERROR($$$CSPTagName,name,%form,..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+
+	// test and convert runtime mode.
+	Do ..SetAttribute("mode",$zcvt(..GetAttribute("MODE","DISPLAY"),"U"))
+	If ..GetAttribute("MODE")="LOGICAL" {
+		Set mode=0
+	}
+	ElseIf ..GetAttribute("MODE")="ODBC" {
+		Set mode=1
+	}
+	ElseIf ..GetAttribute("MODE")="DISPLAY" {
+		Set mode=2
+	}
+	ElseIf ..GetAttribute("MODE")="SYSTEM" {
+		Set mode=""
+	}
+	Else {
+		Set %statuscode=$$$ERROR($$$CSPSQLInvalidMode,..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+	
+	// Save attributes
+	Set csprequired=..IsDefined("CSPREQUIRED")
+	Set query=$$QuoteCSP^%cspQuote(
+		..GetAttribute("CLASSNAME",%formobj)_"."_..GetAttribute("QUERY","Extent"))
+	Set cspbind=..GetAttribute("CSPBIND")
+	// SEPARATOR contains a column-separator string
+	Set sep = ..GetAttribute("SEPARATOR","&nbsp;&nbsp;")
+	// FIELD contains a comma-delimited list of fields
+	Set fld = ..GetAttribute("FIELD","ID")
+	
+	Set multiple=..IsDefined("MULTIPLE")
+	If multiple {
+		Set req="%request"_dot_"Find("""_name_""","
+	} else {
+		If pagelanguage="basic" {
+			Set req="%request.Get("""_name_""")"
+		} ElseIf pagelanguage="mvbasic" {
+			Set req="%request->Get('"_name_"')"
+		} Else {
+			Set req="$get(%request.Data("""_name_""",1))"
+		}
+	}
+	If pagelanguage="basic" {
+		Set noreq="(Not %request.IsDefined("""_name_"""))"
+		Set or=" Or "
+		Set and=" And "
+	} ElseIf pagelanguage="mvbasic" {
+		Set noreq="(Not %request->IsDefined('"_name_"'))"
+		Set or=" Or "
+		Set and=" And "
+	} Else {
+		Set noreq="'$data(%request.Data("""_name_"""))"
+		Set or="||"
+		Set and="&&"
+	}
+
+	Set info = ##class(%CSP.DwxUtils).GetReferenceInfo(%formclass,cspbind)
+	If info="PERSISTENT" {
+		Set list=0
+	} ElseIf info="LISTOBJ" {
+		Set list=1
+	} Else {
+		Set %statuscode=$$$ERROR($$$CSPSelectOref,..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+	
+	//-----------------------------------------------------------------------------------------
+	// build argument list for Execute; stuff it into args variable
+	
+	Set key = "P"
+	Set max = 0
+	Set args = ""
+	Do ..TagAttributes.GetNext(.key)
+	While ((key'="")&&($E(key,1,1)="P")) {
+		Set num = +$E(key,2,$L(key))
+		If (num > max) { 
+			Set max = num
+		}
+		Do ..TagAttributes.GetNext(.key)
+	}
+	For i=1:1:max {
+		Set args = args_$S(i>1:",",1:"")_$$QuoteCSP^%cspQuote(..GetAttribute("P"_i))
+		Do ..TagAttributes.RemoveAt("P"_i)
+	}
+	
+	Set jssep = $tr(##class(%CSP.Page).UnescapeHTML(sep),$char(160)," ")
+	
+	Set (fldcode,cspfldcode,jsfldcode) = ""
+	For i=1:1:$L(fld,",") {
+		Set fldcode = fldcode _ $S(fldcode="":"",1:","""_sep_""",") _ "$$$HTMLENCODE(rs"_dot_"Get("""_$P(fld,",",i)_"""))"
+		If pagelanguage="basic" {
+			Set cspfldcode = cspfldcode _ $select(cspfldcode="":"",1:"&"""_sep_"""&") _ "me.EscapeHTML(%csprs.Get("""_$piece(fld,",",i)_"""))"
+		} ElseIf pagelanguage="mvbasic" {
+			Set cspfldcode = cspfldcode _ $select(cspfldcode="":"",1:":'"_sep_"':") _ """%CSP.Page""->EscapeHTML(%csprs->Get('"_$piece(fld,",",i)_"'))"
+		} Else {
+			Set cspfldcode = cspfldcode _ $select(cspfldcode="":"",1:","""_sep_""",") _ "$$$HTMLENCODE(%csprs.Get("""_$piece(fld,",",i)_"""))"
+		}
+		Set jsfldcode = jsfldcode _ $S(jsfldcode="":"",1:"_"""_jssep_"""_") _ "rs.Get("""_$P(fld,",",i)_""")"
+	}
+
+	//-----------------------------------------------------------------------------------------
+	// Create server method to refresh select list
+
+	Set methodname = %form_"Refresh"_name
+	Set methoderror=""
+	If ($length(methodname)>31) {
+		Set methoderror=$c(13,10)_"<br><b>The name of this method was truncated from "_methodname_"</b>"
+		Set methodname=$extract(methodname,1,31)
+	}
+	Set handle = %compiler.Get("%classhandle")
+	Set select = "CSPPage.document."_%form_"."_name
+	Set linesOut=0
+	$$$cspStartMethodImplementation(handle,methodname)
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	New rs,i,idcol,sel,val")
+
+	// make alias for select list
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""var select = "_select_";"",!")
+
+	// clear out select list
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""select.options.length = 0;"",!")
+
+	// write out 'null' choice
+	if 'csprequired && (info'="LISTOBJ") {
+		$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Write ""select.options[select.options.length] = new CSPPage.Option(""_..QuoteJS(defaultText)_"",'');"",!")
+	}
+	
+	// fill in list from query
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Set rs=##class(%ResultSet).%New("_query_")")
+	If mode'="" $$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Set rs.RuntimeMode="_mode)
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Do rs.Execute("_args_")")
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Set idcol=rs.ContainsId()")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	While (rs.Next()) {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Set val=$select(idcol'=0:rs.GetData(idcol),1:rs.Get(""ID""))")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		If $data(id)=1 {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set sel=(val=id)")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		} Else {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set sel=0")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			Set i=$order(id(""""))")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			While (i'="""")&&'sel {")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"				Set sel=(val=id(i))")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"				Set i=$order(id(i))")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"			}")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		}")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		Write ""select.options[select.options.length] = new CSPPage.Option("",..QuoteJS("_jsfldcode_"),"".replace(/\s+/g,' '),"",..QuoteJS(val),"");"",!")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"		If sel Write ""select.options[select.options.length-1].selected = true;"",!")
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	}")
+
+	$$$cspAddMethodLine(handle,methodname,$i(linesOut),"	Quit """"")
+
+	$$$cspFinishMethodImplementation(handle,methodname,linesOut)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHlanguage,"cache")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+	if info="LISTOBJ" {
+		Do SetMethod^%apiCDL(handle,methodname,$$$cMETHformalspec,"id:%String=""""")
+	} Else {
+		Do SetMethod^%apiCDL(handle,methodname,$$$cMETHformalspec,"id:%String="""",defaultText:%String=""""")
+	}
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHreturntype,"%String")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHclassmethod,1)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHdescription,"Server-side method that, when called from the browser, will refresh the contents of select box <var>"_name_"</var> within form <var>"_%form_"</var>."_methoderror)
+
+	//-----------------------------------------------------------------------------------------
+	// Cleanup CSP attributes
+	
+	If (..IsDefined("CSPREQUIRED")) Do ..TagAttributes.RemoveAt("CSPREQUIRED")
+	If (..IsDefined("CSPVALID")) Do ..TagAttributes.RemoveAt("CSPVALID")
+	If (..IsDefined("CSPCAPTION")) Do ..TagAttributes.RemoveAt("CSPCAPTION")
+	If (..IsDefined("DELIMITER")) Do ..TagAttributes.RemoveAt("DELIMITER")
+	If (..IsDefined("CSPNOTRIM")) Do ..TagAttributes.RemoveAt("CSPNOTRIM")
+	If (..IsDefined("CLASSNAME")) Do ..TagAttributes.RemoveAt("CLASSNAME")
+	If (..IsDefined("FIELD")) Do ..TagAttributes.RemoveAt("FIELD")
+	If (..IsDefined("SEPARATOR")) Do ..TagAttributes.RemoveAt("SEPARATOR")
+	If (..IsDefined("MODE")) Do ..TagAttributes.RemoveAt("MODE")
+	Do ..TagAttributes.RemoveAt("QUERY")
+	Do ..TagAttributes.RemoveAt("CSPBIND")
+	
+	//-----------------------------------------------------------------------------------------
+	// Generate code to output the option tags
+	
+	Set expr = ##class(%CSP.DwxUtils).GetValueExpression(%formclass,cspbind,%formobj,,"L.FindObjectId(%cspval)",pagelanguage)
+
+	; Write start tag before options
+	Do ..RenderDefaultStartTag()
+	
+	If pagelanguage="basic" {
+		Do ..WriteServer(" %csprs= New %ResultSet("_query_")")
+	} ElseIf pagelanguage="mvbasic" {
+		Do ..WriteServer(" %csprs= ""%ResultSet""->%New("_query_")")
+	} Else {
+		Do ..WriteServer("	Set %csprs=##class(%ResultSet).%New("_query_")")
+	}
+	If mode'="" {
+		Do ..WriteServer($select(pagelanguage["basic":"",1:"	Set")_" %csprs"_dot_"RuntimeMode="_mode)
+	}
+
+	// code to write out 'null' selection unless CSPREQUIRED or list of objects
+	if 'csprequired && (info'="LISTOBJ") {
+		If pagelanguage="basic" {
+			Do ..WriteServer(" PrintLn")
+			Do ..WriteServer(" PrintLn ""<option "" & case("_%formobj_","""":"""",:case("_%formobj_"."_cspbind_"GetObjectId(),"""":""selected"_$select(%compiler.Get("%cspXHTML"):"=""""selected""""",1:"")_" "",:"""")) & ""value="""""""">"" & me.EscapeHTML("_..QuoteAttribute("DefaultText")_")"_$select(%compiler.Get("%cspXHTML"):" & ""</option>""",1:""))
+		} ElseIf pagelanguage="mvbasic" {
+			Do ..WriteServer(" Print")
+			Do ..WriteServer(" Print '<option ' : ( IF "_%formobj_"='' THEN '' ELSE ( IF "_%formobj_"->"_cspbind_"GetObjectId()='' THEN 'selected"_$select(%compiler.Get("%cspXHTML"):"=""""selected""""",1:"")_" ' ELSE '')) : 'value="""""""">' : ""%CSP.Page""->EscapeHTML("_..QuoteAttribute("DefaultText")_")"_$select(%compiler.Get("%cspXHTML"):":'</option>'",1:""))
+		} Else {
+			Do ..WriteServer("	Write !,""<option "",$S("_%formobj_"="""":"""",1:$select("_%formobj_"."_cspbind_"GetObjectId()="""":""selected"_$select(%compiler.Get("%cspXHTML"):"=""""selected""""",1:"")_" "",1:"""")),""value="""""""">"",$$$HTMLENCODE("_..QuoteAttribute("DefaultText")_")"_$select(%compiler.Get("%cspXHTML"):",""</option>""",1:"")_",!")
+		}
+	}
+
+	// get expression to get current value
+	If multiple {
+		If pagelanguage="basic" {
+			Set seltest="("_req_"%cspval)<>"""")"
+		} ElseIf pagelanguage="mvbasic" {
+			Set seltest="("_req_"%cspval)<>'')"
+		} Else {
+			Set seltest="("_req_"%cspval))"
+		}
+	} else {
+		Set seltest="("_req_"=%cspval)"
+	}
+			
+	If (cspbind="%Id()") {
+		Set seltest = seltest_or_"(("_noreq_")"_and_"("_%formobj_".%Id()=%cspval))"
+	}
+	Else {
+		If list {
+			If (expr'="") {
+				Set seltest=seltest_or_"(("_noreq_")"_and_"("
+				If pagelanguage="basic" {
+					Set seltest=seltest_$select(list:expr_"<>""""",1:expr_"=%cspval")
+				} ElseIf pagelanguage="mvbasic" {
+					Set seltest=seltest_$select(list:expr_"<>''",1:expr_"=%cspval")
+				} Else {
+					Set seltest=seltest_$select(list:expr_"'=""""",1:expr_"=%cspval")
+				}
+				Set seltest=seltest_"))"
+			}
+		} else {
+			If (expr'="") {
+				Set seltest=seltest_or_"(("_noreq_")"_and_"("_expr_"=%cspval))"
+			}
+		}
+	}
+
+	If pagelanguage="basic" {
+		Set seltest = "case(("_seltest_"),1:"" selected"_$select(%compiler.Get("%cspXHTML"):"=""""selected""""",1:"")_" "",:"""")"
+		Do ..WriteServer(" %cspsc=%csprs.Execute("_args_")")
+		Do ..WriteServer(" If System.Status.IsError(%cspsc) Then") 
+		Do ..WriteServer("    Print ""</select><br"_$select(%compiler.Get("%cspXHTML"):"/",1:"")_">""")
+		Do ..WriteServer("    me.ShowError(%cspsc)")
+		Do ..WriteServer(" Else")
+		Do ..WriteServer("    %cspidcol=%csprs.ContainsId()")
+		Do ..WriteServer("    While (%csprs.Next())")
+		Do ..WriteServer("       %cspval=case(%cspidcol,0:%csprs.Get(""ID""),:%csprs.GetData(%cspidcol))")
+		Do ..WriteServer("       PrintLn ""<option ""& case("_%formobj_","""":"""",:"_seltest_") & ""value=""""""&me.EscapeHTML(%cspval)&"""""">""&"_cspfldcode_$select(%compiler.Get("%cspXHTML"):" & ""</option>""",1:""))
+		Do ..WriteServer("    Wend")
+		Do ..WriteServer(" End If")
+		Do ..WriteServer(" Erase %csprs,%cspsc,%cspidcol,%cspval")
+	} ElseIf pagelanguage="mvbasic" {
+		Set seltest = "IF ("_seltest_") THEN "" selected"_$select(%compiler.Get("%cspXHTML"):"='selected'",1:"")_" "" ELSE ''"
+		Do ..WriteServer(" %cspsc=%csprs->Execute("_args_")")
+		Do ..WriteServer(" If ""%SYSTEM.Status""->IsError(%cspsc) Then") 
+		Do ..WriteServer("    Print '</select><br"_$select(%compiler.Get("%cspXHTML"):"/",1:"")_">':")
+		Do ..WriteServer("    ""%CSP.Page""->ShowError(%cspsc)")
+		Do ..WriteServer(" End Else")
+		Do ..WriteServer("    %cspidcol=%csprs->ContainsId()")
+		Do ..WriteServer("    LOOP")
+		Do ..WriteServer("    WHILE (%csprs.Next()) DO")
+		Do ..WriteServer("       %cspval=IF %cspidcol=0 THEN %csprs->Get('ID') ELSE %csprs->GetData(%cspidcol)")
+		Do ..WriteServer("       Print '<option ': ( IF "_%formobj_"='' THEN '' ELSE "_seltest_") : 'value=""""':""%CSP.Page""->EscapeHTML(%cspval):'"""">':"_cspfldcode_$select(%compiler.Get("%cspXHTML"):":'</option>'",1:""))
+		Do ..WriteServer("    REPEAT")
+		Do ..WriteServer(" End")
+		Do ..WriteServer(" !!! Erase %csprs,%cspsc,%cspidcol,%cspval")
+	} Else {
+		Set seltest = "$S("_seltest_":"" selected"_$select(%compiler.Get("%cspXHTML"):"=""""selected""""",1:"")_" "",1:"""")"
+		Do ..WriteServer("	Set %cspsc=%csprs.Execute("_args_")")
+		Do ..WriteServer("	If '+%cspsc {")
+		Do ..WriteServer("		Write ""</select><br"_$select(%compiler.Get("%cspXHTML"):"/",1:"")_">""")
+		Do ..WriteServer("		Do ..ShowError(%cspsc)")
+		Do ..WriteServer("	} else {")
+		Do ..WriteServer("		Set %cspidcol=%csprs.ContainsId()")
+		Do ..WriteServer("		While (%csprs.Next()) {")
+		Do ..WriteServer("			Set %cspval=$select(%cspidcol'=0:%csprs.GetData(%cspidcol),1:%csprs.Get(""ID""))")
+		Do ..WriteServer("			Write ""<option "",")
+		Do ..WriteServer("				$select("_%formobj_"="""":"""",1:"_seltest_"),")
+		Do ..WriteServer("				""value="""""",$$$HTMLENCODE(%cspval),"""""">"","_cspfldcode_$select(%compiler.Get("%cspXHTML"):",""</option>""",1:"")_",!")
+		Do ..WriteServer("		}")
+		Do ..WriteServer("	}")
+		Do ..WriteServer("	Kill %csprs,%cspsc,%cspidcol,%cspval")
+	}
+	
+	; Write end tag after options
+	Do ..RenderDefaultEndTag()
+	
+</script>
+
+</csr:action>
+</csr:rule>
+
+<!-- TEXTAREA TAG --------------------------------------------- -->
+<!-- CSPBIND is name of character stream property to display -->
+
+<csr:rule name="%TEXTAREA" match="form/*/textarea[cspbind]" language="any">
+<csr:action>
+<script language=cache runat=compiler>
+	If $get(%formobj)="" {
+		Set %statuscode=$$$ERROR($$$CSPNoForm,"textarea",..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+
+	; Define code to render inner text for this tag
+	New expr
+	Set expr = ##class(%CSP.DwxUtils).GetValueExpression(%formclass,..GetAttribute("CSPBIND"),%formobj,,"S"_..GetAttribute("DELIMITER"),%compiler.PageLanguage)
+ 
+	// Cleanup CSP attributes
+	If (..IsDefined("CSPREQUIRED")) Do ..TagAttributes.RemoveAt("CSPREQUIRED")
+	If (..IsDefined("CSPVALID")) Do ..TagAttributes.RemoveAt("CSPVALID")
+	If (..IsDefined("CSPCAPTION")) Do ..TagAttributes.RemoveAt("CSPCAPTION")
+	If (..IsDefined("DELIMITER")) Do ..TagAttributes.RemoveAt("DELIMITER")
+	If (..IsDefined("CSPNOTRIM")) Do ..TagAttributes.RemoveAt("CSPNOTRIM")
+	Do ..TagAttributes.RemoveAt("CSPBIND")
+	
+	; Write start tag before text
+	Do ..RenderDefaultStartTag()
+
+	If %compiler.PageLanguage="basic" {	
+		Do ..WriteServer(" Print case(%request.IsDefined("""_..GetAttribute("NAME")_"""),1:me.EscapeHTML(%request.Get("""_..GetAttribute("NAME")_""")):,"_$select(expr="":"""""",1:"me.EscapeHTML("_expr_")")_")")
+	} ElseIf %compiler.PageLanguage="mvbasic" {	
+		Do ..WriteServer(" Print (IF %request->IsDefined('"_..GetAttribute("NAME")_"')=1 THEN ""%CSP.Page""->EscapeHTML(%request->Get('"_..GetAttribute("NAME")_"')) ELSE "_$select(expr="":"''",1:"""%CSP.Page""->EscapeHTML("_expr_")")_")")
+	} Else {
+		Do ..WriteServer("	Write $select($data(%request.Data("""_..GetAttribute("NAME")_""",1)):$$$HTMLENCODE(%request.Data("""_..GetAttribute("NAME")_""",1)),1:"_$select(expr="":"""""",1:"$$$HTMLENCODE("_expr_")")_")")
+	}
+
+	; Write end tag after text
+	Do ..RenderDefaultEndTag()
+	
+</script>
+
+</csr:action>
+</csr:rule>
+
+<!-- IMG TAG --------------------------------------------- -->
+<!-- CSPBIND is name of binary stream property to display -->
+
+<csr:rule name="%IMG" match="form/*/img[cspbind]" empty language="any">
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	// set up correct attributes
+	New expr
+	If $get(%formobj)="" {
+		Set %statuscode=$$$ERROR($$$CSPNoForm,"img",..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+
+	Set expr = ##class(%CSP.DwxUtils).GetValueExpression(%formclass,..GetAttribute("CSPBIND"),%formobj,,,%compiler.PageLanguage)
+
+	// Get rid of cspbind, set expression for SRC to refer to %CSP.StreamServer
+	Do ..TagAttributes.RemoveAt("CSPBIND")
+	Do ..SetAttribute("src",$select(expr'="":"_CSP.StreamServer.cls?STREAMOID=#("_
+			$case(%compiler.PageLanguage,"basic":"me.Encrypt(","mvbasic":"""%CSP.Page""->Encrypt(",:"$$$cspEncode(%session.Key,")_expr_"))#",1:""))
+	
+	// Cleanup CSP attributes
+	If (..IsDefined("CSPREQUIRED")) Do ..TagAttributes.RemoveAt("CSPREQUIRED")
+	If (..IsDefined("CSPVALID")) Do ..TagAttributes.RemoveAt("CSPVALID")
+	If (..IsDefined("CSPCAPTION")) Do ..TagAttributes.RemoveAt("CSPCAPTION")
+	If (..IsDefined("DELIMITER")) Do ..TagAttributes.RemoveAt("DELIMITER")
+	If (..IsDefined("CSPNOTRIM")) Do ..TagAttributes.RemoveAt("CSPNOTRIM")
+</script>
+
+<csr:default>
+
+</csr:action>
+</csr:rule>
+
+<!-- IMAGE TAG --------------------------------------------- -->
+<!-- CSPBIND is name of binary stream property to display -->
+<!-- THIS IS A COPY OF IMG RULE -->
+
+<csr:rule name="%IMAGE" match="form/*/image[cspbind]" empty language="any">
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	// set up correct attributes
+	New expr
+	If $get(%formobj)="" {
+		Set %statuscode=$$$ERROR($$$CSPNoForm,"image",..LineNumber)
+		Do ##class(%csr.csp.FORM).cleanup()
+		Quit
+	}
+
+	Set expr = ##class(%CSP.DwxUtils).GetValueExpression(%formclass,..GetAttribute("CSPBIND"),%formobj,,,%compiler.PageLanguage)
+
+	// Get rid of cspbind, set expression for SRC to refer to %CSP.StreamServer
+	Do ..TagAttributes.RemoveAt("CSPBIND")
+	Do ..SetAttribute("src",$select(expr'="":"_CSP.StreamServer.cls?STREAMOID=#("_
+			$case(%compiler.PageLanguage,"basic":"me.Encrypt(","mvbasic":"""%CSP.Page""->Encrypt(",:"$$$cspEncode(%session.Key,")_expr_"))#",1:""))
+	
+	// Cleanup CSP attributes
+	If (..IsDefined("CSPREQUIRED")) Do ..TagAttributes.RemoveAt("CSPREQUIRED")
+	If (..IsDefined("CSPVALID")) Do ..TagAttributes.RemoveAt("CSPVALID")
+	If (..IsDefined("CSPCAPTION")) Do ..TagAttributes.RemoveAt("CSPCAPTION")
+	If (..IsDefined("DELIMITER")) Do ..TagAttributes.RemoveAt("DELIMITER")
+	If (..IsDefined("CSPNOTRIM")) Do ..TagAttributes.RemoveAt("CSPNOTRIM")
+</script>
+
+<csr:default>
+
+</csr:action>
+</csr:rule>
+

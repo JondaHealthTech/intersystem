@@ -1,0 +1,37 @@
+<!--
+Workflow: Workflow contents
+-->
+
+<AutoPage domain="Ensemble" pagename="Worklist Browser" parentpage="WFHome.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Current Workflow Contents</Text>
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>The table below shows the current contents of the entire workflow worklist.</Text>
+	<Query>EnsLib.Workflow.Engine:Worklist</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>false</ShowZebra>
+	<ShowRowNumbers>true</ShowRowNumbers>
+	<AutoRefresh>true</AutoRefresh>
+
+
+	<Conditions>
+		<!-- assigned -->
+		<Condition>
+			<ColumnName>AssignedTo</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>{UserName}</Value>
+			<RowStyle>background: #AAAAFF;</RowStyle>
+		</Condition>
+
+	</Conditions>
+
+</Pane>
+
+<Pane name="Info" type="EnsLib.Workflow.UI.ItemDetailPane">
+	<FrameStyle>none</FrameStyle>
+</Pane>
+
+</AutoPage>

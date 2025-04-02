@@ -1,0 +1,765 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>InterSystems.Data.XEP</name>
+    </assembly>
+    <members>
+        <member name="T:InterSystems.XEP.Attributes.Embedded">
+            <summary>
+            Embedded attribute
+            </summary>
+        </member>
+        <member name="T:InterSystems.XEP.Attributes.Id">
+            <summary>
+            Id Attribute
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Attributes.Id.generated">
+            <summary>
+            System generated flag
+            </summary>
+        </member>
+        <member name="T:InterSystems.XEP.Attributes.Index">
+            <summary>
+            Index Attribute
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Attributes.Index.name">
+            <summary>
+            Index name
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Attributes.Index.fields">
+            <summary>
+            Index fields
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Attributes.Index.type">
+            <summary>
+            Index type
+            </summary>
+        </member>
+        <member name="T:InterSystems.XEP.Attributes.IndexType">
+            <summary>
+            IndexType attribute
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Attributes.IndexType.none">
+            <summary>
+            no index
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Attributes.IndexType.bitmap">
+            <summary>
+            bitmap index
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Attributes.IndexType.bitslice">
+            <summary>
+            bitslice index
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Attributes.IndexType.simple">
+            <summary>
+            simple index
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Attributes.IndexType.idkey">
+            <summary>
+            (compound) idkey
+            </summary>
+        </member>
+        <member name="T:InterSystems.XEP.Attributes.Serialized">
+            <summary>
+            Serialized attribute
+            </summary>
+        </member>
+        <member name="T:InterSystems.XEP.Attributes.Transient">
+            <summary>
+            Transient attribute
+            </summary>
+        </member>
+        <member name="T:InterSystems.XEP.Event">
+            <summary><CODE>Event</CODE> provides methods that operate on XEP Events
+            (storing events, creating a query, setting a filter, indexing etc)
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Event.INDEX_MODE_ASYNC_ON">
+            <summary>
+            Set this option to turn asynchronous indexing on (default option).
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Event.INDEX_MODE_ASYNC_OFF">
+            <summary>
+            Set this option to turn asynchronous indexing on (default option).
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Event.INDEX_MODE_SYNC">
+            <summary>
+            Set this option to use synchronous indexing.
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Event.INDEX_MODE_DEFAULT">
+            <summary>
+            Set this option to use default indexing.
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Event.INDEX_MODE_DEFERRED">
+            <summary>
+            Set this option to use deferred indexing.
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.Event.INDEX_MODE_IMMEDIATE">
+            <summary>
+            Set this option to use immediate indexing.
+            </summary>
+        </member>
+        <member name="M:InterSystems.XEP.Event.GetIndexMode">
+            <summary>
+            Retrieves index mode of this event
+            </summary>
+            <returns>int representing enum indicating index mode </returns>
+        </member>
+        <member name="M:InterSystems.XEP.Event.Close">
+            <summary>Releases all resources held by this event</summary>
+        </member>
+        <member name="M:InterSystems.XEP.Event.Store(System.Object)">
+            <summary>Stores the C# object.</summary>
+            <param name="obj">C# object to be saved</param>
+            <returns> long database id of the newly inserted object,
+            or 0 (zero) if the database id could not be returned 
+            or does not apply (for example if composite IDKEYs are used)
+            NOTE: For performance reasons the TCP/IP version will always 
+            return 0
+            </returns>
+        </member>
+        <member name="M:InterSystems.XEP.Event.Store(System.Object[])">
+            <summary>Stores the C# objects.</summary>
+            <param name="objects">list C# object to be saved</param>
+        </member>
+        <member name="M:InterSystems.XEP.Event.CreateQuery``1(System.String)">
+            <summary>
+            Create an instance of EventQuery.
+            </summary>
+            <param name="sqlText">SQL query text</param>
+            <returns>An instance of EventQuery</returns>
+        </member>
+        <member name="M:InterSystems.XEP.Event.GetObject(System.String)">
+            <summary>Retrieves an object given its database id.
+            Returns null if no object with this id exists.</summary>
+            <param name="id">database id</param>
+            <returns> Object an event object</returns>
+        </member>
+        <member name="M:InterSystems.XEP.Event.GetObject(System.Int64)">
+            <summary>Retrieves an object given its database id.
+            Returns null if no object with this id exists.</summary>
+            <param name="id">database id</param>
+            <returns> Object an event object</returns>
+        </member>
+        <member name="M:InterSystems.XEP.Event.UpdateObject(System.Int64,System.Object)">
+            <summary>Updates an existing object given its database id.</summary>
+            <param name="id">database id</param>
+            <param name="obj">new object</param>
+        </member>
+        <member name="M:InterSystems.XEP.Event.DeleteObject(System.Int64)">
+            <summary>Deletes an object given its database id.</summary>
+            <param name="id">database id</param>
+        </member>
+        <member name="M:InterSystems.XEP.Event.GetObject(System.String[])">
+            <summary>Gets an object given its IDKEYs.</summary>
+            <param name="idkeys">composite IDKEY</param>
+        </member>
+        <member name="M:InterSystems.XEP.Event.UpdateObject(System.Object[],System.Object)">
+            <summary>Updates an object given its IDKEYs.</summary>
+            <param name="idkeys">composite IDKEY</param>
+            <param name="obj">object to update</param>
+        </member>
+        <member name="M:InterSystems.XEP.Event.DeleteObject(System.Object[])">
+            <summary>Deletes an object given its IDKEYs.</summary>
+            <param name="idkeys">composite IDKEY</param>
+        </member>
+        <member name="M:InterSystems.XEP.Event.IsEvent(System.Object)">
+            <summary>Checks whether an object (or class) is an event in the XEP sense</summary>
+            <param name="objectOrClass">C# object or class object</param>
+        </member>
+        <member name="M:InterSystems.XEP.Event.StartIndexing">
+            <summary>Start populating indexes asynchronously. This method will throw 
+            an exception if called on an event created with INDEX_MODE_SYNC index mode.
+            No-op
+            </summary>
+        </member>
+        <member name="M:InterSystems.XEP.Event.StopIndexing">
+            <summary>Stop populating indexes asynchronously. This method will throw 
+            an exception if called on an event created with INDEX_MODE_SYNC index mode.
+            No-op
+            </summary>
+        </member>
+        <member name="M:InterSystems.XEP.Event.WaitForIndexing(System.Int32)">
+            <summary>Wait for asynchronous indexing to be completed for this class.
+            If timeout is -1, wait forever or until indexing completes, else
+            timeout after the specified number of seconds, returning false if indexing has
+            not completed.  If timeout is 0, immediately return true if indexing has
+            completed or false if it has not. This method will throw  an exception if 
+            called on an event created with INDEX_MODE_SYNC index mode.
+            
+            In ECP configurations, this method applies only to indexing of objects inserted
+            via the current App Server.
+            
+            </summary>
+            <param name="timeout">Seconds to wait before timing out, -1 for no timeout (wait forever)
+            </param>
+            <returns> true if indexing has completed, false if timed out before indexed completed
+            </returns>
+        </member>
+        <member name="M:InterSystems.XEP.Event.ParallelStore(System.Object[],System.Int32)">
+             <summary>Stores an array of C# objects taking advantage of concurrent
+             utilities for potential insert performance speedup. It is important to note
+             that the potential speedup would result from taking advantage of multiple 
+             threads/cores to serialize the data. Once the data is serialized, the rest
+             of the store process will be equally I/O bound as the ordinary version of 
+             store. This method should be used only on multi-core machines. It is recommended
+             that the non-parallel version of store is used to get the baseline insert
+             rate numbers. Whether ParallelStore performs better depends on the particular 
+             environment. Once the base line is obtained, and the number of cores is
+             retrieved (for example by calling Environment.ProcessorCount, 
+             it might be a good idea to experiment with different splitFactors to see if 
+             using ParallelStore will result in performance boost. 
+             Please note that unlike the regular version, ParallelStore does not 
+             (for performance reasons) return the ids of all the objects that were inserted.
+             splitFactor should always be greater than 2; otherwise regular Store method will
+             be utilized. 
+            
+             IMPORTANT NOTES: True parallel version (utilizing DotNet 4.0 concurrent libraries
+                              is only available for DotNet 4.0+). Prior versions will simply
+                              call the regular Store method.
+                              This method should only be used when no other threading either at
+                              the application, or at the XEP level is used.
+            </summary>
+             <param name="objects">array of C# objects to be saved</param>
+             <param name="splitFactor"> number of parallel tasks used to serialize the data</param>
+        </member>
+        <member name="T:InterSystems.XEP.EventPersister">
+            <summary><c>EventPersister</c> is the main entry point for the XEP module.
+            It provides methods that can be used to set XEP options up, establish an XEP
+            connection, import schema, produce XEP <c>Event</c> objects, get an Ado.NET
+            connection sharing the same process space. It also provides methods to control
+            transactions and perform other tasks.
+            
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.EventPersister.FETCH_LEVEL_ALL">
+            <summary>
+            Set this option to fetch all data (default option).
+            </summary>
+        </member>
+        <member name="F:InterSystems.XEP.EventPersister.FETCH_LEVEL_DATATYPES_ONLY">
+            <summary>
+             Set this option to fetch only datatype data. Arrays, object types and collections will not be fetched.
+             </summary>
+        </member>
+        <member name="F:InterSystems.XEP.EventPersister.FETCH_LEVEL_NO_ARRAY_TYPES">
+            <summary>
+             Set this option to fetch all data except arrays.
+             </summary>
+        </member>
+        <member name="F:InterSystems.XEP.EventPersister.FETCH_LEVEL_NO_OBJECT_TYPES">
+            <summary>
+             Set this option to fetch all non-object data.
+             </summary>
+        </member>
+        <member name="F:InterSystems.XEP.EventPersister.FETCH_LEVEL_NO_COLLECTIONS">
+            <summary>
+             Set this option to fetch all data except collections.
+             </summary>
+        </member>
+        <member name="F:InterSystems.XEP.EventPersister.XEP_REQUIRED_PROTOCOL_VERSION">
+            <summary>
+            Minimum server-side protocol version required to support XEP
+            </summary>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.GetAdoNetConnection">
+            <summary>Returns an ADO.NET connection
+            <br/>
+            <strong>Important Note:</strong> When connecting via TCP/IP, the ADO.NET connection is
+            also used by the XEP engine, so the users should be careful not to close or corrupt 
+            the connection obtained by this method as that might cause the XEP engine to fail.
+            </summary>
+            <returns> an ADO.NET connection</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.SetInterfaceResolver(InterSystems.XEP.InterfaceResolver)">
+             <summary>Sets InterfaceResolver. InterfaceResolver is only relevant when using
+             the flat import mode. All Event objects created via this EventPersiser
+             object will share the InterfaceResolver object. InterfaceResolver defaults
+             to null if this method is not called. See documentation for more info
+             on InterfaceResolver and how it should be used to inform the XEP engine
+             what actual runtime types it can expect for any fields declared as interfaces.
+             <br/>
+             IMPORTANT: Even if set, InterfaceResolver will not be used to resolve 
+                        interfaces when importing classes using the full mode.
+            
+             </summary>
+             <param name="interfaceResolver">An implementation of InterfaceResolver</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.GetInterfaceResolver">
+            <summary>Returns currently set InterfaceResolver.</summary>
+            <returns> an instance of InterfaceResolver, or null if none set</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.Connect(System.String,System.Int32,System.String,System.String,System.String,System.String)">
+            <summary>Connect to IRIS using the parameters specified below. This flavor is
+            to be used for connecting via TCP/IP only.
+            </summary>
+            <param name="host">TCP/IP host address</param>
+            <param name="port">TCP/IP port number</param>
+            <param name="nmspace">IRIS namespace to connect to</param>
+            <param name="username">username</param>
+            <param name="password">password</param>
+            <param name="log">log</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.Connect(System.String,System.Int32,System.String,System.String,System.String)">
+            <summary>Connect to IRIS using the parameters specified below. This flavor is
+            to be used for connecting via TCP/IP only.
+            </summary>
+            <param name="host">TCP/IP host address</param>
+            <param name="port">TCP/IP port number</param>
+            <param name="nmspace">IRIS namespace to connect to</param>
+            <param name="username">username</param>
+            <param name="password">password</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.Connect(System.String)">
+            <summary>Connect to IRIS using the IRISADOConnection.ConnectionString specified below. This flavor is
+            to be used for connecting via TCP/IP only.  By default pooling is turned on, which is different than the four
+            parameter argument to Connect() which turns pooling off.
+            </summary>
+            <param name="connString">IRISADOConnection.ConnectionString (a set of key value pairs)</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.Close">
+            <summary>Close this EventPersister instance</summary>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.IsDirectLoadAuthorized">
+            <summary>
+            Check the current security context for DirectLoad authorization
+            </summary>
+            <returns>true if DirectLoad is authorized, false otherwise</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.GetEvent(System.String)">
+            <summary>Returns an event object that corresponds to the supplied class name.
+            </summary>
+            <param name="className">name of the C# class</param>
+            <returns> an Event object</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.GetEvent(System.String,System.Int32)">
+            <summary>Returns an event object that corresponds to the supplied class name.
+            </summary>
+            Also sets up the indexing mode to be used.
+            <param name="className">name of the C# class</param>
+            <param name="indexMode">index mode to be used</param>
+            <returns> an Event object</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.ImportSchema(System.String)">
+            <summary>If parameter is a class name, import the corresponding class
+            and any dependencies. If the parameter is a DLL file, import all
+            classes in the DLL file and any dependencies. As part of the import,
+            the XEP engine will first try to see if the corresponding schema
+            already exists on the IRIS side. If such schema already exists,
+            and it appears to be in sync with the C# schema, import will be
+            skipped. Should a schema already exist, but it appears different,
+            a check will be performed to see if there is any data. If there is
+            no data, a new schema will be generated. If there is existing data,
+            an exception will be thrown. Returns an array of imported class names.
+            <br/>
+            Since XEP needs to know the actual (concrete) runtime types, if
+            any fields are declared as interfaces, these fields will be skipped
+            (ignored) by XEP by default, unless an implementation of
+            InterfaceResolver has been set (by calling setInterfaceResolver).
+            For any interfaces whose concrete implementation types are not found
+            in the InterfaceResolver, the default behavior is applied (which means
+            that the corresponding field will not be projected, nor considered in
+            store/load)
+            <br/>
+            This flavor should be used for performance oriented applications.
+            The object hierarchy will be fully flattened, and all references
+            will be embedded (projected as ObjectScript serial objects). For
+            applications that require richer feature set, and better correspondence
+            between the C# and ObjectScript object schemas, but are not performance
+            critical, one should use importSchemaFull flavor.
+            </summary>
+            
+            <param name="classOrDLLName">name of the C# class or DLL</param>
+            <returns>an array of imported class names</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.ImportSchemaFull(System.String)">
+            <summary>See importSchema(String classOrJarFileName) for more info. This flavor is different 
+            from that one in that it will not generate the flattened object model, and will allow
+            references. While this mode allows a much closer mapping from Java to ObjectScript
+            by preserving the inheritance model and projecting Java references to ObjectScript,
+            using this mode will invariably result in slower performance. For performance
+            oriented applications, one should use the alternative importSchema flavor.
+            <br/>
+            IMPORTANT: Any class to be imported in the full mode must declare a user defined
+                       Id Key (use @ID for single field keys, or @Index for compound id keys).
+            
+            </summary>
+            <param name="classOrDLLName">name of the C# class or DLL</param>
+            <returns>an array of imported class names</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.ImportSchemaFull(System.String[])">
+            <summary> See importSchema(String[] classes) for more info. This flavor is different from
+             that one in that it will not generate the flattened object model, and will allow
+             references. While this mode allows a much closer mapping from C# to ObjectScript
+             by preserving the inheritance model and projecting C# references to ObjectScript,
+             using this mode will invariably result in slower performance. For performance
+             oriented applications, one should use the alternative importSchema flavor.
+             <br/>
+             IMPORTANT: Any class to be imported in the full mode must declare a user defined
+                        Id Key (use @ID for single field keys, or @Index for compound id keys).
+             
+             </summary>
+            
+             <param name="classNames">class names to be imported</param>
+             <returns>an array of imported class names</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.ImportSchema(System.String[])">
+            <summary> Import the given classes and any dependencies. As part of the
+             import, the XEP engine will first try to see if the corresponding
+             schema already exists on the IRIS side. If such schema already
+             exists, and it appears to be in sync with the C# schema, import
+             will be skipped. Should a schema already exist, but it appears
+             different, a check will be performed to see if there is any data.
+             If there is no data, a new schema will be generated. If there is
+             existing data, an exception will be thrown. Returns an array of
+             imported class names.
+             <br/>
+             Since XEP needs to know the actual (concrete) runtime types, if
+             any fields are declared as interfaces, these fields will be skipped
+             (ignored) by XEP by default, unless an implementation of
+             InterfaceResolver has been set (by calling setInterfaceResolver).
+             For any interfaces whose concrete implementation types are not found
+             in the InterfaceResolver, the default behavior is applied (which means
+             that the corresponding field will not be projected, nor considered in
+             store/load)
+             <br/>
+             This flavor should be used for performance oriented applications.
+             The object hierarchy will be fully flattened, and all references
+             will be embedded (projected as ObjectScript serial objects). For
+             applications that require richer feature set, and better correspondence
+             between the C# and ObjectScript object schemas, but are not performance
+             critical, one should use importSchemaFull flavor.
+            </summary>
+            
+             <param name="classNames">class names to be imported</param>
+             <returns>an array of imported class names</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.DeleteExtent(System.String)">
+            <summary>Deletes all objects in the given extent.</summary>
+            <param name="className">name of the C# event</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.DeleteClass(System.String)">
+            <summary>Deletes a COS class. Deletes only the specified class.
+            No dependencies are deleted.</summary>
+            <param name="className">name of the class to delete</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.StartTransaction">
+            <summary>Start a transaction (which may be a nested transaction)</summary>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.Commit">
+            <summary>Commit one level of transaction</summary>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.Rollback">
+            <summary>Rollback all levels of transaction</summary>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.Rollback(System.Int32)">
+            <summary>Rollback levelCount levels of transaction, where levelCount is a positive integer.
+            Do nothing if levelCount less than or equal to 0, and stop rolling back once transactionLevel 
+            reaches 0, if levelCount is greater than initial transactionLevel.
+            Note: This method is not supported when connected via TCP/IP.
+            </summary>
+            <param name="level">transaction level</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.GetTransactionLevel">
+            <summary>Return current transaction level (0 if not in transaction).</summary>
+            <returns> transaction level</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.GetSchema(System.String)">
+            <summary>
+            Retrieves the logical schema referenced by the given name.
+            </summary>
+            <param name="schemaName">The name of the schema.</param>
+            <returns>The logical schema.</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.GetSchemaJSON(System.String)">
+            <summary>
+            Retrieves the JSON serialization of a logical schema from the Schema Manager..
+            </summary>
+            <param name="name">The name of the schema.</param>
+            <returns>The JSON serialization of the schema.</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.GetSchemaForClassJSON(System.String)">
+            <summary>
+            Retrieves the JSON serialization of the logical schema generated from the IRIS Server class.
+            </summary>
+            <param name="name">The name of the schema.</param>
+            <returns>The JSON serialization of the schema.</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.GetSchemaRecordJSON(System.String)">
+            <summary>
+            Retrieves the JSON serialization of a record schema from the Schema Manager.
+            </summary>
+            <param name="name">The name of the schema.</param>
+            <returns>The JSON serialization of the schema.</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.isSchemaUpToDate(System.String,System.String)">
+            <summary>
+            Checks if schema is up to date
+            </summary>
+            <param name="schemaName">Name of the schema</param>
+            <param name="timestamp">Time of last modification</param>
+            <returns>True if up to date, false otherwise</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.isSchemaRuntimeUpToDate(System.String)">
+            <summary>
+            Checks if schema runtime is up to date
+            </summary>
+            <param name="schemaName">Name of the schema</param>
+            <returns>True if runtime is up to date, false otherwise</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.getData(InterSystems.XEP.Metadata.PersistentSchema,System.Int64)">
+             This method is for internal use only.
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.getData(InterSystems.XEP.Metadata.PersistentSchema,System.String[])">
+             This method is for internal use only.
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.exists(InterSystems.XEP.Metadata.PersistentSchema,System.Object[])">
+             This method is for internal use only.
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.readObject(InterSystems.XEP.Metadata.PersistentSchema,System.String)">
+             This method is for internal use only.
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.readObject(InterSystems.XEP.Metadata.PersistentSchema,System.String[])">
+             This method is for internal use only.
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.readObject(InterSystems.XEP.Metadata.PersistentSchema,System.Int64)">
+             This method is for internal use only.
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.waitForIndexing(System.String)">
+            <summary>
+            Build Deferred Indexes for the specified class on the Iris Server and wait for completion.
+            </summary>
+            <param name="className">name of the Iris Server Class for which indexes for deferred items will be built</param>
+            <returns>true if indexing has completed, false if timed out before index build completed</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.writeDynamicObject(System.Object[],InterSystems.XEP.Metadata.PersistentSchema,System.Int32)">
+            <summary>
+            This method is for internal use only.
+            Serialize and persist an instance of the schema server class
+            </summary>
+            <param name="obj">array of field values</param>
+            <param name="schema">Persistent Schema</param>
+            <param name="indexMode">index mode used for this operation</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.writeObject(System.Object,InterSystems.XEP.Metadata.PersistentSchema,System.Int32)">
+             This method is for internal use only.
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.writeObject(System.Object[],InterSystems.XEP.Metadata.PersistentSchema,System.Int32)">
+             This method is for internal use only.
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.writeObject(System.Object[],InterSystems.XEP.Metadata.PersistentSchema,System.Int32,System.Int32,System.Int32)">
+             This method is for internal use only.
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.persistObject(InterSystems.Data.IRISClient.List.IRISListBuilder,System.Boolean,InterSystems.XEP.Metadata.PersistentSchema,System.Int32)">
+            <summary>
+            This method is for internal use only.
+            Persist objects - write buffer to server
+            </summary>
+            <param name="vList">buffer to write to the server</param>
+            <param name="isArray">true if the buffer contains multiple serialized objects</param>
+            <param name="schema">PersistentSchema describing contents of buffer</param>
+            <param name="indexMode">index mode used for this operation</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.persistObjectKey(InterSystems.Data.IRISClient.List.IRISListBuilder,InterSystems.XEP.Metadata.PersistentSchema,System.String,System.Int32)">
+            <summary>
+            This method is for internal use only. 
+            Persist objects - write buffer to server
+            </summary>
+            <param name="vList"> buffer to write to the server</param>
+            <param name="schema">PersistentSchema describing contents of buffer</param>
+            <param name="persisterFunction">function name used to write buffer to server</param>
+            <param name="indexOpt">index mode used for this operation</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.SkipCollections">
+            <summary>
+            This method is for internal use only.
+            </summary>
+            <returns>true if collections to be skipped</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.SkipObjects">
+            <summary>
+            This method is for internal use only.
+            </summary>
+            <returns>true if objects to be skipped</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.SkipArrays">
+            <summary>
+            This method is for internal use only.
+            </summary>
+            <returns>true if arrays to be skipped</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.GetIRIS">
+             This method is for internal use only.
+        </member>
+        <member name="M:InterSystems.XEP.EventPersister.getIndexOption(InterSystems.XEP.Metadata.PersistentSchema,System.Int32)">
+            <summary>
+            This method is for internal use only.
+            Compute the index option from indexMode and the number of indexes defined by the schema.
+            </summary>
+            <param name="schema">PersistentSchema</param>
+            <param name="indexMode">specified indexMode</param>
+            <returns>Index option: 0 - no indexes, 1 - deferred, 2 - immediate</returns>
+        </member>
+        <member name="T:InterSystems.XEP.EventPersister.ServerApi">
+            <summary>
+            ServerApi is an inner class used to communicate with the connected IRIS Server using the %apiXEP interface
+            </summary>
+        </member>
+        <member name="T:InterSystems.XEP.EventPersister.ServerFoi">
+            <summary>
+            ServerFoi is an inner class used to communicate with the connected IRIS Server using the %FOI.Server interface
+            </summary>
+        </member>
+        <member name="T:InterSystems.XEP.EventQuery`1">
+            <summary><CODE>EventQuery</CODE> can be used to retrieve, update and delete
+            individual events from the database.
+            </summary>
+        </member>
+        <member name="M:InterSystems.XEP.EventQuery`1.AddParameter(System.Object)">
+            <summary>Binds a parameter.</summary>
+            <param name="val">parameter value</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventQuery`1.Execute">
+            <summary>Execute this XEP query.</summary>
+        </member>
+        <member name="M:InterSystems.XEP.EventQuery`1.ExecuteAndFetchAll(System.Int32)">
+            <summary>Executes the query and fetches all data. In case of the TCP/IP version 
+            and on multi-core machines setting the splitFactor parameter to anything 
+            between 3 and the total number of cores should speed up execution as the 
+            de-serialization will be done in parallel by using splitFactor cores/threads.
+            Otherwise (using in-memory version or setting splitFactor to 2 or less)
+            is equivalent to calling Execute followed by calling GetNext in a loop.
+            This is also the case when this method is invoked on DotNet version 3.x
+            or less, or when a full schema option is selected.</summary>
+            <returns>all objects matching the query</returns>
+            <param name="splitFactor"> number of threads to use (should be > 2)</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventQuery`1.GetNext">
+            <summary>Gets the next object.</summary>
+            <returns> next object, null if no more objects for this query</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventQuery`1.UpdateCurrent(`0)">
+            <summary>Updates the object most recently returned by GetNext().</summary>
+            <param name="obj">object to be updated</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventQuery`1.DeleteCurrent">
+            <summary>Deletes the object most recently returned by GetNext()</summary>
+        </member>
+        <member name="M:InterSystems.XEP.EventQuery`1.Close">
+            <summary>Closes the query.</summary>
+        </member>
+        <member name="M:InterSystems.XEP.EventQuery`1.GetAll">
+            <summary>Gets all data in one fell swoop. Can be used to get all data that matches 
+            the given query. Can be used only after a query has been executed, and
+            cannot be combined with calls to getNext.
+            
+            IMPORTANT: This is a convenience method. For best performance, if you need to 
+            process one element at the time only, always choose getNext instead. There is 
+            a high cost associated with maintaining a list of objects.
+            </summary>
+            <returns>all objects matching the query</returns>
+        </member>
+        <member name="M:InterSystems.XEP.EventQuery`1.SetFetchLevel(System.Int32)">
+             <summary> Sets the fetch level. By setting fetch level, it is possible to control the 
+             amount of data returned. For example, by setting the fetch level to 
+             FETCH_LEVEL_DATATYPES_ONLY, objects returned by this query will only have their
+             datatype fields set. Any object types, arrays, collections etc. fields will not
+             get populated. Using this option can dramatically improve query performance.
+             Currently supported fetch levels:
+            
+             FETCH_LEVEL_ALL - default, all fields populated
+             FETCH_LEVEL_DATATYPES_ONLY - only datatype fields filled in
+             FETCH_LEVEL_NO_ARRAY_TYPES - all arrays will be skipped
+             FETCH_LEVEL_NO_OBJECT_TYPES - all object types will be skipped
+             FETCH_LEVEL_NO_COLLECTIONS - all collections will be skipped
+             </summary>
+             <param name="level">fetch level to be set</param>
+        </member>
+        <member name="M:InterSystems.XEP.EventQuery`1.GetFetchLevel">
+            <summary> Returns the current fetch level.</summary>
+            <returns>currently set fetch level</returns>
+        </member>
+        <member name="T:InterSystems.XEP.InterfaceResolver">
+            <summary>
+            A call-back mechanism allowing the application to specify the actual (concrete) 
+            runtime type for any fields declared as interfaces. This allows the applications 
+            to use interface types, but also satisfies the need of the XEP engine to know 
+            the concrete types ahead of time.
+            </summary>
+        </member>
+        <member name="M:InterSystems.XEP.InterfaceResolver.GetImplementationType(System.Type,System.String,System.Type)">
+            <summary>
+            Returns the actual (concrete) runtime type, given a declaring class (optional),
+            field name (optional) and the interface type (not optional).
+            </summary>
+            <param name="declaringClass">declaring class</param>
+            <param name="fieldName">field name</param>
+            <param name="interfaceClass">interface class</param>
+            <returns>actual (concrete) type</returns>
+        </member>
+        <member name="T:InterSystems.XEP.Metadata.AbstractSchema">
+            <summary>
+            Superclass for all schema types. This class is abstract.
+            </summary>
+        </member>
+        <member name="M:InterSystems.XEP.Metadata.KeySerialSchema.getKeyValues(System.Object)">
+             For internal use only - write IDKEY key values to Object array
+            
+             @param object object
+             @return Object array
+        </member>
+        <member name="M:InterSystems.XEP.Metadata.RecordSchema.GetObjectTypeName(InterSystems.Data.IRISClient.List.IRISListReader)">
+            Compute the MSTC from the %%CLASSNAME field. This method assumes hasClassname it true. Currently,
+            hasClassname can only be true if %%CLASSNAME is the first field in serialMap[0].
+            @param vList
+            @return
+        </member>
+        <member name="M:InterSystems.XEP.Metadata.Schemas.ParseIndex(InterSystems.XEP.Metadata.RecordSchema,InterSystems.XEP.Metadata.Parser.MetaDataItem,InterSystems.XEP.Metadata.AbstractMapper)">
+            Parse IRIS Schema Index definition - currently only used for the ShardKey
+            @param schema persistent schema
+            @param indexMDI JSON schema index description
+            @param mapper mapper object
+        </member>
+        <member name="M:InterSystems.XEP.Metadata.Schemas.ParseKey(InterSystems.XEP.Metadata.RecordSchema,InterSystems.XEP.Metadata.Parser.MetaDataItem,InterSystems.XEP.Metadata.AbstractMapper)">
+            Parse Storage Metadata Field that defines IDKEY serialization. The IDKEY is also defined
+            in the INDEXES section of the schema - not currently extracted. The serialization will be
+            the IDKEY definition in the PersistentSchema.
+            @param schema
+            @param mdi
+        </member>
+        <member name="T:InterSystems.XEP.PersisterFactory">
+            <summary><CODE>PersisterFactory</CODE>. Main XEP entry point. Provides factory 
+            method that can be used to produce EventPersister objects.
+            </summary>
+        </member>
+        <member name="M:InterSystems.XEP.PersisterFactory.CreatePersister">
+            <summary>Creates a new persister object.</summary>
+            <returns> EventPersister instance</returns>
+        </member>
+        <member name="T:InterSystems.XEP.XEPException">
+            <summary><CODE>XEPException</CODE> is thrown by all XEP APIs.</summary>
+        </member>
+        <member name="M:InterSystems.XEP.XEPException.#ctor(System.Exception,System.String)">
+            <param name="x"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:InterSystems.XEP.XEPException.#ctor(System.String)">
+            <param name="message"></param>
+        </member>
+    </members>
+</doc>

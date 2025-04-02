@@ -1,0 +1,98 @@
+<!--
+Message Bank Event log viewer
+-->
+
+
+<AutoPage domain="Ensemble" pagename="Message Bank Event Log" parentpage="Ens.Enterprise.Portal.MonitorStatus.cls" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Message Bank Event Log</Text>
+</Pane>
+
+<Pane name="Detail" type="CSPX.Enterprise.Portal.LogTablePane">
+	<Text>Message Bank Event Log records:</Text>
+	<ShowRowNumbers>true</ShowRowNumbers>
+	<HiddenColumns>TraceCat,Stack</HiddenColumns>
+	<Commands>
+		<!-- Purge page is not implemented
+		<Action href="EnsEntLogPurge.csp?$FRAME=Purge" targetFrame="Info">
+			<Caption>Purge</Caption>
+			<Popup>Show purge page</Popup>
+		</Action>-->		
+		<Action href="EnsEntMessages.csp">
+			<Caption>MsgBank Messages</Caption>
+			<Popup>Message Bank Message Browser</Popup>
+		</Action>
+	</Commands>
+
+	<Conditions>
+		<Condition>
+			<ColumnName>Type</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Alert</Value>
+			<RowStyle>background: yellow; color: darkred; font-weight: bold;</RowStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Type</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Error</Value>
+			<RowStyle>background: pink; color: darkred; font-weight: bold;</RowStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Type</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Warning</Value>
+			<RowStyle>background: orange; color: darkred; font-weight: bold;</RowStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Type</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Assert</Value>
+			<RowStyle>background: silver; color: darkred; font-weight: bold;</RowStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Method</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Ens.Director.StartProduction()</Value>
+			<RowStyle>background: lightgreen; color: darkgreen; font-weight: bold;</RowStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Method</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Ens.Director.StopProduction()</Value>
+			<RowStyle>background: lightgreen; color: darkred; font-weight: bold;</RowStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Type</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Info</Value>
+			<RowStyle>background: white; color: black;</RowStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Type</ColumnName>
+			<Predicate>NEQ</Predicate>
+			<Value>TraceXXX</Value>
+			<RowStyle>background: lightblue; color: darkblue;</RowStyle>
+		</Condition>
+</Conditions>
+	
+	<Actions>
+		<Action href="EnsEntMsgTrace.csp" name="Session">
+			<Caption>Trace</Caption>
+			<Popup>Display a trace of all related messages.</Popup>
+			<IDValues>{Session}</IDValues>
+		</Action>
+	</Actions>
+	
+	
+</Pane>
+
+<Pane name="Info" type="%CSP.Util.FormPane">
+	<Text>Enter search criteria:</Text>
+	<FormClass>CSPX.EnsLogFilterForm</FormClass>
+	<SubmitPage>EnsEntLog.csp</SubmitPage>
+	<SubmitTarget>_top</SubmitTarget>
+	<Align>left</Align>
+</Pane>
+
+</AutoPage>

@@ -1,0 +1,101 @@
+<!--
+utilities: Resubmit suspended sessions
+-->
+
+<AutoPage domain="Ensemble" pagename="Suspended" parentpage="UtilEnsMA.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Suspended Messages</Text>
+</Pane>
+<Pane name="Navigator" extends="UtilEnsMA.csp" />
+
+<Pane name="Detail" type="CSPX.EnsSuspendedMsgPane">
+	<Query>Ens.MessageHeader:Enumerate</Query>
+	<!--<Sortable>true</Sortable>-->
+	<ShowZebra>true</ShowZebra>
+	<ShowRowNumbers>true</ShowRowNumbers>
+	<ShowCheckboxes>true</ShowCheckboxes>
+	<CheckboxId>ID</CheckboxId>
+
+	<Commands>
+		<Action href="javascript:checkedMessages('ResubmitChecked',false);" targetFrame="Detail">
+			<Caption>Resubmit</Caption>
+			<Popup>Resubmit all selected messages</Popup>
+		</Action>
+		<Action href="javascript:checkedEditResubmit();" targetFrame="Detail">
+			<Caption>Edit &amp; Resubmit</Caption>
+			<Popup>Edit and then Resubmit one suspended message</Popup>
+		</Action>
+		<Action href="javascript:checkedMessages('DiscardChecked',false);" targetFrame="Detail">
+			<Caption>Discard</Caption>
+			<Popup>Discard all selected messages</Popup>
+		</Action>
+		<Action href="javascript:checkedMessages('DeleteChecked',true);" targetFrame="Detail">
+			<Caption>Delete</Caption>
+			<Popup>Delete all selected messages</Popup>
+		</Action>
+	</Commands>
+
+	<Conditions>
+		<!-- error -->
+		<Condition>
+			<ColumnName>IsError</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>1</Value>
+			<RowStyle>background: red;</RowStyle>
+		</Condition>
+
+		<!-- new session -->
+		<Condition>
+			<ColumnName>Session</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>{ID}</Value>
+			<RowStyle>background: green; color: yellow;</RowStyle>
+		</Condition>
+
+		<!-- queued -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Queued</Value>
+			<CellStyle>background: orange;</CellStyle>
+		</Condition>
+
+		<!-- discarded -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Discarded</Value>
+			<CellStyle>background: silver;</CellStyle>
+		</Condition>
+		
+		<!-- suspended -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Suspended</Value>
+			<CellStyle>background: "#FFCC99";</CellStyle>
+		</Condition>
+
+	</Conditions>
+	
+	<Actions>
+		<Action href="UtilEnsMsgDetails.csp?$FRAME=Info" targetFrame="Info" name="$A">
+			<Caption>Details</Caption>
+			<Popup>Display details for this message.</Popup>
+			<IDValues>{ID}</IDValues>
+		</Action>
+		
+		<Action href="UtilEnsMsgTrace.csp" name="$A2">
+			<Caption>Trace</Caption>
+			<Popup>Show the message trace diagram for this message.</Popup>
+			<IDValues>{ID}</IDValues>
+		</Action>
+	</Actions>
+</Pane>
+<Pane name="Info" type="%CSP.Util.FormPane">
+	<Text>Click Details to review a message or click Resubmit from the above list to resubmit a message.</Text>
+	<Align>left</Align>
+</Pane>
+
+</AutoPage>

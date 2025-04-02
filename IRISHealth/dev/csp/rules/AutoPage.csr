@@ -1,0 +1,194 @@
+<!-- CSP Application Framework Rules: auto -->
+<!-- Copyright (c) 2003, InterSystems Corp. ALL RIGHTS RESERVED -->
+
+
+<!-- ------------------------------------------------------------------------------ -->
+<csr:rule name="%AUTOPAGE" match="AutoPage" >
+<csr:description>
+Identifies rules for an AutoPage
+</csr:description>
+
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	// Set our super class
+	Do %compiler.Set("%cspclass.SUPER",..GetAttribute("Super","%CSP.Util.AutoPage"))
+	
+	// Set PAGENAME and PARENTPAGE parameters
+	New param
+	For param="PAGENAME","PARENTPAGE","DOMAIN" {
+		If ..IsDefined(param) Do %compiler.Set("%cspparam."_param,..GetAttribute(param))
+	}
+	
+	// Set USEFRAMES parameter
+	Do %compiler.Set("%cspparam.USEFRAMES",..GetAttribute("USEFRAMES",0))
+
+	// Set USENAMESPACE parameter
+	Do %compiler.Set("%cspparam.USENAMESPACE",..GetAttribute("USENAMESPACE",0))
+
+	
+	// Set STYLESHEET parameter
+	Do %compiler.Set("%cspparam.STYLESHEET",..GetAttribute("STYLESHEET","csputils.css"))
+
+</script>
+
+<csr:section name="CSPROOT">
+<script language="Cache" runat="server">
+	;If ##class(%SYS.EMS).IsEMSManagerSMP() {
+		;Do ##class(%CSP.Portal.Utils).%DrawError($system.Status.Error($$$ERRORCODE($$$EMSNoSMP)))
+		;Quit 1
+	;}
+	If '##class(%CSP.Portal.Utils).%CheckCustomResource($classname($this)) {
+		Do ##class(%CSP.Portal.Utils).%DrawError($system.Status.Error($$$ERRORCODE($$$AccessDenied)))
+		Quit 1	
+	}
+	Do ..DrawHTML()
+</script>
+
+</csr:section>
+<csr:children/>
+</csr:action>
+
+</csr:rule>
+
+
+<!-- ------------------------------------------------------------------------------ -->
+<csr:rule name="%AUTOPAGEPANE" match="AutoPage/Pane" >
+<csr:description>
+Defines a specific pane within an AutoPage
+</csr:description>
+
+<csr:action>
+
+<script language="Cache" runat="compiler">
+
+	//-----------------------------------------------------------------------------------------
+	// GetXXXPane method
+	
+	New handle,formalspec,paneName,paneClass,extendPage,methodname,code,tClass,reader,sc,obj
+	Set handle = %compiler.Get("%classhandle")
+	Set formalspec = "pInstance:%CSP.Util.PageInstance"
+
+	Set paneName = ..GetAttribute("name","unknown")
+	Set paneClass = ..GetAttribute("type","%CSP.Util.Pane")
+	Set extendPage = ..GetAttribute("extends","")
+
+	Set methodname = "Get" _ paneName _ "Pane"
+	Set code = ""
+	
+	If (extendPage '= "") {
+		// generate code to dispatch to real method
+		Set code = code _ "	Set tClass = ..GetCSPClassName(""" _ extendPage _ """)" _ $$$EOL
+		Set code = code _ " Quit $classmethod(tClass,""" _ methodname _ """,pInstance)" _ $$$EOL
+	}
+	Else {
+
+		// construct a pane object using XML reader...
+		Set reader = ##class(%XML.Reader).%New()
+		If $$$ISERR(reader) Set %statuscode=reader Quit
+
+		Do reader.Correlate("Pane",paneClass)		
+		Set sc = reader.OpenString("<Pane>" _ ..InnerText() _ "</Pane>")
+		If $$$ISERR(sc) Set %statuscode=sc Quit
+		
+		Do reader.Next(.obj,.sc)		
+		If $$$ISERR(sc) Set %statuscode=sc Quit
+		
+		If ($IsObject($G(obj)) && (obj.%IsA("%CSP.Util.Pane"))) {
+			Set code = obj.GenerateCode()
+		} Else {
+			Set %statuscode = $$$ERROR($$$GeneralError,"Unable to find object or object is not a %CSP.Util.Pane.")
+			Quit
+		}
+	}
+	
+	Do AddMethod^%apiCDL(handle,methodname)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHlanguage,"cache")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHformalspec,formalspec)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHcodemode,$$$cMETHCODEMODECODE)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHimplementation,.code)
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHreturntype,"%CSP.Util.Pane")
+	Do SetMethod^%apiCDL(handle,methodname,$$$cMETHclassmethod,1)
+</script>
+
+</csr:action>
+</csr:rule>
+
+<!-- ------------------------------------------------------------------------------ -->
+<csr:rule name="%AUTOPAGECSP" match="AutoPageCSP" empty>
+<csr:description>
+Include this rule in a regular CSP page that wants to work within the
+AutoPage framework.
+</csr:description>
+
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	// Set our super class
+	Do %compiler.Set("%cspclass.SUPER",..GetAttribute("Super","%CSP.UI.System.AutoPageCSP"))
+	
+	// Set PAGENAME and PARENTPAGE parameters
+	New param
+	For param="PAGENAME","PARENTPAGE","DOMAIN" {
+		If ..IsDefined(param) Do %compiler.Set("%cspparam."_param,..GetAttribute(param))
+	}
+</script>
+
+<csr:SECTION NAME="CSPROOT">
+<script language="Cache" runat="server">
+	;If ##class(%SYS.EMS).IsEMSManagerSMP() {
+		;Do ##class(%CSP.Portal.Utils).%DrawError($system.Status.Error($$$ERRORCODE($$$EMSNoSMP)))
+		;Quit 1
+	;}
+	If '##class(%CSP.Portal.Utils).%CheckCustomResource($classname($this)) {
+		Do ##class(%CSP.Portal.Utils).%DrawError($system.Status.Error($$$ERRORCODE($$$AccessDenied)))
+		Quit 1
+	}
+</script>
+</csr:SECTION>
+
+<csr:SECTION NAME="BODY">
+<table border="0" class="LayoutMain" width="100%" cellpadding="0" cellspacing="0">
+<script language="Cache" runat="server">
+	Do ..WriteTitlePane($$$Text("##(..GetAttribute("TITLE"))##"))
+</script>
+</table>
+</csr:section>
+
+</csr:action>
+
+</csr:rule>
+
+<!-- ------------------------------------------------------------------------------ -->
+<csr:rule name="%AUTOPAGEENS" match="AutoPageENS" empty>
+<csr:description>
+Include this rule in an Ensemble CSP page (5.1+) that wants to work within the
+AutoPage framework.
+</csr:description>
+
+<csr:action>
+
+<script language="Cache" runat="compiler">
+	// Set our super class
+	Do %compiler.Set("%cspclass.SUPER",..GetAttribute("Super","CSPX.AutoPageCSP"))
+	
+	// Set PAGENAME and PARENTPAGE parameters
+	New param
+	For param="PAGENAME","PARENTPAGE","DOMAIN" {
+		If ..IsDefined(param) Do %compiler.Set("%cspparam."_param,..GetAttribute(param))
+	}
+</script>
+
+<csr:SECTION NAME="BODY">
+<table border="0" class="LayoutMain" width="100%" cellpadding="0" cellspacing="0">
+<script language="Cache" runat="server">
+	Do ..WriteTitlePane("##(..GetAttribute("TITLE"))##")
+</script>
+</table>
+</csr:section>
+
+</csr:action>
+
+</csr:rule>
+<!-- ------------------------------------------------------------------------------ -->
+

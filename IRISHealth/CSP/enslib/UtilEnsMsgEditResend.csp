@@ -1,0 +1,137 @@
+<AutoPageENS domain="Ensemble" parentpage="UtilEnsMsgResend.csp" pagename="Resend Editor" title="@Ensemble:EnsMessageEdit@Resend Editor">
+<CSP:CLASS INCLUDES="Ensemble,EnsUI">
+
+<html>
+<head>
+<title><csp:text Domain="Ensemble">Resend Editor</csp:text></title>
+<LINK REL="stylesheet" TYPE="text/css" HREF="/csp/sys/csputils.css" TITLE="Standard Style" >
+
+<style>
+</style>
+
+<script language="javascript">
+function saveEdit()
+{
+	var contentCtl = self.document.getElementById('%XCONT');
+	if (contentCtl) self.document.getElementById('$IDXCONT').value = contentCtl.value;
+	var theForm = self.document.theForm;
+	theForm.submit();
+}
+</script>
+</head>
+<body>
+<table border="0" class="LayoutMain" width="100%" height="100%" cellpadding="0" cellspacing="0">
+<tr height="100%">
+<td class="LayoutContentCol" width="80%" >
+<div align="center" class="Text1" style="margin-left:20%;margin-right:20%;">
+
+<script language=Cache runat=server>
+	Set tSC=$$$OK
+	Do {
+		Set tDoSend = +$G(%request.Data("SEND",1))
+		Set tHdrId = $G(%request.Data("$ID1",1))
+		Set tOptions=$G(%request.Data("$ID2",1))
+		Set tHeadOfQueue=$P(tOptions,"|",1)
+		Set tNewTarget=$P(tOptions,"|",2)
+		Set tCloneHeader = (""'=$P(tOptions,"|",3))
+
+		Set tHeader = ##class(Ens.MessageHeader).%OpenId(tHdrId)
+		If ('$IsObject(tHeader)) {
+			Write $ZCVT($$$FormatText($$$Text("Unable to open message header: %1"),tHdrId),"O","HTML")
+			Quit
+		}
+		Set tOldBody = ""
+		Set:""'=tHeader.MessageBodyClassName tOldBody = $zobjclassmethod(tHeader.MessageBodyClassName,"%OpenId",tHeader.MessageBodyId)
+		If ('$IsObject(tOldBody)) {
+			Write $ZCVT($$$FormatText($$$Text("Unable to open message body: %1"),tHeader.MessageBodyClassName_" : "_tHeader.MessageBodyId),"O","HTML")
+			Quit
+		}
+		If 'tDoSend {
+			If tCloneHeader {
+				Write $ZCVT($$$FormatText($$$Text("Edit the body of message %1 and press the Resend button to resend a new copy of the message"),tHdrId),"O","HTML")
+			} Else {
+				Write $ZCVT($$$FormatText($$$Text("Edit the body of message %1 and press the Resubmit button to resubmit the message with a new message body"),tHdrId),"O","HTML")
+			}
+			&html<<hr></div><div align="center" class="Text">>
+
+			Set n = 1
+			Set tButtons(n) = ##class(%CSP.Util.FormButton).%New()
+			Set tButtons(n).Name = "$AUTOFORM_SAVE"
+			If tCloneHeader { Set tButtons(n).Caption = $$$LocalizeText("Ensemble","Resend","Resend") }
+			Else { Set tButtons(n).Caption = $$$LocalizeText("Ensemble","Resubmit","Resubmit") }
+			Set tButtons(n).OnClick = "saveEdit();"
+
+			Set n = n + 1
+			Set tButtons(n) = ##class(%CSP.Util.FormButton).%New()
+			Set tButtons(n).Name = "$AUTOFORM_CANCEL"
+			Set tButtons(n).Caption = $$$LocalizeText("Ensemble","btnCancel","Cancel")
+			Set tButtons(n).OnClick = "self.document.location='UtilEnsSesSuspended.csp';" 
+
+			Set tURL = ..Link("UtilEnsMsgEditResend.csp?SEND=1")
+			Set tID(1) = tHdrId
+			Set tID(2) = tOptions
+			If $zobjclassmethod(tOldBody.%ClassName(1),"%Extends","Ens.Util.MessageBodyMethods") {
+				Do $zobjclassmethod(tOldBody.%ClassName(1), "%DrawHTMLForm", tOldBody, .tID, tURL, .tButtons)
+			} ElseIf $zobjclassmethod(tOldBody.%ClassName(1),"%Extends","%CSP.Util.AutoForm") {
+				Do $zobjclassmethod(tOldBody.%ClassName(1), "DrawHTMLForm", tOldBody, .tID, tURL, .tButtons)
+			} Else {
+				Do ##class(%CSP.Util.AutoFormDynamic).DrawHTMLForm(tOldBody, .tID, tURL, .tButtons)
+			}
+			If tCloneHeader {
+				Write $ZCVT($$$FormatText($$$Text("Resend a new copy of message header %1 containing this new message body"),tHdrId),"O","HTML")
+			} Else {
+				Write $ZCVT($$$FormatText($$$Text("Resubmit message header %1 with this new body replacing its old body contents"),tHdrId),"O","HTML")
+			}
+		} Else { ; do (Re)Submit & report results
+			Set tError = $$$Text("An error has occurred")
+
+			#; get results of submit - note %ProcessSubmit methods do their own clone
+			If $zobjclassmethod(tOldBody.%ClassName(1),"%Extends","Ens.Util.MessageBodyMethods") {
+				Set tID(1)=tHeader.MessageBodyId
+				Set tObj = $zobjclassmethod(tOldBody.%ClassName(1),"%ProcessSubmit", %request, .tID, .tErrMsg)
+			} Else {
+				#; construct body clone and get an id for it
+				Set tOldBody=tOldBody.%ConstructClone()
+				If tOldBody.%IsA("%Library.Persistent") Set tSC=tOldBody.%Save()  Quit:$$$ISERR(tSC)
+				Set tSC=tOldBody.%GetSwizzleObject(0,.tOID)  Quit:$$$ISERR(tSC)
+				Set tID(1)=$$$oidPrimary(tOID)
+
+				If $zobjclassmethod(tOldBody.%ClassName(1),"%Extends","%CSP.Util.AutoForm") {
+					Set tObj = $zobjclassmethod(tOldBody.%ClassName(1),"ProcessSubmit", %request, .tID, .tErrMsg)
+				} Else {
+					Set tObj = ##class(%CSP.Util.AutoFormDynamic).ProcessSubmit(%request, .tID, .tErrMsg, 0)
+				}
+			}
+			If '$IsObject(tObj) {
+				Write $$$Text("Unable to create new body object:")_tErrMsg,!
+				Quit
+			}
+			Set tSC = tObj.%ValidateObject()  Quit:$$$ISERR(tSC)
+
+			#; Do Clone for msg browser resend but not for suspended resubmit
+			If tCloneHeader {
+				Set tSC=##class(Ens.MessageHeader).ResendDuplicatedMessage(tHdrId,.tNewHdrId,tNewTarget,tObj)  Quit:$$$ISERR(tSC)
+				Set tDescription = $ZCVT($$$FormatText($$$Text("Copy of message %1 resent as message %2 to %3 with new edited body '%4'"),tHdrId,tNewHdrId,$S(""'=tNewTarget:tNewTarget,1:tHeader.TargetConfigName),tObj.%Id()),"O","HTML")
+				Set tHdrId=tNewHdrId
+			} Else {
+				Set tSC=##class(Ens.MessageHeader).ResubmitMessage(tHdrId,tNewTarget,tObj,tHeadOfQueue)  Quit:$$$ISERR(tSC)
+				Set tDescription = $ZCVT($$$FormatText($$$Text("Message %1 resubmitted to %2 with new edited body '%3'"),tHdrId,tHeader.TargetConfigName,tObj.%Id()),"O","HTML")
+			}
+			&html<</div><div align="center" class="Text">
+			#(tDescription)#<br/>
+			<a href='#(..Link("UtilEnsMsgTrace.csp?$ID1="_tHdrId))#'>Trace</a>
+			<hr/>>
+		}
+	} While 0
+	If $$$ISERR(tSC) {
+		&html<<br><span class="error">#(tError)#:</span><br>>
+		Do $system.Status.DecomposeStatus(tSC,.err)
+		Set tVal=$ZCVT($G(err(1)),"O","HTML")  For i=2:1:$G(err) Set tVal = tVal _ "<br>"_$C(13,10)_"+<br>"_$C(13,10)_ $ZCVT($G(err(i)),"O","HTML")
+		Write tVal
+	}
+</script>
+</div>
+</td></tr></table>
+
+</body>
+</html>

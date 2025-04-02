@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<script language="cache" runat="server">d HEAD1^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/jxDashboard.css">
+    </head>
+    <body onload="initMe()">
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <h1>Hi there!</h1>
+                    <h2>You have done <span id="total-trans-count"></span> data transformations</h2>
+                    <div class="stats">
+                    <div class="success-rate stat-block">
+                            <div class="block-title">Transaction Success Rate</div>
+                            <div class="block-content">
+                                <div class="stat">
+                                	<p class="num">99%</p>
+                                	<p>Average successful <br> transactions</p>
+                                	<button class="green-btn" onclick="window.frameElement.src='jxDashboardSuccess.csp'">View Details</button>
+    	
+                                	<!--<button class="green-btn" onclick="window.open('jxDashboardSuccess.csp','_self')">View Details</button>-->
+                            	</div>
+                            </div>
+                            <p class='no-data'>You haven't done any transactions yet</p>
+                        </div>
+                        <div class="activity stat-block">
+                            <div class="block-title">Activity</div>
+                            <div class="block-content">
+                                <div class="stat">
+                                    <div class="current-stat">
+                                        <p id="current-trans-count" class="num">70</p>
+                                        <p>Data Transformations <br>
+                                            <span>
+                                                This Month
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="prev-stat">
+                                        <p id="prev-trans-count" class="num">60</p>
+                                        <p>Data Transformations <br>
+                                            <span>
+                                                Last Month
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="activity-chart" height="300"></canvas>
+                                    <button class="green-btn" onclick="window.frameElement.src='jxDashboardActivity.csp'">View Details</button>
+                                </div>
+                            </div>
+                            <p class='no-data'>You haven't done any transactions yet</p>
+                        </div>
+                        
+                        <div class="temp-used stat-block">
+                            <div class="block-title">Templates Used</div>
+                            <div class="block-content">
+                                <div class="chart">
+                                    <canvas id="temp-chart"></canvas>
+                                    <button class="green-btn" onclick="window.frameElement.src='jxDashboardTempUsage.csp'">View Details</button>
+                                </div>
+                            </div>
+                            <p class='no-data'>You haven't done any transactions yet</p>
+                        </div>
+                        <div class="usage-quota stat-block">
+                            <div class="block-title">Usage Quota</div>
+                            <div class="block-content">
+                            	<div class="chart">
+                                	<canvas id="usage-quota-chart">
+                                	</canvas>
+                            		<button class="green-btn" onclick="window.frameElement.src='jxDashboardUsage2.csp'">View Details</button>
+                            	</div>
+                                <div class="stat">
+                                	<h4 class="month">Sept 2023</h4>
+                                	<div class="pre">
+                                		<p>Pre-processing:<br>units</p>
+                                		<p class="num"><span>900</span><br>/1000</p>
+                                	</div>
+                                	<hr>
+                                	<div class="trans">
+                                		<p>Transformation:<br>units</p>
+                                		<p class="num"><span>900</span><br>/1000</p>
+                                	</div>
+                                </div>
+                            </div>
+                            <p class='no-data'>You haven't subscribed to any plan yet!</p>
+                        </div>
+                        <div class="noti stat-block">
+                            <div class="block-title">Notifications</div>
+                            <div class="block-content">
+                                <div class="noti-num">2</div>
+                                <div class="notis">
+                                    <div class="noti-text unread" onclick="openNotiPopup(event)">New Standard Formats Update</div>
+                                    <div class="noti-text unread" onclick="openNotiPopup(event)">Terms of Use Update</div>
+                                    <div class="noti-text" onclick="openNotiPopup(event)">Usage Update</div>
+                                </div>
+                            </div>
+                            <p class='no-data'>There is no new notification yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+        <script src="assets/js/chartjs-plugin-datalabels.min.js"></script>
+    </body>
+    <script type="text/javascript">
+    	let activity = document.getElementsByClassName('activity')[0];
+	    let successRate = document.getElementsByClassName('success-rate')[0];
+        let tempUsed = document.getElementsByClassName("temp-used")[0];
+        let usageQuota = document.getElementsByClassName("usage-quota")[0];
+        let noti = document.getElementsByClassName("noti")[0];
+        let color =[];
+		let noData = document.getElementsByClassName("no-data");
+        
+		window.onload = initMe;
+  		document.onmousemove = parent.resetTimer;
+  		document.onmousedown = parent.resetTimer; // touchscreen presses
+  		document.ontouchstart = parent.resetTimer;
+  		//document.onclick = parent.resetTimer; // touchpad clicks
+  		document.onkeypress = parent.resetTimer;
+  		document.addEventListener('scroll', parent.resetTimer, true);
+  		
+    	function initMe(){
+	    	parent.resetTimer();
+	    	#server(..cInitMe())#;
+	    	if(document.getElementById("total-trans-count").innerHTML=="0"){
+		    	for(var i=0;i<noData.length;i++){
+			    	noData[i].style.display="flex";
+		    	}
+		    	//document.querySelector(".nav-item.active .nav-collapse-btn img.dark").style.display="none";
+	    	}
+	    	else{
+		    	let blockContent = document.getElementsByClassName("block-content");
+		    	for(var i=0;i<blockContent.length;i++){
+			    	blockContent[i].style.display="flex";
+			    	if(blockContent[i].parentElement.classList.contains("usage-quota")){
+				    	if(usageLabel.length==0){
+					    	noData[i].style.display="flex";
+					    	blockContent[i].style.display="none";
+					    	parent.document.querySelector("#Usage").style.display="none";
+				    	}
+				    	else{
+				    		blockContent[i].querySelector(".stat .month").innerHTML=usageLabel[usageLabel.length-1][0]+" "+usageLabel[usageLabel.length-1][1];
+				    		blockContent[i].querySelector(".stat .pre .num").innerHTML="<span>"+usageCurrentOCR[1]+"</span><br>/"+usageCurrentOCR[0];
+				    		blockContent[i].querySelector(".stat .trans .num").innerHTML="<span>"+usageCurrentTransformation[1]+"</span><br>/"+usageCurrentTransformation[0];
+				    	}
+			    	}
+		    	}
+		    	
+		    	//document.querySelector(".nav-item.active .nav-collapse-btn img").style.display="none";
+		    	//document.querySelector(".nav-item.active .nav-collapse-btn img.dark").style.display="block";
+		    	
+	    	}
+	    	noti.querySelector(".block-content").style.display="flex";
+    	}
+        function toggleSideNav(){
+	    let sideNav = document.getElementsByClassName('side-nav')[0];
+	    let mainField = document.getElementsByClassName('main-field')[0];
+	    let num = document.getElementsByClassName('num')[0];
+	    
+            if(sideNav.classList.contains("nav-close")){
+                sideNav.classList.remove("nav-close");
+                mainField.style.width="80vw";
+                num.style.left="5vw";
+                activity.style.width='68%';
+                successRate.style.width='30%';
+                tempUsed.style.width='30%';
+                usageQuota.style.width='36%';
+                noti.style.width='30%';
+            }
+            else{
+                sideNav.classList.add("nav-close");
+                mainField.style.width="95vw";
+                num.style.left="8vw";
+                activity.style.width='72%';
+                successRate.style.width='26%';
+                tempUsed.style.width='26%';
+                usageQuota.style.width='44%';
+                noti.style.width='26%';
+            }
+	}
+
+     // setup
+      Chart.defaults.font.family = "Montserrat";
+      let transformCount=[];
+      let monthLabel=[];
+      let maxNum;
+      const activityData = {
+        labels: monthLabel,
+        datasets: [
+          {
+            data: transformCount,
+            backgroundColor: context=>{
+                if(context.index<transformCount.length-2){
+                    return "#526D97";
+                }
+                else if(context.index==transformCount.length-2){
+                    return "#405470";
+                }
+                else if(context.index==transformCount.length-1){
+                    return "#E63876";
+                }
+            },
+            borderWidth: 0,
+            borderRadius:10,
+            barPercentage: 0.45,
+            categoryPercentage: 1,
+          },
+        ],
+      };
+
+     // config
+      const activityConfig = {
+        type: "bar",
+        data: activityData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              grid: {
+                offset: false,
+                drawOnChartArea: false,
+                tickColor:"white"
+              },
+              ticks:{
+                font:{
+                    size:12,
+                    weight:500,
+                },
+                color:context=>{
+                    if(context.index==transformCount.length-1){
+                        return "#E63876"
+                    }
+                    else{
+                        return "#405470"
+                    }
+
+                },
+              },
+              border: {
+                display: false,
+              },
+            },
+            y: {
+              max: 1,
+              border: {
+                display: false,
+                dash:function(context){
+                    if(context.index == 1){
+                        return [6,6];
+                    }
+                    else{
+                        return [];
+                    }
+                }
+              },
+              grid:{
+                lineWidth:2,
+                color:"#9B9B9B80",
+                tickColor:"white"
+              },
+              ticks: {
+                font:{
+                    size:12,
+                    weight:500,
+                },
+                color: "#405470",
+                stepSize: 0.5,
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              display: false,
+            },
+          },
+        },
+      };
+     // render init block
+      const activityChart = new Chart(document.getElementById("activity-chart"), activityConfig);
+
+      const tempUsageRate = []
+      const tempUsageLabel = []
+      const tempUsageRateData = {
+        labels: tempUsageLabel,
+        datasets: [
+          {
+            data: tempUsageRate,
+            backgroundColor:[
+                "#405470",
+                "#56C4C5",
+                "#F39CBB",
+                "#E63876",
+                "#ADAFC1"
+            ],
+            borderColor:[
+                "#405470",
+                "#56C4C5",
+                "#F39CBB",
+                "#E63876",
+                "#ADAFC1"
+            ],
+            borderWidth:1,
+            cutout:'77%',
+            circumference:180,
+          },
+        ],
+
+      };
+
+      const customDataLabels = {
+        id: 'customDataLabels',
+        afterDatasetsDraw(chart,args,pluginOptions){
+            const {ctx,data,chartArea:{top,bottom,left,right,width,height}} = chart;
+            ctx.save();
+            const halfWidth = width/2+left;
+            const halfHeight = height/2+top;
+            data.datasets[0].data.forEach((datapoint, index)=>{
+                const {x,y} = chart.getDatasetMeta(0).data[index].tooltipPosition();
+                const yPosition = y > halfHeight ? 0:20;
+                const textWidth = ctx.measureText(datapoint).width;
+                const textWidthPosition = x > halfWidth ? 17: -17;
+                ctx.lineWidth = 3;
+                ctx.fillStyle = data.datasets[0].borderColor[index];
+                ctx.textBaseline = 'middle';
+                ctx.font = "600 12px Montserrat";
+                ctx.fillText(datapoint,x+textWidthPosition,y-yPosition);
+            })
+        }
+      }
+      const legendMargin = {
+        id: 'legendMargin',
+        beforeInit(chart,legend,options){
+          const fitValue = chart.legend.fit;
+          chart.legend.fit = function fit(){
+            fitValue.bind(chart.legend)();
+            return this.height += 10;
+          }
+
+        }
+      }
+      // config
+      const tempUsageRateConfig = {
+        type: "doughnut",
+        data: tempUsageRateData,
+        options: {
+          maintainAspectRatio:true,
+          aspectRatio:1.8,
+          rotation:'-90',
+          plugins: {
+            legend: {
+              position:'top',
+              display: true,
+              labels:{
+                boxWidth:12,
+                usePointStyle:true,
+                pointStyle:'rectRounded',
+                color:"#405470",
+                font:{
+                    size:12,
+                    weight:500,
+                },
+              },
+            },
+            tooltip: {
+              display: false,
+            },
+          },
+        },
+        plugins:[customDataLabels,legendMargin]
+      };
+      // render init block
+      const tempChart = new Chart(document.getElementById("temp-chart"), tempUsageRateConfig);
+      const usageCurrentOCR = [];
+      const usageCurrentTransformation = [];
+      const usageOCRCount = [];
+      const usageTransformationCount = [];
+      const usageLabel = [];
+      const usageData = {
+        labels: usageLabel,
+        datasets: [
+          {
+            data: usageOCRCount,
+            label:"Pre-processing",
+            backgroundColor: "#56C4C5",
+            borderWidth: 0,
+            barPercentage: 1,
+            categoryPercentage: 0.7,
+            borderRadius:5,
+          },
+          {
+            data: usageTransformationCount,
+            label: "Transformation",
+            backgroundColor: "#586D93",
+            borderWidth: 0,
+            borderRadius:5,
+            barPercentage: 1,
+            categoryPercentage: 0.7,
+          }
+        ],
+      };
+
+      // config
+      const usageConfig = {
+        type: "bar",
+        data: usageData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          clip:false,
+          scales: {
+            x: {
+	          afterFit: (context)=>{
+		          context.height-=5
+	          },
+              grid: {
+                offset: false,
+                drawOnChartArea: false,
+                tickColor:"white",
+                lineWidth:2
+              },
+              ticks:{
+                font:{
+                    size:11,
+                    weight:500,
+                },
+                color: "#526D97",
+              },
+              border: {
+                display: false,
+              },
+            },
+            y: {
+              max: 100,
+              border: {
+                display: false,
+                dash:function(context){
+                    if(context.tick.value == 100){
+                        return [6,6];
+                    }
+                    else{
+                        return [];
+                    }
+                },
+                lineWidth:2
+              },
+              grid:{
+                lineWidth:2,
+                color:function(context){
+	                if(context.tick.value > 100){
+	                }
+	                else{
+		                return "#9B9B9B80";
+	                }
+                },
+                tickColor:"white"
+              },
+              ticks: {
+                font:{
+                    size:12,
+                    weight:500,
+                },
+                color: "#979797",
+                stepSize: 100,
+                callback: (t, i) => (t % 100 ? "" : t!=0 ? t+"%" : t),
+                scaleLabel: {
+                   display: true,
+                   labelString: "Percentage"
+                }
+              },
+            },
+          },
+          plugins: {
+	        legend:{
+		      position: "bottom",
+		      display: true,
+              labels:{
+                boxWidth:12,
+                usePointStyle:true,
+                pointStyle:'rectRounded',
+                color:"#526D97",
+                font:{
+                    size:12,
+                    weight:500,
+                },
+              },
+	        },
+          },
+        },
+      };
+      // render init block
+      const usageChart = new Chart(document.getElementById("usage-quota-chart"), usageConfig);
+	
+    </script>
+    <script language="cache" method="cInitMe">
+    	d InitMe^jxDashboard2 // Initial lode of the Dashboard
+    </script>
+</html>

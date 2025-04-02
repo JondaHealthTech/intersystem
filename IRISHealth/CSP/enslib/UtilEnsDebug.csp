@@ -1,0 +1,16 @@
+<!--
+Utilities: Debug settings
+-->
+
+<AutoPage domain="Ensemble" pagename="Debug Settings" parentpage="UtilEnsProductions.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Debug Settings</Text>
+</Pane>
+
+<Pane name="Navigator" extends="UtilEnsHome.csp" />
+
+<Pane name="Detail" type="CSPX.EnsDebugSettingsPane">
+</Pane>
+
+</AutoPage>

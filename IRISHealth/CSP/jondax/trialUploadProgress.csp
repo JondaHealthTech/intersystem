@@ -1,0 +1,178 @@
+<html lang="en"> <!--Groot v1.1-->
+<head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+	q 1
+	</script>
+	<script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+    <link rel="stylesheet" href="assets/styles/trialUploadProgress.css">
+</head>
+<body>
+	 <div id="lab-upload" class="lab-upload">
+        <h4>Upload laboratory file</h4>
+        <img src="assets/images/upload.png" alt="Upload">
+        <p>
+            Drag and drop here<br>
+            or<br>
+        </p>
+        <input
+            type="file"
+            accept="image/*,.pdf,.hl7,.xml,.json,.xlsx"
+            id="fileupload"
+            style="display: none"
+            onchange="changeFile(event)" 
+            multiple
+        >
+        <button onclick="openFileDialog(event)" aria-label="Open File Dialog">Upload</button>
+        <p class="note"> 
+                Valid file formats:   
+                <span style="font-weight:normal;" >
+                    CCD-A, HL7 v2, HL7 FHIR, PDF, BMP, HEIC, JPG, JPEG, GIF, WEBP.
+                </span>
+            <br> Maximum file size: <span style="font-weight:normal;" >5MB per file</span> | Maximum pages per PDF:<span style="font-weight:normal;" > 5 pages</span>
+        </p>
+    </div>
+    <div id="popup1" class="popup inactive">
+		<div class="popup-dialog">
+			<!--<img src="./assets/images/trial/cross.png" alt="Close" class="close-btn" onclick="removePopup1()"> -->
+			<h4 class="heading">Hang tight!</h4>
+            <h4 class="heading">Your files are uploading...</h4>
+			<img src="./assets/images/success.png" alt="FYI">
+		</div>
+	</div>                
+    
+    <script>
+            var resizefunc = [];
+        </script> 
+ 	<script language="cache" runat="server">
+			d jQueryCore^WSP999
+	</script>                       
+ <script type="text/javascript">
+     
+    window.onload = parent.parent.resetTimer;
+	document.onmousemove = parent.parent.resetTimer;
+	document.onmousedown = parent.parent.resetTimer;
+	document.ontouchstart = parent.parent.resetTimer;
+	document.onkeypress = parent.parent.resetTimer;
+	document.addEventListener('scroll', parent.parent.resetTimer, true);
+	
+	const fileUpload = document.getElementById("fileupload");
+	let uploadedFiles = [];
+	
+	function openPopup1(){
+    	setTimeout(()=>{
+      	 popup1.classList.remove("inactive")
+    	},100);
+	}
+	function removePopup1(){
+    	popup1.classList.add("inactive");
+	}
+	
+	function openFileDialog(e) {
+	    fileUpload.click();
+	}
+
+	function changeFile(e) {
+			openPopup1();
+            let uploadedFiles = e.target.files;
+            #server(..cSetUploadTime())#
+            if (uploadedFiles.length > 0) {
+                for (let i = 0; i < uploadedFiles.length; i++) {
+                    //console.log(`File ${i + 1}: ${uploadedFiles[i].name}`);
+                    jUploadFile(uploadedFiles[i],uploadedFiles.length);
+                }
+            }
+            removePopup1();
+            //#server(..cOpenReport(uploadedFiles.length))#
+        }
+    document.body.addEventListener("drop", (ev) => {
+    		ev.preventDefault(); 
+
+    		let uploadedFiles = [];
+    		if (ev.dataTransfer.items) {
+       			 for (let i = 0; i < ev.dataTransfer.items.length; i++) {
+            		if (ev.dataTransfer.items[i].kind === "file") {
+                		uploadedFiles.push(ev.dataTransfer.items[i].getAsFile());
+            		}
+        		}
+   			} else {
+        		for (let i = 0; i < ev.dataTransfer.files.length; i++) {
+           			uploadedFiles.push(ev.dataTransfer.files[i]);
+        		}
+    		}
+
+    		#server(..cSetUploadTime())#
+    		if (uploadedFiles.length > 0) {
+       			for (let i = 0; i < uploadedFiles.length; i++) {
+                    jUploadFile(uploadedFiles[i],uploadedFiles.length);
+                }
+    		}
+			//#server(..cOpenReport(uploadedFiles.length))#
+   			removeDragData(ev);
+	});
+
+	document.body.addEventListener("dragover", (e) => {
+    	e.preventDefault(); 
+	});
+
+	function removeDragData(ev) {
+    	if (ev.dataTransfer.items) {
+        	ev.dataTransfer.items.clear();
+   		} else {
+
+       		ev.dataTransfer.clearData();
+    	}
+	}   
+    function removeDragData(ev) {
+        if (ev.dataTransfer.items) {
+        	ev.dataTransfer.items.clear();
+        } else {
+            ev.dataTransfer.clearData();
+        }
+    }    
+
+	function jUploadFile(file,fCount) {
+        var formData = new FormData();
+        formData.append("fileupload", file);
+        var fname = file.name.replace("&", " ");
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "trialUploadRecord.csp?FName=" + fname, true);
+        xhr.send(formData);
+
+        xhr.onload = function (e) {
+        if (this.status == 200) {
+           
+          #server(..cOpenReport(fCount))#
+         }
+        }
+    }	 
+ 
+    </script>
+<script language="cache" method="cOpenReport" arguments="d1:%String">
+     	;&js<alert(`#(d1)#`)>
+     	s UserID=$g(%session.Data("UserID"))
+     	s fileCount=$l(^trialUpload("UploadedFile",UserID),",")-1
+     	i d1'=fileCount s fileCount=$l(^trialUpload("UploadedFile",UserID),",")-1 h 1
+     	i d1'=fileCount s fileCount=$l(^trialUpload("UploadedFile",UserID),",")-1 h 1
+     	i d1'=fileCount s fileCount=$l(^trialUpload("UploadedFile",UserID),",")-1 h 1
+     	i d1'=fileCount s fileCount=$l(^trialUpload("UploadedFile",UserID),",")-1 h 1
+     	i d1'=fileCount s fileCount=$l(^trialUpload("UploadedFile",UserID),",")-1 h 1
+     	i d1'=fileCount s fileCount=$l(^trialUpload("UploadedFile",UserID),",")-1 h 1
+     	i d1'=fileCount s fileCount=$l(^trialUpload("UploadedFile",UserID),",")-1 h 1
+     	i d1'=fileCount s fileCount=$l(^trialUpload("UploadedFile",UserID),",")-1 h 1
+     	i d1'=fileCount s fileCount=$l(^trialUpload("UploadedFile",UserID),",")-1 h 1
+     	i d1'=fileCount s fileCount=$l(^trialUpload("UploadedFile",UserID),",")-1 h 1
+     	if d1=fileCount {
+     			&js<window.open("trialUploadReport.csp","_self")> 
+     		}
+     	
+</script>
+<script language="cache" method="cSetUploadTime">
+     	
+     	s %session.Data("trialFileUpload","time")=$h
+</script>
+                     
+</body>
+	
+</html>	                    

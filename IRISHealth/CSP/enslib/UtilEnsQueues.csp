@@ -1,0 +1,63 @@
+<!--
+Utilities: queue viewer
+-->
+
+<AutoPage domain="Ensemble" pagename="Queues" parentpage="UtilEnsHome.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Message Queues</Text>
+</Pane>
+
+<Pane name="Navigator" extends="UtilEnsHome.csp" />
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>Current Message Queues:</Text>
+	<Query>Ens.Queue:Enumerate</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>false</ShowZebra>
+	<AutoRefresh>true</AutoRefresh>
+
+	<Actions>
+		<Action href="UtilEnsQList.csp" name="$Contents">
+			<Caption>Contents</Caption>
+			<Popup>Display contents of this queue</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+	</Actions>
+
+	<Conditions>
+		<!-- non-empty -->
+		<Condition>
+			<ColumnName>Count</ColumnName>
+			<Predicate>GT</Predicate>
+			<Value>10</Value>
+			<RowStyle>background: red;</RowStyle>
+		</Condition>
+
+		<Condition>
+			<ColumnName>Count</ColumnName>
+			<Predicate>GT</Predicate>
+			<Value>3</Value>
+			<RowStyle>background: orange;</RowStyle>
+		</Condition>
+
+		<Condition>
+			<ColumnName>Count</ColumnName>
+			<Predicate>GT</Predicate>
+			<Value>0</Value>
+			<RowStyle>background: pink;</RowStyle>
+		</Condition>
+
+		<Condition>
+			<ColumnName>Count</ColumnName>
+			<TargetColumn>$Contents</TargetColumn>
+			<Predicate>EQ</Predicate>
+			<Value>0</Value>
+			<CellStyle>disabled;</CellStyle>
+		</Condition>
+
+	</Conditions>
+		
+</Pane>
+
+</AutoPage>

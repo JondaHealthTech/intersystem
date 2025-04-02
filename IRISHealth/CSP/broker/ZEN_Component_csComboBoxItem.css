@@ -1,0 +1,11 @@
+/* @class="%ZEN.Component.csComboBoxItem" */
+/* @doc="Enclosing div for csComboBoxItem." */
+.csComboBoxItem {
+    position:absolute;
+    cursor:pointer;
+    font: 12px sans-serif;
+    background: white;
+    color: black;
+    height:20px;
+}
+/* EOF */

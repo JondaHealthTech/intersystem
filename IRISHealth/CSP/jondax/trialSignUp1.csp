@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+	q 1
+	</script>
+    <script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+	<link rel="stylesheet" href="assets/styles/trialSignUp1.css">
+</head>
+<body>
+	<div id="wrapper">
+	    <div class="bg-wrapper">
+	        <div class="bg4">
+	            <img src="./assets/images/bg4.png">
+	        </div>
+	    </div>
+	    
+	 <a href="https://www.jonda.health/" class="back-link">Back to website</a>
+     <div class="container">    
+     	<img class="logo1" src="./assets/images/trial/JXbyJx.png" alt="Jonda X">
+      		<div class="form-container">  
+        	<form id="F1" class="profile-form" autocomplete="off">
+			<h1>Let us know more about you</h1>
+            	<div class="input-group name">
+                    <input type="text" name="T1" id="T1" placeholder="First name*" onfocus="jChangeMe()" required>
+                    <input type="text" name="T2" id="T2" placeholder="Last name*" onfocus="jChangeMe()" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" name="T3" id="T3" placeholder="Company*" onfocus="jChangeMe()" required>
+                </div>
+                
+                <div class="cType-group input-group">
+                	<input type="text" name="T4" class="T4" placeholder="Company Type*" onfocus="openCompanyDropdown(event)" required>
+                    <!--<div class="bucket-dropdown"><p class="bucket-name"></p></div>-->
+                    <img src="./assets/images/trial/dropDownDarkBlue.png" alt="Dropdown" onclick="openCompanyDropdown(event)">
+                    </div>
+                    <div class="cType-data dropdown-data inactive">
+                            <ul>
+                            	  <li onclick="changeType(event)">CMS,EHR,EMR</li>
+								  <li onclick="changeType(event)">Pathology Laboratory</li>
+								  <li onclick="changeType(event)">CRO</li>
+								  <li onclick="changeType(event)">Health Technology App Solution</li>
+								  <li onclick="changeType(event)">Telehealth</li>
+								  <li onclick="changeType(event)">Clinic & Hospital Groups</li>
+								  <li onclick="changeType(event)">Ministry of Health</li>
+								  <li onclick="changeType(event)">Government</li>
+								  <li onclick="changeType(event)" class="disabled">Other(Please type in text box)</li> 
+                            </ul>
+                </div>
+                <div class="Country-group input-group">
+                	<input type="text" name="T5" class="T5" placeholder="Country*" onfocus="openCountryDropdown(event)" required>
+                    <img src="./assets/images/trial/dropDownDarkBlue.png" alt="Dropdown"  onclick="openCountryDropdown(event)">
+                    </div>
+                    <div class="country-data dropdown-data inactive">
+                            <ul>
+                            	<script language="cache" runat="server">
+                            		d WriteCountry^trialSignUp
+                            	</script>
+                            </ul>
+                </div>
+                
+
+    		<div class="input-group checkbox">
+    		<input type="checkbox" id="marketing-emails" name="marketing" onclick="jToggleCheckBox(event)">
+    		<span>I&apos;d like to receive marketing emails from Jonda Health</span>
+			</div>
+				<p class="error-text" id="AlertText">
+				<br>
+	            </p>
+		</form>
+                <button  class="continue-btn" onclick="jCreate()" disabled>Create Profile</button>
+            
+          </div>
+		<script language="cache" runat="server">
+          	d SetFooter^trialHome
+          </script>
+	  </div>
+	</div>		    
+</body>
+<script type="text/javascript">
+	T1=self.F1.T1, T2=self.F1.T2,T3=self.F1.T3,T4=self.F1.T4,T5=self.F1.T5
+	let AlertText=document.getElementById("AlertText");
+	const CompanyData = document.querySelector(".cType-data");
+	const CountryData = document.querySelector(".country-data");
+	const btn=document.querySelector(".continue-btn");
+	const checkbox=document.getElementById("marketing-emails");
+	window.onload=jInitMe();
+	
+	function jInitMe(){
+		T1.focus();
+	}
+	function jToggleCheckBox(e){
+		btn.disabled = !checkbox.checked;
+		
+	}
+	function jChangeMe(){
+		AlertText.innerHTML="<br>"
+	}
+	function jCreate(){
+		AlertText.innerHTML="<br>"
+		if ((T1.value=="")||(T2.value=="")||(T3.value=="")||(T4.value=="")||(T5.value=="")){
+			AlertText.innerHTML="Let's get all the blanks filled in before we move on"
+		}else{
+			#server(..cCreateProfile(T1.value,T2.value,T3.value,T4.value,T5.value))# 
+		}
+	}
+
+	function openCompanyDropdown(e){
+		jChangeMe()
+	    CompanyData.classList.toggle("inactive")
+        let position = e.target.getBoundingClientRect();
+        CompanyData.style.top = position.bottom + 2 + "px";
+        CompanyData.style.right =window.innerWidth - position.right + "px";
+        setTimeout(()=>{
+            CompanyData.classList.add("active");
+        },100);
+	        }
+	function changeType(e){
+        let type=e.target.textContent;
+        document.querySelector(".T4").value =type;
+        CompanyData.classList.toggle("inactive")
+	        }
+	function openCountryDropdown(e){
+	    jChangeMe()
+	    CountryData.classList.toggle("inactive")
+        let position = e.target.getBoundingClientRect();
+        CountryData.style.top = position.bottom + 2 + "px";
+        CountryData.style.right =window.innerWidth - position.right + "px";
+        setTimeout(()=>{
+            CountryData.classList.add("active");
+        },100);
+	        }
+	function changeCountry(e){
+        let ctry=e.target.textContent;
+        document.querySelector(".T5").value =ctry;
+        CountryData.classList.toggle("inactive")
+	        }
+</script>
+<script language="cache" method="cCheckUser" arguments="d1:%String">
+	d CheckUser^trialSignUp
+</script>
+<script language="cache" method="cCreateProfile" arguments="d1,d2,d3,d4,d5:%String">
+		d CreateProfile^trialSignUp
+</script>
+
+</html>

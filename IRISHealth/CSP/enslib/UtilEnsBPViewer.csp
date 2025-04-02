@@ -1,0 +1,37 @@
+<AutoPageENS domain="Ensemble" parentpage="UtilEnsBPList.csp" pagename="Message Routing Rule Viewer" title="@Ensemble:EnsRoutingRuleViewer@Message Routing Rule Viewer">
+<csp:clsas includes="Ensemble,EnsUI">
+<html>
+<head>
+<title><csp:text>RoutingRule</csp:text></title>
+</head>
+<body>
+</body>
+<script language="CACHE" method="OnPreHTTP" ReturnType="%Boolean">
+	// This page is called from Production configuration page when "View Rule" is clicked.
+	// The Purpose of this page is to check whether there are more than one rule
+	Set $ZT="Trap"
+	Set id = $G(%request.Data("$ID1",1))
+	Set host = $P(id,"||",1)
+	Set rname = $P(id,"||",2)
+	// SKK120 
+	Set refreshpage = "UtilEnsRoutingRuleEditor.csp?$ID1=" _ id _ "&READONLY=1"
+
+	Set tRS = ##class(%ResultSet).%New("Ens.Rule.RuleDefinition:EnumerateSameNameRules")
+	Do tRS.Execute(host,rname)
+	Set tHasMore = 0
+	While tRS.Next() {
+		Set tHasMore = tHasMore + 1
+		If tHasMore > 1 Quit
+	}
+	// SKK120 
+	If tHasMore '> 1 Set %response.Redirect = "UtilEnsRoutingRuleEditor.csp?$ID1=" _ id _ "&READONLY=1"
+	Else  Set %response.Redirect = "UtilEnsRuleSameNameList.csp?$ID1=" _ host _ "&$ID2=" _ rname _ "&READONLY=1"
+	Quit 1
+
+:Trap
+	Set $ZT=""
+	Quit 1	
+	
+</script>
+</html>
+

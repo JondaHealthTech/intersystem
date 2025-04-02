@@ -1,0 +1,172 @@
+<!--
+Utilities: Host Monitor
+-->
+
+<AutoPage domain="Ensemble" pagename="Host Monitor" parentpage="UtilEnsHome.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Host Monitor</Text>
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>Host Monitor</Text>
+	<Query>Ens.Util.Statistics:EnumerateHostStatus</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>false</ShowZebra>
+	<AutoRefresh>true</AutoRefresh>
+
+	<Actions>
+		<Action href="UtilEnsMonitor.csp?$FRAME=Info" targetFrame="Info" name="$A">
+			<Caption>Instances</Caption>
+			<Popup>Display instances for this class.</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+		<Action href="UtilEnsActivityGraph.csp?$FRAME=Info" targetFrame="Info" name="$B">
+			<Caption>@Ensemble:History@History</Caption>
+			<Popup>@Ensemble:HistoryPop@Display Activity History Graph for this class.</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+		<Action href="UtilEnsQList.csp" name="Queue">
+			<Popup>@Ensemble:popMsgQueue@Go to the message queue page</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+
+	</Actions>
+
+	<Conditions>
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Error</Value>
+			<RowStyle>background: red;</RowStyle>
+		</Condition>
+		<!-- stopped -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Stopped</Value>
+			<RowStyle>background: #D0D0D0; color: #808080; font-size: 0.8em;</RowStyle>
+		</Condition>
+
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Inactive</Value>
+			<RowStyle>background: yellow;</RowStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>ElapsedTime</ColumnName>
+			<Predicate>GT</Predicate>
+			<Value>-1</Value>
+			<CellStyle>text-align: right;</CellStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Count</ColumnName>
+			<Predicate>GT</Predicate>
+			<Value>-1</Value>
+			<CellStyle>text-align: right;</CellStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Queue</ColumnName>
+			<Predicate>GT</Predicate>
+			<Value>100</Value>
+			<CellStyle>background: orange; text-align: right;</CellStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Queue</ColumnName>
+			<Predicate>GT</Predicate>
+			<Value>-1</Value>
+			<CellStyle>text-align: right;</CellStyle>
+		</Condition>
+
+		<!-- recent (activity within last minute) -->
+		<Condition>
+			<ColumnName>ElapsedTime</ColumnName>
+			<Predicate>LTEQ</Predicate>
+			<Value>60</Value>
+			<RowStyle>font-weight: bold;</RowStyle>
+		</Condition>
+
+		<!-- old (no activity within last hour) -->
+		<Condition>
+			<ColumnName>ElapsedTime</ColumnName>
+			<Predicate>GT</Predicate>
+			<Value>3600</Value>
+			<RowStyle>background: #E0E0FF; color: #404040;</RowStyle>
+		</Condition>
+
+	</Conditions>
+
+
+</Pane>
+
+<Pane name="Info" type="%CSP.Util.TablePane">
+	<Text>@Ensemble:Details@Details</Text>
+	<Query>Ens.Util.Statistics:EnumerateJobStatus</Query>
+	<Sortable>false</Sortable>
+	<ShowZebra>false</ShowZebra>
+	<AutoRefresh>true</AutoRefresh>
+
+	<Conditions>
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Error</Value>
+			<RowStyle>background: red;</RowStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Retry</Value>
+			<RowStyle>background: orange;</RowStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Inactive</Value>
+			<RowStyle>background: yellow;</RowStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<TargetColumn>$A</TargetColumn>
+			<Predicate>NEQ</Predicate>
+			<Value>Retry</Value>
+			<CellStyle>disabled;</CellStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<TargetColumn>$B</TargetColumn>
+			<Predicate>NEQ</Predicate>
+			<Value>Retry</Value>
+			<CellStyle>disabled;</CellStyle>
+		</Condition>
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<TargetColumn>$C</TargetColumn>
+			<Predicate>EQ</Predicate>
+			<Value>Dead</Value>
+			<CellStyle>disabled;</CellStyle>
+		</Condition>
+	</Conditions>
+	<Actions>
+		<Action href="UtilEnsAbort.csp?$FRAME=Info&amp;$ABORTFROM=MONITOR" targetFrame="Info" name="$A">
+			<Caption>@Ensemble:Abort@Abort</Caption>
+			<Popup>@Ensemble:popMsgAbort@Abort the current message being retried</Popup>
+			<IDValues>{Job}</IDValues>
+			<Confirm>@Ensemble:ConfirmAbortMsg@Are you sure you want to abort this message?</Confirm>
+		</Action>
+		<Action href="UtilEnsAbort.csp?$FRAME=Info&amp;$ABORTFROM=MONITORSUSPEND" targetFrame="Info" name="$B">
+			<Caption>@Ensemble:Suspend@Suspend</Caption>
+			<Popup>@Ensemble:popMsgSuspend@Suspend the current message being retried</Popup>
+			<IDValues>{Job}</IDValues>
+			<Confirm>@Ensemble:ConfirmSuspendMsg@Are you sure you want to suspend this message?</Confirm>
+		</Action>
+		<Action href="UtilEnsAbort.csp?$FRAME=Info&amp;$ABORTFROM=MONITORSTOPJOB" targetFrame="Info" name="$C">
+			<Caption>@Ensemble:StopJob@Stop</Caption>
+			<Popup>@Ensemble:popMsgStopJob@Stop this Instance's Job</Popup>
+			<IDValues>{Job}</IDValues>
+			<Confirm>@Ensemble:ConfirmStopJob@Are you sure you want to stop this instance job? It will be forcibly stopped if it fails to respond within the Update Timeout. Updating the Production subsequently may start a fresh instance job for this config item.</Confirm>
+		</Action>
+	</Actions>
+</Pane>
+</AutoPage>

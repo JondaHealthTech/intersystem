@@ -1,0 +1,566 @@
+<AutoPageENS domain="Ensemble" parentpage="UtilEnsEDIMain.csp" pagename="EDI Document Viewer" title="@Ensemble:EDIManagerViewer@EDI Document Viewer">
+<html>
+<head>
+<script language=Cache runat=server>
+	#Include Ensemble
+	Set tDocClass=$G(%request.Data("CLASS",1))
+	Set tTypeName=$G(%request.Data("NAME",1))  Set:""=tTypeName&&(""'=tDocClass) tTypeName=$zobjclassmethod(tDocClass,"%GetParameter","DOCCLASSNAME")
+	Set tTypeFullName=$G(%request.Data("FULLNAME",1))  Set:""=tTypeFullName&&(""'=tDocClass) tTypeFullName=$zobjclassmethod(tDocClass,"%GetParameter","DOCCLASSFULLNAME")
+	Set tIsHL7=$S(""=tDocClass:0,1:$zobjclassmethod(tDocClass,"%IsA","EnsLib.HL7.Message"))
+</script>
+<title>#(tTypeName)# Viewer</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+
+<SCRIPT LANGUAGE=JavaScript SRC="/csp/broker/cspbroker.js"></SCRIPT>
+
+<STYLE>
+
+/* EDI Document Table */
+TABLE.EDIDocumentTable {
+		border: black solid 1px; font-size: 0.8em;
+		background: #DDDDFF;
+		margin-left: 10px; margin-right: 10px;
+		width: 10;
+	}
+
+TD.EDIDocumentTableExpandor {
+		background: #D0D0FF;
+		border-bottom: gray solid 1px;
+		padding: 2px;
+	}
+
+TD.EDIDocumentTableSegnum {
+		background: white;
+		font-weight: bold;
+		text-align: right;
+		border-bottom: gray solid 1px;
+		padding: 2px;
+	}
+
+TD.EDIDocumentTableSegid {
+		background: white;
+		border-bottom: gray solid 1px;
+		border-right: gray solid 1px;
+		padding: 2px;
+	}
+
+TD.EDIDocumentTableSegname {
+		background: #D0D0FF;
+		text-align: center;
+		font-weight: bold;
+		border-bottom: gray solid 1px;
+		padding: 2px;
+	}
+
+/* Segment single-row Table */
+TABLE.EDISegmentsTable {
+		background: white;
+		font-size: 0.9em;
+		border-bottom: gray solid 1px;
+	}
+
+TD.EDISegmentsTableValue {
+		background: white;
+		padding: 2px;
+	}
+
+TD.EDISegmentsTableSeparator {
+		background: white;
+		padding: 2px;
+	}
+
+TD.EDISegmentsTableEmptyfield {
+		background: white;
+		padding: 2px;
+	}
+</STYLE>
+
+<script language="javascript">
+
+function btnSaveToFile()
+{
+	var form = self.document.theForm;
+	form.SUBMIT_OPERATION.value = "SaveToFile";
+	if (form.OUTFILE.value == '') {
+		alert("Please specify a filename");
+		return false;
+	}
+	form.submit();
+	return true;
+}
+
+function selChange()
+{
+	var sel = self.document.getElementById('EDIType');
+	var form = self.document.getElementById('theForm');
+	form.CLASS.value = sel.options[sel.selectedIndex].value;
+	form.NAME.value = sel.options[sel.selectedIndex].text;
+	form.submit();
+	return true;
+}
+
+function submitClick()
+{
+	var sel = self.document.getElementById('EDIType');
+	var form = self.document.getElementById('theForm');
+	form.CLASS.value = sel.options[sel.selectedIndex].value;
+	form.NAME.value = sel.options[sel.selectedIndex].text;
+	return true;
+}
+</script>
+
+<csp:IF condition="'$L(tDocClass)">
+<script language="javascript">
+function onLoadBody()
+{
+	document.focus();
+}
+</script>
+<csp:ELSE>
+
+<SCRIPT LANGUAGE=Cache RUNAT="server">
+	#Include Ensemble
+	Set tSCService="", tSCOpen=$$$OK
+
+	Set SubmitOperation=$G(%request.Data("SUBMIT_OPERATION",1))
+	Set Filename = $G(%request.Data("FILE",1)),XFilename=""
+	Set:""=Filename Filename=$G(%request.Data("OLDFILE",1))
+
+ 	Set EDIDocId=$G(%request.Data("EDIDOCID",1))
+ 	Set MsgHdrId=$G(%request.Data("HDR",1))
+	Set Origin = $ZCVT($G(%request.Data("ORIGIN",1)),"L")
+	Set:$Case(Origin,"header":1,"head":1,:0) Origin="hdr"
+	If ("hdr"=Origin) {
+	 	Set:""=MsgHdrId MsgHdrId=$G(%request.Data("ID",1))
+	} Else {
+	 	Set:""=EDIDocId EDIDocId=$G(%request.Data("ID",1))
+	}
+	Set:""=Origin Origin=$S(""'=Filename:"file", 1:$S(""'=EDIDocId:"edidoc", 1:$S(""'=MsgHdrId:"hdr", 1:"file"))) ; Set Default
+	Set FileMsg = +$G(%request.Data("FileMsg",1),1)
+	Set DocSpec = $ZCVT($G(%request.Data("DOCSPEC",1)),"L")
+	Set ServiceName = $G(%request.Data("ServiceName",1))
+
+	If "service"=DocSpec {
+		If ""=ServiceName { Set tSCService=$$$ERROR($$$EnsErrGeneral,"No Config Item specified for DocType source") }
+		Else {
+			Set tService=##class(EnsLib.Testing.Service).GetShadowInstance(ServiceName,.tSCService)
+			If $$$ISOK(tSCService) && 'tService.%Extends("EnsLib.EDI.ServiceInterface") {
+				Set tSCService=$$$ERROR($$$EnsErrGeneral,"Config Item class "_tService.%ClassName(1)_" found for '"_ServiceName_"' is not a Business Service")
+			}
+		}
+	}
+	If "hdr"=Origin {
+		Set hdr = ##class(Ens.MessageHeader).%OpenId(MsgHdrId,,.tSCOpen)
+		If '$IsObject(hdr)||'##class(%Dictionary.CompiledClass).%ExistsId(hdr.MessageBodyClassName)||'+hdr.MessageBodyId { Set msg=$$$NULLOREF }
+		Else { Set msg = $zobjclassmethod(hdr.MessageBodyClassName,"%OpenId",hdr.MessageBodyId,,.tSCOpen) }
+	} ElseIf "file"=Origin {
+		Set msg=$$$NULLOREF
+		If ""=Filename {
+			Set tSCOpen=$$$OK
+		} Else {
+			If '##class(%File).Exists(Filename) {
+				Set tSCOpen=$$$ERROR($$$EnsErrGeneral,"Unable to open file '"_Filename_"'")
+			} Else {
+				Set XFilename=Filename
+				Set msg=$zobjclassmethod(tDocClass,"ImportFromFile",XFilename,FileMsg,.tSCOpen,$S($$$ISOK(tSCService):tService,1:""))
+			}
+		}
+	} Else {
+		Set msg=$zobjclassmethod(tDocClass,"%OpenId",EDIDocId,,.tSCOpen)
+	}
+	Set tIsDoc=$S($IsObject(msg):msg.%Extends("Ens.VDoc.Interface"),1:0)
+	Set Category = $G(%request.Data("Category",1))
+	Set MsgType = $G(%request.Data("MsgType",1))
+	Set DocType = $G(%request.Data("DocType",1))
+	Set MsgName=$S(tIsDoc:msg.Name,1:"")
+	Set MsgVer=$S(tIsDoc:msg.TypeVersion,1:"")
+	Set XDocType=""
+	Set:""=DocSpec DocSpec="stored" ; Set Default
+	If "service"=DocSpec {
+		If $$$ISOK(tSCService) {
+			If $IsObject(msg) && 'msg.%Extends(tService.%GetParameter("DOCCLASS")) {
+				Set tSCService=$$$ERROR($$$EnsErrGeneral,"Config Item class "_tService.%ClassName(1)_" found for '"_ServiceName_"' is not "_$S("aeiouxh"[$ZCVT($E(tTypeName),"L"):"an ",1:"a ")_tTypeName_" Service")
+			}
+			Set:$$$ISOK(tSCService)&&$IsObject(msg) XDocType=tService.resolveDocType(msg)
+		}
+		Set tDoc="resolveDocType() method of Business Service <b><i>"_ServiceName_"</i></b>"
+	} ElseIf "category"=DocSpec {
+		If ""'=Category {
+			Set XDocType=..resolveDocType(tDocClass,Category,MsgName)
+		}
+		Set tDoc="Category / doc.Name"
+	} ElseIf "msgtype"=DocSpec {
+		If ""'=MsgType {
+			Set XDocType=..resolveDocType(tDocClass,$P(MsgType,":"),$P(MsgType,":",2))
+		}
+		Set tDoc="ResolveSchemaTypeToDocType( "_MsgType_" )"
+	} ElseIf "declared"=DocSpec {
+		Set XDocType=..resolveDocType(tDocClass,MsgVer,MsgName), tDoc=tTypeName_" content declared"
+	} ElseIf "stored"=DocSpec {
+		Set XDocType=$S(tIsDoc:msg.DocType,1:""), tDoc=tTypeName_" stored DocType property"
+	} ElseIf "none"=DocSpec {
+		Set XDocType="", tDoc="None"
+	} Else {
+		Set XDocType=DocType, tDoc="specified DocType"
+	}
+	//If tIsHL7 { Set:""=XDocType&&$IsObject(msg)&&("none"'=DocSpec) XDocType=msg.chooseDocType(.tDoc),DocSpec="doctype" }
+	Set XCategory=$S("none"=DocSpec:"",1:$S(""'=Category:Category, 1:$S(""'=$P(XDocType,":"):$P(XDocType,":"),1:MsgVer)))
+
+	Set DT = $ZCVT($G(%request.Data("DT",1),0),"L")
+	Set DTClass = $G(%request.Data("DTCLASS",1))
+	Set DTDisp = $ZCVT($G(%request.Data("DTDISP",1)),"L")
+	Set:""=DTDisp DTDisp="one" ; Set Default
+	Set OutFile = $G(%request.Data("OUTFILE",1))
+	
+	If DT && $IsObject(msg)
+	 && (""'=DTClass)
+	 && ##class(%Dictionary.CompiledClass).%ExistsId(DTClass)
+	 && $zobjclassmethod(DTClass,"%Extends","Ens.DataTransform")
+	 && $zobjclassmethod($zobjclassmethod(DTClass,"GetSourceType"),"%Extends",tDocClass) {
+	 Set tSCDT = $zobjclassmethod(DTClass,"Transform",msg,.msgout)
+	}
+	If ""'=OutFile&&("SaveToFile"=SubmitOperation)&&$IsObject(msg) {
+		If $$$IsdefObject(msgout) {
+			Set tSCSaveToFile=msgout.OutputToFile(OutFile,1,msgout.Separators_$C(13,10))
+		} Else {
+			Set tSCSaveToFile=msg.OutputToFile(OutFile,1,msg.Separators_$C(13,10))
+		}
+	} Else { Set tSCSaveToFile=$$$OK }
+	
+	#; Set up UI lists
+	Set tRS = ##class(%ResultSet).%New("%Dictionary.ClassDefinition:SubclassOf")
+	Do tRS.Execute("Ens.BusinessService")
+	While (tRS.Next()) { Set tClassName=$G(tRS.Data("Name"))
+		TRY {
+			Set tList=$zobjclassmethod(tClassName,"GetRequestClassList")
+			For r=1:1:$LL(tList) { Set tReqType=$LI(tList,r)
+				Continue:$$$comClassKeyGet(tClassName,$$$cCLASSabstract)
+				Continue:$Case(tReqType,"%Persistent":1,"%RegisteredObject":1,"%AbstractStream":1,"%Library.Persistent":1,"%Library.RegisteredObject":1,"%Library.AbstractStream":1,"%Stream.Object":1,:'$zobjclassmethod(tDocClass,"%Extends",tReqType))
+				Set iprod=$I(svcsorted)
+				Set svcsorted(iprod) = " class ||"_tClassName
+				Set svcsorted(iprod,"coc")=tClassName
+			}
+		} CATCH errobj { }
+	}
+	Do tRS.Close()
+
+	Set tRS = ##class(%ResultSet).%New("%Dictionary.ClassDefinition:SubclassOf")
+	Do tRS.Execute("Ens.Production")
+	While (tRS.Next()) { Set tName=$G(tRS.Data("Name"))  Continue:$Case(tName,"Ens.Production":1,:0)||'##class(%Dictionary.CompiledClass).%ExistsId(tName)
+		Set tRS2 = ##class(%ResultSet).%New("Ens.Config.Production:EnumerateConfigItems")
+		Do tRS2.Execute(tName,$$$eHostTypeService,0) ; ConfigItemName,CommentOrClassName,Enabled,BusinessType,ClassName,RequestClasses,ResponseClasses
+		While (tRS2.Next()) {
+			Set tClassName=$G(tRS2.Data("ClassName"))
+			Set tReqType=$P($G(tRS2.Data("RequestClasses")),",")
+			Continue:$Case(tReqType,"%Persistent":1,"%RegisteredObject":1,"%AbstractStream":1,"%Library.Persistent":1,"%Library.RegisteredObject":1,"%Library.AbstractStream":1,"%Stream.Object":1,:'$zobjclassmethod(tDocClass,"%Extends",tReqType))
+			Set iprod=$I(svcsorted)
+			Set svcsorted(iprod) = tName_"||"_$G(tRS2.Data("ConfigName"))
+			Set svcsorted(iprod,"coc")=$G(tRS2.Data("CommentOrClassName"))
+			Set:svcsorted(iprod)=$G(svcsorted(iprod-1)) svcsorted(iprod,"coc+")=1, svcsorted(iprod-1,"coc+")=1
+		}
+		Do tRS2.Close()
+		Set tRS2 = $$$NULLOREF
+	}
+	Do tRS.Execute("Ens.DataTransform")
+	While (tRS.Next()) { Set tName=$G(tRS.Data("Name")) Continue:$Case(tName,"Ens.DataTransform":1,"Ens.DataTransformDTL":1,:0)
+		TRY {
+			Set tSrcClass=$S(##class(%Dictionary.CompiledClass).%ExistsId(tName):$zobjclassmethod(tName,"GetSourceType"), 1:"")
+			Set:""'=tSrcClass&&$zobjclassmethod(tSrcClass,"%Extends",tDocClass) dtsorted(tName) = ""
+		} CATCH errobj { }
+	}
+	Do tRS.Close()
+	If ""'=tDocClass&&$zobjclassmethod(tDocClass,"%Extends","Ens.VDoc.Interface") {
+		Set tRS = ##class(%ResultSet).%New(tDocClass_":EnumerateTypeCategories")
+		Do tRS.Execute()
+		While (tRS.Next()) {
+			Set catsorted($I(catsorted)) = $G(tRS.Data("Category"))
+		}
+	}
+	Do tRS.Close()
+	Set tRS = $$$NULLOREF
+</SCRIPT>
+
+<csp:IF CONDITION=($$$ISERR(tSCSaveToFile))>
+<script language="javascript">
+function onLoadBody()
+{
+	document.focus();
+	alert("Error saving file: #($$$StatusDisplayString(tSCSaveToFile))#");
+}
+</script>
+<csp:ELSEIf CONDITION=(""'=OutFile&&("SaveToFile"=SubmitOperation)&&$IsObject(msg))>
+<script language="javascript">
+function onLoadBody()
+{
+	document.focus();
+	alert("Saved #(tTypeName)# to file '#($ZCVT(OutFile,"O","JS"))#'");
+}
+</script>
+<csp:ELSE>
+<script language="javascript">
+function onLoadBody()
+{
+	document.focus();
+}
+</script>
+</csp:IF>
+
+</csp:IF>
+
+</head>
+
+
+<BODY onload="onLoadBody();">
+
+<SCRIPT LANGUAGE=Cache RUNAT="server">
+	#Include Ensemble
+</SCRIPT>
+<table BORDER="0" CLASS="LayoutMain" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" style="border-bottom: gray solid 1px;">
+<tr><td class="LayoutContentCol">
+<div class="Text1"><br>&nbsp;<b>View&nbsp;
+<select name="EDIType" onchange="selChange();">
+<script language=Cache runat=server>
+	Set tRS=##class(%ResultSet).%New("%Dictionary.ClassDefinition:SubclassOf")
+	Do tRS.Execute("Ens.VDoc.Interface")
+	While (tRS.Next()) { Set txClass=$G(tRS.Data("Name"))
+		TRY {
+			Set txName=$zobjclassmethod(txClass,"%GetParameter","DOCCLASSNAME")
+		} CATCH errobj { Set txName="" }
+		Continue:""=txName
+		&html<<option value="#(txClass)#"#($S(txClass=tDocClass||('$L(tDocClass)&&(txClass="EnsLib.HL7.Message")):" selected",1:""))#>#(txName)#</option>>
+	}
+	Do tRS.Close()
+	Set tRS = $$$NULLOREF
+</script>
+</select></b></div>
+
+<csp:IF condition="'$L(tDocClass)">
+<form name="theForm" action=EDIDocumentView.csp method=get>
+<input type="hidden" name="CLASS" value="">
+<input type="hidden" name="NAME" value="">
+	<input type=submit value=View align=center onclick="submitClick();">
+</form>
+<csp:ELSE>
+<form name="theForm" action="EDIDocumentView.csp" method=get>
+	<input type="hidden" name="SUBMIT_OPERATION" value="">
+	<input type=hidden name=CLASS value="#(tDocClass)#">
+	<input type=hidden name=NAME value="#(tTypeName)#">
+<csp:IF condition="$L(tDocClass)">
+	<table><tr>
+		<th width=20/>
+		<th colspan=2 align="left">Source for #(tTypeName)# data</th>
+		<th width=35/>
+		<th colspan=2 align="left">Source for #(tTypeName)# DocType (#($S(tIsHL7:"Message", 1:"Document"))# Structure schema definition)</th>
+	</tr><tr>
+		<td rowspan=7/>
+		<td CLASS="Text"><INPUT TYPE="radio"#($S("file"=Origin:" CHECKED",1:""))# NAME="ORIGIN" VALUE="FILE">Filename</td>
+		<td><INPUT TYPE="file" NAME="FILE" VALUE="#(Filename)#" SIZE="30">
+			<INPUT TYPE="hidden" NAME="OLDFILE" VALUE="#(Filename)#"></td>
+		<td rowspan=7/>
+		<td CLASS="Text"><INPUT TYPE="radio"#($S("service"=DocSpec:" CHECKED",1:""))# NAME="DOCSPEC" VALUE="Service">ProductionName||ConfigName<br>&nbsp;&nbsp;&nbsp;[|CommentOrClassname]</td>
+		<td nowrap CLASS="Text">
+		    <select name="ServiceName" WIDTH="16">
+			<SCRIPT LANGUAGE=Cache RUNAT="server">
+			Set isvc="" For { Set isvc=$O(svcsorted(isvc))  Quit:isvc=""
+				Set svcname=svcsorted(isvc)_$S($G(svcsorted(isvc,"coc+")):"|"_svcsorted(isvc,"coc"),1:"")
+				&html<<option value="#(svcname)#"#($S(svcname=$G(ServiceName):" selected",1:""))#>#(svcname)#</option>>
+			}
+			</SCRIPT>
+			</select></td>
+	</tr>
+	<csp:IF CONDITION=(""'=tSCService&&$$$ISERR(tSCService))>
+		<tr>	
+			<td></td>
+			<td></td>
+			<td colspan=2 CLASS="Text"><i>'#($ZCVT($$$StatusDisplayString(tSCService),"O","HTML"))#'</i></td>
+	    </tr>
+	</csp:IF>
+	<tr>	
+		<td colspan=2 align="center" CLASS="Text"><i>#($S(""=Filename:"",1:"File='"_Filename_"'"))#</i></td>
+		<td CLASS="Text"><INPUT TYPE="radio"#($S("category"=DocSpec||(""=DocSpec):" CHECKED",1:""))# NAME="DOCSPEC" VALUE="Category">Schema&nbsp;Category&nbsp;/&nbsp;Version</td>
+		<td CLASS="Text"><select name="Category" WIDTH="40">
+			<SCRIPT LANGUAGE=Cache RUNAT="server">
+			Set icat="" For { Set icat=$O(catsorted(icat))  Quit:icat=""  Set cat=catsorted(icat)
+				&html<<option value="#(cat)#"#($S(cat=XCategory:" selected",1:""))#>#(catsorted(icat))#</option>>
+			}
+			</SCRIPT>
+		</select></td>
+    </tr><tr>	
+		<td></td>
+		<td CLASS="Text">Document # inside file:&nbsp;<INPUT TYPE="integer" NAME="FileMsg" VALUE="#(FileMsg)#" SIZE="4"/></td>
+		<CSP:IF condition='tIsHL7'>
+			<td CLASS="Text">
+				<INPUT TYPE="radio" #($S("msgtype"=DocSpec:" CHECKED",1:""))# NAME="DOCSPEC" VALUE="MsgType"/>
+				#($Replace(tTypeName," ","&nbsp;"))#&nbsp;Type&nbsp;(Version:Name)</td>
+			<td>
+				<INPUT TYPE="text" NAME="MsgType" VALUE="#($S(""'=MsgType&&(":"'=MsgType):MsgType, 1:$S(""'=MsgVer:MsgVer,1:$P(XDocType,":"))_$S(""=MsgName:"",1:":"_MsgName)))#" SIZE="30">
+			</td>
+		<CSP:ELSE>
+			<td></td>
+			<td></td>
+		</CSP:IF>
+	</tr><tr>	
+		<td CLASS="Text"><INPUT TYPE="radio"#($S("hdr"=Origin:" CHECKED",1:""))# NAME="ORIGIN" VALUE="HDR">Message&nbsp;Header&nbsp;Id&nbsp;</td>
+		<td><INPUT TYPE="text" NAME="HDR" VALUE="#(MsgHdrId)#" SIZE="8"></td>
+		<td CLASS="Text"><INPUT TYPE="radio"#($S("doctype"=DocSpec:" CHECKED",1:""))# NAME="DOCSPEC" VALUE="DocType">Use this DocType</td>
+		<td><INPUT TYPE="text" NAME="DocType" VALUE="#($S(""'=DocType:DocType,1:XDocType))#" SIZE="30"></td>
+    </tr><tr>	
+		<td CLASS="Text"><INPUT TYPE="radio" ALIGN="left"#($S("edidoc"=Origin:" CHECKED",1:""))# NAME="ORIGIN" VALUE="EDIDOC">#(tTypeName)#&nbsp;Id&nbsp;</td>
+		<td><INPUT TYPE="text" NAME="EDIDOCID" VALUE="#(EDIDocId)#" SIZE="8"></td>
+		<td CLASS="Text"><INPUT TYPE="radio"#($S("declared"=DocSpec:" CHECKED",1:""))# NAME="DOCSPEC" VALUE="Declared">#($S(tIsHL7:"MSH",1:"Content"))#&nbsp;declared&nbsp;Version:Name</td>
+		<td CLASS="Text"><i>'</i>#($S('$IsObject(msg):"", 1:"<i title='Document Type derived from Version &amp; DocumentType fields in the "_$S(tIsHL7:"MSH header",1:"document content")_", used to look up a corresponding DocType / schema structure for the document'>"_$ZCVT(MsgVer_":"_MsgName,"O","HTML")_"</i>"_$S('tIsHL7:"", 1:"<i>'</i> -> <i title='Document Structure / DocType derived from the Document Type declared in the Version & DocumentType fields in the MSH header'>'"_$ZCVT(..resolveDocType(tDocClass,MsgVer,MsgName),"O","HTML")_"</i>")))#<i>'</i></td>
+    </tr><tr>	
+		<td></td>
+		<td></td>
+		<td CLASS="Text"><INPUT TYPE="radio"#($S("stored"=DocSpec:" CHECKED",1:""))# NAME="DOCSPEC" VALUE="Stored">Object's&nbsp;stored&nbsp;DocType</td>
+		<td CLASS="Text"><i title='DocType / EDI Document Structure stored as a property of this EDI Document object along with the raw content of the Document'>'#($S(tIsDoc:msg.DocType,1:""))#'</i></td>
+    </tr><tr>	
+		<td></td>
+		<td></td>
+		<td CLASS="Text"><INPUT TYPE="radio"#($S("none"=DocSpec:" CHECKED",1:""))# NAME="DOCSPEC" VALUE="None">None</td>
+		<td></td>
+    </tr></table>	
+<hr>
+	<center><table><tr>
+		<td></td>
+		<td CLASS="Text" align="right"><INPUT type="checkbox" name="DT"#($S('DT:"",1:" CHECKED"))# value="1"></td>
+		<td CLASS="Text" colspan=2>Apply Data Transform&nbsp;
+			<select name="DTCLASS" WIDTH="30">
+			<SCRIPT LANGUAGE=Cache RUNAT="server">
+			Set dtclass="" For { Set dtclass=$O(dtsorted(dtclass))  Quit:dtclass=""
+				&html<<option value="#(dtclass)#"#($S(dtclass=DTClass:" selected",1:""))#>#(dtclass)#</option>>
+			}
+			</SCRIPT>
+			</select>
+		</td>
+    </tr>
+	<tr>	
+		<td>
+</csp:IF>
+		#($S(""=tDocClass:"<center>",1:""))#<INPUT TYPE="submit" VALUE="View #(tTypeName)#" onclick="submitClick();">
+<csp:IF condition="$L(tDocClass)">
+		&nbsp;&nbsp;</td>
+		<td></td>
+		<td CLASS="Text"><INPUT TYPE="radio"#($S("one"=DTDisp:" CHECKED",1:""))# NAME="DTDISP" VALUE="One">Show Output Only</td>
+     </tr><tr>	
+		<td></td>
+		<td></td>
+		<td CLASS="Text"><INPUT TYPE="radio"#($S("both"=DTDisp:" CHECKED",1:""))# NAME="DTDISP" VALUE="Both">Show Input and Output side-by-side</td>
+		<td colspan=2>&nbsp;&nbsp;&nbsp;
+ 			<input #($S('$IsObject(msg):"disabled",1:""))# type="button" name="BTN_SaveToFile" value="Save To File" onclick="btnSaveToFile();">&nbsp;<INPUT TYPE="text" NAME="OUTFILE" VALUE="#(OutFile)#" SIZE="30">
+    	</td>
+    </tr></table></center>
+</csp:IF>
+</form>
+<csp:IF condition="$L(tDocClass)">
+<a name="doc_content"></a>
+<SCRIPT LANGUAGE=Cache RUNAT="server">
+	Set tSource = $$$Text("EDI Document Viewer")
+	Set tNA = $$$Text("N/A")
+	Set errPrefix="</td></tr></table><div CLASS='Text'><center>", errSuffix="</center></div></BODY></HTML>"
+	If DT && $IsObject(msg) {
+		If ""=DTClass { &html<#(errPrefix)#No Data Transform class#(errSuffix)#> Quit }
+		If '##class(%Dictionary.CompiledClass).%ExistsId(DTClass) { &html<#(errPrefix)#'#(DTClass)# class does not exist#(errSuffix)#> Quit }
+		If '$zobjclassmethod(DTClass,"%Extends","Ens.DataTransform") { &html<#(errPrefix)#'#(DTClass)# is not a Data Transform class#(errSuffix)#> Quit }
+		If '$zobjclassmethod($zobjclassmethod(DTClass,"GetSourceType"),"%Extends",tDocClass) { &html<#(errPrefix)#'#(DTClass)# does not accept EDI source objects#(errSuffix)#> Quit }
+
+		If $$$ISERR(tSCDT) {
+			&html<#(errPrefix)#Transform Error = '<b>#($ZCVT($$$StatusDisplayString(tSCDT),"O","HTML"))#</b>'>
+			If '$$$IsdefObject(msgout) { Write errSuffix Quit }
+			&html<</center></div><div>>
+		}
+	}
+	If $$$ISERR(tSCOpen) {
+		Set errPrefix=errPrefix_$ZCVT($$$StatusDisplayString(tSCOpen),"O","HTML")_"<br>"
+	}
+	If "hdr"=Origin {
+		If '$IsObject(hdr) &html<#(errPrefix)#No Message header found with Id <b>#(MsgHdrId)#</b> #(errSuffix)#> Quit
+		If '$IsObject(msg) { &html<#(errPrefix)#No '<i>#(hdr.MessageBodyClassName)#</i>' body found with Id <b>#(hdr.MessageBodyId)#</b> (named in header with Id <b>#(MsgHdrId)#</b>)#(errSuffix)#>  Quit }
+		ElseIf 'msg.%Extends(tDocClass) { &html<<div CLASS="Text"><center> '<i>#(hdr.MessageBodyClassName)#</i>' body found with Id <b>#(hdr.MessageBodyId)#</b> (named in header with Id <b>#(MsgHdrId)#</b>) is not a '<i>#(tDocClass)#</i>' object</center></div>> }
+		&html<<hr><div CLASS="Text"><center>This is the #(tTypeName)# object with Id <b>#(msg.%Id())#</b> attached to message header #(hdr.%Id())#>
+		Do $$$AuditViewMessage(tSource, hdr.%Id(), hdr.MessageBodyClassName, msg.%Id())
+	} ElseIf "file"=Origin {
+		If '$IsObject(msg) {
+			&html<#(errPrefix)#No #(tTypeName)# objects found in file '#(Filename)#'#(errSuffix)#> Quit
+		}
+		&html<<hr><div CLASS="Text"><center>This is #(tTypeName)# #<b>#(FileMsg)#</b> found in file '<b>#(XFilename)#</b>'>
+		Do $$$AuditViewMessage(tSource, tNA, tNA, tNA_$$$FormatText($$$Text(" - In file name %1, sequence inside file # %2"), Filename, FileMsg))
+	} Else {
+		If '$IsObject(msg) &html<#(errPrefix)#</td></tr></table><div><center>No '<i>#(tDocClass)#</i>' object found with Id '#(EDIDocId)#'#(errSuffix)#> Quit
+		&html<<hr><div CLASS="Text"><center>This is the #(tTypeName)# object with Id <b>#(msg.%Id())#</b>>
+		Do $$$AuditViewMessage(tSource, tNA, tTypeName, msg.%Id())
+	}
+	If "stored"'=DocSpec&&tIsDoc {
+		Set:msg.DocType'=XDocType msg.DocType=$S("none"=DocSpec:"",1:XDocType)
+		If tIsHL7 { Do:XCategory'=msg.MessageTypeCategory msg.PokeTypeCategory(XCategory) }
+	}
+	&html<<br>DocType '<b>#($S(tIsDoc:msg.DocType,1:""))#</b>' based on <b><i>'#(tDoc)#'</i><b>>
+	If 'DT {
+		&html<</center></div></td></tr></table>>
+		Set $ZT="Trap0"
+		Do msg.OutputHTML()
+		GoTo Done0
+		:Trap0
+		Set $ZT=""
+		If (msg.%Extends("%XML.Adaptor")) {
+			Write $ZCVT("<?xml version=""1.0"" ?>","O","HTML")_"<br>"
+			Write $ZCVT("<!-- type: "_msg.%ClassName(1)_"  "_$S(msg.%IsA("%Persistent"):"id: "_msg.%Id(),1:"")_" -->","O","HTML")_"<br>"
+			Do msg.XMLExportToStream(.tXML,"",",indent")
+			While $IsObject(tXML)&&'tXML.AtEnd { Write $ZCVT(tXML.ReadLine(2000,.tSC,.tEOL),"O","HTML")  Quit:$$$ISERR(tSC)  Write:tEOL "<br>"_$C(13,10) }
+		} Else {
+			&html<<div>There is no content viewer defined for this message type.</div>>
+		}
+		:Done0
+	} Else {
+		If "one"=DTDisp {
+			&html<</center></div></td></tr></table>>
+			&html<<table border=1>
+			<tr><th align=left>&nbsp;Output #($S(tIsDoc:msg.Name,1:""))# transformed using DT '<b>#(DTClass)#</b>'</th></tr><tr><td>>
+		} Else {
+			&html<</center></div></td></tr></table>>
+			&html<<table border=1>
+			<tr><th>Input '#($S(tIsDoc:msg.Name,1:""))#' before transform</th><th>Output #($S(msgout.%Extends("Ens.VDoc.Interface"):"'"_msgout.Name_"' ",1:""))#transformed using DT '<b>#(DTClass)#</b>'</th></tr><tr><td>>
+			Set $ZT="Trap1"
+			Do msg.OutputHTML()
+			GoTo Done1
+			:Trap1
+			Set $ZT=""
+			If (msg.%Extends("%XML.Adaptor")) {
+				Write $ZCVT("<?xml version=""1.0"" ?>","O","HTML")_"<br>"
+				Write $ZCVT("<!-- type: "_msg.%ClassName(1)_"  "_$S(msg.%IsA("%Persistent"):"id: "_msg.%Id(),1:"")_" -->","O","HTML")_"<br>"
+				Do msg.XMLExportToStream(.tXML,"",",indent")
+				While $IsObject(tXML)&&'tXML.AtEnd { Write $ZCVT(tXML.ReadLine(2000,.tSC,.tEOL),"O","HTML")  Quit:$$$ISERR(tSC)  Write:tEOL "<br>"_$C(13,10) }
+			} Else {
+				&html<<div>There is no content viewer defined for this message type.</div>>
+			}
+			:Done1
+			&html<</td><td>>
+		}
+		Set $ZT="Trap2"
+		Do msgout.OutputHTML()
+		GoTo Done2
+		:Trap2
+		Set $ZT=""
+		If (msgout.%Extends("%XML.Adaptor")) {
+			Write $ZCVT("<?xml version=""1.0"" ?>","O","HTML")_"<br>"
+			Write $ZCVT("<!-- type: "_msgout.%ClassName(1)_"  "_$S(msgout.%IsA("%Persistent"):"id: "_msgout.%Id(),1:"")_" -->","O","HTML")_"<br>"
+			Do msgout.XMLExportToStream(.tXML,"",",indent")
+			While $IsObject(tXML)&&'tXML.AtEnd { Write $ZCVT(tXML.ReadLine(2000,.tSC,.tEOL),"O","HTML")  Quit:$$$ISERR(tSC)  Write:tEOL "<br>"_$C(13,10) }
+		} Else {
+			&html<<div>There is no content viewer defined for this message type.</div>>
+		}
+		:Done2
+		&html<</td></tr></table>>
+	}
+	Quit
+</SCRIPT>
+</csp:IF>
+</csp:IF>
+</BODY>
+
+<script language="CACHE" method="resolveDocType" runat="server" arguments="pDocClass,pVer,pName" returntype="%String">
+ 	Quit:$zobjclassmethod(pDocClass,"%IsA","EnsLib.HL7.Message") ##class(EnsLib.HL7.Schema).ResolveSchemaTypeToDocType(pVer,pName)
+ 	Quit pVer_$S(""=pName:"", 1:":"_pName)
+</script>
+
+</HTML>

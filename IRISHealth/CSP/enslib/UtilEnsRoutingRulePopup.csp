@@ -1,0 +1,528 @@
+<html>
+<head>
+
+<!-- Popup editor window for Routing Rules Editor -->
+
+<!--
+	This popup works in different "modes":
+	"rule"		create/edit a rule
+	"action"	create/edit an action
+-->
+
+<title><csp:text Domain="RuleEditor" TextId="EnsValueEditor">Value Editor</csp:text></title>
+
+<style>
+
+body {
+	background: #DDEEFF;
+	margin: 0px;
+	font-family: verdana;
+}
+
+div.main {
+	margin: 3px;
+}
+
+table.layout {
+}
+
+table.layout th {
+	text-align: left;
+}
+
+h1 {
+	border-bottom: 1px black solid;
+	padding: 5px;
+	width: 110%;
+	filter:
+		progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#4040FF', EndColorStr='#000000')
+}
+
+.label {
+	font-size: 0.8em;
+}
+
+div.title {
+	width: 100%;
+	font-size: 0.8em;
+	font-family: "Lucida Sans Unicode" "Courier New";
+	font-weight: bold;
+	color: yellow;
+	filter:
+		progid:DXImageTransform.Microsoft.dropShadow(color=#404040, OffX=2, OffY=2, Positive=2);
+}
+
+div.text1	{
+	font-size: 0.8em;
+}
+
+div.text1:first-letter {
+	font-size: 1.0em;
+}
+
+span.guibutton {
+	color: black;
+	font-weight: bold;
+}
+
+div.btnbar {
+	width: 100%;
+	text-align: right;
+}
+
+/* base value displayed in input */
+.baseValue {
+	background: #DDDDDD;
+}
+
+.ResetBtn {
+	font-size: 7pt;
+	vertical-align: top;
+}
+
+</style>
+
+<script language="CACHE" runat="SERVER">
+	// get request parms
+	Set tMODE = $G(%request.Data("MODE",1))
+	Set tRULEID = $G(%request.Data("RULEID",1))
+	Set tSUBID = $G(%request.Data("SUBID",1))
+	Set tCONTEXT = $G(%request.Data("CONTEXT",1))
+	Set tHOST = $G(%request.Data("HOST",1))
+	Set tDOALL = $G(%request.Data("DOALL",1))
+
+	If (tMODE = "rule") {
+		If (tRULEID = "base") {
+			Set msgMain = $$$Text("Edit the base values for this Routing Rule. When complete, press OK.","RuleEditor")
+		} Else {
+			Set msgMain = $$$Text("Edit matching attributes for this rule. When complete, press OK.","RuleEditor")
+		}
+	} ElseIf (tMODE = "action") {
+		Set msgMain = $$$Text("Edit attributes for this action. When complete, press OK.","RuleEditor")
+	} Else {
+		Set msgMain = $$$Text("UNKNOWN POPUP MODE","RuleEditor")
+	}
+
+</script>
+
+<script language="JavaScript">
+
+var currMode = '#(tMODE)#';
+var currRuleId = '#(tRULEID)#';
+var currSubId = '#(tSUBID)#';
+
+function pageOnLoad()
+{
+	// set intial values
+	switch (currMode) {
+	case 'rule':
+		getRuleValues();
+		giveFocusToInput('source');
+		break;
+	case 'action':
+		getActionValues();
+		giveFocusToInput('transform');
+		break;
+	}
+	
+	return true;
+}
+
+function getRuleValues()
+{
+	var form = self.document.theForm;
+	if ('-1' == currRuleId) {
+		form.source.value = getBaseAttr('source');
+		form.msgClass.value = getBaseAttr('msgClass');
+		form.vdocName.value = getBaseAttr('vdocName');
+		form.vdocCategory.value = getBaseAttr('vdocCategory');
+		form.vdocType.value = getBaseAttr('vdocType');
+
+		form.source.className = 'baseValue';
+		form.msgClass.className = 'baseValue';
+		form.vdocName.className = 'baseValue';
+		form.vdocCategory.className = 'baseValue';
+		form.vdocType.className = 'baseValue';
+	}
+	else if ('base' == currRuleId) {
+		form.source.value = getBaseAttr('source');
+		form.msgClass.value = getBaseAttr('msgClass');
+		form.vdocName.value = getBaseAttr('vdocName');
+		form.vdocCategory.value = getBaseAttr('vdocCategory');
+		form.vdocType.value = getBaseAttr('vdocType');
+	}
+	else {
+		form.source.value = getRuleAttr('source');
+		form.msgClass.value = getRuleAttr('msgClass');
+		form.vdocName.value = getRuleAttr('vdocName');
+		form.vdocCategory.value = getRuleAttr('vdocCategory');
+		form.vdocType.value = getRuleAttr('vdocType');
+
+		if (form.source.value == '') {
+			form.source.value = getBaseAttr('source');
+			form.source.className = 'baseValue';
+		}
+
+		if (form.msgClass.value == '') {
+			form.msgClass.value = getBaseAttr('msgClass');
+			form.msgClass.className = 'baseValue';
+		}
+		if (form.vdocName.value == '') {
+			form.vdocName.value = getBaseAttr('vdocName');
+			form.vdocName.className = 'baseValue';
+		}
+		if (form.vdocCategory.value == '') {
+			form.vdocCategory.value = getBaseAttr('vdocCategory');
+			form.vdocCategory.className = 'baseValue';
+		}
+		if (form.vdocType.value == '') {
+			form.vdocType.value = getBaseAttr('vdocType');
+			form.vdocType.className = 'baseValue';
+		}
+	}
+	// xform comma to \n in docType
+	form.vdocName.value = csvToMulti(form.vdocName.value);
+	form.vdocType.value = csvToMulti(form.vdocType.value);
+}
+
+/// convert csv to multi-line value
+function csvToMulti(value)
+{
+	var val = '';
+	var list = value.split(',');
+	for (var p in list) {
+		if (list[p] != '') {
+			val += (val!='' ? '\n' : '') + list[p];
+		}
+	}
+	return val;
+}
+
+/// convert csv value to multi-line
+function multiToCSV(value)
+{
+	var val = '';
+	var list = value.split('\n');
+	for (var p in list) {
+		var line = list[p].split('\r')[0];
+		if (line != '') {
+			val += ((val != '') ? ',' : '') + line;
+		}
+	}
+
+	return val;
+}
+
+// 
+function getActionValues()
+{
+	var form = self.document.theForm;
+	if ('-1' == currSubId) {
+		form.type.value = 'send';
+		form.target.value = '';
+		form.transform.value = '';
+	}
+	else {
+		form.type.value = getActionAttr('type');
+		form.target.value = getActionAttr('target');
+		form.transform.value = getActionAttr('transform');
+	}
+}
+
+/// invoked when a attribute control is edited (i.e. keypress).
+function onEditAttr(attr)
+{
+	if ('rule' == currMode) {
+		// if value is not '', then mark as overridden
+		var ctrl = self.document.theForm[attr];
+	
+		if (ctrl) {
+			if ('' == ctrl.value) {
+				//!!!ctrl.className = 'baseValue';
+				//ctrl.value = getBaseAttr(attr);
+			}
+			else {
+				ctrl.className = '';
+			}
+		}
+	}
+}
+
+/// invoked when a attribute control is changed
+function onChangeAttr(attr)
+{
+	if ('rule' == currMode) {
+		// if value is '', then mark as base
+		var ctrl = self.document.theForm[attr];
+	
+		if (ctrl) {
+			if ('' == ctrl.value) {
+				ctrl.className = 'baseValue';
+				ctrl.value = getBaseAttr(attr);
+			}
+			else if (ctrl.value != getBaseAttr(attr)) {
+				ctrl.className = '';
+			}
+		}
+	}
+}
+
+function setAttrFromPopup(attr, value)
+{
+	var ctrl = self.document.theForm[attr];
+
+	if (currMode == 'rule' && attr == 'vdocType') {
+		value = csvToMulti(value);
+	}
+
+	ctrl.value = value;
+	onChangeAttr(attr);
+}
+
+/// reset this attribute to its base value
+function resetAttr(attr)
+{
+	// if value is not '', then mark as overridden
+	var ctrl = self.document.theForm[attr];
+
+	if (ctrl) {
+		ctrl.className = 'baseValue';
+		ctrl.value = getBaseAttr(attr);
+	}
+}
+
+function giveFocusToInput(id)
+{
+	var control = self.document.getElementById(id);
+	if (control && !control.disabled) {
+		control.focus();
+		if (control.type == 'text') {
+			control.select();
+		}
+	}
+
+	return true;
+}
+
+// get rule values; apply to main window
+function processRuleValues()
+{
+	var form = self.document.theForm;
+
+	// if style is baseValue, return ''
+	var source = (form.source.className!='') ? '' : form.source.value;
+	var msgClass = (form.msgClass.className!='') ? '' : form.msgClass.value;
+	var docName = (form.vdocName.className!='') ? '' : form.vdocName.value;
+	var docCategory = (form.vdocCategory.className!='') ? '' : form.vdocCategory.value;
+	var docType = (form.vdocType.className!='') ? '' : form.vdocType.value;
+
+	// convert docType back to csv
+	docName = multiToCSV(docName);
+	docType = multiToCSV(docType);
+
+	if (window.dialogArguments && window.dialogArguments.updateRule) {
+		window.dialogArguments.updateRule(currRuleId,source,msgClass,docName,docCategory,docType,docCategory);
+	}
+	return true;
+}
+
+// get action values; apply to main window
+function processActionValues()
+{
+	var form = self.document.theForm;
+
+	var type = form.type.value;
+	var transform = form.transform.value;
+	var target = form.target.value;
+	
+	if (window.dialogArguments && window.dialogArguments.updateAction) {
+		window.dialogArguments.updateAction(currRuleId,currSubId,type,transform,target);
+	}
+	return true;
+}
+
+/// Get base value for attribute
+function getBaseAttr(attr)
+{
+	var val = '';
+
+	if (window.dialogArguments && window.dialogArguments.getBaseAttr) {
+		val = window.dialogArguments.getBaseAttr(attr);
+	}
+	return val;
+}
+
+/// Get value for attribute in current rule
+function getRuleAttr(attr)
+{
+	var val = '';
+
+	if (window.dialogArguments && window.dialogArguments.getRuleAttr) {
+		val = window.dialogArguments.getRuleAttr(currRuleId,attr);
+	}
+	return val;
+}
+
+/// Get value for attribute in current action
+function getActionAttr(attr)
+{
+	var val = '';
+
+	if (window.dialogArguments && window.dialogArguments.getActionAttr) {
+		val = window.dialogArguments.getActionAttr(currRuleId,currSubId,attr);
+	}
+	return val;
+}
+
+function btnOK()
+{
+	switch (currMode) {
+	case 'rule':
+		if (!processRuleValues()) {
+			return false;
+		}
+		break;
+	case 'action':
+		if (!processActionValues()) {
+			return false;
+		}
+		break;
+	}
+
+	window.close();
+	return true;
+}
+
+function btnCancel()
+{
+	window.close();
+	return true;
+}
+
+/// display value selector popup for attribute
+function showSelectorPopup(attr)
+{
+	var form = self.document.theForm;
+ 	var msgClass = ''
+ 	var docCategory = ''
+	var	isMultiSelect = 0;
+
+	if (currMode == 'rule') {
+	 	msgClass = form.msgClass.value;
+	 	docCategory = form.vdocCategory.value;
+	}
+
+	var value = form[attr].value; // current value
+	if (currMode == 'rule' && attr == 'vdocType') {
+		value = multiToCSV(value);
+		isMultiSelect = 1;
+	} else if (currMode == 'action' && (attr == 'transform' || attr == 'target')) {
+		isMultiSelect = 1;
+	}
+ 
+ 	var url = '#(..Link("UtilEnsRoutingRuleList.csp",,1))#HOST=' + escape('#(tHOST)#') + 
+  				'&MODE=' + escape(attr) +
+  				'&MSGCLASS=' + escape(msgClass) +
+  				'&MSGCATEGORY=' + escape(docCategory) +
+  				'&VALUE=' + escape(value) +
+  				'&MULTISELECT=' + isMultiSelect;
+
+	var sFeatures="dialogHeight: 500px; dialogWidth: 600px; dialogTop: " + (screen.height/7) + "px; dialogLeft: " + (screen.width/7) + "px; edge: Sunken; center: Yes; help: No; resizable: Yes; status: No;";
+
+  	// use IE Modal Dlg.
+  	// pass current window
+	self.showModalDialog(url, window, sFeatures);
+
+  	return true;
+}
+
+</script>
+
+</head>
+
+<body onload="pageOnLoad();">
+<csp:class includes="EnsUI">
+<h1><div class="title"><csp:text Domain="RuleEditor">Routing Rule Wizard</csp:text></div></h1>
+<div class="main">
+<form name="theForm">
+
+<div class="text1">#(msgMain)#</div>
+<hr>
+<table class="layout" border="0" cellpadding="2" cellspacing="0">
+
+<script language="CACHE" runat="SERVER">
+	If (tMODE = "rule") {
+		// display inputs for rule
+		Set caption("source") = $$$TextHTML("Source:","RuleEditor")
+		Set caption("msgClass") = $$$TextHTML("Message Class:","RuleEditor")
+		Set caption("vdocName") = $$$TextHTML("Document Name:","RuleEditor")
+		Set subcaption("vdocName") = "<br><i>"_$$$TextHTML("(1 per line)","RuleEditor")_"</i>"
+		Set caption("vdocCategory") = $$$TextHTML("Schema Category:","RuleEditor")
+		Set caption("vdocType") = $$$TextHTML("Schema DocType:","RuleEditor")
+		Set subcaption("vdocType") = subcaption("vdocName")
+		//&html<<tr><th>Attribute</th><th>Value</th>>
+		For attr = "source","msgClass","vdocName","vdocCategory","vdocType" {
+			&html<<tr>
+			<td class="label" valign="top" nowrap>#($G(caption(attr)))# #($G(subcaption(attr)))#</td>
+			<td valign="top"><div style="vertical-align:top; white-space:nowrap;">>
+
+			If (attr = "vdocName") {
+				// multi value
+				&html<<textarea name="#(attr)#" id="#(attr)#" rows="4" cols="24" onkeyup="onEditAttr('#(attr)#');" onchange="onChangeAttr('#(attr)#');"></textarea>&nbsp;&nbsp;&nbsp;>
+			}
+			ElseIf (attr = "vdocType") {
+				// multi value
+				&html<<textarea name="#(attr)#" id="#(attr)#" rows="4" cols="24" onkeyup="onEditAttr('#(attr)#');" onchange="onChangeAttr('#(attr)#');"></textarea><input class="ResetBtn" type="button" value="..." onclick="showSelectorPopup('#(attr)#');">>
+			}
+			Else {
+				Set browse = ""
+				&html<<input type="text" name="#(attr)#" id="#(attr)#" value="" size="30" onkeyup="onEditAttr('#(attr)#');" onchange="onChangeAttr('#(attr)#');"><input class="ResetBtn" type="button" value="..." #(browse)# onclick="showSelectorPopup('#(attr)#');">>
+			}
+			Set titleReset = $$$Text("Reset to base value","RuleEditor")
+			Set btnReset = $$$Text("Reset","RuleEditor")
+			&html<&nbsp;<input class="ResetBtn" type="button" title="#(titleReset)#" value="#(btnReset)#" onclick="resetAttr('#(attr)#');"></div></td></tr>>
+		}
+	}
+	ElseIf (tMODE = "action") {
+		// display inputs for action
+		Set caption("type") = $$$TextHTML("Type:","RuleEditor")
+		Set caption("transform") = $$$TextHTML("Transform:","RuleEditor")
+		Set caption("target") = $$$TextHTML("Target:","RuleEditor")
+		//&html<<tr><th>Attribute</th><th>Value</th>>
+		For attr = "type","transform","target" {
+			&html<<tr>
+			<td class="label" valign="top" nowrap>#($G(caption(attr)))# #($G(subcaption(attr)))#</td>
+			<td valign="top"><div style="vertical-align:top; white-space:nowrap;">>
+
+			If (attr = "type") {
+				// select
+				&html<<select name="#(attr)#" id="#(attr)#" onchange="onChangeAttr('#(attr)#');">
+				<option value="send">#($$$Text("send","RuleEditor"))#</option>
+				<option value="delete">#($$$Text("delete","RuleEditor"))#</option>>
+				If tDOALL {
+					&html<<option value="stop">#($$$Text("stop","RuleEditor"))#</option>>
+				} Else {
+					&html<<option value="contin">#($$$Text("continue","RuleEditor"))#</option>>
+				}
+				&html<</select>>
+			} Else {
+				// single value
+				&html<<input type="text" name="#(attr)#" id="#(attr)#" value="" size="30" onkeyup="onEditAttr('#(attr)#');" onchange="onChangeAttr('#(attr)#');"><input class="ResetBtn" type="button" value="..." onclick="showSelectorPopup('#(attr)#');">>
+			}
+		}
+	}
+</script>
+
+</table>
+
+<hr>
+<div class="btnbar">
+<input type="button" class="btn" name="OK" textid="" domain="RuleEditor" value=" OK " onclick="btnOK();">&nbsp;
+<input type="button" class="btn" name="CANCEL" textid="" domain="RuleEditor" value=" Cancel " onclick="btnCancel();">
+</div>
+</form>
+
+</div>
+</body>
+
+</html>

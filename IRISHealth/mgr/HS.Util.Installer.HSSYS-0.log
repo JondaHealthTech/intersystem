@@ -1,0 +1,7 @@
+
+2025-03-26 12:25:36.864 HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace About to Create Database hssys
+2025-03-26 12:25:37.007 HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace Created IRIS.DAT in c:\intersystems\irishealth\mgr\hssys
+2025-03-26 12:25:37.106 HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace Made Namespace hssys
+2025-03-26 12:25:39.274 HS.Util.Installer.ConfigItem:MapIPM Added package mapping: %IPM from HSLIB to HSSYS
+2025-03-26 12:26:09.948 HS.Util.Installer.ConfigItem:CreateWebApplicationForRESTServices Created web application for REST Services: /api/healthshare-rest/hssys
+2025-03-26 12:26:44.630 HS.HealthConnect.FHIRSQL.Upgrade.V2:InstallOnce-HSSYS-1 Configured FHIRSQL Application endpoints

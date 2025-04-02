@@ -1,0 +1,298 @@
+<html>
+    <head>
+    	<script language="cache" runat="server">d HEAD1^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/jxDashboardActivityB2B.css">
+    </head>
+    <body onload="initMe()">
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;" onclick="openMobileNav(event)"></i>
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <div class="title">
+                    	<h2>Activity</h2>
+                    	<button class="back-btn" onclick="window.frameElement.src='jxDashboard.csp'"><img src="./assets/images/leftArrow.png" alt="Arrow"> Back</button>
+                    </div>
+                    <div class="stats">
+                        <div class="activity-stat stat-block">
+                            <div class="block-title">
+                                <h4>Overview</h4>
+                                <img src="./assets/images/optionHorizontal.png" alt="Option" onclick="togglePopup(event)">
+                            </div>
+                            <div class="stat">
+                            	<script language="cache" runat="server">
+                            		d WriteMonthlyStat^jxDashboardActivity
+                            	</script>
+                            	
+                                <!--<div class="monthly-stat" data-key="1">
+                                    <p class="num">38</p>
+                                    <p>Data <br> Transformations <br>
+                                        <span>
+                                            Jan 2021
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="monthly-stat" data-key="2">
+                                    <p class="num">29</p>
+                                    <p>Data <br> Transformations <br>
+                                        <span>
+                                            Feb 2021
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="monthly-stat" data-key="3">
+                                    <p class="num">50</p>
+                                    <p>Data <br> Transformations <br>
+                                        <span>
+                                            Mar 2021
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="monthly-stat" data-key="4">
+                                    <p class="num">60</p>
+                                    <p>Data <br> Transformations <br>
+                                        <span>
+                                            Apr 2021
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="monthly-stat stat-active max-stat" data-key="5">
+                                    <p class="num">70</p>
+                                    <p>Data <br> Transformations <br>
+                                        <span>
+                                            May 2021
+                                        </span>
+                                    </p>
+                                </div>-->
+                                <div class="prev mobile-active" onclick="togglePrev(event)"><i class="fa fa-chevron-left"></i></div>
+                                <div class="next mobile-active" onclick="toggleNext(event)"><i class="fa fa-chevron-right"></i></div>
+                            </div>
+                        </div>
+                        <div class="activity-chart stat-block">
+                            <div class="block-title">Activity Chart</div>
+                            <div class="chart">
+                                <canvas id="activity-chart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div id="popup1" class="popup inactive">
+                <div class="popup-dialog">
+                    <button class="download-btn" onclick="downloadCSVFile()">Download CSV file</button>
+                    <button class="cancel-btn" onclick="removePopup()">Cancel</button>
+                </div>
+            </div>
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+    <script type="text/javascript">
+		window.onload = initMe;
+  		document.onmousemove = parent.resetTimer;
+  		document.onmousedown = parent.resetTimer; // touchscreen presses
+  		document.ontouchstart = parent.resetTimer;
+  		//document.onclick = parent.resetTimer; // touchpad clicks
+  		document.onkeypress = parent.resetTimer;
+  		document.addEventListener('scroll', parent.resetTimer, true);
+    	function initMe(){
+	    	parent.resetTimer();
+	    	#server(..cInitMe())#;
+	    	transformCount.forEach(count=>{
+		    	color.push(count==maxNum?"#E63876":"#526D97");
+	    	})
+			activityConfig.options.scales.x.ticks.color=color;
+			activityChart.update();
+    	}
+        const totalMonthlyStat = document.getElementsByClassName("monthly-stat").length;
+        const nextBtn = document.getElementsByClassName("next")[0];
+        const prevBtn = document.getElementsByClassName("prev")[0];
+        let currentActive = document.getElementsByClassName("stat-active")[0];  
+        let popup = document.getElementById("popup1");
+        let popupDialog = document.getElementsByClassName("popup-dialog")[0];
+        let color=[]
+        function checkToDisable(curKey){
+            if(curKey>=totalMonthlyStat){
+                nextBtn.classList.add("disabled")
+            }
+            else if(curKey<=1){
+                prevBtn.classList.add("disabled")
+            }
+            else{
+                nextBtn.classList.remove("disabled");
+                prevBtn.classList.remove("disabled")
+            }
+        }
+        checkToDisable(currentActive.dataset.key);
+        function togglePrev(e){
+            let currentActive = document.getElementsByClassName("stat-active")[0];
+            currentActive.classList.remove("stat-active");
+            let curKey = parseInt(currentActive.dataset.key);
+            document.querySelector(".monthly-stat[data-key='"+(curKey-1)+"']").classList.add("stat-active");
+            checkToDisable(curKey-1);
+        }
+        function toggleNext(e){
+            let currentActive = document.getElementsByClassName("stat-active")[0];
+            currentActive.classList.remove("stat-active");
+            let curKey = parseInt(currentActive.dataset.key);
+            document.querySelector(".monthly-stat[data-key='"+(curKey + 1)+"']").classList.add("stat-active");
+            checkToDisable(curKey+1);
+        }
+        function togglePopup(e){
+            if(popup.classList.contains("inactive")){
+                let position=e.target.getBoundingClientRect();
+                popupDialog.style.top=position.y + 10 + "px";
+                popupDialog.style.left="calc(" +position.right + "px - 25vw)" ;
+            }
+            setTimeout(()=>{
+                popup.classList.toggle("inactive");
+            },100);
+        }
+        function removePopup(){
+            popup.classList.add("inactive");
+        }
+        function downloadCSVFile(){
+			const csvdata = csvMaker();
+			download(csvdata);
+			removePopup();
+        }
+        function csvMaker(){
+			csvRows = [];
+			const headers = ["Month",...Object.values(monthLabel)];
+			csvRows.push(headers.join(','));
+
+			const values = ["Total Transform Count",...Object.values(transformCount).join(',')];
+			csvRows.push(values)
+			
+			return csvRows.join("\n")
+
+        }
+        function download(data){
+	        const blob = new Blob([data], { type: 'text/csv' });
+  			const url = window.URL.createObjectURL(blob)
+  			const a = document.createElement('a')
+  			a.setAttribute('href', url)
+  			a.setAttribute('download', 'ActivityStatistics.csv');
+  			a.click()
+        }
+
+     // setup
+      Chart.defaults.font.family = "Montserrat";
+      let transformCount=[];
+      let monthLabel=[];
+      let maxNum=0;
+      const activityData = {
+        labels: monthLabel,
+        datasets: [
+          {
+            data: transformCount,
+            backgroundColor: context=>{
+	            if(parseInt(context.raw)==maxNum){
+		            return "#E63876"
+	            }
+	            else{
+		            return "#405470"
+	            }
+            },
+            borderWidth: 0,
+            borderRadius:10,
+            barPercentage: 0.45,
+            categoryPercentage: 1,
+          },
+        ],
+      };
+
+     // config
+      const activityConfig = {
+        type: "bar",
+        data: activityData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              grid: {
+                offset: false,
+                drawOnChartArea: false,
+                tickColor:"white"
+              },
+              ticks:{
+                font:{
+                    size:12,
+                    weight:500,
+                },
+                color:context=>{
+	                console.log(context)
+	            	if(parseInt(context.tick.value)==maxNum){
+		            	return "#E63876"
+	            	}
+	            	else{
+		            	return "#405470"
+	            	}
+                },
+              },
+              border: {
+                display: false,
+              },
+            },
+            y: {
+              max: 1,
+              border: {
+                display: false,
+                dash:function(context){
+                    if(context.index == 1){
+                        return [6,6];
+                    }
+                    else{
+                        return [];
+                    }
+                }
+              },
+              grid:{
+                lineWidth:2,
+                color:"#9B9B9B80",
+                tickColor:"white"
+              },
+              ticks: {
+                font:{
+                    size:12,
+                    weight:500,
+                },
+                color: "#405470",
+                stepSize: 0.5,
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              display: false,
+            },
+          },
+        },
+      };
+     // render init block
+      const activityChart = new Chart(document.getElementById("activity-chart"), activityConfig);
+	
+      document.addEventListener("click",(e)=>{
+            if(e.target.closest(".popup-dialog") == null){
+                popup.classList.add("inactive");
+            }
+        })
+    </script>
+    <script language="cache" method="cInitMe">
+    	d LoadChart^jxDashboardActivity
+    </script>
+</html>

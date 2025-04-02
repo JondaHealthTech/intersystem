@@ -1,0 +1,77 @@
+<!--
+	ensdtleditor.html
+	Copyright (c) 2003, InterSystems Corp.
+	ALL RIGHTS RESERVED
+
+	HTML wrapper for DTL editor
+-->
+
+<html><head>
+<style>
+body { margin: 0px; padding: 0px; background: #DDEEFF; }
+</style>
+
+<!-- detect svg -->
+<script language="JavaScript" src="svgcheck.js"></script>
+<script language="VBScript" src="svgcheck.vbs"></script>
+
+<script language='javascript'>
+
+function document_setTarget(name, proplist) {
+	var loadingDiv = self.document.getElementById("loading");
+	loadingDiv.api.setTarget(name,proplist);
+}
+
+function document_setSource(name, proplist) {
+	var loadingDiv = self.document.getElementById("loading");
+	loadingDiv.api.setSource(name,proplist);
+}
+
+function document_addAction(target, source) {
+	var loadingDiv = self.document.getElementById("loading");
+	loadingDiv.api.addAction(target, source);
+}
+
+function document_removeAction(target) {
+	var loadingDiv = self.document.getElementById("loading");
+	loadingDiv.api.removeAction(target);
+}
+
+function document_clearActions() {
+	var loadingDiv = self.document.getElementById("loading");
+	loadingDiv.api.clearActions();
+}
+
+function document_getZoom() {
+	var loadingDiv = self.document.getElementById("loading");
+	loadingDiv.api.getZoom();
+}
+
+function document_setZoom(zoom) {
+	var loadingDiv = self.document.getElementById("loading");
+	loadingDiv.api.setZoom(zoom);
+}
+
+function document_setReadOnly(ro) {
+	var loadingDiv = self.document.getElementById("loading");
+	loadingDiv.api.setReadOnly(ro);
+}
+
+var extCounter = 0;
+function raiseEvent(type,data) {
+	self.document.title = type + ":" + extCounter + ":" + data;
+	extCounter++;
+}
+</script>
+</head><body>
+
+<!-- detect svg -->
+<script language="JavaScript">
+checkAndGetSVGViewer();
+</script>
+
+<xml id='results'></xml>
+<div id='loading' style='background: white; color: blue; font-size: 14pt; font-family: courier new'>Visualizing Data Transformation...</div>
+<embed id='SVGEmbed' name='SVGEmbed' type='image/svg-xml' src='ensdtlcanvas.svg' height='1000' width='1000'>
+</body>
+</html>

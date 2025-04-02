@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" style="width:100%;height:100%">
+<head>
+<meta charset="utf-8">
+<title>TRANSFORM SPEC PATH EDITOR</title>
+</head>
+
+<body style="width:100%;height:100%;margin:0px;padding:0px;">
+<script type="text/javascript" src="SAMLoaderUtil.js"></script>
+<script type="text/javascript" src="inc/FHIRTSpecWizard_inc.js"></script>
+<script type="text/javascript">
+
+
+serviceAnalysis=function(xhr) {
+	var body = xhr.responseText;
+	var analysis = JSON.parse(body);
+	var resourcesFromSpec = document.$specPaths;
+	var fhirFilter = new FHIRFilter();
+	var paths = fhirFilter.getMissingTransformPaths(document.$specPaths, analysis);
+	fhirFilter.annotateAnalysis(analysis, paths);
+	var wiz= document.getElementById("SpecWizard");
+	wiz.setAnalysis(analysis);
+};
+
+serviceSpec=function(xhr) {
+	var body = xhr.responseText;
+	var wiz= document.getElementById("SpecWizard");
+	wiz.setSpec(body);
+
+	// save spec resources and fetch analysis
+	let spec = JSON.parse(body);
+	if (spec.resources){
+		var fhirFilter = new FHIRFilter();
+		document.$specPaths = fhirFilter.getTransformPaths(spec);
+	}
+
+	// fetch analysis
+	var server = document.getElementsByTagName('fhir-feServer')[0];
+	server.getAnalysisResults(spec.scanId, serviceAnalysis);
+};
+
+start=function() {
+	if (!window.$defined_FHIRTSpecWizard) {
+		setTimeout(start,10);
+		return;
+	}	
+
+	var server = document.createElement("fhir-feServer");
+	server.id = "API";
+	server.owner=this;
+	document.body.appendChild(server);
+	
+	var wiz = document.createElement("fhir-tspecwizard");
+	wiz.id = "SpecWizard";
+	wiz.owner=this;
+	document.body.appendChild(wiz);
+	
+	const urlParams = new URLSearchParams(window.location.search);
+	const queryToken = urlParams.get('token')
+	var env = {}; 
+	document.$env = env;
+	if (queryToken) {
+		const token = atob(queryToken);
+		env = JSON.parse(token);
+	}
+	server.setRESTInfo(env);	
+	server.getTransformSpec(env.tsID, serviceSpec);
+};
+ 
+var $IRIS={};
+	$IRIS.pageData = {};
+	$IRIS.captions = {
+	name:"Name:"
+};
+
+window.onload = function() {
+	start();
+};
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<html>		<!-- Error Code under System setting in Side Nav -->
+<head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+		q 1
+	</script>
+
+	<script language="cache" runat="server">
+		s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+		i r1'=1 s %response.Redirect="cLockDown.csp"
+		d HEAD1^CSP999
+	</script>
+    <link rel="stylesheet" href="assets/styles/cFrame.css">
+    <style>
+	input{
+		font-size:11px;   
+		color:black
+	}
+	
+	select{
+		font-size:11px;   
+		color:black
+	}
+	
+	td{
+		vertical-align:top	
+	}
+    </style>
+</head>
+<body onload="jInitMe()" style="padding:0px;margin:0px">
+<form id="F1" name="F1">
+<div id="wrapper">
+	<div class="bg-wrapper">
+	<div class="bg3">
+	<img src="./assets/images/bg3.png">
+	</div>
+	</div>
+	<div class="main-field" style="width:100%">
+		<img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="JondaX">
+		<h1>Error Codes</h1>
+		<div>
+			<!-- Error code table -->
+			<div class="main-table">
+				<div class="table-border"></div>
+					<div class="table-container">
+					<table name="Tab1" id="Tab1" style="margin:0px;padding:0px; font-size:11px;vertical-align:top">
+						<tr>
+							<td>Code*</td>
+							<td>Type</td>
+							<td>Name</td>
+							<td>Description</td>
+							<td>User Friendly Description</td>
+							<td>Action</td>
+							<td>Facing</td>
+							<td>Is Error</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="text" id="T1" name="T1" size="7" style="text-transform: uppercase;" maxlength="10"></td>
+							<td>
+								<!-- Error type dropdown -->
+								<select name="S1" id="S1">
+									<option value=""></option>
+									<option value="Others">Others</option>
+									<option value="CLI">CLI</option>
+									<option value="General">General</option>
+									<option value="Ingestion">Ingestion</option>
+									<option value="OCR">OCR</option>
+									<option value="SQL">SQL</option>
+									<option value="Transformation">Transformation</option>
+								</select>
+							</td>
+							<!-- Name --> 
+							<td><input type="text" id="T2" name="T2" size="24" maxlength="50"></td>
+							<!-- Dedscription --> 
+							<td><input type="text" id="T3" name="T3" size="26" maxlength="200"></td>
+							<!-- User Friendly Dedscription --> 
+							<td><input type="text" id="T4" name="T4" size="26" maxlength="200"></td>
+							<!-- Action --> 
+							<td><input type="text" id="T5" name="T5" size="26" maxlength="200"></td>
+							<td>
+								<!-- Facing --> 
+								<select name="S2" id="S2">
+									<option value=""></option>
+									<option value="External">External</option>
+									<option value="Internal">Internal</option>
+								</select>
+							</td>
+							<td>
+								<!-- Is Error --> 
+								<select name="S3" id="S3">
+									<option value=""></option>
+									<option value="0">No</option>
+									<option value="1">Yes</option>
+								</select>
+							</td>
+							<td><input type="button" id="B1" name="B1" class="back-btn green-btn" onclick="jSaveMe()" style="width:80px" value="Save"></td>
+						</tr>
+					</table>
+					<div>&nbsp;</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</form>
+<script>
+    var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script language="cache" runat="server">
+	d jQueryCore^CSP999
+</script>
+</body>
+<script type="text/javascript">
+window.onload = jInitMe;
+T1=self.F1.T1,T2=self.F1.T2,T3=self.F1.T3,T4=self.F1.T4,T5=self.F1.T5
+S1=self.F1.S1,S2=self.F1.S2,S3=self.F1.S3
+B1=self.F1.B1
+document.onload = parent.resetTimer;
+document.onmousemove = parent.resetTimer;
+document.onmousedown = parent.resetTimer; // touchscreen presses
+document.ontouchstart = parent.resetTimer;
+//document.onclick = parent.resetTimer; // touchpad clicks
+document.onkeypress = parent.resetTimer;
+document.addEventListener('scroll', parent.resetTimer, true);
+
+function jInitMe(e){
+	// session timer resets on page load
+	parent.resetTimer(e);
+	jPopTab1();
+}
+// Pop table
+function jPopTab1(){
+	jClearTab1();
+	#server(..cPopTab1())#
+}
+
+function jClearTab1(){
+	// clear the table
+	rows=document.getElementById('Tab1').rows
+	RowNo=rows.length
+	if (RowNo>2){
+		while (RowNo>2){
+			document.getElementById('Tab1').deleteRow(RowNo-1)
+			RowNo=RowNo-1
+		}
+	}
+}
+// Pop text input boxes with clicked row
+function jPopFields(id){
+	#server(..cPopFields(id))#
+}
+// Delete error code
+function jDeleteMe(id){
+	ans=confirm("Are you sure you want to Delete this record?")
+	if (ans==true){
+		#server(..cDeleteMe(id))#
+		jPopTab1()
+	}
+}
+// Save new error code
+function jSaveMe(){
+	if (T1.value==""){
+		alert("Code is a required field")
+		return false	
+	}
+	#server(..cSaveMe(T1.value,S1.value,T2.value,T3.value,T4.value,T5.value,S2.value,S3.value))#
+	jPopTab1()
+}
+</script>
+
+<script language="cache" method="cPopTab1">
+	d PopTab1^cErrorCode
+</script>
+
+<script language="cache" method="cPopFields" arguments="d1:%String">
+	d PopFields^cErrorCode
+</script>
+
+<script language="cache" method="cDeleteMe" arguments="d1:%String">
+	d DeleteMe^cErrorCode
+</script>
+
+<script language="cache" method="cSaveMe" arguments="d1,d2,d3,d4,d5,d6,d7,d8:%String">
+	d SaveMe^cErrorCode
+</script>
+</html>

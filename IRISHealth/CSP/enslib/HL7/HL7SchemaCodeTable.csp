@@ -1,0 +1,64 @@
+<AutoPageENS domain="Ensemble" parentpage="HL7SchemaMain.csp" pagename="HL7 Code Table" title="@Ensemble:HL7ManagerCodeTable@HL7 Code Table">
+<html>
+<head>
+<title>HL7 Code Table</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+</head>
+<body>
+
+<div class="Text1">HL7 Code Table Definition is displayed below:</div>
+<br>
+
+<script language=Cache runat=server>
+	set ct=%request.Get("CT")
+	set category=$p(ct,":",2)
+	set secondary=$p(ct,":",3)
+	If ((category'="")&&(secondary'="")) {
+		set description=..EscapeHTML($get(^EnsHL7.Description(category,"CT",secondary)))
+		if $data(^EnsHL7.Schema(category,"CT",secondary))=0 {
+			write "<b><font size=6>"_ct_" </font> Definition does not exist!</b>",!
+			quit
+		}
+	}
+	Else {
+		Quit
+	}
+</script>
+
+<table border=1 cellpadding=4 cellspacing=0  style="font-size: 0.8em; margin-left: 40px;">
+
+<tr><td colspan=2><b><font size=6>#(category_":"_secondary)# </font> #($G(description))#</b></td></tr>
+
+<script language=Cache runat=server>
+	set type=$get(^EnsHL7.Schema(category,"CT",secondary))
+	set annotate=$case(type, 1:"user", 2:"HL7", 3:"HL7 and user", 4:"no longer used", 5:"replaced", 6:"user group/national defined", :"undefined")
+	write "<tr><td>Table Type</td><td>"_type_" ("_annotate_")</td></tr>",!
+</script>
+
+<tr><td valign=top>Values</td><td>
+
+<table border=1 cellpadding=4 cellspacing=0>
+
+<script language=Cache runat=server>
+	kill indexed
+	set one="" For  {
+		set one=$o(^EnsHL7.Schema(category,"CT",secondary,one)) Quit:one=""
+		set indexed(^EnsHL7.Schema(category,"CT",secondary,one))=one
+	}
+
+	set i="" For  {
+		set i=$o(indexed(i)) Quit:i=""
+		set description=..EscapeHTML($get(^EnsHL7.Description(category,"CT",secondary,indexed(i))))
+		write "<tr><td valign=top>",indexed(i),"</td><td>",$s(description="":"&nbsp;",1:description),"</td></tr>"
+	}
+</script>
+
+</table>
+</td></tr></table>
+
+<p>
+<a href="#(..Link("HL7SchemaMain.csp"))#">(Show All Categories)</a><br>
+<a href="#(..Link("HL7SchemaList.csp?ELEMENT=CT&CATEGORY="_category))#">(Show All Code Tables in Category '#(category)#')</a>
+
+</body>
+</html>

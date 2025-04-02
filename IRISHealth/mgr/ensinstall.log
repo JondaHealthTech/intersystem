@@ -1,0 +1,933 @@
+
+
+*************************************************************************************
+Installation/upgrade of IRISHealth started at 2025-03-26 12:25:22.831
+*************************************************************************************
+
+Checking Production AutoStart setting in CPF file.
+Updating for Interoperability installation:
+    * Configuration:
+      - System Libraries Parent Directory:C:\InterSystems\IRISHealth\mgr
+      - Manager Directory:                c:\intersystems\irishealth\mgr\
+      - Configuration Name:               IRISHEALTH
+      - Configuration Directory:          c:\intersystems\irishealth\
+      - Version:                          IRIS for Windows (x86-64) 2024.1.3 (Build 456U) Thu Jan 9 2025 12:47:03 EST []
+      - Upgrade:                          No
+    * Storage:
+      - ENSLIB
+        + Adding Database: ENSLIB in C:\InterSystems\IRISHealth\mgr\enslib
+        + ENSLIB is marked as Read Only and will be set back to Read Only after Initialization
+    * Security:
+      - Creating resource %DB_ENSLIB for ENSLIB
+      - Username '_Ensemble' created successfully with properties 'AccountNeverExpires' and 'PasswordNeverExpires' set to True.
+      - Creating Interoperability Resources
+2025-03-26 12:25:22 0 %Library.EnsembleMgr: Installation starting at 2025-03-26 12:25:22, LogLevel=1
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_Deploy' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_DeploymentPkg' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_DeploymentPkgClient' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_TestingService' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_DTLTest' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_ProductionRun' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_ConfigItemRun' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_MessageResend' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_MessageEditResend' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_MessageSuspend' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_MessageDiscard' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_MessageTrace' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_MessageHeader' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_MessageContent' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_MessageExport' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_Purge' with public permission(s) '', type=0
+2025-03-26 12:25:22 1 CreateResource: Creating Resource '%Ens_Dashboard' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_EventLog' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_RuleLog' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_ProductionDocumentation' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_Portal' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_ViewFileSystem' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_MsgBank_MessageHeader' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_MsgBank_MessageContent' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_MsgBank_MessageResend' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_MsgBank_MessageEditResend' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_MsgBank_MessageTrace' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_MsgBank_Dashboard' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_MsgBank_EventLog' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_AlertAdministration' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_Agents' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_Code' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_BPL' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_DTL' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_Rules' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_RoutingRules' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_BusinessRules' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_RecordMap' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_ProductionConfig' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_EDISchema' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_EDISchemaAnnotations' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_Queues' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_Jobs' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_PurgeSchedule' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_PurgeSettings' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_SystemDefaultConfig' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_Credentials' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_ArchiveManager' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_LookupTables' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_MsgBankConfig' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_MsgBank' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_WorkflowConfig' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_Alerts' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_ITK' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_PubSub' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_RestrictedUI_SystemDefaultSettings' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_Port' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_IPAddress' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_Server' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_AllowedIPAddresses' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_ActorPoolSize' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_PoolSize' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_SystemDefaultSettings_Enabled' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_SettingsReportConfig' with public permission(s) '', type=0
+2025-03-26 12:25:23 1 CreateResource: Creating Resource '%Ens_PortSettingsReport' with public permission(s) '', type=0
+2025-03-26 12:25:23 0 %Library.EnsembleMgr: Installation succeeded at 2025-03-26 12:25:23
+2025-03-26 12:25:23 0 %Installer: Elapsed time .19686s
+
+      - Creating Interoperability Roles
+2025-03-26 12:25:23 0 %Library.EnsembleMgr: Installation starting at 2025-03-26 12:25:23, LogLevel=1
+2025-03-26 12:25:23 1 CreateRole: Creating Role '%EnsRole_Operator' with resources '%Ens_Portal:U,%Ens_ProductionRun:U,%Ens_ConfigItemRun:U,%Ens_MessageResend:U,%Ens_Dashboard:U,%Ens_ProductionConfig:R,%Ens_EventLog:U,%Ens_RuleLog:U,%Ens_MessageTrace:U,%Ens_MessageHeader:U,%Ens_Queues:R,%Ens_Jobs:R,%Ens_SystemDefaultConfig:R,%Ens_Credentials:R,%Ens_LookupTables:R,%Ens_MsgBank:R,%Ens_WorkflowConfig:R,%Ens_Alerts:RW,%Ens_MsgBank_MessageHeader:U,%Ens_MsgBank_MessageResend:U,%Ens_MsgBank_MessageTrace:U,%Ens_MsgBank_Dashboard:U,%Ens_MsgBank_EventLog:U,%Ens_ITK:R,%Ens_Agents:R,%Ens_PortSettingsReport:R,%Ens_SettingsReportConfig:R', granting ''
+2025-03-26 12:25:23 1 CreateRole: Creating Role '%EnsRole_RulesDeveloper' with resources '%Ens_Portal:U,%Ens_Rules:RW,%Ens_RuleLog:U', granting ''
+2025-03-26 12:25:23 1 CreateRole: Creating Role '%EnsRole_WebDeveloper' with resources '%Ens_DeploymentPkg:U,%Ens_TestingService:U,%Ens_DTLTest:U,%Ens_MessageEditResend:U,%Ens_MessageSuspend:U,%Ens_MessageDiscard:U,%Ens_MessageContent:U,%Ens_Purge:U,%Ens_ProductionDocumentation:U,%Ens_Code:RW,%Ens_ProductionConfig:W,%Ens_EDISchema:RW,%Ens_EDISchemaAnnotations:RW,%Ens_Queues:W,%Ens_Jobs:W,%Ens_LookupTables:W,%Ens_MsgBankConfig:RW,%Ens_WorkflowConfig:W,%Ens_Alerts:W,%Ens_MsgBank_MessageEditResend:U,%Ens_MsgBank_MessageContent:U,%Ens_ViewFileSystem:U,%Ens_ITK:W,%Ens_PubSub:RW', granting '%EnsRole_Operator,%EnsRole_RulesDeveloper,%DB_ENSLIB'
+2025-03-26 12:25:23 1 CreateRole: Creating Role '%EnsRole_Developer' with resources '%Ens_PurgeSettings:W', granting '%Developer,%EnsRole_WebDeveloper'
+2025-03-26 12:25:23 1 CreateRole: Creating Role '%EnsRole_Administrator' with resources '%Ens_DeploymentPkg:U,%Ens_DeploymentPkgClient:W,%Ens_Deploy:U,%Ens_TestingService:U,%Ens_DTLTest:U,%Ens_MessageEditResend:U,%Ens_MessageSuspend:U,%Ens_MessageDiscard:U,%Ens_MessageContent:U,%Ens_Purge:U,%Ens_MessageExport:U,%Ens_ProductionDocumentation:U,%Ens_Code:R,%Ens_ProductionConfig:W,%Ens_EDISchema:R,%Ens_EDISchemaAnnotations:R,%Ens_Queues:W,%Ens_Jobs:W,%Ens_PurgeSchedule:U,%Ens_PurgeSettings:W,%Ens_SystemDefaultConfig:W,%Ens_Credentials:W,%Ens_ArchiveManager:RW,%Ens_LookupTables:W,%Ens_MsgBankConfig:RW,%Ens_MsgBank:W,%Ens_WorkflowConfig:W,%Ens_Alerts:W,%Ens_MsgBank_MessageEditResend:U,%Ens_MsgBank_MessageContent:U,%Ens_ViewFileSystem:U,%Ens_ITK:W,%Ens_PubSub:R,%Ens_AlertAdministration:U,%Ens_Agents:W,%Ens_PortSettingsReport:RW,%Ens_SettingsReportConfig:RW', granting '%EnsRole_Operator,%DB_ENSLIB'
+2025-03-26 12:25:23 1 CreateRole: Creating Role '%EnsRole_Monitor' with resources '%Ens_Portal:U,%Ens_Dashboard:U,%Ens_MsgBank_Dashboard:U', granting ''
+2025-03-26 12:25:23 1 CreateRole: Creating Role '%EnsRole_PubSubDeveloper' with resources '%Ens_Portal:U,%Ens_PubSub:RW', granting ''
+2025-03-26 12:25:23 1 CreateRole: Creating Role '%EnsRole_AlertOperator' with resources '%Ens_Portal:U,%Ens_Alerts:RW', granting ''
+2025-03-26 12:25:23 1 CreateRole: Creating Role '%EnsRole_AlertAdministrator' with resources '%Ens_AlertAdministration:U', granting '%EnsRole_AlertOperator'
+2025-03-26 12:25:23 1 CreateRole: Creating Role '%EnsRole_RegistryManager' with resources '', granting ''
+2025-03-26 12:25:23 1 CreateRole: Creating Role '%EnsRole_RegistrySelect' with resources '', granting ''
+2025-03-26 12:25:23 1 CreateRole: Creating Role '%EnsRole_TempSQLDict' with resources '', granting ''
+2025-03-26 12:25:23 1 CreateRole: Creating Role '%EnsRole_InteropEditorsAPI' with resources '%Development:U', granting ''
+2025-03-26 12:25:23 0 %Library.EnsembleMgr: Installation succeeded at 2025-03-26 12:25:23
+2025-03-26 12:25:23 0 %Installer: Elapsed time .049271s
+
+      - Starting Interoperability Security Upgrade
+      - Adding '%EnsRole_Administrator' and '%EnsRole_Developer' roles to users with permissions on the '%Admin_Manage' resource
+        + Adding '%EnsRole_Administrator' and '%EnsRole_Developer' roles to user 'Admin'
+      - Completed addition of '%EnsRole_Administrator' and '%EnsRole_Developer' roles to users with permissions on the '%Admin_Manage' resource
+      - Configuration IRISHEALTH updated.
+    * Upgrading existing namespaces
+    * Interoperability enabling namespaces
+      - Marking IRISLIB as ReadOnly=0 (was previously ReadOnly=1)
+      - Marking ENSLIB as ReadOnly=0 (was previously ReadOnly=1)
+      - Loading localized messages into database ENSLIB
+        + Loading: C:\InterSystems\IRISHealth\mgr\Locale\allmessages_de.xml
+        + Loading: C:\InterSystems\IRISHealth\mgr\Locale\allmessages_en-us.xml
+        + Loading: C:\InterSystems\IRISHealth\mgr\Locale\allmessages_es.xml
+        + Loading: C:\InterSystems\IRISHealth\mgr\Locale\allmessages_fr.xml
+        + Loading: C:\InterSystems\IRISHealth\mgr\Locale\allmessages_it.xml
+        + Loading: C:\InterSystems\IRISHealth\mgr\Locale\allmessages_ja.xml
+        + Loading: C:\InterSystems\IRISHealth\mgr\Locale\allmessages_ko.xml
+        + Loading: C:\InterSystems\IRISHealth\mgr\Locale\allmessages_nl.xml
+        + Loading: C:\InterSystems\IRISHealth\mgr\Locale\allmessages_pt-br.xml
+        + Loading: C:\InterSystems\IRISHealth\mgr\Locale\allmessages_ru.xml
+        + Loading: C:\InterSystems\IRISHealth\mgr\Locale\allmessages_uk.xml
+        + Loading: C:\InterSystems\IRISHealth\mgr\Locale\allmessages_zh-cn.xml
+      - Setting IRISLIB back to ReadOnly=1
+      - Setting ENSLIB back to ReadOnly=1
+Update Complete.
+
+%ZHSLIB.HealthShareMgr - Installing namespace and database HSLIB ...
+2025-03-26 12:25:34 0 %ZHSLIB.HealthShareMgr: Installation starting at 2025-03-26 12:25:34, LogLevel=3
+2025-03-26 12:25:34 3 Evaluate: %DB_${DATABASE} -> %DB_HSLIB
+2025-03-26 12:25:34 3 SetVariable: DBRESOURCE=%DB_HSLIB
+2025-03-26 12:25:34 3 Evaluate: #{$ZCVT("${NAMESPACE}","L")} -> hslib
+2025-03-26 12:25:34 3 SetVariable: NAMESPACELOWERCASE=hslib
+2025-03-26 12:25:34 3 Evaluate: #{##class(%File).NormalizeDirectory($system.Util.InstallDirectory()_"mgr/"_"${NAMESPACELOWERCASE}")} -> C:\InterSystems\IRISHealth\mgr\hslib\
+2025-03-26 12:25:34 3 SetVariable: DATABASEDIR=C:\InterSystems\IRISHealth\mgr\hslib\
+2025-03-26 12:25:34 3 Evaluate: ${DATABASE} -> HSLIB
+2025-03-26 12:25:34 3 Evaluate: ${DATABASE} -> HSLIB
+2025-03-26 12:25:34 3 Evaluate: ${DATABASE} -> HSLIB
+2025-03-26 12:25:34 3 Evaluate: ${DATABASE} -> HSLIB
+2025-03-26 12:25:34 3 Evaluate: ${DATABASEDIR} -> C:\InterSystems\IRISHealth\mgr\hslib\
+2025-03-26 12:25:34 3 Evaluate: ${DBRESOURCE} -> %DB_HSLIB
+2025-03-26 12:25:34 1 CreateDatabase: Creating database HSLIB in C:\InterSystems\IRISHealth\mgr\hslib\ with resource %DB_HSLIB
+2025-03-26 12:25:34 2 CreateDatabase: Adding database HSLIB
+2025-03-26 12:25:34 2 CreateDatabase: Creating and assigning resource '%DB_HSLIB' to HSLIB
+2025-03-26 12:25:34 1 CreateNamespace: Creating namespace HSLIB using HSLIB/HSLIB
+2025-03-26 12:25:34 2 CreateNamespace: Adding namespace HSLIB
+2025-03-26 12:25:35 1 ActivateConfiguration: Activating Configuration
+2025-03-26 12:25:35 3 Evaluate: ${NAMESPACE} -> HSLIB
+2025-03-26 12:25:35 1 ClassMapping: Adding classmapping %IPM to HSLIB from HSLIB
+2025-03-26 12:25:35 1 ActivateConfiguration: Activating Configuration
+2025-03-26 12:25:35 0 %ZHSLIB.HealthShareMgr: Installation succeeded at 2025-03-26 12:25:35
+2025-03-26 12:25:35 0 %Installer: Elapsed time .579426s
+
+    * Mappings:
+      - Class:
+        + Adding class mapping Ens -> ENSLIB
+        + Adding class mapping EnsLib -> ENSLIB
+        + Adding class mapping EnsPortal -> ENSLIB
+        + Adding class mapping CSPX.Dashboard -> ENSLIB
+      - Routine:
+        + Adding routine mapping Ens* -> ENSLIB
+      - Global:
+        + Adding global mapping ^EnsDICOM.Dictionary -> ENSLIB
+        + Adding global mapping ^EnsEDI.ASTM.Description("E1394") -> ENSLIB
+        + Adding global mapping ^EnsEDI.ASTM.Schema("E1394") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Description("X","X12") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Schema("HIPAA_4010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Schema("HIPAA_5010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Schema("ISC_00401") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Schema("ISC_00405") -> ENSLIB
+        + Adding global mapping ^EnsEDI.X12.Description("HIPAA_4010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.X12.Description("HIPAA_5010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.X12.Schema("HIPAA_4010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.X12.Schema("HIPAA_5010") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.3.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.5.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.7.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.8.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.8.2") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("ITK") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.1) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.2) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.3) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.4) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.5) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.6) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.7) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.8) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.3.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.5.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.7.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.8.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.8.2") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("ITK") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.1) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.2) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.3) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.4) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.5) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.6) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.7) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.8) -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Arial,Tahoma,Verdana") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Confirm") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EDIDocumentView") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("ENSEMBLE") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Ens") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsAlert") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsBPL") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsColumns") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsDICOM") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDI") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDIEDIFACT") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDIHL7") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDISEF") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDIX12") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEnt") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsLDAP") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsMQTT") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsPushNotifications") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsRecordMap") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsSAP") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsSR") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsSearchTable") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsWf") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsXPATH") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsebXML") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Ensemble") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("ITK") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("RuleEditor") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Workflow") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("tahoma,verdana") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Arial,Tahoma,Verdana") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Confirm") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EDIDocumentView") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("ENSEMBLE") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Ens") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsAlert") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsBPL") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsColumns") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsDICOM") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDI") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDIEDIFACT") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDIHL7") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDISEF") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDIX12") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEnt") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsLDAP") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsMQTT") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsPushNotifications") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsRecordMap") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsSAP") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsSR") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsSearchTable") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsWf") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsXPATH") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsebXML") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Ensemble") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("ITK") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("RuleEditor") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Workflow") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("tahoma,verdana") -> ENSLIB
+      - Updating CPF
+      - Moving changes to active configuration
+       - Loading new mappings for namespace 'HSLIB'
+    * Complete!
+    * Adding mappings for percent items to HSLIB
+      + Adding package mapping %ZHS -> HSLIB
+    * Copying percent items from HSLIB to %SYS
+%ZHS.BulkFHIR.Utils.cls                 %ZHS.FHIRSQL.Utils.cls                  %ZHS.HC.OAuth2.Utils.cls
+%ZHS.BulkFHIR.Utils.cls                 %ZHS.FHIRSQL.Utils.cls                  %ZHS.HC.OAuth2.Utils.cls
+
+
+    * Removing mappings for percent items to HSLIB
+      - Removing package mapping %ZHS -> HSLIB
+    * Adding mappings for percent items to HSLIB
+      + Adding package mapping %ZHSMOD -> HSLIB
+    * Copying percent items from HSLIB to %SYS
+
+
+
+    * Removing mappings for percent items to HSLIB
+      - Removing package mapping %ZHSMOD -> HSLIB
+    * Mappings:
+        + Adding class mapping %pkg.isc -> HSLIB for namespace HSLIB
+Created mappings for HSLIB
+HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace About to Create Database hssys
+HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace Created IRIS.DAT in c:\intersystems\irishealth\mgr\hssys
+HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace Made Namespace hssys
+Created database and namespace HSSYS
+HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace About to Create Database hssyslocaltemp
+HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace Created IRIS.DAT in c:\intersystems\irishealth\mgr\hssyslocaltemp
+HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace Made Namespace hssyslocaltemp
+Created database and namespace HSSYSLOCALTEMP
+Finished running Installer.Install:AddLOCALTEMPStartupItemToTable
+HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace About to Create Database HSCUSTOM
+HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace Created IRIS.DAT in c:\intersystems\irishealth\mgr\HSCUSTOM
+HS.Util.Installer.ConfigItem:CreateDatabaseAndNamespace Made Namespace HSCUSTOM
+Created namespace and database HSCUSTOM
+HS.Util.Installer.ConfigItem:MapIPM Added package mapping: %IPM from HSLIB to HSSYS
+    * Mappings:
+      - Class:
+        + Adding class mapping Ens -> ENSLIB
+        + Adding class mapping EnsLib -> ENSLIB
+        + Adding class mapping EnsPortal -> ENSLIB
+        + Adding class mapping CSPX.Dashboard -> ENSLIB
+      - Routine:
+        + Adding routine mapping Ens* -> ENSLIB
+      - Global:
+        + Creating new global directory entry for ^EnsDICOM.Dictionary
+        + Creating new global directory entry for ^EnsEDI.ASTM.Description
+        + Creating new global directory entry for ^EnsEDI.ASTM.Schema
+        + Creating new global directory entry for ^EnsEDI.Description
+        + Creating new global directory entry for ^EnsEDI.Schema
+        + Creating new global directory entry for ^EnsEDI.X12.Description
+        + Creating new global directory entry for ^EnsEDI.X12.Schema
+        + Creating new global directory entry for ^EnsHL7.Description
+        + Creating new global directory entry for ^EnsHL7.Schema
+        + Checking/fixing global directory settings for existing global ^IRIS.Msg in directory c:\intersystems\irishealth\mgr\hssys\
+        + Checking/fixing global directory settings for existing global ^IRIS.MsgNames in directory c:\intersystems\irishealth\mgr\hssys\
+        + Adding global mapping ^EnsDICOM.Dictionary -> ENSLIB
+        + Adding global mapping ^EnsEDI.ASTM.Description("E1394") -> ENSLIB
+        + Adding global mapping ^EnsEDI.ASTM.Schema("E1394") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Description("X","X12") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Schema("HIPAA_4010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Schema("HIPAA_5010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Schema("ISC_00401") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Schema("ISC_00405") -> ENSLIB
+        + Adding global mapping ^EnsEDI.X12.Description("HIPAA_4010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.X12.Description("HIPAA_5010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.X12.Schema("HIPAA_4010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.X12.Schema("HIPAA_5010") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.3.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.5.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.7.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.8.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.8.2") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("ITK") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.1) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.2) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.3) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.4) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.5) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.6) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.7) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.8) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.3.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.5.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.7.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.8.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.8.2") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("ITK") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.1) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.2) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.3) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.4) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.5) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.6) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.7) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.8) -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Arial,Tahoma,Verdana") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Confirm") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EDIDocumentView") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("ENSEMBLE") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Ens") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsAlert") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsBPL") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsColumns") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsDICOM") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDI") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDIEDIFACT") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDIHL7") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDISEF") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDIX12") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEnt") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsLDAP") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsMQTT") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsPushNotifications") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsRecordMap") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsSAP") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsSR") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsSearchTable") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsWf") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsXPATH") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsebXML") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Ensemble") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("ITK") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("RuleEditor") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Workflow") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("tahoma,verdana") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Arial,Tahoma,Verdana") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Confirm") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EDIDocumentView") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("ENSEMBLE") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Ens") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsAlert") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsBPL") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsColumns") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsDICOM") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDI") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDIEDIFACT") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDIHL7") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDISEF") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDIX12") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEnt") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsLDAP") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsMQTT") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsPushNotifications") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsRecordMap") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsSAP") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsSR") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsSearchTable") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsWf") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsXPATH") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsebXML") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Ensemble") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("ITK") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("RuleEditor") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Workflow") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("tahoma,verdana") -> ENSLIB
+      - Updating CPF
+      - Moving changes to active configuration
+       - Loading new mappings for namespace 'HSSYS'
+    * Complete!
+Finished running Installer.Install:CreateProjectionsForRESTModelClassesForHSSYS
+Created mappings for HSSYS
+    * Mappings:
+      - Class:
+        + Adding class mapping Ens -> ENSLIB
+        + Adding class mapping EnsLib -> ENSLIB
+        + Adding class mapping EnsPortal -> ENSLIB
+        + Adding class mapping CSPX.Dashboard -> ENSLIB
+      - Routine:
+        + Adding routine mapping Ens* -> ENSLIB
+      - Global:
+        + Creating new global directory entry for ^EnsDICOM.Dictionary
+        + Creating new global directory entry for ^EnsEDI.ASTM.Description
+        + Creating new global directory entry for ^EnsEDI.ASTM.Schema
+        + Creating new global directory entry for ^EnsEDI.Description
+        + Creating new global directory entry for ^EnsEDI.Schema
+        + Creating new global directory entry for ^EnsEDI.X12.Description
+        + Creating new global directory entry for ^EnsEDI.X12.Schema
+        + Creating new global directory entry for ^EnsHL7.Description
+        + Creating new global directory entry for ^EnsHL7.Schema
+        + Checking/fixing global directory settings for existing global ^IRIS.Msg in directory c:\intersystems\irishealth\mgr\hscustom\
+        + Checking/fixing global directory settings for existing global ^IRIS.MsgNames in directory c:\intersystems\irishealth\mgr\hscustom\
+        + Adding global mapping ^EnsDICOM.Dictionary -> ENSLIB
+        + Adding global mapping ^EnsEDI.ASTM.Description("E1394") -> ENSLIB
+        + Adding global mapping ^EnsEDI.ASTM.Schema("E1394") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Description("X","X12") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Schema("HIPAA_4010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Schema("HIPAA_5010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Schema("ISC_00401") -> ENSLIB
+        + Adding global mapping ^EnsEDI.Schema("ISC_00405") -> ENSLIB
+        + Adding global mapping ^EnsEDI.X12.Description("HIPAA_4010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.X12.Description("HIPAA_5010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.X12.Schema("HIPAA_4010") -> ENSLIB
+        + Adding global mapping ^EnsEDI.X12.Schema("HIPAA_5010") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.3.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.5.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.7.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.8.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("2.8.2") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description("ITK") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.1) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.2) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.3) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.4) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.5) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.6) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.7) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Description(2.8) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.3.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.5.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.7.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.8.1") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("2.8.2") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema("ITK") -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.1) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.2) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.3) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.4) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.5) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.6) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.7) -> ENSLIB
+        + Adding global mapping ^EnsHL7.Schema(2.8) -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Arial,Tahoma,Verdana") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Confirm") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EDIDocumentView") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("ENSEMBLE") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Ens") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsAlert") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsBPL") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsColumns") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsDICOM") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDI") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDIEDIFACT") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDIHL7") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDISEF") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEDIX12") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsEnt") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsLDAP") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsMQTT") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsPushNotifications") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsRecordMap") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsSAP") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsSR") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsSearchTable") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsWf") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsXPATH") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("EnsebXML") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Ensemble") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("ITK") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("RuleEditor") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("Workflow") -> ENSLIB
+        + Adding global mapping ^IRIS.Msg("tahoma,verdana") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Arial,Tahoma,Verdana") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Confirm") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EDIDocumentView") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("ENSEMBLE") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Ens") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsAlert") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsBPL") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsColumns") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsDICOM") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDI") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDIEDIFACT") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDIHL7") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDISEF") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEDIX12") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsEnt") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsLDAP") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsMQTT") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsPushNotifications") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsRecordMap") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsSAP") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsSR") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsSearchTable") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsWf") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsXPATH") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("EnsebXML") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Ensemble") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("ITK") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("RuleEditor") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("Workflow") -> ENSLIB
+        + Adding global mapping ^IRIS.MsgNames("tahoma,verdana") -> ENSLIB
+      - Updating CPF
+      - Moving changes to active configuration
+       - Loading new mappings for namespace 'HSCUSTOM'
+    * Complete!
+Created mappings from HSCUSTOM for namepsace: HSCUSTOM
+Created mappings from HSCUSTOM for namepsace: HSSYS
+Created mappings from HSCUSTOM for namepsace: HSLIB
+Copying classes in package: HS.Local. from database HSLIB to HSCUSTOM
+ - Copied class HS.Local.BulkFHIR.Util.BaseURL
+ - Copied class HS.Local.FHIRServer.Util.BaseURL
+ - Copied class HS.Local.SDA3.AddressExtension
+ - Copied class HS.Local.SDA3.AdjudicationDetailExtension
+ - Copied class HS.Local.SDA3.AdministrationExtension
+ - Copied class HS.Local.SDA3.AdvanceDirectiveExtension
+ - Copied class HS.Local.SDA3.AlertExtension
+ - Copied class HS.Local.SDA3.AllergyExtension
+ - Copied class HS.Local.SDA3.AppointmentExtension
+ - Copied class HS.Local.SDA3.CarePlanExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ATCCodeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.AddressUseExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.AdjudicationCategoryExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.AdjudicationStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.AdministrationSiteExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.AdministrationStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.AdmissionSourceExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.AdmissionTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.AdmitReasonExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.AlertExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.AlertTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.AllergyCategoryExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.AllergyExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.AppointmentTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.BenefitPaymentStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.BodyPartExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.BrandGenericIndicatorExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.BusinessExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CarePlanIntentExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CarePlanSubTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CarePlanTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CareProviderExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CareProviderTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CategoryExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CertaintyExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CitizenshipExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CityExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ClaimLineTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ClaimStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ClaimSubTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ClaimTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ClaimUseExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ClinicalRelationshipStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CollectionMethodExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CompoundCodeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ConditionVerificationStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ConfidentialityExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ContactTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CountryExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CountyExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CoverageLevelExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CoverageTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.CurrencyExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DataAbsentReasonExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DeniedReasonCodeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DeviceExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DeviceStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DiagnosisExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DiagnosisRelatedGroupExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DiagnosisStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DiagnosisTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DischargeLocationExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DischargeStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DispensedAsWrittenExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DocumentCategoryExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DocumentCompletionStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DocumentOrganizationRoleExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DocumentProviderRoleExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DocumentStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DocumentTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DosageFormExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DrugProductExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DrugProductFormExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DrugProductTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.DurationExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.EOBReasonExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.EOBStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.EOBSupportingInfoCategoryExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.EOBSupportingInfoCodeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.EmploymentStatusCodeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.EncounterPriorityExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.EncounterStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.EncounterTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.EthnicGroupExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.EventReasonExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.FamilyDoctorExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.FamilyMemberExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.FamilyPlanningExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.FinancialResourceStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.FormatCodeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.FrequencyExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.GenderExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.GenderIdentity
+ - Copied class HS.Local.SDA3.CodeTableDetail.GenderIdentityExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.GenericExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.GoalAchievementStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.GoalLifecycleStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.HealthCareFacilityExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.HealthCareFacilityStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.HealthConcernCodeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.HealthConcernStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.HealthFundExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.HealthFundPlanExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.InsuranceTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.InsuredGroupExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.LabTestItemExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.LanguageExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.LocationPhysicalTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.LocationTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.MaritalStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.MarketCategoryExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.MedicationRequestIntentExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.MemberPolicyAmountCategoryExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.MessageEventTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.NarrativeStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ObservationExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ObservationMethodExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ObservationValueCodeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.OccupationExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.OrderCategoryExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.OrderExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.OrganizationExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.OrganizationTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PackageSizeUoMExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ParticipantTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PastHistoryConditionExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PatientStatusAtLocationExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PayerProviderContractingStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PaymentReasonExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PaymentStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PhysExamExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PhysExamObsExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PhysExamObsQualifierExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PhysExamObsValueExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PlaceOfServiceExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PolicyPlanExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PrescriptionOriginExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PresentOnAdmissionExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PriorityExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ProblemCategoryExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ProcedureCodeTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ProcedureExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ProcedureModifierExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ProcedureStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ProcessNoteLanguageExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ProcessNoteTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ProcessPriorityExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ProvenanceAgentTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ProviderQualificationExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ProviderRoleExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.PublicityCodeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.QuestionnaireResponseStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.RaceExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.RateUnitsExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ReactionExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ReasonforStudyExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ReferralDoctorExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.RefusalReasonExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.RelatedClaimRelationshipExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.RelationshipExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ReligionExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.RevenueExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.RouteExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SeparationModeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SeverityExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SocialDeterminantCodeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SocialDeterminantValueCodeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SocialHabitCategoryExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SocialHabitExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SocialHabitQtyExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SourceFormatExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SpecialCoverageExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SpecimenAdditiveExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SpecimenAppropriatenessExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SpecimenConditionExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SpecimenQualityExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SpecimenRejectReasonExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SpecimenRoleExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SpecimenSourceSiteExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SpecimenSourceSiteModifierExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SpecimenTypeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SpecimenTypeModifierExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.StateExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.StrengthExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SurveyCodeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.SurveyValueCodeExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.TagExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.TaskIntentExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.TaskPriorityExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.TaskStatusExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.TrustExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.TypeOfBillExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.UoMExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.UserExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.VaccinationStatusReasonExtension
+ - Copied class HS.Local.SDA3.CodeTableDetail.ZipExtension
+ - Copied class HS.Local.SDA3.ContactInfoExtension
+ - Copied class HS.Local.SDA3.DeviceExtension
+ - Copied class HS.Local.SDA3.DeviceItemExtension
+ - Copied class HS.Local.SDA3.DiagnosisExtension
+ - Copied class HS.Local.SDA3.DocumentExtension
+ - Copied class HS.Local.SDA3.DocumentOrganizationExtension
+ - Copied class HS.Local.SDA3.DocumentProviderExtension
+ - Copied class HS.Local.SDA3.DosageStepExtension
+ - Copied class HS.Local.SDA3.EOBSupportingInfoExtension
+ - Copied class HS.Local.SDA3.EncounterExtension
+ - Copied class HS.Local.SDA3.EncounterParticipantExtension
+ - Copied class HS.Local.SDA3.FamilyHistoryExtension
+ - Copied class HS.Local.SDA3.FinancialCareTeamMemberExtension
+ - Copied class HS.Local.SDA3.GenomicsOrderExtension
+ - Copied class HS.Local.SDA3.GenomicsVariantExtension
+ - Copied class HS.Local.SDA3.GoalExtension
+ - Copied class HS.Local.SDA3.GuarantorExtension
+ - Copied class HS.Local.SDA3.HealthConcernExtension
+ - Copied class HS.Local.SDA3.HealthFundExtension
+ - Copied class HS.Local.SDA3.IdentifierExtension
+ - Copied class HS.Local.SDA3.IllnessHistoryExtension
+ - Copied class HS.Local.SDA3.InterventionExtension
+ - Copied class HS.Local.SDA3.LabOrderExtension
+ - Copied class HS.Local.SDA3.LabResultItemExtension
+ - Copied class HS.Local.SDA3.LocationExtension
+ - Copied class HS.Local.SDA3.MedicalClaimExtension
+ - Copied class HS.Local.SDA3.MedicalClaimLineExtension
+ - Copied class HS.Local.SDA3.MedicalEOBLineExtension
+ - Copied class HS.Local.SDA3.MedicalExplanationOfBenefitExtension
+ - Copied class HS.Local.SDA3.MedicationExtension
+ - Copied class HS.Local.SDA3.MemberEnrollmentExtension
+ - Copied class HS.Local.SDA3.MemberPolicyAmountExtension
+ - Copied class HS.Local.SDA3.MessageHeaderExtension
+ - Copied class HS.Local.SDA3.NameExtension
+ - Copied class HS.Local.SDA3.ObservationExtension
+ - Copied class HS.Local.SDA3.ObservationGroupExtension
+ - Copied class HS.Local.SDA3.OtherOrderExtension
+ - Copied class HS.Local.SDA3.OutcomeExtension
+ - Copied class HS.Local.SDA3.PatientExtension
+ - Copied class HS.Local.SDA3.PatientLanguageExtension
+ - Copied class HS.Local.SDA3.PatientNumberExtension
+ - Copied class HS.Local.SDA3.PharamacyEOBLineExtension
+ - Copied class HS.Local.SDA3.PharmacyClaimExtension
+ - Copied class HS.Local.SDA3.PharmacyClaimLineExtension
+ - Copied class HS.Local.SDA3.PharmacyExplanationOfBenefitExtension
+ - Copied class HS.Local.SDA3.PhysicalExamExtension
+ - Copied class HS.Local.SDA3.PriorCodeExtension
+ - Copied class HS.Local.SDA3.ProblemExtension
+ - Copied class HS.Local.SDA3.ProcedureExtension
+ - Copied class HS.Local.SDA3.ProcessNoteExtension
+ - Copied class HS.Local.SDA3.ProvenanceExtension
+ - Copied class HS.Local.SDA3.QuantityExtension
+ - Copied class HS.Local.SDA3.QuestionnaireResponseExtension
+ - Copied class HS.Local.SDA3.RadOrderExtension
+ - Copied class HS.Local.SDA3.RecommendationExtension
+ - Copied class HS.Local.SDA3.ReferralExtension
+ - Copied class HS.Local.SDA3.RelatedClaimExtension
+ - Copied class HS.Local.SDA3.ResultExtension
+ - Copied class HS.Local.SDA3.SocialDeterminantExtension
+ - Copied class HS.Local.SDA3.SocialHistoryExtension
+ - Copied class HS.Local.SDA3.SpecimenExtension
+ - Copied class HS.Local.SDA3.SupportContactExtension
+ - Copied class HS.Local.SDA3.SurveyExtension
+ - Copied class HS.Local.SDA3.TaskExtension
+ - Copied class HS.Local.SDA3.VaccinationExtension
+Finished running Installer.Install:CopyClassesToHSCUSTOM
+Created Base Security Resources
+Created Base Security Roles
+Creating HealthShare Foundation Resources
+
+      Starting HealthShare Foundation Security Upgrade
+      Adding %HSAdmin_InstallationManagement to %EnsRole_Developer and EnsRole_Administrator roles
+Created additional Security Roles and Resources
+Created web applications for HSLIB
+HS.Util.Installer.ConfigItem:CreateWebApplicationForRESTServices Created web application for REST Services: /api/healthshare-rest/hssys
+Created web applications for HSSYS
+Created web applications for HSCUSTOM
+Imported SDA3 schema
+Finished running Installer.Install:ImportSDA3Schema
+      - Loading localized messages into HSLIB
+Finished loading localized error messages
+    * Validating Installation in 'HSLIB'
+      - Checking class 'HS.Director' ...
+      - Checking class 'HS.HC.Util.Installer' ...
+Finished AdditionalSetup()
+Finished AdditionalHCSetup()
+Deactivating all HealthShare Instances
+
+Build of HL7 to SDA mapping finished
+
+Build of CDA (C32) to SDA mapping finished
+
+Build of SDA to CDA (C32) mapping finished
+
+Build of CDA (CCDA1) to SDA mapping finished
+
+Build of SDA to CDA (CCDA1) mapping finished
+
+Build of CDA (CCDA2) to SDA mapping finished
+
+Build of SDA to CDA (CCDA2) mapping finished
+
+Build of CDA (XDLAB) to SDA mapping finished
+
+Build of SDA to CDA (XDLAB) mapping finished
+
+Import of HL7 to SDA mapping finished
+Links:          0
+Targets:        0
+Sources:        0
+
+
+Import of CDA (C32) to SDA mapping finished
+Links:          2676
+Targets:        1426 (762 new & 664 prior)
+XPath Targets:  1426 (1031 new & 395 prior)
+Sources:        1426 (1138 new & 288 prior)
+
+
+Import of SDA to CDA (C32) mapping finished
+Links:          5236
+Targets:        2818 (1471 new & 1347 prior)
+Sources:        2818 (378 new & 2440 prior)
+XPath Sources:  2818 (871 new & 1947 prior)
+
+
+Import of CDA (CCDA1) to SDA mapping finished
+Links:          2655
+Targets:        1436 ( 22 new & 1414 prior)
+XPath Targets:  1436 (143 new & 1293 prior)
+Sources:        1436 (1110 new & 326 prior)
+
+
+Import of SDA to CDA (CCDA1) mapping finished
+Links:          5138
+Targets:        2794 (1381 new & 1413 prior)
+Sources:        2794 (  4 new & 2790 prior)
+XPath Sources:  2794 ( 58 new & 2736 prior)
+
+
+Import of CDA (CCDA2) to SDA mapping finished
+Links:          2925
+Targets:        1654 (195 new & 1459 prior)
+XPath Targets:  1654 (233 new & 1421 prior)
+Sources:        1654 (1219 new & 435 prior)
+
+
+Import of SDA to CDA (CCDA2) mapping finished
+Links:          6005
+Targets:        3459 (1995 new & 1464 prior)
+Sources:        3459 (111 new & 3348 prior)
+XPath Sources:  3459 (185 new & 3274 prior)
+
+
+Import of CDA (XDLAB) to SDA mapping finished
+Links:          668
+Targets:        334 (  0 new & 334 prior)
+XPath Targets:  334 (  0 new & 334 prior)
+Sources:        334 (284 new &  50 prior)
+
+
+Import of SDA to CDA (XDLAB) mapping finished
+Links:          537
+Targets:        294 (130 new & 164 prior)
+Sources:        294 (  9 new & 285 prior)
+XPath Sources:  294 ( 64 new & 230 prior)
+
+Marked namespaces with upgrade steps as inactive
+HS.HealthConnect.FHIRSQL.Upgrade.V2:InstallOnce-HSSYS-1 Configured FHIRSQL Application endpoints
+      + Installed component HSLIB successfully
+Compilation started on 03/26/2025 12:26:44 with qualifiers 'ck'
+Compiling class %ZHSLIB.KitManager
+Compiling routine %ZHSLIB.KitManager.1
+Compilation finished successfully in 0.004s.

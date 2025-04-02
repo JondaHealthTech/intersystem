@@ -1,0 +1,12 @@
+<!--
+Purge page for messages.
+-->
+
+<AutoPage domain="Ensemble" pagename="Purge" parentpage="UtilEnsMA.csp">
+
+<Pane name="Detail" type="CSPX.EnsPurgePane">
+	<Text>@Ensemble:PurgeTitle@Fill out the form and press the button to start purge:</Text>
+	<FormClass>CSPX.EnsPurgeForm</FormClass>
+	<PurgeType>@Ensemble:Messages@Messages</PurgeType>
+</Pane>
+</AutoPage>

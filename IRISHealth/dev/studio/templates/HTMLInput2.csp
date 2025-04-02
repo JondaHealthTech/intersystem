@@ -1,0 +1,8 @@
+<csp:StudioGenerateTemplate><script language="Cache" runat="server">
+	Write "<input"
+	Write " type=""",$get(%request.Data("type",1)),""""
+	Write:($get(%request.Data("name",1))'="") " name=""",..EscapeHTML(%request.Data("name",1)),""""
+	Write:($get(%request.Data("size",1))'="") " size=""",..EscapeHTML(%request.Data("size",1)),""""
+	Write:($get(%request.Data("value",1))'="") " value=""",..EscapeHTML(%request.Data("value",1)),""""
+	Write ">"
+</script>

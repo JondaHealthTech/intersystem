@@ -1,0 +1,12 @@
+# Ignore all case variations (optional but useful for cross-platform)
+*.dat
+*.DAT
+*.jar
+*.JAR
+*.wij
+*.WIJ
+
+#ignore specific files
+IRISHealth/mgr/*.DAT
+IRIS/mgr/user/*.DAT
+IRIS/mgr/irislocaldata/*.DAT

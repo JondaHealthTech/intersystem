@@ -1,0 +1,519 @@
+<html>
+<head>
+
+<!-- Popup operand editor window for Rules Editor -->
+
+<title><csp:text Domain="RuleEditor" TextId="EnsValueEditor">Value Editor</csp:text></title>
+
+<style>
+
+body {
+	background: #F0F0F0;
+	background-image: url(/csp/broker/images/grad-halfgray2-10x500.png);
+	background-repeat: repeat-x;
+	margin: 0px;
+}
+
+div.main {
+	margin: 10px;
+}
+
+table.layout {
+}
+
+h1 {
+	border-bottom: 1px black solid;
+	padding: 5px;
+	width: 110%;
+	background: #000040;
+	background-image: url(/csp/broker/images/grad-blue-10x30.png);
+	background-repeat: repeat-x;
+}
+
+div.title {
+	width: 100%;
+	font-size: 0.8em;
+	font-family: "Lucida Sans Unicode" "Courier New";
+	font-weight: bold;
+	color: yellow;
+	filter:
+		progid:DXImageTransform.Microsoft.dropShadow(color=#404040, OffX=2, OffY=2, Positive=2);
+}
+
+td.optype	{
+	font-size: 12pt; 
+}
+
+td.opval	{
+	horizontal-align: left;
+}
+
+div.text1	{
+	font-size: 12pt; 
+}
+
+div.text1:first-letter {
+	font-size: 15pt;
+}
+
+span.guibutton {
+	color: black;
+	font-weight: bold;
+}
+
+/* default value displayed in input */
+.defaultValue {
+	background: #DDDDDD;
+}
+
+.EditBtn {
+	font-size: 8pt;
+	vertical-align: top;
+}
+
+</style>
+
+<script language="CACHE" runat="SERVER">
+	// get request parms
+	Set tValue = $G(%request.Data("VALUE",1))
+	Set tID = $G(%request.Data("ID",1))
+	Set tBP = $G(%request.Data("HOST",1))
+	Set tCX = $G(%request.Data("CONTEXT",1))
+	Set tMsgClass = $G(%request.Data("MSGCLASS",1))
+	Set tDocCategory = $G(%request.Data("DOCCATEGORY",1))
+	Set tDocType = $G(%request.Data("DOCTYPE",1))
+	
+	If (tValue = "") {
+		Set tOpType = "string"
+		Set tToken = ""
+	} Else {
+		Set tOpType = ##class(Ens.Rule.ExpressionParser).GetOpType(tValue,.tToken)
+	}
+	Set tIsVDoc = ##class(Ens.VDoc.Utils).IsVirtualDocument(tMsgClass)
+	Set tDocTypeList=0
+	If tIsVDoc {
+		#; Parse out multiple DocTypes
+		For i=1:1:$L(tDocType,",") { Set tTyp=$ZSTRIP($P(tDocType,",",i),"<>W")  Continue:""=tTyp
+			Set:""'=tDocCategory&&(tTyp'[":") tTyp=tDocCategory_":"_tTyp, $P(tDocType,",",i)=tTyp
+			Set tDocTypeList($I(tDocTypeList))=tTyp
+		}
+	}
+	Set tDocTypeMsg=$S(tDocTypeList=1&&(""'=$P(tDocTypeList(1),":",2)):"Browse for a Virtual Document property path within the DocType schema that the current Rule filters for"
+							, tDocTypeList>1&&(""'=$P(tDocTypeList(1),":",2)):"Browse for a Virtual Document property path within the first DocType schema that the current Rule filters for"
+							, 1:"Cannot browse - no Virtual Document DocType schema is specified in the current rule")
+
+	Set tString="",tNumber="",tProp="",tVProp="",tFunction="",tFocusId=""
+	Set tExpression = $ZCVT(tValue,"O","HTML")
+	Set tVBaseProp=$S(##class(%Dictionary.CompiledClass).%ExistsId(tCX)&&$zobjclassmethod(tCX,"%Extends","EnsLib.HL7.MsgRouter.RoutingEngine"):"HL7",1:"Document")
+	If (tOpType = "number") {
+		Set tNumber = $ZCVT(tToken,"O","HTML")
+		Set tFocusId = "txtNumber"
+	}
+	ElseIf (tOpType = "string") {
+		Set tString = $ZCVT(tToken,"O","HTML")
+		Set tFocusId = "txtString"
+	}
+	ElseIf (tOpType = "property") {
+		Set tProp = $ZCVT(tToken,"O","HTML")
+		Set tFocusId = "selProperty"
+	}
+	ElseIf (tOpType = "vprop" && tIsVDoc) {
+		Set tVProp = $ZCVT(tToken,"O","HTML")
+		Set tvbp=$P(tToken,".{")  Set:""'=tvbp tVBaseProp=tvbp
+		Set tFocusId = "txtVProp"
+	}
+	ElseIf (tOpType = "function") {
+		Set tFunction = $ZCVT(tToken,"O","HTML")
+		Set tFocusId = "selFunction"
+	}
+	Else {
+		Set tFocusId = "txtExpression"
+	}
+	Set msgOK = $$$LocalizeText("Ensemble","OK","OK")
+	Set msgEnterNumeric = $$$LocalizeText("RuleEditor","msgEnterNumeric","Please enter a numeric value.")
+</script>
+<script language="JavaScript">
+
+function pageOnLoad()
+{
+	// give focus to input
+	giveFocusToInput('#(tFocusId)#');
+	return true;
+}
+
+function giveFocusToInput(id)
+{
+	var control = self.document.getElementById(id);
+	if (control && !control.disabled) {
+		control.focus();
+		if (control.type == 'text') {
+			control.select();
+		}
+	}
+	return true;
+}
+
+function updateMainWindow()
+{
+	// assemble the value
+	var value = '';
+	var btn = self.document.theForm.optype;
+	var msg = '';
+	var id;
+
+	// get value and validate
+	if (btn[0].checked) {
+		// number
+		value = self.document.getElementById('txtNumber').value;
+		if (value != (value * 1)) {
+			msg = "#(msgEnterNumeric)#"  //'Please enter a numeric value.';
+			id = 'txtNumber';
+		}
+		value = value * 1;
+	}
+	else if (btn[1].checked) {
+		// string
+		value = self.document.getElementById('txtString').value;
+		value = '"' + value.replace(/"/g,'""') + '"';
+	}
+	else if (btn[2].checked) {
+		// property
+		value = self.document.getElementById('selProperty').value;
+	}
+	else if (btn[3].checked) {
+		// virtual property
+		value = self.document.getElementById('txtVProp').value;
+	}
+	else if (btn[4].checked) {
+		// function
+		value = self.document.getElementById('selFunction').value;
+	}
+	else if (btn[5].checked) {
+		// expression
+		value = self.document.getElementById('txtExpression').value;
+	}
+	
+	if (msg != '') {
+		alert(msg);
+		giveFocusToInput(id);
+		return false;
+	}
+	window.dialogArguments.value = value;
+	return true;
+}
+
+function btnOK()
+{
+	if (!updateMainWindow()) {
+		return false;
+	}
+	window.close();
+	return true;
+}
+
+function btnCancel()
+{
+	window.close();
+	return true;
+}
+
+function optypeSelect()
+{
+	var btn = self.document.theForm.optype;
+	var divString = self.document.getElementById('divString');
+	var divNumber = self.document.getElementById('divNumber');
+	var divProperty = self.document.getElementById('divProperty');
+	var divVProp = self.document.getElementById('divVProp');
+	var divFunction = self.document.getElementById('divFunction');
+	var divExpression = self.document.getElementById('divExpression');
+
+	// turn off everything: then turn on selected ones
+	divNumber.style.display = 'none';
+	divString.style.display = 'none';
+	divProperty.style.display = 'none';
+	divVProp.style.display = 'none';
+	divFunction.style.display = 'none';
+	divExpression.style.display = 'none';
+	
+	if (btn[0].checked) {
+		// number
+		divNumber.style.display = '';
+		giveFocusToInput('txtNumber');
+	}
+	else if (btn[1].checked) {
+		// string
+		divString.style.display = '';
+		giveFocusToInput('txtString');
+	}
+	else if (btn[2].checked) {
+		// property
+		divProperty.style.display = '';
+		giveFocusToInput('selProperty');
+	}
+	else if (btn[3].checked) {
+		// virtual property
+		divVProp.style.display = '';
+		giveFocusToInput('txtVProp');
+	}
+	else if (btn[4].checked) {
+		// function
+		divFunction.style.display = '';
+		giveFocusToInput('selFunction');
+	}
+	else if (btn[5].checked) {
+		// expression
+		divExpression.style.display = '';
+		giveFocusToInput('txtExpression');
+	}
+	return true;
+}
+
+/// invoked when a attribute control is edited (i.e. keypress).
+function onEditAttr(attr)
+{
+	// if value is not '', then mark as overridden
+	var ctrl = self.document.theForm[attr];
+	if (ctrl) {
+		if ('' != ctrl.value) {
+			ctrl.className = '';
+		}
+	}
+}
+
+/// invoked when a attribute control is changed
+function onChangeAttr(attr)
+{
+	// if value is '', then mark as default
+	var ctrl = self.document.theForm[attr];
+	if (ctrl) {
+		if ('' == ctrl.value) {
+			ctrl.className = 'defaultValue';
+		}
+		else {
+			ctrl.className = '';
+		}
+	}
+}
+
+function setAttrFromPopup(mode, value)
+{
+	var attr='txtVProp';
+	var ctrl = self.document.theForm[attr];
+	ctrl.value = value;
+	onChangeAttr(attr);
+}
+
+// display the value selector Popup
+function showSelectorPopup(mode,msgClass)
+{
+	var form = self.document.theForm;
+	var value = form['txtVProp'].value; // current value
+ 
+ 	var url = '#(..Link("UtilEnsRoutingRuleList.csp",,1))#HOST=' + escape('') + 
+  				'&MODE=' + escape(mode) +
+  				'&VALUE=' + escape(value) +
+  				'&MSGCLASS=' + escape(msgClass) +
+  				'&MSGCATEGORY=' + escape('#(tDocCategory)#') +
+  				'&DOCTYPE=' + escape('#($G(tDocTypeList(1)))#') +
+  				'&VBASEPROP=' + escape('#(tVBaseProp)#') +
+  				'&MULTISELECT=0';
+
+	var sFeatures="dialogHeight: 500px; dialogWidth: 720px; dialogTop: " + (screen.height/7) + "px; dialogLeft: " + (screen.width/7) + "px; edge: Sunken; center: Yes; help: No; resizable: Yes; status: No;";
+
+  	// use IE Modal Dlg.
+  	// pass current window
+	self.showModalDialog(url, window, sFeatures);
+  	return true;
+}
+</script>
+</head>
+
+<body onload="pageOnLoad();">
+<csp:class includes="EnsUI">
+<h1><div class="title"><csp:text Domain="RuleEditor" TextId="ValueEditor">Value Editor</csp:text></div></h1>
+<div class="main">
+<form name="theForm">
+
+<div class="text1" Domain="RuleEditor" TextId="msgValueEdit">Enter a value for this field. When complete, press OK.</div>
+
+<csp:if condition="$L(tMsgClass)">
+	&nbsp;(Message class=<i>'#(tMsgClass)#'</i>
+	<csp:if condition="tIsVDoc">
+		, DocType=<i>'#(tDocType)#'</i>
+	</csp:if>
+	)
+</csp:if>
+<hr/>
+<table class="layout" border="0" cellpadding="2" cellspacing="0">
+
+<tr>
+<td class="optype">
+<csp:text Domain="RuleEditor" TextId="ValueIs">
+This value is:
+</csp:text>
+</td><td>&nbsp;</td>
+</tr>
+
+<tr>
+<td class="optype">
+<input type="radio" name="optype" value="number" #($S(tOpType="number":"checked",1:""))# onclick="optypeSelect();">
+<csp:text Domain="RuleEditor" TextId="Numeric">
+Numeric
+</csp:text>
+&nbsp;
+</td>
+<td class="opval">
+<div id="divNumber" style="#($S(tOpType="number":"",1:"display:none;"))#">
+<input type="text" id="txtNumber" size="10" value="#(tNumber)#">
+</div>
+</td>
+</tr>
+
+<tr>
+<td class="optype">
+<input type="radio" name="optype" value="string" #($S(tOpType="string":"checked",1:""))# onclick="optypeSelect();">
+<csp:text Domain="RuleEditor" TextId="String">
+String
+</csp:text>
+&nbsp;
+</td>
+<td class="opval">
+<div id="divString" style="#($S(tOpType="string":"",1:"display:none;"))#">
+<input type="text" id="txtString" size="22" value="#(tString)#">
+</div>
+</td>
+</tr>
+
+<tr>
+<td class="optype">
+<input type="radio" name="optype" value="property" #($S(tOpType="property":"checked",1:""))# onclick="optypeSelect();">
+<csp:text Domain="RuleEditor" TextId="Property">
+Property
+</csp:text>
+&nbsp;
+</td>
+<td class="opval">
+<div id="divProperty" style="#($S(tOpType="property":"",1:"display:none;"))#">
+<select id="selProperty" value="#(tProp)#" #($S(tCX="":"disabled",1:""))#>
+<script language="cache" runat="server">
+	If (tCX '= "") {
+		// get list of properties
+		Kill tList
+		Set tSC = ##class(Ens.Rule.Utils).GetPropertyList(.tList,tCX,tMsgClass)
+		If $$$ISOK(tSC) {
+			Set i="" For { Set i=$O(tList(i))  Quit:""=i
+				Set tName = $LG(tList(i))
+				#; Skip Adapter properties because this is a BP and BP's use no Adapters
+				Continue:"Adapter."=$E(tName,1,$L("Adapter."))
+				Write "<option "_$S(tName=tProp:"selected",1:"")_" value="""_tName_""">"_tName_"</option>",!
+		 	}
+		}
+	}
+</script>
+</select>
+
+</div>
+</td>
+</tr>
+
+<tr>
+<td class="optype">
+<div style="#($S(tIsVDoc:"",1:"display:none;"))#">
+<input type="radio" name="optype" value="vprop" #($S(tOpType="vprop":"checked",1:""))# onclick="optypeSelect();">
+<csp:text Domain="RuleEditor" TextId="VProperty">
+Virtual Prop.
+</csp:text>
+&nbsp;
+</div>
+</td>
+<td class="opval">
+<div id="divVProp" style="#($S(tIsVDoc&&(tOpType="vprop"):"",1:"display:none;"))#">
+<input type="text" id="txtVProp" value="#(tVProp)#" size="30" onkeyup="onEditAttr('txtVProp');" onchange="onChangeAttr('txtVProp');">
+&nbsp;<input class="EditBtn" type="button" title="#(tDocTypeMsg)#" value="..." onclick="#($S(""'=$P($G(tDocTypeList(1)),":",2):"showSelectorPopup('vdocPropPath','"_tMsgClass_"')",1:"alert('"_tDocTypeMsg_"')"))#;">
+</div>
+</td>
+</tr>
+
+<tr>
+<td class="optype">
+<input type="radio" name="optype" value="function" #($S(tOpType="function":"checked",1:""))# onclick="optypeSelect();">
+<csp:text Domain="RuleEditor" TextId="Function">
+Function
+</csp:text>
+&nbsp;
+</td>
+<td class="opval">
+<div id="divFunction" style="#($S(tOpType="function":"",1:"display:none;"))#">
+<select id="selFunction" value="#(tFunction)#" #($S(tBP="":"disabled",1:""))#>
+<script language="cache" runat="server">
+	If (tBP '= "") {
+		// get list of functions
+		// Format of ^Ens.FunctionSet is: $LB(class,name,specparsed)
+		Set tSC = ##class(Ens.Rule.Utils).GetFunctionSet(.funcset)
+
+		Set i="" For { Set i=$O(funcset(i),1,val)  Quit:""=i
+			Set tName = $LG(val,2)_"("
+
+#if 0		// NOTE: This makes the combo box too wide!	
+			// Add the argument names
+			Set tSpec = $LG(val,3)
+			For j = 1:1:$LL(tSpec) {
+				Set tArg = $LG(tSpec,j)
+				Set:j>1 tName = tName _ ","
+				Set tName = tName _ $LG(tArg,1)
+			}
+#endif
+			Set tName = tName _")"
+			Set tFull=$S(tName=..stripIndices(tFunction):tFunction,1:tName)
+			Write "<option ",$S(tFull=tFunction:"selected",1:"")," value=""",tFull,""">",tFull,"</option>",!
+		}
+	}
+</script>
+</select>
+
+</div>
+</td>
+</tr>
+
+<tr>
+<td class="optype">
+<input type="radio" name="optype" value="expression" #($S(tOpType="expression":"checked",1:""))# onclick="optypeSelect();">
+<csp:text Domain="RuleEditor" TextId="Expression">
+Expression
+</csp:text>
+&nbsp;
+</td>
+<td class="opval">
+<div id="divExpression" style="#($S(tOpType="expression":"",1:"display:none;"))#">
+<input type="text" id="txtExpression" size="25" value="#(tExpression)#">
+</div>
+</td>
+</tr>
+
+</table>
+
+<hr/>
+<div class="btnbar">
+<input type="button" class="btn" name="OK" value="#(msgOK)#" onclick="btnOK();">&nbsp;
+<input type="button" class="btn" name="CANCEL" value=" Cancel " Domain="Workflow" TextId="Cancel" onclick="btnCancel();">
+</div>
+</form>
+
+</div>
+</body>
+
+<script language="CACHE" method="hasProp" runat="server" arguments="pClass,pPropName,pPropType" returntype="%Boolean">
+	Set tProp=##class(Ens.VDoc.SearchTableGenerator).FindClassDefProperty(pClass,pPropName)
+	Quit:'$IsObject(tProp) 0
+	Quit $zobjclassmethod(tProp.RuntimeType,"%Extends",pPropType)
+</script>
+
+<script language="CACHE" method="stripIndices" runat="server" arguments="pPath" returntype="%String">
+ 	Set tOut=pPath, pos2=1 For { Set pos=$F(tOut,"(",pos2)  Quit:'pos
+ 		Set pos2=$F(tOut,")",pos) Quit:'pos2
+ 		Set $E(tOut,pos,pos2-2)="", pos2=pos+1
+ 	}
+ 	Quit tOut
+</script>
+
+</html>

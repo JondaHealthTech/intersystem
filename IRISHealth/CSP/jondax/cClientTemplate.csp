@@ -1,0 +1,231 @@
+<html>	<!-- not using -->
+<head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+		q 1
+	</script>
+
+	<script language="cache" runat="server">
+		s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+		i r1'=1 s %response.Redirect="cLockDown.csp"
+		d HEAD1^CSP999
+	</script>
+	<link rel="stylesheet" href="assets/styles/cFrame.css">
+</head>
+<body onload="jInitMe()" style="padding:0px;margin:0px">
+<form id="F1" name="F1">
+<div id="wrapper">
+	<div class="bg-wrapper">
+	<div class="bg3">
+	<img src="./assets/images/bg3.png">
+	</div>
+	</div>
+	<div class="main-field" style="width:100%">
+		<img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="JondaX">
+		<h1>Client Templates</h1>
+		<div>
+			<div class="main-table">
+				<div class="table-border"></div>
+					<div class="table-container">
+					<table width="100%">
+						<tr>
+							<td width="130px">(Client) Bucket</td>
+							<td>
+								<!-- Templates dropdown-->
+								<select name="S1" id="S1" style="color:black" onchange="jPopS1()">
+									<option value=0> </option>
+									<script language="cache" runat="server">
+										k arr
+										;Load templates into dropdown
+										&sql(DECLARE C1 CURSOR FOR
+											SELECT ID,BucketName,Setting
+											INTO :r1,:r2,:r3
+											FROM MX.Template
+											ORDER BY 2
+										)
+										&sql(OPEN C1)
+										&sql(FETCH C1)
+										WHILE SQLCODE=0{
+											s arr(r3,r2)=r1
+											&sql(FETCH C1)
+										}
+										&sql(CLOSE C1)
+										s r3="",r1=""
+										f i=1:1 s r3=$o(arr(r3)) d  q:r3=""
+										. q:r3=""
+										. f ii=1:1 s r2=$o(arr(r3,r2)) d  q:r2=""
+										.. q:r2=""
+										.. s r1=arr(r3,r2)
+										.. s r3a="" &sql(SELECT CompanyName INTO :r3a FROM MX."User" WHERE Setting=:r3)
+										.. i r3a'="" w "<option value="_r2_">("_r3a_") "_r2_"</option>",!
+										//.. w "<option value="_r3_">("_r3a_") "_r2_"</option>",!
+									</script>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<table width="100%">
+						<tr>
+							<td>
+								<!-- Sorting characters-->
+								<input type="button" value="All" onclick="jSortMe('All')" style="font-size:8pt;color:grey">
+								<input type="button" value="0-9" onclick="jSortMe('0')" style="font-size:8pt;color:grey">
+								<input type="button" value="A" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="B" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="C" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="D" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="E" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="F" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="G" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="H" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="I" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="J" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="K" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="L" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="M" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="N" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="O" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="P" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="Q" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="R" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="S" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="T" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="U" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="V" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="W" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="X" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="Y" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+								<input type="button" value="Z" onclick="jSortMe(this.value)" style="font-size:8pt;color:grey">
+							</td>
+						</tr>
+					</table>
+					<!-- template table -->
+					<table width="100%" name="Tab1" id="Tab1">
+						<tr>
+							<td width="50px">ID</td>
+							<td width="300px">JondaX Name</td>
+							<td width="400px">Client Name</td>
+							<td width="100px">Client Unit</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td id="Tab1ID"></td>
+							<td>
+								<select name="S2" id="S2">
+									<option value=""></option>
+									<script language="cache" runat="server">
+										&sql(DECLARE C2 CURSOR FOR
+											SELECT DISTINCT BY (SIName) ID,%EXACT(SIName)
+											INTO :r1,:r2
+											FROM MX.DiagnosticTest
+											ORDER BY 2
+										)
+										&sql(OPEN C2)
+										&sql(FETCH C2)
+										WHILE SQLCODE=0{
+											w "<option value='"_r2_"'>"_r2_"</option>",!
+											&sql(FETCH C2)	
+										}
+										&sql(CLOSE C2)
+									</script>
+								</select>
+							</td>
+							<td><input type="text" id="T1" name="T1" size="40"></td>
+							<td><input type="text" id="T2" name="T2" size="10"></td>
+							<td><input type="button" id="B1" name="B1" class="back-btn green-btn" onclick="jSaveMe()" style="width:80px" value="Save">
+					</table>
+					<div>&nbsp;</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</form>
+<script>
+    var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script language="cache" runat="server">
+	d jQueryCore^CSP999
+</script>
+</body>
+<script type="text/javascript">
+T1=self.F1.T1,T2=self.F1.T2,S1=self.F1.S1
+B1=self.F1.B1
+
+SortVal="All"
+SettingID=""
+TemplateID=""
+
+function jInitMe(){
+	jPopTab1()
+}
+
+function jPopS1(){
+	SettingID=S1.value
+	jPopTab1()
+}
+
+function jSortMe(val){
+	SortVal=val
+	jPopTab1()
+}
+
+function jPopTab1(){
+	jClearTab1()
+	#server(..cPopTab1(SortVal,S1.value))#
+}
+
+function jPopFields(val){
+	#server(..cPopFields(val))#
+}
+
+function jClearTab1(){
+	// clear the table
+	rows=document.getElementById('Tab1').rows
+	RowNo=rows.length
+	if (RowNo>2){
+		while (RowNo>2){
+			document.getElementById('Tab1').deleteRow(RowNo-1)
+			RowNo=RowNo-1
+		}
+	}
+}
+
+function jDeleteMe(id){
+	ans=confirm("Are you sure you want to Delete this record?")
+	if (ans==true){
+		#server(..cDeleteMe(id))#
+		jPopTab1()
+	}
+	
+}
+
+function jSaveMe(){
+	#server(..cSaveMe(document.getElementById("Tab1ID").innerHTML,S1.value,S2.value,T1.value,T2.value))#
+	jPopTab1()
+}
+</script>
+
+<script language="cache" method="cPopTab1" arguments="d1,d2:%String">
+	d PopTab1^cClientTemplate
+</script>
+
+<script language="cache" method="cPopFields" arguments="d1:%String">
+	d PopFields^cClientTemplate
+</script>
+
+<script language="cache" method="cDeleteMe" arguments="d1:%String">
+	d DeleteMe^cClientTemplate
+</script>
+
+<script language="cache" method="cSaveMe" arguments="d0,d1,d2,d3,d4:%String">
+	s errmsg=""
+	i d1="" s errmsg=$s(errmsg'="":errmsg_", ",1:"")_"(Client) Bucket"
+	i d2="" s errmsg=$s(errmsg'="":errmsg_", ",1:"")_"JondaX Name"
+	i d3="" s errmsg=$s(errmsg'="":errmsg_", ",1:"")_"Name"
+	i errmsg'="" s errmsg="Missing Required Fields: "_errmsg &js<alert("#(errmsg)#")> q
+	d SaveMe^cClientTemplate
+</script>
+
+</html>

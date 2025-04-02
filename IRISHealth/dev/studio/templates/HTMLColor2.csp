@@ -1,0 +1,1 @@
+<csp:StudioGenerateTemplate>#($get(%request.Data("COLOR",1),"#FFFFFF"))#

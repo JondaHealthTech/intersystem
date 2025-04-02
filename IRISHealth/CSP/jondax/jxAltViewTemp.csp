@@ -1,0 +1,113 @@
+<html>
+    <head>
+    	<script language="cache" runat="server">d HEAD1^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/jxViewTemp.css">
+        <style>
+        .main-field{
+	        width:100%;
+        }
+        </style>
+    </head>
+    <body onload="jInitMe()">
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;" onclick="openMobileNav(event)"></i>
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <div class="title">
+                    	<h1>View outbound Template : <span id="tName">Template 1</span></h1>
+                    	<button class="back-btn" onclick="window.close()"><img src="./assets/images/leftArrow.png" alt="Arrow"> Back</button>
+                    </div>
+                    <div id="temp-content" class="temp-content">
+                        <div class="filters">
+                            <div class="text-fil">
+                                <p onclick="jLoadTemplates(event)">All</p>
+                                <p onclick="jLoadTemplates(event)">1-9</p>
+                                <p onclick="jLoadTemplates(event)">A</p>
+                                <p onclick="jLoadTemplates(event)">B</p>
+                                <p onclick="jLoadTemplates(event)">C</p>
+                                <p onclick="jLoadTemplates(event)">D</p>
+                                <p onclick="jLoadTemplates(event)">E</p>
+                                <p onclick="jLoadTemplates(event)">F</p>
+                                <p onclick="jLoadTemplates(event)">G</p>
+                                <p onclick="jLoadTemplates(event)">H</p>
+                                <p onclick="jLoadTemplates(event)">I</p>
+                                <p onclick="jLoadTemplates(event)">J</p>
+                                <p onclick="jLoadTemplates(event)">K</p>
+                                <p onclick="jLoadTemplates(event)">L</p>
+                                <p onclick="jLoadTemplates(event)">M</p>
+                                <p onclick="jLoadTemplates(event)">N</p>
+                                <p onclick="jLoadTemplates(event)">O</p>
+                                <p onclick="jLoadTemplates(event)">P</p>
+                                <p onclick="jLoadTemplates(event)">Q</p>
+                                <p onclick="jLoadTemplates(event)">R</p>
+                                <p onclick="jLoadTemplates(event)">S</p>
+                                <p onclick="jLoadTemplates(event)">T</p>
+                                <p onclick="jLoadTemplates(event)">U</p>
+                                <p onclick="jLoadTemplates(event)">V</p>
+                                <p onclick="jLoadTemplates(event)">W</p>
+                                <p onclick="jLoadTemplates(event)">X</p>
+                                <p onclick="jLoadTemplates(event)">Y</p>
+                                <p onclick="jLoadTemplates(event)">Z</p>
+                            </div>
+                            <!--s<button class="filter-btn"><img src="./assets/images/filter.png" alt="Filter">Filters</button>-->
+                        </div>
+                        <div class="table-border"></div>
+                        <div class="temp-table">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>JondaX Name <img src="./assets/images/updownArrow.png" alt="Arrow"></th>
+                                        <th>Client Name</th>
+                                        <th>Client Unit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+    <script type="text/javascript">
+    	function jInitMe(){
+	    	#server(..cInitMe())#
+    	}
+    	function jLoadTemplates(e){
+	    	let start=e.target.textContent;
+	    	if(start.startsWith("0")){
+		    	start="num"
+	    	}
+	    	if(start=="All"){
+		    	start=""
+	    	}
+	    	#server(..cLoadTemplates(start))#
+    	}
+        function jLogout(){
+	        #server(..cLogout())#
+        }
+    </script>
+    <script language="cache" method="cInitMe">
+    	d InitMe^jxAltViewTemp
+    </script>
+    <script language="cache" method="cLoadTemplates" arguments="d1:%String">
+    	d LoadTemplates^jxAltViewTemp(d1)
+    </script>
+    <script language="cache" method="cLogout">
+    	d Logout^cLogin
+    </script>
+</html>

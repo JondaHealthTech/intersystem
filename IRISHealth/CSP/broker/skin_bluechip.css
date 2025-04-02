@@ -1,0 +1,78 @@
+/*
+	skin_bluechip.css
+	Additional CSS for "BlueChip" color scheme
+	Copyright (c) 2009 InterSystems Corp. ALL RIGHTS RESERVED.
+*/
+
+
+.zenLabel {
+	color: #404040;
+}
+
+#desktop {
+	background: white;
+}
+
+/* top/bottom strips */
+#contentsOuter {
+	background: rgb(9,89,156);
+}
+
+#contentsInner {
+	border-top: 1px solid #A0A0D0;
+	border-bottom: 1px solid #A0A0D0;
+}
+
+/* div around left-hand column */
+#contentsLeft {
+	color: white;
+	background: rgb(9,89,156);
+}
+
+#worklistTitle {
+	color: white;
+
+}
+
+/* widget frame */
+.dswidgetHeader {
+	background: #F0F0FF;
+}
+
+.dswidgetSidebar {
+	background: #F0F0FF;
+}
+
+.dswidgetFooter {
+	background: #F0F0FF;
+}
+
+/* pivot table */
+table th.dsPivotColumn, 
+table th.dsPivotRow,
+.dsptTopLeftDiv {
+	background: #B3D2EB;
+	color: #1B3C57;
+	background-image: none;
+	font-family: arial;
+	font-size: 12pt;
+}
+
+.dsptTopLeftDiv {
+	border-right: 1px solid #EFEFEF;
+	border-bottom: 1px solid #EFEFEF;
+}
+
+table.dsPivotTable td, 
+table.dsPivotTable th {
+	border-right: 1px solid #EFEFEF;
+	border-bottom: 1px solid #EFEFEF;
+}
+
+table.dsPivotDataTable td {
+	border-right: 1px solid white;
+	border-bottom: 1px solid #EFEFEF;
+	font-family: arial;
+	font-size: 11pt;
+	color: #1B3C57;
+}

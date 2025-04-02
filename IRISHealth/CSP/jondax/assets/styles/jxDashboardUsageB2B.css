@@ -1,0 +1,777 @@
+.nav-item.collapse-open.active .nav-collapse-item{
+    background: none;
+}
+.nav-item.collapse-open.active .nav-collapse-item:hover{
+    background:  rgba(64, 84, 112, 0.1);
+}
+#Usage{
+    background: rgba(86, 196, 197, 0.3);
+}
+.main-field{
+    align-self: flex-end;
+}
+h1 {
+    font-size: 3vw;
+    font-weight: 400;
+    line-height: 3.5vw;
+    color: white;
+    margin: 2vw 0 1vw;
+    text-align: left;
+}
+h2 {
+    color: white;
+    font-weight: 700;
+    font-size: 2.3vw;
+    text-align: left;
+    margin-bottom: 1.7vw;
+}
+.stat-block{
+    background: white;
+    box-shadow: 0px 4px 2px rgba(0, 0, 0, 0.125);
+    border-radius: 15px;
+    margin-bottom: 2vh;
+    padding:1.5vw;
+    text-align: left;
+    position: relative;
+    width: 100%;
+}
+.stat-block:last-child{
+    min-height: 47vh;
+}
+.block-title,.block-title h4{
+    font-size: 1.4vw;
+    font-weight: 700;
+    line-height: 1.4vw;
+    color:#405470;
+    margin: 0.6vw 0 1.5vw;
+    text-align: left;
+}
+.block-title h4{
+    margin: 0;
+}
+.block-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.block-title img{
+    width: 1.7vw;
+}
+.stat{
+    width: 100%;
+    margin:0;
+    display: flex;
+    justify-content: start;
+    gap:1.5vw;
+    min-height:15vh;
+}
+p.no-data{
+    text-align:center;
+    width:100%;
+    align-self:center;
+}
+.usage-stat{
+    background: #526D97;
+    border-radius: 15px;
+    text-align: center;
+    padding:1.5vw 0.8vw;
+    min-width: 13vw;
+    min-height: 11vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position:relative;
+}
+.pre-stat .trans-stat{
+    padding:1.5vw;
+}
+.usage-stat h4{
+    color:white;
+    font-size:1.1vw;
+    font-weight:700;
+    margin:0;
+}
+.stat-data{
+    margin:2.5vh 0;
+}
+.all-stat .stat-data{
+    margin:1vh 0;
+    min-height:10vh;
+}
+.all-stat h5{
+    font-size:0.8vw;
+    color:white;
+    font-weight:700;
+}
+.all-stat .stat-data > div{
+    padding:0.4vw;
+    position:relative;
+}
+.all-stat .stat-data{
+    display:flex;
+}
+.stat-data .pre-processing{
+    border-right:1px solid white;
+}
+.usage-stat p{
+    color:white;
+    font-size: 1vw;
+    font-weight: 700;
+}
+.all-stat .num{
+    font-weight: 500;
+    font-size: 0.85vw;
+}
+.pre-stat .num,.trans-stat .num{
+    font-size: 2.6vw;
+    line-height: 3vw;
+    font-weight:700;
+}
+.all-stat .num span{
+    font-size: 2.6vw;
+    line-height: 3vw;
+    font-weight:700;
+}
+.usage-stat.high-stat{
+    background: #E63876;
+}
+.chart{
+    width: 100%;
+    height: calc(47vh - 6.5vw);
+    margin: 0;
+    position: unset;
+    margin: 0 auto;
+}
+.usage-quota-chart{
+    margin-bottom: 0;
+}
+.usage-quota-chart .chart{
+    position: relative;
+}
+.chart canvas{
+    position: unset;
+}
+.title{
+    position:relative;
+}
+.popup {
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 40%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+.popup-dialog {
+    position: absolute;
+    transform: unset;
+    background: white;
+    border-radius: 20px;
+    width: 25vw;
+    padding:1.4vw 2.7vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:1.3vw;
+}
+.popup-dialog button{
+    width: 100%;
+    border-radius: 20px;
+    border: 0px;
+    padding: 0.75vw;
+    font-size: 1.4vw;
+    font-weight: 700;
+    line-height: 1.7vw;
+    color:white;
+}
+.download-btn{
+    background: #56C4C5;
+}
+.cancel-btn{
+    background: #E63876;
+}
+.inactive{
+    display: none !important;
+}
+.mobile-active{
+    display: none;
+}
+.dropdown{
+    position:absolute;
+    left:17vw;
+    top:10px;
+}
+.dropdown-btn{
+    position:absolute;
+    background:white;
+    padding:0.5vw 1.5vw;
+    border-radius:15px;
+    color: #405470;
+    font-size: 1.4vw;
+    font-weight: 700;
+    text-wrap:nowrap;
+    cursor:pointer;
+}
+.dropdown.active .dropdown-btn{
+    border-radius:15px 15px 0 0;
+}
+.dropdown-btn img{
+    width:1.5vw;
+    margin-left:0.5vw;
+}
+.dropdown-data{
+    position:absolute;
+    top:3.1vw;
+    background:white;
+    z-index:100;
+    padding:1vw 1.5vw;
+    border-radius:15px;
+    color: #405470;
+    font-size: 1.4vw;
+    font-weight: 700;
+    display:none;
+}
+.dropdown.active .dropdown-data{
+    display:block;
+    border-radius:0 15px 15px;
+}
+ul{
+    list-style-type:none;
+    padding:0;
+    margin:0;
+}
+li{
+    text-align:left;
+    line-height:2vw;
+    padding:0.5vw 1.3vw 0.5vw 0.5vw;
+    cursor:pointer;
+}
+hr{
+    margin:0;
+    border-bottom:1px solid #405470;
+}
+
+@media screen and (max-width: 1440px) {
+    html {
+        font-size: 14px;
+    }
+}
+@media screen and (max-width: 1000px) {
+    html {
+        font-size: 14px;
+    }
+    .pink-bg-text {
+        font-size: 1.3625rem;
+        padding: 0.325rem 0.625rem;
+        line-height: 1.75rem;
+        margin-top: 0;
+    }
+    .logo{
+        width: 15vw;
+    }
+    h1 {
+        font-size: 2rem;
+        line-height: 3.2rem;
+        margin: 2.2rem 0 1.5rem;
+        padding: 0 1rem;
+    }
+    h1 br{
+        display: none;
+    }
+    h2{
+        font-size: 1.5rem;
+    }
+    .side-nav.nav-close{
+        width: 10vw;
+    }
+    .side-nav.nav-close + .main-field{
+        width: 90vw;
+    }
+    .side-nav.nav-close .profile{
+        width: 4vw;
+    }
+    .main-field{
+        width: 80vw;
+    }
+    .side-nav{
+        width: 30vw;
+    }
+    .profile{
+        width: 5.5vw;
+    }
+    h3{
+        font-size: 1.2vw;
+        line-height: 1.4vw;
+    }
+    .location{
+        font-size: 1vw;
+    }
+    .plan{
+        font-size: 1vw;
+        line-height: 1.2vw;
+    }
+    .nav-items{
+        margin-top: calc(6.5vh - 1vw);
+    }
+    .nav-item{
+        gap: 1.2vw;
+        padding: 0.8vw 2vw;
+        margin: 0.4vw 0;
+    }
+    .nav-collapse-item{
+        gap: 1.2vw;
+        padding:0.8vw 2vw;
+    }
+    .nav-collapse-btn{
+        gap:0.85vw;
+    }
+    .nav-collapse-field{
+        padding: 0.8vw 0 0.8vw 4.8vw;
+        font-size: 1.3vw;
+        line-height: 1.5vw;
+    }
+    .nav-item .nav-collapse-btn img{
+        width: 1vw;
+    }
+    .nav-item img{
+        width: 1.2rem;
+    }
+    .nav-item:last-child img{
+        width: 1.2rem;
+    }
+    .nav-item p{
+        font-size: 1.3vw;
+        line-height: 1.5vw;
+    }
+    .nav-item.active p{
+        color: #384A62;
+    }
+    .nav-footer{
+        position: absolute;
+        bottom: 3vh;
+        width: 100%;
+    }
+    .nav-footer {
+        font-size: 1.3vw;
+        line-height: 1.5vw;
+    }
+    .logout{
+        gap:1vw;
+    }
+    .logout img{
+        width: 1.5vw;
+    }
+    .collapseBtn img{
+        width: 2.9vw;
+    }
+    .num{
+        left:2vw;
+    }
+    .side-nav.nav-close + .main-field .num{
+        left:3vw;
+    }
+    .main-field{
+        overflow-y: scroll;
+        display: block;
+        height: 100vh;
+    }
+    .activity{
+        width: 100%;
+    }
+}
+@media screen and (max-width: 540px) {
+    html {
+        font-size: 12px;
+    }
+    .bg2 {
+        display: none;
+    }
+    .content{
+        display: block;
+        overflow-y: auto ;
+    }
+    .side-nav .logo {
+        width: 10rem;
+        margin-top: 3.5rem;
+    }
+    .logo {
+        width: 10rem;
+        margin: 3.5rem;
+        margin: 0 auto;
+    }
+    .pink-bg-text {
+        font-size: 1.2rem;
+        line-height: 1.25rem;
+        padding:0.8rem 1.2rem;
+        position: unset;
+        display: inline-block;
+        margin: 2rem 0 1rem;
+    }
+    .profile{
+        width: 4rem;
+        margin: 3rem 0 0;
+    }
+    h1 {
+        font-size: 1.8rem;
+        line-height: 2.2rem;
+        margin: 2.2rem 0 1.5rem;
+        padding: 0 1rem;
+    }
+    h1 br {
+        display: none;
+    }
+    h2 {
+        font-size: 1.5rem;
+        line-height: 2.2rem;
+        margin-bottom: 1rem;
+    }
+    .main-field{
+        width: 100%;
+        position: unset;
+        padding:4rem 2% 1rem;
+    }
+    .mobile-active{
+        display: block;
+    }
+    .nav-toggle,.close-nav{
+        position: absolute;
+        font-size: 2.2rem;
+        top:2rem;
+        right:5%;
+    }
+    .close-nav{
+        width: 1.5rem;
+    }
+    .side-nav{
+        width: 100%;
+        display: none;
+        transition: all 0.3s ease;
+    }
+    .side-nav.nav-open + .main-field{
+        display: none;
+    }
+    .side-nav.nav-open{
+        display: block;
+        border-radius: 0;
+    }
+    
+    h3{
+        font-size: 1.2rem;
+        line-height: 1.2rem;
+        margin: 1.8rem 0 0.5rem;
+    }
+    .location{
+        font-size: 1rem;
+        line-height: 1.2rem;
+    }
+    .plan{
+        font-size: 1.05rem;
+        line-height: 1rem;
+        color:#e63876;
+        margin-top: 1rem;
+    }
+    .nav-items{
+        margin-top: 4rem;
+    }
+    .nav-item{
+        gap: 1rem;
+        padding: 0.6rem 1.6rem;
+        margin: 0.3rem 0;
+    }
+    .nav-collapse-item{
+        gap: 1rem;
+        padding:0.6rem 1.6rem;
+    }
+    .nav-collapse-btn{
+        gap:0.7rem;
+    }
+    .nav-collapse-field{
+        padding: 0.6rem 0 0.6rem 4.2rem;
+        font-size: 1.2rem;
+        line-height: 1.2rem;
+    }
+    .nav-item .nav-collapse-btn img{
+        width: 0.8rem;
+    }
+    .nav-item img{
+        width: 1.5rem;
+    }
+    .nav-item:last-child img{
+        width: 1.4rem;
+    }
+    .nav-item p{
+        font-size: 1.2rem;
+        line-height: 1.2rem;
+    }
+    .nav-footer{
+        bottom: 3rem;
+    }
+    .nav-footer {
+        font-size: 1rem;
+        line-height: 1.2rem;
+    }
+    .logout{
+        gap:0.8rem;
+        margin-bottom: 2rem;
+    }
+    .logout img{
+        width: 1.2rem;
+    }
+    .collapseBtn img{
+        width: 2.3rem;
+        display: none;
+    }
+    h1,h2{
+        text-align: center;
+    }
+    .block-content{
+        flex-wrap: wrap;
+    }
+    .stat{
+        width: 100%;
+        height: unset;
+        margin-left: 0;
+        padding:1rem 0;
+        border: none;
+        position: relative;
+    }
+    .chart{
+        width: 100%;
+        height: 30vh;
+    }
+    .stat-block{
+        margin-bottom: 2rem;
+        padding:1rem;
+    }
+    .stat-block:last-child{
+        min-height: unset;
+    }
+    .block-title{
+        font-size: 1.2rem;
+        line-height: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+    .usage-quota .stat{
+        width: 100%;
+    }
+    .usage-quota .num{
+        font-size: 2.7rem;
+        line-height: 3.8rem;
+        margin: 0;
+    }
+    .usage-quota p{
+        font-size: 1.1rem;
+        line-height: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    .usage-quota .chart{
+        max-width: unset;
+        width: 100%;
+        margin: 0;
+    }
+    .dropdown{
+	left:11rem;
+    }
+    .dropdown-btn{
+	font-size:1rem;
+	padding:0.4rem 0.8rem;
+    }
+    .dropdown-btn img{
+	width:1.2rem;
+	margin-left:0.3rem;
+    }
+    .dropdown-data{
+	top:2.3rem;
+    }
+    ul{
+        padding:0.3rem 0.5rem;
+    }
+    li{
+        font-size: 1rem;
+        line-height: 1.2rem;
+        padding:0.3rem 0.2rem;
+    }
+    .usage-quota-stat{
+        gap:0.3rem;
+        margin: 0.5rem 0;
+    }
+    #usage-quota-chart{
+        margin-bottom: 1.5rem;
+    }
+    .month{
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+    .usage-stat{
+        width: 70%;
+        margin: 0 auto;
+        padding:1.2rem 0.5rem;
+        display: none;
+    }
+    .usage-stat h4{
+	font-size:1.2rem;
+    }
+    .all-stat .stat-data{
+	justify-content:center;
+    }
+    .all-stat .stat-data > div{
+	padding:0.3rem 0.6rem;
+    }
+    .all-stat h5{
+	font-size:1rem;
+    }
+    .usage-stat p{
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+    .usage-stat p span{
+        font-weight: 700;
+    }
+    .usage-stat .num{
+        font-size: 3rem;
+        line-height: 3.8rem;
+    }
+    .all-stat .num{
+	font-size:0.9rem;
+	line-height:1.2rem;
+    }
+    .all-stat .num span{
+	font-size:3rem;
+	line-height:3.8rem;
+    }
+    .prev,.next{
+        position: absolute;
+        top:50%;
+        left: 0.5rem;
+        transform: translateY(-50%);
+        color:#e63875cd;
+        font-size: 1.5rem;
+    }
+    .prev.disabled,.next.disabled,.prev.disabled:hover,.next.disabled:hover{
+        color:#8B8B8B;
+        pointer-events: none;
+    }
+    .prev:hover,.next:hover{
+        color:#E63876;
+    }
+    .next{
+        left: unset;
+        right: 0.5rem;
+    }
+    .usage-stat.stat-active{
+        display: block;
+    }
+    #popup2 .popup-dialog{
+        width: 70%;
+        padding:1.5rem;
+        gap:1.5rem;
+    }
+    .close-btn{
+        width: 1.2rem;
+        right:1.3rem;
+        top:1rem;
+    }
+    .popup-dialog h4{
+        font-size: 1.3rem;
+        margin-bottom: 0;
+    }
+    .date-selector p{
+        font-size: 1.1rem;
+    }
+    .date-selector button img{
+        width: 1rem;
+        right:0.8rem;
+    }
+    .popup-dialog .ok-btn{
+        padding:0.8rem 2.2rem;
+    }
+    .popup-dialog{
+        min-width: 17rem;
+        padding:1.2rem;
+        gap:1rem;
+    }
+    .popup-dialog button{
+        font-size: 1.1rem;
+        padding:1rem 1.5rem;
+    }
+    .dropdown button{
+        font-size: 1rem;
+        padding:0.5rem 1rem;
+        margin-top: 0.5rem;
+    }
+    .dropdown button img{
+        width: 1rem;
+        margin-left: 0.5rem;
+    }
+    .item{
+        gap:1rem;
+        padding:0.5rem 0;
+    }
+    .item p{
+        font-size: 0.9rem;
+    }
+    .collapse-field{
+        padding:1rem;
+    }
+    .block-content{
+        gap:3rem;
+    }
+    .block-content .stat{
+        width: 100%;
+        margin-top: 0;
+    }
+    .block-content .chart{
+        width: 100%;
+        border: none;
+        padding: 0;
+    }
+    .block-content .num{
+        font-size: 5.3rem;
+        line-height: 6.2rem;
+    }
+    .block-content p{
+        font-size: 1rem;
+        line-height: 1.2rem;
+    }
+    .back-btn{
+        font-size: 1rem;
+        padding:0.6rem 1rem;
+    }
+    .back-btn img{
+        width: 0.5rem;
+        margin-right: 0.5rem;
+    }
+    .title{
+        margin-top: 1.5rem;
+    }
+    .block-title, .block-title h4{
+        font-size: 1.3rem;
+        line-height: 1.5rem;
+    }
+    .block-title img{
+        width: 1.6rem;
+    }
+}
+@media screen and (max-width: 380px) {
+    h1{
+        margin: 1.5rem 0;
+    }
+    .pink-bg-text {
+        margin: 1rem 0 0;
+    }
+    .nav-items{
+        margin-top: 2rem;
+    }
+}
+
+@media screen and (max-width: 300px) {
+    html{
+        font-size: 12px;
+    }
+    h1 {
+        font-size: 1.6rem;
+        line-height: 2rem;
+    }
+}

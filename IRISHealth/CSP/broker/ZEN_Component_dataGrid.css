@@ -1,0 +1,405 @@
+/* @class="%ZEN.Component.dataGrid" */
+
+.dataGrid {
+	font-family: arial;
+	font-size: 12px;
+	color: #404040;
+	border: 1px solid #D0D0D0;
+	background: #F0F0F0;
+	width: 620px;
+	height: 500px;
+	opacity: 0.0;
+
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: 0.25s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: opacity;
+	-moz-transition-duration: 0.25s;
+	-moz-transition-timing-function: ease;
+
+	background: #C0C0C0;
+	overflow: hidden;
+
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+
+/* wrapper within enclosing div */
+.dgWrapper {
+	position: relative;
+}
+
+/* layer underneath data grid */
+.dgCellsUnder {
+	position: absolute;
+	overflow: hidden;
+	background: white;
+}
+
+.dgDiv,
+.dgDivCells,
+.dgDivSummary,
+.dgDivSummaryHeader,
+.dgDivColumnHeader {
+	position: absolute;
+	overflow: hidden;
+}
+
+.dgDivColumnHeader {
+	background: none;
+	border-bottom: 1px solid #D0D0D0;
+}
+
+.dgDivSummary {
+	font-weight: bold;
+}
+
+.dgNub {
+	border-right: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;
+	background: none;
+	position: absolute;
+
+	background: #C0C0C0;
+	background-image: url(images/grad-halfgray-10x30.png);
+	background-repeat: repeat-x;
+}
+
+.dgTitle, .dgStatus {
+	background: none;
+	position: absolute;
+}
+
+.dgTitle {
+	border-bottom: 1px solid #D0D0D0;
+}
+
+div.dgHdr, div.dgHdrSelected {
+	border-right: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;
+	background: none;
+	position: absolute;
+	overflow: hidden;
+	font-weight: bold;
+	background: #C0C0C0;
+	background-image: url(images/grad-halfgray-10x30.png);
+	background-repeat: repeat-x;
+}
+
+div.dgHdr:hover, div.dgHdrSelected:hover {
+	background: #E0E0E0;
+}
+
+div.dgHdrSelected {
+	background: #D0D0FF;
+}
+
+.dgCellEditor {
+	border:1px solid blue;
+}
+
+/* column header style */
+div.dgHdrColInner {
+	position: absolute;
+	padding: 2px;
+	padding-left: 3px;
+	padding-right: 3px;
+	bottom: 0px;
+	white-space: nowrap;
+}
+
+/* row header style */
+div.dgHdrRowInner {
+	position: absolute;
+	padding: 3px;
+	padding-left: 3px;
+	padding-right: 3px;
+	min-width: 50px;
+}
+
+/* outer wrapper for individual cell */
+.dgCell {
+	border-right: 1px solid #D0D0D0;
+	border-bottom: 1px solid #D0D0D0;
+	position: absolute;
+	overflow: hidden;
+}
+
+.dgCell,.dgHdr {
+	-webkit-transition-property: background;
+	-webkit-transition-duration: 0.25s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: background;
+	-moz-transition-duration: 0.25s;
+	-moz-transition-timing-function: ease;
+}
+
+.dgCell {
+}
+
+/* style for data cell */
+.dgCellInner {
+	position: absolute;
+	padding: 2px;
+	padding-left: 3px;
+	padding-right: 3px;
+	white-space: nowrap;
+	overflow: hidden;
+	min-width: 25px;
+}
+
+/* style for non-text cells */
+.dgCellInnerImage {
+	z-index: 10;
+	position: absolute;
+	padding: none;
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	min-width: 16px;
+	min-height: 16px;
+	font-size: 10px;
+}
+
+/* selector: indicates current row or cell */
+.dgSelector {
+	z-index: 1;
+	position: absolute;
+	border: 2px solid rgb(100,100,140);
+	border-radius: 2px;
+	width: 100px;
+	height: 25px;
+	background: none;
+}
+
+/* selector: indicates current row or cell */
+.dgSelectorFocus {
+	z-index: 1;
+	position: absolute;
+	border: 2px solid rgb(100,140,180);
+	border-radius: 2px;
+	width: 100px;
+	height: 25px;
+	background: none;
+}
+
+/* sizing handle for selector */
+.dgSizeHandle {
+	z-index: 3;
+	position: absolute;
+	border: 1px solid white;
+	background: black;
+	width: 4px;
+	height: 4px;
+	cursor: se-resize;
+}
+
+/* action icon within cell selector */
+.dgAction {
+	z-index: 2;
+	position: absolute;
+	border: 1px solid #808080;
+	cursor: pointer;
+	overflow: hidden;
+
+
+	width:24px;
+	height:24px;
+	background-color: #D0D0F8;
+	background-image: url('deepsee/zoom_24.png');
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+.dgAction:hover {
+	background-color: #F0F0FF;
+}
+
+.dgVtScroll {
+	z-index: 2;
+	position: absolute;
+	width: 20px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+.dgVtScrollInner {
+	height: 100px;
+	width: 15px;
+}
+.dgHzScroll {
+	z-index: 2;
+	position: absolute;
+	height: auto;
+	overflow-x: scroll;
+	overflow-y: hidden;
+}
+.dgHzScrollInner {
+	height: 0px;
+	width: 100px;
+}
+
+/* column resize handle */
+.dgResize {
+	cursor: e-resize;
+	z-index: 100;
+	width: 4px;
+	background: none;
+	position: absolute;
+}
+
+.dgOverlay {
+	position: absolute;
+	z-index: 100;
+	opacity: 0.0;
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: 0.2s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: opacity;
+	-moz-transition-duration: 0.2s;
+	-moz-transition-timing-function: ease;
+}
+
+.dgMsg {
+	background: white;
+	width: 150px;
+	padding: 10px;
+	color: #404040;
+	border: 1px solid #D0D0D0;
+	box-shadow: 2px 2px 2px #808080;
+	border-radius: 4px;
+}
+
+.dgWaitBox {
+	background: #F8F8FF;
+	width: 150px;
+	padding: 5px;
+	color: #404040;
+	font-size: 10px;
+	border: 1px solid #D0D0D0;
+	box-shadow: 2px 2px 2px #808080;
+	border-radius: 4px;
+}
+
+.dgPageDiv {
+	height: 20px;
+	font-size: 10px;
+	color: #606060;
+	position: relative;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+
+.dgPageButton,
+.dgPageButtonDis,
+.dgPageButtonCurr {
+	font-family: arial;
+	border: 1px solid rgb(200,200,200);/*fallback*/
+	border: 1px solid rgba(200,200,200,0.6);
+	border-radius: 2px;
+	position: absolute;
+	padding: 0px;
+	top: 0px;
+	height: 14px;
+	font-size: 8px;
+	text-align: center;
+	background: rgb(200,200,200);/*fallback*/
+	background: rgba(200,200,200,0.5);
+	-webkit-transition-property: background;
+	-webkit-transition-duration: 0.25s;
+	-webkit-transition-timing-function: ease;
+	-moz-transition-property: background;
+	-moz-transition-duration: 0.25s;
+	-moz-transition-timing-function: ease;
+}
+
+.dgPageButtonCurr {
+	background:#F0F0F0;
+	font-weight: bold;
+}
+
+.dgPageButtonDis {
+	opacity: 0.5;
+}
+
+.dgPageButton:hover {
+	background: #FFEEAA;
+}
+
+.dgPageButton:active {
+	background: white;
+	box-shadow: -1px 1px 8px #FFFFCC, 1px -1px 8px #FFFFFF;
+}
+
+/* lookup div within popup */
+.dgLookupResults {
+	border-top: 1px solid #D0D0D0;
+}
+
+table.dgLookupResultTable {
+	width: 100%;
+	color: #404040;
+	background: white;
+	font-size: 12px;
+	font-family: arial;
+	border-bottom: 1px solid #D0D0D0;
+}
+
+table.dgLookupResultTable td {
+	border-bottom: 1px solid #F0F0F0;
+	padding: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+table.dgLookupResultTable tr {
+	-webkit-transition-property: background;
+	-webkit-transition-duration: 0.5s;
+	-webkit-transition-timing-function: ease;
+}
+
+table.dgLookupResultTable tr.dgLookupOdd:hover,
+table.dgLookupResultTable tr.dgLookupEven:hover {
+	background: #FFEEAA;
+	color: #404040;
+
+	-moz-transition-property: background;
+	-moz-transition-duration: 0.5s;
+	-moz-transition-timing-function: ease;
+}
+
+table.dgLookupResultTable tr.dgLookupSelected:hover {
+	color: #FFFFFF;
+}
+
+.dgLookupOdd {
+}
+
+.dgLookupEven {
+	background: #F4F4F4;
+}
+
+.dgLookupSelected {
+	background: rgb(53,107,141);
+	color: #F0F0F0;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(53,107,141)), color-stop(100%,rgb(33,87,121)));
+}
+
+/* image item within popup */
+.dgLookupImage {
+	max-width: 96px;
+	max-height: 96px;
+}
+
+/* filter control within popup */
+.dgLookupFilter {
+	font-size: 10px;
+	color: #404040;
+}
+
+/* EOF */

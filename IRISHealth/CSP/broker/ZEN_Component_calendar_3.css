@@ -1,0 +1,161 @@
+/* @class="%ZEN.Component.calendar" */
+/* @doc="Outer table for calendar." */
+table.calendarOutline {
+	border: 1px black solid;
+	text-align: center;
+	background: white;
+	font-family: arial;
+}
+
+/* @doc="Inner table for calendar." */
+table.calendar {
+	border: 1px black solid;
+	text-align: center;
+}
+
+/* @doc="Gap (td) between the year and month elements." */
+.calendarGap {
+	background: #F0F0F0;
+}
+
+/* @doc="Style for month and year when calendar is in fixedMonth mode." */
+span.calendarLabel {
+	padding-left: 2px;
+	padding-right: 2px;
+	font-weight: bold;
+	color: #404040;
+}
+ 
+/* @doc="Table headers for calendar." */
+table.calendar th {
+	border-bottom: 1px gray solid;
+	padding-left: 2px;
+	padding-right: 2px;
+	font-weight: bold;
+	background: #404040;
+	background-image: url(images/grad-gray-10x100.png);
+	background-repeat: repeat-x;
+}
+
+/* @doc="Disabled table headers for calendar." */
+table.calendar th.calendarDisabled {
+	color: #808080;
+	background: #E0E0E0;
+}
+
+/* @doc="Empty cells within calendar." */
+table.calendar td.calendarEmpty {
+	border-bottom: 1px gray solid;
+	border-right: 1px gray solid;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-bottom: 1px;
+	background: #F0F0F0;
+}
+
+/* each day of week can have its own style */
+table.calendar td.calendarDay0,
+table.calendar td.calendarDay1,
+table.calendar td.calendarDay2,
+table.calendar td.calendarDay3,
+table.calendar td.calendarDay4,
+table.calendar td.calendarDay5,
+table.calendar td.calendarDay6
+{
+	border-bottom: 1px gray solid;
+	border-right: 1px gray solid;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-bottom: 1px;
+	color: #404040;
+	cursor: pointer;
+}
+
+/* @doc="Selected cell in calendar." */
+table.calendar td.calendarSelected {
+	border-bottom: 1px gray solid;
+	border-right: 1px gray solid;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-bottom: 0px;
+	font-weight: bold;
+	cursor: pointer;
+	background: rgb(47,98,128);
+	color: white;
+}
+
+table.calendar td.calendarSelected:hover {
+	background: rgb(47,98,128);
+	color: orange;
+}
+
+table.calendar td.calendarDay0:hover,
+table.calendar td.calendarDay1:hover,
+table.calendar td.calendarDay2:hover,
+table.calendar td.calendarDay3:hover,
+table.calendar td.calendarDay4:hover,
+table.calendar td.calendarDay5:hover,
+table.calendar td.calendarDay6:hover
+{
+	background: #FFEEAA;
+	border-bottom: 1px gray solid;
+	border-right: 1px gray solid;
+	padding-left: 2px;
+	padding-right: 2px;
+	color: #404040;
+	cursor: pointer;
+}
+
+/* @doc="Current day in calendar." */
+table.calendar td.calendarToday {
+	border-bottom: 1px gray solid;
+	border-right: 1px gray solid;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-bottom: 0px;
+	font-weight: bold;
+	color: black;
+	cursor: pointer;
+}
+
+table.calendar td.calendarToday:hover {
+	background: #FFEEAA;
+}
+
+/* @doc="Next or previous link in calendar." */
+table.calendar td.calendarLink {
+	border-bottom: 1px gray solid;
+	border-right: 1px gray solid;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-bottom: 1px;
+	background: #F0F0F0;
+	color: #404040;
+	cursor: pointer;
+}
+
+table.calendar td.calendarLink:hover {
+	background: #FFEEAA;
+}
+
+/* @doc="Disabled cells in calendar." */
+table.calendar td.calendarDisabled {
+	border-bottom: 1px gray solid;
+	border-right: 1px gray solid;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-bottom: 1px;
+	color: #808080;
+	background: #E0E0E0;
+}
+
+select.calendarSelect {
+	color: #404040;
+}
+
+.calendarTimeDiv {
+	font-size: 0.8em;
+	padding: 1px;
+}
+
+/* EOF */

@@ -1,0 +1,30 @@
+<!--
+PubSub: Subscriber editor
+-->
+
+<AutoPage domain="Ensemble" pagename="Edit Subscriber Definition" parentpage="UtilEnsSubscribers.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Edit Subscriber Definition</Text>
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.FormPane">
+	<Text>Edit the Subscriber definition using the form below. A subscriber can subscribe to one or more topics; when a message is published that matches a subscriber's topic it will be sent to the Target operation defined for the subscriber. Address is an additional piece of information that can be used by the Target operation to send the request.</Text>
+	<FormClass>EnsLib.PubSub.SubscriberForm</FormClass>
+	<SubmitPage>UtilEnsSubscribers.csp</SubmitPage>
+	<Align>left</Align>
+	
+	<Commands>
+		<Action href="UtilEnsPubSubDomains.csp">
+			<Caption>Show Domains</Caption>
+		</Action>
+		<Action href="UtilEnsSubscribers.csp">
+			<Caption>Show Subscribers</Caption>
+		</Action>
+		<Action href="UtilEnsSubscriptions.csp">
+			<Caption>Show Subscriptions</Caption>
+		</Action>
+	</Commands>
+</Pane>
+
+</AutoPage>

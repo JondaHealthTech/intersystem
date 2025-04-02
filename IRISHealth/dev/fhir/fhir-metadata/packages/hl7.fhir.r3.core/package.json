@@ -1,0 +1,44 @@
+{
+  "_from": "hl7.fhir.r3.core@3.0.2",
+  "_id": "hl7.fhir.r3.core@3.0.2",
+  "_inBundle": false,
+  "_integrity": "sha512-V+icwN0BbiQaif9P6NTyweOU27hBEET386JMR363ouLJgEL1VrHaXyKbzLOPRSXHXuClPw9UrkkWEdScuJsP6A==",
+  "_location": "/hl7.fhir.r3.core",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "hl7.fhir.r3.core@3.0.2",
+    "name": "hl7.fhir.r3.core",
+    "escapedName": "hl7.fhir.r3.core",
+    "rawSpec": "3.0.2",
+    "saveSpec": null,
+    "fetchSpec": "3.0.2"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://packages.simplifier.net//hl7.fhir.r3.core/-/hl7.fhir.r3.core-3.0.2.tgz",
+  "_shasum": "173cc0eec749a68bff90cccae7631f2c72a4f2ac",
+  "_spec": "hl7.fhir.r3.core@3.0.2",
+  "_where": "C:\\Users\\aepstein\\dev\\fhir-npm",
+  "author": {
+    "name": "HL7 Inc"
+  },
+  "bundleDependencies": false,
+  "canonical": "http://hl7.org/fhir",
+  "deprecated": false,
+  "description": "Definitions (API, structures and terminologies) for the R3 version of the FHIR standard",
+  "fhir-version-list": [
+    "3.0.2"
+  ],
+  "homepage": "http://hl7.org/fhir",
+  "license": "CC0-1.0",
+  "name": "hl7.fhir.r3.core",
+  "title": "FHIR R3 package : Core",
+  "tools-version": 3,
+  "type": "fhir.core",
+  "url": "http://hl7.org/fhir/STU3",
+  "version": "3.0.2"
+}

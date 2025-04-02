@@ -1,0 +1,163 @@
+/* @class="%DeepSee.Component.SVG.scoreCard" */
+
+.scoreCardBackground {
+	fill: #FFFFFE;
+	stroke: none;
+}
+
+.scoreCardRowEven {
+	fill: white;
+	fill-opacity: 0;
+	stroke: none;
+}
+.scoreCardRowOdd {
+	fill: rgb(206,205,165);
+	fill-opacity: 0.2;
+	stroke: none;
+	stroke-width: 0.1px;
+}
+
+.scoreCardRowSelected {
+	fill: #FFEEAA;
+	stroke: blue;
+	stroke-width: 0.1px;
+}
+
+/* line on top and bottom of card */
+.scoreCardSeparator {
+	fill: none;
+	stroke: #404040;
+	stroke-width: 0.25px;
+	stroke-linecap: round;
+}
+
+.scoreCardTitle {
+	pointer-events: none;
+	font-size: 16pt;
+	fill: rgb(164,57,39);
+	stroke: none;
+}
+
+.scoreCardSubtitle {
+	pointer-events: none;
+	font-size: 10pt;
+	fill: rgb(164,164,164);
+	stroke: none;
+}
+
+.scoreCardHeader {
+	pointer-events: none;
+	font-size: 11pt;
+	font-weight: bold;
+	fill: #404040;
+	stroke: none;
+}
+
+.scoreCardLabel {
+	pointer-events: none;
+	font-size: 11pt;
+	fill: #404040;
+	stroke: none;
+}
+
+.scoreCardLabelBig {
+	pointer-events: none;
+	font-size: 18pt;
+	fill: #404040;
+	stroke: none;
+}
+
+.scoreCardCellCaption {
+	pointer-events: none;
+	font-size: 11pt;
+	fill: #404040;
+	stroke: none;
+}
+
+.scoreCardValue {
+	pointer-events: none;
+	font-size: 10pt;
+	fill: #404040;
+	stroke: none;
+}
+
+.scoreCardValueBig {
+	pointer-events: none;
+	font-size: 20pt;
+	fill: #404040;
+	stroke: none;
+}
+
+.scoreCardTrendLine {
+	fill: none;
+	stroke: rgb(164,57,39);
+	stroke-width: 2px;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+
+.scoreCardTrendBars {
+	fill: rgb(47,98,128);
+	stroke: none;
+	stroke-width: 1px;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+
+.scoreCardArrow {
+	fill: #AA6666;
+	stroke: none;
+	stroke-width: 0.1px;
+}
+
+.scoreCardLamp {
+	stroke: none;
+	stroke-width: 0.5px;
+}
+
+.scoreCardPlotBoxOuter {
+	fill: #D0D0D0;
+	fill-opacity: 0.75;
+	stroke: none;
+}
+
+.scoreCardPlotBoxMiddle {
+	fill: #B0B0B0;
+	fill-opacity: 0.75;
+	stroke: none;
+}
+
+.scoreCardPlotBoxInner {
+	fill: #909090;
+	fill-opacity: 0.75;
+	stroke: none;
+}
+
+.scoreCardPlotBoxValue {
+	fill: #202020;
+	stroke: none;
+}
+
+.scoreCardPlotBoxTarget {
+	stroke: #202060;
+	stroke-width: 2px;
+	stroke-linecap: round;
+	fill: none;
+}
+
+.scoreCardScale {
+	stroke: #404040;
+	stroke-width: 0.5px;
+	fill: none;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.scoreCardScaleLabel {
+	pointer-events: none;
+	font-size: 7pt;
+	fill: #404040;
+	stroke: none;
+}
+
+/* EOF */

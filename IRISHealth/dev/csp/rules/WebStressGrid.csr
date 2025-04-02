@@ -1,0 +1,325 @@
+<csr:rule name="WebStressGrid" match="WebStress:grid" textonly=2>
+<csr:attribute name="NAME" required>
+<csr:attribute name="CLASS" required>
+<csr:attribute name="MAXROWS">
+<csr:attribute name="DISPLAYONLOAD">
+<csr:attribute name="ORDER">
+<csr:attribute name="PARENTGRID">
+<csr:attribute name="PARENTID">
+<csr:attribute name="MATCHPROPERTY">
+<csr:attribute name="TITLE">
+<csr:attribute name="SAVEBUTTON">
+<csr:attribute name="INSERTROW">
+<csr:attribute name="MATCHVALUE">
+<csr:attribute name="NOROWDELETE">
+<csr:action>
+<csr:section name="HEAD">
+<script language="CACHE" runat="COMPILER">
+	new tableid,classname,maxrows,displayonload,order,parentid,matchproperty,title,savebutton,insertrow
+	new att,attext,known,detail,i,value,checkatt,norowdelete,text,hdrs,gridTags,col,colCount
+	new column,selText,colText,attCount,attribute,delim,attsCount,readonly,loadText
+	new criteria,customsearch,len,parentid,ref,selOpts,tag,tagCount,tagText,temp,text,tg,update,updateCount,updates
+    set tableid =  ..GetAttribute("NAME")
+    set classname = ..GetAttribute("CLASS")
+    set maxrows = ..GetAttribute("MAXROWS")
+    if +maxrows=0 set maxrows=10
+    set displayonload = ..GetAttribute("DISPLAYONLOAD")
+    set order = ..GetAttribute("ORDER")
+    set parentgrid=..GetAttribute("PARENTGRID")
+    set parentid=..GetAttribute("PARENTID")
+    set matchproperty=..GetAttribute("MATCHPROPERTY")
+    set title=..GetAttribute("TITLE")
+    set savebutton=+..GetAttribute("SAVEBUTTON")
+    set insertrow=..GetAttribute("INSERTROW",1)
+    set matchvalue=..GetAttribute("MATCHVALUE")
+    set norowdelete=+..GetAttribute("NOROWDELETE")
+	set att="",attext="",known=",NAME,CLASS,MAXROWS,DISPLAYONLOAD,ORDER,PARENTGRID,PARENTID,MATCHPROPERTY,TITLE,SAVEBUTTON,INSERTROW,MATCHVALUE,NOROWDELETE"
+	set detail=..InnerText()
+    for i=1:1 {
+	    set value=..TagAttributes.GetNext(.att)
+	    if att="" quit
+	    set checkatt=","_$zcvt(att,"U")_","
+	    if known'[checkatt set attext=attext_" "_att_"="""""_$li(value,1)_""""""
+    }
+   	set gridID = ##class(%WebStress.UI.GridDetails).Create(%pageName,tableid,classname,maxrows,displayonload,order,parentgrid,parentid,matchproperty,savebutton,insertrow,matchvalue,norowdelete,detail)
+   	if gridID {
+	   	if '$data(^%WebStress.UI.Page($job,%pageName)) {
+			set ^%WebStress.UI.Page($job,%pageName)=1
+				set text="	write ""<script language=""""javascript"""">"",!"
+				do ..WriteServer(text,0)
+				set text="	write ""imageAddin='Images/addin.gif';"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""imageDelete='Images/delete.gif';"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""GridSelOpts = new Array();"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""GridCol = new Array();"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""GridRow = new Array();"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""GridHdr = new Array();"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""GridData = new Array();"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""GridSearchOption = new Array();"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""GridTags = new Array();"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""GridRowSelected = new Array();"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""GrididCountSelected = new Array();"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""GridChild = new Array();"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""GridNewRow = new Array();"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""GridColLoad = new Array();"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""<"_"/script>"",!"
+				do ..WriteServer(text,1)
+				set text="	write ""<script language='JavaScript' src='webstress_grid.js'><"_"/script>"",!"
+				do ..WriteServer(text,0)
+		}
+		
+		set text="	write ""<script language=""""javascript"""">"",!"
+		do ..WriteServer(text,0)
+	   	set text="	write ""GridCol["_gridID_"] = new Array();"",!"
+	   	do ..WriteServer(text,1)
+	   	set text="	write ""GridSelOpts["_gridID_"] = new Array();"",!"
+	   	do ..WriteServer(text,1)
+	   	set text="	write ""GridTags["_gridID_"] = new Array();"",!"
+	   	do ..WriteServer(text,1)
+	   	set text="	write ""GridSearchOption["_gridID_"] = new Array(0,'[All]','','[All]','','');"",!"
+	   	do ..WriteServer(text,1)
+		set text="	write ""GridRowSelected["_gridID_"] = 0;"",!"
+	   	do ..WriteServer(text,1)
+	   	set text="	write ""GridNewRow["_gridID_"] = 0;"",!"
+	   	do ..WriteServer(text,1)
+	   	
+	   	set obj=##class(%WebStress.UI.GridDetails).%OpenId(gridID,0)
+	   	set hdrs=""
+	   	set gridTags=""
+		set colCount = obj.Columns.Count()
+		for col=1:1:colCount {
+			set column = obj.Columns.GetAt(col)
+			set selText="	write ""GridSelOpts["_gridID_"]["_col_"] = new Array();"",!"
+			do ..WriteServer(selText,1)
+			set colText="	write ""GridCol["_gridID_"]["_col_"] = new Array();"",!"
+			do ..WriteServer(colText,1)
+			set colText="	write ""GridCol["_gridID_"]["_col_"][0] = new Array('"_column.CellsType_"','"
+			set attCount=column.CellsAtts.Count()
+			for att=1:1:attCount {
+				set attribute = column.CellsAtts.GetAt(att)
+				set colText=colText_" "_attribute.Name
+				set value = attribute.Value
+				set delim = attribute.Delim
+				if value'="" set colText=colText_"="_delim_value_delim
+			}
+			set tagCount = column.Tags.Count()
+			set colText=colText_"','"_tagCount_"'"
+			set colText=colText_");"",!"
+			do ..WriteServer(colText,1)
+			
+			set tagText=""
+			for tg=1:1:tagCount {
+				set tag=column.Tags.GetAt(tg)
+				set tagText = "	write ""GridCol["_gridID_"]["_col_"]["_tg_"] = new Array('"_tag.Tag_"','"_tag.Closed_"','"_tag.Property_"','"_+tag.Replicate_"','"
+				set attsCount = tag.Atts.Count()
+				set readonly = 0
+				for at=1:1:attsCount {
+					set att=tag.Atts.GetAt(at)
+					if (att.Name="update")&&(tag.Tag="SELECT") {
+						set updateCount = ##class(%WebStress.UI.GridDetails).FindUpdateField(obj,att.Value,tag.SelectQuery,.updates)
+						if updateCount {
+							if $get(loadText)="" {
+								set loadText="	write ""GridColLoad["_gridID_"]='"
+							}
+							set tagText=tagText_" onchange="""""
+							for update=1:1:updateCount {
+								set tagText=tagText_"javascript:grid_update_change("_gridID_","_col_","_$piece(updates(update),",",1)_","_$piece(updates(update),",",2)_");"
+								set loadText=loadText_"javascript:grid_update_change("_gridID_","_col_","_$piece(updates(update),",",1)_","_$piece(updates(update),",",2)_");"
+							}
+							set tagText=tagText_""""""
+						}
+					}
+					else {
+						if att.Name="WebStress" {
+							set tagText=tagText_" class=FormInputCellLeft onchange=""""javascript:set_changed(1);"""""
+						}
+						else {
+							set tagText=tagText_" "_att.Name
+							if att.Value'="" set tagText=tagText_"="""""_att.Value_""""""
+							if $zcvt(att.Name,"l")="readonly" set readonly=1
+						}
+					}
+				}
+				set gridTag = tag.Property
+				if readonly set gridTag=""
+				if gridTags="" {
+					set gridTags="	write ""GridTags["_gridID_"] = new Array('"_gridTag_"'"
+				}
+				else {
+					set gridTags=gridTags_",'"_gridTag_"'"
+				}
+				set selOpts=tag.SelectOptions.Count()
+				if selOpts {
+					set selText="	write ""GridSelOpts["_gridID_"]["_col_"]["_tg_"] = new Array();"",!"
+					do ..WriteServer(selText,1)
+					set selText="	write ""GridSelOpts["_gridID_"]["_col_"]["_tg_"][0] = new Array("_selOpts_",'');"",!"
+					do ..WriteServer(selText,1)
+					for sel=1:1:selOpts {
+						set select=tag.SelectOptions.GetAt(sel)
+						set selText="	write ""GridSelOpts["_gridID_"]["_col_"]["_tg_"]["_sel_"] = new Array("
+						set selText=selText_"'"_select.Display_"','"_select.Value_"');"",!"
+						do ..WriteServer(selText,1)
+					}
+				}
+				if tag.SelectQuery'="" {
+					set selText="	write ""GridSelOpts["_gridID_"]["_col_"]["_tg_"] = new Array();"",!"
+					do ..WriteServer(selText,1)
+					set selText="	write ""GridSelOpts["_gridID_"]["_col_"]["_tg_"][1] = new Array('','');"",!"
+					do ..WriteServer(selText,1)
+					set selText="	set sel = 1"
+					do ..WriteServer(selText,1)
+					set selText="	kill rsSelect"
+					do ..WriteServer(selText,1)
+					set selText="	set rsSelect=##class(%ResultSet).%New(""%DynamicQuery:SQL"")"
+					do ..WriteServer(selText,1)
+					set selText="	if rsSelect.Prepare("""_tag.SelectQuery_""") {"
+					do ..WriteServer(selText,1)
+					set selText="		if rsSelect.Execute() {"
+					do ..WriteServer(selText,1)
+					set selText="			while rsSelect.Next() {"
+					do ..WriteServer(selText,1)
+					set selText="				set sel=sel+1"
+					do ..WriteServer(selText,1)
+					set selText="				write ""GridSelOpts["_gridID_"]["_col_"]["_tg_"]["",sel,""] = new Array('"",rsSelect.GetData(2),""','"",rsSelect.GetData(1),""'"""
+					do ..WriteServer(selText,1)
+					set selText="				for col=3:1:rsSelect.GetColumnCount() {"
+					do ..WriteServer(selText,1)
+					set selText="					write "",'"",rsSelect.GetData(col),""'"""
+					do ..WriteServer(selText,1)
+					set selText="				}"
+					do ..WriteServer(selText,1)
+					set selText="				write "");"",!"
+					do ..WriteServer(selText,1)
+					set selText="			}"
+					do ..WriteServer(selText,1)
+					set selText="		}"
+					do ..WriteServer(selText,1)
+					set selText="	}"
+					do ..WriteServer(selText,1)
+					set selText="	write ""GridSelOpts["_gridID_"]["_col_"]["_tg_"][0] = new Array("",sel,"",'');"",!"
+					do ..WriteServer(selText,1)
+				}
+			}
+			if tagText'="" {
+				set tagText=tagText_"','"_tag.PropertyTitle
+				set tagText=tagText_"');"",!"
+				do ..WriteServer(tagText,1)
+			}
+		}
+		set gridTags=gridTags_");"",!"
+		do ..WriteServer(gridTags,1)
+		
+		if $get(loadText)'="" {
+			set loadText=loadText_"'"",!"
+			do ..WriteServer(loadText,1)
+		}
+		kill loadText
+		
+		set text="	write ""GridHdr["_gridID_"] = new Array("
+		set text=text_"'"_obj.Name_"'"
+		set text=text_",'<table cellspacing=""""1"""" cellpadding=""""1"""" class=""""DataGrid""""><tbody>"
+		if title'="" {
+			set text=text_"<tr><td class=""""FormTitle"""" colspan="_(colCount+3)_">"_title_"</td></tr>"
+		}
+		set text=text_"<tr><td>#</td>"
+		set colCount = obj.Columns.Count()
+		for col=1:1:colCount {
+			set column=obj.Columns.GetAt(col)
+			set text=text_"<"_column.HeaderType
+			set attCount=column.HeaderAtts.Count()
+			for att=1:1:attCount {
+				set attribute = column.HeaderAtts.GetAt(att)
+				set text=text_" "_attribute.Name
+				set value = attribute.Value
+				set delim = attribute.Delim
+				if delim="""" set delim=""""""
+				if value'="" set text=text_"="_delim_value_delim
+			}
+			set text=text_">"
+			set text=text_column.Header
+			set text=text_"</"_column.HeaderType_">"
+		}
+		set text=text_"</tr>'"
+		set text=text_",'"_obj.MaxRows_"'"
+		set text=text_",'"_colCount_"'"
+		set text=text_",'0'"
+		set text=text_","_obj.SaveButton
+		set text=text_","_obj.InsertRow
+		set text=text_","_obj.NoRowDelete
+		set text=text_");"",!"
+		do ..WriteServer(text,1)
+		
+		if parentgrid="" {
+			set criteria=""""""
+			if obj.ParentID'="" {
+				set criteria="$get("_obj.ParentID_")"
+			}
+			elseif obj.MatchValue'="" {
+				set criteria=obj.MatchValue
+			}
+			set text="	do ##class(%WebStress.UI.GridDetails).GetData("_gridID_",.IDCounts,"_criteria_")"
+			do ..WriteServer(text,0)
+		}
+		
+		set text="	write ""<"_"/script>"",!"
+		do ..WriteServer(text,1)
+   	}
+</script>
+</csr:section>
+<script language="cache" runat="COMPILER">
+	new text,parentid,temp,customsearch,len,ref
+	if gridID {
+		set text="	write ""<div ID=""""UI_"_gridID_"""""></div>"",!"
+		do ..WriteServer(text,1)
+	}
+	if parentgrid="" {
+		if matchvalue'="" {
+			set text="	if "_matchvalue_"'="""" {"
+			do ..WriteServer(text,0)
+		}
+		set text="	write ""<script language=javascript>"",!"
+		do ..WriteServer(text,0)
+		set text="Grid_Show("_gridID_",'"
+		set parentid=obj.ParentID
+		if parentid'="" {
+			set text=text_"#($get("
+			set temp=parentid
+			if parentid["""" {
+				set temp=""
+				set len=$length(parentid,"""")
+				for i=1:1:len {
+					set temp=temp_$piece(parentid,"""",i)
+					if i'=len set temp=temp_""""
+				}
+			}
+			set text=text_temp
+			set text=text_"))#"
+		}
+		elseif matchvalue'="" {
+			set text=text_"#("_matchvalue_")#"
+		}
+		set text=text_"',1);"
+		do ..WriteCSPText(text,1)
+		set text="	write ""<"_"/script>"",!"
+		do ..WriteServer(text,1)
+		if matchvalue'="" {
+			set text="	}"
+			do ..WriteServer(text,1)
+		}
+	}
+</script>
+</csr:action>
+</csr:rule>

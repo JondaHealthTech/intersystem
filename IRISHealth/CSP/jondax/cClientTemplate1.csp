@@ -1,0 +1,645 @@
+<html>		<!-- Client Template under Admin setting in Side Nav -->
+<head>
+<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+	q 1
+</script>
+
+<script language="cache" runat="server">
+	s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+	i r1'=1 s %response.Redirect="cLockDown.csp"
+	d HEAD1^CSP999
+</script>
+	<link rel="stylesheet" href="assets/styles/cClientTemplate1.css" />
+</head>
+    <body>
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div id="loader" class="loader">
+            	<div class="loader-content">
+            		<p>Please wait for all the data to be loaded!</p>
+            		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            	</div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;" onclick="openMobileNav(event)"></i>
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <div class="title">
+                    	<h1>Client Templates</h1>
+                    	<div class="temp-name-group">
+                    		<p>Client Template Name:</p>
+                    		<div class="temp-dropdown"><p class="temp-name"></p><img src="./assets/images/dropDownWhite.png" alt="Dropdown" onclick="openTemplateDropdown(event)"></div>
+                    	</div>
+                    </div>
+                    <div id="temp-content" class="temp-content">
+                    	<!-- Initial characters filter-->
+                        <div class="filters">
+                            <div class="text-fil">
+                                <p onclick="jLoadTemplates(event)">All</p>
+                                <p onclick="jLoadTemplates(event)">1-9</p>
+                                <p onclick="jLoadTemplates(event)">A</p>
+                                <p onclick="jLoadTemplates(event)">B</p>
+                                <p onclick="jLoadTemplates(event)">C</p>
+                                <p onclick="jLoadTemplates(event)">D</p>
+                                <p onclick="jLoadTemplates(event)">E</p>
+                                <p onclick="jLoadTemplates(event)">F</p>
+                                <p onclick="jLoadTemplates(event)">G</p>
+                                <p onclick="jLoadTemplates(event)">H</p>
+                                <p onclick="jLoadTemplates(event)">I</p>
+                                <p onclick="jLoadTemplates(event)">J</p>
+                                <p onclick="jLoadTemplates(event)">K</p>
+                                <p onclick="jLoadTemplates(event)">L</p>
+                                <p onclick="jLoadTemplates(event)">M</p>
+                                <p onclick="jLoadTemplates(event)">N</p>
+                                <p onclick="jLoadTemplates(event)">O</p>
+                                <p onclick="jLoadTemplates(event)">P</p>
+                                <p onclick="jLoadTemplates(event)">Q</p>
+                                <p onclick="jLoadTemplates(event)">R</p>
+                                <p onclick="jLoadTemplates(event)">S</p>
+                                <p onclick="jLoadTemplates(event)">T</p>
+                                <p onclick="jLoadTemplates(event)">U</p>
+                                <p onclick="jLoadTemplates(event)">V</p>
+                                <p onclick="jLoadTemplates(event)">W</p>
+                                <p onclick="jLoadTemplates(event)">X</p>
+                                <p onclick="jLoadTemplates(event)">Y</p>
+                                <p onclick="jLoadTemplates(event)">Z</p>
+                            </div>
+                            <!-- Search Bar -->
+                            <div class="search-group">
+                                <input type="text" autocomplete="off" id="search" placeholder="Search" onkeyup="searchDataChange(event)">
+                                <img src="./assets/images/search icon.png" alt="Search" class="search-icon" onclick="jLoadSearchResults(1)">
+                            </div>
+                            <!--s<button class="filter-btn"><img src="./assets/images/filter.png" alt="Filter">Filters</button>-->
+                        </div>
+                        <!-- Template table -->
+                        <div class="table-border"></div>
+                        <div class="temp-table">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>JX Name <div class="img-group"><img src="./assets/images/upArrow.png" alt="Up Arrow" onclick="jSortTable(1)"><img src="./assets/images/downArrow.png" alt="Down Arrow" onclick="jSortTable(2)"></div></th>
+                                        <th>Client Name <div class="img-group"><img src="./assets/images/upArrow.png" alt="Up Arrow" onclick="jSortTable(3)"><img src="./assets/images/downArrow.png" alt="Down Arrow" onclick="jSortTable(4)"></div></th>
+                                        <th>Client Unit</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                         <!-- Template dropdown data-->
+                        <div class="template-data dropdown-data">
+                            <ul>
+                            	<script language="cache" runat="server">
+                            		; Load template names 
+                            		d WriteTemplates^cClientTemplate
+                            	</script>
+                            </ul>
+                        </div>
+                        <div class="search-data dropdown-data">
+                            <ul>
+                            </ul>
+                        </div>
+                        <div class="diagnostic-data dropdown-data">
+                            <ul>
+                            </ul>
+                        </div>
+                        <div class="name-data dropdown-data">
+                            <ul>
+                            </ul>
+                        </div>
+                        <div class="unit-data dropdown-data">
+                            <ul>
+                            </ul>
+                        </div>
+                        <button type="button" class="add-row" onclick="addRow(event)">Add Row</button>
+                    	<div class="btn-edit-group">
+                    		<button class="green-btn" onclick="saveRow()">Save Changes</button>
+                    		<button class="pink-btn" onclick="cancelEdit()">Cancel</button>
+                    	</div>
+                    </div>
+                </div>
+            </div>
+        </div><div id="popup1" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Are you sure you want to delete "<span id="del-val"></span>"?</h4>
+                <p>This action cannot be undone.</p>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="confirmDelete()">Yes</button>
+                    <button class="pink-btn" onclick="cancelDelete()">No</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup2" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>"<span id="del-val1"></span>" is now deleted!</h4>
+                <button class="green-btn" onclick="removePopup2()">Okay</button>
+            </div>
+        </div>
+        <div id="popup3" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Are you sure you want to save <span id="save-val"></span>?</h4>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="confirmSave()">Yes</button>
+                    <button class="pink-btn" onclick="removePopup3()">No</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup4" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Please make sure you fill up <br> both the name and the unit!!</h4>
+                <button class="green-btn" onclick="removePopup4()">Okay</button>
+            </div>
+        </div>
+        <div id="popup5" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>"<span id="save-val1"></span>" is now saved!</h4>
+                <button class="green-btn" onclick="removePopup5()">Okay</button>
+            </div>
+        </div>
+        <div id="popup6" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Changes are now saved!</h4>
+                <button class="green-btn" onclick="removePopup6()">Okay</button>
+            </div>
+        </div>
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/detect.js"></script>
+        <script src="assets/js/fastclick.js"></script>
+        <script src="assets/js/jquery.slimscroll.js"></script>
+        <script src="assets/js/jquery.blockUI.js"></script>
+        <script src="assets/js/waves.js"></script>
+        <script src="assets/js/wow.min.js"></script>
+        <script src="assets/js/jquery.nicescroll.js"></script>
+        <script src="assets/js/jquery.scrollTo.min.js"></script>
+        <script src="assets/js/jquery.core.js"></script>
+        <script src="assets/js/jquery.app.js"></script>
+    </body>
+    <script type="text/javascript">
+    	let popup1 = document.getElementById("popup1");
+        let popup2 = document.getElementById("popup2");
+        let popup3 = document.getElementById("popup3");
+        let popup4 = document.getElementById("popup4");
+        let popup5 = document.getElementById("popup5");
+        let popup6 = document.getElementById("popup6");
+        let currentTr;
+        let val1;
+        let val2;
+        let val3;
+    	let dropDownText = " <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'>"
+        let templateData = document.querySelector(".template-data");
+        let searchData = document.querySelector(".search-data");
+        let diagnosticData = document.querySelector(".diagnostic-data");
+        let nameData = document.querySelector(".name-data");
+        let unitData = document.querySelector(".unit-data");
+        let currentOrder = 1;
+        let currentLoadData = "";
+        let lastViewDate;
+        let prevSearchData;
+        window.onresize = setTableBorderPos;
+        window.onload = jInitMe;
+  		document.onload = parent.resetTimer;
+  		document.onmousemove = parent.resetTimer;
+  		document.onmousedown = parent.resetTimer; // touchscreen presses
+  		document.ontouchstart = parent.resetTimer;
+  		//document.onclick = parent.resetTimer; // touchpad clicks
+  		document.onkeypress = parent.resetTimer;
+  		document.addEventListener('scroll', parent.resetTimer, true); 
+        let searching = false;
+        
+        function jInitMe(e){
+	        // session timer resets on page load
+			parent.resetTimer(e);
+	        // Load table result
+	        #server(..cInitMe())#
+	        setTableBorderPos();
+	    	document.getElementById("loader").style.display = "none";
+        }
+        // Set and adjust table border
+        function setTableBorderPos(){
+            let tableBorder = document.querySelector(".table-border");
+            let tempTable = document.querySelector(".temp-table");
+            let table = document.querySelector("table");
+            let filter = document.querySelector(".filters");
+            
+            setTimeout(()=>{
+	            let tablePosition = table.getBoundingClientRect();
+            	if(tempTable.scrollHeight > tempTable.clientHeight){
+                	tableBorder.style.height = "calc(60vh + 4px)"
+            	}
+            	else{
+		        	tableBorder.style.height = tablePosition.height + 4 + "px";
+            	}
+            	tableBorder.style.width = tablePosition.width + 4 + "px";
+            	filter.style.width = tablePosition.width;
+            },100);
+        }
+        // Activate template names dropdown
+        function openTemplateDropdown(e){
+            let position = e.target.getBoundingClientRect();
+            templateData.style.top = position.bottom + 2 + "px";
+            templateData.style.right =window.innerWidth - position.right + "px";
+            setTimeout(()=>{
+                templateData.classList.add("active");
+            },100);
+        }
+        // Selecting a template from dropdown
+        function changeBK(e){
+	        let bk=e.target.textContent;
+	        #server(..cSaveCurrentBK(bk))#
+	        document.querySelector(".temp-name").innerHTML = bk;
+	        jLoadTemplates("New BK");
+	        templateData.classList.remove("active");
+        }
+        // Sort the table, JX Name or client name
+        function jSortTable(order){
+	    	if(order==currentOrder){ return;}
+		    if(document.querySelectorAll("tbody tr").length<=1){
+		    	return;
+		    }
+	    	if(searching){
+		    	jLoadSearchResults(order);
+		    	return;
+		    }
+	    	document.getElementById("loader").style.display = "block";
+	    	#server(..cLoadTemplates(currentLoadData,order,lastViewDate))#
+	    	currentOrder = order;
+	    	document.getElementById("loader").style.display = "none";
+            setTableBorderPos();
+    	}
+    	
+    	// Load table with selected character or num or load new template
+    	function jLoadTemplates(e){
+	    	let start=e.target?e.target.textContent:e;
+	    	searching=false;
+	    	if(start.startsWith("1")){
+		    	start="num"
+	    	}
+	    	if(start=="All"){
+		    	start=""
+	    	}
+	    	if(currentLoadData==start && currentOrder==1){return;}
+	    	document.getElementById("loader").style.display = "block";
+	    	if(start=="New BK"){
+		    	start=""
+	    	}
+	    	#server(..cLoadTemplates(start,1,lastViewDate))#
+	    	currentLoadData=start;
+	    	currentOrder=1;
+	    	document.getElementById("loader").style.display = "none";
+	    	setTableBorderPos();
+    	}
+    	// Add new row in template
+		function addRow(e){
+	    	let tempTable = document.querySelector(".temp-table");
+	    	let tbody = document.querySelector("tbody");
+	    	let tr = document.createElement("tr");
+	    	tr.classList.add("new");
+            let tableData = "<td class='diagnostic-test'><input type='text' name='diagnostic-test' value='' onkeyup='openDiagnosticSuggestion(event)'></td>";
+            tableData = tableData+"<td class='client-name'><input type='text' name='client-name' value='' onkeyup='openNameSuggestion(event)'></td>";
+            tableData = tableData+"<td class='client-unit'><input type='text' name='client-unit' value='' onkeyup='openUnitSuggestion(event)'></td>";
+            tableData = tableData+"<td class='action hidden'><img class='edit-icon' src='./assets/images/edit.png' alt='Edit' onclick='editRow(event)'> <img src='./assets/images/delete.png' alt='Delete' onclick='deleteRow(event)'></td>"
+	    	tr.innerHTML = tableData;
+    		tbody.prepend(tr);
+    		currentTr = tr;
+    		tempTable.scrollTop = 0;
+    		e.target.style.display="none";
+    		document.querySelector(".btn-edit-group").style.display="block";
+            setTableBorderPos();
+    	}
+    	
+    	// Activate confirmation popup3 to save new/edit row
+    	function saveRow(){
+	    	let tds = currentTr.querySelectorAll("td");
+	    	if(tds[0].querySelector("input").value=="" || tds[1].querySelector("input").value==""){
+		    	popup4.classList.remove("inactive");
+		    	return;
+	    	}
+	    	if(currentTr.classList.contains("new")){
+	    		document.getElementById("save-val").innerHTML = "\""+tds[1].querySelector("input").value+"\"";
+	    		document.getElementById("save-val1").innerHTML = tds[1].querySelector("input").value;
+	    	}
+	    	else{
+	    		document.getElementById("save-val").innerHTML = "changes";
+	    	}
+	    	setTimeout(()=>popup3.classList.remove("inactive"),100);
+    	}
+    	// Save new/edit row
+    	function confirmSave(){
+	    	let tds = currentTr.querySelectorAll("td");
+	    	let id = "";
+	    	val1 = tds[0].querySelector("input").value;
+	    	val2 = tds[1].querySelector("input").value;
+	    	val3 = tds[2].querySelector("input").value;
+	    	if(currentTr.classList.contains("new")){
+		    	id=""
+	    	}
+	    	else{
+		    	id=currentTr.getAttribute("key");
+	    	}
+		    #server(..cSaveUpdateTemplate(id,val1,val2,val3))#
+	    	tds[0].innerHTML = val1;
+	    	tds[1].innerHTML = val2;
+	    	tds[2].innerHTML = val3;
+            tds[3].classList.remove("hidden");
+			currentTr.classList.add("highlight");
+	        currentTr.classList.remove("new");
+	    	popup3.classList.add("inactive");
+    		document.querySelector(".btn-edit-group").style.display="none";
+    		document.querySelector(".add-row").style.display="block";
+    		currentTr=null;
+    	}
+    	
+    	// Create input boxex to edit row
+        function editRow(e){
+	    	if(currentTr==null){
+	    		currentTr = e.target.parentElement.parentElement;
+	    		tds = currentTr.querySelectorAll("td");
+	    		val1 = tds[0].textContent;
+	    		val2 = tds[1].textContent;
+                val3 = tds[2].textContent;
+	    		tds[0].innerHTML = "<input type='text' name='diagnostic-test' value='"+val1+"' onkeyup='openDiagnosticSuggestion(event)'>";
+	    		tds[1].innerHTML = "<input type='text' name='client-name' value='"+val2+"' onkeyup='openNameSuggestion(event)'>";
+	    		tds[2].innerHTML = "<input type='text' name='client-unit' value='"+val3+"' onkeyup='openUnitSuggestion(event)'>";
+	    		tds[3].classList.add("hidden");
+                document.querySelector(".btn-edit-group").style.display="block";
+    			document.querySelector(".add-row").style.display="none";
+	    	}
+	    	else{
+		    	alert("You cannot edit multiple testnames at the same time");
+	    	}
+            setTableBorderPos();
+    	}
+    	// change input boxes to text content
+    	function cancelEdit(){
+	    	if(currentTr==document.querySelector("tbody").firstElementChild && currentTr.classList.contains("new")){
+		    	document.querySelector("tbody").firstElementChild.remove();
+	    	}
+	    	else{
+	    		tds = currentTr.querySelectorAll("td");
+	    		tds[0].innerHTML = val1;
+	    		tds[1].innerHTML = val2;
+	    		tds[2].innerHTML = val3;
+	    		tds[3].classList.remove("hidden");
+	    	}
+	    	currentTr = null;
+    		document.querySelector(".btn-edit-group").style.display="none";
+    		document.querySelector(".add-row").style.display="block";
+            setTableBorderPos();
+    	}
+    	// Activate confirmation popup1 to delete row
+    	function deleteRow(e){
+	    	currentTr = e.target.parentElement.parentElement;
+            let value = currentTr.querySelectorAll("td")[1].textContent;
+	    	document.getElementById("del-val").innerHTML = value;
+	    	document.getElementById("del-val1").innerHTML = value;
+	    	setTimeout(()=>{
+	    		popup1.classList.remove("inactive");
+	    	},100);
+    	}
+    	// Delete row
+    	function confirmDelete(){
+	    	removePopup1();
+	    	#server(..cDeleteTemplate(currentTr.getAttribute("key")))#
+    		currentTr.remove();
+    		currentTr=null;
+            setTimeout(()=>{
+                popup2.classList.remove("inactive");
+            },100)
+            setTableBorderPos();
+    	}
+    	// Cancel deletion
+        function cancelDelete(){
+            currentTr=null;
+            removePopup1();
+        }
+        // not using
+        function openSearchDropdown(e){
+            let position = e.target.closest(".search-group").getBoundingClientRect();
+            searchData.style.top = position.bottom + 2 + "px";
+            searchData.style.right = window.innerWidth - position.right + "px";
+            setTimeout(()=>{
+                searchData.classList.add("active");
+            },100);
+        }
+        
+        // Activate and load JX Test Name suggestions for new and editing row
+        function openDiagnosticSuggestion(e){
+	        let diagnosticTest = e.target.value;
+	        #server(..cLoadDiagnosticTests(diagnosticTest))#
+	        let position = e.target.getBoundingClientRect();
+            diagnosticData.style.top = position.bottom + 2 + "px";
+            diagnosticData.style.right = window.innerWidth - position.right + "px";
+            diagnosticData.style.width = position.width;
+            setTimeout(()=>{
+                diagnosticData.classList.add("active");
+            },100);
+        }
+        // Selecting from  Test Name suggestions 
+        function changeDiagnosticTest(e){
+	        currentTr.querySelector(".diagnostic-test input").value = e.target.textContent;
+	        diagnosticData.classList.remove("active");
+        }
+        // Activate and load Client test name suggestions for new and editing row
+        function openNameSuggestion(e){
+	        let name = e.target.value;
+	        #server(..cLoadClientNames(name))#
+	        let position = e.target.getBoundingClientRect();
+            nameData.style.top = position.bottom + 2 + "px";
+            nameData.style.right = window.innerWidth - position.right + "px";
+            nameData.style.width = position.width;
+            setTimeout(()=>{
+                nameData.classList.add("active");
+            },100);
+        }
+        // Selecting from  Client Test Name suggestions 
+        function changeClientName(e){
+	        currentTr.querySelector(".client-name input").value = e.target.textContent;
+	        nameData.classList.remove("active");
+        }
+        // Activate and load unit suggestions for new and editing row
+        function openUnitSuggestion(e){
+	        let unit = e.target.value;
+	        #server(..cLoadClientUnits(unit))#
+	        let position = e.target.getBoundingClientRect();
+            unitData.style.top = position.bottom + 2 + "px";
+            unitData.style.right = window.innerWidth - position.right + "px";
+            setTimeout(()=>{
+                unitData.classList.add("active");
+                if(unitData.getBoundingClientRect().width < position.width){
+                    unitData.style.width = position.width;
+                }
+            },100);
+        }
+        // Selecting from  unit suggestions 
+        function changeClientUnit(e){
+	        currentTr.querySelector(".client-unit input").value = e.target.textContent;
+	        unitData.classList.remove("active");
+        }
+        
+        // Activate search suggestion dropdown and load suggestions
+        function searchDataChange(e){
+	        searching = true;
+	        if(e.keyCode==13){
+		        currentLoadData = e.target.value;
+		        jLoadSearchResults(1);
+		        setTableBorderPos();
+			    return;
+	        }
+	        if(e.target.value.length==0){
+		        searchData.classList.remove("active");
+		        currentOrder=1
+		        return;
+	        }
+	        let position = e.target.closest(".search-group").getBoundingClientRect();
+            searchData.style.top = position.bottom + 2 + "px";
+            searchData.style.left = position.left;
+           	if(e.target.value==prevSearchData){}
+	        else{
+		        prevSearchData=e.target.value;
+	        	#server(..cClearSearchData())#
+	        	#server(..cSearchData(e.target.value))#
+	        	#server(..cLoadSearchSuggestions())#
+	        	setTimeout(()=>{
+              		searchData.classList.add("active");
+               		if(searchData.getBoundingClientRect().width < position.width){
+                   		searchData.style.width = position.width;
+               		}
+           		},100);
+	        }
+        }
+        // Load table with search result
+        function jLoadSearchResults(order){
+	    	document.getElementById("loader").style.display = "block";
+	        #server(..cLoadSearchResults(order))#
+	        currentOrder = order;
+			searchData.classList.remove("active");
+	    	document.getElementById("loader").style.display = "none";
+        }
+        
+        // Choose from search suggestion
+        function jLoadSearchData(e){
+	        searching = true;
+	        let searchVal = e.target.textContent;
+	        document.getElementById("search").value = searchVal;
+            searchData.classList.remove("active");
+	        let search = e.target.getAttribute("value").split(":");
+	        let searchType = search[0];
+	        let searchId = search[1];
+	        #server(..cClearSearchData())#
+	        switch(searchType){
+		        case 'DiagnosticTest':#server(..cSearchDiagnosticTest(searchVal))#;break;
+		        case 'ClientName':#server(..cSearchClientName(searchVal))#;break;
+		        case 'ClientUnit':#server(..cSearchClientUnit(searchVal))#;break;
+	        }
+	        currentLoadData=searchVal;
+	        jLoadSearchResults(1);
+            setTableBorderPos();
+        }
+        
+        // Deactivate popups
+        function removePopup1(){
+            popup1.classList.add("inactive");
+        }
+        function removePopup2(){
+            popup2.classList.add("inactive");
+        }
+        function removePopup3(){
+            popup3.classList.add("inactive");
+        }
+        function removePopup4(){
+            popup4.classList.add("inactive");
+        }
+        function removePopup5(){
+            popup5.classList.add("inactive");
+        }
+        function removePopup6(){
+            popup6.classList.add("inactive");
+        }
+        document.addEventListener("click",(e)=>{
+	        if(e.target.closest(".template-data")==null && templateData.classList.contains("active")){
+		        templateData.classList.remove("active");
+	        }
+	        if(e.target.closest(".diagnostic-data")==null && diagnosticData.classList.contains("active")){
+		        diagnosticData.classList.remove("active");
+	        }
+	        if(e.target.closest(".name-data")==null && nameData.classList.contains("active")){
+		        nameData.classList.remove("active");
+	        }
+	        if(e.target.closest(".unit-data")==null && unitData.classList.contains("active")){
+		        unitData.classList.remove("active");
+	        }
+	        if(e.target.closest(".search-data")==null && searchData.classList.contains("active")){
+		        searchData.classList.remove("active");
+	        }
+        })
+    </script>
+    
+<script language="cache" method="cInitMe">
+	d InitMe^cClientTemplate
+</script>
+<script language="cache" method="cSaveCurrentBK" arguments="bk:%String">
+	d INIT1^CSP999
+	s lastViewDate = $s($g(^LastView("ClientTemplate",UserID,bk))="":"2023-03-01 00:00:01",1:$zdatetime($g(^LastView("ClientTemplate",UserID,bk)),3))
+	&js<lastViewDate="#(lastViewDate)#";>
+	s %session.Data("ClientTemplates","bk") = bk
+	s ^LastView("ClientTemplate",UserID,bk)=$h
+</script>
+<script language="cache" method="cLoadTemplates" arguments="searchVal:%String,orderCol:%Integer,lastViewDate:%String">
+	d LoadTemplates^cClientTemplate(searchVal,orderCol,lastViewDate)
+</script>
+<script language="cache" method="cSaveUpdateTemplate" arguments="id,diagnosticTest,clientName,clientUnit:%String">
+	d SaveUpdateTemplate^cClientTemplate
+</script>
+<script language="cache" method="cDeleteTemplate" arguments="id:%String">
+	d DeleteTemplate^cClientTemplate
+</script>
+<script language="cache" method="cLoadDiagnosticTests" arguments="name:%String">
+	d LoadDiagnosticTests^cClientTemplate
+</script>
+<script language="cache" method="cLoadClientNames" arguments="name:%String">
+	d LoadClientNames^cClientTemplate
+</script>
+<script language="cache" method="cLoadClientUnits" arguments="unit:%String">
+	d LoadClientUnits^cClientTemplate
+</script>
+<script language="cache" method="cClearSearchData">
+	k ^SearchDiagnosticTest
+	k ^SearchCName
+	k ^SearchData
+</script>
+<script language="cache" method="cSearchData" arguments="searchVal:%String">
+	d SearchData^cClientTemplate
+</script>
+<script language="cache" method="cSearchDiagnosticTest" arguments="searchVal:%String">
+	d SearchDiagnosticTest^cClientTemplate
+</script>
+<script language="cache" method="cSearchClientName" arguments="searchVal:%String">
+	d SearchClientName^cClientTemplate
+</script>
+<script language="cache" method="cSearchClientUnit" arguments="searchVal:%String">
+	d SearchClientUnit^cClientTemplate
+</script>
+<script language="cache" method="cLoadSearchSuggestions">
+	d LoadSearchSuggestions^cClientTemplate
+</script>
+<script language="cache" method="cLoadSearchResults" arguments="orderCol:%String">
+	d LoadSearchResults^cClientTemplate
+</script>
+</html>

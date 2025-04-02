@@ -1,0 +1,98 @@
+<html>
+<head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+		q 1
+	</script>
+
+	<script language="cache" runat="server">
+		s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+		i r1'=1 s %response.Redirect="cLockDown.csp"
+		d HEAD1^CSP999
+	</script>
+        <link rel="stylesheet" href="assets/styles/cFrame.css">
+</head>
+<body onload="jInitMe()" style="padding:0px;margin:0px">
+<form id="F1" name="F1">
+<div id="wrapper">
+	<div class="bg-wrapper">
+	<div class="bg3">
+	<img src="./assets/images/bg3.png">
+	</div>
+	</div>
+	<div class="main-field" style="width:100%">
+		<img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="JondaX">
+		<h1>
+		Menus
+		</h1>
+		<div>
+			<div class="main-table">
+				<div class="table-border"></div>
+					<div class="table-container">
+					<table>
+						<tr>
+							<td>Code</td>
+							<td><input type="text" id="T1" name="T1" size=10></td>
+						</tr>
+						<tr>
+							<td>Name</td>
+							<td><input type="text" id="T2" name="T2" size=50></td>
+						</tr>
+					</table>
+					<div>&nbsp;</div>
+					<table style='padding:1px;'>
+						<tr>
+							<td><input type="checkbox" id="C1" name="C1" onclick="jCheckMe(this.id,this.checked)"> Admin Dashboard</td>
+							<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td><input type="checkbox" id="C2" name="C2" onclick="jCheckMe(this.id,this.checked)"> Reviewer Dashboard</td>
+						</tr>
+					</table>
+					<table style='padding:1px'>
+						<tr>
+							<td>Review Results &nbsp;: &nbsp;</td>
+							<td><input type="checkbox" id="C2a" name="C2a" onclick="jCheckMe(this.id,this.checked)"> Insert &nbsp;</td>
+							<td><input type="checkbox" id="C2b" name="C2b" onclick="jCheckMe(this.id,this.checked)"> Amend &nbsp;</td>
+							<td><input type="checkbox" id="C2c" name="C2c" onclick="jCheckMe(this.id,this.checked)"> Delete &nbsp;</td>
+							<td><input type="checkbox" id="C2d" name="C2d" onclick="jCheckMe(this.id,this.checked)"> Display &nbsp;</td>
+							<td><input type="checkbox" id="C2e" name="C2e" onclick="jCheckMe(this.id,this.checked)"> Print</td>
+						</tr>                       
+					</table>
+					</div>
+			</div>
+			<button id="B1" name="B1" class="back-btn green-btn" onclick="jSaveMe()">Save</button> <button id="B2" name="B2" class="back-btn green-btn" onclick="jDeleteMe()">Delete</button>
+		</div>
+	</div>
+</div>
+</form>
+<script>
+    var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script language="cache" runat="server">
+	d jQueryCore^CSP999
+</script>
+</body>
+<script type="text/javascript">
+T1=self.F1.T1,T2=self.F1.T2
+C1a=self.F1.C1a,C1b=self.F1.C1b,C1c=self.F1.C1c,C1d=self.F1.C1d,C1e=self.F1.C1e,C1f=self.F1.C1f
+
+function jInitMe(){
+	//#server(..cInitMe())#
+}
+
+function jCheckMe(fld,val){
+	alert(fld + " checked is " + val)
+
+}
+
+function jSaveMe(){
+	
+}
+
+function jDeleteMe(){
+	
+}
+
+
+</script>
+</html>

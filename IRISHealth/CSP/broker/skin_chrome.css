@@ -1,0 +1,33 @@
+/*
+	skin_chrome.css
+	Additional CSS for "Chrome" color scheme
+	Copyright (c) 2009 InterSystems Corp. ALL RIGHTS RESERVED.
+*/
+
+.zenLabel {
+	color: #404040;
+}
+
+#desktop {
+	background: #F8F8F8;
+}
+
+/* div around left-hand column */
+#contentsLeft {
+	background: #F0F0F0;
+	border-right: 1px solid #D0D0D0;
+}
+
+
+/* widget frame */
+.dswidgetHeader {
+	background: #F8F8F8;
+}
+
+.dswidgetSidebar {
+	background: #F8F8F8;
+}
+
+.dswidgetFooter {
+	background: #F8F8F8;
+}

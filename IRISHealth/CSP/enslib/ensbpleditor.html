@@ -1,0 +1,98 @@
+<!--
+	ensbpleditor.html
+	Copyright (c) 2003, InterSystems Corp.
+	ALL RIGHTS RESERVED
+
+	HTML wrapper for BPL editor
+-->
+
+<html><head>
+<style>
+body { margin: 0px; padding: 0px; }
+</style>
+
+<!-- detect svg -->
+<script language="JavaScript" src="svgcheck.js"></script>
+<script language="VBScript" src="svgcheck.vbs"></script>
+
+<script language='javascript'>
+function document_save() {
+	self.getCanvas().invokeOperation('saveDiagram',null);
+}
+function document_open(state) {
+	self.getCanvas().invokeOperation('openDiagram',state);
+}
+function document_delete() {
+	self.getCanvas().invokeOperation('deleteItem',null);
+}
+function document_arrange() {
+	self.getCanvas().invokeOperation('arrangeShapes',null);
+}
+function document_listItems(type) {
+	self.getCanvas().invokeOperation('listItems',type);
+}
+function document_cut() {
+	self.getCanvas().invokeOperation('cutItem');
+}
+function document_undo() {
+	self.getCanvas().invokeOperation('undo');
+}
+function document_canUndo() {
+	self.getCanvas().invokeOperation('canUndo');
+}
+function document_isModified() {
+	self.getCanvas().invokeOperation('isModified');
+}
+function document_redo() {
+}
+function document_copy() {
+	self.getCanvas().invokeOperation('copyItem');
+}
+function document_paste() {
+	self.getCanvas().invokeOperation('pasteItem');
+}
+function document_createShape(shapename) {
+	self.getCanvas().invokeOperation('createShape',shapename);
+}
+function document_getZoom() {
+	self.getCanvas().invokeOperation('getZoom');
+}
+function document_setZoom(zoom) {
+	self.getCanvas().invokeOperation('setZoom',zoom);
+}
+function document_getDiagramInfo() {
+	self.getCanvas().invokeOperation('getDiagramInfo');
+}
+function document_setReadOnly(ro) {
+	self.getCanvas().invokeOperation('setReadOnly',ro);
+}
+function document_getProperty(prop) {
+	self.getCanvas().invokeOperation('getProperty',prop);
+}
+function document_setProperty(prop, val) {
+	self.getCanvas().invokeOperation('setProperty',prop,val);
+}
+function getCanvas() {
+	return self.document.getElementById('SVGEmbed').getSVGDocument().getElementById('canvas');
+}
+var extCounter = 0;
+function raiseEvent(type) {
+	self.document.title = type + ":" + extCounter++;
+}
+</script>
+</head><body>
+
+<!-- detect svg -->
+<script language="JavaScript">
+checkAndGetSVGViewer();
+</script>
+
+<xml id='initialState'>
+<diagram Name="" Width="2000" Height="2000" Request="Ens.Request" Response="Ens.Response" Language="objectscript" ShowAnnotation="1" >
+<shape _index="0" _Type="start" Name="" xPos="500" yPos="100"  Annotation="" ShowAnnotation="0" />
+<shape _index="1" _Type="end" Name="" xPos="500" yPos="600"  Annotation="" ShowAnnotation="0" />
+</diagram>
+</xml>
+<xml id='results'></xml>
+<embed id='SVGEmbed' name='SVGEmbed' type='image/svg-xml' src='ensbplcanvas.svg' height='2000' width='2000'>
+</body></html>

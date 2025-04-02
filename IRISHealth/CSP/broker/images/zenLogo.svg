@@ -1,0 +1,233 @@
+<?xml version="1.0" ?>
+<!--
+	ZEN Logo
+-->
+
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
+	onload="initLogo()"
+> 
+
+<style type="text/css"><![CDATA[
+
+.zenBackground {
+	fill: url(#background);
+}
+
+.zenLine {
+	stroke: darkblue;
+	stroke-width: 2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-opacity: 0.3;
+	fill-opacity: 0.75;
+}
+
+.zenLine2 {
+	stroke: darkblue;
+	stroke-width: 0.5;
+	fill: none;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	opacity: 0.1;
+}
+
+.zenRay {
+	stroke: darkblue;
+	stroke-width: 0.5;
+	fill: none;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	opacity: 0.5;
+}
+
+.zenLetter {
+	stroke: black;
+	fill: none;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.zenLetter2 {
+	fill: none;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.zenLetter3 {
+	stroke: #202040;
+	fill: none;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+]]></style>
+
+<script language="text/javascript">
+<![CDATA[
+
+var timerID = null;
+var timerInterval = 75;
+var counter = 90;
+var colorIndex = 0;
+var colorIndex2 = 0;
+var ready = true;
+var ready2 = true;
+var letterColor = new Array('orange','yellow','blue','red','purple','white');
+
+function initLogo()
+{
+	updateImage();
+}
+
+function updateImage()
+{
+	// fade letters in/out
+	counter++;
+	var opacity = (Math.sin(counter/20)+1)/2;
+	opacity = Math.floor(opacity*100)/100;
+	opacity = (opacity < 0) ? 0 : opacity;
+	var opacity2 = 1.0 - opacity;
+
+	var opacity3 = (Math.sin((counter-10)/20)+1)/2;
+	opacity3 = Math.floor(opacity3*100)/100;
+	opacity3 = (opacity3 < 0) ? 0 : opacity3;
+	if (opacity3 == 0 && ready) {
+		ready = false;
+		colorIndex++;
+		colorIndex = colorIndex % letterColor.length;
+	}
+	else if (opacity3 != 0) {
+		ready = true;
+	}
+	if (opacity > 0.95 && ready2) {
+		ready2 = false;
+		colorIndex2++;
+		colorIndex2 = colorIndex2 % letterColor.length;
+	}
+	else if (opacity < 0.95) {
+		ready2 = true;
+	}
+	
+	var letters = document.getElementById('letters');
+	if (letters) {
+		letters.setAttribute('opacity',opacity);
+		letters.setAttribute('stroke-width',opacity*8);
+	}
+
+	var letters = document.getElementById('letters2');
+	if (letters) {
+		letters.setAttribute('opacity',opacity3);
+		letters.setAttribute('stroke-width',opacity3*4);
+		letters.setAttribute('stroke',letterColor[colorIndex]);
+	}
+
+	var letters = document.getElementById('letters3');
+	if (letters) {
+		letters.setAttribute('opacity',opacity3);
+		letters.setAttribute('stroke-width',opacity3*8);
+	}
+
+	var rays = document.getElementById('rays');
+	if (rays) {
+		rays.setAttribute('opacity',opacity);
+	}
+
+	var pyr = document.getElementById('pyramid');
+	if (pyr) {
+		pyr.setAttribute('opacity',opacity2);
+		pyr.setAttribute('fill',letterColor[colorIndex2]);
+	}
+	
+
+	// restart timer
+	timerID = window.setTimeout("updateImage()",timerInterval);
+}
+
+]]>
+</script>
+
+<defs>
+<linearGradient id="background" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" style="stop-color:#3030E0" />
+<stop offset="20%" style="stop-color:#902090" />
+<stop offset="35%" style="stop-color:#402040" />
+</linearGradient>
+</defs>
+
+<svg x="0" y="0" width="600" height="600" viewBox="0 0 100 100">
+<rect id="back" class="zenBackground" x="0" y="0" width="400" height="400"/>
+	
+<g id="pyramid"  opacity="1.0">
+<path class="zenLine" d="M 10 80 L 90 80 50 20 z" />
+<line class="zenLine2" x1="16.6" y1="70" x2="83.3" y2="70" />
+<line class="zenLine2" x1="23.3" y1="60" x2="76.6" y2="60" />
+<line class="zenLine2" x1="30.0" y1="50" x2="70.0" y2="50" />
+<line class="zenLine2" x1="36.6" y1="40" x2="63.3" y2="40" />
+<line class="zenLine2" x1="43.3" y1="30" x2="56.6" y2="30" />
+</g>
+
+<g id="rays"  opacity="0.0">
+<line class="zenRay" x1="50" y1="15" x2="50" y2="10" transform="rotate(0,50,20)" />
+<line class="zenRay" x1="50" y1="15" x2="50" y2="10" transform="rotate(45,50,20)" />
+<line class="zenRay" x1="50" y1="15" x2="50" y2="10" transform="rotate(-45,50,20)" />
+<line class="zenRay" x1="50" y1="15" x2="50" y2="10" transform="rotate(90,50,20)" />
+<line class="zenRay" x1="50" y1="15" x2="50" y2="10" transform="rotate(-90,50,20)" />
+</g>
+
+<g id="letters3" opacity="0.0" transform="translate(2,2)">
+<!-- Z -->
+<line class="zenLetter3" x1="30" y1="50" x2="10" y2="50" />
+<line class="zenLetter3" x1="30" y1="50" x2="10" y2="80" />
+<line class="zenLetter3" x1="30" y1="80" x2="10" y2="80" />
+
+<!-- E -->
+<line class="zenLetter3" x1="40" y1="80" x2="40" y2="50" />
+<line class="zenLetter3" x1="40" y1="50" x2="60" y2="50" />
+<line class="zenLetter3" x1="40" y1="65" x2="60" y2="65" />
+<line class="zenLetter3" x1="40" y1="80" x2="60" y2="80" />
+
+<!-- N -->
+<line class="zenLetter3" x1="70" y1="80" x2="70" y2="50" />
+<line class="zenLetter3" x1="90" y1="80" x2="90" y2="50" />
+<line class="zenLetter3" x1="70" y1="50" x2="90" y2="80" />
+</g>
+
+<g id="letters" opacity="0.0">
+<!-- Z -->
+<line class="zenLetter" x1="30" y1="50" x2="10" y2="50" />
+<line class="zenLetter" x1="30" y1="50" x2="10" y2="80" />
+<line class="zenLetter" x1="30" y1="80" x2="10" y2="80" />
+
+<!-- E -->
+<line class="zenLetter" x1="40" y1="80" x2="40" y2="50" />
+<line class="zenLetter" x1="40" y1="50" x2="60" y2="50" />
+<line class="zenLetter" x1="40" y1="65" x2="60" y2="65" />
+<line class="zenLetter" x1="40" y1="80" x2="60" y2="80" />
+
+<!-- N -->
+<line class="zenLetter" x1="70" y1="80" x2="70" y2="50" />
+<line class="zenLetter" x1="90" y1="80" x2="90" y2="50" />
+<line class="zenLetter" x1="70" y1="50" x2="90" y2="80" />
+</g>
+
+<g id="letters2" opacity="0.0">
+<!-- Z -->
+<line class="zenLetter2" x1="30" y1="50" x2="10" y2="50" />
+<line class="zenLetter2" x1="30" y1="50" x2="10" y2="80" />
+<line class="zenLetter2" x1="30" y1="80" x2="10" y2="80" />
+
+<!-- E -->
+<line class="zenLetter2" x1="40" y1="80" x2="40" y2="50" />
+<line class="zenLetter2" x1="40" y1="50" x2="60" y2="50" />
+<line class="zenLetter2" x1="40" y1="65" x2="60" y2="65" />
+<line class="zenLetter2" x1="40" y1="80" x2="60" y2="80" />
+
+<!-- N -->
+<line class="zenLetter2" x1="70" y1="80" x2="70" y2="50" />
+<line class="zenLetter2" x1="90" y1="80" x2="90" y2="50" />
+<line class="zenLetter2" x1="70" y1="50" x2="90" y2="80" />
+</g>
+
+</svg>
+
+</svg>

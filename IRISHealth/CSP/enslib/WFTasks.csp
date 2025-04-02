@@ -1,0 +1,60 @@
+<!--
+Workflow: Workflow task list
+-->
+
+<AutoPage domain="Ensemble" pagename="Workflow Tasks" parentpage="WFHome.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Workflow Tasks</Text>
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>The tasks below are either directly assigned to you or are unassigned. You can view task details or take ownership of unassigned tasks using the Review command.</Text>
+	<Query>EnsLib.Workflow.Engine:ListTasksForCurrentUser</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>false</ShowZebra>
+	<ShowRowNumbers>true</ShowRowNumbers>
+	<AutoRefresh>true</AutoRefresh>
+	<HiddenColumns>ID,UserName</HiddenColumns>
+	
+	<Conditions>
+		<!-- assigned -->
+		<Condition>
+			<ColumnName>AssignedTo</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>{UserName}</Value>
+			<RowStyle>background: #AAAAFF;</RowStyle>
+		</Condition>
+
+		<!-- new task -->
+		<Condition>
+			<ColumnName>New</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>*</Value>
+			<CellStyle>font-weight:bold; background: yellow; </CellStyle>
+		</Condition>
+
+		<!-- hi priority -->
+		<Condition>
+			<ColumnName>Priority</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>1</Value>
+			<CellStyle>font-weight:bold; background: yellow; </CellStyle>
+		</Condition>
+	</Conditions>
+	
+	<Actions>
+		<Action href="WFTasks.csp?$FRAME=Info" targetFrame="Info" name="$A">
+			<Caption>Review</Caption>
+			<Popup>Review this task.</Popup>
+			<IDValues>{ID}</IDValues>
+		</Action>
+	</Actions>
+
+</Pane>
+
+<Pane name="Info" type="EnsLib.Workflow.UI.ItemDetailPane">
+	<FrameStyle>none</FrameStyle>
+</Pane>
+
+</AutoPage>

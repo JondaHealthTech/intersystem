@@ -1,0 +1,1660 @@
+<AutoPageENS domain="Ensemble" parentpage="UtilEnsRuleList.csp" pagename="Business Rule Editor" title="@Ensemble:EnsRuleEditor@Business Rule Editor">
+<CSP:CLASS INCLUDES="Ensemble,EnsUI">
+
+<script language="CACHE" method="OnPreHTTP" ReturnType="%Boolean">
+	Set $ZT="Trap"
+	Do SetIO^%NLS($$MapCharset^%NLS(..#CHARSET))
+
+	// test for submit
+	If ($G(%request.Data("submitType",1)) = "save") {
+
+		// get serial state of Rules and replace
+		Set tState = "<?xml version=""1.0"" ?>" _ $C(13,10) _ $G(%request.Data("data",1))
+
+		Set tSC = ##class(Ens.Rule.RuleSet).Load("string",tState,0,.tRuleSet)
+		If $$$ISERR(tSC) || '$IsObject(tRuleSet) {
+			// redirect to display error
+			Set %response.Redirect = "UtilEnsRuleEditor.csp?$ID1=" _ $G(%request.Data("$ID1",1)) _ "&ERROR=" _ ..EscapeURL(tSC)
+		} Else {
+			// redirect after submit
+			Set %response.Redirect = "UtilEnsRuleEditor.csp?$ID1=" _ tRuleSet.%Id()
+		}
+		Quit 1
+	}
+	ElseIf ($G(%request.Data("submitType",1)) = "delete") {
+		
+		// delete the specified Rule Definition (and all old versions)
+		Set tRuleSetId = $G(%request.Data("$ID1",1))
+		Set tPackage = $P(tRuleSetId,"||",1)
+		Set tRuleName = $P(tRuleSetId,"||",2)
+		Set tSC = ##class(Ens.Rule.RuleDefinition).PurgeOldVersions(tPackage,tRuleName,0)
+
+		// redirect after submit
+		Set %response.Redirect = "UtilEnsRuleList.csp"
+		Quit 1
+	}
+	// see if this is the correct editor for this rule type
+	Set tType = $G(%request.Data("$ID2",1))
+	If ((tType '= "") && (tType '= "UtilEnsRuleEditor.csp")) {
+		Set tReadOnly = $G(%request.Data("READONLY",1),0)
+
+		// find editor type
+		Set tURL = $zobjclassmethod(tType,"%GetParameter","RULEEDITORURL")
+		If (tURL '= "") {
+			Set %response.Redirect = tURL _ "?$ID1=" _ $G(%request.Data("$ID1",1))
+			If (tReadOnly) {
+				Set %response.Redirect = %response.Redirect _ "&READONLY=1"
+			}
+		} Else {
+			// no editor available
+			Set %response.Redirect = "UtilEnsRuleList.csp"
+		}
+		Quit 1
+	}
+	Quit ##super()
+
+:Trap
+	Set $ZT=""
+	Quit 1	
+</script>
+
+<script language="CACHE" runat="SERVER">
+	Set tReadOnly = $G(%request.Data("READONLY",1),0)
+	
+	Set tError = $G(%request.Data("ERROR",1))
+	Set tIsError = (tError '= "")
+	Set sError = $$$EnsMsgError
+	Set sReadOnly = $$$EnsMsgReadOnly
+	Set tStatus = $S(tIsError:sError,tReadOnly:sReadOnly,1:$$$EnsMsgOk)
+
+	// Get ID of RuleSet
+	Set tRuleSetId = $G(%request.Data("$ID1",1))
+	Set tPackage = $P(tRuleSetId,"||",1)
+	Set tRuleName = $P(tRuleSetId,"||",2)
+	Set tContextClass = ""
+	Set tRuleSet = ""
+	Set tIsNew = 0
+	Set tRoutineName = ""
+
+	If (tRuleSetId '= "") {
+		// edit existing RuleSet
+		Set tRuleSet = ##class(Ens.Rule.RuleSet).Open(tPackage,tRuleName)
+	}
+	If ('$IsObject(tRuleSet)) {
+		// new
+		Set tRuleSet = ##class(Ens.Rule.RuleSet).%New()
+		Set tRuleSet.HostClass = tPackage
+		Set tRuleSet.Name = tRuleName
+		Set tStatus = $S(tIsError:sError,tReadOnly:sReadOnly,1:$$$LocalizeText("Ensemble","NewRuleSet","New RuleSet"))
+		Set tContextClass = tRuleSet.ContextClass
+		Set tIsNew = 1
+	}
+	Else {
+		Set tRoutineName = tRuleSet.RoutineName
+	}
+	Set tContextClass = tRuleSet.ContextClass
+	Set:tRoutineName="" tRoutineName = "N/A"
+
+	// Messages
+	
+	// The messages below are used in JavaScript code; the localizable ones are escaped
+	Set msgDelRule = $ZCVT($$$LocalizeText("RuleEditor","msgDelRule","Delete this rule"),"O","JS")
+	Set msgDelCond = $ZCVT($$$LocalizeText("RuleEditor","msgDelCond","Delete this condition"),"O","JS")
+	Set msgDelAction = $ZCVT($$$LocalizeText("RuleEditor","msgDelAction","Delete this condition"),"O","JS")
+	Set msgEditOp = $ZCVT($$$LocalizeText("RuleEditor","msgEditOp","Edit this value"),"O","JS")
+	Set msgNewRule = $ZCVT($$$LocalizeText("RuleEditor","msgNewRule","Add a new rule"),"O","JS")
+	Set msgEnable = $ZCVT($$$LocalizeText("RuleEditor","msgEnable","Enable or disable this rule"),"O","JS")
+	Set msgNewCond = $ZCVT($$$LocalizeText("RuleEditor","msgNewCond","Add a new condition"),"O","JS")
+	Set msgNewAction = $ZCVT($$$LocalizeText("RuleEditor","msgNewAction","Add a new action"),"O","JS")
+	Set msgNewCmd = $ZCVT($$$LocalizeText("RuleEditor","msgNewCmd","Add"),"O","JS")
+	Set msgEditCmd = "..."
+	Set msgRule = $$$Text("Rule","RuleEditor")
+
+	//Set msgRemoveCmd = "&#9587;"
+	Set msgRemoveCmd = "X"
+	Set msgUpCmd = "&#9650;"
+	Set msgDownCmd = "&#9660;"
+
+	Set msgUpRule = $ZCVT($$$LocalizeText("RuleEditor","msgUpRule","Move this rule up one position"),"O","JS")
+	Set msgDownRule = $ZCVT($$$LocalizeText("RuleEditor","msgDownRule","Move this rule down one position"),"O","JS")
+
+	Set msgRemoveRulePrompt = $ZCVT($$$LocalizeText("RuleEditor","msgRemoveRulePrompt","Do you wish to remove this rule?"),"O","JS")
+	Set msgRemoveCondPrompt = $ZCVT($$$LocalizeText("RuleEditor","msgRemoveCondPrompt","Do you wish to remove this condition?"),"O","JS")
+	Set msgRemoveActionPrompt = $ZCVT($$$LocalizeText("RuleEditor","msgRemoveActionPrompt","Do you wish to remove this action?"),"O","JS")
+
+	Set msgRevertPrompt = $ZCVT($$$LocalizeText("RuleEditor","msgRevertPrompt","Revert to last saved version?"),"O","JS")
+	
+	// The messages below are used in HTML
+	Set msgSaveRuleSet = $$$LocalizeText("RuleEditor","msgSaveRuleSet","Save this RuleSet")
+	Set msgSaveCmd = $$$LocalizeText("RuleEditor","msgSaveCmd","Save")
+
+	Set msgRevertRuleSet = $$$LocalizeText("RuleEditor","msgRevertRuleSet","Revert to last saved version.")
+
+	Set msgRevertCmd = $$$LocalizeText("RuleEditor","msgRevertCmd","Revert")
+
+	Set msgEditRuleSetCmd = $$$LocalizeText("RuleEditor","msgEditRuleSetCmd","Edit")
+	Set msgEditRuleSet = $$$LocalizeText("RuleEditor","msgEditRuleSet","Edit this RuleSet.")
+
+	Set msgDeleteRuleSet = $$$LocalizeText("RuleEditor","msgDeleteRuleSet","Delete this RuleSet")
+	Set msgDeleteCmd = $$$LocalizeText("RuleEditor","msgDeleteCmd","Delete")
+	Set msgDeleteRuleSetPrompt = $$$LocalizeText("RuleEditor","msgDeleteRuleSetPrompt","Do you wish to delete this Rule Set?")
+
+	Set msgList = $$$LocalizeText("RuleEditor","msgList","Return to list of rules")
+	Set msgListCmd = $$$LocalizeText("RuleEditor","msgListCmd","Rule List")
+	Set msgGotoListPrompt = $$$LocalizeText("RuleEditor","msgGotoListPrompt","There are changes made; Do you wish to lose them?")
+
+	Set msgLog = $$$LocalizeText("RuleEditor","msgLog","View the Log for this Rule.")
+	Set msgLogCmd = $$$LocalizeText("RuleEditor","msgLogCmd","Rule Log")
+
+	Set sModified = $$$EnsMsgModified
+	Set sSaving = $$$EnsMsgSaving
+	Set sRules = $$$EnsMsgRules
+	Set sConditions = $$$LocalizeText("Ensemble","Conditions","Conditions")
+	Set sActions = $$$LocalizeText("Ensemble","Actions","Actions")
+	Set sDefault = $$$LocalizeText("Ensemble","Default","Default: ")
+	Set sReturn = $$$LocalizeText("Ensemble","Return","Return: ")
+	Set sDeleting = $$$LocalizeText("Ensemble","Deleting","Deleting...")
+	If (tReadOnly) {
+		Set msgSummaryDesc = $$$LocalizeText("RuleEditor","msgSummaryDesc","The following table shows the name and other data for this Rule Set.")
+		Set msgRulesDesc = $$$LocalizeText("RuleEditor","msgRulesDesc","The table below shows the rules that make up this Rule Set.")
+		If (tIsNew) {
+			Set msgSummaryDesc = msgSummaryDesc _ "<br>"_$$$LocalizeText("RuleEditor","msgSummaryDesc1","This Rule Set does not exist within the database. Press Edit to create a new Rule Set.")
+			Set msgEditRuleSet = $$$LocalizeText("RuleEditor","msgEditRuleSet","Create a new Rule Set.")
+			Set msgEditCmd = $$$LocalizeText("RuleEditor","msgEditCmd","Create")
+		}
+	}
+	Else {
+		Set msgSummaryDesc = $$$LocalizeText("RuleEditor","msgSummaryDesc2","Use the following table to view and edit the summary information for this Rule Set.")
+		Set msgRulesDesc = $$$LocalizeText("RuleEditor","msgRulesDesc2","Use the table below to add, remove, and edit the rules that make up this Rule Set.")
+	}
+
+</script>
+
+<html>
+<head>
+<title><csp:text Domain="Ensemble">Business Rule Editor</csp:text></title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+<style>
+
+table.Rules {
+	border: 1px black solid;
+	font-size: 1.0em;
+}
+
+table.Rules td {
+	border-bottom: 1px black solid;
+	border-right: 1px black solid;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+table.Rules th {
+	text-align: left;
+	color: yellow;
+	border-bottom: 1px black solid;
+	border-right: 1px black solid;
+	padding: 5px;
+	font-size: 0.8em;
+	background: #000040;
+	background-image: url(/csp/broker/images/grad-blue-10x30.png);
+	background-repeat: repeat-x;
+}
+
+table.Rules tr.EvenRow {
+	background: lightblue;
+	padding-bottom: 5px;
+}
+
+table.Rules tr.OddRow {
+	background: #DDEEFF;
+	padding-bottom: 5px;
+}
+
+table.Rules tr.DisabledRow {
+	background: gray;
+	padding-bottom: 5px;
+}
+
+table.RuleCol {
+	border: none;
+	padding: 0px;
+}
+
+table.RuleCol td {
+	border: none;
+	padding: 0px;
+}
+
+table.RuleCol td.RuleName {
+	border: none;
+	padding: 0px;
+	font-weight: bold;
+}
+
+table.RuleCol td.RuleDescription {
+	border: none;
+	padding: 0px;
+	color: green;
+	font-size: 0.6em;
+}
+
+table.Conditions {
+	border: none;
+	padding: 0px;
+}
+
+table.Conditions td {
+	border: none;
+	padding: 0px;
+}
+
+table.Actions td {
+	border: none;
+	padding: 0px;
+}
+
+.Modified {
+	background: orange;
+	color: black;
+}
+
+.Disabled {
+	background: gray;
+	color: darkgray;
+}
+
+.Error {
+	background: red;
+	color: white;
+}
+
+span.statusMsg {
+	color: blue;
+}
+
+span.RuleLabel {
+	color: black;
+	font-size: 0.8em;
+	font-variant: small-caps;
+}
+
+span.Action {
+	color: black;
+	font-size: 0.8em;
+	font-variant: small-caps;
+}
+
+input.EditButton {
+	font-size: 8pt;
+	color: blue;
+}
+
+input.RemoveButton {
+	font-size: 8pt;
+	font-weight: bold;
+	color: red;
+}
+
+table.Summary {
+	border: 1px black solid;
+	font-size: 0.8em;
+	background: #C0C0C0;
+	background-image: url(/csp/broker/images/grad-halfgray-10x500.png);
+	background-repeat: repeat-x;
+}
+
+table.Summary th {
+	color: yellow;
+	border-bottom: 1px gray solid;
+	border-right: 1px gray solid;
+	background: #000040;
+	background-image: url(/csp/broker/images/grad-blue-10x30.png);
+	background-repeat: repeat-x;
+}
+
+table.Summary td {
+	border-bottom: 1px gray solid;
+	border-right: 1px gray solid;
+}
+
+table.Summary td.SummaryLabel {
+	font-weight: bold;
+	cursor: default;
+}
+
+</style>
+
+<script language="JavaScript">
+
+function escHTML(val)
+{
+	return escXML(val);
+}
+
+// quote any special xml characters within text
+function escXML(text)
+{
+	var out = '';
+	
+	// don't escape numbers
+	if (text == (text * 1)) {
+		return text;
+	}
+
+	// skip null values
+	if (text == null || text == '') {
+		return '';
+	}
+
+	for (var p = 0; p < text.length; p++) {
+		var ch = text.charAt(p);
+		switch (ch) {
+		case '&':
+			out += '&amp;';
+			break;
+		case '<':
+			out += '&lt;';
+			break;
+		case '>':
+			out += '&gt;';
+			break;
+		case '"':
+			out += '&quot;';
+			break;
+		default:
+			out += ch;
+			break;
+		}
+	}
+
+	return out;
+}
+
+// commands
+
+var isModified = false;
+
+function setModified(flag)
+{
+	if (isModified == flag) {
+		return;
+	}
+	
+	isModified = flag;
+	self.document.getElementById('btnRevert').disabled = !isModified;
+	self.document.getElementById('btnSave').disabled = !isModified;
+	self.document.getElementById('statusMsg').innerText = isModified ? 'Modified' : 'OK';
+}
+
+function showErrorStatus()
+{
+	self.document.getElementById('statusMsg').innerText = 'Error';
+}
+
+function editRuleSet()
+{
+	self.document.location = '#(..Link("UtilEnsRuleEditor.csp",,1))#' + '$ID1=' + escape('#(tRuleSetId)#');
+}
+
+function gotoList()
+{
+	if (isModified) {
+		if (!confirm('#(msgGotoListPrompt)#')) {
+			return;
+		}
+	}
+	self.document.location = '#(..Link("UtilEnsRuleList.csp"))#';
+}
+
+function gotoRuleLog()
+{
+	self.document.location = '#(..Link("UtilEnsRuleLog.csp",,1))#' + '$ID1=' + escape(ruleSet.host) + '&$ID2=' + escape(ruleSet.name);
+}
+
+function addRule()
+{
+	rule = ruleSet.addRule(new Rule());
+	ruleSet.renderHTML("table");
+	setModified(true);
+	
+	return true;
+}
+
+function addCondition(rno)
+{
+	var rule = ruleSet.rules[rno];
+	rule.addCondition(new Condition("AND","","=",""));
+	ruleSet.renderHTML("table");
+	setModified(true);
+	
+	return true;
+}
+
+function addAction(rno)
+{
+	var rule = ruleSet.rules[rno];
+	rule.addAction(new Action("Assign"));
+	ruleSet.renderHTML("table");
+	setModified(true);
+	return true;
+}
+
+function removeRule(id)
+{
+	var rule = ruleSet.rules[id];
+	if (confirm('#(msgRemoveRulePrompt)#')) {
+		ruleSet.rules.splice(id,1);
+		ruleSet.renderHTML("table");
+		setModified(true);
+	}
+	return true;
+}
+
+function removeCondition(rno,cno)
+{
+	var rule = ruleSet.rules[rno];
+	var cond = rule.conditions[cno];
+	if (confirm('#(msgRemoveCondPrompt)#')) {
+		rule.conditions.splice(cno,1);
+		ruleSet.renderHTML("table");
+		setModified(true);
+	}
+	return true;
+}
+
+function removeAction(rno,ano)
+{
+	var rule = ruleSet.rules[rno];
+	var action = rule.actions[ano];
+	if (confirm('#(msgRemoveActionPrompt)#')) {
+		rule.actions.splice(ano,1);
+		ruleSet.renderHTML("table");
+		setModified(true);
+	}
+	return true;
+}
+
+function moveRuleUp(id)
+{
+	if (id > 0) {
+		var rule1 = ruleSet.rules[id-1];
+		var rule2 = ruleSet.rules[id];
+		ruleSet.rules[id-1] = rule2;
+		ruleSet.rules[id] = rule1;
+		ruleSet.renderHTML("table");
+		setModified(true);
+	}
+	return true;
+}
+
+function moveRuleDown(id)
+{
+	if (id < ruleSet.rules.length - 1) {
+		var rule1 = ruleSet.rules[id+1];
+		var rule2 = ruleSet.rules[id];
+		ruleSet.rules[id+1] = rule2;
+		ruleSet.rules[id] = rule1;
+		ruleSet.renderHTML("table");
+		setModified(true);
+	}
+	return true;
+}
+
+function revertRuleSet()
+{
+	if (confirm('#(msgRevertPrompt)#')) {
+		self.document.location.reload();
+	}
+	return true;
+}
+
+function saveRuleSet()
+{
+	if (ruleSet.host=='') {
+		alert('#($$$TextJS("You must enter a Package Name"))#');
+	} else if (ruleSet.name=='') {
+		alert('#($$$TextJS("You must enter a Rule Name"))#');
+	} else if (ruleSet.name.indexOf('.')!=-1) {
+		alert('#($$$TextJS("Rule name cannot contain the '.' character."))#');
+	} else if (ruleSet.name.indexOf('$')!=-1) {
+		alert('#($$$TextJS("Rule name cannot contain the '$' character."))#');
+	} else if ((ruleSet.name.indexOf(' ')==0) || (ruleSet.name.indexOf(' ')==(ruleSet.name.length)-1)) {
+		alert('#($$$TextJS("Rule name cannot contain a blank space as the first or last character."))#');
+	} else {
+		if ((ruleSet.effectiveBeginDateTime != '') || (ruleSet.effectiveEndDateTime != '')) {
+			var msgDateError = #server(..CheckEffectiveDates(ruleSet.effectiveBeginDateTime,ruleSet.effectiveEndDateTime))#;
+			if (msgDateError != '') {
+				alert(msgDateError);
+				return;
+			}
+		}
+		self.document.getElementById('statusMsg').innerText = '#(sSaving)#';
+		self.document.getElementById('btnSave').disabled = true;
+
+		var saveForm = self.document.saveForm;
+		saveForm.method = 'post';
+		saveForm.submitType.value = 'save';
+		saveForm.data.value = ruleSet.serialize();
+
+		saveForm.submit();
+	}
+}
+
+function deleteRuleSet()
+{
+	if (!confirm('#(msgDeleteRuleSetPrompt)#')) {
+		return false;
+	}
+	
+	self.document.getElementById('statusMsg').innerText = '#(sDeleting)#';
+	self.document.getElementById('btnDelete').disabled = true;
+
+	var saveForm = self.document.saveForm;
+	saveForm.method = 'post';
+	saveForm.submitType.value = 'delete';
+	saveForm.data.value = '';
+
+	saveForm.submit();
+}
+
+// display the operand editor popup
+// *id* is id of input control
+function editValue(evt,id,type)
+{
+	try {
+		var ctrl = self.document.getElementById(id);
+		var value = ctrl.value;
+		var old = value;
+	
+		value = encodeURIComponent(value);
+	
+	  	var url = 'UtilEnsRuleOpEdit.csp?VALUE=' + value + 
+	  				"&ID=" + encodeURIComponent(id) +
+	  				"&CONTEXT=" + encodeURIComponent(ruleSet.context) +
+	  				"&HOST=" + encodeURIComponent(ruleSet.host);
+	 
+		var sFeatures="dialogHeight: 400px; dialogWidth: 600px; dialogTop: " + event.clientY + "px; dialogLeft: " + event.clientX + "px; edge: Sunken; center: Yes; help: No; resizable: Yes; status: No;";
+	
+	  	// use IE Modal Dlg.
+		self.showModalDialog(url, ctrl, sFeatures);
+		
+		var nv = ctrl.value;
+		if (nv != old) {
+			// changed
+			switch(type) {
+			case 'op1':
+				operand1Change(ctrl,nv);
+				break;
+			case 'op2':
+				operand2Change(ctrl,nv);
+				break;
+			case 'returnValue':
+				returnValueChange(ctrl,nv);
+				break;
+			case 'defaultValue':
+				defaultValueChange(ctrl,nv);
+				break;
+			case 'actionProp':
+				actionPropertyChange(ctrl,nv,'property');
+				break;
+			case 'actionVal':
+				actionPropertyChange(ctrl,nv,'value');
+				break;
+			}
+		}
+	}
+	catch(ex) {
+		alert('Exception: ' + ex.message);
+	}
+	
+  	return true;
+}
+
+// ---
+// events
+
+function keyup(el)
+{
+	if (!ruleSet || ruleSet.readOnly) {
+		return;
+	}
+	
+	// see if this item is modified
+	var id = el.id.split("_");
+
+	switch(id[0]) {
+	case 'op1':
+		operand1Change(el,el.value);
+		break;
+	case 'op2':
+		operand2Change(el,el.value);
+		break;
+	case 'returnValue':
+		returnValueChange(el,el.value);
+		break;
+	case 'defaultValue':
+		defaultValueChange(el,el.value);
+		break;
+	case 'ruleDesc':
+		ruleDescChange(el,el.value);
+		break;
+	case 'ruleName':
+		ruleNameChange(el,el.value);
+		break;
+	case 'ruleContext':
+		ruleContextChange(el,el.value);
+		break;
+	case 'actionProp':
+		actionPropertyChange(el,el.value,'property');
+		break;
+	case 'actionVal':
+		actionPropertyChange(el,el.value,'value');
+		break;
+	}
+}
+
+function ruleDescChange(el,val)
+{
+	ruleSet.description = val;
+	if (ruleSet.description == originalRuleSet.description) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function rulePackageChange(el,val)
+{
+	ruleSet.host = val;
+	if (ruleSet.host == originalRuleSet.host) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function ruleNameChange(el,val)
+{
+	ruleSet.name = val;
+	if (ruleSet.name == originalRuleSet.name) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function effectiveBeginDateTimeChange(el,val)
+{
+	ruleSet.effectiveBeginDateTime = val;
+	if (ruleSet.effectiveBeginDateTime == originalRuleSet.effectiveBeginDateTime) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function effectiveEndDateTimeChange(el,val)
+{
+	ruleSet.effectiveEndDateTime = val;
+	if (ruleSet.effectiveEndDateTime == originalRuleSet.effectiveEndDateTime) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function reportGroupChange(el,val)
+{
+	ruleSet.reportGroup = val;
+	if (ruleSet.reportGroup == originalRuleSet.reportGroup) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function reportNameChange(el,val)
+{
+	ruleSet.reportName = val;
+	if (ruleSet.reportName == originalRuleSet.reportName) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function shortDescriptionChange(el,val)
+{
+	ruleSet.shortDescription = val;
+	if (ruleSet.shortDescription == originalRuleSet.shortDescription) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function ruleContextChange(el,val)
+{
+	ruleSet.context = val;
+	if (ruleSet.context == originalRuleSet.context) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function operand1Change(el,val)
+{
+	var id = el.id.split("_");
+	var rule = ruleSet.rules[id[1]];
+	var cond = rule.conditions[id[2]];
+	var orule = originalRuleSet.rules[id[1]];
+	var ocond = (orule ? orule.conditions[id[2]] : null);
+	cond.op1 = val;
+
+	if (ocond && cond.op1 == ocond.op1) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+
+	setModified(true);
+}
+
+function operand2Change(el,val)
+{
+	var id = el.id.split("_");
+	var rule = ruleSet.rules[id[1]];
+	var cond = rule.conditions[id[2]];
+	var orule = originalRuleSet.rules[id[1]];
+	var ocond = (orule ? orule.conditions[id[2]] : null);
+	cond.op2 = val;
+	if (ocond && cond.op2 == ocond.op2) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function operatorChange(el,val)
+{
+	var id = el.id.split("_");
+	var rule = ruleSet.rules[id[1]];
+	var cond = rule.conditions[id[2]];
+	var orule = originalRuleSet.rules[id[1]];
+	var ocond = (orule ? orule.conditions[id[2]] : null);
+	cond.operator = val;
+	
+	if (ocond && cond.operator == ocond.operator) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+
+	// test if operand2 needs to be modified
+	var op2 = self.document.getElementById('op2_' + id[1] + '_' + id[2]);
+	var op2edit = self.document.getElementById('op2edit_' + id[1] + '_' + id[2]);
+	if (val == "") {
+		op2edit.disabled = true;
+		op2.disabled = true;
+		op2.className = 'Disabled';
+	} else {
+		op2edit.disabled = false;
+		op2.disabled = false;
+		operand2Change(op2,op2.value);
+	}
+	setModified(true);
+}
+
+function actionPropertyChange(el,val,property)
+{
+	var id = el.id.split("_");
+	var rule = ruleSet.rules[id[1]];
+	var action = rule.actions[id[2]];
+	var orule = originalRuleSet.rules[id[1]];
+	var oaction = (orule ? orule.actions[id[2]] : null);
+	action.propertyBag[property] = val;
+	
+	if (oaction && action.propertyBag[property] == oaction.propertyBag[property]) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function joinChange(el,val)
+{
+	var id = el.id.split("_");
+	var rule = ruleSet.rules[id[1]];
+	var cond = rule.conditions[id[2]];
+	var orule = originalRuleSet.rules[id[1]];
+	var ocond = (orule ? orule.conditions[id[2]] : null);
+
+	cond.join = val;
+	if (ocond && cond.join == ocond.join) {
+		el.className = "";
+	}
+	else {
+		el.className = "Modified";
+	}
+
+	setModified(true);
+}
+
+function returnValueChange(el,val)
+{
+	var id = el.id.split("_");
+	var rule = ruleSet.rules[id[1]];
+	var orule = originalRuleSet.rules[id[1]];
+	rule.returnValue = val;
+
+	if (orule && rule.returnValue == orule.returnValue) {
+		el.className = "";
+	}
+	else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function defaultValueChange(el,val)
+{
+	ruleSet.defaultValue = val;
+	if (ruleSet.defaultValue == originalRuleSet.defaultValue) {
+		el.className = "";
+	}
+	else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function enableRule(el,val)
+{
+	el.className = "Modified";
+	var id = el.id.split("_");
+	var rule = ruleSet.rules[id[1]];
+	rule.disabled = !val;
+	
+	// update table
+	var tr = self.document.getElementById('row_' + id[1]);
+	if (rule.disabled) {
+		tr.className = 'DisabledRow';
+	}
+	else {
+		tr.className = id[1]%2 ? 'OddRow' : 'EvenRow';
+	}
+	setModified(true);
+}
+
+// ---
+
+var ruleSet = null;
+var originalRuleSet = null;
+
+/// client-side rules objects
+
+function RuleSet(host,name,ro,defval,desc,context,effectiveBeginDateTime,effectiveEndDateTime,reportGroup,reportName,shortDescription)
+{
+	this.rules = new Array();
+	this.host = host;
+	this.name = name;
+	this.context = context;
+	this.readOnly = ro;
+	this.description = desc;
+	this.defaultValue = defval;
+	this.defaultValueError = '';
+	this.effectiveBeginDateTime = effectiveBeginDateTime;
+	this.effectiveEndDateTime = effectiveEndDateTime;
+	this.reportGroup = reportGroup;
+	this.reportName = reportName;
+	this.shortDescription = shortDescription;
+
+	this.addRule = RuleSet_addRule;
+	this.renderHTML = RuleSet_renderHTML;
+	this.serialize = RuleSet_serialize;
+	this.clone = RuleSet_clone;
+}
+
+function RuleSet_clone()
+{
+	var clone = new RuleSet(this.host, this.name, this.readOnly, this.defaultValue, this.description, this.context, this.effectiveBeginDateTime, this.effectiveEndDateTime, this.reportGroup, this.reportName, this.shortDescription);
+	for (var r = 0; r < this.rules.length; r++) {
+		clone.addRule(this.rules[r].clone());
+	}
+	return clone;
+}
+
+function RuleSet_serialize()
+{
+	var s = '';
+	s += '<ruleSet name="' + escXML(this.name) + '"';
+	s += ' host="' + escXML(this.host) + '"';
+	if (this.effectiveBeginDateTime != '') { s += ' effectiveBeginDateTime="' + escXML(this.effectiveBeginDateTime) + '"'; }
+	if (this.effectiveEndDateTime != '') { s += ' effectiveEndDateTime="' + escXML(this.effectiveEndDateTime) + '"'; }
+	s += ' context="' + escXML(this.context) + '"';
+	s += ' default="' + escXML(this.defaultValue) + '"';
+	s += ' xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"';
+	s += '>\n';
+	if (this.description && this.description != '') {
+		s += '<description>' + escXML(this.description) + '</description>\n';
+	}
+	if (this.reportGroup && this.reportGroup != '') {
+		s += '<reportGroup>' + escXML(this.reportGroup) + '</reportGroup>\n';
+	}
+	if (this.reportName && this.reportName != '') {
+		s += '<reportName>' + escXML(this.reportName) + '</reportName>\n';
+	}
+	if (this.shortDescription && this.shortDescription != '') {
+		s += '<shortDescription>' + escXML(this.shortDescription) + '</shortDescription>\n';
+	}
+
+	for (var r = 0; r < this.rules.length; r++) {
+		s += this.rules[r].serialize();
+	}
+	s += '</ruleSet>';
+	return s;
+}
+
+function RuleSet_renderHTML(divname)
+{
+	var div = self.document.getElementById(divname);
+	if (!div) {
+		return;
+	}
+	var ro = this.readOnly;
+
+	var html = '';
+	html += '<table class="Rules" border="0" cellpadding="0" cellspacing="0">';
+	html += '<tr><th nowrap>&nbsp;</th><th nowrap>#(sRules)#</th><th nowrap>#(sConditions)#</th><th nowrap>#(sActions)#</th></tr>';
+	
+	for (var r = 0; r < this.rules.length; r++) {
+		html += '<tr id="row_' + r +'" class="' + (this.rules[r].disabled ? 'DisabledRow' : (r%2==0 ? 'EvenRow' : 'OddRow')) + '">';
+		html += this.rules[r].renderHTML(ro,r);
+		html += '</tr>';
+	}
+
+	// new rule button + default value
+	html += '<tr class="' + (r%2==0 ? 'EvenRow' : 'OddRow') + '">';
+	html += '<td>&nbsp;</td><td>';
+	if (!ro) {
+		html += '<input title="#(msgNewRule)#" type="button" class="EditButton" onclick="addRule();" value="#(msgNewCmd)#">';
+	}
+	html += '&nbsp;</td><td>&nbsp;</td><td nowrap><span class="RuleLabel">#(sDefault)# </span><input ' + (this.defaultValueError!='' ? 'class="Error" title="' + this.defaultValueError + '"' : '') + (ro?' readonly':'') + ' id="defaultValue" type="text" size="12" value="' + escHTML(this.defaultValue) + '" onchange="defaultValueChange(this,this.value);" onkeyup="keyup(this);">';
+	if (!ro) {
+		html += '<input class="EditButton" type="button" value="#(msgEditCmd)#" title="#(msgEditOp)#" onclick="editValue(event,\'defaultValue\',\'defaultValue\');">&nbsp;';
+	}
+
+	html += '</td></tr>';
+	html += '</table>';
+
+	div.innerHTML = html;
+
+	return html;
+}
+
+function RuleSet_addRule(rule)
+{
+	this.rules[this.rules.length] = rule;
+	return rule;
+}
+
+function Rule()
+{
+	this.conditions = new Array();
+	this.actions = new Array();
+	this.returnValue = '';
+	this.returnValueError = '';
+	this.disabled = false;
+
+	this.addCondition = Rule_addCondition;
+	this.addAction = Rule_addAction;
+	this.renderHTML = Rule_renderHTML;
+	this.serialize = Rule_serialize;
+	this.clone = Rule_clone;
+}
+
+function Rule_clone()
+{
+	var clone = new Rule();
+	clone.returnValue = this.returnValue;
+	clone.disabled = this.disabled;
+
+	for (var c = 0; c < this.conditions.length; c++) {
+		clone.addCondition(this.conditions[c].clone());
+	}
+
+	for (var a = 0; a < this.actions.length; a++) {
+		clone.addAction(this.actions[a].clone());
+	}
+
+	return clone;
+}
+
+function Rule_serialize()
+{
+	var s = '';
+	s += '<rule'
+	if (this.returnValue != '') {
+		s += ' return="' + escXML(this.returnValue) + '"';
+	}
+	if (this.disabled) {
+		s += ' disabled="true"';
+	}
+	s += '>\n';
+
+	for (var c = 0; c < this.conditions.length; c++) {
+		s += this.conditions[c].serialize();
+	}
+	for (var a = 0; a < this.actions.length; a++) {
+		s += this.actions[a].serialize();
+	}
+
+	s += '</rule>\n';
+	return s;
+}
+
+// render a rule as HTML
+// ro is readonly flag, id is rule #
+function Rule_renderHTML(ro,id)
+{
+	var html = '';
+
+	// enabled column
+	html += '<td><input title="#(msgEnable)#" type="checkbox" id="enabled_' + id + '" ' + (ro ? 'disabled ' : '') + (this.disabled ? '' : 'checked') + ' onclick="enableRule(this,this.checked);"></td>';
+
+	// rule # column
+	html += '<td>';
+	html += '<span class="RuleLabel">' + '#(msgRule)#' + ' ' + (id + 1) + '</span>';
+	if (!ro) {
+		html += '<hr>';
+		html += '<input type="button" title="#(msgDelRule)#" class="RemoveButton" onclick="removeRule(' + id + ');" value="#(msgRemoveCmd)#">';
+		if (id > 0) {
+			html += '<input type="button" title="#(msgUpRule)#" class="EditButton" onclick="moveRuleUp(' + id + ');" value="#(msgUpCmd)#">';
+		}
+		if (id < ruleSet.rules.length - 1) {
+			html += '<input type="button" title="#(msgDownRule)#" class="EditButton" onclick="moveRuleDown(' + id + ');" value="#(msgDownCmd)#">';
+		}
+	}
+	html += '&nbsp;</td>';
+	
+	// condition column
+	html += '<td><table class="Conditions" width="100%" border="0" cellpadding="0" cellspacing="0">';
+	for (var c = 0; c < this.conditions.length; c++) {
+		html += '<tr align="right">';
+		html += this.conditions[c].renderHTML(ro,id,c);
+		html += '</tr>';
+	}
+
+	// new condition button
+	if (!ro) {
+		html += '<tr align="right">';
+		html += '<td  align="left" colspan="5">&nbsp;';
+		html += '<input type="button" title="#(msgNewCond)#" class="EditButton" onclick="addCondition(' + id + ');" value="#(msgNewCmd)#">&nbsp;';
+		html += '</td></tr>';
+	}
+
+	html += '</table></td>';
+
+	// action column
+	html += '<td valign="top">';
+	html += '<table class="Actions" cellpadding="0" cellspacing="0" border="0">';
+	
+	// show other actions
+	for (var a = 0; a < this.actions.length; a++) {
+		html += "<tr>"
+		html += this.actions[a].renderHTML(ro,id,a);
+		html += "</tr>"
+	}
+	
+	html += '<tr><td>'
+	if (!ro) {
+		html += '<input title="#(msgNewAction)#" type="button" class="EditButton" onclick="addAction(' + id + ');" value="#(msgNewCmd)#">';
+	}	
+
+	html += '&nbsp;</td><td><span class="RuleLabel">' + '#(sReturn)# </span><input ' + (this.returnValueError!='' ? 'class="Error" title="' + this.returnValueError + '"' : '') + (ro?' readonly':'') + ' id="returnValue_' + id + '" type="text" size="12" value="' + escHTML(this.returnValue) + '" onchange="returnValueChange(this,this.value);" onkeyup="keyup(this);">';
+	if (!ro) {
+		html += '<input class="EditButton" type="button" value="#(msgEditCmd)#" title="#(msgEditOp)#" onclick="editValue(event,\'returnValue_'+id+'\',\'returnValue\');">&nbsp;';
+	}
+
+	html += "</td></tr></table>"
+	
+	html += '&nbsp;</td>';
+	
+	return html;
+}
+
+function Rule_addCondition(cond)
+{
+	this.conditions[this.conditions.length] = cond;
+	return cond;
+}
+
+function Rule_addAction(action)
+{
+	this.actions[this.actions.length] = action;
+	return action;
+}
+
+function Condition(join,op1,operator,op2)
+{
+	this.join = (join == '') ? null : join;
+	this.op1 = op1;
+	this.op1Error = '';
+	this.operator = operator;
+	this.op2 = op2;
+	this.op2Error = '';
+	this.renderHTML = Condition_renderHTML;
+	this.serialize = Condition_serialize;
+	this.clone = Condition_clone;
+}
+
+function Condition_clone()
+{
+	var clone = new Condition();
+	clone.op1 = this.op1;
+	clone.op2 = this.op2;
+	clone.operator = this.operator;
+
+	return clone;
+}
+
+function Condition_serialize()
+{
+	var s = '';
+	s += '<condition';
+	s += ' join="' + escXML(this.join) + '"';
+	s += ' op1="' + escXML(this.op1) + '"';
+	
+	if (this.operator != '') {
+		s += ' operator="' + escXML(this.operator) + '"';
+		s += ' op2="' + escXML(this.op2) + '"';
+	}
+	s += '/>\n';
+	return s;
+}
+
+// render a condition as HTML
+// ro is readonly flag, rno is rule #, cno is cond #
+function Condition_renderHTML(ro,rno,cno)
+{
+	var html = '';
+	
+	if (!ro) {
+		html += '<td>&nbsp;<input type="button" title="#(msgDelCond)#" class="RemoveButton" onclick="removeCondition('+rno+','+cno+');" value="#(msgRemoveCmd)#">&nbsp;</td>';
+	}
+
+	if (cno == 0) {
+		html += '<td align=left>&nbsp;<font size=2>IF</font>&nbsp;</td>';
+	} else {
+		html += '<td>&nbsp;<select '+ (ro?' readonly':'') + ' id="join_'+rno+'_'+cno+'" onchange="joinChange(this,this.value);">' + getJoinOptions(this.join) + '</select>&nbsp;</td>';
+	}
+	html += '<td nowrap align="left">';
+	html += '<input type="text" size="30" ' + (this.op1Error!='' ? 'class="Error" title="' + this.op1Error + '"' : '') + (ro?' readonly':'') + ' id="op1_'+rno+'_'+cno+'" value="' + escHTML(this.op1) + '" onchange="operand1Change(this,this.value);" onkeyup="keyup(this);">';
+	if (!ro) {
+		html += '<input class="EditButton" id="op1edit_'+rno+'_'+cno+'" type="button" value="#(msgEditCmd)#" title="#(msgEditOp)#" onclick="editValue(event,\'op1_'+rno+'_'+cno+'\',\'op1\');">&nbsp;';
+	}
+	html += '</td><td nowrap>';
+	html += '&nbsp;<select '+ (ro?'disabled':'') + ' id="op_'+rno+'_'+cno+'" onchange="operatorChange(this,this.value);">' + getOperatorOptions(this.operator) + '</select>&nbsp;</td>';
+	html += '<td nowrap align="left">';
+	html += '<input type="text" size="16" ' + ((this.operator=='') ? 'class="Disabled"' : (this.op2Error!='' ? 'class="Error" title="' + this.op2Error + '"' : '')) + (ro?' readonly':'') + ' id="op2_'+rno+'_'+cno+'" value="' + escHTML(this.op2) + '" onchange="operand2Change(this,this.value);" onkeyup="keyup(this);">';
+	if (!ro) {
+		html += '<input class="EditButton" id="op2edit_'+rno+'_'+cno+'" type="button" ' + (this.operator=='' ? 'disabled' : '') + ' value="#(msgEditCmd)#" title="#(msgEditOp)#" onclick="editValue(event,\'op2_'+rno+'_'+cno+'\',\'op2\');">&nbsp;';
+	}
+	html += '</td>';
+
+	return html;
+}
+
+function Action(type)
+{
+	this.type = type;
+	this.propertyBag = new Object();
+	this.propertyError = new Object(); // error msg indexed by property
+
+	this.serialize = Action_serialize;
+	this.renderHTML = Action_renderHTML;
+	this.clone = Action_clone;
+}
+
+function Action_clone()
+{
+	var clone = new Action(this.type);
+	return clone;
+}
+
+function Action_serialize()
+{
+	var s = '';
+	s += '<action';
+	s += ' xs:type="' + escXML(this.type) + '"';
+	
+	for (prop in this.propertyBag) {
+		if (this.propertyBag[prop]) {
+			s += ' ' + prop + '="' + escXML(this.propertyBag[prop]) + '"';
+		}
+	}
+	s += '/>\n';
+	return s;
+}
+
+function Action_renderHTML(ro,rno,ano)
+{
+	var html = '';
+	
+	html += '<td>';
+	if (!ro) {
+		html += '<input type="button" title="#(msgDelAction)#" class="RemoveButton" onclick="removeAction(' + rno + ',' + ano + ');" value="#(msgRemoveCmd)#">';
+	}
+	html += '&nbsp;</td>';
+	html += '<td>';
+	html += '<span class="RuleLabel">' + this.type + ':</span> ';
+
+	if (this.type == 'Assign') {
+		var prop = this.propertyBag['property'];
+		var val = this.propertyBag['value'];
+
+		var propErr = this.propertyError['property'];
+		propErr = (propErr == null) ? '' : propErr;
+		var valErr = this.propertyError['value'];
+		valErr = (valErr == null) ? '' : valErr;
+
+		html += '<span class="Action">';
+
+		html += '<input type="text" size="18" ' + (propErr!='' ? 'class="Error" title="' + propErr + '"' : '') + (ro?' readonly':'') + ' id="actionProp_'+rno+'_'+ano+'" value="' + escHTML(prop) + '" onchange="actionPropertyChange(this,this.value,\'property\');" onkeyup="keyup(this);">';
+		if (!ro) {
+			html += '<input class="EditButton" type="button" value="#(msgEditCmd)#" title="#(msgEditOp)#" onclick="editValue(event,\'actionProp_'+rno+'_'+ano+'\',\'actionProp\');">&nbsp;';
+		}
+
+		html +=	'&nbsp;=&nbsp;';
+		html += '<input type="text" size="10" ' + (valErr!='' ? 'class="Error" title="' + valErr + '"' : '') + (ro?' readonly':'') + ' id="actionVal_'+rno+'_'+ano+'" value="' + escHTML(val) + '" onchange="actionPropertyChange(this,this.value,\'value\');" onkeyup="keyup(this);">';
+		if (!ro) {
+			html += '<input class="EditButton" type="button" value="#(msgEditCmd)#" title="#(msgEditOp)#" onclick="editValue(event,\'actionVal_'+rno+'_'+ano+'\',\'actionVal\');">&nbsp;';
+		}
+
+		html += '</span>';
+	}
+	html +=  '</td>';
+	
+	return html;
+}
+
+</script>
+
+<script language="cache" runat="server">
+	// create list generating functions
+
+	Write "<script language=""javascript"">",!
+	Write "function getJoinOptions(val)",!
+	Write "{",!
+	Write " var html='';",!
+
+	Set tList = ##class(Ens.Rule.Condition).GetJoinList()
+	Set tDelim = $E(tList,1)
+	Set tList = $E(tList,2,*)
+	
+	For i = 1:1:$L(tList,",") {
+		Set t = $P(tList,",",i)
+		Write " html += '<option ' + (val=='" _ t _ "' ? 'selected ' : '') + 'value=""" _ t _ """>" _ t _ "';",!
+	}
+	Write " return html;",!
+	Write "}",!
+
+	Write "function getOperatorOptions(val)",!
+	Write "{",!
+	Write " var html='';",!
+
+	Set tList = ##class(Ens.Rule.Condition).GetOperatorList()
+	Set tDelim = $E(tList,1)
+	//Set tList = $E(tList,2,*)
+	
+	For i = 1:1:$L(tList,",") {
+		Set t = $P(tList,",",i)
+		Write " html += '<option ' + (val=='" _ t _ "' ? 'selected ' : '') + 'value=""" _ t _ """>" _ t _ "';",!
+	}
+
+	Write " return html;",!
+	Write "}",!
+
+	// create initial RuleSet using values from the server
+	Write "function createRuleSet()",!
+	Write "{",!
+
+	If ($IsObject(tRuleSet)) {
+
+		&js<var rule;>
+		
+		&js<ruleSet = new RuleSet(#(..QuoteJS(tRuleSet.HostClass))#,#(..QuoteJS(tRuleSet.Name))#,#($S(tReadOnly:"true",1:"false"))#,#(..QuoteJS(tRuleSet.DefaultValue))#,#(..QuoteJS(tRuleSet.Description))#,#(..QuoteJS(tRuleSet.ContextClass))#,#(..QuoteJS(tRuleSet.EffectiveBeginDateTime))#,#(..QuoteJS(tRuleSet.EffectiveEndDateTime))#,#(..QuoteJS(tRuleSet.ReportGroup))#,#(..QuoteJS(tRuleSet.ReportName))#,#(..QuoteJS(tRuleSet.ShortDescription))#);>
+		Set tOK = ##class(Ens.Rule.ExpressionParser).Validate(tRuleSet.DefaultValue,.tErrMsg,tContextClass)
+		If ('tOK) {
+			&js<ruleSet.defaultValueError = #(..QuoteJS(tErrMsg))#;>
+			&js<showErrorStatus();>
+		}
+
+		For r = 1:1:tRuleSet.Rules.Count() {
+			Set tRule = tRuleSet.Rules.GetAt(r)
+
+			&js<rule = ruleSet.addRule(new Rule());>
+			If (tRule.ReturnValue '= "") {
+				&js<rule.returnValue = #(..QuoteJS(tRule.ReturnValue))#;>
+			}
+
+			// actions			
+			For a = 1:1:tRule.Actions.Count() {
+				Set tAction = tRule.Actions.GetAt(a)
+				If (tAction.%IsA("Ens.Rule.Assign")) {
+					&js<var action = new Action('Assign');>
+					&js<rule.addAction(action);>
+					&js<action.propertyBag['property'] = #(..QuoteJS(tAction.Property))#;>
+					&js<action.propertyBag['value'] = #(..QuoteJS(tAction.Value))#;>
+					
+					// validate property and value
+					Set tOK = ##class(Ens.Rule.ExpressionParser).Validate(tAction.Property,.tErrMsg,tContextClass)
+					If ('tOK) {
+						&js<action.propertyError['property'] = #(..QuoteJS(tErrMsg))#;>
+						&js<showErrorStatus();>
+					}
+
+					Set tOK = ##class(Ens.Rule.ExpressionParser).Validate(tAction.Value,.tErrMsg,tContextClass)
+					If ('tOK) {
+						&js<action.propertyError['value'] = #(..QuoteJS(tErrMsg))#;>
+						&js<showErrorStatus();>
+					}
+				}
+			}
+			
+			Set tOK = ##class(Ens.Rule.ExpressionParser).Validate(tRule.ReturnValue,.tErrMsg,tContextClass)
+			If ('tOK) {
+				&js<rule.returnValueError = #(..QuoteJS(tErrMsg))#;>
+				&js<showErrorStatus();>
+			}
+			
+			If (tRule.Disabled) {
+				&js<rule.disabled = true;>
+			}
+
+			For c = 1:1:tRule.Conditions.Count() {
+				Set tCond = tRule.Conditions.GetAt(c)
+				&js<var cond = new Condition(#(..QuoteJS(tCond.JoinOperator))#,#(..QuoteJS(tCond.Operand1))#,#(..QuoteJS(tCond.Operator))#,#(..QuoteJS(tCond.Operand2))#);>
+				&js<rule.addCondition(cond);>
+
+				Set tOK = ##class(Ens.Rule.ExpressionParser).Validate(tCond.Operand1, .tErrMsg,tContextClass)
+				If ('tOK) {
+					&js<cond.op1Error = #(..QuoteJS(tErrMsg))#;>
+					&js<showErrorStatus();>
+				}
+				Set tOK = ##class(Ens.Rule.ExpressionParser).Validate(tCond.Operand2, .tErrMsg,tContextClass)
+				If ('tOK) {
+					&js<cond.op2Error = #(..QuoteJS(tErrMsg))#;>
+					&js<showErrorStatus();>
+				}
+
+			}
+		}
+		&js<ruleSet.renderHTML("table");>
+		&js<originalRuleSet = ruleSet.clone();>
+	}
+
+	Write "}",!
+
+	Write "</","script>",!
+</script>
+
+</head>
+<body>
+
+<table border="0" class="LayoutMain" width="100%" height="100%" cellpadding="0" cellspacing="0">
+<tr height="100%">
+<td class="LayoutContentCol" width="80%">
+
+<!-- form used to submit changes -->
+<form name="saveForm">
+<input type="hidden" name="submitType" value="">
+<input type="hidden" name="data" value="">
+</form>
+
+<div style="margin-left:3%;margin-right:3%;" >
+
+<!-- details for rule -->
+
+<csp:if CONDITION="$IsObject(tRuleSet)">
+<div>
+<br>
+&nbsp;<input id="btnList" title="#(msgList)#" type="button" value="#(msgListCmd)#" onclick="gotoList();">
+&nbsp;<input id="btnLog" title="#(msgLog)#" type="button" value="#(msgLogCmd)#" onclick="gotoRuleLog();">
+<csp:if CONDITION="tReadOnly">
+&nbsp;<input id="btnEdit" title="#(msgEditRuleSet)#" type="button" value="#(msgEditRuleSetCmd)#" onclick="editRuleSet();">
+<csp:else>
+&nbsp;<input id="btnRevert" #($S(tReadOnly:"disabled",1:"disabled"))# title="#(msgRevertRuleSet)#" type="button" value="#(msgRevertCmd)#" onclick="revertRuleSet();">
+</csp:if>
+&nbsp;<input id="btnSave" #($S(tReadOnly:"disabled",1:""))# title="#(msgSaveRuleSet)#" type="button" value="#(msgSaveCmd)#" onclick="saveRuleSet();">
+&nbsp;<input id="btnDelete" #($S(tReadOnly:"disabled",1:""))# title="#(msgDeleteRuleSet)#" type="button" value="#(msgDeleteCmd)#" onclick="deleteRuleSet();">
+</div>
+<br>
+</csp:if>
+
+<csp:if CONDITION="tIsError">
+<div style="color:red;"><csp:text Domain="RuleEditor" TextId="ErrorSave">An error ocurred while saving this RuleSet:</csp:text>
+<pre style="background:white; border: 1px solid gray;">
+<script language="Cache" runat="server">
+	// get and display escaped error message(s)
+	Do $system.Status.DecomposeStatus(tError,.err)
+	Set tVal=$ZCVT($G(err(1)),"O","HTML")  For i=2:1:$G(err) Set tVal = tVal _ "<br>"_$C(13,10)_"+<br>"_$C(13,10)_ $ZCVT($G(err(i)),"O","HTML")
+	Write tVal
+</script>
+</pre>
+<hr>
+</div>
+</csp:if>
+
+<csp:if CONDITION="$IsObject(tRuleSet)">
+<script language="cache" runat="server">
+	Set msgrulePackage = $$$Text("Package portion of the full rule name","RuleEditor")
+	Set msgruleName = $$$Text("Last piece of the full rule name","RuleEditor")
+	Set msgruleContextClass = $$$Text("Classname of the context object. If used in BPL, this should be the full name of the BPL class plus '.Context'","RuleEditor")
+</script>
+<div class="text1">#(msgSummaryDesc)#</div>
+<table class="Summary" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<th colspan="2"><csp:text textid="" domain="RuleEditor">Rule Set</csp:text></th>
+</tr>
+<tr>
+<td class="SummaryLabel" Title="#(msgrulePackage)#">
+<csp:text textid="" domain="RuleEditor">Package Name</csp:text></td>
+<td Title="#(msgrulePackage)#">
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="rulePackage" value="#(tRuleSet.HostClass)#" onchange="rulePackageChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+<!--
+<select #($S(tReadOnly:"disabled",1:""))# id="rulePackage" onchange="rulePackageChange(this,this.value);">
+<option value=""></option>
+<script language="cache" runat="server">
+	Set pRS = ##class(%ResultSet).%New("%Dictionary.ClassDefinition:SubclassOf")
+	Set tSC = pRS.Execute("Ens.BusinessProcess")
+	While (pRS.Next()) {
+		Set tName = $G(pRS.Data("Name"))
+		&html<<option value="#(tName)#" #($S(tName=tRuleSet.HostClass:"selected",1:""))#>#(tName)#</option>>
+	}
+</script>
+</select>
+-->
+
+<tr>
+<td class="SummaryLabel" Title="#(msgruleName)#"><csp:text TextId="">Rule Name</csp:text></td>
+<td Title="#(msgruleName)#">
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="ruleName" value="#(tRuleSet.Name)#" onchange="ruleNameChange(this,this.value);" onkeyup="keyup(this);"  size="80">
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" Title='#($$$Text("Date & time from which this rule is in effect. The format of this field is ""yyyy-mm-ddThh:mm:ss"".","RuleEditor"))#' nowrap><csp:text Domain="Ensemble" TextId="EffectiveBeginDateTime">Effective Begin DateTime</csp:text></td>
+<td Title='#($$$Text("Date & time from which this rule is in effect. The format of this field is ""yyyy-mm-ddThh:mm:ss"".","RuleEditor"))#'>
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="effectiveBeginDateTime" value="#(tRuleSet.EffectiveBeginDateTime)#" onchange="effectiveBeginDateTimeChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" Title='#($$$Text("Date & time before which this rule is in effect. The format of this field is ""yyyy-mm-ddThh:mm:ss"".","RuleEditor"))#' nowrap><csp:text Domain="Ensemble" TextId="EffectiveEndDateTime">Effective End DateTime</csp:text></td>
+<td Title='#($$$Text("Date & time before which this rule is in effect. The format of this field is ""yyyy-mm-ddThh:mm:ss"".","RuleEditor"))#'>
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="effectiveEndDateTime" value="#(tRuleSet.EffectiveEndDateTime)#" onchange="effectiveEndDateTimeChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" Title="#(msgruleContextClass)#"><csp:text textid="" domain="RuleEditor">Context Class</csp:text></td>
+<td Title="#(msgruleContextClass)#">
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="ruleContextClass" value="#(tRuleSet.ContextClass)#" onchange="ruleContextChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel"><csp:text textid="" domain="RuleEditor">Description</csp:text></td>
+<td>
+	<textarea #($S(tReadOnly:"readonly",1:""))# type="text" id="ruleDesc" rows="3" cols="80" onchange="ruleDescChange(this,this.value);" onkeyup="keyup(this);">#(tRuleSet.Description)#</textarea>
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" Title='#($$$Text("Value to be used to group rules for reporting","RuleEditor"))#' nowrap><csp:text Domain="Ensemble" TextId="ReportGroup">Report Group</csp:text></td>
+<td Title='#($$$Text("Value to be used to group rules for reporting","RuleEditor"))#'>
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="reportGroup" value="#(tRuleSet.ReportGroup)#" onchange="reportGroupChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" Title='#($$$Text("Display value for the rule report group","RuleEditor"))#' nowrap><csp:text Domain="Ensemble" TextId="ReportName">Report Name</csp:text></td>
+<td Title='#($$$Text("Display value for the rule report group","RuleEditor"))#'>
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="reportName" value="#(tRuleSet.ReportName)#" onchange="reportNameChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" nowrap><csp:text Domain="Ensemble" TextId="ShortDescription">Short Description</csp:text></td>
+<td>
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="shortDescription" value="#(tRuleSet.ShortDescription)#" onchange="shortDescriptionChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel"><csp:text textid="" domain="RuleEditor">Routine</csp:text></td>
+<td><span class="statusMsg">#(tRoutineName)#&nbsp;</span></td>
+</tr>
+
+<tr>
+<td class="SummaryLabel"><csp:text textid="" domain="RuleEditor">Status</csp:text></td>
+<td><span class="statusMsg" id="statusMsg">#(tStatus)#</span></td>
+</tr>
+</table>
+
+<script language="cache" runat="server">
+	Do ..ShowTestForm(tRuleSet)
+</script>
+
+</csp:if>
+<script language="cache" runat="server">
+	Set sRuleSetMsg = $ZCVT($$$FormatText($$$Text("Rule Set %1 for package %2 not found.","RuleEditor"), tRuleName, tPackage),"O","HTML")
+</script>
+<hr>
+<div class="text1">#(msgRulesDesc)#</div>
+<div id="table"><b>#(sRuleSetMsg)#</b></div>
+
+</table>
+</div>
+
+</td></tr></table>
+
+<csp:if CONDITION="$IsObject(tRuleSet)">
+<script language="javascript">
+	createRuleSet();
+</script>
+</csp:if>
+
+</body>
+
+<script language="Cache" method="GetOperatorOptions" runat="server" arguments="pCurr" returntype="%String">
+	// return a string defining set of options for a list of operators Select box
+	Set tList = ##class(Ens.Rule.Condition).GetOperatorList()
+	Set tDelim = $E(tList,1)
+	Set tList = $E(tList,2,*)
+	Set tSelect = ""
+	
+	For i = 1:1:$L(tList,",") {
+		Set t = $P(tList,",",i)
+		Set tSelect = tSelect _ "<option " _ $S(pCurr=t:"selected",1:"") _ " value=""" _ $ZCVT(t,"O","HTML") _ """>" _ $ZCVT(t,"O","HTML")
+	}
+	Quit tSelect
+</script>
+
+<script language="Cache" method="GetJoinOptions" runat="server" arguments="pCurr" returntype="%String">
+	// return a string defining set of options for a list of join operators Select box
+	Set tList = ##class(Ens.Rule.Condition).GetJoinList()
+	Set tDelim = $E(tList,1)
+	Set tList = $E(tList,2,*)
+	Set tSelect = ""
+	
+	For i = 1:1:$L(tList,",") {
+		Set t = $P(tList,",",i)
+		Set tSelect = tSelect _ "<option " _ $S(pCurr=t:"selected",1:"") _ " value=""" _ $ZCVT(t,"O","HTML") _ """>" _ $ZCVT(t,"O","HTML")
+	}
+	Quit tSelect
+</script>
+
+<script language="Cache" method="CheckEffectiveDates" runat="server" arguments="pBegin,pEnd" returntype="%Boolean">
+	// Validate effective date
+	// The format is YYYY-MM-DD [ Thh:mm:ss ]
+	// Basically, it's in the same format as $tr($zdatetime($H,3)," ","T") except time portion (including the character T) is optional. 
+	Set msg = "", tBegin = "", tEnd = "9999-99-99T23:59:59"
+	If pBegin'="" {
+		If pBegin'?4n1"-"2n1"-"2n.1(1"T"2n1":"2n1":"2n) { Set tval = -1 }
+		Else { Set:pBegin'["T" pBegin = pBegin_"T00:00:00" Set tval = $ZDateTimeH(pBegin,3,,,,,,,,-1) }
+		If tval=-1 { Set msg = msg_$$$Text("Effective Begin DateTime is invalid, please use format 'YYYY-MM-DDTHH:MM:SS' where the time portion is optional.") }
+		Else { Set tBegin = tval }
+	}
+	If pEnd'="" {
+		If pEnd'?4n1"-"2n1"-"2n.1(1"T"2n1":"2n1":"2n) { Set tval = -1 }
+		Else { Set:pEnd'["T" pEnd = pEnd_"T23:59:59" Set tval = $ZDateTimeH(pEnd,3,,,,,,,,-1) }
+		If tval=-1 { Set:msg'="" msg = msg_$C(10) Set msg = msg_$$$Text("Effective End DateTime is invalid, please use format 'YYYY-MM-DDTHH:MM:SS' where the time portion is optional.") }
+		Else  { Set tEnd = tval }
+	}
+	If tBegin]tEnd Set:msg'="" msg = msg_$C(10) Set msg = msg_$$$Text("Effective Dates/Times must be in chronological order.")
+	Quit msg
+</script>
+
+<script language="Cache" method="ShowTestForm" runat="server" arguments="pRuleSet" returntype="">
+	Quit
+	Set tSC = ##class(Ens.Rule.Utils).GetPropertyTree(.tList,pRuleSet.ContextClass)
+	If $$$ISERR(tSC) Quit
+
+	&html<<form name="testForm">
+		<table>>
+		Set n = $O(tList(""))
+		While (n '= "") {
+			Set tName = n
+			Set tType = $LG(tList(n),1)
+			If ((tType [ "Integer") || (tType [ "Float") || (tType [ "Date")) {
+				Set tSize = 8
+			} Else {
+				Set tSize = 20
+			}
+			&html<<tr><td>#(tName)#</td>
+				<td><input type="text" name="#(tName)#" size="#(tSize)#" value=""></td></tr>>
+			Set n = $O(tList(n))
+		}
+	&html<<tr><td>&nbsp;</td>
+		<td><input type="button" value="Test">
+		</tr>
+		</table></form>>
+</script>
+
+</html>

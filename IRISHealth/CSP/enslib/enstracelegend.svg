@@ -1,0 +1,395 @@
+<?xml version="1.0" ?>
+<svg zoomAndPan="disable" width="100%" height="100%" viewBox="0 0 200% 400%" > 
+<style type="text/css"><![CDATA[
+.canvas {
+	fill: none;
+	stroke : none;
+	stroke-width : 1;
+}
+rect.TitleRect {
+	fill: none;
+	stroke : none;
+	stroke-width : none;
+}
+
+text.Title {
+  font-size : 18;
+  stroke : none;
+  fill: blue;
+}
+
+text.Label {
+  font-size : 12;
+  stroke : none;
+  fill: black;
+}
+
+text.MsgLabel {
+  font-size : 11;
+  stroke : none;
+  fill: blue;
+}
+
+rect.MsgOutline {
+	fill: yellow;
+	stroke : green;
+	stroke-width : 2;
+	opacity: 0.7;
+	filter: url(#dropShadow);
+}
+
+line.Sep {
+	stroke : gray;
+	stroke-width : 1;
+}
+
+line.MsgLineRequest {
+	stroke : blue;
+	stroke-width : 2;
+	stroke-linecap: round;
+	opacity: 0.8;
+}
+line.MsgLineResponse {
+	stroke : green;
+	stroke-width : 2;
+	stroke-linecap: round;
+	opacity: 0.8;
+}
+line.MsgLineError {
+	stroke : red;
+	stroke-width : 2;
+	stroke-linecap: round;
+	opacity: 0.8;
+}
+rect.MsgTerm {
+	fill: gray;
+	stroke : blue;
+	stroke-width : 1;
+}
+rect.MsgTermDiscarded {
+	fill: silver;
+	stroke : blue;
+	stroke-width : 1;
+}
+
+rect.MsgTermQueued {
+	fill: gray;
+	stroke : black;
+	stroke-width : 1;
+}
+rect.MsgTermNoResponse {
+	fill: orange;
+	stroke : blue;
+	stroke-width : 1;
+}
+rect.MsgTermResponse {
+	fill: plum;
+	stroke : blue;
+	stroke-width : 1;
+}
+rect.MsgTermAsyncResponse {
+	fill: plum;
+	stroke : blue;
+	stroke-width : 1;
+}
+rect.MsgTermSyncResponse {
+	fill: lightblue;
+	stroke : blue;
+	stroke-width : 1;
+}
+rect.MsgTermAsync {
+	fill: plum;
+	stroke : blue;
+	stroke-width : 1;
+}
+rect.MsgTermSync {
+	fill: lightblue;
+	stroke : blue;
+	stroke-width : 1;
+}
+circle.Discarded {
+	fill: silver;
+	stroke : blue;
+	stroke-width : 1;
+}
+
+circle.MsgStart {
+	fill: yellow;
+	stroke : blue;
+	stroke-width : 1;
+}
+circle.MsgStartNoResponse {
+	fill: orange;
+	stroke : blue;
+	stroke-width : 1;
+}
+circle.MsgStartSyncResponse {
+	fill: lightblue;
+	stroke : blue;
+	stroke-width : 1;
+}
+circle.MsgStartResponse {
+	fill: plum;
+	stroke : blue;
+	stroke-width : 1;
+}
+circle.MsgStartSync {
+	fill: lightblue;
+	stroke : blue;
+	stroke-width : 1;
+}
+circle.MsgStartAsync {
+	fill: plum;
+	stroke : blue;
+	stroke-width : 1;
+}
+circle.MsgStartAsyncResponse {
+	fill: plum;
+	stroke : blue;
+	stroke-width : 1;
+}
+
+.eventMarkerBack {
+	fill: white;
+	stroke: blue;
+	stroke-width: 1;
+	opacity: 0.9;
+}
+
+/* Assert,Error,Warning,Info,Trace,Alert */
+
+.eventMarker1 {
+	fill: silver;
+	stroke: black;
+	stroke-width: 1;
+}
+
+.eventMarker2 {
+	fill: red;
+	stroke: black;
+	stroke-width: 1;
+	opacity: 0.7;
+}
+
+.eventMarker3 {
+	fill: orange;
+	stroke: black;
+	stroke-width: 1;
+}
+
+.eventMarker4 {
+	fill: white;
+	stroke: black;
+	stroke-width: 1;
+}
+
+.eventMarker5 {
+	fill: lightblue;
+	stroke: black;
+	stroke-width: 1;
+}
+
+.eventMarker6 {
+	fill: yellow;
+	stroke: black;
+	stroke-width: 1;
+}
+
+.ackArrow {
+	fill: green;
+	stroke: black;
+	stroke-width: 0;
+}
+.ackBack {
+	fill: white;
+	stroke: blue;
+	stroke-width: 1;
+	opacity: 0.9;
+}
+.ioArrows {
+	fill: blue;
+	stroke-width: 0;
+}
+]]></style>>
+
+<!-- defs -->
+<defs>
+
+<!-- filters -->
+<filter id="dropShadow" x="-2%" y="-2%" height="120%" width="120%">
+<feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+<feOffset dx="4px" dy="4px" result="offsetBlur" />
+<feMerge>
+	<feMergeNode in="offsetBlur"/>
+	<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+</defs>
+
+<rect class="canvas" x="-40" y="0" width="600" height="600" />
+					
+<rect class="TitleRect" x="0" y="0" width="220" height="50" />
+<text class="Title" x="110" y="20" text-anchor="middle">Visual Trace Legend</text>
+
+<g transform="translate(-240,60)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+<text class="Label" x="5" y="4" text-anchor="start">Synchronous request</text>
+<rect class="MsgOutline" x="5" y="8" width="190" height="24" rx="3" />
+<rect class="MsgTermSync" x="178" y="11" width="14" height="18" rx="2"/>
+<line class="MsgLineRequest" x1="15" y1="20" x2="177" y2="20" />
+<circle class="MsgStartSync" cx="15" cy="20" r="8"/>
+<line class="MsgLineRequest" x1="172" y1="15" x2="177" y2="20" />
+<line class="MsgLineRequest" x1="172" y1="25" x2="177" y2="20" />
+<text class="MsgLabel" x="48" y="18" text-anchor="start">Time</text>
+<text class="MsgLabel" x="48" y="30" text-anchor="start">Message Type</text>
+</g>
+
+<g transform="translate(-240,120)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+<text class="Label" x="5" y="4" text-anchor="start">Asynchronous request with response</text>
+<rect class="MsgOutline" x="5" y="8" width="190" height="24" rx="3" />
+<rect class="MsgTermAsync" x="178" y="11" width="14" height="18" rx="2"/>
+<line class="MsgLineRequest" x1="15" y1="20" x2="177" y2="20" />
+<circle class="MsgStartAsync" cx="15" cy="20" r="8"/>
+<line class="MsgLineRequest" x1="172" y1="15" x2="177" y2="20" />
+<line class="MsgLineRequest" x1="172" y1="25" x2="177" y2="20" />
+<line class="MsgLineRequest" x1="167" y1="15" x2="172" y2="20" />
+<line class="MsgLineRequest" x1="167" y1="25" x2="172" y2="20" />
+<text class="MsgLabel" x="48" y="18" text-anchor="start">Time</text>
+<text class="MsgLabel" x="48" y="30" text-anchor="start">Message Type</text>
+</g>
+
+<g transform="translate(-240,180)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+<text class="Label" x="5" y="4" text-anchor="start">Asynchronous request; no response</text>
+<rect class="MsgOutline" x="5" y="8" width="190" height="24" rx="3" />
+<rect class="MsgTermNoResponse" x="178" y="11" width="14" height="18" rx="2"/>
+<line class="MsgLineRequest" x1="15" y1="20" x2="177" y2="20" />
+<circle class="MsgStartNoResponse" cx="15" cy="20" r="8"/>
+<line class="MsgLineRequest" x1="172" y1="14" x2="172" y2="26" />
+<line class="MsgLineRequest" x1="167" y1="15" x2="172" y2="20" />
+<line class="MsgLineRequest" x1="167" y1="25" x2="172" y2="20" />
+<text class="MsgLabel" x="48" y="18" text-anchor="start">Time</text>
+<text class="MsgLabel" x="48" y="30" text-anchor="start">Message Type</text>
+</g>
+
+<g transform="translate(-240,240)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+<text class="Label" x="5" y="4" text-anchor="start">Synchronous response</text>
+<rect class="MsgOutline" x="5" y="8" width="190" height="24" rx="3" />
+<rect class="MsgTermSyncResponse" x="8" y="11" width="14" height="18" rx="2"/>
+<line class="MsgLineResponse" x1="22" y1="20" x2="177" y2="20" />
+<circle class="MsgStartSyncResponse" cx="184" cy="20" r="6"/>
+<line class="MsgLineResponse" x1="23" y1="20" x2="28" y2="15" />
+<line class="MsgLineResponse" x1="23" y1="20" x2="28" y2="25" />
+<text class="MsgLabel" x="164" y="18" text-anchor="end">Time</text>
+<text class="MsgLabel" x="164" y="30" text-anchor="end">Message Type</text>
+</g>
+
+<g transform="translate(-240,300)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+
+<text class="Label" x="5" y="4" text-anchor="start">Asynchronous response</text>
+<rect class="MsgOutline" x="5" y="8" width="190" height="24" rx="3" />
+<rect class="MsgTermAsyncResponse" x="8" y="11" width="14" height="18" rx="2"/>
+<line class="MsgLineResponse" x1="22" y1="20" x2="177" y2="20" />
+<circle class="MsgStartAsyncResponse" cx="184" cy="20" r="6"/>
+<line class="MsgLineResponse" x1="23" y1="20" x2="28" y2="15" />
+<line class="MsgLineResponse" x1="23" y1="20" x2="28" y2="25" />
+<line class="MsgLineResponse" x1="28" y1="20" x2="33" y2="15" />
+<line class="MsgLineResponse" x1="28" y1="20" x2="33" y2="25" />
+<text class="MsgLabel" x="164" y="18" text-anchor="end">Time</text>
+<text class="MsgLabel" x="164" y="30" text-anchor="end">Message Type</text>
+</g>
+
+<g transform="translate(-240,360)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+
+<text class="Label" x="5" y="4" text-anchor="start">Discarded response</text>
+<rect class="MsgOutline" x="5" y="8" width="190" height="24" rx="3" />
+<rect class="MsgTermDiscarded" x="8" y="11" width="14" height="18" rx="2"/>
+<line class="MsgLineResponse" x1="22" y1="20" x2="177" y2="20" />
+<circle class="MsgStartAsyncResponse" cx="184" cy="20" r="6"/>
+<circle class="Discarded" cx="28" cy="20" r="5"/>
+<text class="MsgLabel" x="164" y="18" text-anchor="end">Time</text>
+<text class="MsgLabel" x="164" y="30" text-anchor="end">Message Type</text>
+</g>
+
+/* Assert,Error,Warning,Info,Trace,Alert */
+
+<g transform="translate(0,60)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+<text class="Label" x="5" y="4" text-anchor="start">Event Log Assert</text>
+<g transform="translate(20,20)">
+<rect class="eventMarkerBack" x="-8" y="-8" width="16" height="16" />
+<path class="eventMarker1" d="M -6 0 L 0 6 6 0 0 -6 Z" />
+</g>
+</g>
+
+<g transform="translate(0,120)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+<text class="Label" x="5" y="4" text-anchor="start">Event Log Error</text>
+<g transform="translate(20,20)">
+<rect class="eventMarkerBack" x="-8" y="-8" width="16" height="16" />
+<path class="eventMarker2" d="M -6 0 L 0 6 6 0 0 -6 Z" />
+</g>
+</g>
+
+<g transform="translate(0,180)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+<text class="Label" x="5" y="4" text-anchor="start">Event Log Warning</text>
+<g transform="translate(20,20)">
+<rect class="eventMarkerBack" x="-8" y="-8" width="16" height="16" />
+<path class="eventMarker3" d="M -6 0 L 0 6 6 0 0 -6 Z" />
+</g>
+</g>
+
+<g transform="translate(0,240)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+<text class="Label" x="5" y="4" text-anchor="start">Event Log Info</text>
+<g transform="translate(20,20)">
+<rect class="eventMarkerBack" x="-8" y="-8" width="16" height="16" />
+<path class="eventMarker4" d="M -6 0 L 0 6 6 0 0 -6 Z" />
+</g>
+</g>
+
+<g transform="translate(0,300)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+<text class="Label" x="5" y="4" text-anchor="start">Event Log Trace</text>
+<g transform="translate(20,20)">
+<rect class="eventMarkerBack" x="-8" y="-8" width="16" height="16" />
+<path class="eventMarker5" d="M -6 0 L 0 6 6 0 0 -6 Z" />
+</g>
+</g>
+ 
+<g transform="translate(0,360)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+<text class="Label" x="5" y="4" text-anchor="start">Event Log Alert</text>
+<g transform="translate(20,20)">
+<rect class="eventMarkerBack" x="-8" y="-8" width="16" height="16" />
+<path class="eventMarker6" d="M -6 0 L 0 6 6 0 0 -6 Z" />
+</g>
+</g>
+
+<!-- IOLog entry, EDI Acknowledgement Response -->
+<g transform="translate(240,60)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+<text class="Label" x="5" y="4" text-anchor="start">IOLog Entry</text>
+<g transform="translate(20,20)">
+<rect class="eventMarkerBack" x="-9" y="-9" width="18" height="18" rx="1" />
+<path class="ioArrows" d="M -8 -6 L 1 -6 1 -9 8 -4 1 1 1 -2 -8 -2 Z" />
+<path class="ioArrows" d="M 8 6 L -1 6 -1 9 -8 4 -1 -1 -1 2 8 2 Z" />
+</g>
+</g>
+
+<g transform="translate(240,120)">
+<line class="Sep" x1="-10" y1="-10" x2="210" y2="-10" />
+<text class="Label" x="5" y="4" text-anchor="start">EDI Acknowledgement/Response</text>
+<g transform="translate(20,20)">
+<rect class="ackBack" x="-7" y="-7" width="14" height="14" />
+<path class="ackArrow" d="M -6 0 L 0 6 0 2 6 2 6 -2 0 -2 0 -6 Z"/>
+</g>
+</g>
+
+</svg>
+

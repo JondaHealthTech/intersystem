@@ -1,0 +1,44 @@
+<!--
+Utilities: queue contents viewer
+-->
+
+<AutoPage domain="Ensemble" pagename="Contents" parentpage="UtilEnsQueues.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>@Ensemble:QueueContentsTitle@Message Queue Contents</Text>
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>Contents of Message Queue: {$ID1}</Text>
+	<Query>Ens.Queue:EnumerateItem</Query>
+	<ShowZebra>true</ShowZebra>
+	<AutoRefresh>true</AutoRefresh>
+	<Commands>
+		<Action href="UtilEnsAbort.csp?$FRAME=Info&amp;$ABORTFROM=QUEUE&amp;$ABORTALL=1">
+			<Caption>Abort All</Caption>
+			<Popup>Abort all messages in queue</Popup>
+			<IDValues>{$ID1}</IDValues>
+			<Confirm>@Ensemble:ConfirmAbortQueueAll@Are you sure you want to abort all messages in queue?</Confirm>
+		</Action>
+	</Commands>
+	<Actions>
+		<Action href="UtilEnsQList.csp?$FRAME=Info" targetFrame="Info" name="$A">
+			<Caption>@Ensemble:Details@Details</Caption>
+			<Popup>@Ensemble:QueueContentDetailsPop@Display details for this message.</Popup>
+			<IDValues>{MessageId}</IDValues>
+		</Action>
+		<Action href="UtilEnsAbort.csp?$FRAME=Info&amp;$ABORTFROM=QUEUE" targetFrame="Info" name="$B">
+			<Caption>@Ensemble:Abort@Abort</Caption>
+			<Popup>@Ensemble:popQueueAbort@Abort this message.</Popup>
+			<IDValues>{$ID(1)},{Priority},{Index}</IDValues>
+			<Confirm>@Ensemble:ConfirmAbortQueue@Are you sure you want to abort this message?</Confirm>
+		</Action>
+	</Actions>
+
+</Pane>
+
+<Pane name="Info" type="CSPX.EnsMsgPane">
+
+</Pane>
+
+</AutoPage>

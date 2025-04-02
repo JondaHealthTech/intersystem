@@ -1,0 +1,147 @@
+<html>
+    <head>
+    	<script language="cache" runat="server">d HEAD1^WSP999</script>
+        <link rel="stylesheet" href="assets/styles/jxSelectTransformationB2B.css">
+    </head>
+    <body onload="jInitMe()">
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;" onclick="openMobileNav(event)"></i>
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <h1>
+                        You've uploaded a<span id="uploadformat"></span>
+                    </h1>
+                    <div id="lab-convert" class="lab-convert">
+                        <h4>
+                            What <span>clinical nomenclature</span> would you like
+                            to use?
+                        </h4>
+                        <div class="btn-group">
+                            <button
+                                type="button"
+                                class="btn btn-default dropdown-toggle units-btn"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                Custom
+                                <img
+                                    src="./assets/images/dropDown.png"
+                                    alt="DropDown"
+                               >
+                            </button>
+                            <ul class="dropdown-menu">
+								<!--
+                                <li onclick="changeUnits(event)">
+                                    <a href="#">LOINC</a>
+                                </li>
+                                <li onclick="changeUnits(event)">
+                                    <a href="#">SNOMED</a>
+                                </li>
+                                -->
+                                <li onclick="changeUnits(event)">
+                                    <a href="#">Custom</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <h4>
+                            What <span> file format</span> would you like to
+                            receive?
+                        </h4>
+                        <div class="btn-group">
+                            <button
+                                type="button"
+                                class="btn btn-default dropdown-toggle format-btn"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                FHIR xml
+                                <img
+                                    src="./assets/images/dropDown.png"
+                                    alt="DropDown"
+                               >
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li onclick="changeFormat(event)">
+                                    <a href="#">FHIR xml</a>
+                                </li>
+                                <li onclick="changeFormat(event)">
+                                    <a href="#">FHIR json</a>
+                                </li>
+                                <li onclick="changeFormat(event)">
+                                    <a href="#">HL7</a>
+                                </li>
+                                <li onclick="changeFormat(event)">
+                                    <a href="#">C-CDA</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <button
+                            class="green-btn"
+                            onclick="jNext()"
+                        >
+                            Okay
+                        </button>
+                    </div>
+                    <div class="hr-group">
+                        <hr>
+                        <p class="num">2</p>
+                    </div></div>
+            </div>
+        </div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+    <script type="text/javascript">
+    const unitsBtn = document.getElementsByClassName("units-btn")[0];
+	const formatBtn = document.getElementsByClassName("format-btn")[0];
+	let fileType;
+	var dropdownTxt ='<img src="./assets/images/dropDown.png"  alt="DropDown"/>';
+
+	window.onload = jInitMe;
+  	document.onmousemove = parent.resetTimer;
+  	document.onmousedown = parent.resetTimer; // touchscreen presses
+  	document.ontouchstart = parent.resetTimer;
+  	//document.onclick = parent.resetTimer; // touchpad clicks
+  	document.onkeypress = parent.resetTimer;
+  	document.addEventListener('scroll', parent.resetTimer, true);
+  	
+	function jInitMe(){
+		parent.resetTimer();
+		#server(..cInitMe())#;
+	}
+
+	function changeUnits(e) {
+    	unitsBtn.innerHTML = e.target.innerHTML + dropdownTxt;
+	}
+
+	function changeFormat(e) {
+    	formatBtn.innerHTML = e.target.innerHTML + dropdownTxt;
+	}
+
+	function jNext(){
+		d1=unitsBtn.innerHTML,d2=formatBtn.innerHTML
+		#server(..cNext(d1,d2))#
+		window.location='jxConvertResultTable.csp'	
+	}
+    </script>
+	<script language="cache" method="cInitMe">
+		d InitMe^jxSelectTransformation
+	</script>
+	<script language="cache" method="cNext" arguments="d1,d2:%String">
+		d Next^jxSelectTransformation
+	</script>
+</html>

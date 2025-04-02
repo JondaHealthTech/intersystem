@@ -1,0 +1,14 @@
+<!--
+Utilities: New Production Wizard
+-->
+
+<AutoPage domain="Ensemble" pagename="Production Wizard" parentpage="UtilEnsProductions.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Production Wizard</Text>
+</Pane>
+
+<Pane name="Detail" type="CSPX.EnsProductionWizardPane">
+</Pane>
+
+</AutoPage>

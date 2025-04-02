@@ -1,0 +1,397 @@
+<html>		<!-- Side Menu, Under System Setting -> Language -->
+<head>
+<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+	q 1
+</script>
+
+<script language="cache" runat="server">
+	s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+	i r1'=1 s %response.Redirect="cLockDown.csp"
+	d HEAD1^CSP999
+</script>
+	<link rel="stylesheet" href="assets/styles/cLanguage.css" />
+</head>
+    <body>
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div id="loader" class="loader">
+            	<div class="loader-content">
+            		<p>Please wait for all the data to be loaded!</p>
+            		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            	</div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;" onclick="openMobileNav(event)"></i>
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <div class="title">
+                    	<h1>Languages</h1>
+                    </div>
+                    <!-- Initial characters to filter-->
+                    <div id="temp-content" class="temp-content">
+                        <div class="filters">
+                            <div class="text-fil">
+                                <p onclick="jLoadLanguages(event)">All</p>
+                                <p onclick="jLoadLanguages(event)">1-9</p>
+                                <p onclick="jLoadLanguages(event)">A</p>
+                                <p onclick="jLoadLanguages(event)">B</p>
+                                <p onclick="jLoadLanguages(event)">C</p>
+                                <p onclick="jLoadLanguages(event)">D</p>
+                                <p onclick="jLoadLanguages(event)">E</p>
+                                <p onclick="jLoadLanguages(event)">F</p>
+                                <p onclick="jLoadLanguages(event)">G</p>
+                                <p onclick="jLoadLanguages(event)">H</p>
+                                <p onclick="jLoadLanguages(event)">I</p>
+                                <p onclick="jLoadLanguages(event)">J</p>
+                                <p onclick="jLoadLanguages(event)">K</p>
+                                <p onclick="jLoadLanguages(event)">L</p>
+                                <p onclick="jLoadLanguages(event)">M</p>
+                                <p onclick="jLoadLanguages(event)">N</p>
+                                <p onclick="jLoadLanguages(event)">O</p>
+                                <p onclick="jLoadLanguages(event)">P</p>
+                                <p onclick="jLoadLanguages(event)">Q</p>
+                                <p onclick="jLoadLanguages(event)">R</p>
+                                <p onclick="jLoadLanguages(event)">S</p>
+                                <p onclick="jLoadLanguages(event)">T</p>
+                                <p onclick="jLoadLanguages(event)">U</p>
+                                <p onclick="jLoadLanguages(event)">V</p>
+                                <p onclick="jLoadLanguages(event)">W</p>
+                                <p onclick="jLoadLanguages(event)">X</p>
+                                <p onclick="jLoadLanguages(event)">Y</p>
+                                <p onclick="jLoadLanguages(event)">Z</p>
+                            </div>
+                            <!-- Search Box -->
+                            <div class="search-group">
+                                <input type="text" id="search" placeholder="Search" onkeyup="searchDataChange(event)">
+                                <img src="./assets/images/search icon.png" alt="Search" class="search-icon" onclick="jLoadSearchResults(1)">
+                            </div>
+                        </div>
+                        <!-- Language table -->
+                        <div class="table-border"></div>
+                        <div class="temp-table">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name <div class="img-group"><img src="./assets/images/upArrow.png" alt="Up Arrow" onclick="jSortTable(1)"><img src="./assets/images/downArrow.png" alt="Down Arrow" onclick="jSortTable(2)"></div></th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="search-data dropdown-data">
+                            <ul>
+                            </ul>
+                        </div>
+                        <button type="button" class="add-row" onclick="addRow(event)">Add Row</button>
+                    	<div class="btn-edit-group">
+                    		<button class="green-btn" onclick="saveRow()">Save Changes</button>
+                    		<button class="pink-btn" onclick="cancelEdit()">Cancel</button>
+                    	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Popups -->
+        <div id="popup1" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Are you sure you want to delete "<span id="del-val"></span>"?</h4>
+                <p>This action cannot be undone.</p>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="confirmDelete()">Yes</button>
+                    <button class="pink-btn" onclick="cancelDelete()">No</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup2" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>"<span id="del-val1"></span>" is now deleted!</h4>
+                <button class="green-btn" onclick="removePopup2()">Okay</button>
+            </div>
+        </div>
+        <div id="popup3" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Are you sure you want to save <span id="save-val"></span>?</h4>
+                <div class="btn-group">
+                    <button class="green-btn" onclick="confirmSave()">Yes</button>
+                    <button class="pink-btn" onclick="removePopup3()">No</button>
+                </div>
+            </div>
+        </div>
+        <div id="popup4" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Please make sure you fill up <br> the name!!</h4>
+                <button class="green-btn" onclick="removePopup4()">Okay</button>
+            </div>
+        </div>
+        <div id="popup5" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>"<span id="save-val1"></span>" is now saved!</h4>
+                <button class="green-btn" onclick="removePopup5()">Okay</button>
+            </div>
+        </div>
+        <div id="popup6" class="popup inactive">
+            <div class="popup-dialog">
+                <img src="./assets/images/success.png" alt="FYI">
+                <h4>Changes are now saved!</h4>
+                <button class="green-btn" onclick="removePopup6()">Okay</button>
+            </div>
+        </div>
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/detect.js"></script>
+        <script src="assets/js/fastclick.js"></script>
+        <script src="assets/js/jquery.slimscroll.js"></script>
+        <script src="assets/js/jquery.blockUI.js"></script>
+        <script src="assets/js/waves.js"></script>
+        <script src="assets/js/wow.min.js"></script>
+        <script src="assets/js/jquery.nicescroll.js"></script>
+        <script src="assets/js/jquery.scrollTo.min.js"></script>
+        <script src="assets/js/jquery.core.js"></script>
+        <script src="assets/js/jquery.app.js"></script>
+    </body>
+    
+    <script type="text/javascript">
+    	let popup1 = document.getElementById("popup1");
+       	let popup2 = document.getElementById("popup2");
+        let popup3 = document.getElementById("popup3");
+        let popup4 = document.getElementById("popup4");
+        let popup5 = document.getElementById("popup5");
+        let popup6 = document.getElementById("popup6");
+    	let	searching;
+    	let currentLoadData = "";
+    	let currentOrder = 1;
+    	let currentTr;
+    	let val1;
+    	let dataExist=false;
+    	let lastViewDate;
+    	window.onresize = setTableBorderPos;
+        window.onload = jInitMe;
+
+        function jInitMe(){
+	        // Pop table and set ^LastViewDate Global
+	        #server(..cInitMe())#
+	        setTableBorderPos();
+	    	document.getElementById("loader").style.display = "none";
+        }
+        // Set and adjust table borders
+        function setTableBorderPos(){
+            let tableBorder = document.querySelector(".table-border");
+            let tempTable = document.querySelector(".temp-table");
+            let table = document.querySelector("table");
+            
+            setTimeout(()=>{
+	            let tablePosition = table.getBoundingClientRect();//top,bottom,right,left,x,y,height,width
+            	if(tempTable.scrollHeight > tempTable.clientHeight){
+                	tableBorder.style.height = "calc(60vh + 4px)"
+            	}
+            	else{
+		        	tableBorder.style.height = tablePosition.height + 4 + "px";
+            	}
+            	tableBorder.style.width = tablePosition.width + 4 + "px";
+            },100);
+        }
+        
+        // Load table by initial character or num
+        function jLoadLanguages(e){
+	    	let start=e.target.textContent;
+	    	searching=false;
+	    	if(start.startsWith("1")){
+		    	start="num"
+	    	}
+	    	if(start=="All"){
+		    	start=""
+	    	}
+	    	if(currentLoadData==start && currentOrder==1){return;}
+	    	
+	    	document.getElementById("loader").style.display = "block";
+	    	#server(..cLoadLanguages(start,1,lastViewDate))#
+	    	currentLoadData=start;
+	    	currentOrder=1;
+	    	document.getElementById("loader").style.display = "none";
+	    	setTableBorderPos();
+    	}
+    	// Sort table 
+    	function jSortTable(order){
+	    	if(order==currentOrder){ return;}
+		    if(document.querySelectorAll("tbody tr").length<=1){
+		    	return;
+		    }
+	    	document.getElementById("loader").style.display = "block";
+	    	#server(..cLoadLanguages(currentLoadData,order,lastViewDate))#
+	    	currentOrder = order;
+	    	document.getElementById("loader").style.display = "none";
+            setTableBorderPos();
+    	}
+    	
+    	// Editing row
+    	function editRow(e){
+	    	if(currentTr==null){
+	    		currentTr = e.target.parentElement.parentElement;
+	    		let tds = currentTr.querySelectorAll("td");
+	    		val1 = tds[1].textContent;
+	    		tds[1].innerHTML = "<input type='text' name='name' value='"+val1+"'>";
+	    		tds[2].classList.add("hidden");
+                document.querySelector(".btn-edit-group").style.display="block";
+    			document.querySelector(".add-row").style.display="none";
+	    	}
+	    	else{
+		    	alert("You cannot edit multiple testnames at the same time");
+	    	}
+            setTableBorderPos();
+    	}
+    	// Activate popup3 to confiirm save edit/new row
+        function saveRow(){
+	    	let tds = currentTr.querySelectorAll("td");
+	    	if(tds[1].querySelector("input").value==""){
+		    	setTimeout(()=>popup4.classList.remove("inactive"),100);
+		    	return;
+	    	}
+	    	if(currentTr.classList.contains("new")){
+	    		document.getElementById("save-val").innerHTML = "\""+tds[1].querySelector("input").value+"\"";
+	    		document.getElementById("save-val1").innerHTML = tds[1].querySelector("input").value;
+	    	}
+	    	else{
+	    		document.getElementById("save-val").innerHTML = "changes";
+	    	}
+	    	setTimeout(()=>popup3.classList.remove("inactive"),100);
+    	}
+    	// Save edit/new row
+    	function confirmSave(){
+	    	let tds = currentTr.querySelectorAll("td");
+	    	let id;
+	    	val1 = tds[1].querySelector("input").value;
+	    	if(currentTr.classList.contains("new")){
+		    	id=""
+	    	}
+	    	else{
+		    	id=tds[0].textContent;
+	    	}
+		    #server(..cSaveUpdateLanguage(id,val1))#
+		    if(dataExist){
+			    dataExist=false;
+			    removePopup3();
+			    return;
+		    }
+	    	tds[1].innerHTML = val1;
+            tds[2].classList.remove("hidden");
+	        currentTr.classList.remove("new");
+	        currentTr.classList.add("highlight");
+	    	popup3.classList.add("inactive");
+    		document.querySelector(".btn-edit-group").style.display="none";
+    		document.querySelector(".add-row").style.display="block";
+    		currentTr=null;
+    	}
+    	// Cancel editing
+    	function cancelEdit(){
+	    	if(currentTr==document.querySelector("tbody").firstElementChild && currentTr.classList.contains("new")){
+		    	document.querySelector("tbody").firstElementChild.remove();
+	    	}
+	    	else{
+	    		tds = currentTr.querySelectorAll("td");
+	    		tds[1].innerHTML = val1;
+	    		tds[2].classList.remove("hidden");
+	    	}
+	    	currentTr = null;
+    		document.querySelector(".btn-edit-group").style.display="none";
+    		document.querySelector(".add-row").style.display="block";
+            setTableBorderPos();
+    	}
+
+    	// Deactivate popups
+        function removePopup1(){
+            popup1.classList.add("inactive");
+        }
+        function removePopup2(){
+            popup2.classList.add("inactive");
+        }
+        function removePopup3(){
+            popup3.classList.add("inactive");
+        }
+        function removePopup4(){
+            popup4.classList.add("inactive");
+        }
+        function removePopup5(){
+            popup5.classList.add("inactive");
+        }
+        function removePopup6(){
+            popup6.classList.add("inactive");
+        }
+        
+        
+        // Create new input box to add new row
+    	function addRow(e){
+	    	let tempTable = document.querySelector(".temp-table");
+	    	let tbody = document.querySelector("tbody");
+	    	let tr = document.createElement("tr");
+	    	tr.classList.add("new");
+            let tableData = "<td class='id'>---</td>";
+            tableData = tableData+"<td class='name'><input type='text' name='name' value=''></td>";
+            tableData = tableData+"<td class='actions hidden'><img class='edit-icon' src='./assets/images/edit.png' alt='Edit' onclick='editRow(event)'> <img src='./assets/images/delete.png' alt='Delete' onclick='deleteRow(event)'></td>"
+	    	tr.innerHTML = tableData;
+    		tbody.prepend(tr);
+    		currentTr = tr;
+    		tempTable.scrollTop = 0;
+    		e.target.style.display="none";
+    		document.querySelector(".btn-edit-group").style.display="block";
+            setTableBorderPos();
+    	}
+    	// Activate delete confirmation popup
+    	function deleteRow(e){
+	    	currentTr = e.target.parentElement.parentElement;
+            let value = currentTr.querySelectorAll("td")[1].textContent;
+	    	document.getElementById("del-val").innerHTML = value;
+	    	document.getElementById("del-val1").innerHTML = value;
+	    	setTimeout(()=>{
+	    		popup1.classList.remove("inactive");
+	    	},100);
+    	}
+    	// Delete language
+    	function confirmDelete(){
+	    	removePopup1();
+	    	#server(..cDeleteLanguage(currentTr.querySelector(".id").textContent))#
+    		currentTr.remove();
+    		currentTr=null;
+            setTimeout(()=>{
+                popup2.classList.remove("inactive");
+            },100)
+            setTableBorderPos();
+    	}
+    	// Cancel deletion
+        function cancelDelete(){
+            currentTr=null;
+            removePopup1();
+        }
+        
+    </script>
+<script language="cache" method="cInitMe">
+	d InitMe^cLanguage
+</script>
+<script language="cache" method="cLoadLanguages" arguments="d1:%String,orderCol:%Integer,lastViewDate:%String">
+	d LoadLanguages^cLanguage(d1,orderCol,lastViewDate)
+</script>
+<script language="cache" method="cSaveUpdateLanguage" arguments="id,name:%String">
+	d SaveUpdateLanguage^cLanguage
+</script>
+<script language="cache" method="cDeleteLanguage" arguments="id:%String">
+	d DeleteLanguage^cLanguage
+</script>
+</html>
+

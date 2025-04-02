@@ -1,0 +1,103 @@
+<html>
+<head>
+<title>Gradient Images</title>
+<style>
+body {
+	background: #D0D0A0;
+	font-family: verdana:
+}
+
+.p {
+	font-size: 1.2em;
+	line-height: 120%;
+	padding-bottom: 10px;
+}
+
+.file {
+	font-size: 1.2em;
+	font-family: courier new;
+	padding-bottom: 10px;
+}
+
+.table {
+	text-align: left;
+	border: 1px solid black;
+	background: white;
+}
+
+.table th {
+	background: #A0A0D0;
+}
+
+.table th, .table td {
+	padding: 3px;
+	border-right: 1px solid gray;
+	border-bottom: 1px solid gray;
+}
+
+</style>
+</head>
+<body>
+<div class="p">Zen includes a small set of gradient images that are used by sample programs.</div>
+<div class="p">If you wish you can also use these images within your Zen applications (or at least until you get around to creating the <em>real</em> styles for your application).</div>
+<div class="p">All of these gradients were created using a nice on-line tool called Gradient Image Maker:
+<a href="http://tools.dynamicdrive.com/gradient/">http://tools.dynamicdrive.com/gradient/</a>
+</div>
+<div class="p">The naming convention for these files is:</div>
+<div class="file">grad-<i>(color)</i>-<i>(width)</i>x<i>(height)</i>.png</div>
+<div class="file">grad-<i>(color)2</i>-<i>(width)</i>x<i>(height)</i>.png&nbsp;&nbsp;<i>inverted image</i></div>
+<div class="p">Typically you use these gradients as follows (with background color set to the end color of the gradient):</div>
+<div class="file">
+&lt;style&gt;<br/>
+.myStyle {<br/>
+background: #000040;<br/>
+background-image: url(/csp/broker/images/grad-blue-10x100.png);<br/>
+background-repeat: repeat-x;<br/>
+}<br/>
+&lt;/style&gt;<br/>
+</div>
+<hr/>
+
+
+<table class="table" border="0" cellspacing="0" cellpadding="0">
+<tr><th>Gradient</th><th style="width:120px;">Sample</th><th>Width</th><th>Height</th><th>Start Color</th><th>End Color</th></tr>
+<tr><td>grad-blue-10x30.png</td><td style="color:white;background-image:url(grad-blue-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#4040F0</td><td>#000040</td></tr>
+<tr><td>grad-blue-10x100.png</td><td style="color:white;background-image:url(grad-blue-10x100.png);height:100px;">Sample</td><td>10</td><td>100</td><td>#4040F0</td><td>#000040</td></tr>
+<tr><td>grad-blue2-10x30.png</td><td style="color:white;background-image:url(grad-blue2-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#000040</td><td>#4040F0</td></tr>
+<tr><td>grad-blue2-10x100.png</td><td style="color:white;background-image:url(grad-blue2-10x100.png);height:100px;">Sample</td><td>10</td><td>100</td><td>#000000</td><td>#4040F0</td></tr>
+
+<tr><td>grad-cyan-10x30.png</td><td style="color:white;background-image:url(grad-cyan-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#40F0F0</td><td>#004040</td></tr>
+<tr><td>grad-cyan2-10x30.png</td><td style="color:white;background-image:url(grad-cyan2-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#40F0F0</td><td>#004040</td></tr>
+
+<tr><td>grad-gray-10x30.png</td><td style="color:white;background-image:url(grad-gray-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#F0F0F0</td><td>#404040</td></tr>
+<tr><td>grad-gray-10x100.png</td><td style="color:white;background-image:url(grad-gray-10x100.png);height:100px;">Sample</td><td>10</td><td>100</td><td>#F0F0F0</td><td>#404040</td></tr>
+<tr><td>grad-gray-10x500.png</td><td style="color:white;background-image:url(grad-gray-10x500.png);height:500px;">Sample</td><td>10</td><td>100</td><td>#F0F0F0</td><td>#404040</td></tr>
+
+<tr><td>grad-gray2-10x30.png</td><td style="color:white;background-image:url(grad-gray2-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#404040</td><td>#F0F0F0</td></tr>
+<tr><td>grad-gray2-10x100.png</td><td style="color:white;background-image:url(grad-gray2-10x100.png);height:100px;">Sample</td><td>10</td><td>100</td><td>#404040</td><td>#F0F0F0</td></tr>
+
+<tr><td>grad-green-10x30.png</td><td style="color:white;background-image:url(grad-green-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#40F040</td><td>#004000</td></tr>
+<tr><td>grad-green2-10x30.png</td><td style="color:white;background-image:url(grad-green2-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#004000</td><td>#40F040</td></tr>
+
+<tr><td>grad-halfgray-10x30.png</td><td style="color:white;background-image:url(grad-halfgray-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#F0F0F0</td><td>#C0C0C0</td></tr>
+<tr><td>grad-halfgray-10x100.png</td><td style="color:white;background-image:url(grad-halfgray-10x100.png);height:100px;">Sample</td><td>10</td><td>100</td><td>#F0F0F0</td><td>#C0C0C0</td></tr>
+<tr><td>grad-halfgray2-10x30.png</td><td style="color:white;background-image:url(grad-halfgray2-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#C0C0C0</td><td>#F0F0F0</td></tr>
+<tr><td>grad-halfgray2-10x100.png</td><td style="color:white;background-image:url(grad-halfgray2-10x100.png);height:100px;">Sample</td><td>10</td><td>100</td><td>#C0C0C0</td><td>#F0F0F0</td></tr>
+<tr><td>grad-halfgray-10x500.png</td><td style="color:white;background-image:url(grad-halfgray-10x500.png);height:500px;">Sample</td><td>10</td><td>100</td><td>#F0F0F0</td><td>#C0C0C0</td></tr>
+<tr><td>grad-halfgray2-10x500.png</td><td style="color:white;background-image:url(grad-halfgray2-10x500.png);height:500px;">Sample</td><td>10</td><td>100</td><td>#C0C0C0</td><td>#F0F0F0</td></tr>
+
+<tr><td>grad-red-10x30.png</td><td style="color:white;background-image:url(grad-red-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#F04040</td><td>#400000</td></tr>
+<tr><td>grad-red2-10x30.png</td><td style="color:white;background-image:url(grad-red2-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#400000</td><td>#F04040</td></tr>
+
+<tr><td>grad-purple-10x30.png</td><td style="color:white;background-image:url(grad-purple-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#F040F0</td><td>#400040</td></tr>
+<tr><td>grad-purple2-10x30.png</td><td style="color:white;background-image:url(grad-purple2-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#F000F0</td><td>#F040F0</td></tr>
+
+<tr><td>grad-yellow-10x30.png</td><td style="color:white;background-image:url(grad-yellow-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#F0F040</td><td>#404000</td></tr>
+<tr><td>grad-yellow-10x100.png</td><td style="color:white;background-image:url(grad-yellow-10x100.png);height:100px;">Sample</td><td>10</td><td>100</td><td>#F0F040</td><td>#404000</td></tr>
+<tr><td>grad-yellow2-10x30.png</td><td style="color:white;background-image:url(grad-yellow2-10x30.png);height:30px;">Sample</td><td>10</td><td>30</td><td>#404000</td><td>#F0F040</td></tr>
+<tr><td>grad-yellow2-10x100.png</td><td style="color:white;background-image:url(grad-yellow2-10x100.png);height:100px;">Sample</td><td>10</td><td>100</td><td>#404000</td><td>#F0F040</td></tr>
+</table>
+<br/>
+
+</body>
+</html>

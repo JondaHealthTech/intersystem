@@ -1,0 +1,96 @@
+<html>
+<head>
+    <script language="cache" runat="server">d HEAD1^WSP999</script>
+	<link rel="stylesheet" href="assets/styles/jxLoginB2B.css">
+</head>
+<body onload="jInitMe()">
+<form id="F1" autocomplete="off">
+	<div id="wrapper">
+	    <div class="bg-wrapper">
+	        <div class="bg4">
+	            <img src="./assets/images/bg4.png">
+	        </div>
+	    </div>
+	    <div class="content">
+	        <img class="logo" src="./assets/images/JX Logo White.png" alt="Jonda X">
+	        <h1>
+	            Welcome back!
+	        </h1>
+			<h2>Start to <span>transform</span> your health data <span>securely</span>.</h2>
+	        <div id="login-form" class="login-form">
+                <h4>Please enter your user id and password. Passwords are case-sensitive.</h4>
+	            <div class="input-group">
+	                <input type="text" name="T1" id="T1" autocomplete="off" placeholder="Enter your user id" onkeypress="jChangeMe()" >
+	            </div>
+	            <div class="input-group">
+	                <input type="password" name="T2" id="T2" autocomplete="off" placeholder="Enter your password" onkeypress="jCheckKey(event)" >
+	                <img onclick="jTogglePassword(event)" src="./assets/images/eyeClose.png">
+	            </div>
+	            <button type="button" class="login-btn" onclick="jLogin()" >Login</button>
+	            <div class="forget-pass" onclick="jResetPassword()">
+	                Forgot password
+	            </div>
+	            <p class="error-text" id="AlertText">
+	                Please enter a correct user id and password.
+	            </p>
+	            <p class="error-text" id="Ftext">
+	            </p>
+	            
+	        </div>
+	    </div>
+	</div>
+	<script type="text/javascript">var resizefunc = [];</script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+</form>
+</body>
+<script type="text/javascript">
+T1=self.F1.T1, T2=self.F1.T2
+//For viewing and hiding password on the eye icon 
+function jTogglePassword(event){
+	if(T2.type=="password"){
+		T2.type="text";
+		event.target.src = "./assets/images/eyeOpen.png";
+	}
+	else{
+		T2.type="password";
+		event.target.src = "./assets/images/eyeClose.png";
+	}
+}
+
+function jInitMe(){
+	T1.focus()
+}
+
+function jCheckKey(event){
+	jChangeMe();
+	if(event.which === 13){
+		jLogin()
+	}
+}
+
+function jChangeMe(){
+	
+	document.getElementById("AlertText").style.opacity=0;
+	document.getElementById("Ftext").style.opacity=0;
+}
+
+function jLogin(){	
+	if ((T1.value=="")||(T2.value=="")){
+		document.getElementById("AlertText").style.opacity=1
+		return false
+	}
+	#server(..cLogin(T1.value,T2.value))#
+}
+function jResetPassword(){
+	window.open('jxResetPassword1.csp','_self')
+}
+</script>
+
+<script language="cache" method="cLogin" arguments="d1,d2:%String">
+	;d Login^jxLogin
+	d Validate^jxLogin
+</script>
+</html>

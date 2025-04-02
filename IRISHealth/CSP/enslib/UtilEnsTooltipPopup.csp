@@ -1,0 +1,101 @@
+<html>
+<head>
+
+<!-- Popup text window used for documentation -->
+
+<script language="CACHE" runat="SERVER">
+
+	// get request parms
+	Set key = $G(%request.Data("KEY",1))
+	set tTITLE = $get(%session.Data("tipTitle-escaped", key),"no title")
+</script>
+
+<title>#(tTITLE_" - "_key)#</title>
+
+<style>
+
+body {
+	background: #FFFFCC;
+	margin: 0px;
+	font-family: verdana;
+}
+
+div.title {
+	width: 95%;
+	font-size: 0.8em;
+	font-weight: bold;
+	padding-top: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+div.text	{
+	font-size: 0.8em; 
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+div.text:first-letter {
+	font-size: 1.0em;
+}
+
+span.guibutton {
+	color: black;
+	font-weight: bold;
+}
+
+div.btnDiv {
+	width: 70%;
+	text-align: center;
+}
+
+/* default value displayed in input */
+.defaultValue {
+	background: #FFFFCC;
+}
+
+.ResetBtn {
+	font-size: 7pt;
+	vertical-align: top;
+}
+
+</style>
+
+	<script language="javascript">
+   function keyCloseHandler(e)
+   {
+    // IE : Firefox
+	var kC    = (window.event) ? event.keyCode : e.keyCode;
+	var Esc   = (window.event) ? 27 : e.DOM_VK_ESCAPE
+	var Enter = (window.event) ? 13 : e.DOM_VK_ENTER
+	var Space = (window.event) ? 32 : e.DOM_VK_SPACE
+	switch (kC) {
+		case Esc:
+		case Enter:
+		case Space:
+			window.close ();
+	}
+   }
+   function btnCloseHandler()
+   {
+	window.close ();
+   }
+   </script>
+ </head>
+ <body onkeypress="keyCloseHandler(window.event);">
+ <script language="CACHE" runat="SERVER">
+	Set key = $G(%request.Data("KEY",1))
+	Set contents = $Get(%session.Data("tipContent-escaped", key),"no contents")
+</script>
+
+<div class="title">#(tTITLE)#<hr>
+</div>
+<div class="text">#(contents)#<p>
+</div>
+
+<div class="btnDiv">
+	<input type="button" id="btnCancel" value='Close' onclick="btnCloseHandler();">
+</div>
+	
+</body>
+</html>

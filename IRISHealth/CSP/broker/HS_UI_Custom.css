@@ -1,0 +1,24 @@
+/* @class="HS.UI.Custom.textList" */
+
+/* @doc="Item within listBox. Set the font size for this form." */
+.listBox {
+	border: 1px #77A8D0 solid;
+}
+.listBoxItem {
+	font-size: 12px;
+	font-family: verdana;
+}
+/* @doc="Selected item within listBox." */
+.listBoxItemSelected {
+	font-size: 12px;
+	font-family: verdana;
+	font-weight: normal;
+}
+/* @doc="Selected item with focus within listBox." */
+.listBoxItemFocus {
+	font-size: 12px;
+	font-family: verdana;
+	font-weight: normal;
+}
+
+/* EOF */

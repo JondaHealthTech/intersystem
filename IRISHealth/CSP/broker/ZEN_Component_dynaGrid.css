@@ -1,0 +1,137 @@
+/* @class="%ZEN.Component.dynaGrid" */
+
+/* @doc="Wrapper div for dynaGrid." */
+.dynaGridWrapper {
+	border: 1px solid black;
+	overflow: hidden;
+}
+
+/* @doc="Main table for dynaGrid." */
+table.dynaGrid {
+	background: white;
+	color: #404040;
+	table-layout: fixed;
+	padding: 0px;
+	width: 100%;
+}
+
+/* @doc="Main table for disabled dynaGrid." */
+table.dynaGridDisabled {
+	background: #D0D0D0;
+	color: #606060;
+	table-layout: fixed;
+	padding: 0px;
+	width: 100%;
+}
+
+/* @doc="Label for dynaGrid." */
+table.dynaGrid th.dynaGridLabel,
+table.dynaGridDisabled th.dynaGridLabel {
+	border-left: 1px solid gray;
+	border-bottom: 1px solid gray;
+	padding: 1px;
+	padding-left: 3px;
+	padding-right: 3px;
+	cursor: pointer;
+	background: #DDDDDD;
+	text-align: left;
+	white-space: nowrap;
+	font-style: italic;
+	overflow: hidden;
+}
+
+table.dynaGridDisabled th.dynaGridLabel {
+	background: #DDDDDD;
+}
+
+/* @doc="Column labels for dynaGrid." */
+table.dynaGrid th.dynaGridColumn,
+table.dynaGridDisabled th.dynaGridColumn {
+	border-left: 1px solid gray;
+	border-bottom: 1px solid gray;
+	padding: 1px;
+	padding-left: 3px;
+	padding-right: 3px;
+	cursor: pointer;
+	background: #DDDDDD;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+table.dynaGridDisabled th.dynaGridColumn {
+	background: #DDDDDD;
+}
+
+table.dynaGrid tr.dynaGridRowEven {
+	background: #F8F8F8;
+}
+table.dynaGrid tr.dynaGridRowOdd {
+}
+
+/* @doc="Row labels for dynaGrid." */
+table.dynaGrid th.dynaGridRow,
+table.dynaGridDisabled th.dynaGridRow {
+	border-left: 1px solid gray;
+	border-bottom: 1px solid gray;
+	padding: 1px;
+	padding-left: 3px;
+	padding-right: 3px;
+	cursor: pointer;
+	background: #DDDDDD;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+table.dynaGridDisabled th.dynaGridRow {
+	background: #DDDDDD;
+}
+
+/* @doc="Cells within dynaGrid." */
+table.dynaGrid td,
+table.dynaGridDisabled td {
+	border-left: 1px solid gray;
+	border-bottom: 1px solid gray;
+	padding: 0px;
+	margin: 0px;
+	cursor: pointer;
+	text-align: right;
+}
+
+table.dynaGrid td div, table.dynaGridDisabled td div {
+	height: 100%;
+	width: 90%;
+	padding: 0px;
+	padding-left: 2px;
+	padding-right: 2px;
+	margin: 0px;
+	overflow: hidden;
+	vertical-align: middle;
+ 	border: none;
+}
+
+/* @doc="Current cell with focus within dynaGrid." */
+table.dynaGrid td div.focus {
+	color: white;
+	background: rgb(53,107,141);
+}
+
+/* @doc="Selected cell within dynaGrid." */
+table.dynaGrid td div.selected {
+	color: white;
+	background: rgb(53,107,131);
+}
+
+/* @doc="Input control within dynaGrid." */
+.dynaGridInput {
+ 	border: none;
+	background: #FFFFA0;
+}
+
+/* @doc="Input control (with focus) within dynaGrid." */
+.dynaGridInput:focus {
+	background: #FFFFE0;
+}
+
+/* EOF */

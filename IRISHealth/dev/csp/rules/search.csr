@@ -1,0 +1,184 @@
+<!-- CSP SEARCH Rules -->
+<!-- Copyright (c) 2000 InterSystems Corp. ALL RIGHTS RESERVED. -->
+
+<!-- SEARCH TAG --------------------------------------------- -->
+
+<csr:rule name="%SEARCH" match="csp:search" empty language="any">
+<csr:description>
+The <b>csp:search</b> tag defines defines a client-side JavaScript function that invokes a search 
+page.
+<p>The name of the function is specified by the value of the <var>name</var> attribute.
+<p>For example, to define a search function that allows user to find a <b>Company</b> by <var>Name</var> or 
+<var>City</var>, do the following:
+<EXAMPLE>
+<csp:search name="searchCompany" classname="Company" where="Name,City">
+</EXAMPLE>
+You can then invoke the resulting search function from a button:
+<example>
+<input name="btnSearch" value="Search" onclick="searchCompany()">
+</example>
+</csr:description>
+
+<csr:attribute name=ClassName required description="Class name upon which the search is performed." type="Classname:QUERY(%CSP.DwxUtils.ClassList)" >
+<csr:attribute name=OBJID description="Object Identifier value used to identify an object (used if the search page wants to cancel a search and return to the target page)." type="Objectid:STRING" >
+<csr:attribute name=OBJIDATTR description="Name of the object identifier attribute of the associated form" type="ObjectidAttr:STRING" >
+<csr:attribute name=Where required description="A comma-delimited list of fields to search on.  Each field is of the form 'property alias|desc' where alias and |desc are optional." type="List:STRING" >
+<csr:attribute name=Select description="A comma-delimited list of fields to display in the search result table.   Each field is of the form 'property alias|desc' where alias and |desc are optional.  If not specified, the WHERE list is used as the SELECT list." type="List:STRING" >
+<csr:attribute name=Order description="A comma-delimited list of fields used to sort the search results.  Each field is of the form 'property |desc' where |desc is optional." type="List:STRING" >
+<csr:attribute name=MaxRows description="Specifies the maximum number of rows to display in the search results table. The default is 500." type="MaxRows:STRING" >
+<csr:attribute name=Target description="Specifies the page to which the links in the search result window point. The default is the page invoking the search." type="Url:STRING" >
+<csr:attribute name=Options description="A comma-separated list of search window options. These include &quot;popup&quot;, &quot;clearbtn&quot;, &quot;nodisplay&quot;, &quot;display&quot;, &quot;nopredicates&quot;, &quot;predicates&quot; and &quot;sortbox&quot;." type="Options:STRING" >
+<csr:attribute name=Caption description="An optional caption string displayed within the standard search page." type="Caption:STRING" >
+<csr:attribute name=Features description="The features argument to the window.open call for the popup search window." type="WindowFeatures:STRING" >
+<csr:attribute name=OnSelect description="Javascript function to execute on the calling for after item has been selected." type="FunctionName:STRING" >
+<csr:attribute name=StartValues description="A comma-delimited list of fields whose initial value should come from the form." type="List:STRING" >
+<csr:action>
+<script language="Cache" runat="compiler">
+	New i,seedlist,seedvalues,search,options,form,setCmd,searchpage
+	
+	// Indicate that cspBroker.js needed
+	Set %compiler.Get("%cspDocObject").NeedJS=1
+	
+	Set setCmd=$select(%compiler.IsBasic:"",1:"	Set")
+
+	Set options=$zcvt(..GetAttribute("OPTIONS"),"U")
+
+	If ((%compiler.Get("cspsearch") = "") && (options [ "POPUP")) {
+		Do %compiler.Set("cspsearch",1)  ; make sure only generated once
+		If %compiler.Get("%cspHTML4STRICT") {
+			Do ..WriteText("<script type=""text/javascript"">",1)
+		} Else {
+			Do ..WriteText("<script language=""JavaScript"" type=""text/javascript"">",1)
+		}
+		If %compiler.Get("%cspXHTML") {
+			Do ..WriteText("//<![CDATA[",1)
+		} Else {
+			Do ..WriteText("<!--",1)
+		}
+		Do ..WriteText("   cspInsertCode(self,'onunload','cspUnloadPopup();');",1)
+		If %compiler.Get("%cspXHTML") {
+			Do ..WriteText("//]]>",1)
+		} Else {
+			Do ..WriteText("// -->",1)
+		}
+		Do ..WriteText("<" _ "/script>",1)
+	}
+	
+	If ..IsDefined("ONSELECT") && '(options [ "POPUP") {
+		Set %statuscode=$$$ERROR($$$CSPOnSelectError,..GetAttribute("NAME"),..LineNumber)
+		Quit
+	}
+	
+	// HEAD section
+	Do ..PushDefaultSection("HEAD")
+	
+	// Setup array with search page parameters.
+	Do ..WriteServer(setCmd_" nvp(""CLASSNAME"") = "_..QuoteAttribute("CLASSNAME"))
+	Do ..WriteServer(setCmd_" nvp(""WHERE"") = "_..QuoteAttribute("WHERE"))
+	Do ..WriteServer(setCmd_" nvp(""OBJID"") = "_..QuoteAttribute("OBJID",
+						"#(%request.Get("_..QuoteAttribute("OBJIDATTR","OBJID")_"))#"))
+	If ..IsDefined("OBJIDATTR") Do ..WriteServer(setCmd_" nvp(""OBJIDATTR"") = "_..QuoteAttribute("OBJIDATTR"))
+	If ..IsDefined("SELECT") Do ..WriteServer(setCmd_" nvp(""SELECT"") = "_..QuoteAttribute("SELECT"))
+	If ..IsDefined("PREDICATES") Do ..WriteServer(setCmd_" nvp(""PREDICATES"") = "_..QuoteAttribute("PREDICATES"))
+	If ..IsDefined("ORDER") Do ..WriteServer(setCmd_" nvp(""ORDER"") = "_..QuoteAttribute("ORDER"))
+	If ..IsDefined("MAXROWS") Do ..WriteServer(setCmd_" nvp(""MAXROWS"") = "_..QuoteAttribute("MAXROWS"))
+	If ..IsDefined("SHOWSQL") Do ..WriteServer(setCmd_" nvp(""SHOWSQL"") = "_..QuoteAttribute("SHOWSQL"))
+	If ..IsDefined("IDNAME") Do ..WriteServer(setCmd_" nvp(""IDNAME"") = "_..QuoteAttribute("IDNAME"))
+	If ..IsDefined("OPTIONS") Do ..WriteServer(setCmd_" nvp(""OPTIONS"") = "_$$Quote^%cspQuote(options))
+	If ..IsDefined("CAPTION") Do ..WriteServer(setCmd_" nvp(""CAPTION"") = "_..QuoteAttribute("CAPTION"))
+	If ..IsDefined("FORM") Do ..WriteServer(setCmd_" nvp(""FORM"") = "_..QuoteAttribute("FORM"))
+	If ..IsDefined("ONSELECT") Do ..WriteServer(setCmd_" nvp(""ONSELECT"") = "_..QuoteAttribute("ONSELECT"))
+	If ..IsDefined("TARGET")  { 
+		Do ..WriteServer(setCmd_" nvp(""TARGET"") = "_..QuoteAttribute("TARGET")) 
+	} ElseIf options '[ "POPUP" {
+		Do ..WriteServer(setCmd_" nvp(""TARGET"") = "_$$Quote^%cspQuote(%compiler.Get("%pagename"))) 
+	}
+	
+	// JavaScript search function
+	If %compiler.Get("%cspHTML4STRICT") {
+		Do ..WriteText("<script type=""text/javascript"">",1)
+	} Else {
+		Do ..WriteText("<script language=""JavaScript"" type=""text/javascript"">",1)
+	}
+	If %compiler.Get("%cspXHTML") {
+		Do ..WriteText("//<![CDATA[",1)
+	} Else {
+		Do ..WriteText("<!--",1)
+	}
+	Do ..WriteCSPText("function "_..GetAttribute("NAME","search")_"()",1)
+	Do ..WriteText("{",1)
+	Do ..WriteText("   var values = '';",1)
+	
+	// Javascript code to pass search values.
+	Set seedlist = ..GetAttribute("STARTVALUES")
+	If (seedlist'="") {
+		Set form=..GetAttribute("FORM")
+		If form'="" Set form=##class(%CSP.Page).QuoteJS(form)
+		Set seedvalues = ""
+		For i=1:1:$L(seedlist,",") {
+			Set seedvalues = seedvalues _ "," _ ##class(%CSP.Page).QuoteJS($P(seedlist,",",i))
+		}
+		If form'="" {
+			Do ..WriteCSPText("   if (self.document.forms["_form_"] != null) {",1)
+			Do ..WriteCSPText("      values = '&' + cspGetSearchValues(self.document.forms["_form_"]"_seedvalues_");",1)
+			Do ..WriteCSPText("   } else {",1)
+			If %compiler.PageLanguage="mvbasic" {
+				Do ..WriteCSPText("      alert(#(""%CSP.Page""->QuoteJS(%response.GetText('','%CSPSearch','InvalidFormAttribute','csp:SEARCH tag has an invalid FORM attribute: ')))# + "_form_");",1)
+			} Else {
+				Do ..WriteCSPText("      alert(#("_$case(%compiler.PageLanguage,"basic":"me.",:"..")_"QuoteJS(%response.GetText("""",""%CSPSearch"",""InvalidFormAttribute"",""csp:SEARCH tag has an invalid FORM attribute: "")))# + "_form_");",1)
+			}
+			Do ..WriteCSPText("   }",1)
+		} Else {
+			Do ..WriteCSPText("   if (self.document.forms[0] != null) {",1)
+			Do ..WriteCSPText("      values = '&' + cspGetSearchValues(self.document.forms[0]"_seedvalues_");",1)
+			Do ..WriteCSPText("   } else {",1)
+			If %compiler.PageLanguage="mvbasic" {
+				Do ..WriteCSPText("      alert(#(""%CSP.Page""->QuoteJS(%response.GetText('','%CSPSearch','NoForm','csp:SEARCH specified with no forms on page.')))#);",1)
+			} Else {
+				Do ..WriteCSPText("      alert(#("_$case(%compiler.PageLanguage,"basic":"me.",:"..")_"QuoteJS(%response.GetText("""",""%CSPSearch"",""NoForm"",""csp:SEARCH specified with no forms on page."")))#);",1)
+			}
+			Do ..WriteCSPText("   }",1)
+		}
+	}
+
+	// Javascript code to open search page
+	Set searchpage=..QuoteAttribute("SEARCHPAGE","_CSP.PageLookup.cls")
+	If $extract(searchpage,2,2)="%" Set $extract(searchpage,2,2)="_"
+	If %compiler.PageLanguage="basic" {
+		Set search = "#(me.Link("_searchpage_",nvp))#"
+	} ElseIf %compiler.PageLanguage="mvbasic" {
+		Set search = "#(""%CSP.Page""->Link("_searchpage_",nvp))#"
+	} Else {
+		Set search = "#(..Link("_searchpage_",.nvp))#"
+	}
+	if options [ "POPUP" {
+		Do ..WriteCSPText("   var url = '"_search_"' + values;",1)
+		Do ..WriteCSPText("   self.cspPopupWindow = window.open(url,'cspPopup',"_
+			##class(%CSP.Page).QuoteJS(..GetAttribute(
+				"FEATURES","width=500,height=500,status,scrollbars,resizable"))_");",1)
+		Do ..WriteCSPText("   self.cspPopupWindow.focus();",1)
+	}
+	else {
+		Do ..WriteCSPText("   self.document.location='"_search_"' + values;",1)
+	}
+
+	// Finish Javascript search function	
+	Do ..WriteText("}",1)
+	If %compiler.Get("%cspXHTML") {
+		Do ..WriteText("//]]>",1)
+	} Else {
+		Do ..WriteText("// -->",1)
+	}
+	Do ..WriteText("</"_"script>",1)
+	If %compiler.PageLanguage="basic" {
+		Do ..WriteServer("	Erase nvp")
+	} ElseIf %compiler.PageLanguage="mvbasic" {
+	} Else {
+		Do ..WriteServer("	Kill nvp")
+	}
+	
+	Do ..PopDefaultSection()
+</script>
+</csr:action>
+</csr:rule>
+

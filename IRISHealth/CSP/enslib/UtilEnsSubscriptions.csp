@@ -1,0 +1,51 @@
+<!--
+PubSub: subscription list
+-->
+
+<AutoPage domain="Ensemble" pagename="PubSub Subscriptions" parentpage="UtilEnsHome.csp" useframes="0">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>PubSub Subscriptions</Text>
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>The following PubSub Subscriptions are currently defined. A subscription associates a Subscriber with a given topic.</Text>
+	<Query>EnsLib.PubSub.Subscription:Enumerate</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>true</ShowZebra>
+	<ShowRowNumbers>true</ShowRowNumbers>
+	<AutoRefresh>false</AutoRefresh>
+	<HiddenColumns>ID</HiddenColumns>
+	
+	<Commands>
+		<Action href="UtilEnsPubSubDomains.csp">
+			<Caption>Show Domains</Caption>
+		</Action>
+		<Action href="UtilEnsSubscribers.csp">
+			<Caption>Show Subscribers</Caption>
+		</Action>
+		<Action href="UtilEnsSubscriptions.csp">
+			<Caption>Show Subscriptions</Caption>
+		</Action>
+		<Action href="UtilEnsSubscriptionEdit.csp">
+			<Caption>Create New Subscription</Caption>
+		</Action>
+	</Commands>
+
+	<Actions>
+		<Action href="UtilEnsSubscriptionEdit.csp" name="$A">
+			<Caption>Edit</Caption>
+			<Popup>Edit this Subscription definition.</Popup>
+			<IDValues>{ID}</IDValues>
+		</Action>
+		<Action href="UtilEnsSubscriptions.csp?$AUTOFORM_DELETE=1&amp;$CLASS=EnsLib.PubSub.SubscriptionForm" name="$B">
+			<Caption>Delete</Caption>
+			<Popup>Delete this Subscription definition.</Popup>
+			<Confirm>Do you really wish to delete this Subscription definition?</Confirm>
+			<IDValues>{ID}</IDValues>
+		</Action>
+	</Actions>
+
+</Pane>
+
+</AutoPage>

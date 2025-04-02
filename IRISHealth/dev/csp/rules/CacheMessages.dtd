@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+
+<!-- =====================================================================
+     A message represents a single named message that can be loaded
+     ===================================================================== -->
+<!ELEMENT   Message (#PCDATA)>
+<!ATTLIST   Message
+            Id      CDATA #REQUIRED
+            Name    CDATA #IMPLIED>
+
+
+<!-- =====================================================================
+     A message domain represents a group of messages.
+     ===================================================================== -->
+<!ELEMENT   MsgDomain   (Message*)>
+<!ATTLIST   MsgDomain
+            Domain      CDATA #REQUIRED>
+
+
+<!-- =====================================================================
+     A message file is the top level element, which contains all the message domains.
+     The language attribute is a RFC 1766 language specification.
+     ===================================================================== -->
+<!ELEMENT   MsgFile     (MsgDomain+)>
+<!ATTLIST   MsgFile
+            Language      CDATA #REQUIRED>

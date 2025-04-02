@@ -1,0 +1,519 @@
+<html><!-- not use, using jxDashBoardUsage2-->
+    <head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="jxLockDown.csp" q 1
+		q 1
+	</script>
+	<script language="cache" runat="server">
+		s id=$g(%session.Data("UserID"))
+		d HEAD1^WSP999
+	</script>
+        <link rel="stylesheet" href="assets/styles/jxDashboardUsageB2B.css">
+    </head>
+    <body onload="initMe()">
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;" onclick="openMobileNav(event)"></i>
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <div class="title">
+                    	<h2>Usage Quota</h2>
+                    	<div id="quota-type" class="dropdown">
+                    		<div class="dropdown-btn" onclick="toggleQuotaType()">All data<img src='./assets/images/dropDownBlue.png' alt='DropDown'></div>
+                    		<div class="dropdown-data">
+                    			<ul>
+                    				<li onclick="changeQuotaType(event)">All data</li>
+                    				<hr>
+                    				<li onclick="changeQuotaType(event)">Pre-processing</li>
+                    				<hr>
+                    				<li onclick="changeQuotaType(event)">Transformation</li>
+                    			</ul>
+                    		</div>
+                    	</div>
+                    	<button class="back-btn" onclick="window.frameElement.src='jxDashboard.csp'"><img src="./assets/images/leftArrow.png" alt="Arrow"> Back</button>
+                    </div>
+                    <div class="stats">
+                        <div class="usage-quota-stat stat-block">
+                            <div class="block-title">
+                                <h4>Overview</h4>
+                                <img src="./assets/images/optionHorizontal.png" alt="Option" onclick="togglePopup(event)">
+                            </div>
+                            <!--<div class="stat">
+                                <div class="all-stat usage-stat high-stat" data-key="1">
+                                	<h4>Jan 2023</h4>
+                                	<div class="stat-data">
+                                		<div class="pre-processing">
+                                			<h5>Pre-processing:</h5>
+                                			<p class="num"><span>1025</span><br>/1000</p>
+                                			<p class="note active">QUOTA<br>EXCEEDED</p>
+                                		</div>
+                                		<div class="tranformation">
+                                			<h5>Transformation:</h5>
+                                			<p class="num"><span>925</span><br>/1000</p>
+                                			<p class="note">QUOTA<br>EXCEEDED</p>
+                                		</div>
+                                	</div>
+                                </div>
+                                <div class="all-stat usage-stat" data-key="2">
+                                	<h4>Jan 2023</h4>
+                                	<div class="stat-data">
+                                		<div class="pre-processing">
+                                			<h5>Pre-processing:</h5>
+                                			<p class="num"><span>725</span><br>/1000</p>
+                                			<p class="note">QUOTA<br>EXCEEDED</p>
+                                		</div>
+                                		<div class="tranformation">
+                                			<h5>Transformation:</h5>
+                                			<p class="num"><span>525</span><br>/1000</p>
+                                			<p class="note">QUOTA<br>EXCEEDED</p>
+                                		</div>
+                                	</div>
+                                </div>
+                                <div class="all-stat usage-stat" data-key="3">
+                                	<h4>Jan 2023</h4>
+                                	<div class="stat-data">
+                                		<div class="pre-processing">
+                                			<h5>Pre-processing:</h5>
+                                			<p class="num"><span>625</span><br>/1000</p>
+                                		</div>
+                                		<div class="tranformation">
+                                			<h5>Transformation:</h5>
+                                			<p class="num"><span>725</span><br>/1000</p>
+                                		</div>
+                                	</div>
+                                </div>
+                                <div class="all-stat usage-stat high-stat" data-key="4">
+                                	<h4>Jan 2023</h4>
+                                	<div class="stat-data">
+                                		<div class="pre-processing">
+                                			<h5>Pre-processing:</h5>
+                                			<p class="num"><span>825</span><br>/1000</p>
+                                		</div>
+                                		<div class="tranformation">
+                                			<h5>Transformation:</h5>
+                                			<p class="num"><span>1025</span><br>/1000</p>
+                                		</div>
+                                	</div>
+                                </div>
+                                <div class="all-stat usage-stat stat-active high-stat" data-key="5">
+                                	<h4>Jan 2023</h4>
+                                	<div class="stat-data">
+                                		<div class="pre-processing">
+                                			<h5>Pre-processing:</h5>
+                                			<p class="num"><span>1050</span><br>/1000</p>
+                                		</div>
+                                		<div class="tranformation">
+                                			<h5>Transformation:</h5>
+                                			<p class="num"><span>1025</span><br>/1000</p>
+                                		</div>
+                                	</div>
+                                </div>
+                                <div class="prev mobile-active" onclick="togglePrev(event)"><i class="fa fa-chevron-left"></i></div>
+                                <div class="next mobile-active" onclick="toggleNext(event)"><i class="fa fa-chevron-right"></i></div>
+                            </div>-->
+                            <div class="stat">
+                                <!--<div class="pre-stat usage-stat high-stat" data-key="1">
+                                	<h4>Jan 2023</h4>
+                                	<div class="stat-data">
+                                		<p class="num">875 / 1000</p>
+                                		<p>credits</p>
+                                		<p class="note">QUOTA EXCEEDED</p>
+                                	</div>
+                                </div>
+                                <div class="pre-stat usage-stat high-stat" data-key="2">
+                                	<h4>Jan 2023</h4>
+                                	<div class="stat-data">
+                                		<p class="num">925 / 1000</p>
+                                		<p>credits</p>
+                                		<p class="note">QUOTA EXCEEDED</p>
+                                	</div>
+                                </div>
+                                <div class="pre-stat usage-stat" data-key="3">
+                                	<h4>Jan 2023</h4>
+                                	<div class="stat-data">
+                                		<p class="num">625 / 1000</p>
+                                		<p>credits</p>
+                                		<p class="note">QUOTA EXCEEDED</p>
+                                	</div>
+                                </div>
+                                <div class="pre-stat usage-stat" data-key="4">
+                                	<h4>Jan 2023</h4>
+                                	<div class="stat-data">
+                                		<p class="num">725 / 1000</p>
+                                		<p>credits</p>
+                                		<p class="note">QUOTA EXCEEDED</p>
+                                	</div>
+                                </div>
+                                <div class="pre-stat usage-stat stat-active high-stat" data-key="5">
+                                	<h4>Jan 2023</h4>
+                                	<div class="stat-data">
+                                		<p class="num">1025 / 1000</p>
+                                		<p>credits</p>
+                                		<p class="note active">QUOTA EXCEEDED</p>
+                                	</div>
+                                </div>-->
+                            </div>
+                        </div>
+                        <div class="usage-quota-chart stat-block">
+                            <div class="block-title">
+                                <h4>Usage Chart</h4>
+                                <img src="./assets/images/optionHorizontal.png" alt="Option" onclick="togglePopup(event)">
+                            </div>
+                            <div class="chart">
+                                <canvas id="usage-quota-chart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div id="popup1" class="popup inactive">
+                <div class="popup-dialog">
+                    <button class="download-btn" onclick="downloadCSV()">Download CSV file</button>
+                    <button class="cancel-btn" onclick="removePopup()">Cancel</button>
+                </div>
+            </div>
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+        <script src="assets/js/chartjs-plugin-datalabels.min.js"></script>
+    </body>
+    <script type="text/javascript">
+    
+		window.onload = initMe;
+  		document.onmousemove = parent.resetTimer;
+  		document.onmousedown = parent.resetTimer; // touchscreen presses
+  		document.ontouchstart = parent.resetTimer;
+  		//document.onclick = parent.resetTimer; // touchpad clicks
+  		document.onkeypress = parent.resetTimer;
+  		document.addEventListener('scroll', parent.resetTimer, true);
+    	let popup = document.getElementById("popup1");
+        let popupDialog = document.getElementsByClassName("popup-dialog")[0];
+        let currentActive; 
+        let totalMonthlyStat; 
+        let nextBtn;
+        let prevBtn;
+        let dropdownText = "<img src='./assets/images/dropDownBlue.png' alt='DropDown'>";
+        let curStatblock;
+        let currentQuotaType="all";
+  		
+    	function initMe(){
+	    	parent.resetTimer();
+	    	#server(..cLoadData(currentQuotaType))#
+	    	if(datasets!=null){
+		    	let usageStats=document.querySelectorAll(".usage-stat");
+		    	usageStats[usageStats.length-1].classList.add("stat-active");
+	    		nextBtn = document.getElementsByClassName("next")[0];
+	    		prevBtn = document.getElementsByClassName("prev")[0];
+	    		currentActive = document.getElementsByClassName("stat-active")[0]; ;
+        		totalMonthlyStat = usageStats.length;
+        		checkToDisable(currentActive.dataset.key);
+	    	}
+	    	else{
+		    	document.querySelector(".stat").innerHTML="<p class='no-data'>You haven't subscribed to any plan yet!</p>"
+				usageChart.destroy();
+				document.querySelector(".chart").style.display="flex";
+				document.querySelector(".chart").innerHTML="<p class='no-data'>You haven't subscribed to any plan yet!</p>"
+			}
+    	}
+        
+        function checkToDisable(curKey){
+            if(curKey>=totalMonthlyStat){
+                nextBtn.classList.add("disabled")
+            }
+            else if(curKey<=1){
+                prevBtn.classList.add("disabled")
+            }
+            else{
+                nextBtn.classList.remove("disabled");
+                prevBtn.classList.remove("disabled")
+            }
+        }
+        function togglePrev(e){
+            let currentActive = document.getElementsByClassName("stat-active")[0];
+            currentActive.classList.remove("stat-active");
+            let curKey = parseInt(currentActive.dataset.key);
+            document.querySelector(".usage-stat[data-key='"+(curKey-1)+"']").classList.add("stat-active");
+            checkToDisable(curKey-1);
+        }
+        function toggleNext(e){
+            let currentActive = document.getElementsByClassName("stat-active")[0];
+            currentActive.classList.remove("stat-active");
+            let curKey = parseInt(currentActive.dataset.key);
+            document.querySelector(".usage-stat[data-key='"+(curKey + 1)+"']").classList.add("stat-active");
+            checkToDisable(curKey+1);
+        }
+        function togglePopup(e){
+            if(popup.classList.contains("inactive")){
+                curStatblock = e.target.closest(".stat-block");
+                let position=e.target.getBoundingClientRect();
+                popupDialog.style.top=position.y + 10 + "px";
+                popupDialog.style.left="calc(" +position.right + "px - 25vw)" ;
+            }
+            setTimeout(()=>{
+                popup.classList.toggle("inactive");
+            },100);
+        }
+        function removePopup(){
+            popup.classList.add("inactive");
+        }
+        function toggleQuotaType(){
+	        let currentType = document.querySelector(".dropdown-btn");
+	        if(currentType.textContent!="All data"){
+		        document.querySelector(".dropdown-data").style.borderTopRightRadius = 0;
+		        document.querySelector(".dropdown-data").style.width = currentType.getBoundingClientRect().width;
+	        }
+	        else{
+		        document.querySelector(".dropdown-data").style.borderTopRightRadius = "15px";
+	        }
+	        setTimeout(()=>{
+	        	document.getElementById("quota-type").classList.toggle("active");
+	        	
+	        },100);
+        }
+        function changeQuotaType(e){
+	        let quota = e.target.textContent;
+	        document.querySelector(".dropdown-btn").innerHTML = quota + dropdownText;
+	        document.getElementById("quota-type").classList.remove("active");
+	        currentQuotaType = quota=="Pre-processing"?"pre":quota=="Transformation"?"trans":"all";
+	        usageCount1=[];usageCount2=[];monthLabel=[];
+	        #server(..cLoadData(currentQuotaType))#
+	        let usageStats=document.querySelectorAll(".usage-stat");
+		    usageStats[usageStats.length-1].classList.add("stat-active");
+		    currentActive = usageStats[usageStats.length-1];
+	    	nextBtn = document.getElementsByClassName("next")[0];
+	    	prevBtn = document.getElementsByClassName("prev")[0];
+		    checkToDisable(currentActive.dataset.key);
+        }
+        function downloadCSV(){
+	        const data ={
+                headers:["Date"],
+                values:[]
+            }
+	        if(currentQuotaType=="all"){
+		        data.headers.push("Pre-processing","Transformation");
+	        }
+	        else if(currentQuotaType=="pre"){
+		        data.headers.push("Pre-processing");
+	        }
+	        else{
+		        data.headers.push("Transformation");
+	        }
+            if(curStatblock.className.split(" ")[0] == "usage-quota-stat"){
+                let usageStat = document.querySelectorAll(".usage-stat");
+                for(var i=0;i<usageStat.length;i++){
+                    let valObj = {label:"",result:[]};
+	                if(currentQuotaType=="all"){
+                    	valObj.label=usageStat[i].querySelector("h4").textContent;
+                    	valObj.result.push(usageStat[i].querySelector(".stat-data .pre-processing .num").textContent);
+	                	valObj.result.push(usageStat[i].querySelector(".stat-data .tranformation .num").textContent);
+	                }
+	                else{
+		                valObj.label=usageStat[i].querySelector("h4").textContent;
+                    	valObj.result.push(usageStat[i].querySelector(".stat-data .num").textContent);
+	                }
+	                data.values.push(valObj);
+                }
+                const csvData = csvmaker(data);
+                download(csvData);
+            }
+            else{
+                for(var i=0;i<datasets[0].data.length;i++){
+	                let valObj = {label:"",result:[]};
+                    valObj.label=monthLabel[i];
+                    valObj.result.push(datasets[0].data[i]+"%");
+                    	
+	                if(currentQuotaType=="all"){
+	                	valObj.result.push(datasets[1].data[i]+"%");
+	                }
+	                data.values.push(valObj);
+                }
+                const csvData = csvmaker(data);
+                download(csvData);
+            }
+            removePopup();
+        }
+        const csvmaker = function (data) {
+            csvRows = [];
+            const headers = Object.values(data.headers);
+            csvRows.push(headers);
+            if(data.values[0].result!=undefined){
+                for(const row of data.values){
+                    if(row.label!=""){
+                        const values = [row.label,...Object.values(row.result)];
+                        csvRows.push(values.join(","));
+                    }
+                    else{
+                        const values = Object.values(row.result);
+                        csvRows.push(values.join(","));
+                    }
+                }
+            }
+            else{
+                const values = Object.values(data.values);
+                csvRows.push(values.join(","))
+            }
+            return csvRows.join('\n')
+        }
+        const download = function (data) {
+            const blob = new Blob([data], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.setAttribute('href', url)
+  			a.setAttribute('download', 'UsageQuotaStatistics.csv');
+            a.click()
+        }
+
+        Chart.defaults.font.family = "Montserrat";
+        let monthLabel = [];
+        const datasets = [];
+        const usageData = {
+        labels: monthLabel,
+        datasets: datasets
+      };
+      const customDataLabels = {
+        id: 'customDataLabels',
+        afterDatasetsDraw(chart,args,pluginOptions){
+            const {ctx,data,chartArea:{top,bottom,left,right,width,height}} = chart;
+            ctx.save();
+           	data.datasets.forEach((dataset,dataIndex)=>{
+	           	dataset.data.forEach((datapoint,index)=>{
+		           	const textWidth = ctx.measureText(datapoint).width;
+		           	const {x,y} = chart.getDatasetMeta(dataIndex).data[index].tooltipPosition();
+                	ctx.fillStyle = "#405470";
+                	ctx.textBaseline = 'middle';
+                	ctx.font = "700 10px Montserrat";
+                	ctx.fillText(datapoint+"%",x-(textWidth/2),height + 23);
+	           	});
+                //const {x,y} = chart.getDatasetMeta(0).data[index].tooltipPosition()
+                //console.log(x,y);
+                //ctx.fillText(datapoint,x,y-15);
+            })
+        }
+      }
+      const xScalePadding = {
+	      id: 'xScalePadding',
+	      beforeDatasetsDraw(chart,args,pluginOptions){
+		      const {ctx,data,scales:{x,y}} = chart;
+		      x._labelItems.forEach((label,index)=>{
+			      label.textBaseline = 'top';
+			      label.textOffset = 20;
+			  })
+	      }
+      }
+      // config
+      const usageConfig = {
+        type: "bar",
+        data: usageData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          clip:false,
+          layout:{
+              padding:{
+                 top:10,
+              }
+          },
+          scales: {
+            x: {
+	          afterFit: (context)=>{
+		          context.height+=15
+	          },
+              grid: {
+                offset: false,
+                drawOnChartArea: false,
+                tickColor:"white"
+              },
+              ticks:{
+                font:{
+                    size:13,
+                    weight:500,
+                },
+                color: "#405470",
+              },
+              border: {
+                display: false,
+              },
+            },
+            y: {
+              max: 100,
+              border: {
+                display: false,
+                dash:function(context){
+                    if(context.tick.value == 50){
+                        return [6,6];
+                    }
+                    else{
+                        return [];
+                    }
+                }
+              },
+              grid:{
+                lineWidth:2,
+                color:function(context){
+	                if(context.tick.value > 100){
+	                }
+	                else{
+		                return "#9B9B9B80";
+	                }
+                },
+                tickColor:"white"
+              },
+              ticks: {
+                font:{
+                    size:13,
+                    weight:500,
+                },
+                color: "#405470",
+                stepSize: 50,
+                callback: (t, i) => (t % 50 ? "" : t!=0 ? t+"%" : t),
+                scaleLabel: {
+                   display: true,
+                   labelString: "Percentage"
+                }
+              },
+            },
+          },
+          plugins: {
+	        legend:{
+		      position: "bottom",
+		      display: true,
+              labels:{
+                boxWidth:12,
+                usePointStyle:true,
+                pointStyle:'rectRounded',
+                color:"#405470",
+                font:{
+                    size:12,
+                    weight:500,
+                },
+              },
+	        },
+          },
+        },
+        plugins:[xScalePadding,customDataLabels]
+      };
+      // render init block
+      const usageChart = new Chart(document.getElementById("usage-quota-chart"), usageConfig);
+      document.addEventListener("click",(e)=>{
+            if(e.target.closest(".popup-dialog") == null){
+                popup.classList.add("inactive");
+            }
+            if(e.target.closest("#quota-type") == null){
+	            document.getElementById("quota-type").classList.remove("active");
+            }
+        })
+    </script>
+    <script language="cache" method="cLoadData" arguments="d1:%String">
+    	d LoadData^jxDashboardUsage
+    </script>
+</html>

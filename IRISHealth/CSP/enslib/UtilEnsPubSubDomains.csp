@@ -1,0 +1,51 @@
+<!--
+PubSub: list of Subscription Domains
+-->
+
+<AutoPage domain="Ensemble" pagename="PubSub Domains" parentpage="UtilEnsHome.csp" useframes="0">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>PubSub Domain Names</Text>
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>The following PubSub Domain Names are currently defined. PubSub domain names are used to group PubSub subscribers and their associated subscriptions.</Text>
+	<Query>EnsLib.PubSub.DomainName:Enumerate</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>true</ShowZebra>
+	<ShowRowNumbers>true</ShowRowNumbers>
+	<AutoRefresh>false</AutoRefresh>
+	<HiddenColumns>ID</HiddenColumns>
+	
+	<Actions>
+		<Action href="UtilEnsPubSubDomainEdit.csp" name="$A">
+			<Caption>Edit</Caption>
+			<Popup>Edit this Domain definition.</Popup>
+			<IDValues>{ID}</IDValues>
+		</Action>
+		<Action href="UtilEnsPubSubDomains.csp?$AUTOFORM_DELETE=1&amp;$CLASS=EnsLib.PubSub.DomainName" name="$B">
+			<Caption>Delete</Caption>
+			<Popup>Delete this PubSub domain definition.</Popup>
+			<Confirm>Do you really wish to delete this domain definition?</Confirm>
+			<IDValues>{ID}</IDValues>
+		</Action>
+	</Actions>
+
+	<Commands>
+		<Action href="UtilEnsPubSubDomains.csp">
+			<Caption>Show Domains</Caption>
+		</Action>
+		<Action href="UtilEnsSubscribers.csp">
+			<Caption>Show Subscribers</Caption>
+		</Action>
+		<Action href="UtilEnsSubscriptions.csp">
+			<Caption>Show Subscriptions</Caption>
+		</Action>
+		<Action href="UtilEnsPubSubDomainEdit.csp">
+			<Caption>Create New Domain Name</Caption>
+		</Action>
+	</Commands>
+
+</Pane>
+
+</AutoPage>

@@ -1,0 +1,1431 @@
+<?xml version="1.0" ?>
+
+<!--
+	ensdtlcanvas.svg
+	Copyright (c) 2003, InterSystems Corp.
+	ALL RIGHTS RESERVED
+
+	SVG Editor Canvas for DTL editor
+-->
+
+<svg id="svg" onload="Initialize()" zoomAndPan="disable" > 
+
+<style type="text/css"><![CDATA[
+
+.canvas {
+	fill: #DDEEFF;
+	stroke: gray;
+	stroke-width: 1;
+}
+
+.TitleLine {
+	fill: none;
+	stroke: blue;
+	stroke-width: 1;
+}
+
+.Spine {
+	fill: #EEEEFF;
+	stroke: blue;
+	stroke-width: 1;
+}
+
+.Expando {
+	fill: #EEEEFF;
+	stroke: blue;
+	stroke-width: 1;
+}
+
+.ExpandoDown {
+	fill: plum;
+	stroke: green;
+	stroke-width: 1.5;
+}
+
+.PropRect {
+	fill: white;
+	stroke: blue;
+	stroke-width: 1;
+	xfilter: url(#dropShadow);
+}
+
+.PropRectSelected {
+	fill: yellow;
+	stroke: blue;
+	stroke-width: 2;
+	xfilter: url(#dropShadow);
+}
+
+.PropRectRelated {
+	fill: #DDCCFF;
+	stroke: blue;
+	stroke-width: 2;
+	xfilter: url(#dropShadow);
+}
+
+.PropRectCanConnect {
+	fill: orange;
+	stroke: green;
+	stroke-width: 1;
+	xfilter: url(#dropShadow);
+}
+
+.ConnectorNone {
+	fill: white;
+	stroke: blue;
+	stroke-width: 1;
+}
+
+.ConnectorConnecting {
+	fill: orange;
+	stroke: blue;
+	stroke-width: 2;
+}
+
+.ConnectorOver {
+	fill: orange;
+	stroke: blue;
+	stroke-width: 2;
+}
+
+.ConnectorSelected {
+	fill: yellow;
+	stroke: blue;
+	stroke-width: 2;
+}
+
+.DTLConnector {
+	fill: none;
+	stroke: green;
+	stroke-width: 2;
+	stroke-linejoin: round;
+	opacity: 0.7;
+}
+
+.DTLConnectorSelected {
+	fill: none;
+	stroke: blue;
+	stroke-width: 3;
+	stroke-linejoin: round;
+}
+
+.DTLCircle {
+	fill: white;
+	stroke: blue;
+	stroke-width: 1;
+}
+
+.DTLCircleSelected {
+	fill: yellow;
+	stroke: blue;
+	stroke-width: 2;
+}
+
+.Title {
+  pointer-events: none;
+  font-size: 20;
+  fill: black;
+  stroke: none;
+}
+
+.Error {
+  pointer-events: none;
+  font-size: 18;
+  fill: red;
+  stroke: none;
+}
+
+.TitleSmall {
+  pointer-events: none;
+  font-size: 14;
+  fill: blue;
+  stroke: none;
+}
+
+.PropName {
+  pointer-events: none;
+  font-size: 14;
+  fill: black;
+  stroke: none;
+}
+  
+.RubberBand {
+  stroke: black;
+  fill: none;
+  stroke-width: 3;
+  stroke-opacity: 0.5;
+  stroke-linejoin: round;
+}
+
+text, tspan {
+  font-family: tahoma,verdana;
+}
+
+]]></style>
+
+<!-- scripts -->
+
+<script type="text/ecmascript" xlink:href="enssvg.js"/>
+
+<script language="text/javascript">
+<![CDATA[
+
+// common variables
+var canvasName = 'dtl';
+
+// position of spine
+var spineX = 500;
+
+// count of property boxes
+var boxCount = 0;
+var maxBoxes = 300;
+
+var readOnlyFlag = false;
+var mouseScale = 100;
+var api = new Object();
+
+function Initialize()
+{
+	// replace context menu
+	var newMenuRoot = parseXML(printNode(document.getElementById('CanvasMenu')), contextMenu);
+	contextMenu.replaceChild( newMenuRoot, contextMenu.firstChild );
+
+	// find loading div in outer html
+	var loadingDiv = self.document.getElementById("loading");
+	if (loadingDiv) {
+		loadingDiv.style.display = 'none';
+	}
+	
+	// associate API methods with loading <div> in html parent
+	api.setTarget = setTarget;
+	api.setSource = setSource;
+	api.addAction = addAction;
+	api.removeAction = removeAction;
+	api.clearActions = clearActions;
+	api.getZoom = getZoom;
+	api.setZoom = setZoom;
+	api.setReadOnly = setReadOnly;
+
+	loadingDiv.api = api;
+	
+	setCanvasSize(1000,100);
+
+	setZoom(getCookie(canvasName,100));
+	
+	if (self.initDTL) initDTL();
+}
+
+// public API:
+// name is name of target property, proplist is csv list of properties
+function setTarget(name, proplist)
+{
+	setClass('target',name,proplist);
+	currItem = null;
+	layoutBoxes();
+	updateContextMenu();
+}
+
+// name is name of source property, proplist is csv list of properties
+function setSource(name, proplist)
+{
+	/* !!!
+	proplist = ""; // !!!
+	for (var i = 1; i < 10; i++) {
+		var p = "SEG" + i;
+		for (var j = 1; j < 100; j++) {
+			proplist += (proplist == "" ? "" : ",") + "source." + p + ".Field" + j;
+		}
+	}
+	*/
+
+	setClass('source',name,proplist);
+	currItem = null;
+	layoutBoxes();
+	updateContextMenu();
+}
+
+// adds lines to represent action between target and csv-list of source properties
+function addAction(target, source)
+{
+	if (connectorList[target]) {
+		// alert('Action is already defined for target: ' + target);
+		return;
+	}
+	
+	// create connection to target
+	var connect = new Connector(target, source);
+	if (connect.SVGGroup) {
+		// add to list
+		connectorList[target] = connect;
+	
+		// update menu
+		updateContextMenu();
+	}
+}
+
+// remove lines for target action
+function removeAction(target)
+{
+	if (connectorList[target]) {
+		connectorList[target].remove();
+		delete connectorList[target];
+	}
+
+	// update menu
+	updateContextMenu();
+}
+
+// remove all actions
+function clearActions()
+{
+	for (var target in connectorList) {
+		connectorList[target].remove();
+	}
+	
+	// reset list of connectors
+	connectorList = new Object();
+}
+
+function getZoom()
+{
+	canvas_setResultsDiv('zoom', currZoom);
+}
+
+function setReadOnly(ro)
+{
+	readOnlyFlag = ro;
+}
+
+// private
+
+// tell Studio to add an assignment for the select item
+function addAssignment()
+{
+	// !!!
+	if (currItem) {
+		raiseEvent("add", currItem);
+	}
+}
+
+// tell Studio to remove the assignment for the select item
+function removeAssignment()
+{
+	if (currItem && getCurrConnector()) {
+		// find target property
+		var prop = currItem.split("_")[1];
+		raiseEvent("remove", prop);
+	}
+}
+
+// set the value of the results element for the external system to read.
+function canvas_setResultsDiv(command, value)
+{
+	// find results div
+	var results = self.document.getElementById("results");
+
+	// place value into results
+	if (results) {
+		results.innerHTML = command + ":" + value;
+	}
+}
+
+// raise an event for the external system
+function canvas_raiseEvent(type,data)
+{
+	self.raiseEvent(type,data);
+}
+
+// sets up boxes for either target or source classes
+function setClass(type, name, proplist)
+{
+	// set title
+	setTextNode(type + "Name", name);
+	
+	var key;
+	var offset = (type == "target") ? 20 : 0;
+	
+	// remove old property boxes	
+	if (propIndex[type]) {
+		for (key in propIndex[type]) {
+			propIndex[type][key].remove();
+		}
+	}
+	
+	// reset index
+	propIndex[type] = new Object();
+		
+	// create new property boxes
+	var name,label,s,parent;
+	var props = proplist.split(",");
+	var y = 50 + offset;
+	for (var i = 0; i < props.length; i++) {
+		if (props[i].length > 0) {
+			s = props[i].split(".");
+			name = '';
+			parent = null;
+			
+			// test if all parent shapes are defined
+			for (n = 0; n < s.length; n++) {
+				name = name + (name!='' ? '.' : '') + s[n];
+				if (!propIndex[type][name]) {
+					label = s[n];
+					propIndex[type][name] = new PropertyBox(type,parent,name,label,y);
+					y += 40;
+				}
+				parent = propIndex[type][name];
+			}
+		}
+	}
+}
+
+var currItem = null;  // selected item
+
+// find out if the current selected item is a property
+function getCurrProperty()
+{
+	if (currItem && (currItem.split("_")[0] != "connector")) {
+		return currItem;
+	}
+	
+	return null;
+}
+
+function getCurrConnector()
+{
+	if (currItem && (currItem.split("_")[0] == "connector")) {
+		return connectorList[currItem.split("_")[1]];
+	}
+	
+	return null;
+}
+
+// index of properties subscripted by name
+var propIndex = new Object();
+propIndex['target'] = null;
+propIndex['source'] = null;
+
+// property box object: type is 'target' or 'source'
+function PropertyBox(type, parent, name, label)
+{
+	this.type = type;
+	this.name = name;
+	this.label = label;
+	this.isVisible = true;
+	this.showChildren = true;
+	this.parent = parent;
+	this.children = new Array();
+	this.SVGGroup = null;
+
+	// methods
+	this.remove = PropertyBox_remove;
+	this.place = PropertyBox_place;
+	this.render = PropertyBox_render;
+	this.unrender = PropertyBox_unrender;
+
+	if (parent) {
+		parent.children[parent.children.length] = this;
+		
+		// make expando visible for parent
+		if (parent.SVGGroup) {
+			parent.expando.setAttribute("style","");
+		}
+	}
+	
+	// count . in name
+	this.level = name.split(".").length;
+	
+	var wid = spineX - 100;
+	var cx, xpos, ypos;
+	ypos = 0;
+
+	wid -= (this.level-1) * 30;
+	if (type == 'target') {
+		xpos = 50 + ((this.level-1) * 30);
+		cx = wid + 5;
+	}
+	else {
+		xpos = spineX + 60 + ((this.level-1) * 30);
+		cx = -5;
+	}
+	
+	this.xPos = xpos;
+	this.yPos = ypos;
+
+	this.cx = xpos + cx;
+	this.cy = ypos + 12;
+	
+	this.width = wid;
+	
+	// decide whether to show children initially
+	switch(this.level) {
+	case 1:
+		this.isVisible = true;
+		this.showChildren = true;
+		this.render();
+		break;
+	case 2:
+		this.isVisible = true;
+		this.showChildren = false;
+		this.render();
+		break;
+	default:
+		this.isVisible = false;
+		this.showChildren = false;
+		break;
+	}
+}
+
+// create svg for this shape
+function PropertyBox_render()
+{
+	if (this.SVGGroup) {
+		return;
+	}
+	
+	boxCount++;
+
+	// group with elements inside
+	this.SVGGroup = document.createElement("g");
+	
+	this.SVGGroup.addEventListener("mousedown",propertyClick,false);
+	if (this.type == 'source') {
+		this.SVGGroup.addEventListener("mouseover",sourceMouseOver,false);
+		this.SVGGroup.addEventListener("mouseout",sourceMouseOut,false);
+	}
+
+	// id value
+	this.SVGGroup.setAttribute("id", this.name);
+	
+	// rect, etc...
+	var rect = document.createElement("rect");
+	rect.setAttribute("id","rect_" + this.name);
+	rect.setAttribute("x",0);
+	rect.setAttribute("y",0);
+	rect.setAttribute("width",this.width);
+	rect.setAttribute("height",24);
+	rect.setAttribute("rx",4);
+	rect.setAttribute("class","PropRect");
+	
+	this.SVGGroup.appendChild(rect);
+
+	// io handle
+	var io = document.createElement("circle");
+	io.setAttribute("id","io_" + this.name);
+	io.setAttribute("cx",this.cx - this.xPos);
+	io.setAttribute("cy",12);
+	io.setAttribute("r",5);
+	io.setAttribute("class","ConnectorNone");
+	
+	if (this.type == 'target') {
+		io.addEventListener("mousedown",targetHandleMouseDown,false);
+	}
+	
+	this.SVGGroup.appendChild(io);
+	
+	// expando box
+	var expando = document.createElement("polygon");
+	expando.setAttribute("points", "5,6 15,12 5,18");
+	expando.setAttribute("class","Expando");
+	expando.setAttribute("id","expando_" + this.name);
+	expando.setAttribute("transform",this.showChildren ? "rotate(90,10,12)" : "");
+	if (this.children.length == 0) {
+		expando.setAttribute("style","display: none;");
+	}
+
+	expando.addEventListener("mousedown",expandoMouseDown,false);
+	expando.addEventListener("mouseup",expandoMouseUp,false);
+	expando.addEventListener("mouseover",expandoMouseOver,false);
+	expando.addEventListener("mouseout",expandoMouseOut,false);
+	this.SVGGroup.appendChild(expando);
+	this.expando = expando;
+
+	// text
+	var text = document.createElement("text");
+	text.setAttribute("class","PropName");
+	text.setAttribute("x", 20);
+	text.setAttribute("y", 18);
+	
+	// create the text node and append it
+	var textNode = document.createTextNode(this.label);
+	text.appendChild(textNode);
+
+	this.SVGGroup.appendChild(text);
+
+	// default translation
+	var transform = 'translate(' + this.xPos + ',' + this.yPos + ')';
+	this.SVGGroup.setAttribute("transform",transform);
+
+	// add group to DOM	
+	var canvas = document.getElementById("canvas");
+
+	canvas.appendChild(this.SVGGroup);
+}
+
+// delete svg for this shape
+function PropertyBox_unrender()
+{
+	if (this.SVGGroup) {
+
+		boxCount--;
+
+		// remove SVG elements
+		var group = document.getElementById(this.name);
+		if (group) {
+			var parent = group.parentNode;
+			if (parent) {
+				parent.removeChild(group);
+			}
+		}
+
+		this.SVGGroup = null;
+	}
+}
+
+function PropertyBox_remove()
+{
+	this.unrender();
+}
+
+// set the position of this box
+function PropertyBox_place(ypos, visible)
+{
+	if (!visible) {
+		// hide this box (remove svg for it)
+		this.unrender();
+		//if (this.SVGGroup) {
+		//	this.SVGGroup.setAttribute("style","display: none;");
+		//}
+
+		this.isVisible = false;
+
+		if (this.children) {
+			for (var n = 0; n < this.children.length; n++) {
+				ypos = this.children[n].place(ypos, false);
+			}
+		}
+	}
+	else {
+		if (!this.SVGGroup) {
+			this.render();
+		}
+
+		var expando = document.getElementById("expando_" + this.name);
+		expando.setAttribute("transform",this.showChildren ? "rotate(90,10,12)" : "");
+
+		this.SVGGroup.setAttribute("style","");
+		this.isVisible = true;
+
+		this.yPos = ypos;
+		this.cy = ypos + 12;
+
+		ypos += 40;
+
+		var transform = 'translate(' + this.xPos + ',' + this.yPos + ')';
+		this.SVGGroup.setAttribute("transform",transform);
+
+		if (this.children) {
+			for (var n = 0; n < this.children.length; n++) {
+				ypos = this.children[n].place(ypos, this.showChildren);
+			}
+		}
+	}
+	
+	return ypos;
+}
+
+/// find the specified PropertyBox
+function findPropertyBox(type, name)
+{
+	if (type == null) {
+		// figure out type from name
+		type = name.split(".")[0];
+	}
+
+	if (propIndex[type]) {
+		return propIndex[type][name];
+	}
+
+	return null;
+}
+
+// layout out property boxes according to hierarchy and expando settings
+function layoutBoxes(flag)
+{
+	var box;
+
+	// place target shapes
+	if (propIndex['target']) {
+		box = propIndex['target']['target'];
+		if (box) {
+			box.place(60, true);
+		}
+	}
+
+	// place source shapes
+	if (propIndex['source']) {
+		box = propIndex['source']['source'];
+		if (box) {
+			box.place(60, true);
+		}
+	}
+	
+	// fix connectors
+	for (var target in connectorList) {
+		connectorList[target].update();
+	}
+
+	// recalculate size of canvas
+	var count = 0;
+	var tcount = 0;
+	for (key in propIndex['target']) {
+		if (propIndex['target'][key].isVisible) {
+			tcount++;
+		}
+	}
+
+	var scount = 0;
+	for (key in propIndex['source']) {
+		if (propIndex['source'][key].isVisible) {
+			scount++;
+		}
+	}
+	count = (tcount > scount) ? tcount : scount;
+	setCanvasSize(1000, (count * 40) + 50 + 20);
+}
+
+// mouse events
+
+function canvasMouseDown(evt)
+{
+	evt.stopPropagation();
+	selectItem(null);
+}
+
+function canvasMouseMove(evt)
+{
+	evt.stopPropagation();
+
+	if (currRubberBand) {
+		// move edge of RubberBand
+		var coord = document.getElementById("canvasSVG");
+		var xoff = coord.getAttribute("x") * 1;
+		var yoff = coord.getAttribute("y") * 1;
+
+		moveRubberBand((evt.clientX * (mouseScale/currZoom)) - xoff, (evt.clientY * (mouseScale/currZoom)) - yoff);
+	}
+}
+
+function canvasMouseUp(evt)
+{
+	evt.stopPropagation();
+	
+	if (currRubberBand) {
+		endRubberBand();
+
+		if (currSourceId) {
+			var rect = document.getElementById("rect_" + currSourceId);
+			rect.setAttribute("class","PropRect");
+			
+			var io = document.getElementById("io_" + currSourceId);
+			io.setAttribute("class","ConnectorNone");
+			
+			currSourceId = null;
+		}
+	}	
+}
+
+function canvasMouseOver(evt)
+{
+	evt.stopPropagation();
+	
+	if (currRubberBand) {
+		// see if we have moved out of a source property
+		if (currSourceId &&
+			 ((lastSourceX != evt.clientX) || (lastSourceY != evt.clientY))) {
+			 
+			var rect = document.getElementById("rect_" + currSourceId);
+			rect.setAttribute("class","PropRect");
+			
+			var io = document.getElementById("io_" + currSourceId);
+			io.setAttribute("class","ConnectorNone");
+			
+			currSourceId = null;
+		}
+	}	
+}
+
+function propertyClick(evt)
+{
+	evt.stopPropagation();
+	var el = evt.getTarget();
+	var id = el.parentNode.id();
+
+	selectItem(id);
+}
+
+function connectorClick(evt)
+{
+	evt.stopPropagation();
+	var el = evt.getTarget();
+	var id = el.parentNode.id();
+
+	selectItem(id);
+}
+
+var lastSourceX = 0;
+var lastSourceY = 0;
+var currSourceId = null;
+
+function sourceMouseOver(evt)
+{
+	evt.stopPropagation();
+	var el = evt.getTarget();
+	var id = el.parentNode.id();
+
+	if (currRubberBand && (id != currSourceId)) {
+		if (currSourceId) {
+			var rect = document.getElementById("rect_" + currSourceId);
+			rect.setAttribute("class","PropRect");
+
+			var io = document.getElementById("io_" + currSourceId);
+			io.setAttribute("class","ConnectorNone");
+		}
+	
+		var rect = document.getElementById("rect_" + id);
+		rect.setAttribute("class","PropRectCanConnect");
+
+		var io = document.getElementById("io_" + id);
+		io.setAttribute("class","ConnectorConnecting");
+
+		currSourceId = id;
+	}
+}
+
+function sourceMouseOut(evt)
+{
+	evt.stopPropagation();
+	var el = evt.getTarget();
+	var id = el.parentNode.id();
+	
+	lastSourceX = evt.clientX;
+	lastSourceY = evt.clientY;
+}
+
+function targetHandleMouseDown(evt)
+{
+	var el = evt.getTarget();
+	evt.stopPropagation();
+	
+	// select this shape
+	var id = el.parentNode.id();
+	selectItem(id);
+	
+	if (readOnlyFlag) {
+		// no connections for read only mode
+		return;
+	}
+	
+	// test if this property is already connected
+	var t = id.split(".")[0];
+	if (t == 'target') {
+		if (connectorList[id]) {
+			return;
+		}
+	}
+
+	// start a RubberBand in this shape in order to connect
+	
+	var x = evt.clientX;
+	var y = evt.clientY;
+		
+	// make a RubberBand
+	var coord = document.getElementById("canvasSVG");
+	var xoff = coord.getAttribute("x") * 1;
+	var yoff = coord.getAttribute("y") * 1;
+	startRubberBand((x * (mouseScale/currZoom)) - xoff, (y * (mouseScale/currZoom)) - yoff, id);
+	
+	currSourceId = null;
+}
+
+function expandoMouseDown(evt)
+{
+	var el = evt.getTarget();
+	evt.stopPropagation();
+	
+	// toggle children
+	var id = el.id.split("_")[1];
+	var box = findPropertyBox(null, id);
+	if (box) {
+		box.showChildren = !box.showChildren;
+		el.setAttribute("class","Expando");
+		
+		// see if we have too many boxes...
+		if (box.showChildren && (boxCount > maxBoxes)) {
+			// close a different parent of this tree
+			var parent = findPropertyBox(null, box.type);
+			for (var n = 0; n < parent.children.length; n++) {
+				var child = parent.children[n];
+				if (child.showChildren && (box.name.substr(0,child.name.length) != child.name)) {
+					// this is a different branch/ close it
+					child.showChildren = false;
+					break;
+				}
+			}
+		}
+
+		layoutBoxes();
+	}
+}
+
+function expandoMouseUp(evt)
+{
+	var el = evt.getTarget();
+	evt.stopPropagation();
+}
+
+function expandoMouseOut(evt)
+{
+	var el = evt.getTarget();
+	evt.stopPropagation();
+	
+	el.setAttribute("class","Expando");
+}
+
+function expandoMouseOver(evt)
+{
+	var el = evt.getTarget();
+	evt.stopPropagation();
+	
+	el.setAttribute("class","ExpandoDown");
+}
+
+// -------------------------------------------------------------------------------
+
+// array of connector objects: indexed by target name
+var connectorList = new Object();
+
+// Connector object
+function Connector(target, source)
+{
+	this.target = target;
+	this.source = source;
+	
+	// APIs
+	this.remove = Connector_remove;
+	this.update = Connector_update;
+	
+	// find target PropBox
+	var tBox = findPropertyBox('target',target);
+	if (!tBox) {
+		// no connector made
+		this.SVGGroup = null;
+		return;
+	}
+
+	// see if target is selected
+	var	selected = (currItem == target);
+	
+	var tx = tBox.cx;
+	var ty = tBox.cy;
+
+	// create SVG element (only 1 per target)
+	var canvas = document.getElementById("canvas");
+
+	var id = "connector_" + this.target;
+	var g = document.createElement("g");
+	g.setAttribute("id",id);
+	
+	this.SVGGroup = g;
+
+	this.SVGGroup.addEventListener("mousedown",connectorClick,false);
+
+	// introduce some randomness to make
+	// layout clearer; remember this value
+	this.rx = 15 + (Math.random() * 10);
+
+	// line from target to spine
+	var line = document.createElement("line");
+	line.setAttribute("class", selected ? "DTLConnectorSelected" : "DTLConnector");
+	line.setAttribute("x1", tx);
+	line.setAttribute("y1", ty);
+
+	line.setAttribute("x2", spineX);
+	line.setAttribute("y2", ty);
+	g.appendChild(line);
+	this.targetLine = line;
+
+	// now lines to every element referenced by value
+	sourceList = source.split(",");
+	this.sourceLines = new Array();
+	
+	for (n = 0; n != sourceList.length; n++) {
+		var src = sourceList[n];
+
+		var sBox = findPropertyBox('source',src);
+		if (sBox) {
+			var sx = sBox.cx;
+			var sy = sBox.cy;
+			
+			var path = 'M ' + spineX + ' ' + ty + 
+							', L ' + (spineX + this.rx) + ' ' + ty +
+							', ' + (sx - this.rx) + ' ' + sy + 
+							', ' + sx + ' ' + sy; 
+
+			line = document.createElement("path");
+			line.setAttribute("class", selected ? "DTLConnectorSelected" : "DTLConnector");
+			line.setAttribute("d",path);
+			g.appendChild(line);
+			
+			this.sourceLines[n] = line;
+		}
+	}
+	
+	// central circle from target to spine
+	var circle = document.createElement("circle");
+	circle.setAttribute("class", selected ? "DTLCircleSelected" : "DTLCircle");
+	circle.setAttribute("cx", spineX);
+	circle.setAttribute("cy", ty);
+	circle.setAttribute("r", 5);
+	g.appendChild(circle);
+	this.spineCircle = circle;
+	
+	// append to canvas (after Spine)
+	var spine = document.getElementById("Spine");
+	canvas.insertBefore(g,spine);
+	
+	// make sure new lines are drawn right
+	this.update();
+}
+
+// update display of this connector
+function Connector_update()
+{
+	var visible = true;
+	var tx = 0;
+	var ty = 0;
+	var sx = 0;
+	var sy = 0;
+
+	// check if target is visible
+	var tBox = findPropertyBox('target',this.target);
+	if (tBox) {
+		if (tBox.isVisible) {
+			tx = tBox.cx;
+			ty = tBox.cy;
+			this.targetLine.setAttribute("style", "");
+		}
+		else {
+			// find visible parent
+			var b = tBox.parent;
+			while(b && !b.isVisible) {
+				b = b.parent;
+			}
+			if (b) {
+				tx = b.cx;
+				ty = b.cy;
+				this.targetLine.setAttribute("style", "stroke-dasharray: 4,2;");
+			}
+			else {
+				visible = false;
+			}
+		}
+
+		if (visible) {
+			this.targetLine.setAttribute("x1", tx);
+			this.targetLine.setAttribute("y1", ty);
+			this.targetLine.setAttribute("x2", spineX);
+			this.targetLine.setAttribute("y2", ty);
+			this.spineCircle.setAttribute("cy", ty);
+		}
+	}
+	else {
+		visible = false;
+	}
+	
+	// check if sources are visible
+	if (visible) {
+		sourceList = this.source.split(",");
+		for (n = 0; n != sourceList.length; n++) {
+			var src = sourceList[n];
+
+			var sBox = findPropertyBox('source',src);
+			if (sBox) {
+				if (sBox.isVisible) {
+					sx = sBox.cx;
+					sy = sBox.cy;
+					this.sourceLines[n].setAttribute("style", "");
+				}
+				else {
+					// find visible parent
+					var b = sBox.parent;
+					while(b && !b.isVisible) {
+						b = b.parent;
+					}
+					if (b) {
+						sx = b.cx;
+						sy = b.cy;
+						this.sourceLines[n].setAttribute("style", "stroke-dasharray: 4,4;");
+					}
+					else {
+						// !!!
+					}
+				}
+
+				var path = 'M ' + spineX + ' ' + ty + 
+							', L ' + (spineX + this.rx) + ' ' + ty +
+							', ' + (sx - this.rx) + ' ' + sy + 
+							', ' + sx + ' ' + sy; 
+
+				this.sourceLines[n].setAttribute("d",path);
+			}
+		}
+	}
+	
+	this.SVGGroup.setAttribute("style",visible ? "" : "display: none;");
+}
+
+function Connector_remove()
+{
+	var id = "connector_" + this.target;
+
+	// if we are selected, unselect
+	if (currItem == id) {
+		selectItem(null);
+	}
+
+	// remove SVG elements
+	var group = document.getElementById(id);
+	if (group) {
+		var parent = group.parentNode;
+		if (parent) {
+			parent.removeChild(group);
+		}
+	}
+}
+
+// private functions
+// Set the contents of text element id to str
+function setTextNode(id,str)
+{
+	var text = document.getElementById(id);
+	if (!text) {
+		return;
+	}
+	
+	// create next text node and replace the current one
+	var oldNode = text.firstChild;
+	text.removeChild(oldNode);
+
+	var textNode;
+	textNode = document.createTextNode(str);
+	text.appendChild(textNode);
+}
+
+function selectItem(id)
+{
+	var currProperty, connector;
+
+	if (currItem != id) {
+		currProperty = getCurrProperty();
+
+		if (currProperty) {
+			// unselect property
+			var rect = document.getElementById("rect_" + currProperty);
+			rect.setAttribute("class","PropRect");
+
+			var io = document.getElementById("io_" + currProperty);
+			io.setAttribute("class","ConnectorNone");
+
+			// is there a connector for this (target only)
+			var group = document.getElementById("connector_" + currProperty);
+			if (group) {
+				for (var n = 0; n != group.getChildNodes().length; n++) {
+					var item = group.getChildNodes().item(n);
+					if (item.getAttribute("class") == "DTLConnectorSelected") {
+						item.setAttribute("class","DTLConnector");
+					}
+					else {
+						item.setAttribute("class","DTLCircle");
+					}
+				}
+			}
+
+			// now unhighlight end points of connectors
+			if (connectorList[currProperty]) {
+				sourceList = connectorList[currProperty].source.split(",");
+				for (n = 0; n != sourceList.length; n++) {
+					var src = sourceList[n];
+
+					var rel = document.getElementById("rect_" + src);
+					if (rel) {
+						rel.setAttribute("class","PropRect");
+					}
+					var io = document.getElementById("io_" + src);
+					if (io) {
+						io.setAttribute("class","ConnectorNone");
+					}
+				}
+			}
+
+			currItem = null;
+		}
+		else if (currItem) {
+			// unselect connector
+			connector = getCurrConnector();
+			if (connector) {
+				connector.targetLine.setAttribute("class","DTLConnector");
+				connector.spineCircle.setAttribute("class","DTLCircle");
+				for (var n = 0; n < connector.sourceLines.length; n++) {
+					if (connector.sourceLines[n]) {
+						connector.sourceLines[n].setAttribute("class","DTLConnector");
+					}
+				}
+			}
+		}
+
+		if (id) {
+			// select new item
+			currItem = id;
+			currProperty = getCurrProperty();
+			if (currProperty) {
+				// select property
+				var rect = document.getElementById("rect_" + id);
+				rect.setAttribute("class","PropRectSelected");
+
+				var io = document.getElementById("io_" + id);
+				io.setAttribute("class","ConnectorSelected");
+
+				// is there a connector for this (target only)
+				var group = document.getElementById("connector_" + currProperty);
+				if (group) {
+					for (var n = 0; n != group.getChildNodes().length; n++) {
+						var item = group.getChildNodes().item(n);
+
+						if (item.getAttribute("class") == "DTLConnector") {
+							item.setAttribute("class","DTLConnectorSelected");
+						}
+						else {
+							item.setAttribute("class","DTLCircleSelected");
+						}
+					}
+				}
+
+				// now highlight end points of connectors
+				if (connectorList[currProperty]) {
+					sourceList = connectorList[currProperty].source.split(",");
+					for (n = 0; n != sourceList.length; n++) {
+						var src = sourceList[n];
+
+						var rel = document.getElementById("rect_" + src);
+						if (rel) {
+							rel.setAttribute("class","PropRectRelated");
+						}
+						var io = document.getElementById("io_" + src);
+						if (io) {
+							io.setAttribute("class","ConnectorSelected");
+						}
+					}
+				}
+			}
+			else {
+				// select connector
+				connector = getCurrConnector();
+				if (connector) {
+					connector.targetLine.setAttribute("class","DTLConnectorSelected");
+					connector.spineCircle.setAttribute("class","DTLCircleSelected");
+					for (var n = 0; n < connector.sourceLines.length; n++) {
+						if (connector.sourceLines[n]) {
+							connector.sourceLines[n].setAttribute("class","DTLConnectorSelected");
+						}
+					}
+				}
+			}
+		}
+	}
+
+	updateContextMenu();
+
+	// notify studio of selection
+	currProperty = null;
+	if (currItem) {
+		connector = getCurrConnector();
+		if (connector) {
+			currProperty = currItem.split("_")[1];
+		}
+		else {
+			currProperty = getCurrProperty();
+		}
+	}
+
+	canvas_setResultsDiv("select", (currProperty ? currProperty : ""));
+	raiseEvent("select", (currProperty ? currProperty : ""));
+}
+
+// update context menu based on current state
+function updateContextMenu()
+{
+	// update context menu
+	var menuAdd = false;
+	var menuRemove = false;
+	var connector = getCurrConnector();
+
+	if (connector && !readOnlyFlag) {
+		menuRemove = true;
+	}
+
+	setMenuItemOption("enabled", "menu_Add", "", menuAdd);
+	setMenuItemOption("enabled", "menu_Remove", "", menuRemove);
+}
+
+
+// ---------------------------------------------------------------------------
+// RubberBand functions
+// the rubber band provides feedback while connecting shapes
+
+var rubberX = 0;
+var rubberY = 0;
+var rubberStart = null;
+var currRubberBand = null;
+
+function startRubberBand(x, y, start)
+{
+	if (currRubberBand) {
+		return;
+	}
+
+	// remember start of line
+	rubberX = x;
+	rubberY = y;
+	rubberStart = start; // target name
+	
+	var element = document.createElement("line");
+	element.setAttribute("class", "RubberBand");
+	element.setAttribute("x1", x);
+	element.setAttribute("y1", y);
+	element.setAttribute("x2", x);
+	element.setAttribute("y2", y);
+
+	var canvas = document.getElementById("canvas");
+	canvas.appendChild(element);
+
+	currRubberBand = element;
+}
+
+function moveRubberBand(x, y)
+{
+	if (currRubberBand) {
+		currRubberBand.setAttribute("x2", x);
+		currRubberBand.setAttribute("y2", y);
+	}
+}
+
+// end the connection rubber band;
+// if target and source are defined, connect them, else cancel
+function endRubberBand()
+{
+	if (currRubberBand) {
+		// delete the rubber band
+		var canvas = document.getElementById("canvas");
+		canvas.removeChild(currRubberBand);
+		currRubberBand = null;
+		
+		// connect?
+		var currProperty = getCurrProperty();
+		if (currProperty && currSourceId) {
+			raiseEvent("assign", currProperty + "," + currSourceId);
+
+			var rect = document.getElementById("rect_" + currSourceId);
+			rect.setAttribute("class","PropRect");
+			
+			var io = document.getElementById("io_" + currSourceId);
+			io.setAttribute("class","ConnectorNone");
+			currSourceId = null;
+		}
+	}
+}
+
+]]>
+</script>
+
+<!-- defs -->
+<defs>
+
+<!-- context menu -->
+<menu id="CanvasMenu" xmlns="http://mynamepsace.com/">
+    <header>DTL Editor Menu</header>
+    <menu id="menu_zoom">
+	 <header>Zoom</header>
+	 <item id="menu_zoom_33" onactivate="setZoom(33);">33%</item>
+	 <item id="menu_zoom_50" onactivate="setZoom(50);">50%</item>
+	 <item id="menu_zoom_75" onactivate="setZoom(75);">75%</item>
+	 <item id="menu_zoom_88" onactivate="setZoom(88);">88%</item>
+	 <item checked="yes" id="menu_zoom_100" onactivate="setZoom(100);">100%</item>
+	 <item id="menu_zoom_110" onactivate="setZoom(110);">110%</item>
+	 <item id="menu_zoom_125" onactivate="setZoom(125);">125%</item>
+	 <item id="menu_zoom_150" onactivate="setZoom(150);">150%</item>
+	 <item id="menu_zoom_200" onactivate="setZoom(200);">200%</item>
+    </menu>
+    <separator/>
+	 <!--<item enabled="no" id="menu_Add" onactivate="addAssignment();">Add Assignment</item>-->
+	 <item enabled="no" id="menu_Remove" onactivate="removeAssignment();">Remove Assignment</item>
+
+    <separator/>
+	<item action="Find" id="Find">Find...</item>
+	<item action="FindAgain" id="FindAgain">Find Again</item>
+    <separator/>
+    <item action="About">A&amp;bout SVG Viewer...</item>
+</menu>
+
+<!-- filters -->
+<filter id="dropShadow" x="-2%" y="-2%" height="120%" width="120%">
+<feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+<feOffset dx="4px" dy="4px" result="offsetBlur" />
+<feMerge>
+	<feMergeNode in="offsetBlur"/>
+	<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+
+</defs>
+
+<!-- elements -->
+
+<!-- canvas -->
+
+<svg id="canvasSVG" x="0" y="0" width="100%" height="100%">
+<g id="canvas" 
+	onmousedown="canvasMouseDown(evt);"
+	onmousemove="canvasMouseMove(evt);"
+	onmouseup="canvasMouseUp(evt);"
+	onmouseover="canvasMouseOver(evt);"
+>
+
+<rect class="canvas" x="0" y="0" width="100%" height="100%" />
+
+<text class="TitleSmall" x="25%" y="12" text-anchor="middle">
+Target
+</text>
+
+<text class="Title" id="targetName" x="25%" y="36" text-anchor="middle">
+&lt;no target object&gt;
+</text>
+
+<text class="TitleSmall" x="75%" y="12" text-anchor="middle">
+Source
+</text>
+
+<text class="Title"  id="sourceName" x="75%" y="36" text-anchor="middle">
+&lt;no source object&gt;
+</text>
+
+<line class="TitleLine" x1="0" y1="40" x2="100%" y2="40" />
+		
+<!-- dividing spine -->
+<rect class="Spine" x="49%" y="0" width="20" height="100%" />
+
+<!-- dummy shape to insert connectors after -->
+<rect display="hidden" id="Spine" x="0" y="0" width="0" height="0" />
+
+</g>
+</svg>
+</svg>

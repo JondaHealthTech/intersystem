@@ -1,0 +1,48 @@
+body {
+            font-family: Montserrat;
+            margin: 0;
+            padding: 20px 10px 0px 10px;
+            
+            text-align:justify;
+        }
+h2{
+    text-align: center;
+    color: black;
+    font-family: Montserrat;
+    margin: 0;
+    font-size: 32px;
+    font-weight:500;
+    margin-bottom: 15px;
+}
+h3{
+    font-size: 20px;
+    font-weight: 500;
+    text-align: justify;
+    color: black;
+    line-height: 3.2vw;
+	}
+p{
+    font-size: 16px;
+   text-align:justify;
+    color:black;
+	}
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+/* Track */
+::-webkit-scrollbar-track{
+    background: #d9d9d9;
+    border-radius: 20px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #405470;
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #384A62;
+}

@@ -1,0 +1,18 @@
+<csp:StudioGenerateTemplate><script language="Cache" runat="server">
+	Write $get(%request.Data("PRE",1))
+	Write "<",$zcvt($get(%request.Data("TAG",1),"UNKNOWN"),"L")
+	For a = 1:1:%request.Count("ANAME") {
+		// !!! what about empty attrs!
+		Set type = $get(%request.Data("ATYPE",a))
+		
+		If (type '= "boolean") {
+			Write:($get(%request.Data("AVALUE",a))'="") " ",$zcvt($get(%request.Data("ANAME",a)),"L")
+			Write:($get(%request.Data("AVALUE",a))'="") "=""",%request.Data("AVALUE",a),""""
+		}
+		Else {
+			Write:($get(%request.Data("AVALUE",a))=1) " ",$zcvt($get(%request.Data("ANAME",a)),"L")
+		}
+	}
+	Write ">"
+	Write $get(%request.Data("POST",1))
+</script>

@@ -1,0 +1,86 @@
+<AutoPageENS domain="Ensemble" parentpage="ASTMSchemaMain.csp" pagename="ASTM Component Structure" title="@Ensemble:ASTMManagerComponentStructure@ASTM Compnent Structure">
+<html>
+<head>
+<title>ASTM Component Structure</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+</head>
+<body>
+
+<div class="Text1">ASTM Component Structure Definition is displayed below:</div>
+
+<script language=Cache runat=server>
+	#include EnsEDIASTM
+	set tPath=%request.Get("PATH")
+	set ds=%request.Get("DS")
+	set ss=%request.Get("SS")
+	set iField=%request.Get("FIELD")
+	set cs=%request.Get("CS")
+	set cs1=%request.Get("CS1")
+	set cs1Field=%request.Get("CS1FIELD")
+	set category=$p(cs,":",2)
+	set secondary=$p(cs,":",3)
+	If ((category'="")&&(secondary'="")) {
+		set description=..EscapeHTML($get($$$vaSchemaDescGbl(category,"CS",secondary)))
+		if $data($$$vaSchemaGbl(category,"CS",secondary))=0 {
+			write "<b><font size=6>"_cs_" </font> Definition does not exist!</b>",!
+			quit
+		}
+	}
+</script>
+<csp:if condition="$L(tPath)">
+<div class="Text1"><i>Path you followed to get to this component structure:</i>&nbsp;<b>#(tPath)#</b><br>
+	<csp:if condition="$L(cs1Field)">
+		<i>Component Structure </i>&nbsp;<b>'#($P(cs1,":",2,3))#'</b>, field # <b>#(cs1Field)#</b>,<br>
+	</csp:if>
+	<i>At Field#</i>&nbsp;<b>#(iField)#</b><br>
+	<i>Of Segment Structure </i>&nbsp;<b>'#($P(ss,":",2,3))#'</b>,<br>
+	<i>Of Document Structure </i>&nbsp;<b>'#($P(ds,":",2,3))#'</b></div>
+</csp:if>
+
+<div style="margin-left: 20px; margin-right: 20px;">
+<table border=1 cellpadding=4 cellspacing=0  style="font-size: 0.8em;">
+
+<tr><td colspan=6><b><font size=6>#(category_":"_secondary)# </font> #($G(description))#</b></td></tr>
+
+<tr align='left'><th>Component</th><th>Description</th><th>Property&nbsp;Name</th><th>Data&nbsp;Structure</th><th>Code&nbsp;Table</th><th><center><i>Alternate<br>Description</i></center></th></tr>
+
+<script language=Cache runat=server>
+	#include EnsEDIASTM
+	If ((category'="")&&(secondary'="")) {
+		set struct=$$$vaSchemaGbl(category,"CS",secondary)
+		kill names set name="" for  {
+			set name=$o($$$vaSchemaGbl(category,"CS",secondary,"names",name)) quit:name=""
+			set names($$$vaSchemaGbl(category,"CS",secondary,"names",name))=name
+		}
+		for i=1:1:$LL(struct)  {
+			set value=$LI(struct,i)
+			write "<tr>"
+			write "<td>"_i_"</td>"
+			; description
+			set description=..EscapeHTML($G($$$vaSchemaDescGbl(category,"CS",secondary,i)))
+			write "<td>",$s(description="":"&nbsp;",1:description),"</td>"
+			; property name
+			set tPropPath=$S(""=tPath||(""=$get(names(i))):"",1:tPath_"."_$get(names(i)))
+			write "<td><a"_$S(""=tPropPath:"",1:" title='"_tPropPath_"' href='"_..Link("ASTMSchemaPath.csp?PATH="_tPropPath_"&CS="_cs_"&CSFIELD="_i_"&CS1="_cs1_"&CS1FIELD="_cs1Field_"&FIELD="_iField_"&DS="_ds_"&SS="_ss)_"'")_">"_$get(names(i),"&nbsp")_"</a></td>"
+			; Component structure
+			write "<td>",$s(value="":"&nbsp;",1:"<a href='"_..Link("ASTMSchemaComponentStructure.csp?CS=CS:"_value_"&PATH="_tPropPath_"&CS1="_cs_"&CS1FIELD="_i_"&FIELD="_iField_"&DS="_ds_"&SS="_ss)_"'>"_value_"</a>"),"</td>"
+			; code table
+			set value=$g($$$vaSchemaGbl(category,"CS",secondary,"tables",i))
+			write "<td>",$s(value="":"&nbsp;",1:"<a href='"_..Link("ASTMSchemaCodeTable.csp?CT=CT:"_value)_"'>"_value_"</a>"),"</td>"
+			; alternate description
+			set altdesc=..EscapeHTML($get($$$vaSchemaDescGbl(category,"CS",secondary,i,"alt")))
+			write "<td>",$s(altdesc="":"&nbsp;",1:altdesc),"</td>"
+			write "</tr>",!
+		}
+	}
+</script>
+
+</table>
+
+<p>
+<a href="#(..Link("ASTMSchemaMain.csp"))#">(Show All Categories)</a><br>
+<a href="#(..Link("ASTMSchemaList.csp?ELEMENT=CS&CATEGORY="_category))#">(Show All Component Structures in Category '#(category)#')</a>
+</div>
+
+</body>
+</html>

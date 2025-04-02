@@ -1,0 +1,962 @@
+.stat-block .no-data{
+	width:100%;
+	font-weight:500;
+	font-size:1.2vw;
+	color:#405470;
+    	height:calc(100% - 1.2vw - 1rem - 1vw);
+	display: none;
+	justify-content:center;
+	align-items:center;
+	text-align:center;
+}
+.noti{
+    display:none;
+}
+.usage-quota .no-data{
+	display:none;
+}
+h1{
+	font-size:3.3vw;
+	line-height:3.8vw;
+	margin-top:2.8vw;
+}
+h2{
+	font-size:2.8vw;
+	margin-bottom:1.7vw;
+}
+.stats{
+    display: flex;
+    flex-wrap: wrap;
+    gap:2%
+}
+.stat-block{
+    background: white;
+    min-height: 36vh;
+    max-height: 39vh;
+    box-shadow: 0px 4px 2px rgba(0, 0, 0, 0.125);
+    border-radius: 15px;
+    margin-bottom: 3vh;
+    padding:1.6vw;
+    text-align: left;
+    position: relative;
+}
+.activity{
+    width: 68%;
+}
+.success-rate{
+    width: 30%;
+}
+.temp-used{
+    width: 30%;
+}
+.usage-quota{
+    width: 68%;
+    max-height: 39vh;
+}
+.noti{
+    width: 30%;
+    position: relative;
+}
+.block-title{
+    font-size: 1.4vw;
+    font-weight: 700;
+    line-height: 1.4vw;
+    color:#405470;
+}
+.block-content{
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    margin:1rem 0;
+    height:calc(100% - 1.2vw - 1.6rem - 1vw);
+}
+.stat{
+    width: 30%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid rgba(155, 155, 155, 0.5);
+    padding-right: 2.5%;
+}
+.current-stat{
+    background: #E63876;
+    border-radius: 15px;
+    text-align: center;
+    padding:0.95vw 1.3vw;
+}
+.current-stat p{
+    color:white;
+    font-size: 1.2vw;
+    font-weight: 500;
+    line-height: 1.5vw;
+}
+.current-stat p span{
+    font-weight: 600;
+}
+.current-stat .num{
+    font-weight: 600;
+    font-size: 3.2vw;
+    line-height: 3.5vw;
+}
+.prev-stat{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:0.7vw;
+    color:#405470;
+    margin-top: 1.1vw;
+}
+.prev-stat .num{
+    font-size: 2.3vw;
+    font-weight: 600;
+    line-height: 3.3vw;
+}
+.prev-stat p{
+    font-size: 0.95vw;
+    font-weight: 500;
+    line-height: 1.2vw;
+}
+.prev-stat p span{
+    font-weight: 700;
+}
+.chart{
+    width: 67.5%;
+    height: 85%;
+    margin: 0;
+    position: unset;
+}
+.success-rate .stat{
+    width: 100%;
+    padding-right: 0;
+    border-right:none;
+    text-align: center;
+    color:#405470;
+}
+.success-rate .num{
+    font-size: 6.8vw;
+    font-weight: 600;
+    line-height: 7.7vw;
+    margin: 0;
+}
+.success-rate p{
+    font-size: 1.2vw;
+    font-weight: 500;
+    line-height: 1.6vw;
+    margin-bottom: 1rem;
+}
+.noti-num{
+    position: absolute;
+    right:1.5vw;
+    top:1vw;
+    border-radius: 50%;
+    background: #e63876;
+    color:white;
+    font-size: 1.3vw;
+    font-weight: 700;
+    line-height: 2.5vw;
+    width: 2.5vw;
+    text-align: center;
+}
+.notis{
+    width: 100%;
+}
+.noti-text{
+    cursor: pointer;
+    width: 100%;
+    padding:0.1vw 1.2vw;
+    margin: 2vh 0;
+    background: #F0F0F0;
+    box-shadow: 2px 4px 2px rgba(0, 0, 0, 0.125);
+    border-radius: 15px;
+    color:#405470;
+    font-size: 1.2vw;
+    font-weight: 600;
+    line-height: 3vw;
+}
+.noti-text.unread{
+    background: #FCD9E6;
+}
+.green-btn{
+    background: #56C4C5;
+    color:white;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.95vw;
+    font-weight: 700;
+    line-height: 1.4vw;
+    padding:0.45vw 1.3vw;
+    position: absolute;
+    left:50%;
+    bottom: 1.6vw;
+    transform: translateX(-50%);
+}
+.activity .green-btn{
+    left:67%;
+}
+.usage-quota .green-btn{
+    left:33%;
+}
+.chart canvas{
+    position: unset;
+}
+.success-stat{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap:0.3vw;
+    margin: 0.5vw 0;
+}
+.temp-used .chart{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.usage-quota-stat{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap:1.2vw;
+    margin: 0.3vw;
+}
+.usage-quota .chart{
+    width:68.5%
+    height:100%;
+    padding-right:1vw;
+    border-right: 1px solid #9B9B9B80;
+}
+.usage-quota .stat{
+    padding:1.5vw;
+    background:#E63876;
+    width:29%;
+    height:100%;
+    border-radius:15px;
+    display:unset;
+}
+.usage-quota .stat h4{
+    font-size:1.05vw;
+    color:white;
+    font-weight:700;
+    margin:0;
+}
+.usage-quota .stat div{ 
+    display:flex;
+    gap:0.5vw;
+    justify-content:space-between;
+    align-items:center;
+    margin:1vw 0;
+}
+.usage-quota .stat p{
+    font-size:0.9vw;
+    line-height:1.5vw;
+    color:white;
+    font-weight:700;
+    text-align:right;
+}
+.usage-quota .stat .num{
+    text-align:center;
+    font-weight:500;
+}
+.usage-quota .stat .num span{
+    font-size:2.65vw;
+    line-height:2.65vw;
+    font-weight:700;
+}
+@media screen and (max-width: 1440px) {
+    html {
+        font-size: 14px;
+    }
+}
+@media screen and (max-width: 1000px) {
+    html {
+        font-size: 14px;
+    }
+    .pink-bg-text {
+        font-size: 1.3625rem;
+        padding: 0.325rem 0.625rem;
+        line-height: 1.75rem;
+        margin-top: 0;
+    }
+    .logo{
+        width: 15vw;
+    }
+    h1 {
+        font-size: 2rem;
+        line-height: 3.2rem;
+        margin: 2.2rem 0 1.5rem;
+        padding: 0 1rem;
+    }
+    h1 br{
+        display: none;
+    }
+    h2{
+        font-size: 1.5rem;
+    }
+    .side-nav.nav-close{
+        width: 10vw;
+    }
+    .side-nav.nav-close + .main-field{
+        width: 90vw;
+    }
+    .side-nav.nav-close .profile{
+        width: 4vw;
+    }
+    .main-field{
+        width: 80vw;
+    }
+    .side-nav{
+        width: 30vw;
+    }
+    .profile{
+        width: 5.5vw;
+    }
+    h3{
+        font-size: 1.2vw;
+        line-height: 1.4vw;
+    }
+    .location{
+        font-size: 1vw;
+    }
+    .plan{
+        font-size: 1vw;
+        line-height: 1.2vw;
+    }
+    .nav-items{
+        margin-top: calc(6.5vh - 1vw);
+    }
+    .nav-item{
+        gap: 1.2vw;
+        padding: 0.8vw 2vw;
+        margin: 0.4vw 0;
+    }
+    .nav-collapse-item{
+        gap: 1.2vw;
+        padding:0.8vw 2vw;
+    }
+    .nav-collapse-btn{
+        gap:0.85vw;
+    }
+    .nav-collapse-field{
+        padding: 0.8vw 0 0.8vw 4.8vw;
+        font-size: 1.3vw;
+        line-height: 1.5vw;
+    }
+    .nav-item .nav-collapse-btn img{
+        width: 1vw;
+    }
+    .nav-item img{
+        width: 1.2rem;
+    }
+    .nav-item:last-child img{
+        width: 1.2rem;
+    }
+    .nav-item p{
+        font-size: 1.3vw;
+        line-height: 1.5vw;
+    }
+    .nav-item.active p{
+        color: #384A62;
+    }
+    .nav-footer{
+        position: absolute;
+        bottom: 3vh;
+        width: 100%;
+    }
+    .nav-footer {
+        font-size: 1.3vw;
+        line-height: 1.5vw;
+    }
+    .logout{
+        gap:1vw;
+    }
+    .logout img{
+        width: 1.5vw;
+    }
+    .collapseBtn img{
+        width: 2.9vw;
+    }
+    .num{
+        left:2vw;
+    }
+    .side-nav.nav-close + .main-field .num{
+        left:3vw;
+    }
+    .main-field{
+        overflow-y: scroll;
+        display: block;
+        height: 100vh;
+    }
+    .stat-block{
+	    min-height:33vh;
+    }
+    .activity{
+        width: 100%;
+    }
+    .success-rate{
+        width: 49%;
+    }
+    .temp-used{
+        width: 49%;
+    }
+    .usage-quota{
+        width: 49%;
+    }
+    .noti{
+        width: 49%;
+    }
+    .usage-quota-stat{
+        gap:0.7rem;
+        margin: 0.3rem;
+    }
+    hr{
+        left:28.5%;
+        top:49%;
+    }
+    .dotted{
+        right:calc(1.5vw + 0.1rem);
+    }
+    .month{
+        font-size: 0.7rem;
+        line-height: 2rem;
+    }
+}
+@media screen and (max-width: 830px) {
+
+    .block-title{
+        font-size: 1.1rem;
+        line-height: 1.2rem;
+    }
+    .stat-block{
+        width: 100% !important;
+        margin-bottom: 2rem;
+        padding:1rem;
+    }
+    .activity .block-content{
+        margin-bottom: 1rem;
+    }
+    .current-stat{
+        padding:1.2rem 0.5rem;
+    }
+    .current-stat p{
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+    .current-stat .num{
+        font-size: 2.1rem;
+        line-height: 3rem;
+    }
+    .prev-stat{
+        gap:0.5rem;
+        margin-top: 0.5rem;
+    }
+    .prev-stat .num{
+        font-size: 1.8rem;
+        line-height: 3rem;
+    }
+    .prev-stat p{
+        font-size: 0.8rem;
+        line-height: 1rem;
+    }
+    .success-rate .stat{
+        width: 38%;
+    }
+    .success-rate .num{
+        font-size: 2.3rem;
+        line-height: 2.9rem;
+    }
+    .success-rate p{
+        font-size: 0.9rem;
+        line-height: 1.2rem;
+    }
+    .success-rate .chart{
+        width: 100%;
+    }
+    .drop-down{
+        margin-top: 0.5rem;
+    }
+    .drop-down button{
+        padding:0.4rem 1rem;
+        font-size: 0.8rem;
+        line-height: 1rem;
+    }
+    .drop-down button img{
+        width: 0.7rem;
+        margin-left: 0.5rem;
+    }
+    .noti-num{
+        right:1.5rem;
+        top:1rem;
+        font-size: 1.2rem;
+        line-height: 2.5rem;
+        width: 2.5rem;
+    }
+    .notis{
+        margin-top: 1rem;
+    }
+    .noti-text{
+        padding:0.2rem 1.2rem;
+        margin: 1.5rem 0;
+        font-size: 1rem;
+        line-height: 3rem;
+    }
+    .noti-text.unread{
+        background: #FCD9E6;
+    }
+    .green-btn{
+        font-size: 0.8rem;
+        line-height: 1.2rem;
+        padding:0.4rem 1.1rem;
+        width: 8rem;
+        bottom: 1.5rem;
+    }
+    .activity .green-btn{
+        bottom: -0.5rem;
+    }
+    .success-stat{
+        gap:0.3rem;
+        margin: 0.5rem 0;
+    }
+    .success-rate .block-content{
+        margin-top: 1rem;
+    }
+    #success-rate-chart{
+        margin-bottom: 3.3rem;
+    }
+    .month{
+        font-size: 0.9rem;
+        line-height: 2rem;
+    }
+    .success-stat .bar{
+        width: 80%;
+        height: 2.5rem;
+    }
+    .bar-percent{
+        height: 2.5rem;
+    }
+    .bar-percent p{
+        font-size: 0.95rem;
+        line-height: 2.5rem;
+    }
+    .temp-used{
+        height: 23rem;
+    }
+    .usage-quota-stat{
+        gap:1.2rem;
+        margin: 0.3rem;
+    }
+    #usage-quota-chart{
+        margin-bottom: 3.3rem;
+        margin-top: 1rem;
+        width: 100%;
+    }
+    .usage-quota-stat .bar{
+        width: 77%;
+        height: 1.8rem;
+    }
+    .usage-quota-stat .bar-percent{
+        height: 1.8rem;
+    }
+    .usage-quota-stat .bar-percent p{
+        line-height: 1.8rem;
+    }
+    hr{
+        left:24.5%;
+        top:49%;
+    }
+    .dotted{
+        right:1.05rem;
+    }
+}
+@media screen and (max-width: 740px) {
+    .block-content{
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+    .activity .chart{
+        width: 100%;
+    }
+    .activity .stat{
+        width: 100%;
+        height: auto;
+        padding: 0;
+        border: none;
+    }
+    .current-stat{
+        width: 70%;
+        margin: 0 auto;
+        padding:1.2rem 0.5rem;
+    }
+    .success-rate .stat{
+        width: 100%;
+        height: auto;
+    }
+    .success-rate .chart{
+        width: 100%;
+    }
+}
+@media screen and (max-width: 540px) {
+    html {
+        font-size: 12px;
+    }
+    .bg2 {
+        display: none;
+    }
+    .content{
+        display: block;
+        overflow-y: auto ;
+    }
+    .side-nav .logo {
+        width: 10rem;
+        margin-top: 3.5rem;
+    }
+    .logo {
+        width: 10rem;
+        margin: 3.5rem;
+        margin: 0 auto;
+    }
+    .pink-bg-text {
+        font-size: 1.2rem;
+        line-height: 1.25rem;
+        padding:0.8rem 1.2rem;
+        position: unset;
+        display: inline-block;
+        margin: 2rem 0 1rem;
+    }
+    .profile{
+        width: 4rem;
+        margin: 3rem 0 0;
+    }
+    h1 {
+        font-size: 1.8rem;
+        line-height: 2.2rem;
+        margin: 2.2rem 0 1.5rem;
+        padding: 0 1rem;
+    }
+    h1 br {
+        display: none;
+    }
+    h2 {
+        font-size: 1.5rem;
+        line-height: 2.2rem;
+        margin-bottom: 1.5rem;
+    }
+    .main-field{
+        width: 100%;
+        position: unset;
+    }
+    .mobile-active{
+        display: block;
+    }
+    .nav-toggle,.close-nav{
+        position: absolute;
+        font-size: 2.2rem;
+        top:2rem;
+        right:5%;
+    }
+    .close-nav{
+        width: 1.5rem;
+    }
+    .side-nav{
+        width: 100%;
+        display: none;
+        transition: all 0.3s ease;
+    }
+    .side-nav.nav-open + .main-field{
+        display: none;
+    }
+    .side-nav.nav-open{
+        display: block;
+        border-radius: 0;
+    }
+    
+    h3{
+        font-size: 1.2rem;
+        line-height: 1.2rem;
+        margin: 1.8rem 0 0.5rem;
+    }
+    .location{
+        font-size: 1rem;
+        line-height: 1.2rem;
+    }
+    .plan{
+        font-size: 1.05rem;
+        line-height: 1rem;
+        color:#e63876;
+        margin-top: 1rem;
+    }
+    .nav-items{
+        margin-top: 4rem;
+    }
+    .nav-item{
+        gap: 1rem;
+        padding: 0.6rem 1.6rem;
+        margin: 0.3rem 0;
+    }
+    .nav-collapse-item{
+        gap: 1rem;
+        padding:0.6rem 1.6rem;
+    }
+    .nav-collapse-btn{
+        gap:0.7rem;
+    }
+    .nav-collapse-field{
+        padding: 0.6rem 0 0.6rem 4.2rem;
+        font-size: 1.2rem;
+        line-height: 1.2rem;
+    }
+    .nav-item .nav-collapse-btn img{
+        width: 0.8rem;
+    }
+    .nav-item img{
+        width: 1.5rem;
+    }
+    .nav-item:last-child img{
+        width: 1.4rem;
+    }
+    .nav-item p{
+        font-size: 1.2rem;
+        line-height: 1.2rem;
+    }
+    .nav-footer{
+        bottom: 3rem;
+    }
+    .nav-footer {
+        font-size: 1rem;
+        line-height: 1.2rem;
+    }
+    .logout{
+        gap:0.8rem;
+        margin-bottom: 2rem;
+    }
+    .logout img{
+        width: 1.2rem;
+    }
+    .collapseBtn img{
+        width: 2.3rem;
+        display: none;
+    }
+    h1,h2{
+        text-align: center;
+    }
+    .block-content{
+        flex-wrap: wrap;
+    }
+    .stat{
+        width: 100%;
+        height: unset;
+        padding:1rem 0 2rem 0;
+        border: none;
+    }
+    .chart{
+        width: 100%;
+    }
+    .stat-block{
+        min-height:20rem;
+        max-height:unset;
+        margin-bottom: 2rem;
+        padding:1rem;
+    }
+    .block-title{
+        font-size: 1.2rem;
+        line-height: 1.2rem;
+    }
+    .block-content{
+        height: unset;
+    }
+    .activity .block-content{
+        margin-bottom: 3rem;
+        margin-top:2%;
+    }
+    .current-stat{
+        width: 70%;
+        margin: 0 auto;
+        background: #E63876;
+        border-radius: 15px;
+        text-align: center;
+        padding:1.2rem 0.5rem;
+    }
+    .current-stat p{
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+    .current-stat p span{
+        font-weight: 700;
+    }
+    .current-stat .num{
+        font-size: 2.1rem;
+        line-height: 3rem;
+    }
+    .prev-stat{
+        gap:0.3rem;
+        margin-top: 0.5rem;
+    }
+    .prev-stat .num{
+        font-size: 2rem;
+        line-height: 3rem;
+    }
+    .prev-stat p{
+        font-size: 0.9rem;
+        line-height: 1rem;
+    }
+    .prev-stat p span{
+        font-weight: 700;
+    }
+    .success-rate .stat{
+        width: 100%;
+    }
+    .success-rate .num{
+        font-size: 6rem;
+        line-height: 7rem;
+    }
+    .success-rate p{
+        font-size: 1rem;
+        line-height: 1.2rem;
+    }
+    .success-rate .chart{
+        width: 100%;
+    }
+    .drop-down{
+        margin-top: 0.5rem;
+    }
+    .drop-down button{
+        padding:0.4rem 1rem;
+        font-size: 0.8rem;
+        line-height: 1rem;
+    }
+    .drop-down button img{
+        width: 0.7rem;
+        margin-left: 0.5rem;
+    }
+    .noti-num{
+        right:1.5rem;
+        top:1rem;
+        font-size: 1.2rem;
+        line-height: 2.5rem;
+        width: 2.5rem;
+    }
+    .notis{
+        margin-top: 1rem;
+    }
+    .noti-text{
+        padding:0.2rem 1.2rem;
+        margin: 1.5rem 0;
+        font-size: 1rem;
+        line-height: 3rem;
+    }
+    .noti-text.unread{
+        background: #FCD9E6;
+    }
+    .green-btn{
+        font-size: 1rem;
+        line-height: 1.4rem;
+        padding:0.5rem 1.1rem;
+	width:10rem;
+        bottom: 1.5rem;
+    }
+    .activity .green-btn{
+        bottom: 1.5rem;
+	left:50%;
+    }
+    .success-stat{
+        gap:0.3rem;
+        margin: 0.5rem 0;
+    }
+    .success-rate .block-content{
+        margin-bottom: 2.3rem;
+    }
+    #success-rate-chart{
+        margin-bottom: 1.5rem;
+    }
+    .month{
+        font-size: 0.9rem;
+        line-height: 2rem;
+    }
+    .success-stat .bar{
+        width: 80%;
+        height: 2.5rem;
+    }
+    .bar-percent{
+        height: 2.5rem;
+    }
+    .bar-percent p{
+        font-size: 0.95rem;
+        line-height: 2.5rem;
+    }
+    .temp-used{
+        height: 23rem;
+    }
+    .usage-quota .block-content{
+	flex-direction:column-reverse;
+    }
+    .usage-quota .stat{
+	width:auto;
+	padding:1rem;
+    }
+    .usage-quota .stat h4{
+	font-size:1.3rem;
+    }
+    .usage-quota .stat p{
+	font-size:0.9rem;
+	line-height:1.3rem;
+    }
+    .usage-quota .stat .num span{
+	font-size:2.5rem;
+	line-height:2.7rem;
+    }
+    .usage-quota-stat{
+        gap:1.2rem;
+        margin: 0.3rem;
+    }
+    .usage-quota .chart{
+	border-right:none;
+	padding-top:1rem;
+    }
+    #usage-quota-chart{
+        margin-bottom: 2rem;
+        margin-top: 1rem;
+        width: 100%;
+    }
+    .usage-quota .green-btn{
+	left:50%;
+    }
+    
+    .stat-block .no-data{
+	font-size:15px;
+    }
+}
+@media screen and (max-width: 380px) {
+    h1{
+        margin: 1.5rem 0;
+    }
+    .pink-bg-text {
+        margin: 1rem 0 0;
+    }
+    .nav-items{
+        margin-top: 2rem;
+    }
+    hr{
+        left:22%;
+        top:49%;
+    }
+}
+@media screen and (max-width: 300px) {
+    html{
+        font-size: 12px;
+    }
+    h1 {
+        font-size: 1.6rem;
+        line-height: 2rem;
+    }
+    .usage-quota-stat{
+        gap:0.5rem;
+    }
+    .usage-quota-stat .bar{
+        width: 73%;
+    }
+    hr{
+        left:28.5%;
+        top:48%;
+    }
+}

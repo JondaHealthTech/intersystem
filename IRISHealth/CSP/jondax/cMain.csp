@@ -1,0 +1,298 @@
+<html>
+<head>
+<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	s id=$g(%session.Data("UserID"))
+	i id="" s %response.Redirect="cLockDown.csp" q 1
+	s r1="" &sql(SELECT IsAdmin INTO :r1 FROM MX."User" WHERE ID=:id)
+	i r1'=1 d LockDown^cMain
+	q 1
+</script>
+
+<script language="cache" runat="server">
+	d HEAD1^CSP999
+</script>
+<link rel="stylesheet" href="assets/styles/cMain.css">
+</head>
+<body onload="jInitMe()" style="margin: 0px 0px">
+	<div id="wrapper">
+        <div class="bg-wrapper"><div class="bg3"><img src="./assets/images/bg3.png"></div></div>
+		<div class="content">
+			<div class="side-nav">
+				<img class="close-nav mobile-active" src="./assets/images/cross.png" alt="Cross" onclick="closeMobileNav(event)">
+				<img class="logo" src="./assets/images/JX Logo Blue.png" alt="Jonda Health">
+				<img class="logo-small" src="./assets/images/X Blue Pink.png" alt="Jonda Health">
+				<br>
+				<img class="profile" src="./assets/images/jxLogo.png" alt="Profile">
+				<h3>JondaX Admin Portal</h3>
+				<p id="userid" class="location">Data Transformation Engine</p>
+				<p class="plan"></p>
+                <div class="nav-items" style="overflow: auto;">
+					<div class="nav-item active" onclick="window.open('cMain.csp','_self')"> 
+						<img src="./assets/images/sNavDashboard.png" alt="Dashboard">
+						<img class="dark" src="./assets/images/sNavDashboard_dark.png" alt="Dashboard">
+						<p>Dashboard</p>
+					</div>
+					<div class="nav-item" onclick="jPopMain('cReviewResultGrootList.csp')">
+						<img src="./assets/images/sNavDT.png" alt="System Settings">
+						<img class="dark" src="./assets/images/sNavDT_dark.png" alt="Review Results Groot">
+						<p>Groot v1.1 Review Results</p>
+					</div>
+					<div class="nav-item" onclick="jPopMain('cViewClientTemplate.csp')">
+						<img src="./assets/images/sNavDT.png" alt="System Settings">
+						<img class="dark" src="./assets/images/sNavDT_dark.png" alt="View Templates">
+						<p>View Templates</p>
+					</div>
+                    <div class="nav-item collapse" >
+						<div class="nav-collapse-item" onclick="toggleCollapseSetting(event)">
+							<img class="dark" src="./assets/images/sNavSettings_dark.png" alt="Settings">
+							<img src="./assets/images/sNavSettings.png" alt="Settings">
+							<div class="nav-collapse">
+								<div class="nav-collapse-btn" onclick="">
+									<p>System Settings</p>
+									<img src="./assets/images/dropDownGrey.png" alt="DropDown">
+									<img class="dark" src="./assets/images/dropDownBlack.png" alt="DropDown">
+									<img class="close-dark" src="./assets/images/dropDownCloseBlack.png" alt="DropDown">
+								</div>
+							</div>
+                        </div>
+						<!-- <div class="nav-collapse-field" onclick="window.open('cDiagnosticTest.csp','DiagnosticTest')">Diagnostic Test</div>-->
+						<div class="nav-collapse-field" onclick="window.open('cDiagnosticTest1.csp','DiagnosticTest')">Diagnostic Test</div>
+						<div class="nav-collapse-field" onclick="window.open('cDiagnosticCategory.csp','DiagnosticCateory')">Diagnostic Category</div>
+						<div class="nav-collapse-field" onclick="window.open('cSIUnit.csp','SIUnit')">JX Unit</div>
+						<div class="nav-collapse-field" onclick="window.open('cSIUnitFormula.csp','SIUnitFormula')">JX Unit Formula</div>
+						<div class="nav-collapse-field" onclick="window.open('cCountry1.csp','Country')">Country</div>
+						<div class="nav-collapse-field" onclick="window.open('cLanguage1.csp','Language')">Language</div>
+                   </div>
+                   <script language="cache" runat="server">
+                   		s uid=%session.Data("UserID") i (uid=3)!(uid=12)!(uid=16)!(uid=28) d
+						. w "<div class='nav-item collapse admin'>",!
+						. w "<div class='nav-admin-item' onclick='toggleAdmin(event)'>",!
+						. w "<img class='dark' src='./assets/images/sNavAdmin_dark.png' alt='Admin'>",!
+						. w "<img src='./assets/images/sNavAdmin.png' alt='Admin'>",!
+						. w "<div class='nav-admin'>",!
+						. w "<div class='nav-admin-btn' onclick=''>",!
+						. w "<p>Admin Settings</p>",!
+						. w "<img src='./assets/images/dropDownGrey.png' alt='DropDown'>",!
+						. w "<img class='dark' src='./assets/images/dropDownBlack.png' alt='DropDown'>",!
+						. w "<img class='close-dark' src='./assets/images/dropDownCloseBlack.png' alt='DropDown'>",!
+						. w "</div>",!
+						. w "</div>",!
+						. w "</div>",!
+						. w "<div class='nav-admin-field' onclick='jPopMain(""cClientTemplate1.csp"")'>Client Templates</div>",!
+						. w "<div class='nav-admin-field' onclick='jPopMain(""cErrorCode.csp"")'>Error Codes</div>",!
+						. w "<div class='nav-admin-field' onclick='jPopMain(""cUser.csp"")'>User Details</div>",!
+						. w "<div class='nav-admin-field' onclick='jPopMain(""cMenu.csp"")'>Menus</div>",!
+						. w "<div class='nav-admin-field' onclick='window.open(""cDiagnosticTestApproval.csp"",""_blank"")'>Diagnostic Test Approval<span id='DiagnosticTestApprovalCircle' class='circle'>2</span></div>",!
+						. w "<div class='nav-admin-field' onclick='window.open(""cUnitApproval.csp"",""_blank"")'>Unit Approval<span id='DiagnosticTestApprovalCircle' class='circle'>2</span></div>",!
+						. w "<div class='nav-admin-field' onclick='window.open(""cDiagnosticCategoryApproval.csp"",""_blank"")'>Category Approval<span id='DiagnosticTestApprovalCircle' class='circle'>2</span></div>",!
+						. ;w "<div class='nav-admin-field' onclick='jResetBiolytica()'>Reset Biolytica Subscription</div>",!
+						. w "</div>",!
+                   </script>
+               	<!--
+					<div class="nav-item collapse admin" >
+						<div class="nav-admin-item" onclick="toggleAdmin(event)">
+							<img class="dark" src="./assets/images/sNavAdmin_dark.png" alt="Admin">
+							<img src="./assets/images/sNavAdmin.png" alt="Admin">
+							<div class="nav-admin">
+								<div class="nav-admin-btn" onclick="">
+									<p>Admin Settings</p>
+									<img src="./assets/images/dropDownGrey.png" alt="DropDown">
+									<img class="dark" src="./assets/images/dropDownBlack.png" alt="DropDown">
+									<img class="close-dark" src="./assets/images/dropDownCloseBlack.png" alt="DropDown">
+								</div>
+							</div>
+						</div>
+						<div class="nav-admin">
+								<div class="nav-admin-btn" onclick='window.open(""DemoDePii.csp"",""_self"")'>
+									<p>Redaction</p>
+									<img src="./assets/images/dropDownGrey.png" alt="DropDown">
+									<img class="dark" src="./assets/images/dropDownBlack.png" alt="DropDown">
+									<img class="close-dark" src="./assets/images/dropDownCloseBlack.png" alt="DropDown">
+								</div>
+							</div>
+						<div class="nav-admin-field" onclick="jPopMain('cClientTemplate1.csp')">Client Templates</div>
+						<div class="nav-admin-field" onclick="jPopMain('cErrorCode.csp')">Error Codes</div>
+						<div class="nav-admin-field" onclick="jPopMain('cUser.csp')">User Details</div>
+						<div class="nav-admin-field" onclick="jPopMain('cMenu.csp')">Menus</div>
+						<div class="nav-admin-field" onclick="window.open('cDiagnosticTestApproval.csp','_blank')">Diagnostic Test Approval<span id="DiagnosticTestApprovalCircle" class="circle">2</span></div>
+						<div class="nav-admin-field" onclick="jResetBiolytica()">Reset Biolytica's Subscription</div>
+					</div>
+				-->
+					<div class="nav-item collapse report" >
+						<div class="nav-report-item" onclick="toggleReport(event)">
+							<img class="dark" src="./assets/images/sNavReport_dark.png" alt="Reports">
+							<img src="./assets/images/sNavReport.png" alt="Reports">
+							<div class="nav-report">
+								<div class="nav-report-btn" onclick="">
+									<p>Reports</p>
+									<img src="./assets/images/dropDownGrey.png" alt="DropDown">
+									<img class="dark" src="./assets/images/dropDownBlack.png" alt="DropDown">
+									<img class="close-dark" src="./assets/images/dropDownCloseBlack.png" alt="DropDown">
+								</div>
+							</div>
+						</div>
+						<div class="nav-report-field view-temp" onclick="alert('Under development')">Report 1</div>
+						<div class="nav-report-field" onclick="alert('Under development')">Report 2</div>
+					</div>
+					<!--
+					<div class="nav-item" onclick="jPopMain('cReviewResults.csp')">
+						<img src="./assets/images/sNavDT.png" alt="System Settings">
+						<img class="dark" src="./assets/images/sNavDT_dark.png" alt="Review Results">
+						<p>Review Results(Old system)</p>
+					</div>
+					-->
+					<!--
+					<div class='nav-item collapse testing'>
+						<div class='nav-testing-item' onclick='toggleTesting(event)'>
+							<img class='dark' src='./assets/images/Testing_Active_small.png' alt='Testing'>
+							<img src='./assets/images/Testing_Inactive_small.png' alt='Testing'>
+							<div class='nav-testing'>
+								<div class='nav-testing-btn' onclick=''>
+									<p>Testing</p>
+									<img src='./assets/images/dropDownGrey.png' alt='DropDown'>
+									<img class='dark' src='./assets/images/dropDownBlack.png' alt='DropDown'>
+								</div>
+							</div>
+						</div>
+							<div class="nav-testing-field" onclick="jPopMain('DemoDePii.csp')">
+								Redaction
+							</div>
+							<div class="nav-testing-field" onclick="jPopMain('jxAltFileUpload.csp')">
+								Groot
+								</div>
+							<div class="nav-testing-field" onclick="jPopMain('jxAltFileUpload1.csp')">
+								Groot v1.1
+							</div>
+							<div class="nav-testing-field" onclick="jPopMain('jxAltFileUploadIND.csp')">
+								Groot v1.1 IND
+							</div> 
+						
+					</div>
+					-->
+				   <div class="nav-item" onclick="jPopMain('cChangePassword.csp')">
+						<img src="./assets/images/sNavSettings.png" alt="System Settings">
+						<img class="dark" src="./assets/images/sNavSettings_dark.png" alt="Review Results">
+						<p>Change Password</p>
+					</div>
+				</div>
+				<div class="nav-footer">
+					<div class="logout" onclick="jLogout()"><img src="./assets/images/logout.png" alt="Log Out"><p>Log Out</p></div>
+					<div class="copyright">Jonda Health © 2023</div>
+				</div>
+				<div class="collapseBtn active" >
+					<img class="collapseClose" src="./assets/images/collapseClose.png" alt="collapse" onclick="toggleSideNav()">
+					<img class="collapseOpen" src="./assets/images/collapseOpen.png" alt="collapse" onclick="toggleSideNav()">
+				</div>
+			</div>
+			<div class="main-field" id="main-field" style="vertical-align:top;padding:0px">
+				<iframe src="" name="iFrame1" id="iFrame1" style="min-height:100vh;width:100%;height:100%;border:0px;overflow:scroll" scrolling="yes">
+				
+				</iframe>
+			</div>
+		</div>
+	</div>
+    <script>
+        var resizefunc = [];
+    </script>
+    <!-- jQuery  -->
+	<script language="cache" runat="server">
+		d jQueryCore^CSP999
+	</script>
+
+</body>
+<script language="cache" runat="server">
+	d jScript^cMain
+	d jScript2^cMain
+</script>
+
+<script type="text/javascript">
+let mySessionEnd;	
+iFrame1=document.getElementById("iFrame1");
+
+window.onload = jInitMe;
+document.onmousemove = resetTimer;
+document.onmousedown = resetTimer; // touchscreen presses
+document.ontouchstart = resetTimer;
+document.onclick = resetTimer; // touchpad clicks
+document.onkeypress = resetTimer;
+document.addEventListener('scroll', resetTimer, true); 
+
+function resetTimer(){
+	// Resets the session timer and trigger jLockDown after 1 hour (3600000 ms) of inactivity.
+	clearTimeout(mySessionEnd);
+	mySessionEnd = setTimeout(jLockDown, 900000); // 3600000);
+}
+function clearTimer(){
+	// Clears the session timeout to prevent jLockDown from being triggered.
+	clearTimeout(mySessionEnd);
+}
+
+function jInitMe(){
+	#server(..cInitMe())#
+	iFrame1.src="jxDashboard.csp"	// Landing page after Login 
+	resetTimer();
+}
+
+//// Highlight the selected tab
+function jPopMain(val){
+	let navItems = document.querySelectorAll('.nav-item');
+    for (let i = 0; i < navItems.length; i++) {
+        navItems[i].classList.remove('active');
+    }
+    event.currentTarget.classList.add('active');	//Changing color with css '.active'
+	iFrame1.src=val
+}
+
+function jLogout(){
+	#server(..cLogout())#
+}
+function jLockDown(){
+	#server(..cLockDown())#
+}
+
+// Adjusts the margin and padding of the nav-items element 
+const checkScrollbar = ()=>{
+	let navItems = document.querySelector(".nav-items");
+    if(navItems.scrollHeight > navItems.clientHeight){
+        navItems.style.marginRight = "0.5vw";
+        navItems.style.paddingRight = "0.5vw";
+    }
+    else{
+       	navItems.style.marginRight = 0;
+        navItems.style.paddingRight = 0;
+    }
+}
+checkScrollbar();
+
+//Temporary function to renew Biolytica subscription monthly
+function jResetBiolytica(){
+	if (confirm("Are you sure you want to reset\nBiolytica's Subscription to today?") == true) {
+		#server(..cResetBiolytica())#
+	}		
+}
+</script>
+
+
+<script language="cache" method="cInitMe">
+	d InitMe^cMain
+</script>
+
+<script language="cache" method="cLogout">	//Log out by user
+	;d Logout^cMain
+	d Logout^cLogin($g(%session.Data("UserName")))
+</script>
+
+<script language="cache" method="cLockDown">	// Log out for inactivity of 1 hour
+	k %session.Data
+	&js<window.open("cLockDown.csp","_parent")>
+</script>
+
+<script labguage="cache" method="cResetBiolytica">	//Temporary function to renew Biolytica subscription monthly
+	;s d1=$zdate($h,1,,4)
+	;s d2=$zdate($h+365,1,,4)
+	s d3=1000,d4=1000
+	;&sql(UPDATE MX.Subscription SET StartDate=:d1,EndDate=:d2,RemainingOCRUnit=:d3,RemainingTransformationUnit=:d4 WHERE ID=3)
+	;&sql(UPDATE MX.Subscription SET RemainingOCRUnit=:d3,RemainingTransformationUnit=:d4 WHERE ID=3)
+	;i SQLCODE=0 &js<alert("Subscription successfully renewed!")>
+</script>
+</html>

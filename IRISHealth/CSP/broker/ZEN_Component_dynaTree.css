@@ -1,0 +1,76 @@
+/* @class="%ZEN.Component.dynaTree" */
+
+/* @doc="div for node in tree." */
+.dynaTreeNode {
+	white-space: nowrap;
+	font-size: 12px;
+	font-family: Arial,Helvetica,sans-serif;
+	margin: 0px;
+	padding: 1px;
+	text-decoration: none;
+}
+
+/* @doc="div for node in tree when showLines is true." */
+.dynaTreeNodeLines {
+	white-space: nowrap;
+	vertical-align: middle;
+	font-size: 12px;
+	height: 16px;
+	overflow: visible;
+	font-family: Arial,Helvetica,sans-serif;
+	margin: 0px;
+	padding: 0px;
+}
+
+/* @doc="expando image for node in tree." */
+.dynaTreeExp {
+	cursor: pointer;
+}
+
+/* @doc="icon image for node in tree." */
+.dynaTreeIcon {
+	cursor: pointer;
+}
+
+/* @doc="Caption for node (a) in tree." */
+a.dynaTreeItem {
+	color: darkblue;
+	text-decoration: none;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+	padding: 1px;
+}
+
+/* @doc="Current selected node (a) in tree." */
+a.dynaTreeItemSelected {
+	color: black;
+	font-weight: bold;
+	background: #D0D0F0;
+	border: 1px dotted darkblue;
+	padding: 0px;
+	text-decoration: none;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.dynaTreeNode img, .dynaTreeNodeLines img {
+	border: none;
+}
+
+a.dynaTreeItem:hover {
+	color: black;
+	background: #FFFAE7;
+	border: 1px dotted gray;
+	padding: 0px;
+}
+a.dynaTreeItem:active {
+	text-decoration: none;
+}
+.dynaTreeItem:focus {
+	color: white;
+	background: darkblue;
+}
+
+/* EOF */

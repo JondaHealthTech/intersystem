@@ -1,0 +1,46 @@
+<!--
+Utilities: process viewer
+-->
+
+<AutoPage domain="Ensemble" pagename="Jobs" parentpage="UtilEnsHome.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Jobs</Text>
+</Pane>
+
+<Pane name="Navigator" extends="UtilEnsHome.csp" />
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>Current Jobs:</Text>
+	<Query>Ens.Job:Enumerate</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>false</ShowZebra>
+	<AutoRefresh>true</AutoRefresh>
+
+	<Conditions>
+		<!-- error -->
+		<Condition>
+			<ColumnName>Status</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Error</Value>
+			<RowStyle>background: pink;</RowStyle>
+		</Condition>
+		<!-- dead -->
+		<Condition>
+			<ColumnName>State</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Dead</Value>
+			<RowStyle>background: red;</RowStyle>
+		</Condition>
+		<!-- starting -->
+		<Condition>
+			<ColumnName>State</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>Starting</Value>
+			<RowStyle>background: lightblue;</RowStyle>
+		</Condition>
+	</Conditions>
+
+</Pane>
+
+</AutoPage>

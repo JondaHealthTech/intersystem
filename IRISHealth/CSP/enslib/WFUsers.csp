@@ -1,0 +1,73 @@
+<!--
+Workflow: Workflow users
+-->
+
+<AutoPage domain="Ensemble" pagename="Workflow Users" parentpage="WFHome.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Workflow Users</Text>
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.TablePane">
+	<Text>The following Workflow users are currently defined.</Text>
+	<Query>EnsLib.Workflow.Engine:ListUsers</Query>
+	<Sortable>true</Sortable>
+	<ShowZebra>true</ShowZebra>
+	<ShowRowNumbers>true</ShowRowNumbers>
+	<AutoRefresh>false</AutoRefresh>
+	<HiddenColumns>CurrUser</HiddenColumns>
+
+	<Commands>
+		<Action href="WFHome.csp">
+			<Caption>Home</Caption>
+		</Action>
+
+		<Action href="WFRoles.csp">
+			<Caption>Show Roles</Caption>
+		</Action>
+
+		<Action href="WFUserEditor.csp?$FRAME=Info" targetFrame="Info">
+			<Caption>Create New User</Caption>
+		</Action>
+	</Commands>
+
+	<Actions>
+		<Action href="WFRolesForUser.csp?$FRAME=Info" name="$A"  targetFrame="Info">
+			<Caption>Roles</Caption>
+			<Popup>Show roles this user belongs to.</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+		<Action href="WFTasksForUser.csp?$FRAME=Info" name="$B"  targetFrame="Info">
+			<Caption>Tasks</Caption>
+			<Popup>Show tasks assigned to this user.</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+		<Action href="WFUserEditor.csp?$FRAME=Info" name="$C" targetFrame="Info">
+			<Caption>Edit</Caption>
+			<Popup>Edit this user definition.</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+		<Action href="WFUsers.csp?$AUTOFORM_DELETE=1&amp;$CLASS=EnsLib.Workflow.UserDefinition" name="$D" targetFrame="_top">
+			<Caption>Delete</Caption>
+			<Confirm>Do you really wish to delete this User Definition?</Confirm>
+			<Popup>Delete this user definition.</Popup>
+			<IDValues>{Name}</IDValues>
+		</Action>
+	</Actions>
+
+	<Conditions>
+		<!-- inactive -->
+		<Condition>
+			<ColumnName>IsActive</ColumnName>
+			<Predicate>EQ</Predicate>
+			<Value>0</Value>
+			<RowStyle>background: #D0D0D0; color: #808080;</RowStyle>
+		</Condition>
+	</Conditions>
+
+</Pane>
+
+<Pane name="Info" type="%CSP.Util.Pane">
+</Pane>
+
+</AutoPage>

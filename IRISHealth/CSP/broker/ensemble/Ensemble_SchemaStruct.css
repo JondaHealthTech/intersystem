@@ -1,0 +1,220 @@
+text, tspan {
+	pointer-events : none;
+	font-size: 17px;
+	fill: #404040;
+	font-family: arial,ms mincho;
+	-webkit-user-select:none;
+}
+
+.canvas {
+	fill: #FDFDFD;
+	stroke: gray;
+	stroke-width: 1;
+}
+
+#canvasSVG {
+	/* prevent selecting text during drag */
+	-webkit-user-select: none; /* Safari 3.1+ */
+    -moz-user-select: none; /* Firefox 2+ */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none; /* Standard syntax */
+}
+
+.header {
+	fill: #D0D0E0;
+	stroke: none;
+}
+
+/* rect that holds boxes */
+.containerBox {
+	fill: none;
+	stroke-width: 1;
+	stroke: gray;
+}
+
+.clearBackground {
+	fill: white;
+	opacity: 0;
+	stroke: none;
+}
+
+.scrollBtn {
+	opacity: 0.5;
+	fill: #EEEEFF;
+	stroke: #808080;
+	stroke-width: 1;
+}
+
+.scrollBtnHover {
+	opacity: 1.0;
+	fill: #FFEEAA;
+	stroke: #202020;
+	stroke-width: 1;
+}
+
+.scrollBoxHover {
+	opacity: 1.0;
+	fill: #FEEAA;
+	stroke: #202020;
+	stroke-width: 1;
+}
+
+.scrollBox {
+	opacity: 0.5;
+	fill: #EEEEFF;
+	stroke: #808080;
+	stroke-width: 1;
+}
+
+.scrollBtnBg {
+	opacity: 0.3;
+	fill: #EEEEFF;
+	stroke: #808080;
+	stroke-width: 1;
+}
+
+.scrollBtnBgHover {
+	opacity: 1.0;
+	fill: #FFEEAA;
+	stroke: #202020;
+	stroke-width: 1;
+}
+
+.TitleLine {
+	fill: none;
+	stroke: #404040;
+	stroke-width: 0.25;
+}
+
+.Expando {
+	fill: #EEEEFF;
+	stroke: #808080;
+	stroke-width: 1;
+}
+
+.ExpandoNotLoaded {
+	fill: #DDDDFF;
+	stroke: #808080;
+	stroke-width: 1;
+}
+
+.ExpandoDown {
+	fill: yellow;
+	stroke: #8080F0;
+	stroke-width: 1.5;
+}
+
+.Menu {
+	fill: white;
+	stroke: grey;
+	stroke-width: 1;
+}
+
+.MenuOption {
+	pointer-events: none;
+	font-size: 10.5pt;
+	fill: black;
+	stroke-width: 1.2;
+	font-weight: 500;
+}
+
+.MenuOptionDisabled {
+	pointer-events: none;
+	font-size: 10.5pt;
+	fill: silver;
+}
+
+.Checkbox {
+	fill: white;
+	stroke: black;
+	stroke-width: 0.5;
+}
+
+.Checkmark {
+	fill: none;
+	stroke: black;
+	stroke-width: 1.5;
+}
+
+.LocatorLine {
+	fill: none;
+	stroke: gray;
+	stroke-width: 1.5;
+	stroke-dasharray: 20,10,5,5,5,10;
+}
+
+.LocatorCircle {
+	fill:white;
+	stroke: gray;
+	stroke-width: 2;
+}
+
+.PropRect {
+	fill: white;
+	stroke: #8080D0;
+	stroke-width: 1;
+	opacity: 0.9;
+}
+.PropRectOptional {
+	fill: white;
+	stroke: #60a060;
+	stroke-dasharray: 2,2; 
+	stroke-width: 1;
+	opacity: 0.9;
+}
+
+.PropRectSelected {
+	fill: #FFEEAA;
+	fill-opacity:0.5;
+	stroke: rgb(53,107,141);
+	stroke-width: 2;
+}
+
+.PropRectOptSelected {
+	fill: #FFEEAA;
+	fill-opacity:0.5;
+	stroke: #60a060;
+	stroke-dasharray: 5,3;
+	stroke-width: 2;
+}
+
+.PropRectRelated {
+	fill: #FFDDFF;
+	stroke: rgb(53,107,141);
+	stroke-width: 2;
+}
+
+.PropRectCanConnect {
+	fill: orange;
+	stroke: green;
+	stroke-width: 1;
+}
+
+.StatusBar {
+	fill: rgb(53,107,141);
+	stroke: black;
+	stroke-width: 1;
+	filter: url(#dropShadow);
+}
+
+.StatusText {
+  pointer-events: none;
+  font-size: 9pt;
+  fill: white;
+  stroke: none;
+}
+
+.Error {
+  pointer-events: none;
+  font-size: 12pt;
+  fill: red;
+  stroke: none;
+}
+
+.PropName {
+  pointer-events: none;
+  font-size: 10.5pt;
+  font-weight: bold;
+  fill: #606060;
+  stroke: none;
+}

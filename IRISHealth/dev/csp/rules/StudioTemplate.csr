@@ -1,0 +1,80 @@
+<csr:rule name="%StudioInteractiveTemplate" match="csp:StudioInteractiveTemplate" empty language="any">
+<csr:description>
+	Insert this tag into the page that you wish to be included in the templates available in Studio.<p>
+	All templates live in the '/apps/templates' path. Items that include this tag will show up under the
+	templates menu and will consist of several CSP pages which then generates the text to include.
+</csr:description>
+<csr:attribute name=Name description="Name of the template to show in Studio" type="accessType:STRING">
+<csr:attribute name=Id description="Id of name in localization database" type="accessType:STRING">
+<csr:attribute name=Description description="Descriptions of this Studio template" type="accessType:STRING">
+<csr:attribute name=Type description="Comma separated list of 'CSP', 'CSR', 'MAC', 'INT', 'INC', 'BAS', 'CLS' to say what type of code this template generates; CSP, CSR, Routine, or Class code. Can also specify '*' for all types." type="accessType:STRING">
+<csr:attribute name=Mode description="One of 'template', 'new', 'addin' to determine what type of template this is. 'template' is the default and this creates code that is inserted into the current document, 'new' is a template that appears on the dialog when you click the new button, 'addin' is a template that appears on the addin menu which does not generate any output." type="accessType:STRING">
+<csr:attribute name=Group description="For Mode=new template the name of the tab this should appear on, 'Custom' if not specified" type="accessType:STRING">
+<csr:attribute name=Global description="True (1) if this template should be available in every namespace, even though it is not mapped to a percent class" type="accessType:STRING">
+<csr:attribute name=NoOutput description="True (1) if this template does not generate any output, only applies to 'template' types but it prevents Studio from needing to make the file writable." type="accessType:STRING">
+<csr:attribute name=Accelerator description="Accelerator key for this template in Studio, 0-9. User will press Ctrl+Alt+key to activate." type="accessType:STRING">
+<csr:attribute name=Nonmodal description="True (1) if this template run in nonmodal dialog (default = 0)">
+<csr:action>
+	<script language="Cache" runat="compiler">
+		New name
+		Set name=..GetAttribute("Name")
+		If name="" {
+			Set name=%compiler.Get("%classname")
+			Set name=$Piece(name,".",$Length(name,"."))
+		}
+		#; Now add this template information
+		Do ##class(%CSP.StudioTemplateMgr).AddTemplate(name,..GetAttribute("Mode"),%compiler.Get("%pagename"),..GetAttribute("Description"),%compiler.Get("%classname"),..GetAttribute("Type"),1,..GetAttribute("Global"),..GetAttribute("Id"),..GetAttribute("NoOutput"),..GetAttribute("Accelerator"),..GetAttribute("Group"),..GetAttribute("Nonmodal"))
+		Do %compiler.Set("%cspclass.SUPER","%CSP.StudioTemplateSuper")
+		If ..GetAttribute("Global") Do %compiler.Set("%cspparam.GlobalTemplate",1)
+		Quit
+	</script>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%StudioGenerateTemplate" match="csp:StudioGenerateTemplate" empty language="any">
+<csr:description>
+	Insert this tag into the page that generates the actual template text. This ensures it
+	outputs the correct tags for the Studio to know this is the final template to be inserted
+	at the current cursor position. So you always label the final template page with this.
+</csr:description>
+<csr:action>
+	<script language="Cache" runat="compiler">
+		Do %compiler.Set("%cspclass.SUPER","%CSP.StudioTemplateInsert")
+		Quit
+	</script>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%StudioSimpleTemplate" match="csp:StudioSimpleTemplate" empty language="any">
+<csr:description>
+	Insert this tag into a simple template. It is to be used if you have a simple block of text that you
+	wish to insert that does not require any questions. It basically combines the functionality of the
+	StudioInteractiveTemplate and the StudioGenerateTemplate into a single tag.
+</csr:description>
+<csr:attribute name=Name description="Name of the template to show in Studio" type="accessType:STRING">
+<csr:attribute name=Id description="Id of name in localization database" type="accessType:STRING">
+<csr:attribute name=Description description="Descriptions of this Studio template" type="accessType:STRING">
+<csr:attribute name=Type description="Comma separated list of 'CSP', 'CSR', 'MAC', 'INT', 'INC', 'BAS', 'CLS' to say what type of code this template generates; CSP, CSR, Routine, or Class code. Can also specify '*' for all types." type="accessType:STRING">
+<csr:attribute name=Mode description="One of 'template', 'new', 'addin' to determine what type of template this is. 'template' is the default and this creates code that is inserted into the current document, 'new' is a template that appears on the dialog when you click the new button, 'addin' is a template that appears on the addin menu which does not generate any output." type="accessType:STRING">
+<csr:attribute name=Group description="For Mode=new template the name of the tab this should appear on, 'Custom' if not specified" type="accessType:STRING">
+<csr:attribute name=Global description="1 if this template should be available in every namespace, even though it is not mapped to a percent class" type="accessType:STRING">
+<csr:attribute name=NoOutput description="True (1) if this template does not generate any output, only applies to 'template' types but it prevents Studio from needing to make the file writable." type="accessType:STRING">
+<csr:attribute name=Accelerator description="Accelerator key for this template in Studio, 0-9. User will press Ctrl+Alt+key to activate." type="accessType:STRING">
+<csr:action>
+	<script language="Cache" runat="compiler">
+		New name
+		Set name=..GetAttribute("Name")
+		If name="" {
+			Set name=%compiler.Get("%classname")
+			Set name=$Piece(name,".",$Length(name,"."))
+		}
+		#; Now add this template information
+		Do ##class(%CSP.StudioTemplateMgr).AddTemplate(name,..GetAttribute("Mode"),%compiler.Get("%pagename"),..GetAttribute("Description"),%compiler.Get("%classname"),..GetAttribute("Type"),0,..GetAttribute("Global"),..GetAttribute("Id"),..GetAttribute("NoOutput"),..GetAttribute("Accelerator"),..GetAttribute("Group"))
+		
+		#; This is the insertion template as well
+		Do %compiler.Set("%cspclass.SUPER","%CSP.StudioTemplateInsert")
+		If ..GetAttribute("Global") Do %compiler.Set("%cspparam.GlobalTemplate",1)
+		Quit
+	</script>
+</csr:action>
+</csr:rule>

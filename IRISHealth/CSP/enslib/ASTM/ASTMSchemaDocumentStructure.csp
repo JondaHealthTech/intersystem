@@ -1,0 +1,98 @@
+<AutoPageENS domain="Ensemble" parentpage="ASTMSchemaMain.csp" pagename="ASTM Document Structure" title="@Ensemble:ASTMManagerDocumentStructure@ASTM Document Structure">
+<html>
+<head>
+<title>ASTM Message Document Structure</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+</head>
+<body>
+
+<div class="Text1">ASTM <b>Document Structure</b> (<b>DocType</b>) definition is displayed below:</div>
+
+<script language=Cache runat=server>
+#Include EnsEDIASTM
+	set ds=%request.Get("DS")
+	set category=$p(ds,":",2)
+	set secondary=$p(ds,":",3)
+	If ((category'="")&&(secondary'="")) {
+		set description=..EscapeHTML(##class(EnsLib.EDI.ASTM.Schema).GetDescription(ds))
+		if $data($$$vaSchemaGbl(category,"DS",secondary))=0 {
+			write "<b><font size=6>"_ds_" </font> Definition does not exist!</b>",!
+			quit
+		}
+	}
+</script>
+
+<b><font size=6>#(category_":"_secondary)# </font> #($G(description))#</b>
+<br><br>
+<div style="margin-left: 20px; margin-right: 20px;">
+
+<script language=Cache runat=server>
+	If ((category'="")&&(secondary'="")) {
+		Set struct=$$$vaSchemaGbl(category,"DS",secondary)
+		
+		#; Build segment paths list
+		set rs=##class(%ResultSet).%New("Ens.VDoc.Utils:EnumerateDocContents")
+		s sc=rs.Execute("EnsLib.EDI.ASTM.Message",,category_":"_secondary,1)
+		if $$$ISOK(sc) {
+			Set iSeg=0,depth=0,fullpath=""
+			For iRow=1:1 { quit:'rs.Next()
+				set path=rs.Data("Property"), type=rs.Data("Type")
+				if $E(path,depth+1)="." { Set depth=depth+1 }
+				else {
+					while depth&&($E(path,depth)'=".") { set depth=depth-1 }
+				}
+				set seg=$p($p(type,":",3),"(")
+				set fullpath=$S(depth:$p(fullpath,".",1,depth)_".",1:"")_$E(path,depth+1,$L(path))
+				If seg'["grp"&&(seg'["union") {
+					set iSeg=iSeg+1, segs(iSeg)=fullpath, segs(iSeg,"type")=seg
+				}
+			}
+		}
+		#; Draw segments table
+		write "<table border=1 cellpadding=2 cellspacing=0 style=""font-size: 1.0em;""><tbody align=center><tr>",!
+		Set iSeg=0  For i=1:1:$l(struct,"~")  {
+			Set tSegRef=$p(struct,"~",i)
+			if tSegRef="[" write "<td><table border=1 cellpadding=2 cellspacing=0 bordercolor=green style=""border: 2 dotted""><tr>",! continue
+			if tSegRef="]" write "</tr></table></td>",! continue
+			if tSegRef="{" write "<td><table border=1 cellpadding=2 cellspacing=0 bordercolor=red><tr>",! continue
+			if tSegRef="}" write "</tr></table></td>",! continue
+			if tSegRef="<" write "<td><table border=1 cellpadding=2 cellspacing=0 bordercolor=orange style=""border: 1 dotted""><tr>",! continue
+			if tSegRef=">" write "</tr></table></td>",! continue
+			if tSegRef="|" continue
+			set iSeg=iSeg+1, tName=$P(tSegRef,":",2)
+			If "DocsRef"=$E(tName,*-$L("DocsRef")+1,*) {
+				Set tRef=$S("Message"'=$E(tName,1,*-$L("DocsRef")):
+							"ASTMSchemaMessageType.csp?MT=MT:"_$p(tSegRef,":")_":"_$E(tName,1,*-$L("DocsRef"))
+						, 1:"ASTMSchemaList.csp?ELEMENT=MT&CATEGORY="_$S("."=$P(tSegRef,":"):$G($$$vaSchemaGbl(category,"base"),category),1:$P(tSegRef,":")))
+				write "<td><a title='Zero or more """_$E(tName,1,*-$L("DocsRef"))_""" documents appear here' href='"_..Link(tRef)_"'>"_tName_"</a></td>"
+			} Else {
+				set tPath=$S($G(segs(iSeg,"type"))=tName&&(tName'=""):segs(iSeg), 1:"")
+				set tDesc=..EscapeHTML(##class(EnsLib.EDI.ASTM.Schema).GetDescription("SS:"_tSegRef))
+				write "<td><a title='"_$S(""'=tPath:tPath, 1:tSegRef)_$S(""=tDesc:"",1:" - "_tDesc)_"' href='"_..Link("ASTMSchemaSegmentStructure.csp?SS=SS:"_tSegRef_"&PATH="_$S(""=tPath:"",1:tPath)_"&DS="_ds)_"'>"_tName_"</a></td>"
+			}
+		}
+		write "</table>"
+
+		write "<br>"
+
+		write "<table cellpadding=4 cellspacing=0>"
+		write "<tr><td><table border=1 cellpadding=0 cellspacing=0 bordercolor=green style=""border: 2 dotted"" #000000><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table></td>"
+		write "<td>optional</td></tr>"
+		write "<tr><td><table border=1 cellpadding=0 cellspacing=0 bordercolor=red><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table></td>"
+		write "<td>repeating</td></tr>"
+		if struct["|" {
+		  write "<tr><td><table border=1 cellpadding=0 cellspacing=0 bordercolor=orange style=""border: 1 dotted"" #000000><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table></td>"
+		  write "<td>choice</td></tr>"
+		}
+		write "</table>"
+		write "<br>"
+	}
+</script>
+
+<p>
+<a href="#(..Link("ASTMSchemaMain.csp"))#">(Show All Categories)</a><br>
+<a href="#(..Link("ASTMSchemaList.csp?ELEMENT=DS&CATEGORY="_category))#">(Show All Document Structures in category '#(category)#')</a><br>
+<a href="#(..Link("ASTMSchemaRawStructure.csp?DS="_ds))#">(Show Raw Definition text)</a>
+</div>
+</body>
+</html>

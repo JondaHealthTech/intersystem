@@ -1,0 +1,75 @@
+<html>
+<title>Abort Message/Job</title>
+<head>
+
+<LINK REL="stylesheet" TYPE="text/css" HREF="/csp/sys/csputils.css" TITLE="Standard Style" >
+
+</head>
+<body>
+<csp:class Includes="EnsUI,Ensemble">
+<script language="cache" runat="server">
+	Set tSC = $$$OK
+	Set lcomplete = $$$LocalizeText("Ensemble","completed","completed.")
+	Set ABORTFROM = $G(%request.Data("$ABORTFROM",1))
+	If ABORTFROM = "QUEUE" {
+		Set lTitle = $$$LocalizeText("Ensemble","popQueueAbort","Abort this queue")
+		Set lQueueName = $$$LocalizeText("EnsColumns","QueueName","Queue Name")
+		Set lPriority = $$$LocalizeText("Ensemble","Priority","Priority")
+		Set lIndex = $$$LocalizeText("Ensemble","Index","Index")
+		Set pQueueName = $G(%request.Data("$ID1",1))
+		Set pPriority = $G(%request.Data("$ID2",1))
+		Set pIndex = $G(%request.Data("$ID3",1))
+		Set AbortAll = $G(%request.Data("$ABORTALL",1))
+		If AbortAll = "" {
+			&html<<div class="Text1" Domain="Ensemble" TextId="popQueueAbort">Abort this message.</div>
+			<br>#(lQueueName)#: #(..EscapeHTML(pQueueName))#
+			<br>#(lPriority)#: #(pPriority)#
+			<br>#(lIndex)#: #(pIndex)#>
+			Set tSC = ##class(Ens.Queue).AbortItem(pQueueName,pPriority,pIndex)
+		} Else {
+			&html<<div class="Text1" Domain="Ensemble" TextId="popQueueAbortAll">Abort all messages in queue.</div>
+			<br>#(lQueueName)#: #(..EscapeHTML(pQueueName))#>
+			Set tSC = $G(tmsg)
+		}
+	} ElseIf ABORTFROM = "MONITOR" {
+		Set lTitle = $$$LocalizeText("Ensemble","popQueueAbort","Abort this job's current active message.")
+		Set lInstance = $$$LocalizeText("Ensemble","Instance","Instance")
+		&html<<div class="Text1">#(..EscapeHTML(lTitle))#</div>
+		<br>#(lInstance)#: #(..EscapeHTML($G(%request.Data("$ID1",1))))#>	
+		Set tSC = ##class(Ens.Job).AbortOperation($G(%request.Data("$ID1",1)))	
+	} ElseIf ABORTFROM = "MONITORSUSPEND" {
+		Set lTitle = $$$LocalizeText("Ensemble","popJobSuspend","Suspend this job's current active message.")
+		Set lInstance = $$$LocalizeText("Ensemble","Instance","Instance")
+		&html<<div class="Text1">#(..EscapeHTML(lTitle))#</div>
+		<br>#(lInstance)#: #(..EscapeHTML($G(%request.Data("$ID1",1))))#>
+		Set tSC = ##class(Ens.Job).SuspendOperation($G(%request.Data("$ID1",1)))
+	} ElseIf ABORTFROM = "MONITORSTOPJOB" {
+		Set lTitle = $$$LocalizeText("Ensemble","popJobStop","Stop this job.")
+		Set lInstance = $$$LocalizeText("Ensemble","Instance","Instance")
+		&html<<div class="Text1">#(..EscapeHTML(lTitle))#</div>
+		<br>#(lInstance)#: #(..EscapeHTML($G(%request.Data("$ID1",1))))#>
+		Set tSC = ##class(Ens.Job).Stop($G(%request.Data("$ID1",1)),$G($$$ConfigProdSetting("UpdateTimeout"),10),1)
+	} 
+	If $$$ISERR(tSC) {
+		&html<<div class="ErrorBox">#(..EscapeHTML($$GetErrorText^%apiOBJ(tSC)))#</div>>	
+	} Else {
+		&html<<br>#(lcomplete)#>
+	}
+</script>
+</body>
+<script language="Cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	If $G(%request.Data("$ABORTFROM",1))="QUEUE",$G(%request.Data("$ABORTALL",1)) = 1 {
+		Set pQueueName = $G(%request.Data("$ID1",1))
+		If pQueueName '= "" {
+			Set tSC = ##class(Ens.Queue).AbortQueue(pQueueName)
+			If $$$ISOK(tSC) {
+				Set redirectpage = ..Link("UtilEnsQueues.csp")
+				Set %response.Redirect = redirectpage
+			} Else {
+				Set tmsg = tSC
+			}
+		}
+	}
+	Quit 1
+</script>
+</html>

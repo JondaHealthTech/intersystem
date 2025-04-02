@@ -1,0 +1,204 @@
+<html>
+<head>
+<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+	q 1
+</script>
+<script language="cache" runat="server">
+	s id=$g(%session.Data("UserID"))
+	d HEADTRIAL^WSP999
+</script>
+<link rel="stylesheet" href="assets/styles/trialMain.css">
+</head>
+<body style="margin: 0px 0px">
+	<div id="wrapper">
+        <div class="bg-wrapper"><div class="bg3"><img src="./assets/images/bg3.png"></div></div>
+		<div class="content">
+			<div class="side-nav">
+				<img class="close-nav mobile-active" src="./assets/images/cross.png" alt="Cross" onclick="closeMobileNav(event)">
+				<img class="logo" src="./assets/images/JX Logo Blue.png" style="margin-top:2vw;height: 62px;width:144.21px;"alt="Jonda Health">
+				<img class="logo-small" src="./assets/images/X Blue Pink.png" alt="Jonda Health">
+				<br>
+				<img class="profile" style="margin: 1vh 0 0;"src="./CompanyLogos/default.png" alt="Profile">
+                    <h3><script language="cache" runat="server">w $s($g(%session.Data("UserName"))'="":$g(%session.Data("UserName")),1:"")</script></h3>
+                    <h5><script language="cache" runat="server">w $s($g(%session.Data("CompanyName"))'="":$g(%session.Data("CompanyName")),1:"")</script></h5>
+                    <p class="plan" id="PlanName">Trial Profile</p>
+                    
+                    <div class="nav-items">
+                    <div class='nav-item active-nav home' onclick="jPopMain('trialHomeT.csp')">
+    						<img src='./assets/images/trial/home.png' alt='Home'>
+    						<img class='dark' src='./assets/images/trial/homeF.png' alt='Home'>
+    						<p>Home</p>
+    					</div>
+    					<div class='nav-item upload' onclick="jPopMain('trialUpload.csp')">
+    						<img src='./assets/images/trial/smallUpload.png' alt='Upload Files'>
+    						<img class='dark' src='./assets/images/trial/uploadF.png' alt='Upload Files'>
+    						<p>Upload files</p>
+    					</div>
+    					<div class='nav-item download' onclick="jPopMain('trialDownload.csp')">
+    						<img src='./assets/images/trial/smallDownload.png' alt='Download Files'>
+    						<img class='dark' src='./assets/images/trial/downloadF.png' alt='Download Files'>
+    						<p>Download files</p>
+    					</div>
+    					<div class='nav-item' onclick="jPopMain('contactUs')" >
+    						<img src='./assets/images/trial/contact.png' alt='Contact Us'>
+    						<img class='dark' src='./assets/images/trial/contact.png' alt='Contact Us'>
+    						<p>Contact Us</p>
+    					</div>
+                    </div>
+                    <div class="nav-footer">
+                        <div class="logout" onclick="jLogout()"><img src="./assets/images/logout.png" alt="Log Out"><p>Log Out</p></div>
+                        <div class="copyright">Jonda Health &copy; 2024 </div>
+                    </div>
+                    <div class="collapseBtn active" >
+                        <img class="collapseClose" src="./assets/images/collapseClose.png" alt="collapse" onclick="toggleSideNav()">
+                        <img class="collapseOpen" src="./assets/images/collapseOpen.png" alt="collapse" onclick="toggleSideNav()">
+                    </div>
+			</div>
+			<div class="main-field" id="main-field" style="vertical-align:top;padding:0px;">
+				<iframe src="trialHomeT.csp" name="iFrame1" id="iFrame1" style="min-height: 100vh;width:100%;height:100%;border:0px;overflow: hidden;"  onload="">
+				 <!-- change to home page csp-->
+				</iframe>
+				<i class="fa fa-bars mobile-active nav-toggle" style="color: #ffffff;z-index:101" onclick="openMobileNav(event)"></i>
+			</div>
+		</div>
+	</div>
+        <div id="popup1" class="popup inactive">
+        <div class="popup-dialog">
+        	<img src="./assets/images/trial/cross.png" alt="Close" class="close-btn" onclick="removePopup1()">
+            <img src="./assets/images/success.png" alt="FYI">
+            <h4>Do you really want to delete your JondaX Trial Profile?</h4>
+            <p class="pink-text">Once you delete your profile, it can't be undone. All your transformed files will be permanently deleted.</p>
+            <p>To continue deletion, type <b>delete</b> in the box and click confirm button.</p>
+            <input type="text" class="delete-text" placeholder="DELETE" onkeyup="jAbleDelete(event)">
+            <button type="button" class="blue-btn" onclick="jDeleteProfile()" disabled>Confirm</button>
+        </div>
+    </div>
+    
+    <script>
+        var resizefunc = [];
+    </script>
+    <!-- jQuery  -->
+	<script language="cache" runat="server">
+		d jQueryCore^CSP999
+	</script>
+
+</body>
+<script language="cache" runat="server">
+	d jScript^jxScripts
+	d jScript2^jxScripts
+</script>
+
+<script type="text/javascript">
+let mySessionEnd;	
+iFrame1=document.getElementById("iFrame1");
+let bk;
+window.onload = jInitMe;
+document.onmousemove = resetTimer;
+document.onmousedown = resetTimer; 
+document.ontouchstart = resetTimer;
+document.onclick = resetTimer; 
+document.onkeypress = resetTimer;
+document.addEventListener('scroll', resetTimer, true); 
+
+
+function resetTimer(){
+	clearTimeout(mySessionEnd);
+	mySessionEnd = setTimeout(jLockDown, 3600000);
+}
+function clearTimer(){
+	clearTimeout(mySessionEnd);
+}
+function jLockDown(){
+	#server(..cLockDown())#
+}
+function jLogout(){
+	#server(..cLogout())#
+}
+
+function jInitMe(){
+	#server(..cInitMe())# 
+	//document.querySelector('.nav-item').classList.add('active-nav');
+	//document.querySelector('.nav-item img.dark').style.display="inline";
+	resetTimer();
+}
+
+function jPopMain(val){
+	#server(..cCheckSession())#
+	let navItems = document.querySelectorAll('.nav-item');
+    for (let i = 0; i < navItems.length; i++) {
+        navItems[i].classList.remove('active-nav');
+    }
+    event.currentTarget.classList.add('active-nav');
+    if (val.includes("contactUs")){
+	    window.location.href = "mailto:partnerships@jonda.health?subject=More%20Information%20About%20JondaX&body=I%20would%20like%20to%20know%20more%20about%20JondaX.";
+    }else{
+	iFrame1.src=val 
+    }
+}
+function jAbleDelete(event){
+	let deleteInput=event.target.value;
+	let text =deleteInput.value.toLowerCase();
+	if(text=== "delete") {
+		document.querySelector(".blue-btn").disabled = false;	
+	}
+	else{
+		document.querySelector(".blue-btn").disabled = true;
+	}
+}
+function jDeleteProfile(){
+	#server(..cDeleteProfile())#
+	window.open("trialDeleteAccSurvey.csp","_self")
+}
+
+
+const checkScrollbar = ()=>{
+	let navItems = document.querySelector(".nav-items");
+    if(navItems.scrollHeight > navItems.clientHeight){
+        navItems.style.marginRight = "0.5vw";
+        navItems.style.paddingRight = "0.5vw";
+    }
+    else{
+       	navItems.style.marginRight = 0;
+        navItems.style.paddingRight = 0;
+    }
+}
+checkScrollbar();
+function openPopup1(){
+    setTimeout(()=>{
+       popup1.classList.remove("inactive")
+    },100);
+}
+function removePopup1(){
+    popup1.classList.add("inactive");
+}
+</script>
+
+<script language="cache" method="cInitMe">
+	;d LoadProfile^jxSideNav
+</script>
+<script language="cache" method="cSaveBucket" arguments="d1:%String">
+    s %session.Data("bk")=d1
+</script>
+ <script language="cache" method="cDeleteProfile">
+   s uid=$g(%session.Data("UserID"))
+   s dt= $zdatetime($h,3)
+   &sql(UPDATE MX."User" SET DeletedDate=:dt WHERE ID=:uid)
+</script>
+ <script language="cache" method="cCheckSession">
+   if ($g(%session.Data("UserID"))=""){
+	   &js<window.open("jxLockDown.csp","_self")>
+   }
+</script>
+
+<script language="cache" method="cLockDown">
+	k %session.Data
+	&js<window.open("trialLockDown.csp","_parent")>
+</script>
+
+<script language="cache" method="cLogout">
+	d Logout^trialLogin($g(%session.Data("UserName")))
+</script>
+
+
+</html>

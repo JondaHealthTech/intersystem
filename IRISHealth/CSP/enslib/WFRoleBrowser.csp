@@ -1,0 +1,204 @@
+<html>
+<head>
+
+<!-- Popup selector dialog for Role Editor -->
+
+<title><csp:text Domain="Workflow" TextId="WFSelWindow">Selection Window</csp:text></title>
+
+<style>
+
+body {
+	background: blue;
+	filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=1, StartColorStr='#DDEEFF', EndColorStr='#4040FF');
+	margin: 0px;
+}
+
+div.main {
+	margin: 10px;
+}
+
+table.layout {
+}
+
+h1 {
+	border-bottom: 1px black solid;
+	padding: 5px;
+	width: 110%;
+	filter:
+		progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#4040FF', EndColorStr='#000000')
+}
+
+div.title {
+	width: 100%;
+	font-size: 0.8em;
+	font-family: "Lucida Sans Unicode" "Courier New";
+	font-weight: bold;
+	color: yellow;
+	filter:
+		progid:DXImageTransform.Microsoft.dropShadow(color=#404040, OffX=2, OffY=2, Positive=2);
+}
+
+div.text1	{
+	font-size: 12pt; 
+}
+
+div.text1:first-letter {
+	font-size: 15pt;
+}
+
+span.guibutton {
+	color: black;
+	font-weight: bold;
+}
+
+#choiceList {
+	width: 250px;
+}
+
+</style>
+
+<script language="CACHE" runat="SERVER">
+	// get request parms
+	Set tType = $G(%request.Data("TYPE",1))
+	Set tValue = $G(%request.Data("VALUE",1))
+	
+	Set tError = ""
+	Set tTitleId = "WFUnkCat",tTitle = "Unknown Category"
+	Set tRS = ""
+	If (tType = "TITLE") {
+		Set tTitleId = "WFTitles",tTitle = "Titles"
+		Set tRS = ##class(%ResultSet).%New()
+		Set tSC = tRS.Prepare("SELECT DISTINCT Title FROM EnsLib_Workflow.RoleMembership WHERE Title IS NOT NULL")
+
+		If $$$ISERR(tSC) {
+			Do $System.Status.DecomposeStatus(tSC,.a)
+			Set tError = " " _ $G(a(1))
+		}
+		
+		Set tSC = tRS.Execute()
+	}
+	ElseIf (tType = "USERNAME") {
+		Set tTitleId = "Users",tTitle = "Users"
+		Set tRS = ##class(%ResultSet).%New()
+		Set tSC = tRS.Prepare("SELECT Name FROM EnsLib_Workflow.UserDefinition")
+
+		If $$$ISERR(tSC) {
+			Do $System.Status.DecomposeStatus(tSC,.a)
+			Set tError = " " _ $G(a(1))
+		}
+
+		Set tSC = tRS.Execute()
+	}
+	ElseIf (tType = "ROLEMEMBERS") {
+		Set tRoleName = $G(%request.Data("ROLE",1))
+		Set tTitleId = "WFRoleMembers",tTitle = "Role Members"
+		Set tRS = ##class(%ResultSet).%New()
+		Set tSC = tRS.Prepare("SELECT UserName FROM EnsLib_Workflow.RoleMembership WHERE RoleName = ?")
+
+		If $$$ISERR(tSC) {
+			Do $System.Status.DecomposeStatus(tSC,.a)
+			Set tError = " "_$G(a(1))
+		}
+
+		Set tSC = tRS.Execute(tRoleName)
+	}
+	
+</script>
+
+<script language="JavaScript">
+
+function pageOnLoad()
+{
+	return true;
+}
+
+function giveFocusToInput(id)
+{
+	var control = self.document.getElementById(id);
+	if (control) {
+		control.focus();
+		if (control.type == 'text') {
+			control.select();
+		}
+	}
+
+	return true;
+}
+
+function choiceDblClick()
+{
+	btnOK();
+}
+
+function updateMainWindow()
+{
+	//YSD2042 var value = self.document.getElementById('choiceList').value;
+	var choiceList = self.document.getElementById('choiceList');
+	var len = choiceList.length;
+	var choices = "";
+	for (r=0; r<len; r++) {
+		if (choiceList.options[r].selected == true) {
+			if (choices != "") choices = choices + ",";
+			choices = choices + choiceList.options[r].value;
+		}
+	}
+	window.dialogArguments.value = choices;
+	return true;
+}
+
+function btnOK()
+{
+	if (!updateMainWindow()) {
+		return false;
+	}
+	window.close();
+	return true;
+}
+
+function btnCancel()
+{
+	window.close();
+	return true;
+}
+
+</script>
+
+</head>
+
+<body onload="pageOnLoad();">
+
+<h1><div class="title" Domain="Workflow" TextId="#(tTitleId)#">#(tTitle)#</div></h1>
+<div class="main">
+<form name="theForm">
+
+<div class="text1" Domain="Workflow" TextId="WFRoleBrowserSel">Select an item from the list below. When complete, press </div><span class="guibutton" Domain="Workflow" TextId="OK">OK</span>.
+<hr>
+
+<csp:if condition="$L(tError)&gt;0">
+<csp:text Domain="Workflow" TextId="Error">Error:</csp:text>#(..EscapeHTML(tError))#
+</csp:if>
+
+<csp:if condition="$IsObject(tRS)">
+<select id="choiceList" size="4" ondblclick="choiceDblClick();" multiple>
+
+<script language="cache" runat="server">
+	While (tRS.Next()) {
+		Set tName = ..EscapeHTML(tRS.GetData(1))
+		Write "<option value=""",tName,""">",tName,"    </option>",!
+	}
+</script>
+
+</select>
+</csp:if>
+<hr>
+
+<div class="btnbar">
+<input type="button" class="btn" name="OK" value=" OK " Domain="Workflow" TextId="OK" onclick="btnOK();">&nbsp;
+<input type="button" class="btn" name="CANCEL" value=" Cancel " Domain="Workflow" TextId="Cancel" onclick="btnCancel();">
+</div>
+</form>
+
+</div>
+</body>
+
+</html>

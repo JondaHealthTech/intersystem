@@ -1,0 +1,234 @@
+<!--Studio Template -->
+<csp:StudioInteractiveTemplate name="HTML Tag" type="CSP,CLS" description="Inserts or edits an HTML tag." id="HTMLTag">
+<csp:class DOMAIN="%TemplateMessages">
+<html>
+<head>
+<style type="text/css">
+<!--
+
+span.Label	{	
+					font-size: 9pt;
+					font-weight: bold;
+				}
+
+span.Unknown	{	
+					font-size: 12pt;
+				}
+
+a.Help		{	font-size: 9pt;
+					font-weight: bold;
+					text-decoration: none;
+					
+				}
+
+-->
+</style>
+
+
+<script language="JavaScript" type="text/javascript">
+function newCat()
+{
+	var form = self.document.theForm;
+	
+	// submit back to ourself to see different category values
+	form.action = self.document.location;
+	form.submit();
+
+	return true;
+}
+	
+function loopBack()
+{
+	// submit back to ourself to see different category values
+	self.document.theForm.action = self.document.location;
+	return true;
+}
+</script>
+
+</head>
+<body>
+
+<script language="Cache" method=OnPreHTTP arguments="" returntype="%Boolean">
+ 	If ($get(%request.Data("SelectedText",1))= "") {
+ 		Set %response.Redirect=%request.Get("redirect","HTMLTagNew.csp")
+ 	}
+	Quit 1
+</script>
+
+<script language="Cache" runat="server">
+ If ($data(%request.Data("NEWCAT",1))) {
+	 Set pre = $get(%request.Data("PRE",1))
+	 Set post = $get(%request.Data("POST",1))
+	 Set tag = $get(%request.Data("TAG",1))
+ }
+ Else {
+	 Set pre = ""
+	 Set post = ""
+	 Set tag = ""
+	 Set tokens = ##class(%CSP.TokenStream).%New()
+	 Do tokens.OpenFromString($get(%request.Data("SelectedText",1)))
+	 While (tokens.NextToken()) {
+		 If (tag = "") {
+			If tokens.IsTag() {
+				Set tag = tokens.Tag
+				Do tokens.GetAttrs(.ats)
+			}
+			Else {
+				Set pre = pre _ tokens.Text
+			}
+		 }
+		 Else {
+			Set post = post _ tokens.Text
+		 }
+	
+	 }
+ }
+ 
+ Set cat = $get(%request.Data("CATEGORY",1))
+ 
+ // normalize case of attrs
+ Set key = $order(ats(""))
+ While (key '= "") {
+	 Set KEY = $ZCVT(key,"U")
+	 Merge attrs(KEY) = ats(key)
+	 If ($get(attrs(KEY,"type")) = "boolean") {
+	 	Set:('$data(attrs(KEY,"value"))) attrs(KEY,"value") = "1"
+ 	 }
+	 Set key = $order(ats(key))
+ }
+ 
+ // now look up any other attrs associated with this tag
+ Set defined = 0
+ If (tag '= "") {
+ 	Set defined = ##class(%Studio.Template.HTMLElement).GetAttrs($zcvt(tag,"U"),.attrs,.cats)
+ }
+ 
+ // copy any submitted values into attr list
+ If ($data(%request.Data("NEWCAT",1))) {
+	For a = 1:1:%request.Count("ANAME") {
+		If ($get(%request.Data("ANAME",a))'="") {
+			Set attrs(%request.Data("ANAME",a),"value")=$get(%request.Data("AVALUE",a))
+		}
+	}
+ }
+</script>
+
+<script language="cache" runat="server">
+	Set tTitle = "&lt;"_$zconvert(tag,"O","HTML")_"&gt; "_$$$Text("Tag Inspector")
+	If defined = 0 Set tTitle = tTitle _ "("_$$$Text("tag unknown")_")"
+	Do ##class(%template.htmlcolor).DrawTitle(tTitle)
+</script>
+<!-- YSD2449<h1>&lt;#(tag)#&gt; #($select(defined=0:"<span class='UNKNOWN'>(unknown)</span>",1:""))# #($$$Text("Tag Inspector"))#</h1>-->
+
+<form name="theForm" action="HTMLTag2.csp">
+
+<input type="hidden" name="NEWCAT" value="1">
+<input type="hidden" name="TAG" value="#(..EscapeHTML(tag))#">
+<input type="hidden" name="PRE" value="#(..EscapeHTML(pre))#">
+<input type="hidden" name="POST" value="#(..EscapeHTML(post))#">
+
+<!-- dummy value to supress redirect logic -->
+<input type="hidden" name="SelectedText" value="text">
+
+<table cellspacing="3" cellpadding="1">
+
+<tr><td class="Label"><a class="Help" name="Help" title='#($$$Text("Select the category of attributes to display."))#'>#($$$Text("CATEGORY"))#</a></td>
+<td>
+<select name="CATEGORY" onchange="newCat();">
+<script language="Cache" runat="server">
+ Write "<option value="""""
+ Write:(cat="") " selected"
+ Write ">"_$$$Text("General")
+ Set c = $order(cats(""))
+ While (c '= "") {
+	Write "<option value=""",$zconvert(c,"O","HTML"),""""
+	Write:(cat=c) " selected"
+	Write ">",$zconvert(c,"O","HTML"),!
+	Set c = $order(cats(c))
+ }
+</script>
+</select></td></tr>
+
+<tr><td>&nbsp;</td></tr>
+
+<script language="Cache" runat="server">
+	Set key = $order(attrs(""))
+	Set col = 0
+	While (key '= "") {
+		Set itype = "TEXT"
+		Set type = $get(attrs(key,"type"),"string")
+		If ($get(attrs(key,"category"))=cat) {
+			// show the value
+			Write:(col=0) "<tr>"
+			
+			&html<<td class="Label">&nbsp;
+			<a class="Help" name="Help#($zconvert(key,"O","HTML"))#" title="#($zconvert($G(attrs(key,"desc")),"O","HTML"))#">#($zconvert(key,"O","HTML"))#</a></td>>
+			
+			&html<<td>
+			<input type="hidden" name="ANAME" value="#($zconvert(key,"O","HTML"))#">
+			<input type="hidden" name="ATYPE" value="#($zconvert(type,"O","HTML"))#">
+			>
+
+			If (type = "enum") {
+				Set enum = $get(attrs(key,"enum"))
+				Write "<select name=""AVALUE"">",!
+				Write "<option value="""">",!
+				For i = 1:1:$length(enum,"|") {
+					Set e = $piece(enum,"|",i)
+					Write "<option value=""",$zconvert(e,"O","HTML"),""""
+					If ($zcvt(e,"U") = $zcvt($get(attrs(key,"value")),"U")) {
+						Write " selected"
+					}
+					Write ">",$zconvert(e,"O","HTML"),!
+				}
+							
+				Write "</select>",!
+			}
+			ElseIf (type="boolean") {
+				Write "<select name=""AVALUE"">",!
+				Write "<option value=""0"">"_$$$Text("false"),!
+				Write "<option value=""1"""
+				If (1 = $G(attrs(key,"value"))) {
+					Write " selected"
+				}
+				Write ">"_$$$Text("true"),!
+				Write "</select>",!
+
+			}
+			Else {
+				Write "<input name=""AVALUE"" type=""text"""
+				If (type = "number") {
+					Write " size=""5"""
+				}
+				Else {
+					Write " size=""14"""
+				}
+				Write " value=""",..EscapeHTML($get(attrs(key,"value"))),""">"
+			}
+			Write "</td>"
+			Write:(col=1) "</tr>",!
+			Set col = (col + 1) # 2
+		}
+		Else {
+			// use a hidden field
+			&html<
+			<input type="hidden" name="ANAME" value="#($zconvert(key,"O","HTML"))#">
+			<input type="hidden" name="ATYPE" value="#($zconvert(type,"O","HTML"))#">
+			<input type="hidden" name="AVALUE" value="#(..EscapeHTML($G(attrs(key,"value"))))#">>
+		}
+				
+		Set key = $order(attrs(key))
+	}
+
+</script>
+
+</table>
+<hr>
+
+<div align="right">
+<input type="submit" value=" OK " name="OKBUTTON" textid="">
+</div>
+
+</form>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+		q 1
+		</script>-->
+    <script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+	<link rel="stylesheet" href="assets/styles/trialAccCompletion.css">
+</head>
+<body>
+	<div id="wrapper">
+	    <div class="bg-wrapper">
+	        <div class="bg4">
+	            <img src="./assets/images/bg4.png">
+	        </div>
+	    </div>
+	    
+	 <a href="#" class="back-link">Back to website</a>
+     <div class="container">    
+     	<img class="logo1" src="./assets/images/trial/JXbyJx.png" alt="Jonda X">
+               
+
+      	<div class="form-container">  
+
+			<h1>You have created your Free Trial Profile</h1>
+            	<img class="mail-img" src="./assets/images/trial/accCreated.png" alt="Verification mail sent">
+            	<p class="P1">You may now login and try out the data transformation power of JondaX!</p>
+
+				<button type="button" class="B1" onclick="jLogin()">Login</button> 
+          </div>
+            
+            <script language="cache" runat="server">
+          		d SetFooter^trialHome
+          </script>
+		
+	  </div>
+	</div>		    
+</body>
+<script  type="text/javascript">
+    function jLogin(){
+	    #server(..cKill())#
+    	window.open("trialLogin.csp","_self")
+    }
+</script>
+<script language="cache" method="cKill" >
+	s mail=$g(%session.Data("Email"))
+	k ^TrialUser(mail)
+	k %session.Data
+</script>
+</html>

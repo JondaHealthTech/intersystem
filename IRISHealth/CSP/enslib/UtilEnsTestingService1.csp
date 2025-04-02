@@ -1,0 +1,127 @@
+<AutoPageENS domain="Ensemble" parentpage="UtilEnsHome.csp" pagename="Testing Service - 2 of 4" title="@Ensemble:EnsTestingService@Testing Service">
+
+<CSP:CLASS INCLUDES="Ensemble,EnsUI">
+
+<script language="CACHE" runat="SERVER">
+
+	Set tProduction = $G($$$EnsRuntime("Name"))
+	Set tType = $G(%request.Data("TYPE",1))
+	Set tOperation = $G(%request.Data("OPERATION",1))
+	Set tProcess = $G(%request.Data("PROCESS",1))
+	Set tTarget = $S(tType="process":tProcess, 1:tOperation)
+
+	Set tDescription = $$$LocalizeText("Ensemble","TS1Description","Next: select the type of message you wish to send using the list below and press Next.")
+</script>
+
+<html>
+<head>
+<title><csp:text TextId="TestingService2" Domain="Ensemble"></csp:text></title>
+<LINK REL="stylesheet" TYPE="text/css" HREF="/csp/sys/csputils.css" TITLE="Standard Style" >
+
+<script language="JavaScript">
+function changeRequest()
+{
+	var request = self.document.getElementById("selectRequest").value;
+	var next = self.document.getElementById("btnNext");
+	
+	if (request == '') {
+		next.disabled = true;
+	}
+	else {
+		next.disabled = false;
+	}
+	
+	return true;
+}
+</script>
+
+</head>
+<body onload="changeRequest();">
+<table border="0" class="LayoutMain" width="100%" height="100%" cellpadding="0" cellspacing="0">
+<tr height="100%">
+<td class="LayoutContentCol" width="80%" >
+
+<form action="#(..Link("UtilEnsTestingService2.csp"))#">
+<div align="center" class="text1" style="margin-left:20%;margin-right:20%;">
+#(tDescription)#
+</div>
+<div align="center">
+
+<table border="0" cellspacing="5" cellpadding="5">
+
+<tr><td align="right"><csp:text Domain="Ensemble" TextId="CurrentProduction">Current Production:</csp:text></td>
+<td><b>#(tProduction)#&nbsp;</b></td></tr>
+<tr><td align="right"><csp:text Domain="Ensemble" TextId="Target">Target:</csp:text></td>
+<td><b>#(tTarget)#&nbsp;</b></td></tr>
+
+<tr><td align="right"><csp:text Domain="Ensemble" TextId="RequestType">Request Type:</csp:text></td>
+<td>
+
+<input type="hidden" name="TARGET" value="#(tTarget)#">
+
+<input type="hidden" name="TYPE" value="#(tType)#">
+<input type="hidden" name="OPERATION" value="#(tOperation)#">
+<input type="hidden" name="PROCESS" value="#(tProcess)#">
+
+<select id="selectRequest" name="REQUEST" onchange="changeRequest();">
+<script language="CACHE" runat="SERVER">
+	If $Data($$$EnsRuntime) {
+		// get list of available requests for current target
+		// find the actual class name associated with target
+		&sql(SELECT ClassName INTO :tCls
+			FROM Ens_Config.Item
+			WHERE (Production->Name = :tProduction) AND (Name = :tTarget))
+		Set:SQLCODE tCls=""
+		If ""'=tCls {
+			Set tList = $zobjclassmethod(tCls,"GetMessageList")
+		} Else {
+			Set tList = ""
+		}
+		Set tDefChoice = ""
+		
+		If (($LL(tList)=1)&&($LG(tList,1)="Ens.Request")) {
+			Set tDefChoice = "Ens.StringRequest"
+		}
+		
+		// Now build a list of all requests and their subclasses
+		For n = 1:1:$LL(tList) {
+			Set:($LG(tList,n)'="") tReq1($LG(tList,n)) = ""
+		}
+		
+		// merge into list including subclasses
+		Set tRS = ##class(%ResultSet).%New("%Dictionary.ClassDefinition:SubclassOf")
+		Set tName="" For { Set tName=$O(tReq1(tName))  Quit:""=tName
+			Set:'$$$comClassKeyGet(tName,$$$cCLASSabstract) tRequests(tName) = ""
+			Do tRS.Execute(tName)
+			While (tRS.Next()) {  Continue:'##class(%Dictionary.CompiledClass).%ExistsId(tRS.Data("Name"))
+				Continue:$$$comClassKeyGet(tRS.Data("Name"),$$$cCLASSabstract)
+				Set tRequests(tRS.Data("Name")) = ""
+			}
+			Do tRS.Close()
+		}
+		Set tRS = ""
+		
+		Set tName="" For { Set tName=$O(tRequests(tName))  Quit:""=tName
+			&html<<option value="#(tName)#" #($S(tName=tDefChoice:"selected",1:""))#>#(tName)#</option>>
+		}
+	}
+</script>
+</select>
+</td></tr>
+<tr><td colspan="2"><hr></td></tr>
+<tr><td align="right">&nbsp;</td>
+<td align="left">
+<input id="btnBack" type="button" Domain="Ensemble" TextId="btnBack" value="Back" onclick="self.location='#(..Link("UtilEnsTestingService.csp"))#';">&nbsp;
+<input id="btnNext" type="submit" Domain="Ensemble" TextId="btnNext" value="Next" disabled>&nbsp;&nbsp;&nbsp;
+<input type="button" Domain="Ensemble" TextId="btnCancel" value="Cancel" onclick="self.location='#(..Link("UtilEnsHome.csp"))#';">
+
+</td></tr>
+</table>
+</div>
+</form>
+
+</td></tr></table>
+
+</body>
+
+</html>

@@ -1,0 +1,159 @@
+/* @class="%ZEN.ComponentEx.schedulePane" */
+
+/* @doc="Table used to layout the schedule." */
+.schedulePaneTable {
+	font-family: lucida sans unicode;
+	border: 1px solid black;
+	width: 100%;
+	table-layout: fixed;
+}
+
+/* @doc="Header for a day within the schedule." */
+.schedulePaneDayHeader {
+	font-weight: bold;
+	background: #404040;
+	background-image: url(images/grad-gray-10x100.png);
+	background-repeat: repeat-x;
+	border-bottom: 1px solid gray;
+	border-right: 1px solid gray;
+	padding: 2px;
+	text-align: left;
+	overflow: hidden;
+}
+
+/* @doc="Header for the schedule." */
+.schedulePaneHeader {
+	background: #404040;
+	background-image: url(images/grad-gray-10x100.png);
+	background-repeat: repeat-x;
+	padding: 2px;
+	text-align: left;
+	overflow: hidden;
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+}
+
+.schedulePaneHeader table {
+	width: 100%;
+	padding: 2px;
+	font-weight: bold;
+	font-size: 1.4em;
+}
+
+.schedulePaneDaySubHeader {
+	font-weight: normal;
+	font-size: 0.8em;
+}
+
+.schedulePaneDayBody {
+	position: relative;
+}
+
+.schedulePaneTable td {
+}
+
+.scheduleMonthCell {
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	text-align: right;
+	vertical-align: top;
+	position: relative;
+}
+
+.scheduleMonthCellHi {
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	text-align: right;
+	vertical-align: top;
+	background: yellow;
+	position: relative;
+}
+
+/* day from other than the current month */
+.scheduleMonthCellGray {
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	text-align: right;
+	vertical-align: top;
+	color: #606060;
+	background: #D0D0D0;
+	position: relative;
+}
+
+.scheduleMonthItems {
+	padding: 2px;
+	text-align: left;
+	font-size: 0.8em;
+	font-weight: normal;
+	overflow: hidden;
+	position: absolute;
+}
+
+.scheduleMonthCellHi .scheduleMonthItems {
+	overflow-y: auto;
+}
+
+.scheduleSlot,.scheduleSlotHi {
+	font-size: 7pt;
+	width: 100%;
+	position: absolute;
+	border-bottom: 1px dotted black;
+	border-right: 1px solid black;
+}
+
+/* @doc="Highlighted empty cell." */
+.scheduleSlotHi {
+	border: 1px solid black;
+	background: yellow;
+}
+
+/* @doc="Highlighted cell." */
+.scheduleSlotBookedHi,.scheduleSlotUnavailableHi {
+	border: 2px solid black;
+	background: yellow;
+}
+
+/* @doc="Description for a schedule cell." */
+.scheduleSlotCaption {
+	font-size: 8pt;
+	text-align: center;
+	vertical-align: middle;
+	border: none;
+}
+
+.scheduleSlotTime {
+	font-size: 7pt;
+	text-align: left;
+	vertical-align: top;
+	border: none;
+}
+
+/* @doc="Div for a schedule cell." */
+.scheduleSlotBooked,.scheduleSlotUnavailable,
+.scheduleSlotBookedHi,.scheduleSlotUnavailableHi  {
+	position: absolute;
+	font-size: 9pt;
+	text-align: center;
+	overflow: hidden;
+}
+
+.scheduleSlotBooked {
+	border: 1px solid black;
+	background: #FFEEAA;
+}
+
+.scheduleSlotUnavailable {
+	color: #404040;
+	background: #D0D0D0;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+}
+
+/* @doc="Buttons within header." */
+.scheduleBtn {
+	width: 100%;
+	font-size: 12pt;
+}
+
+/* EOF */

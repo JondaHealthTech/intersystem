@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+    <title>Account Deletion Notice</title>
+	<link rel="stylesheet" href="assets/styles/trialAccDeleted.css">
+</head>
+<body>
+    <div class="container">
+    	
+    	<img src="./assets/images/trial/JXbyJx.png" alt="JondaX Logo" class="logo">
+    	<img src="./assets/images/trial/delete.png" alt="Account Deleted" class="Delete-img">
+    	<h1>Your profile has been successfully deleted</h1>
+    	<p>You can safely close this window.</p>
+    </div>
+
+</body>
+</html>

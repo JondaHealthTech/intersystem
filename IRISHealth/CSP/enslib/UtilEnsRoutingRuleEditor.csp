@@ -1,0 +1,1834 @@
+<AutoPageENS domain="Ensemble" parentpage="UtilEnsRuleList.csp" pagename="Message Routing Rule Editor" title="@Ensemble:EnsRoutingRuleEditor@Message Routing Rule Editor">
+<CSP:CLASS INCLUDES="Ensemble,EnsUI">
+
+<script language="CACHE" method="OnPreHTTP" ReturnType="%Boolean">
+	Set $ZT="Trap"
+	Do SetIO^%NLS($$MapCharset^%NLS(..#CHARSET))
+
+	// test for submit
+	If ($G(%request.Data("submitType",1)) = "save") {
+
+		// get serial state of Rules and replace
+		Set tState = "<?xml version=""1.0"" ?>" _ $C(13,10) _ $G(%request.Data("data",1))
+
+		Set tSC = ##class(Ens.Rule.Router.RoutingRule).Load("string",tState,0,.tRoutingRule)
+		If $$$ISERR(tSC) || '$IsObject(tRoutingRule) {
+			// redirect to display error
+			Set %response.Redirect = "UtilEnsRoutingRuleEditor.csp?$ID1=" _ $G(%request.Data("$ID1",1)) _ "&ERROR=" _ ..EscapeURL(tSC)
+		} Else {
+			// redirect after submit
+			Set %response.Redirect = "UtilEnsRoutingRuleEditor.csp?$ID1=" _ tRoutingRule.%Id()
+		}
+		Quit 1
+	}
+	ElseIf ($G(%request.Data("submitType",1)) = "delete") {
+		
+		// delete the specified Rule Definition (and all old versions)
+		Set tRoutingRuleId = $G(%request.Data("$ID1",1))
+		Set tPackage = $P(tRoutingRuleId,"||",1)
+		Set tRuleName = $P(tRoutingRuleId,"||",2)
+		Set tSC = ##class(Ens.Rule.RuleDefinition).PurgeOldVersions(tPackage,tRuleName,0)
+
+		// redirect after submit
+		Set %response.Redirect = "UtilEnsRuleList.csp"
+		Quit 1
+	}
+	
+	// see if this is the correct editor for this rule type
+	Set tType = $G(%request.Data("$ID2",1))
+	If ((tType '= "") && (tType '= "UtilEnsRoutingRuleEditor.csp")) {
+		Set tReadOnly = $G(%request.Data("READONLY",1),0)
+
+		// find editor type
+		Set tURL = $zobjclassmethod(tType,"%GetParameter","RULEEDITORURL")
+		If (tURL '= "") {
+			Set %response.Redirect = tURL _ "?$ID1=" _ $G(%request.Data("$ID1",1))
+			If (tReadOnly) {
+				Set %response.Redirect = %response.Redirect _ "&READONLY=1"
+			}
+		} Else {
+			// no editor available
+			Set %response.Redirect = "UtilEnsRuleList.csp"
+		}
+		Quit 1
+	}
+
+	Quit ##super()
+
+:Trap
+	Set $ZT=""
+	Quit 1	
+</script>
+
+<script language="CACHE" runat="SERVER">
+	Set tReadOnly = $G(%request.Data("READONLY",1),0)
+	
+	Set tError = $G(%request.Data("ERROR",1))
+	Set tIsError = (tError '= "")
+	Set sError = $$$EnsMsgError
+	Set sReadOnly = $$$EnsMsgReadOnly
+	Set tStatus = $S(tIsError:sError,tReadOnly:sReadOnly,1:$$$EnsMsgOk)
+
+	// Get ID of RoutingRule
+	Set tRoutingRuleId = $G(%request.Data("$ID1",1))
+	Set tPackage = $P(tRoutingRuleId,"||",1)
+	Set tRuleName = $P(tRoutingRuleId,"||",2)
+	Set tContextClass = ""
+	Set tRoutingRule = ""
+	Set tIsNew = 0
+	Set tRoutineName = ""
+
+	If (tRoutingRuleId '= "") {
+		// edit existing RoutingRule
+		Set tRoutingRule = ##class(Ens.Rule.Router.RoutingRule).Open(tPackage,tRuleName)
+	}
+	If ('$IsObject(tRoutingRule)) {
+		// new
+		Set tRoutingRule = ##class(Ens.Rule.Router.RoutingRule).%New()
+		Set tRoutingRule.HostClass = tPackage
+		Set tRoutingRule.Name = tRuleName
+		Set tStatus = $S(tIsError:sError,tReadOnly:sReadOnly,1:$$$LocalizeText("Ensemble","NewRoutingRule","New RoutingRule"))
+		Set tIsNew = 1
+	} Else {
+		Set tRoutineName = tRoutingRule.RoutineName
+	}
+	Set tContextClass = tRoutingRule.ContextClass
+	Set:tRoutineName="" tRoutineName = "N/A"
+
+	// Messages
+	
+	// The messages below are used in JavaScript code; the localizable ones are escaped
+	Set msgEditRule = $ZCVT($$$LocalizeText("RuleEditor","msgEditRule","Edit this rule"),"O","JS")
+	Set msgDelRule = $ZCVT($$$LocalizeText("RuleEditor","msgDelRule","Delete this rule"),"O","JS")
+	Set msgDelCond = $ZCVT($$$LocalizeText("RuleEditor","msgDelCond","Delete this condition"),"O","JS")
+	Set msgDelAction = $ZCVT($$$LocalizeText("RuleEditor","msgDelActionR","Delete this condition"),"O","JS")
+	Set msgEditOp = $ZCVT($$$LocalizeText("RuleEditor","msgEditOp","Edit this value"),"O","JS")
+	Set msgNewRule = $ZCVT($$$LocalizeText("RuleEditor","msgNewRule","Add a new rule"),"O","JS")
+	Set msgEnable = $ZCVT($$$LocalizeText("RuleEditor","msgEnable","Enable or disable this rule"),"O","JS")
+	Set msgNewCond = $ZCVT($$$LocalizeText("RuleEditor","msgNewCond","Add a new condition"),"O","JS")
+	Set msgNewAction = $ZCVT($$$LocalizeText("RuleEditor","msgNewAction","Add a new action"),"O","JS")
+	Set msgNewCmd = $ZCVT($$$LocalizeText("RuleEditor","msgNewCmd","Add"),"O","JS")
+	Set msgEditAction = $ZCVT($$$LocalizeText("RuleEditor","msgEditAction","Edit this action"),"O","JS")
+	Set msgEditCmd = "..."
+
+	//Set msgRemoveCmd = "&#9587;"
+	Set msgRemoveCmd = "X"
+	Set msgUpCmd = "&#9650;"
+	Set msgDownCmd = "&#9660;"
+
+	Set msgDefault = $$$Text("Default","RuleEditor")
+	Set msgBase = $$$Text("Base","RuleEditor")
+	Set msgRule = $$$Text("Rule","RuleEditor")
+	Set msgIF = $$$Text("IF","RuleEditor")
+	Set msgSend = $$$Text("Send","RuleEditor")
+	Set msgDelete = $$$Text("Delete","RuleEditor")
+
+	Set msgUpRule = $ZCVT($$$LocalizeText("RuleEditor","msgUpRule","Move this rule up one position"),"O","JS")
+	Set msgDownRule = $ZCVT($$$LocalizeText("RuleEditor","msgDownRule","Move this rule down one position"),"O","JS")
+
+	Set msgRemoveRulePrompt = $ZCVT($$$LocalizeText("RuleEditor","msgRemoveRulePrompt","Do you wish to remove this rule?"),"O","JS")
+	Set msgRemoveCondPrompt = $ZCVT($$$LocalizeText("RuleEditor","msgRemoveCondPrompt","Do you wish to remove this condition?"),"O","JS")
+	Set msgRemoveActionPrompt = $ZCVT($$$LocalizeText("RuleEditor","msgRemoveActionPrompt","Do you wish to remove this action?"),"O","JS")
+
+	Set msgRevertPrompt = $ZCVT($$$LocalizeText("RuleEditor","msgRevertPrompt","Revert to last saved version?"),"O","JS")
+	
+	// The messages below are used in HTML
+	Set msgSaveRoutingRule = $$$LocalizeText("RuleEditor","msgSaveRoutingRule","Save this RoutingRule")
+	Set msgSaveCmd = $$$LocalizeText("RuleEditor","msgSaveCmd","Save")
+
+	Set msgRevertRoutingRule = $$$LocalizeText("RuleEditor","msgRevertRuleSet","Revert to last saved version.")
+	Set msgRevertCmd = $$$LocalizeText("RuleEditor","msgRevertCmd","Revert")
+
+	Set msgEditRoutingRuleCmd = $$$LocalizeText("RuleEditor","msgEditRoutingRuleCmd","Edit")
+	Set msgEditRoutingRule = $$$LocalizeText("RuleEditor","msgEditRoutingRule","Edit this RoutingRule.")
+
+	Set msgDeleteRoutingRule = $$$LocalizeText("RuleEditor","msgDeleteRoutingRule","Delete this RoutingRule")
+	Set msgDeleteCmd = $$$LocalizeText("RuleEditor","msgDeleteCmd","Delete")
+	Set msgDeleteRoutingRulePrompt = $$$LocalizeText("RuleEditor","msgDeleteRoutingRulePrompt","Do you wish to delete this Routing Rule?")
+
+	Set msgList = $$$LocalizeText("RuleEditor","msgList","Return to list of rules")
+	Set msgListCmd = $$$LocalizeText("RuleEditor","msgListCmd","Rule List")
+	Set msgGotoListPrompt = $$$LocalizeText("RuleEditor","msgGotoListPrompt","There are changes made; Do you wish to lose them?")
+
+	Set msgLog = $$$LocalizeText("RuleEditor","msgLog","View the Log for this Rule.")
+	Set msgLogCmd = $$$LocalizeText("RuleEditor","msgLogCmd","Rule Log")
+
+	Set msgDoAllTitle = $$$LocalizeText("RuleEditor","msgDoAllTitle","By default, continue evaluating subsequent rules after the current rule's conditions are satisfied and its actions are recorded")
+
+	Set sModified = $$$EnsMsgModified
+	Set sSaving = $$$EnsMsgSaving
+	Set sRules = $$$EnsMsgRules
+	Set sConditions = $$$LocalizeText("Ensemble","Conditions","Conditions")
+	Set sActions = $$$TextHTML("Action","RuleEditor")
+	Set sDeleting = $$$LocalizeText("Ensemble","Deleting","Deleting...")
+
+	Set sSource = $$$LocalizeText("Ensemble","Source","Source")
+	Set sMsgClass = $$$TextHTML("Message Class","RuleEditor")
+	Set sDocName = $$$TextHTML("Document Name","RuleEditor")
+	Set sDocCat = $$$TextHTML("Schema Category","RuleEditor")
+	Set sDocType = $$$TextHTML("Schema DocType","RuleEditor")
+
+	Set sTransform = $$$TextHTML("Transform","RuleEditor")
+	Set sTarget = $$$TextHTML("Target","RuleEditor")
+
+	If (tReadOnly) {
+		Set msgSummaryDesc = $$$LocalizeText("RuleEditor","msgSummaryDescR","The following table shows the name and other data for this Message Routing Rule.")
+		Set msgRulesDesc = $$$LocalizeText("RuleEditor","msgRulesDescR","The table below shows the rules that make up this Message Routing Rule.")
+		If (tIsNew) {
+			Set msgSummaryDesc = msgSummaryDesc _ "<br>"_$$$LocalizeText("RuleEditor","msgSummaryDesc1R","This Message Routing Rule does not exist within the database. Return to the Business Rules page and press Create to create a new Routing Rule.")
+			Set msgEditRoutingRule = $$$LocalizeText("RuleEditor","msgEditRoutingRuleR","Create a new Message Routing Rule.")
+			Set msgEditCmd = $$$LocalizeText("RuleEditor","msgEditCmd","Create")
+		}
+	} Else {
+		Set msgSummaryDesc = $$$LocalizeText("RuleEditor","msgSummaryDesc2R","Use the following table to view and edit the summary information for this Message Routing Rule.")
+		Set msgRulesDesc = $$$LocalizeText("RuleEditor","msgRulesDesc2R","Use the table below to add, remove, and edit the matching rules that make up this Message Routing Rule.")
+		Set msgRulesDesc = msgRulesDesc _ "<br>"_$$$LocalizeText("RuleEditor","msgRulesDesc3R","To edit a rule, click on its name. Inherited base values are shown in <i>italics</i>.")
+
+	}
+</script>
+
+<html>
+<head>
+<title><csp:text TextId="EnsRoutingRuleEditor" Domain="Ensemble"></csp:text></title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+<style>
+
+table.Rules {
+	border: 1px black solid;
+	font-size: 0.8em;
+}
+
+table.Rules td {
+	border-bottom: 1px black solid;
+	border-right: 1px black solid;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+table.Rules th {
+	text-align: left;
+	color: yellow;
+	border-bottom: 1px black solid;
+	border-right: 1px black solid;
+	padding: 5px;
+	font-size: 0.8em;
+	background: #000040;
+	background-image: url(/csp/broker/images/grad-blue-10x30.png);
+	background-repeat: repeat-x;
+}
+
+table.Rules tr {
+	padding-bottom: 5px;
+}
+
+table.Rules tr.BaseRow {
+	background: white;
+}
+
+table.Rules tr.EvenRow {
+	background: #DDDDFF;
+}
+
+table.Rules tr.OddRow {
+	background: #DDEEFF;
+}
+
+table.Rules tr.DisabledRow {
+	background: gray;
+	padding-bottom: 5px;
+}
+
+table.RuleCol {
+	border: none;
+	padding: 0px;
+}
+
+table.RuleCol td {
+	border: none;
+	padding: 0px;
+}
+
+table.RuleCol td.RuleName {
+	border: none;
+	padding: 0px;
+	font-weight: bold;
+}
+
+table.RuleCol td.RuleDescription {
+	border: none;
+	padding: 0px;
+	color: green;
+	font-size: 0.6em;
+}
+
+table.Conditions {
+	border: none;
+	padding: 0px;
+	font-size: 1.0em;
+}
+
+table.Conditions td {
+	border: none;
+	padding: 0px;
+}
+
+table.Actions td {
+	border: none;
+	padding: 0px;
+}
+
+.Modified {
+	background: orange;
+	color: black;
+}
+
+.Disabled {
+	background: gray;
+	color: darkgray;
+}
+
+.inherited {
+	color: darkblue;
+	font-style: italic;
+	font-size: 0.9em;
+}
+
+.Error {
+	background: red;
+	color: white;
+}
+
+span.statusMsg {
+	color: blue;
+}
+
+span.RuleLabel {
+	color: black;
+	font-size: 0.8em;
+	font-variant: small-caps;
+}
+
+div.Action {
+	color: black;
+	font-size: 0.8em;
+	font-variant: small-caps;
+	border-bottom: 1px solid gray;
+	width: 100%;
+}
+
+div.Condition {
+	color: black;
+	font-size: 0.8em;
+	font-variant: small-caps;
+	width: 100%;
+}
+
+input.RuleBtn {
+	width: 10.0em;
+}
+
+input.EditButton {
+	font-size: 8pt;
+	color: blue;
+}
+
+input.RemoveButton {
+	font-size: 8pt;
+	font-weight: bold;
+	color: red;
+}
+
+table.Summary {
+	border: 1px black solid;
+	font-size: 0.8em;
+	background: #C0C0C0;
+	background-image: url(/csp/broker/images/grad-halfgray-10x500.png);
+	background-repeat: repeat-x;
+}
+
+table.Summary th {
+	color: yellow;
+	border-bottom: 1px gray solid;
+	border-right: 1px gray solid;
+	background: #000040;
+	background-image: url(/csp/broker/images/grad-blue-10x30.png);
+	background-repeat: repeat-x;
+}
+
+table.Summary td {
+	border-bottom: 1px gray solid;
+	border-right: 1px gray solid;
+}
+
+table.Summary td.SummaryLabel {
+	font-weight: bold;
+	cursor: default;
+}
+
+</style>
+
+<script language="JavaScript">
+
+function escHTML(val)
+{
+	return escXML(val);
+}
+
+// quote any special xml characters within text
+function escXML(text)
+{
+	var out = '';
+	
+	// don't escape numbers
+	if (text == (text * 1)) {
+		return text;
+	}
+	// skip null values
+	if (text == null || text == '') {
+		return '';
+	}
+	// escape special characters
+	for (var p = 0; p < text.length; p++) {
+		var ch = text.charAt(p);
+		switch (ch) {
+		case '&':
+			out += '&amp;';
+			break;
+		case '<':
+			out += '&lt;';
+			break;
+		case '>':
+			out += '&gt;';
+			break;
+		case '"':
+			out += '&quot;';
+			break;
+		default:
+			out += ch;
+			break;
+		}
+	}
+	return out;
+}
+
+// commands
+
+var isModified = false;
+
+function setModified(flag)
+{
+	if (isModified == flag) {
+		return;
+	}
+	
+	isModified = flag;
+	self.document.getElementById('btnRevert').disabled = !isModified;
+	self.document.getElementById('btnSave').disabled = !isModified;
+	self.document.getElementById('statusMsg').innerText = isModified ? '#($$$Text("Modified","RuleEditor"))#' : '#($$$Text("OK","RuleEditor"))#';
+}
+
+function showErrorStatus()
+{
+	self.document.getElementById('statusMsg').innerText = '#($$$Text("Error","RuleEditor"))#';
+}
+
+function editRoutingRule()
+{
+	self.document.location = '#(..Link("UtilEnsRoutingRuleEditor.csp",,1))#' + '$ID1=' + encodeURIComponent('#(tRoutingRuleId)#');
+}
+
+function gotoList()
+{
+	if (isModified) {
+		if (!confirm('#(msgGotoListPrompt)#')) {
+			return;
+		}
+	}
+	self.document.location = '#(..Link("UtilEnsRuleList.csp"))#';
+}
+
+function gotoRuleLog()
+{
+	self.document.location = '#(..Link("UtilEnsRuleLog.csp",,1))#' + '$ID1=' + escape(routingRule.host) + '&$ID2=' + escape(routingRule.name);
+}
+
+function addRule()
+{
+	showRoutingPopup('rule',-1);
+}
+
+function editRule(ruleId)
+{
+	showRoutingPopup('rule',ruleId);
+}
+
+function addCondition(rno)
+{
+	var rule = routingRule.rules[rno];
+	rule.addCondition(new Condition("AND","","=",""));
+	routingRule.renderHTML("table");
+	setModified(true);
+}
+
+function addAction(rno)
+{
+	showRoutingPopup('action',rno,-1);
+}
+
+function editAction(rno,ano)
+{
+	showRoutingPopup('action',rno,ano);
+}
+
+function removeRule(id)
+{
+	var rule = routingRule.rules[id];
+	if (confirm('#(msgRemoveRulePrompt)#')) {
+		routingRule.rules.splice(id,1);
+		routingRule.renderHTML("table");
+		setModified(true);
+	}
+	return true;
+}
+
+function removeCondition(rno,cno)
+{
+	var rule = routingRule.rules[rno];
+	var cond = rule.conditions[cno];
+	if (confirm('#(msgRemoveCondPrompt)#')) {
+		rule.conditions.splice(cno,1);
+		routingRule.renderHTML("table");
+		setModified(true);
+	}
+	return true;
+}
+
+function removeAction(rno,ano)
+{
+	var rule = routingRule.rules[rno];
+	var action = rule.actions[ano];
+	if (confirm('#(msgRemoveActionPrompt)#')) {
+		rule.actions.splice(ano,1);
+		routingRule.renderHTML("table");
+		setModified(true);
+	}
+}
+
+function moveRuleUp(id)
+{
+	if (id > 0) {
+		var rule1 = routingRule.rules[id-1];
+		var rule2 = routingRule.rules[id];
+		routingRule.rules[id-1] = rule2;
+		routingRule.rules[id] = rule1;
+		routingRule.renderHTML("table");
+		setModified(true);
+	}
+	return true;
+}
+
+function moveRuleDown(id)
+{
+	if (id < routingRule.rules.length - 1) {
+		var rule1 = routingRule.rules[id+1];
+		var rule2 = routingRule.rules[id];
+		routingRule.rules[id+1] = rule2;
+		routingRule.rules[id] = rule1;
+		routingRule.renderHTML("table");
+		setModified(true);
+	}
+	return true;
+}
+
+function revertRoutingRule()
+{
+	if (confirm('#(msgRevertPrompt)#')) {
+		self.document.location.reload();
+	}
+	return true;
+}
+
+function saveRoutingRule()
+{
+	// save
+	//alert(routingRule.serialize());
+	if (routingRule.host=='') {
+		alert('#($$$TextJS("You must enter a Package Name","RuleEditor"))#');
+	} else if (routingRule.name=='') {
+		alert('#($$$TextJS("You must enter a Rule Name","RuleEditor"))#');
+	} else if (routingRule.name.indexOf('.')!=-1) {
+		alert('#($$$TextJS("Rule name cannot contain the '.' character.","RuleEditor"))#');
+	} else if (routingRule.name.indexOf('$')!=-1) {
+		alert('#($$$TextJS("Rule name cannot contain the '$' character."))#');
+	} else if ((routingRule.name.indexOf(' ')==0) || (routingRule.name.indexOf(' ')==(routingRule.name.length)-1)) {
+		alert('#($$$TextJS("Rule name cannot contain a blank space as the first or last character."))#');
+	} else {
+		if ((routingRule.effectiveBeginDateTime != '') || (routingRule.effectiveEndDateTime != '')) {
+			var msgDateError = #server(..CheckEffectiveDates(routingRule.effectiveBeginDateTime,routingRule.effectiveEndDateTime))#;
+			if (msgDateError != '') {
+				alert(msgDateError);
+				return;
+			}
+		}
+		self.document.getElementById('statusMsg').innerText = '#(sSaving)#';
+		self.document.getElementById('btnSave').disabled = true;
+	
+		var saveForm = self.document.saveForm;
+		saveForm.method = 'post';
+		saveForm.submitType.value = 'save';
+		saveForm.data.value = routingRule.serialize();
+		saveForm.submit();
+	}
+}
+
+function deleteRoutingRule()
+{
+	if (!confirm('#(msgDeleteRoutingRulePrompt)#')) {
+		return false;
+	}
+	
+	self.document.getElementById('statusMsg').innerText = '#(sDeleting)#';
+	self.document.getElementById('btnDelete').disabled = true;
+
+	var saveForm = self.document.saveForm;
+	saveForm.method = 'post';
+	saveForm.submitType.value = 'delete';
+	saveForm.data.value = '';
+
+	saveForm.submit();
+}
+
+// display the operand editor popup
+// *id* is id of input control
+function editValue(id,type,ruleId)
+{
+	var ctrl = self.document.getElementById(id);
+	var value = ctrl.value;
+	var old = value;
+	var rule = routingRule.rules[ruleId];
+	
+	// extra escape for "+" to avoid IE bugs!
+	value = escape(value);
+	value = value.replace(/\+/g,"%2B");
+	var msgClass = (rule.msgClass != '') ? rule.msgClass : routingRule.baseValues['msgClass']
+	var docCategory = ('' != rule.vdocCategory && null != rule.vdocCategory) ? rule.vdocCategory : routingRule.baseValues['vdocCategory'];
+  	var url = '#(..Link("UtilEnsRuleOpEdit.csp",,1))#VALUE=' + value + 
+  				"&ID=" + escape(id) +
+  				"&CONTEXT=" + escape(routingRule.context) +
+  				"&HOST=" + escape(routingRule.host) +
+  				"&MSGCLASS=" + escape(msgClass) +
+  				"&DOCTYPE=" + escape(getDocType(msgClass,rule)) +
+  				"&DOCCATEGORY=" + escape(docCategory);
+ 
+	var sFeatures="dialogHeight: 430px; dialogWidth: 500px; dialogTop: " + event.clientY + "px; dialogLeft: " + event.clientX + "px; edge: Sunken; center: Yes; help: No; resizable: Yes; status: No;";
+
+  	// use IE Modal Dlg.
+	self.showModalDialog(url, ctrl, sFeatures);
+	
+	var nv = ctrl.value;
+	if (nv != old) {
+		// changed
+		switch(type) {
+		case 'op1':
+			//validateOp(ctrl,nv);
+			operand1Change(ctrl,nv);
+			break;
+		case 'op2':
+			//validateOp(ctrl,nv);
+			operand2Change(ctrl,nv);
+			break;
+		case 'actionProp':
+			actionPropertyChange(ctrl,nv,'property');
+			break;
+		case 'actionVal':
+			actionPropertyChange(ctrl,nv,'value');
+			break;
+		}
+	}
+  	return true;
+}
+
+// display the RoutingRule Popup
+function showRoutingPopup(mode, ruleId, subId)
+{
+	subId = (null == subId) ? '' : subId;
+	var msgClass=(routingRule.msgClass != '') ? routingRule.msgClass : routingRule.baseValues['msgClass']
+  	var url = '#(..Link("UtilEnsRoutingRulePopup.csp",,1))#MODE=' + mode + 
+  				'&RULEID=' + ruleId + 
+  				'&SUBID=' + subId + 
+  				'&CONTEXT=' + escape(routingRule.context) + 
+  				"&HOST=" + escape(routingRule.host) +
+  				"&DOALL=" + escape(routingRule.doAll);
+ 
+	var sFeatures="dialogHeight: 500px; dialogWidth: 600px; dialogTop: " + (screen.height/8) + "px; dialogLeft: " + (screen.width/8) + "px; edge: Sunken; center: Yes; help: No; resizable: Yes; status: No;";
+
+  	// use IE Modal Dlg.
+	self.showModalDialog(url, window, sFeatures);
+
+  	return true;
+}
+
+function getDocType(msgClass,rule)
+{
+	var doctype = (null != rule.vdocType && '' != rule.vdocType) ? rule.vdocType : routingRule.baseValues['vdocType'];
+	if (null == doctype || '' == doctype) {
+		var tCategory = ('' != rule.vdocCategory && null != rule.vdocCategory) ? rule.vdocCategory : routingRule.baseValues['vdocCategory'];
+		var tName=('' != rule.vdocName && null != rule.vdocName != null) ? rule.vdocName : routingRule.baseValues['vdocName'];
+		doctype=#call(..resolveDocType(msgClass,tCategory,tName))#;
+	}
+	return (null == doctype) ? '' : doctype;	 								 
+}
+
+/// Return base value for named rule attribute
+function getBaseAttr(attr)
+{
+	return routingRule.baseValues[attr];
+}
+
+/// Return value for named rule attribute in specified rule
+function getRuleAttr(ruleId,attr)
+{
+	var rule = routingRule.rules[ruleId];
+	return rule[attr];
+}
+
+/// Return value for named action attribute in specified rule/action
+function getActionAttr(ruleId,actionId,attr)
+{
+	var rule = routingRule.rules[ruleId];
+	if (rule) {
+		var action = rule.actions[actionId];
+		if (action) {
+			return action[attr];
+		}
+	}
+	return '';
+}
+
+/// called by popup to insert/update a rule
+function updateRule(ruleId,source,msgClass,docName,docCategory,docType)
+{
+	var rule;
+	if ('base' == ruleId) {
+		rule = routingRule.baseValues;
+	}
+	else if (-1 == ruleId) {
+		rule = routingRule.addRule(new Rule());
+	}
+	else {
+		rule = routingRule.rules[ruleId];
+	}
+	rule.source = source;
+	rule.msgClass = msgClass;
+	rule.vdocName = docName;
+	rule.vdocCategory = docCategory;
+	rule.vdocType = docType;
+
+	//routingRule.validate();
+	routingRule.renderHTML("table");
+	setModified(true);
+}
+
+/// called by popup to insert/update an action
+function updateAction(ruleId,actionId,type,transform,target)
+{
+	var rule = routingRule.rules[ruleId];
+	if (!rule) {
+		alert('#($$$TextJS("updateAction: unabled to find rule!","RuleEditor"))#');
+	}
+
+	var action;
+	if (-1 == actionId) {
+		action  = new Action(type);
+		rule.addAction(action);
+	} else {
+		action = rule.actions[actionId];
+	}
+
+	action.type = type;
+	action.transform = transform;
+	action.target = target;
+
+	routingRule.renderHTML("table");
+	setModified(true);
+}
+
+// ---
+// events
+
+function keyup(el)
+{
+	if (!routingRule || routingRule.readOnly) {
+		return;
+	}
+	
+	// see if this item is modified
+	var id = el.id.split("_");
+
+	switch(id[0]) {
+	case 'op1':
+		operand1Change(el,el.value);
+		break;
+	case 'op2':
+		operand2Change(el,el.value);
+		break;
+	case 'ruleDesc':
+		ruleDescChange(el,el.value);
+		break;
+	case 'ruleName':
+		ruleNameChange(el,el.value);
+		break;
+	case 'actionProp':
+		actionPropertyChange(el,el.value,'property');
+		break;
+	case 'actionVal':
+		actionPropertyChange(el,el.value,'value');
+		break;
+	}
+}
+
+function ruleDoAllChange(el,val)
+{
+	routingRule.doAll = val;
+	if (!routingRule.doAll == !originalRoutingRule.doAll) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function ruleDescChange(el,val)
+{
+	routingRule.description = val;
+	if (routingRule.description == originalRoutingRule.description) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function rulePackageChange(el,val)
+{
+	routingRule.host = val;
+	if (routingRule.host == originalRoutingRule.host) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function ruleNameChange(el,val)
+{
+	routingRule.name = val;
+	if (routingRule.name == originalRoutingRule.name) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function effectiveBeginDateTimeChange(el,val)
+{
+	routingRule.effectiveBeginDateTime = val;
+	if (routingRule.effectiveBeginDateTime == originalRoutingRule.effectiveBeginDateTime) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function effectiveEndDateTimeChange(el,val)
+{
+	routingRule.effectiveEndDateTime = val;
+	if (routingRule.effectiveEndDateTime == originalRoutingRule.effectiveEndDateTime) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function reportGroupChange(el,val)
+{
+	routingRule.reportGroup = val;
+	if (routingRule.reportGroup == originalRoutingRule.reportGroup) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function reportNameChange(el,val)
+{
+	routingRule.reportName = val;
+	if (routingRule.reportName == originalRoutingRule.reportName) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function shortDescriptionChange(el,val)
+{
+	routingRule.shortDescription = val;
+	if (routingRule.shortDescription == originalRoutingRule.shortDescription) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+
+function ruleContextClassChange(el,val)
+{
+	routingRule.context = val;
+	if (routingRule.context == originalRoutingRule.context) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function operand1Change(el,val)
+{
+	var id = el.id.split("_");
+	var rule = routingRule.rules[id[1]];
+	var cond = rule.conditions[id[2]];
+	var orule = originalRoutingRule.rules[id[1]];
+	var ocond = (orule ? orule.conditions[id[2]] : null);
+	cond.op1 = val;
+
+	if (ocond && cond.op1 == ocond.op1) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+
+	setModified(true);
+}
+
+function operand2Change(el,val)
+{
+	var id = el.id.split("_");
+	var rule = routingRule.rules[id[1]];
+	var cond = rule.conditions[id[2]];
+	var orule = originalRoutingRule.rules[id[1]];
+	var ocond = (orule ? orule.conditions[id[2]] : null);
+	cond.op2 = val;
+	if (ocond && cond.op2 == ocond.op2) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function operatorChange(el,val)
+{
+	var id = el.id.split("_");
+	var rule = routingRule.rules[id[1]];
+	var cond = rule.conditions[id[2]];
+	var orule = originalRoutingRule.rules[id[1]];
+	var ocond = (orule ? orule.conditions[id[2]] : null);
+	cond.operator = val;
+	
+	if (ocond && cond.operator == ocond.operator) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+
+	// test if operand2 needs to be modified
+	var op2 = self.document.getElementById('op2_' + id[1] + '_' + id[2]);
+	var op2edit = self.document.getElementById('op2edit_' + id[1] + '_' + id[2]);
+	if (val == "") {
+		op2edit.disabled = true;
+		op2.disabled = true;
+		op2.className = 'Disabled';
+	} else {
+		op2edit.disabled = false;
+		op2.disabled = false;
+		operand2Change(op2,op2.value);
+	}
+	setModified(true);
+}
+
+/// !!!
+function actionPropertyChange(el,val,property)
+{
+	var id = el.id.split("_");
+	var rule = routingRule.rules[id[1]];
+	var action = rule.actions[id[2]];
+	var orule = originalRoutingRule.rules[id[1]];
+	var oaction = (orule ? orule.actions[id[2]] : null);
+	action.propertyBag[property] = val;
+	
+	if (oaction && action.propertyBag[property] == oaction.propertyBag[property]) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function joinChange(el,val)
+{
+	var id = el.id.split("_");
+	var rule = routingRule.rules[id[1]];
+	var cond = rule.conditions[id[2]];
+	var orule = originalRoutingRule.rules[id[1]];
+	var ocond = (orule ? orule.conditions[id[2]] : null);
+
+	cond.join = val;
+	if (ocond && cond.join == ocond.join) {
+		el.className = "";
+	} else {
+		el.className = "Modified";
+	}
+	setModified(true);
+}
+
+function enableRule(el,val)
+{
+	el.className = "Modified";
+	var id = el.id.split("_");
+	var rule = routingRule.rules[id[1]];
+	rule.disabled = !val;
+	
+	// update table
+	var tr = self.document.getElementById('row_' + id[1]);
+	if (rule.disabled) {
+		tr.className = 'DisabledRow';
+	} else {
+		tr.className = id[1]%2 ? 'OddRow' : 'EvenRow';
+	}
+	setModified(true);
+}
+
+// ---
+
+var routingRule = null;
+var originalRoutingRule = null;
+
+/// client-side rules objects
+
+function RoutingRule(host,name,context,ro,desc,source,msgClass,docName,docCat,docType,doAll,effectiveBeginDateTime,effectiveEndDateTime,reportGroup,reportName,shortDescription)
+{
+	this.rules = new Array();
+	this.host = host;
+	this.name = name;
+	this.context = context;
+	this.doAll = doAll;
+	if ('' == context) {
+		var list =self.document.getElementById('ruleContextClass')
+		this.context = list.options[list.selectedIndex].value;
+	}
+	this.readOnly = ro;
+	this.description = desc;
+	this.effectiveBeginDateTime = effectiveBeginDateTime;
+	this.effectiveEndDateTime = effectiveEndDateTime;
+	this.reportGroup = reportGroup;
+	this.reportName = reportName;
+	this.shortDescription = shortDescription;
+
+	// place base values in special rule object
+	this.baseValues = new Rule();
+	this.baseValues.source = source;
+	this.baseValues.msgClass = msgClass;
+	this.baseValues.vdocName = docName;
+	this.baseValues.vdocCategory = docCat;
+	this.baseValues.vdocType = docType;
+
+	// methods
+	this.addRule = RoutingRule_addRule;
+	this.renderHTML = RoutingRule_renderHTML;
+	this.serialize = RoutingRule_serialize;
+	this.clone = RoutingRule_clone;
+}
+
+function RoutingRule_clone()
+{
+	var clone = new RoutingRule(this.host, this.name, this.context, this.readOnly, this.description, this.baseValues.source, this.baseValues.msgClass, this.baseValues.vdocName, this.baseValues.vdocCategory, this.baseValues.vdocType, this.doAll, this.effectiveBeginDateTime, this.effectiveEndDateTime, this.reportGroup, this.reportName, this.shortDescription);
+	for (var r = 0; r < this.rules.length; r++) {
+		clone.addRule(this.rules[r].clone());
+	}
+	return clone;
+}
+
+function RoutingRule_serialize()
+{
+	var s = '';
+	s += '<routingRule name="' + escXML(this.name) + '"';
+	s += ' host="' + escXML(this.host) + '"';
+	if (this.effectiveBeginDateTime != '') { s += ' effectiveBeginDateTime="' + escXML(this.effectiveBeginDateTime) + '"'; }
+	if (this.effectiveEndDateTime != '') { s += ' effectiveEndDateTime="' + escXML(this.effectiveEndDateTime) + '"'; }
+	s += ' context="' + escXML(this.context) + '"';	
+	
+	//s += ' xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"';
+	if (this.baseValues.source!='') { s += ' source="' + escXML(this.baseValues.source) + '"'; }
+	if (this.baseValues.msgClass!='') { s += ' msgClass="' + escXML(this.baseValues.msgClass) + '"'; }
+	if (this.baseValues.vdocName!='') { s += ' docName="' + escXML(this.baseValues.vdocName) + '"'; }
+	if (this.baseValues.vdocCategory!='') { s += ' docCategory="' + escXML(this.baseValues.vdocCategory) + '"'; }
+	if (this.baseValues.vdocType!='') { s += ' docType="' + escXML(this.baseValues.vdocType) + '"'; }
+	if (this.doAll && this.doAll != '' && this.doAll != '0' && this.doAll != 'false') {
+		s += ' doAll="true"';
+	}
+	s += '>\n';
+	if (this.description && this.description != '') {
+		s += '<description>' + escXML(this.description) + '</description>\n';
+	}
+	if (this.reportGroup && this.reportGroup != '') {
+		s += '<reportGroup>' + escXML(this.reportGroup) + '</reportGroup>\n';
+	}
+	if (this.reportName && this.reportName != '') {
+		s += '<reportName>' + escXML(this.reportName) + '</reportName>\n';
+	}
+	if (this.shortDescription && this.shortDescription != '') {
+		s += '<shortDescription>' + escXML(this.shortDescription) + '</shortDescription>\n';
+	}
+
+	for (var r = 0; r < this.rules.length; r++) {
+		s += this.rules[r].serialize();
+	}
+	s += '</routingRule>';
+	return s;
+}
+
+function RoutingRule_renderHTML(divname)
+{
+	var div = self.document.getElementById(divname);
+	if (!div) {
+		return;
+	}
+	var ro = this.readOnly;
+
+	var html = '';
+	html += '<table class="Rules" border="0" cellpadding="0" cellspacing="0">';
+	html += '<tr><th nowrap>&nbsp;</th><th nowrap>#(sRules)#</th><th nowrap>#(sSource)#</th><th nowrap>#(sMsgClass)#</th><th nowrap>#(sDocName)#</th><th nowrap>#(sDocCat)#</th><th nowrap>#(sDocType)#</th><th nowrap>#(sConditions)#</th><th colspan="2" nowrap>#(sActions)#</th><th nowrap>#(sTransform)#</th><th nowrap>#(sTarget)#</th></tr>';
+	
+	// show base values
+	html += '<tr id="row_base" class="BaseRow">';
+	html += this.baseValues.renderHTML(ro,'base');
+	html += '</tr>';
+
+	for (var r = 0; r < this.rules.length; r++) {
+		html += '<tr id="row_' + r +'" class="' + (this.rules[r].disabled ? 'DisabledRow' : (r%2==0 ? 'EvenRow' : 'OddRow')) + '">';
+		html += this.rules[r].renderHTML(ro,r);
+		html += '</tr>';
+	}
+
+	// Add-rule button
+	html += '<tr class="' + (r%2==0 ? 'EvenRow' : 'OddRow') + '">';
+	html += '<td>&nbsp;</td><td colspan="11">';
+	if (!ro) {
+		html += '<input title="#(msgNewRule)#" type="button" class="EditButton" onclick="addRule();" value="#(msgNewCmd)#">';
+	}
+
+	html += '</td></tr>';
+	html += '</table>';
+
+	div.innerHTML = html;
+	return html;
+	
+}
+
+function RoutingRule_addRule(rule)
+{
+	this.rules[this.rules.length] = rule;
+	return rule;
+}
+
+function Rule()
+{
+	this.conditions = new Array();
+	this.actions = new Array();
+	this.disabled = false;
+
+	this.source = '';
+	this.msgClass = '';
+	this.vdocName = '';
+	this.vdocCategory = '';
+	this.vdocType = '';
+
+	// methods
+	this.addCondition = Rule_addCondition;
+	this.addAction = Rule_addAction;
+	this.renderHTML = Rule_renderHTML;
+	this.serialize = Rule_serialize;
+	this.clone = Rule_clone;
+}
+
+function Rule_clone()
+{
+	var clone = new Rule();
+	clone.disabled = this.disabled;
+	clone.source = this.source;
+	clone.msgClass = this.msgClass;
+	clone.vdocName = this.vdocName;
+	clone.vdocCategory = this.vdocCategory;
+	clone.vdocType = this.vdocType;
+
+	for (var c = 0; c < this.conditions.length; c++) {
+		clone.addCondition(this.conditions[c].clone());
+	}
+
+	for (var a = 0; a < this.actions.length; a++) {
+		clone.addAction(this.actions[a].clone());
+	}
+
+	return clone;
+}
+
+function Rule_serialize()
+{
+	var s = '';
+	s += '<rule'
+	if (this.disabled) {s += ' disabled="true"'; }
+	if (this.source!='') {s += ' source="' + escXML(this.source) + '"'; }
+	if (this.msgClass!='') {s += ' msgClass="' + escXML(this.msgClass) + '"'; }
+	if (this.vdocName!='') {s += ' docName="' + escXML(this.vdocName) + '"'; }
+	if (this.vdocCategory!='') {s += ' docCategory="' + escXML(this.vdocCategory) + '"'; }
+	if (this.vdocType!='') {s += ' docType="' + escXML(this.vdocType) + '"'; }
+	s += '>\n';
+
+	for (var c = 0; c < this.conditions.length; c++) {
+		s += this.conditions[c].serialize();
+	}
+	for (var a = 0; a < this.actions.length; a++) {
+		s += this.actions[a].serialize();
+	}
+
+	s += '</rule>\n';
+	return s;
+}
+
+// render a rule as HTML
+// ro is readonly flag, id is rule #
+function Rule_renderHTML(ro,id)
+{
+	var html = '';
+
+	// enabled column
+	if (id != 'base') {
+		html += '<td><input title="#(msgEnable)#" type="checkbox" id="enabled_' + id + '" ' + (ro ? 'disabled ' : '') + (this.disabled ? '' : 'checked') + ' onclick="enableRule(this,this.checked);"></td>';
+	} else {
+		html += '<td>&nbsp;</td>';
+	}
+
+	// rule # column
+	var ruleName = (id != 'base') ? '#(msgRule)# ' + (id + 1) : '#(msgBase)#'
+	html += '<td>';
+	html += '<span class="RuleLabel"><a title="#(msgEditRule)#" '+(ro?'disabled':'') +'href="javascript: editRule(\''+id+'\');">' + ruleName + '</a></span>';
+	if (!ro && id != 'base') {
+		html += '<hr>';
+		html += '<input type="button" title="#(msgDelRule)#" class="RemoveButton" onclick="removeRule(' + id + ');" value="#(msgRemoveCmd)#">';
+		if (id > 0) {
+			html += '<input type="button" title="#(msgUpRule)#" class="EditButton" onclick="moveRuleUp(' + id + ');" value="#(msgUpCmd)#">';
+		}
+		if (id < routingRule.rules.length - 1) {
+			html += '<input type="button" title="#(msgDownRule)#" class="EditButton" onclick="moveRuleDown(' + id + ');" value="#(msgDownCmd)#">';
+		}
+	}
+	html += '&nbsp;</td>';
+
+	// columns for rule attrs
+	var alist  = new Array('source','msgClass','vdocName','vdocCategory','vdocType');
+	for (var a in alist) {
+		var attr = alist[a];
+		var val = '';
+		var cls = '';
+	
+		if (id != 'base') {
+			val = ('' == this[attr]) ? routingRule.baseValues[attr] : this[attr];
+			cls = ('' == this[attr]) ? 'inherited' : '';
+		} else {
+			val = this[attr];
+		}
+	
+		// show docType as multi-lines
+		if ((attr == 'docType')||(attr == 'vdocName')) {
+			var list = val.split(',');
+			val = '';
+			for (var j in list) {
+				val += list[j] + '<br>';
+			}
+		}
+		html += '<td class="'+cls+'">' + val + '&nbsp;</td>';
+	}
+	
+	if (id == 'base') {
+		html += '<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>';
+	} else {
+		// condition column
+		html += '<td valign="top"><table class="Conditions" width="100%" border="0" cellpadding="0" cellspacing="0">';
+		for (var c = 0; c < this.conditions.length; c++) {
+			html += '<tr align="right">';
+			html += this.conditions[c].renderHTML(ro,id,c);
+			html += '</tr>';
+		}
+	
+		// new condition button
+		if (!ro) {
+			html += '<tr align="right" valign="top">';
+			html += '<td  align="left" colspan="5">';
+			if (this.conditions.length>0) { html += '&nbsp;'; }
+			html += '<div class="Condition"><a title="#(msgNewCond)#" href="javascript: addCondition(' + id + ');">#(msgNewCmd)#</a></div>';
+			html += '</td></tr>';
+		}
+	
+		html += '</table></td>';
+
+		// show actions: do this inline
+		var linecounts=new Array();
+		for (var a in this.actions) {
+			linecounts[a]=1;
+			var xforms=this.actions[a].transform.split(",");
+			if (xforms.length>1) linecounts[a]=xforms.length;
+			var targs=this.actions[a].target.split(",");
+			if (targs.length>1) linecounts[a]=targs.length;
+		}
+	
+		// delete + add action button
+		html += '<td valign="top" nowrap>';
+		if (!ro) {
+			for (var a in this.actions) {
+				html += '<div class="Action">';
+				html += '<a title="#(msgDelAction)#" href="javascript: removeAction(' + id + ',' + a + ');">#(msgRemoveCmd)#</a>';
+				for (var il=0; il<linecounts[a]-1; il++) html += '&nbsp;<br>';
+				html += '&nbsp;</div>';
+			}
+			html += '<div class="Action"><a title="#(msgNewAction)#" href="javascript: addAction('+id+');">#(msgNewCmd)#</a></div>';
+		}
+		html += '&nbsp;</td>';
+
+		// action type
+		html += '<td valign="top" nowrap>';
+		var msgAct;
+		for (var a in this.actions) {
+			if (this.actions[a].type.toLowerCase() == "send") {
+				msgAct = '#(msgSend)#';
+			} else if (this.actions[a].type.toLowerCase() == "delete") {
+				msgAct = '#(msgDelete)#';
+			} else {
+				msgAct = this.actions[a].type;	
+			}
+			html += '<div class="Action">';
+			html += '<a title="#(msgEditAction)#" '+(ro?'disabled':'')+'href="javascript: editAction('+id+','+a+');">' + msgAct + '</a>';
+			for (var il=0; il<linecounts[a]-1; il++) html += '&nbsp;<br>';
+			html += '&nbsp;</div>';
+		}
+		html += '&nbsp;</td>';
+		
+		// action transform
+		html += '<td valign="top" nowrap>';
+		for (var a in this.actions) {
+			html += '<div class="Action">'
+			var xforms=this.actions[a].transform.split(",");
+			html += xforms.join(',<br>');
+			for (var il=0; il<linecounts[a]-xforms.length; il++) html += '&nbsp;<br>';
+			html += '&nbsp;</div>';
+		}
+		html += '&nbsp;</td>';
+	
+		// action target
+		html += '<td valign="top" nowrap>';
+		for (var a in this.actions) {
+			html += '<div class="Action">';
+			var targs=this.actions[a].target.split(",");
+			html += targs.join(',<br>');
+			for (var il=0; il<linecounts[a]-targs.length; il++) html += '&nbsp;<br>';
+			html += '&nbsp;</div>';
+		}
+		html += '&nbsp;</td>';
+	}
+	
+	return html;
+}
+
+function Rule_addCondition(cond)
+{
+	this.conditions[this.conditions.length] = cond;
+	return cond;
+}
+
+function Rule_addAction(action)
+{
+	this.actions[this.actions.length] = action;
+	return action;
+}
+
+function Condition(join,op1,operator,op2)
+{
+	this.join = (join == '') ? null : join;
+	this.op1 = op1;
+	this.op1Error = '';
+	this.operator = operator;
+	this.op2 = op2;
+	this.op2Error = '';
+	this.renderHTML = Condition_renderHTML;
+	this.serialize = Condition_serialize;
+	this.clone = Condition_clone;
+}
+
+function Condition_clone()
+{
+	var clone = new Condition();
+	clone.op1 = this.op1;
+	clone.op2 = this.op2;
+	clone.operator = this.operator;
+
+	return clone;
+}
+
+function Condition_serialize()
+{
+	var s = '';
+	s += '<condition';
+	s += ' join="' + escXML(this.join) + '"';
+	s += ' op1="' + escXML(this.op1) + '"';
+	
+	if (this.operator != '') {
+		s += ' operator="' + escXML(this.operator) + '"';
+		s += ' op2="' + escXML(this.op2) + '"';
+	}
+	s += '/>\n';
+	return s;
+}
+
+// render a condition as HTML
+// ro is readonly flag, rno is rule #, cno is cond #
+function Condition_renderHTML(ro,rno,cno)
+{
+	var html = '';
+	
+	if (!ro) {
+		html += '<td>&nbsp;<input type="button" title="#(msgDelCond)#" class="RemoveButton" onclick="removeCondition('+rno+','+cno+');" value="#(msgRemoveCmd)#">&nbsp;</td>';
+	}
+	if (cno == 0) {
+		html += '<td align=left>&nbsp;<font size=2>#(msgIF)#</font>&nbsp;</td>';
+	} else {
+		html += '<td>&nbsp;<select '+ (ro?' readonly':'') + ' id="join_'+rno+'_'+cno+'" onchange="joinChange(this,this.value);">' + getJoinOptions(this.join) + '</select>&nbsp;</td>';
+	}
+	html += '<td nowrap align="left">';
+	html += '<input type="text" size="30" ' + (this.op1Error!='' ? 'class="Error" title="' + this.op1Error + '"' : '') + (ro?' readonly':'') + ' id="op1_'+rno+'_'+cno+'" value="' + escHTML(this.op1) + '" onchange="operand1Change(this,this.value);" onkeyup="keyup(this);">';
+	if (!ro) {
+		html += '<input class="EditButton" id="op1edit_'+rno+'_'+cno+'" type="button" value="#(msgEditCmd)#" title="#(msgEditOp)#" onclick="editValue(\'op1_'+rno+'_'+cno+'\',\'op1\','+rno+');">&nbsp;';
+	}
+	html += '</td><td nowrap>';
+	html += '&nbsp;<select '+ (ro?'disabled':'') + ' id="op_'+rno+'_'+cno+'" onchange="operatorChange(this,this.value);">' + getOperatorOptions(this.operator) + '</select>&nbsp;</td>';
+	html += '<td nowrap align="left">';
+	html += '<input type="text" size="16" ' + ((this.operator=='') ? 'class="Disabled"' : (this.op2Error!='' ? 'class="Error" title="' + this.op2Error + '"' : '')) + (ro?' readonly':'') + ' id="op2_'+rno+'_'+cno+'" value="' + escHTML(this.op2) + '" onchange="operand2Change(this,this.value);" onkeyup="keyup(this);">';
+	if (!ro) {
+		html += '<input class="EditButton" id="op2edit_'+rno+'_'+cno+'" type="button" ' + (this.operator=='' ? 'disabled' : '') + ' value="#(msgEditCmd)#" title="#(msgEditOp)#" onclick="editValue(\'op2_'+rno+'_'+cno+'\',\'op2\','+rno+');">&nbsp;';
+	}
+	html += '</td>';
+
+	return html;
+}
+
+/// A rule action
+function Action(type)
+{
+	this.type = type;
+	this.target = '';
+	this.transform = '';
+
+	this.serialize = Action_serialize;
+	this.clone = Action_clone;
+}
+
+function Action_clone()
+{
+	var clone = new Action(this.type);
+	return clone;
+}
+
+function Action_serialize()
+{
+	var s = '';
+	s += '<action';
+	s += ' type="' + escXML(this.type) + '"';
+	if ('' != this.target) { s += ' target="' + escXML(this.target) + '"';}
+	if ('' != this.transform) {s += ' transform="' + escXML(this.transform) + '"';}
+		s += '/>\n';
+	return s;
+}
+
+</script>
+
+<script language="cache" runat="server">
+	// create list generating functions
+
+	Write "<script language=""javascript"">",!
+	Write "function getJoinOptions(val)",!
+	Write "{",!
+	Write " var html='';",!
+
+	Set tList = ##class(Ens.Rule.Router.Condition).GetJoinList()
+	Set tDelim = $E(tList,1)
+	Set tList = $E(tList,2,*)
+	Set msgOpt("AND") = $$$TextHTML("AND")
+	Set msgOpt("OR") = $$$TextHTML("OR")	
+	For i = 1:1:$L(tList,",") {
+		Set t = $P(tList,",",i)
+		Write " html += '<option ' + (val=='" _ t _ "' ? 'selected ' : '') + 'value=""" _ t _ """>" _ $S($G(msgOpt(t))'="":msgOpt(t),1:$ZCVT(t,"O","HTML")) _ "';",!
+	}
+	Write " return html;",!
+	Write "}",!
+
+	Write "function getOperatorOptions(val)",!
+	Write "{",!
+	Write " var html='';",!
+
+	// use common list !
+	Set tList = ##class(Ens.Rule.Condition).GetOperatorList()
+	Set tDelim = $E(tList,1)
+	//Set tList = $E(tList,2,*)
+	
+	For i = 1:1:$L(tList,",") {
+		Set t = $P(tList,",",i)
+		Write " html += '<option ' + (val=='" _ t _ "' ? 'selected ' : '') + 'value=""" _ t _ """>" _ t _ "';",!
+	}
+
+	Write " return html;",!
+	Write "}",!
+
+	// create initial RoutingRule using values from the server
+	Write "function createRoutingRule()",!
+	Write "{",!
+
+	If ($IsObject(tRoutingRule)) {
+		&js<var rule;>
+		&js<routingRule = new RoutingRule(#(..QuoteJS(tRoutingRule.HostClass))#,#(..QuoteJS(tRoutingRule.Name))#,#(..QuoteJS(tRoutingRule.ContextClass))#,#($S(tReadOnly:"true",1:"false"))#,#(..QuoteJS(tRoutingRule.Description))#,#(..QuoteJS(tRoutingRule.Source))#,#(..QuoteJS(tRoutingRule.MsgClass))#,#(..QuoteJS(tRoutingRule.DocName))#,#(..QuoteJS(tRoutingRule.DocCategory))#,#(..QuoteJS(tRoutingRule.DocType))#,#(..QuoteJS(tRoutingRule.DoAll))#,#(..QuoteJS(tRoutingRule.EffectiveBeginDateTime))#,#(..QuoteJS(tRoutingRule.EffectiveEndDateTime))#,#(..QuoteJS(tRoutingRule.ReportGroup))#,#(..QuoteJS(tRoutingRule.ReportName))#,#(..QuoteJS(tRoutingRule.ShortDescription))#);>
+
+		For r = 1:1:tRoutingRule.Rules.Count() {
+			Set tRule = tRoutingRule.Rules.GetAt(r)
+
+			&js<rule = routingRule.addRule(new Rule());>
+			&js<rule.source = #(..QuoteJS(tRule.Source))#;>
+			&js<rule.msgClass = #(..QuoteJS(tRule.MsgClass))#;>
+			&js<rule.vdocName = #(..QuoteJS(tRule.DocName))#;>
+			&js<rule.vdocCategory = #(..QuoteJS(tRule.DocCategory))#;>
+			&js<rule.vdocType = #(..QuoteJS(tRule.DocType))#;>
+
+			// actions			
+			For a = 1:1:tRule.Actions.Count() {
+				Set tAction = tRule.Actions.GetAt(a)
+				&js<var action = new Action(#(..QuoteJS(tAction.Type))#);>
+				&js<action.target = #(..QuoteJS(tAction.Target))#;>
+				&js<action.transform = #(..QuoteJS(tAction.Transform))#;>
+				&js<rule.addAction(action);>
+			}
+		
+			If (tRule.Disabled) {
+				&js<rule.disabled = true;>
+			}
+
+			For c = 1:1:tRule.Conditions.Count() {
+				Set tCond = tRule.Conditions.GetAt(c)
+				&js<var cond = new Condition(#(..QuoteJS(tCond.JoinOperator))#,#(..QuoteJS(tCond.Operand1))#,#(..QuoteJS(tCond.Operator))#,#(..QuoteJS(tCond.Operand2))#);>
+				&js<rule.addCondition(cond);>
+
+				Set tOK = ##class(Ens.Rule.ExpressionParser).Validate(tCond.Operand1, .tErrMsg, tContextClass, $S(""'=tRule.MsgClass:tRule.MsgClass, 1:tRoutingRule.MsgClass))
+				If ('tOK) {
+					&js<cond.op1Error = #(..QuoteJS(tErrMsg))#;>
+					&js<showErrorStatus();>
+				}
+				Set tOK = ##class(Ens.Rule.ExpressionParser).Validate(tCond.Operand2, .tErrMsg, tContextClass, $S(""'=tRule.MsgClass:tRule.MsgClass, 1:tRoutingRule.MsgClass))
+				If ('tOK) {
+					&js<cond.op2Error = #(..QuoteJS(tErrMsg))#;>
+					&js<showErrorStatus();>
+				}
+
+			}
+		}
+		&js<routingRule.renderHTML("table");>
+		&js<originalRoutingRule = routingRule.clone();>
+	}
+
+	Write "}",!
+
+	Write "</","script>",!
+</script>
+
+</head>
+<body>
+
+<table border="0" class="LayoutMain" width="100%" height="100%" cellpadding="0" cellspacing="0">
+<tr height="100%">
+<td class="LayoutContentCol" width="80%">
+
+<!-- form used to submit changes -->
+<form name="saveForm">
+<input type="hidden" name="submitType" value="">
+<input type="hidden" name="data" value="">
+</form>
+
+<div style="margin-left:3%;margin-right:3%;" >
+
+<!-- details for rule -->
+
+<csp:if CONDITION="$IsObject(tRoutingRule)">
+<div>
+<br>
+&nbsp;<input class="RuleBtn" id="btnList" title="#(msgList)#" type="button" value="#(msgListCmd)#" onclick="gotoList();">
+&nbsp;<input class="RuleBtn" id="btnLog" title="#(msgLog)#" type="button" value="#(msgLogCmd)#" onclick="gotoRuleLog();">
+<csp:if CONDITION="tReadOnly">
+&nbsp;<input class="RuleBtn" id="btnEdit" title="#(msgEditRoutingRule)#" type="button" value="#(msgEditRoutingRuleCmd)#" onclick="editRoutingRule();">
+<csp:else>
+&nbsp;<input class="RuleBtn" id="btnRevert" #($S(tReadOnly:"disabled",1:"disabled"))# title="#(msgRevertRoutingRule)#" type="button" value="#(msgRevertCmd)#" onclick="revertRoutingRule();">
+</csp:if>
+&nbsp;<input class="RuleBtn" id="btnSave" #($S(tReadOnly:"disabled",1:""))# title="#(msgSaveRoutingRule)#" type="button" value="#(msgSaveCmd)#" onclick="saveRoutingRule();">
+&nbsp;<input class="RuleBtn" id="btnDelete" #($S(tReadOnly:"disabled",1:""))# title="#(msgDeleteRoutingRule)#" type="button" value="#(msgDeleteCmd)#" onclick="deleteRoutingRule();">
+</div>
+<br>
+</csp:if>
+
+<csp:if CONDITION="tIsError">
+<div style="color:red;">#($$$Text("An error ocurred while saving this RoutingRule:","RuleEditor"))#
+<pre style="background:white; border: 1px solid gray;">
+<script language="Cache" runat="server">
+	// get and display escaped error message(s)
+	Do $system.Status.DecomposeStatus(tError,.err)
+	Set tVal=$ZCVT($G(err(1)),"O","HTML")  For i=2:1:$G(err) Set tVal = tVal _ "<br>"_$C(13,10)_"+<br>"_$C(13,10)_ $ZCVT($G(err(i)),"O","HTML")
+	Write tVal
+</script>
+</pre>
+<hr>
+</div>
+</csp:if>
+
+<csp:if CONDITION="$IsObject(tRoutingRule)">
+<div class="text1">#(msgSummaryDesc)#</div>
+<table class="Summary" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<th colspan="2" nowrap>#($$$Text("Message Routing Rule","RuleEditor"))#</th>
+</tr>
+<tr>
+<td class="SummaryLabel" Title='#($$$Text("Package portion of the full rule name","RuleEditor"))#' nowrap>#($$$Text("Package Name","RuleEditor"))#</td>
+<td Title='#($$$Text("Package portion of the full rule name","RuleEditor"))#'>
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="rulePackage" value="#(tRoutingRule.HostClass)#" onchange="rulePackageChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+<!--
+<select #($S(tReadOnly:"disabled",1:""))# id="rulePackage" onchange="rulePackageChange(this,this.value);">
+<option value=""></option>
+<script language="cache" runat="server">
+	Set pRS = ##class(%ResultSet).%New("%Dictionary.ClassDefinition:SubclassOf")
+	Set tSC = pRS.Execute("Ens.BusinessProcess")
+	While (pRS.Next()) {
+		Set tName = $G(pRS.Data("Name"))
+		&html<<option value="#(tName)#" #($S(tName=tRoutingRule.HostClass:"selected",1:""))#>#(tName)#</option>>
+	}
+</script>
+</select>
+-->
+
+<tr>
+<td class="SummaryLabel" Title='#($$$Text("Last piece of the full rule name","RuleEditor"))#' nowrap>#($$$Text("Rule Name","RuleEditor"))#</td>
+<td Title='#($$$Text("Last piece of the full rule name","RuleEditor"))#'>
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="ruleName" value="#(tRoutingRule.Name)#" onchange="ruleNameChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" Title='#($$$Text("Date & time from which this rule is in effect. The format of this field is ""yyyy-mm-ddThh:mm:ss""."))#' nowrap>#($$$Text("Effective Begin DateTime","RuleEditor"))#</td>
+<td Title='#($$$Text("Date & time from which this rule is in effect. The format of this field is ""yyyy-mm-ddThh:mm:ss"".","RuleEditor"))#'>
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="effectiveBeginDateTime" value="#(tRoutingRule.EffectiveBeginDateTime)#" onchange="effectiveBeginDateTimeChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" Title='#($$$Text("Date & time before which this rule is in effect. The format of this field is ""yyyy-mm-ddThh:mm:ss""."))#' nowrap>#($$$Text("Effective End DateTime","RuleEditor"))#</td>
+<td Title='#($$$Text("Date & time before which this rule is in effect. The format of this field is ""yyyy-mm-ddThh:mm:ss"".","RuleEditor"))#'>
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="effectiveEndDateTime" value="#(tRoutingRule.EffectiveEndDateTime)#" onchange="effectiveEndDateTimeChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" Title='#($$$Text("RoutingEngine classname","RuleEditor"))#' nowrap>#($$$Text("Routing Engine Class","RuleEditor"))#</td>
+<td Title='#($$$Text("RoutingEngine classname","RuleEditor"))#'>
+	&nbsp;<select #($S(tReadOnly:"readonly",1:""))# id="ruleContextClass" value="#(tRoutingRule.ContextClass)#" onchange="ruleContextClassChange(this,this.value);" >
+	#(..GetContextOptions(tRoutingRule.ContextClass))#
+	</select>&nbsp;
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" nowrap><csp:text Domain="Ensemble" TextId="Description">Description</csp:text></td>
+<td>
+	<textarea #($S(tReadOnly:"readonly",1:""))# type="text" id="ruleDesc" rows="3" cols="80" onchange="ruleDescChange(this,this.value);" onkeyup="keyup(this);">#(tRoutingRule.Description)#</textarea>
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" Title='#($$$Text("Value to be used to group rules for reporting","RuleEditor"))#' nowrap><csp:text Domain="Ensemble" TextId="ReportGroup">Report Group</csp:text></td>
+<td Title='#($$$Text("Value to be used to group rules for reporting","RuleEditor"))#'>
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="reportGroup" value="#(tRoutingRule.ReportGroup)#" onchange="reportGroupChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" Title='#($$$Text("Display value for the rule report group","RuleEditor"))#' nowrap><csp:text Domain="Ensemble" TextId="ReportName">Report Name</csp:text></td>
+<td Title='#($$$Text("Display value for the rule report group","RuleEditor"))#'>
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="reportName" value="#(tRoutingRule.ReportName)#" onchange="reportNameChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" nowrap><csp:text Domain="Ensemble" TextId="ShortDescription">Short Description</csp:text></td>
+<td>
+	<input #($S(tReadOnly:"readonly",1:""))# type="text" id="shortDescription" value="#(tRoutingRule.ShortDescription)#" onchange="shortDescriptionChange(this,this.value);" onkeyup="keyup(this);" size="80">
+</td>
+</tr>
+<tr>
+<td class="SummaryLabel"><div title="#(msgDoAllTitle)#"><csp:text textid="" domain="RuleEditor">Do All Rules</csp:text></div></td>
+<td>
+	<csp:if CONDITION="tReadOnly">
+		<span class="statusMsg">#($S(tRoutingRule.DoAll:$$$EnsMsgTrue,1:$$$EnsMsgFalse))#</span>
+	<csp:else>
+		<input type="checkbox" id="ruleDoAll" #($S(tRoutingRule.DoAll:"checked",1:""))# onClick="ruleDoAllChange(this,this.checked);"/>
+	</csp:if>
+
+</td>
+</tr>
+
+<td class="SummaryLabel" nowrap><csp:text Domain="Ensemble" TextId="Routine">Routine</csp:text></td>
+<td><span class="statusMsg">#(tRoutineName)#&nbsp;</span></td>
+</tr>
+
+<tr>
+<td class="SummaryLabel" nowrap><csp:text Domain="Ensemble" TextId="Status">Status</csp:text></td>
+<td><span class="statusMsg" id="statusMsg">#(tStatus)#</span></td>
+</tr>
+</table>
+
+<script language="cache" runat="server">
+	Do ..ShowTestForm(tRoutingRule)
+</script>
+
+</csp:if>
+<script language="cache" runat="server">
+	Set sRoutingRuleMsg = $ZCVT($$$FormatText($$$Text("Routing Rule %1 for package %2 not found.","RuleEditor"), tRuleName, tPackage),"O","HTML")
+</script>
+<hr>
+<div class="text1">#(msgRulesDesc)#</div>
+<div id="table"><b>#(sRoutingRuleMsg)#</b></div>
+
+</table>
+</div>
+
+</td></tr></table>
+
+<csp:if CONDITION="$IsObject(tRoutingRule)">
+<script language="javascript">
+	createRoutingRule();
+</script>
+</csp:if>
+
+</body>
+
+<script language="Cache" method="GetOperatorOptions" runat="server" arguments="pCurr" returntype="%String">
+	// return a string defining set of options for a list of operators Select box
+	Set tList = ##class(Ens.Rule.Router.Condition).GetOperatorList()
+	Set tDelim = $E(tList,1)
+	Set tList = $E(tList,2,*)
+	Set tSelect = ""
+	
+	For i = 1:1:$L(tList,",") {
+		Set t = $P(tList,",",i)
+		Set tSelect = tSelect _ "<option " _ $S(pCurr=t:"selected",1:"") _ " value=""" _ $ZCVT(t,"O","HTML") _ """>" _ $ZCVT(t,"O","HTML")
+	}
+	Quit tSelect
+</script>
+
+<script language="Cache" method="resolveDocType" runat="server" arguments="pDocClass,pVer,pName" returntype="%String">
+ 	Quit:""'=pDocClass&&$zobjclassmethod(pDocClass,"%IsA","EnsLib.HL7.Message") ##class(EnsLib.HL7.Schema).ResolveSchemaTypeToDocType(pVer,pName)
+ 	Quit pVer_$S(""=pName:"", 1:":"_pName)
+</script>
+
+<script language="Cache" method="GetJoinOptions" runat="server" arguments="pCurr" returntype="%String">
+	// return a string defining set of options for a list of join operators Select box
+	Set tList = ##class(Ens.Rule.Router.Condition).GetJoinList()
+	Set tDelim = $E(tList,1)
+	Set tList = $E(tList,2,*)
+	Set tSelect = ""
+	Set msgOpt("AND") = $$$TextHTML("AND")
+	Set msgOpt("OR") = $$$TextHTML("OR")
+	For i = 1:1:$L(tList,",") {
+		Set t = $P(tList,",",i)
+		Set tSelect = tSelect _ "<option " _ $S(pCurr=t:"selected",1:"") _ " value=""" _ $ZCVT(t,"O","HTML") _ """>" _ $S($G(msgOpt(t))'="":msgOpt(t),1:$ZCVT(t,"O","HTML"))
+	}
+	Quit tSelect
+</script>
+
+<script language="Cache" method="GetContextOptions" runat="server" arguments="pCurr" returntype="%String">
+	Set pRS = ##class(%ResultSet).%New("%Dictionary.ClassDefinition:SubclassOf")
+	Set tBaseName = "EnsLib.MsgRouter.RoutingEngine"
+	Set tSelect = "<option " _ $S(pCurr=tBaseName:"selected",1:"") _ " value=""" _ $ZCVT(tBaseName,"O","HTML") _ """>" _ $ZCVT(tBaseName,"O","HTML") _ "</option>"
+	Set tSC = pRS.Execute(tBaseName)
+	While (pRS.Next()) {
+		Set tName = $G(pRS.Data("Name"))
+		Set tSelect = tSelect _ "<option " _ $S(pCurr=tName:"selected",1:"") _ " value=""" _ $ZCVT(tName,"O","HTML") _ """>" _ $ZCVT(tName,"O","HTML") _ "</option>"
+	}
+	Quit tSelect
+</script>
+
+<script language="Cache" method="CheckEffectiveDates" runat="server" arguments="pBegin,pEnd" returntype="%Boolean">
+	// Validate effective date
+	// The format is YYYY-MM-DD [ Thh:mm:ss ]
+	// Basically, it's in the same format as $tr($zdatetime($H,3)," ","T") except time portion (including the character T) is optional. 
+	Set msg = "", tBegin = "", tEnd = "9999-99-99T23:59:59"
+	If pBegin'="" {
+		If pBegin'?4n1"-"2n1"-"2n.1(1"T"2n1":"2n1":"2n) { Set tval = -1 }
+		Else { Set:pBegin'["T" pBegin = pBegin_"T00:00:00" Set tval = $ZDateTimeH(pBegin,3,,,,,,,,-1) }
+		If tval=-1 { Set msg = msg_$$$Text("Effective Begin DateTime is invalid, please use format 'YYYY-MM-DDTHH:MM:SS' where the time portion is optional.") }
+		Else { Set tBegin = tval }
+	}
+	If pEnd'="" {
+		If pEnd'?4n1"-"2n1"-"2n.1(1"T"2n1":"2n1":"2n) { Set tval = -1 }
+		Else { Set:pEnd'["T" pEnd = pEnd_"T23:59:59" Set tval = $ZDateTimeH(pEnd,3,,,,,,,,-1) }
+		If tval=-1 { Set:msg'="" msg = msg_$C(10) Set msg = msg_$$$Text("Effective End DateTime is invalid, please use format 'YYYY-MM-DDTHH:MM:SS' where the time portion is optional.") }
+		Else  { Set tEnd = tval }
+	}
+	If tBegin]tEnd Set:msg'="" msg = msg_$C(10) Set msg = msg_$$$Text("Effective Dates/Times must be in chronological order.")
+	Quit msg //..QuoteJS(msg)
+</script>
+
+<script language="Cache" method="ShowTestForm" runat="server" arguments="pRoutingRule" returntype="">
+	Quit
+	Set tSC = ##class(Ens.Rule.Utils).GetPropertyTree(.tList,pRoutingRule.ContextClass,pRoutingRule.MsgClass)
+	If $$$ISERR(tSC) Quit
+
+	&html<<form name="testForm">
+		<table>>
+		Set n = $O(tList(""))
+		While (n '= "") {
+			Set tName = n
+			Set tType = $LG(tList(n),1)
+			If ((tType [ "Integer") || (tType [ "Float") || (tType [ "Date")) {
+				Set tSize = 8
+			} Else {
+				Set tSize = 20
+			}
+			&html<<tr><td>#(tName)#</td>
+				<td><input type="text" name="#(tName)#" size="#(tSize)#" value=""></td></tr>>
+			Set n = $O(tList(n))
+		}
+	&html<<tr><td>&nbsp;</td>
+		<td><input type="button" value="Test">
+		</tr>
+		</table></form>>
+</script>
+
+
+</html>

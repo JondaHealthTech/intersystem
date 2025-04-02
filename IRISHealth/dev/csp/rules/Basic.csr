@@ -1,0 +1,244 @@
+<!-- Basic CSP Tags -->
+<!-- Copyright (c) 2000 InterSystems Inc. ALL RIGHTS RESERVED. -->
+
+<csr:rule name="%HTML" match="/html" class="%CSP.TagSection" language="any">
+<csr:description>
+Our generic HTML tag that always forces a new section.
+</csr:description>
+</csr:rule>
+
+<csr:rule name="%HEAD" match="/html/head" class="%CSP.TagSection" language="any">
+<csr:description>
+Our generic HEAD tag that always forces a new section.
+</csr:description>
+</csr:rule>
+
+<csr:rule name="%BODY" match="/html/body" class="%CSP.TagSection" language="any">
+<csr:description>
+Our generic BODY tag that always forces a new section.
+</csr:description>
+</csr:rule>
+
+<csr:rule name="%MetaContentType" match="/html/head/meta[http-equiv=Content-Type]" empty language="any">
+<csr:action>
+	<script language="Cache" runat="compiler">
+		#; Grab the CONTENT attribute and use it as defaults for the page.
+		New content,type,charset
+		Set content=$TR(..GetAttribute("content"),$C(32,9))
+		Set type=$P(content,";")
+		Set charset=$P(content,"charset=",2)
+		If type'="" Do %compiler.Set("%cspparam.CONTENTTYPE",type)
+		If charset'="" Do %compiler.Set("%cspparam.CHARSET",charset)
+	</script>
+	<csr:default>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%MetaExpires" match="/html/head/meta[http-equiv=Expires]" empty language="any">
+<csr:action>
+	<script language="Cache" runat="compiler">
+		#; Grab the time this page should expire.
+		New expires
+		Set expires=..GetAttribute("content")
+		If expires'="" Do %compiler.Set("%cspparam.EXPIRES",expires)
+	</script>
+	<csr:default>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%SCRIPT" match="script" class="%CSP.ScriptElement" textonly language="any">
+<csr:description>
+All SCRIPT tags except those with language="Cache" just use default element.
+</csr:description>
+</csr:rule>
+
+<csr:rule name="%BASIC" match="script[language=Basic]" class="%CSP.TagCache" textonly language="any">
+The &lt;SCRIPT language="Basic" runat="server"&gt; tag defines a section of code written 
+in Basic that is to be run on the Application Server.
+</csr:rule>
+
+<csr:rule name="%MVBASIC" match="script[language=MVBasic]" class="%CSP.TagCache" textonly language="any">
+The &lt;SCRIPT language="MVBasic" runat="server"&gt; tag defines a section of code written 
+in MV Basic that is to be run on the Application Server.
+</csr:rule>
+
+<csr:rule name="%CACHE" match="script[language=Cache]" class="%CSP.TagCache" textonly language="any">
+The &lt;SCRIPT language="Cache" runat="server"&gt; tag defines a section of code written
+in ObjectScript that is to be run on the Application Server.
+</csr:rule>
+
+<csr:rule name="%SERVER" match="server" class="%CSP.TagCacheServer" textonly language="any">
+<csr:description>
+The SERVER tag defines a section of code that is to be run on the Application Server.
+<P>This is the same as the &lt;script language="Cache" runat="server"&gt; tag.
+</csr:description>
+</csr:rule>
+
+<csr:rule name="%TEXTBLOCK" match="csp:textblock" textonly language="any">
+<csr:description>
+The <b>csp:textblock</b> tag writes it contents to the CSP with no CSP processing performed except for &#035;&#035;( )&#035;&#035;.
+</csr:description>
+<csr:action>
+	<script language="Cache" runat="compiler">
+		Do ..WriteText($$resolvePP^%cspQuote(..InnerText()),0)
+	</script>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%SECTION" match="csp:section" language="any">
+<csr:action>
+	<csr:section name=##(..GetAttribute("name"))## block=##(..GetAttribute("block",0))##>
+		<csr:children>
+	</csr:section>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%METHOD" match="csp:method" class="%CSP.TagMethod" textonly language="any">
+<csr:description>
+The <b>csp:method</b> tag is supersede by <b>script language=cache method</b> tag.
+</csr:description>
+<csr:attribute name=Name required description="The name of the generated method. Must be a valid method name." type="methodName:STRING">
+<csr:attribute name=ReturnType description="The return type of the method." type="dataType:STRING">
+<csr:attribute name=Arguments description="A list of arguments for the method." type="spec:STRING">
+</csr:rule>
+
+<csr:rule name="%BASICMETHOD" match="script[language=basic,method]" class="%CSP.TagMethod" textonly language="any">
+<csr:description>
+The <b>script language=basic method</b> tag specifies a method written in Basic 
+to be generated as part of the class that is generated when a CSP page is compiled.
+</csr:description>
+<csr:attribute name=Method required description="The name of the generated method. Must be a valid method name." type="methodName:STRING">
+<csr:attribute name=ReturnType description="The return type of the method." type="dataType:STRING">
+<csr:attribute name=Arguments description="A list of arguments for the method." type="spec:STRING">
+</csr:rule>
+
+<csr:rule name="%MVBASICMETHOD" match="script[language=mvbasic,method]" class="%CSP.TagMethod" textonly language="any">
+<csr:description>
+The <b>script language=mvbasic method</b> tag specifies a method written in MV Basic 
+to be generated as part of the class that is generated when a CSP page is compiled.
+</csr:description>
+<csr:attribute name=Method required description="The name of the generated method. Must be a valid method name." type="methodName:STRING">
+<csr:attribute name=ReturnType description="The return type of the method." type="dataType:STRING">
+<csr:attribute name=Arguments description="A list of arguments for the method." type="spec:STRING">
+</csr:rule>
+
+<csr:rule name="%SCRIPTMETHOD" match="script[language=cache,method]" class="%CSP.TagMethod" textonly language="any">
+<csr:description>
+The <b>script language=cache method</b> tag specifies a method written in ObjectScript
+to be generated as part of the class that is generated when a CSP page is compiled.
+</csr:description>
+<csr:attribute name=Method required description="The name of the generated method. Must be a valid method name." type="methodName:STRING">
+<csr:attribute name=ReturnType description="The return type of the method." type="dataType:STRING">
+<csr:attribute name=Arguments description="A list of arguments for the method." type="spec:STRING">
+</csr:rule>
+
+<csr:rule name="%CLASS" match="csp:class" empty language="any">
+<csr:description>
+	The <b>csp:class</b> tag specifies characteristics of the class that is generated when 
+	a CSP page is compiled.
+</csr:description>
+<csr:attribute name=Private description="Specifies whether this page is pubblic (=0) or private (=1)." type="AccessFlag:BOOLEAN">
+<csr:attribute name=Encoded description="Specifies parms for this page will be encrypted (0,1,2)." type="EncodedFlag:INTEGER">
+<csr:attribute name=ErrorPage description="Name of custom CSP error page." type="Page:STRING">
+<csr:attribute name=Expires description="Default value for %response.Expires." type="Expiration:STRING">
+<csr:attribute name=Domain description="Default domain for csp:text, span and div tags that is used to specify the subset of localized messages for this page." type="domain:STRING">
+<csr:attribute name=Super description="A comma-delimited list of super classes." type="classList:STRING">
+<csr:attribute name=Import description="A comma-delimited list of imported packages." type="packageList:STRING">
+<csr:attribute name=Includes description="A comma-delimited list of include files for the generated CSP class." type="IncludeList:STRING">
+<csr:attribute name=Description description="A description of this page to put into the generated class." type="description:STRING">
+<csr:attribute name=InsertBrokerApplet description="Set to 1 to add code to load the CSP broker Java applet used by #server.  Deprecated:  XMLHttpRequest will be used." type="InsertFlag:BOOLEAN">
+<csr:attribute name=InsertBrokerIFrame description="Set to 1 to add code to load the IFrame used by #call.  Deprecated:  XMLHttpRequest will be used." type="InsertFlag:BOOLEAN">
+<csr:attribute name=InsertBrokerJS description="Set to 1 to add code to load cspbroker.js and cspxmlhttp.js." type="InsertFlag:BOOLEAN">
+<csr:attribute name=OptionalBrokerJS description="Set to 1 to suppress the loading of cspBroker.js in the case of HyperEvents on the page." type="InsertFlag:BOOLEAN">
+<csr:attribute name=SuppressBrokerJS description="Set to 1 to suppress the loading of both cspxmlhttp.js and cspbroker.js in the case of HyperEvents on the page." type="InsertFlag:BOOLEAN">
+<csr:attribute name=FormHiddenFieldsAtEnd description="Set to 1 to put CSP added hidden fields at the end of the form." type="InsertFlag:BOOLEAN">
+<csr:attribute name=SECURITYRESOURCE description="Pass in required security resource for this page" type="Resource:STRING">
+<csr:action>
+	<script language="Cache" runat="compiler">
+		New param
+		If ..IsDefined("FormHiddenFieldsAtEnd") {
+			Do %compiler.Set("%cspFormHiddenFieldsAtEnd",''..GetAttribute("FormHiddenFieldsAtEnd"))
+		}
+		If ..IsDefined("INSERTBROKERAPPLET") || ..IsDefined("INSERTBROKERIFRAME") {
+			Set %compiler.Get("%cspDocObject").NeedJS=(..GetAttribute("INSERTBROKERAPPLET",1)||..GetAttribute("INSERTBROKERIFRAME",1))
+		}
+		If ..IsDefined("INSERTBROKERJS") {
+			Set %compiler.Get("%cspDocObject").NeedJS=''..GetAttribute("INSERTBROKERJS",1)
+		}
+		If ..IsDefined("OptionalBrokerJS") {
+			Do %compiler.Set("%cspOptionalBrokerJS",''..GetAttribute("OptionalBrokerJS"))
+		}
+		If ..IsDefined("SuppressBrokerJS") {
+			Do %compiler.Set("%cspSuppressBrokerJS",''..GetAttribute("SuppressBrokerJS"))
+		}
+		For param="PRIVATE","ENCODED","DOMAIN","ERRORPAGE","EXPIRES","SECURITYRESOURCE" {
+			If ..IsDefined(param) Do %compiler.Set("%cspparam."_param,..GetAttribute(param))
+		}
+		For param="IMPORT","SUPER","INCLUDES","DESCRIPTION" {
+			If ..IsDefined(param) Do %compiler.Set("%cspclass."_param,..GetAttribute(param))
+		}
+		Quit
+	</script>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%COMMENT" match="csp:comment" textonly language="any">
+<csr:description>
+The <b>csp:comment</b> tag lets you specify comments that are not rendered to the client.
+</csr:description>
+<csr:action>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%CONTENT" match="csp:content" empty language="any">
+<csr:description>
+	The <b>csp:content</b> tag specifies the default content characteristics of the generated page.<BR>
+</csr:description>
+<csr:attribute name=Type description="Specify the default Content-Type" type="contentType:STRING">
+<csr:attribute name=Charset description="Specifies the default charset" type="charSet:STRING">
+<csr:attribute name=NoCharSetConvert description="Turns off the charset conversion" type="noCharSetConvert:STRING">
+<csr:action>
+	<script language="Cache" runat="compiler">
+		If ..IsDefined("type") Do %compiler.Set("%cspparam.CONTENTTYPE",..GetAttribute("type"))
+		If ..IsDefined("charset") Do %compiler.Set("%cspparam.CHARSET",..GetAttribute("charset"))
+		If ..IsDefined("nocharsetconvert") Do %compiler.Set("%cspparam.NOCHARSETCONVERT",..GetAttribute("nocharsetconvert"))
+		Quit
+	</script>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%INCLUDE" match="csp:include" empty language="any">
+<csr:description>
+	The <b>csp:include</b> tag include another csp page or file at runtime. If there is a problem
+	with the include then it will call the error page to display the error, setting the parameter
+	"Error:IncludePage" to the page it was trying to include.<br>
+</csr:description>
+<csr:attribute name=Page description="The csp page or file to include at this point" type="pageURL:STRING">
+<csr:action>
+	<script language="Cache" runat="server">
+		Do ..Include(##'..GetAttribute("page")'##)
+	</script>
+	<script language="Basic" runat="server">
+		me.Include(##'..GetAttribute("page")'##)
+	</script>
+	<script language="MVBasic" runat="server">
+		"%CSP.Page"->Include(##'..GetAttribute("page")'##)
+	</script>
+</csr:action>
+</csr:rule>
+
+<csr:rule name="%PARAMETER" match="csp:parameter" empty language="any">
+<csr:description>
+	The <b>csp:parameter</b> tag specifies a class parameter value for the generated
+	CSP class.
+</csr:description>
+<csr:attribute name=Name description="Specifies the name of the class parameter" type="name:STRING">
+<csr:attribute name=Value description="Specifies the value of the class parameter" type="value:STRING">
+<csr:action>
+	<script language="Cache" runat="compiler">
+		If ..IsDefined("name") Do %compiler.Set("%cspparam."_..GetAttribute("name"),..GetAttribute("value"))
+		Quit
+	</script>
+</csr:action>
+</csr:rule>
+

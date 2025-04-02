@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	i $g(%session.Data("UserID"))="" s %response.Redirect="trialLockDown.csp" q 1
+	q 1
+	</script>
+    <script language="cache" runat="server">d HEADTRIAL^WSP999</script>
+	<link rel="stylesheet" href="assets/styles/trialSignUp.css">
+</head>
+<body>
+	<div id="wrapper">
+	    <div class="bg-wrapper">
+	        <div class="bg4">
+	            <img src="./assets/images/bg4.png">
+	        </div>
+	    </div>
+	    
+	 <a href="https://www.jonda.health/" class="back-link">Back to website</a>
+     <div class="container">    
+     	<img class="logo1" src="./assets/images/trial/JXbyJx.png" alt="Jonda X">
+      		<div class="form-container">  
+        	<form id="F1" class="profile-form" autocomplete="off">
+			<h1>Create a JondaX Free Trial Profile</h1>
+            
+                <div class="input-group">
+                    <input type="text" name="T1" id="T1" placeholder="Enter your company email" onkeypress="jEnter(event)" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="T2" id="T2" placeholder="Enter a Password" onkeypress="jEnter(event)" required>
+                    <img onclick="jTogglePassword(event)" src="./assets/images/eyeClose.png">
+                </div>
+                <div class="input-group">
+                    <input type="password" name="T3" id="T3" placeholder="Confirm Password" onkeypress="jEnter(event)" required>
+                    <img onclick="jTogglePassword(event)" src="./assets/images/eyeClose.png">
+                </div>
+				<p class="error-text" id="AlertText">
+				<br>
+	            </p>
+                <p class="password-instructions">Your password should contain:</p>
+                <div class="password-hints">
+                    <span>8+ <br>Characters</span>
+                    <span>AA <br>Uppercase</span>
+                    <span>aa<br> Lowercase</span>
+                    <span>123<br> Number</span>
+                    <span>&$#<br> Symbol</span>
+                </div>
+
+                <button type="button" class="continue-btn" onclick="jSignUp()" >Continue</button>
+
+                <p class="or">or</p>
+
+                <a href="trialLogin.csp" class="login-link">Login</a>
+            </form>
+          </div>
+          <script language="cache" runat="server">
+          	d SetFooter^trialHome
+          </script>
+		
+	  </div>
+	</div>		    
+</body>
+<script type="text/javascript">
+T1=self.F1.T1, T2=self.F1.T2,T3=self.F1.T3
+let AlertText=document.getElementById("AlertText");
+
+function jEnter(event){
+	if(event.which === 13){
+			event.preventDefault();
+			jSignUp();
+		}
+}
+
+function jTogglePassword(e){
+	let tBox=e.target.previousElementSibling;
+	if(tBox.type=="password"){
+		tBox.type="text";
+		event.target.src = "./assets/images/eyeOpen.png";
+	}
+	else{
+		tBox.type="password";
+		event.target.src = "./assets/images/eyeClose.png";
+	}
+}
+
+function jInitMe(){
+	T1.focus()
+}
+function jSignUp(){
+	AlertText.innerHTML=""
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+	var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,12})+$/
+
+	if (mailformat.test(T1.value)){
+		#server(..cCheckUser(T1.value))#
+	} else{
+		AlertText.innerHTML="Please enter a valid email."
+	}
+	
+	if ((T2.value!=T3.value)){
+		AlertText.innerHTML="The passwords do not match. Please check both fields again."
+	}
+	if ((T2.value.length<8)&&(T2.value.length<8)){
+		AlertText.innerHTML="The password created is too short!"	
+	}
+	if (regex.test(T2.value)){
+	} else { 
+		AlertText.innerHTML="The password created does not meet our requirements."
+	} 
+	if ((T1.value=="")||(T2.value=="")){
+		AlertText.innerHTML="Please fill all the fields"
+	}
+	#server(..cContinue(T1.value,T2.value,AlertText.innerHTML))# 
+}
+</script>
+<script language="cache" method="cCheckUser" arguments="d1:%String">
+	d CheckUser^trialSignUp
+</script>
+<script language="cache" method="cContinue" arguments="d1,d2,d3:%String">
+	if d3=""{
+		s EmailAddress=$zconvert(d1,"l")
+		s ^TrialUser(EmailAddress,"mail")=EmailAddress
+		s ^TrialUser(EmailAddress,"pswd")=d2
+		d VerifyByEmail^AutoMail
+		&js<window.open("trialVerifyMail.csp","_self")>}
+	else {}
+</script>
+
+</html>

@@ -1,0 +1,36 @@
+<csp:StudioGenerateTemplate><script language="Cache" runat="server">
+	Set cursor = $G(%request.Data("cursor",1),"SQL1")
+	Set gen = $G(%request.Data("generate",1),"STATEMENT")
+	
+	If (gen = "STATEMENT") {
+		Write $G(%request.Data("sql",1))
+	}
+	ElseIf(gen = "CURSOR") {
+		Write $C(9),"&sql(DECLARE ",cursor," CURSOR FOR",!
+		Write $C(9),$G(%request.Data("sql",1)),!
+		Write $C(9),")",!
+	}
+	ElseIf(gen = "CURSORLOOP") {
+		Write $C(9),"&sql(DECLARE ",cursor," CURSOR FOR",!
+		Write $C(9),$G(%request.Data("sql",1)),!
+		Write $C(9),")",!
+		Write $C(9),"&sql(OPEN ",cursor,")",!
+		Write $C(9),"&sql(FETCH ",cursor,")",!
+		Write $C(9),"While (SQLCODE = 0) {",!
+		Write $C(9,9),"// REPLACE: inner loop",!
+		Write $C(9,9),"&sql(FETCH ",cursor,")",!
+		Write $C(9),"}",!
+	
+		Write $C(9),"&sql(CLOSE ",cursor,")",!
+	}
+	ElseIf(gen = "RESULTSET") {
+		Set sql = $G(%request.Data("sql",1))
+		Set sql = $TR(sql,$C(13,10)," ")
+		
+		Write $C(9),"Set ",cursor," = ##class(%ResultSet).%New()",!
+		Write $C(9),"Do ",cursor,".Prepare(""",sql,""")",!
+		Write $C(9),"Do ",cursor,".Execute()",!
+		Write $C(9),"// loop",!
+	}
+	
+</script>	

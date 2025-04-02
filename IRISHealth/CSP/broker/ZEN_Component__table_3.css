@@ -1,0 +1,279 @@
+/* @class="%ZEN.Component.simpleTablePane" */
+
+/* @doc="Main table for tablePane" */
+table.tpTable {
+	background: white;
+	border: 1px solid black;
+	font-family: arial;
+	width: 100%;
+	table-layout: fixed;
+	empty-cells: show;
+}
+
+/* @doc="Caption above table."*/
+table.tpTable caption { 
+	font-weight: bold;
+	text-align: left;
+	padding: 2px;
+	border: 1px solid black;
+	background: #404040;
+	background-image: url(images/grad-gray-10x100.png);
+	background-repeat: repeat-x;
+}
+
+/* @doc="Column header." */
+table.tpTable th {
+	border-right: 1px solid gray;
+	border-bottom: 1px solid gray;
+	color: black;
+	font-weight: bold;
+	text-align: left;
+	padding: 2px;
+	overflow: hidden;
+	background: #404040;
+	background-image: url(images/grad-gray-10x100.png);
+	background-repeat: repeat-x;
+}
+
+/* @doc="Default height for rows in the body: */
+.ie11 table.tpTable tbody tr {
+	height:1em;
+}
+
+/* @doc="Selected column header." */
+table.tpTable th.tpHdrSelected {
+	color: white;
+	background: #F0F0F0;
+	background-image: url(images/grad-gray2-10x100.png);
+	background-repeat: repeat-x;
+}
+
+table.tpTable td {
+	border-right: 1px solid gray;
+	border-bottom: 1px solid gray;
+	padding: 2px;
+	overflow: hidden;
+	/*text-overflow: ellipsis;*/
+}
+
+table.tpTable tr.tpSelected td {
+	border-top: 1px solid black;
+	border-bottom: 2px solid black;
+	padding-top: 1px;
+	padding-bottom: 1px;
+}
+
+/* @doc="Selected row within table." */
+table.tpTable tr.tpSelected {
+	color: black;
+	background: #404040;
+	background-image: url(images/grad-yellow-10x100.png);
+	background-repeat: repeat-x;
+}
+
+/* @doc="Style used for table body outside of cells within the table." */
+.tpBody {
+	background: #DDDDDD;
+}
+
+/* @doc="Style used for table body outside of cells within the table when using fixed headers." */
+.tpBodyFixed {
+	background: #DDDDDD;
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+ 
+/* @doc="Style for rows when not using zebra styling." */
+.tpRow {
+	color: darkblue;
+	background: white;
+}
+
+/* @doc="Style for odd-rows when using zebra styling." */
+.tpOdd {
+	color: darkblue;
+	background: white;
+}
+
+/* @doc="Style for even-rows when using zebra styling." */
+.tpEven {
+	color: darkblue;
+	background: #DDDDFF;
+}
+
+/* @doc="Cell containing a string value." */
+.tpStr {
+
+}
+
+/* @doc="Cell containing numeric value." */
+.tpNum {
+	text-align: right;
+}
+
+/* @doc="Cell containing the current row selector." */
+.tpSel {
+	text-align: center;
+	font-weight: bold;
+}
+
+/* @doc="Cell containing the row number." */
+.tpRNum {
+	text-align: right;
+}
+
+/* @doc="Cell containing a link." */
+.tpAction {
+}
+
+.tpAction a {	
+	color: darkblue;
+}
+
+.tpAction a:hover {
+	color: darkblue;
+}
+
+.tpAction a:link {
+	color: darkblue;
+}
+
+.tpAction a:active {
+	color: darkblue;
+}
+
+/* @doc="Cell displaying No Results message." */
+table td.tpNoResults {
+	font-style: italic;
+	color: #202060;
+	background: white;
+}
+
+/* @doc="Extra padding cell at bottom of table." */
+table td.tpPadRow {
+	background: white;
+}
+
+/* @doc="Table containing filter controls." */
+table.tpFilterLayout {
+	border: none;
+}
+
+/* @doc="Cell within table containing filter controls." */
+table.tpFilterLayout td {
+	border: none;
+	background: none;
+}
+
+/* @doc="Filter control." */
+.tpFilter {
+	/*width: 100%;*/
+	font-size: 0.8em;
+}
+
+/* @doc="Filter control for date values." */
+.tpFilterDate {
+	font-size: 0.8em;
+}
+
+/* @doc="Filter control with focus." */
+.tpFilter:focus {
+	background: #FFFFE0;
+}
+
+/* @doc="Label for filter control." */
+.tpFilterLabel {
+	font-size: 0.6em;
+	font-weight: normal;
+	text-align: right;
+}
+
+/* @doc="Button in filter section." */
+.tpFilterButton {
+	vertical-align: middle;
+	border: 1px solid black;
+	font-size: 0.6em;
+}
+
+.tpFilterButton:hover {
+	background: #FFFF80;
+}
+
+/* @class="%ZEN.Component.tableNavigatorBar" */
+
+/* @doc="Table around navigator bar." */
+.tnbrTable {
+	border: 1px solid black;
+	background: #404040;
+	background-image: url(images/grad-gray-10x100.png);
+	background-repeat: repeat-x;
+	padding: 1px;
+}
+
+/* @doc="Buttons within navigator bar." */
+.tnbrPagingButtons {
+	color: black;
+	background: white;
+	border: 1px solid #404040;
+	padding: 1px;
+	margin-left: 5px;
+	font-size: 0.7em;
+}
+
+/* @doc="Link within navigator bar." */
+.tnbrPageLink {
+	color: black;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+/* @doc="Disabled link within navigator bar." */
+.tnbrPageLinkDisabled {
+	color: #B0B0B0;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+/* @doc="Current page button within navigator bar." */
+.tnbrPageLinkCurr {
+	color: black;
+	font-weight: bold;
+	padding-left: 4px;
+	padding-right: 4px;
+	border-left: 1px black solid;
+	border-right: 1px black solid;
+
+	background: #404000;
+	background-image: url(images/grad-yellow-10x100.png);
+	background-repeat: repeat-x;
+}
+
+/* @doc="Row count indicator." */
+.tnbrFound {
+	color: #202020;
+	font-weight: bold;
+	font-size: 0.7em;
+}
+
+/* @doc="Filter and page size control." */
+.tnbrFilter {
+	color: #202020;
+	padding-right: 10px;
+	font-weight: bold;
+	font-size: 0.7em;
+}
+
+.tnbrFilter input {
+	color: #202020;
+	font-size: 0.9em;
+	border: 1px solid #404040;
+}
+
+/* @class="%ZEN.Component.tableNavigator" */
+.tn-pageLabel {
+	font-size: 0.75em;
+	color: darkblue;
+	margin-right: 5px;
+	margin-left: 2px;
+}
+/* EOF */

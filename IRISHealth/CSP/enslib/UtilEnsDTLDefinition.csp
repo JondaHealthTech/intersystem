@@ -1,0 +1,22 @@
+<!--
+Utilities: BPL Viewer
+-->
+
+<AutoPage domain="Ensemble" pagename="DTL Viewer" parentpage="UtilEnsDTLList.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>DTL Viewer</Text>
+</Pane>
+
+<Pane name="Detail" type="CSPX.EnsDTLPane">
+</Pane>
+
+<Pane name="Info" type="CSPX.EnsDTLInfoPane">
+	<Text>DTL Definition:</Text>
+	<FormClass>CSPX.EnsDTLInfoPaneForm</FormClass>
+	<SubmitPage>UtilEnsDTLDefinition.csp</SubmitPage>
+	<SubmitTarget>_top</SubmitTarget>
+	<Align>left</Align>
+</Pane>
+
+</AutoPage>

@@ -1,0 +1,198 @@
+<html>
+    <head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+		q 1
+	</script>
+
+	<script language="cache" runat="server">
+		s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+		i r1'=1 s %response.Redirect="cLockDown.csp"
+		d HEAD1^CSP999
+	</script>
+     <link rel="stylesheet" href="assets/styles/jxReviewResults.css" />
+    </head>
+    <body onload="jInitMe()">
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png" />
+                </div>
+            </div>
+            <div class="content">
+                <div class="side-nav nav-close">
+	                <img class="close-nav mobile-active" src="./assets/images/cross.png" alt="Cross" onclick="closeMobileNav(event)">
+	                <img class="logo" src="./assets/images/Jonda X Logo Blue Pink.png" alt="Jonda Health">
+	                <img class="logo-small" src="./assets/images/X Blue Pink.png" alt="Jonda Health">
+                    <br>
+                    <img class="profile" src="./assets/images/profileBordered.png" alt="Profile">
+                    <h3>NewTrend Solutions Inc.</h3>
+                    <p class="location">Zürich, Switzerland</p>
+                    <p class="plan">Trial Plan</p>
+                    <div class="nav-items">
+                    	<div class="nav-item collapse" onclick="window.open('jxDashboard.csp','_self')">
+                            <div class="nav-collapse-item">
+                                <img class="dark" src="./assets/images/sNavDashboard_dark.png" alt="Settings">
+                                <img src="./assets/images/sNavDashboard.png" alt="Dashboard">
+                                <div class="nav-collapse">
+                                    <div class="nav-collapse-btn" onclick="">
+                                        <p>Dashboard</p>
+                                        <img src="./assets/images/dropDownGrey.png" alt="DropDown"  onclick="toggleCollapseSetting(event)">
+                                        <img class="close-dark" src="./assets/images/dropDownCloseBlack.png" alt="DropDown" onclick="toggleCollapseSetting(event)">
+                                        <img class="dark" src="./assets/images/dropDownBlack.png" alt="DropDown" onclick="toggleCollapseSetting(event)">
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="Activity" class="nav-collapse-field" onclick="openDashboardPages(event)">Activity</div>
+                            <div id="Success" class="nav-collapse-field" onclick="openDashboardPages(event)">Transaction Success Rate</div>
+                            <div id="TempUsage" class="nav-collapse-field" onclick="openDashboardPages(event)">Templates Usage</div>
+                            <div id="Usage" class="nav-collapse-field" onclick="openDashboardPages(event)">Usage Quota</div>
+                        </div>
+                        <div class="nav-item active" onclick="window.open('jxFileUpload.csp','_self')">
+                            <img src="./assets/images/sNavDT.png" alt="Data Transform">
+                            <img class="dark" src="./assets/images/sNavDT_dark.png" alt="Data Transform">
+                            <p>Data Transformations</p>
+                        </div>
+                        <div class="nav-item" onclick="window.open('jxSettings.csp','_self')">
+                            <img src="./assets/images/sNavSettings.png" alt="Data Transform">
+                            <img class="dark" src="./assets/images/sNavSettings_dark.png" alt="Settings">
+                            <p>Outbound Settings</p>
+                        </div>
+                        <a class="nav-item" href="mailto:support@jonda.health">
+                            <img src="./assets/images/sNavSupport.png" alt="Support">
+                            <p>Support</p>
+                        </a>
+                    </div>
+                    <div class="nav-footer">
+                        <div class="logout"><img src="./assets/images/logout.png" alt="Log Out"><p>Log Out</p></div>
+                        <div class="copyright">JondaHealth &Copy; 2023 </div>
+                    </div>
+                    <div class="collapseBtn active" >
+                        <img class="collapseClose" src="./assets/images/collapseClose.png" alt="collapse" onclick="toggleSideNav()">
+                        <img class="collapseOpen" src="./assets/images/collapseOpen.png" alt="collapse" onclick="toggleSideNav()">
+                    </div>
+                </div>
+                <div class="main-field">
+                    <h1>Review Results</h1>
+                    <h2>1 result waiting to be reviewed.</h2>
+                    <h4>2 results are in review.</h4>
+                    <div class="results">
+                        <div class="table-border"></div>
+                        <div class="result-table">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Upload Date/Time</th>
+                                        <th>Process Date/Time</th>
+                                        <th>File Type</th>
+                                        <th>Transaction ID</th>
+                                        <th>Report Type</th>
+                                        <th>Status <img id="filter-btn" src="./assets/images/filter-blue.png" alt="Filter" onclick="toggleStatusSelect(event)"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2023-07-20 14:24:58</td>
+                                        <td>2023-07-20 14:24:58</td>
+                                        <td><img src="./assets/images/ocr icon.png" alt="OCR File"></td>
+                                        <td>3538</td>
+                                        <td>-</td>
+                                        <td><button class="review-btn blue-btn" onclick="window.open('./jxReviewResultsS1.csp','new')">Start review</button></td>
+                                    </tr>
+                                    <tr class="reviewed">
+                                        <td>2023-07-20 12:20:15</td>
+                                        <td>2023-07-20 12:30:58</td>
+                                        <td><img src="./assets/images/excel icon.png" alt="Excel File"></td>
+                                        <td>3538</td>
+                                        <td>-</td>
+                                        <td>In review by: <br><span>Suhina Singh</span></td>
+                                    </tr>
+                                    <tr class="reviewed">
+                                        <td>2023-07-20 14:24:58</td>
+                                        <td>2023-07-20 14:24:58</td>
+                                        <td><img src="./assets/images/hl7 icon.png" alt="HL7/FHIR File"></td>
+                                        <td>2343</td>
+                                        <td>-</td>
+                                        <td>In review by: <br><span>Rachel Camacho</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           </div>
+            <div id="status-select" class="collapse-field">
+                <div class="collapse">
+                    <div class="item">
+                        <div class="round">
+                            <input name="status" id="C1" type="checkbox" value="For review" checked>
+                            <label for="C1"></label>
+                        </div>
+                        <p>For review</p>
+                    </div>
+                    <div class="item">
+                        <div class="round">
+                            <input name="status" id="C2" type="checkbox" value="In review">
+                            <label for="C2"></label>
+                        </div>
+                        <p>In review</p>
+                    </div>
+                    <div class="item">
+                        <div class="round">
+                            <input name="status" id="C3" type="checkbox" value="On Hold">
+                            <label for="C3"></label>
+                        </div>
+                        <p>On Hold</p>
+                    </div>
+                    <button onclick="closeStatusSelect()">Confirm</button>
+                </div>
+            </div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+    <script type="text/javascript">
+        let statusSelect=document.getElementById("status-select");
+        function jInitMe(){
+	        #server(..cInitMe())#
+        }
+        const checkScrollbar = ()=>{
+            let resultTable = document.querySelector(".result-table");
+            let tableBorder = document.querySelector(".table-border");
+            if(resultTable.scrollHeight > resultTable.clientHeight){
+                tableBorder.style.width = "calc(100% - 5vw + 4px)";
+                tableBorder.style.height = "calc(100% - 3vw + 4px)";
+            }
+            else{
+                tableBorder.style.width = "calc(100% - 4.2vw + 4px)";
+                tableBorder.style.height = (resultTable.clientHeight + 4)+"px";
+            }
+        }
+        checkScrollbar();
+        function toggleStatusSelect(e){
+            let elemPosition = e.target.getBoundingClientRect();
+            statusSelect.style.top = elemPosition.top + 16 + "px";
+            statusSelect.style.right = window.innerWidth - elemPosition.right + 10 + "px";
+            setTimeout(()=>{
+                statusSelect.classList.toggle("active");
+            },100)
+        }
+        function closeStatusSelect(){
+            statusSelect.classList.remove("active");
+        }
+        document.addEventListener("click",(e)=>{
+            if(e.target.closest("#status-select") == null && e.target.closest("#filter-btn") == null && e.target.closest(".popup-dialog") == null){
+                closeStatusSelect();
+            }
+        })
+    </script>
+<script language="cache" method="cInitMe">
+	d INIT^WSP999
+</script>
+</html>

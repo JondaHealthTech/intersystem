@@ -1,0 +1,82 @@
+/* @class="HS.UI.Component.SMPFinderPane" */
+.finderColumn {
+	overflow-x: hidden;
+	overflow-y: scroll;
+	border-right: 1px solid #CBCBCB;
+	top: 0px;
+	height: 100%;
+}
+.finderItem a,.finderItemOdd a {
+	color: #000000;
+	font-size: 14px;
+	font-weight: 600;
+	padding: 10px;
+}
+/*  this new design no longer distinguishes Odd/Even */
+.finderItemOdd {
+	background: #FFFFFF;  /*#EEEEEE;*/
+}
+.finderItemSelected a {
+	font-size: 14px;
+	padding: 10px;
+}
+.finderItemSelected a:hover {
+	background: #BFE4E3;
+	color: #000000;
+	font-size: 14px;
+	padding: 10px;
+}
+.finderItem a:hover,
+.finderItemOdd a:hover {
+	background: #F7F7F7;
+	color: #000000;
+	font-size: 14px;
+	font-weight: 600;
+	padding: 10px;	
+}
+.finderItemDisabled a {
+	color: #000000;
+	font-size: 14px;
+	padding: 10px;
+}
+.finderListRowSelected .finderListName {
+	text-decoration: underline;
+	color: white;
+}
+table.finderListTable {
+	font-size: 14px;
+}
+/* category name for List View with kids */
+.finderListCategory {
+	color: black;
+	font-family: "Source Sans Pro",Futura,Arial,sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+}
+.finderListDisabled {
+	color:#D0D0D0;
+}
+.finderListName {
+	text-decoration: underline;
+	color: #333695;
+}
+.finderListName:hover {
+	background: #F7F7F7;
+}
+.finderListRowSelected {
+	background: white;
+	color: #000000;
+}
+tr.finderListRowSelected:hover {
+	background: #F7F7F7;
+}
+tr.finderListRowOdd:hover,
+tr.finderListRowEven:hover {
+	background: #F7F7F7;
+}
+
+tr.finderListRowSelected:hover {
+	background: rgb(73,127,161);
+}
+
+/* EOF */

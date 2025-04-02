@@ -1,0 +1,22 @@
+<!--
+Message Bank Trace Tool
+-->
+
+<AutoPage domain="Ensemble" pagename="Message Bank Trace" parentpage="EnsEntMessages.csp" useframes="1">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Message Bank Trace</Text>
+</Pane>
+
+<Pane name="Detail" type="CSPX.Enterprise.Portal.MsgTracePane">
+</Pane>
+
+<Pane name="Info" type="CSPX.Enterprise.Portal.MsgTraceFilterPane">
+	<Text>Enter search criteria (this allows you to view a different set of messages within this session):</Text>
+	<FormClass>CSPX.EnsMsgTraceFilterForm</FormClass>
+	<SubmitPage>EnsEntMsgTrace.csp</SubmitPage>
+	<SubmitTarget>_top</SubmitTarget>
+	<Align>left</Align>
+</Pane>
+
+</AutoPage>

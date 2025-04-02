@@ -1,0 +1,289 @@
+<AutoPageENS domain="Ensemble" parentpage="../UtilEnsEDIMain.csp" pagename="EDI Schemas" title="@Ensemble:X12ManagerSchemas@EDI Schemas">
+<html>
+<head>
+<script language=Cache runat=server>
+	Set tFamily=$G(%request.Data("FAMILY",1),"X12")
+</script>
+<title>#(tFamily)# Schemas</title>
+<link rel="stylesheet" type="text/css" href="/csp/sys/csputils.css" title="Standard Style" />
+<style>
+/* apply some uniformity to buttons */
+select, input {
+	width: 20.0em;
+}
+</style>
+<script language=Cache runat=server>
+	#Include EnsEDISEF
+	Set SubmitOperation=$G(%request.Data("SUBMIT_OPERATION",1))
+	Set:""=SubmitOperation SubmitOperation=$G(%session.Data("SUBMIT_OPERATION"))
+	Kill %session.Data("SUBMIT_OPERATION")
+	Set Filename="", (tSCImport,tSCExport)=$$$OK
+	If "Import"=SubmitOperation || ("ImportSEF"=SubmitOperation) {
+		Set Filename=$G(%request.Data("FILE",1))
+	
+		If ""=Filename||'##class(%File).Exists(Filename) {
+			Set tSCImport=$$$ERROR($$$EnsErrGeneral,"Unable to open file '"_Filename_"'")
+		}
+		If ""'=Filename&&$$$ISOK(tSCImport) {
+			If "ImportSEF"=SubmitOperation {
+	    	    Set tSCImport=##class(EnsLib.EDI.SEF.Compiler).Import(Filename,tFamily,.tCatImported)
+			}
+		}
+	} ElseIf "Export"=SubmitOperation {
+		Set OutFilename=$G(%request.Data("OUTFILE",1))
+		Set OutCategory=$G(%request.Data("CATEGORY",1))
+        Set:""'=(OutFilename_OutCategory) tSCExport=$System.OBJ.Export(OutCategory_".EDI",OutFilename,"-d")
+	} ElseIf "Remove"=SubmitOperation {
+		Set OutCategory=$G(%request.Data("CATEGORY",1))
+		Set tKilled=$D($$$vaSchemaGbl(OutCategory))
+		Kill:""'=OutCategory $$$vaSchemaGbl(OutCategory),$$$vaSchemaDescGbl(OutCategory)
+	}
+</script>
+
+<csp:IF CONDITION=($$$ISERR(tSCImport))>
+<script language="javascript">
+function onLoadBody()
+{
+	alert("Error importing from file '#($ZCVT(Filename,"O","JS"))#': #($ZCVT($$$StatusDisplayString(tSCImport),"O","JS"))#");
+}
+</script>
+<csp:ELSEIf CONDITION=($$$ISERR(tSCExport))>
+<script language="javascript">
+function onLoadBody()
+{
+	alert("Error exporting category '#($ZCVT(OutCategory,"O","JS"))#' to file '#($ZCVT(Filename,"O","JS"))#': #($ZCVT($$$StatusDisplayString(tSCExport),"O","JS"))#");
+}
+</script>
+<csp:ELSEIf CONDITION=(("Import"=SubmitOperation)&&(""'=Filename))>
+<script language="javascript">
+function onLoadBody()
+{
+	alert("Imported schema category #($ZCVT(tCatImported,"O","JS"))# from file '#($ZCVT(Filename,"O","JS"))#'");
+}
+</script>
+<csp:ELSEIf CONDITION=(("Export"=SubmitOperation)&&(""'=(OutFilename_OutCategory)))>
+<script language="javascript">
+function onLoadBody()
+{
+	alert("Exported schema category '#($ZCVT(OutCategory,"O","JS"))#' to file '#($ZCVT(OutFilename,"O","JS"))#'");
+}
+</script>
+<csp:ELSEIf CONDITION=(("Remove"=SubmitOperation)&&(""'=OutCategory)&&tKilled)>
+<script language="javascript">
+function onLoadBody()
+{
+	alert("Removed schema category '#($ZCVT(OutCategory,"O","JS"))#'");
+}
+</script>
+<csp:ELSE>
+<script language="javascript">
+function onLoadBody()
+{
+}
+</script>
+</csp:IF>
+
+<script language="javascript">
+
+function btnRemove()
+{
+	var form = self.document.theForm;
+	if (form.CATEGORY.value == '') {
+		alert("Please select a Category");
+		return false;
+	}
+	var a = (confirm('Remove Category '+form.CATEGORY.value+' ?'));
+	if (!a) {
+		return false;
+	}
+	form.FILE.value = "";
+	form.OUTFILE.value = "";
+	setSessionOperation("Remove");
+	//form.SUBMIT_OPERATION.value = "Remove";
+	form.submit();
+	return true;
+}
+
+function btnExport()
+{
+	var form = self.document.theForm;
+	if (form.CATEGORY.value == '') {
+		alert("Please select a Category");
+		return false;
+	}
+	if (form.OUTFILE.value == '') {
+		alert("Please specify a filename");
+		return false;
+	}
+	form.FILE.value = "";
+	setSessionOperation("Export");
+	//form.SUBMIT_OPERATION.value = "Export";
+	form.submit();
+	return true;
+}
+
+function getFileCat()
+{
+	var x = #server(EnsLib.EDI.SEF.SchemaXML.GetImportCategory(self.document.theForm.FILE.value))#;
+	return x; 
+}
+
+function getSEFFileCat()
+{
+	var x = #server(EnsLib.EDI.SEF.Compiler.GetImportCategory(self.document.theForm.FILE.value))#;
+	return x; 
+}
+
+function setSessionOperation(OperationName)
+{
+	var x = #server(..SetSessionSubmitOperation(OperationName))#
+	return x; 
+}
+
+</script>
+<script language=Cache runat=server>
+	#Include EnsEDISEF
+	Write "<script language=""javascript"">",!
+	&html<
+	function btnImport()
+	{>
+	Write "    var catList=new Array();",!
+	Set cat="" For { Set cat=$o($$$vaSchemaGbl(cat)) Quit:cat=""
+		Write "    catList['"_cat_"'] = 1;",!
+	}
+	&html<
+		var form = self.document.theForm;
+		if (form.FILE.value == '') {
+			alert("Please specify a filename");
+			return false;
+		}
+		var fileCat = getFileCat();
+		if ((fileCat != '') && (catList[fileCat] != null)) {
+			var a = (confirm('Overwrite Category '+fileCat+' by loading from file '+form.FILE.value+' ?'));
+			if (!a) {
+				return false;
+			}
+		}
+		form.CATEGORY.value = "";
+		setSessionOperation("Import");
+		//form.SUBMIT_OPERATION.value = "Import";
+		form.submit();
+		return true;
+	}
+	
+	function btnImportSEF()
+	{>
+	Write "    var catList=new Array();",!
+	Set cat="" For { Set cat=$o($$$vaSchemaGbl(cat)) Quit:cat=""
+		Write "    catList['"_cat_"'] = 1;",!
+	}
+	&html<
+		var form = self.document.theForm;
+		if (form.FILE.value == '') {
+			alert("Please specify a filename");
+			return false;
+		}
+		var fileCat = getSEFFileCat();
+		if ((fileCat != '') && (catList[fileCat] != null)) {
+			var a = (confirm('Overwrite Category '+fileCat+' by loading from SEF file '+form.FILE.value+' ?'));
+			if (!a) {
+				return false;
+			}
+		}
+		form.CATEGORY.value = "";
+		setSessionOperation("ImportSEF");
+		//form.SUBMIT_OPERATION.value = "ImportSEF";
+		form.submit();
+		return true;
+	}>
+	Write "<"_$C(47)_"script>",!
+</script>
+
+</head>
+<body onload="onLoadBody();">
+
+<div class="Text1">#(tFamily)# schema Categories / Implementation Guides and the<br>Transaction Set implementation Names they define are displayed below:</div>
+
+<table border=1 cellpadding=4 cellspacing=0 style="margin-left: 20px;"><tr>
+
+<tr><th>Category</th><th>Name</th><th>Base</th><th>Description</th></tr>
+
+<script language=Cache runat=server>
+	#Include EnsEDISEF
+	Set cat="" For { Set cat=$o($$$vaSchemaGbl(cat))  Quit:cat=""
+		If $P($$$vaSchemaGbl(cat),"|",5) = tFamily { // Only show schemas from the current family
+			Set sorted("="_cat)=""
+		}
+	}
+	Set sortcat="" For { Set sortcat=$o(sorted(sortcat)) Quit:sortcat=""
+		set cat=$e(sortcat,2,99999)
+		set catdesc=##class(EnsLib.EDI.SEF.Schema).GetDescription("IG:"_cat)
+		set base=$get($$$vaSchemaGbl(cat,"base")) Set:""=base base="&nbsp;"
+		&html<<tr>>
+		set rowdesc="",item="" For rows=0:1 { Set item=$O($$$vaSchemaGbl(cat,item))  Set:""=rowdesc rowdesc=##class(EnsLib.EDI.SEF.Schema).GetDescription("TS:"_cat_":"_item)  Quit:item="" } ; get rows count
+		set item=$o($$$vaSchemaGbl(cat,""))
+		set itemdesc=##class(EnsLib.EDI.SEF.Schema).GetDescription("TS:"_cat_":"_item)
+		Set desc=$S(itemdesc'=catdesc:catdesc, 1:"")_$S(""'=rowdesc||(""=catdesc):$S(""'=catdesc&&(itemdesc'=catdesc):"<br>",1:"")_" - "_itemdesc, 1:"")
+		&html<
+			<td#($S(rows:" rowspan="_rows,1:""))#>#(cat)#</td>
+			<td><a title='TS:#(cat)#:#(item)#' href='EnsLib.EDI.SEF.HTMLViewer.cls?DocType=#(cat)#:#(item)#'>#(item)#</a></td>
+			<td#($S(rows:" rowspan="_rows,1:""))#>#(base)#</td>
+			<td#($S('rowdesc:" rowspan="_rows,1:""))#>#(desc)#</td>>
+		For { Set item=$O($$$vaSchemaGbl(cat,item))  Quit:item=""
+			set:rowdesc itemdesc=" - "_##class(EnsLib.EDI.SEF.Schema).GetDescription("TS:"_cat_":"_item)
+			&html<</tr>>
+			&html<<tr>>
+			&html<<td><a title='TS:#(cat)#:#(item)#' href='EnsLib.EDI.SEF.HTMLViewer.cls?DocType=#(cat)#:#(item)#'>#(item)#</a></td>
+			<td>#($S(rowdesc:itemdesc,1:""))#</td>>
+		}
+		&html<</tr>>
+	}
+</script>
+
+</table>
+<form name="theForm" action="EDISchemaMain.csp" method=get>
+	<input type="hidden" name="SUBMIT_OPERATION" value="">
+	<input type="hidden" name="FAMILY" value="#(tFamily)#">
+	<table class="AutoForm" cellpadding=4><tr>
+		<td>
+		</td><td align=center>
+ 			<input type="button" name="BTN_Import" value="Import From SEF File" onclick="btnImportSEF();">&nbsp;
+		</td><td rowspan=2 align=center>
+ 			<input TYPE="file" NAME="FILE" VALUE="" SIZE="30">
+		</td>
+	</tr><tr>
+		<td>
+		</td><td align=center>
+ 			<input type="button" name="BTN_Import" value="Import From XML File" onclick="btnImport();">&nbsp;
+		</td>
+	</tr><tr>
+		<td rowspan=2>Choose Category<br><select name="CATEGORY">
+		<script language=Cache runat=server>
+			&html<<option value=""></option>>
+			Set sortcat="" For { Set sortcat=$o(sorted(sortcat)) Quit:sortcat=""
+				set cat=$e(sortcat,2,99999)
+				&html<<option value="#(cat)#">#(cat)#</option>>
+			}
+		</script>
+		</select></td>
+		<td align=center>
+			<input type="button" name="BTN_Export" value="Export To File" onclick="btnExport();">&nbsp;
+		</td><td>
+			<input TYPE="text" NAME="OUTFILE" VALUE="" SIZE="30">
+    	</td>
+	</tr><tr>
+		<td align=center>
+			<input type="button" name="BTN_Remove" value="Remove Category" onclick="btnRemove();">
+		</td><td>
+		</td>
+    </tr></table>	
+</form>
+
+</body>
+
+<SCRIPT LANGUAGE="Cache" METHOD="SetSessionSubmitOperation" RUNAT="server" ARGUMENTS="pOperationName">
+	Set %session.Data("SUBMIT_OPERATION")=pOperationName
+	Quit 1
+</SCRIPT>
+
+</html>

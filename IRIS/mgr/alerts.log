@@ -1,0 +1,4 @@
+03/26/25-11:13:15:091 (13348) 2 [Generic.Event] Failed to allocate 5146MB shared memory using large pages.  Switching to small pages.
+03/26/25-11:13:15:091 (13348) 2 [Generic.Event] Failed to allocate 5146MB shared memory: 4041MB global buffers, 404MB routine buffers
+03/26/25-11:13:15:092 (13348) 2 [Generic.Event] Failed to allocate 4554MB shared memory using large pages.  Switching to small pages.
+03/26/25-11:13:17:164 (27600) 2 [Utility.Event] LMF Error: No valid license key. No valid local file found and LicenseID not defined.

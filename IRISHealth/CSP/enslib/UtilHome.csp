@@ -1,0 +1,35 @@
+<!--
+Home page for CSP-based utilities.
+-->
+<AutoPage domain="Ensemble" pagename="Home">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>System Management Portal</Text>
+</Pane>
+
+<Pane name="Navigator" type="%CSP.Util.NavigatorPane">
+	<Commands>
+		<Action href="UtilHome.csp">
+			<Caption>Home</Caption>
+		</Action>
+
+		<Action href="UtilLogin.csp">
+			<Caption>Login</Caption>
+		</Action>
+
+		<Action href="UtilSysHome.csp">
+			<Caption>System Manager</Caption>
+		</Action>
+
+		<Action href="UtilSqlHome.csp">
+			<Caption>SQL Manager</Caption>
+		</Action>
+	</Commands>
+
+</Pane>
+
+<Pane name="Detail" type="%CSP.Util.Pane">
+	<Text>Welcome to the System Management Portal.</Text>
+</Pane>
+
+</AutoPage>

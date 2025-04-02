@@ -1,0 +1,3 @@
+To enable Hunspell dictionaries to be used for stemming in iKnow or iFind, create a subfolder named after the two-character language code (en, de, fr, nl, es, pt, ru, uk, ja, sv, ...) and copy the corresponding .dic and .aff files into it. Alternatively, if these files start with the language code, they can also be saved in this folder directly.
+
+Note: if there are multiple files corresponding to the naming pattern described above, the first one according to default file system order will be used. It is recommended to only have a single combination of .dic and .aff file satisfying these naming conventions per language.

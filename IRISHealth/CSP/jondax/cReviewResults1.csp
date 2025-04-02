@@ -1,0 +1,232 @@
+<html>
+<head>
+<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+	i $g(%session.Data("UserID"))="" s %response.Redirect="cLockDown.csp" q 1
+	q 1
+</script>
+
+<script language="cache" runat="server">
+	s r1="",id=$g(%session.Data("UserID")) &sql(SELECT IsAdmin INTO :r1 FROM "User" WHERE ID=:id)
+	i r1'=1 s %response.Redirect="cLockDown.csp"
+	d HEAD1^CSP999
+</script>
+</head>
+
+<body onload="jInitMe()" onunload="jUnloadMe()">
+<form name='F1' id='F1'>
+	<h3 style="font-color:black"><span>Review Results</span></h3>	
+	&nbsp;<span id="AlertText" Name="AlertText" class="alerttext"></span>
+	<table style="width: 100%; border:0px; font-size:8pt">
+		<tr>
+			<td style="width:40px"><img height="40" src="images/pdf.png" width="32" onclick="jPopOriginal()"></td>
+			<td>Report Date: <input name="RDate" id="RDate" type="text" size="15"></td>
+			<td>
+				Report Type: <select name="RType" id="RType">
+				<option selected="" value="Blood Test">Blood Test</option>
+				<option value="Clinical Notes">Clinical Notes</option>
+				<option value="Covid-19 Results">Covid-19 Results</option>
+				<option value="Urinalysis">Urinalysis</option>
+				<option value="Medication">Medication</option>
+				<option value="Radiology">Radiology</option>
+				<option value="Vaccine">Vaccine</option>
+				<option value="Other">Other</option>
+				<option value="Other Results">Other Results</option>
+				</select>
+			</td>
+			<td><input name="B1" id="B1" type="button" value=" Save " onclick="jSaveMe()"></td>
+			<td></td>
+		</tr>
+	</table>
+	<table name="Tab1" id="Tab1" style="width: 100%; font-size:8pt">
+		<tr style="font-weight:500">
+			<td style="width:20px">ID</td>
+			<td style="width:80px">Test Name</td>
+			<td style="width:5px;text-align:left;color:#999">XName&nbsp;&nbsp;</td>
+			<td style="width:80px">Result</td>
+			<td style="width:5px;text-align:left;color:#999">XResult&nbsp;&nbsp;</td>
+			<td style="width:80px">Unit</td>
+			<td style="width:5px;text-align:left;color:#999">XUnit&nbsp;&nbsp;</td>
+			<td style="width:80px">Lower Range</td>
+			<td style="width:5px;text-align:left;color:#999">XLower&nbsp;&nbsp;</td>
+			<td style="width:80px">Upper Range</td>
+			<td style="width:5px;text-align:left;color:#999">XUpper</td>
+			<td>&nbsp;</td>
+		</tr>
+		<script language="cache" runat="server">
+			f i=1:1:70 d
+			. w "<tr><td>&nbsp;</td>",!
+			. s ta="T"_i_"a",tb="T"_i_"b",tc="T"_i_"c",td="T"_i_"d",te="T"_i_"e"
+			. s tda="td"_i_"a",tdb="td"_i_"b",tdc="td"_i_"c",tdd="td"_i_"d",tde="td"_i_"e"
+			. w "<td> <input name='"_ta_"' id='"_ta_"' type='text' size='35' autocomplete='on' onfocusout='jValField(this.id,this.value)'></td>",!
+			. w "<td id='"_tda_"' style='color:#aaa'></td>",!
+			. w "<td> <input name='"_tb_"' id='"_tb_"' type='text' size='10' autocomplete='on'></td>",!
+			. w "<td id='"_tdb_"' style='color:#aaa'></td>",!
+			. w "<td> <input name='"_tc_"' id='"_tc_"' type='text' size='10' autocomplete='on' onfocusout='jValField(this.id,this.value)'></td>",!
+			. w "<td id='"_tdc_"' style='color:#aaa'></td>",!
+			. w "<td> <input name='"_td_"' id='"_td_"' type='text' size='10' autocomplete='on'></td>",!
+			. w "<td id='"_tdd_"' style='color:#aaa'></td>",!
+			. w "<td> <input name='"_te_"' id='"_te_"' type='text' size='10' autocomplete='on'></td>",!
+			. w "<td id='"_tde_"' style='color:#aaa'></td>",!
+			. w "<td>&nbsp;</td></tr>",! 
+		</script>
+
+
+	</table>
+	<br><input type="button" name="B2" id="B2" value=" Save " onclick="jSaveMe()">
+</form>
+</body>
+<script type="text/javascript">
+	RDate=document.F1.RDate,RType=document.F1.RType
+	B1=document.getElementById("B1"),B2=document.getElementById("B2")
+	
+	T1a=document.F1.T1a,T1b=document.F1.T1b,T1c=document.F1.T1c,T1d=document.F1.T1d,T1e=document.F1.T1e
+	T2a=document.F1.T2a,T2b=document.F1.T2b,T2c=document.F1.T2c,T2d=document.F1.T2d,T2e=document.F1.T2e
+	T3a=document.F1.T3a,T3b=document.F1.T3b,T3c=document.F1.T3c,T3d=document.F1.T3d,T3e=document.F1.T3e
+	T4a=document.F1.T4a,T4b=document.F1.T4b,T4c=document.F1.T4c,T4d=document.F1.T4d,T4e=document.F1.T4e
+	T5a=document.F1.T5a,T5b=document.F1.T5b,T5c=document.F1.T5c,T5d=document.F1.T5d,T5e=document.F1.T5e
+	T6a=document.F1.T6a,T6b=document.F1.T6b,T6c=document.F1.T6c,T6d=document.F1.T6d,T6e=document.F1.T6e
+	T7a=document.F1.T7a,T7b=document.F1.T7b,T7c=document.F1.T7c,T7d=document.F1.T7d,T7e=document.F1.T7e
+	T8a=document.F1.T8a,T8b=document.F1.T8b,T8c=document.F1.T8c,T8d=document.F1.T8d,T8e=document.F1.T8e
+	T9a=document.F1.T9a,T9b=document.F1.T9b,T9c=document.F1.T9c,T9d=document.F1.T9d,T9e=document.F1.T9e
+	T10a=document.F1.T10a,T10b=document.F1.T10b,T10c=document.F1.T10c,T10d=document.F1.T10d,T10e=document.F1.T10e
+
+	T11a=document.F1.T11a,T11b=document.F1.T11b,T11c=document.F1.T11c,T11d=document.F1.T11d,T11e=document.F1.T11e
+	T12a=document.F1.T12a,T12b=document.F1.T12b,T12c=document.F1.T12c,T12d=document.F1.T12d,T12e=document.F1.T12e
+	T13a=document.F1.T13a,T13b=document.F1.T13b,T13c=document.F1.T13c,T13d=document.F1.T13d,T13e=document.F1.T13e
+	T14a=document.F1.T14a,T14b=document.F1.T14b,T14c=document.F1.T14c,T14d=document.F1.T14d,T14e=document.F1.T14e
+	T15a=document.F1.T15a,T15b=document.F1.T15b,T15c=document.F1.T15c,T15d=document.F1.T15d,T15e=document.F1.T15e
+	T16a=document.F1.T16a,T16b=document.F1.T16b,T16c=document.F1.T16c,T16d=document.F1.T16d,T16e=document.F1.T16e
+	T17a=document.F1.T17a,T17b=document.F1.T17b,T17c=document.F1.T17c,T17d=document.F1.T17d,T17e=document.F1.T17e
+	T18a=document.F1.T18a,T18b=document.F1.T18b,T18c=document.F1.T18c,T18d=document.F1.T18d,T18e=document.F1.T18e
+	T19a=document.F1.T19a,T19b=document.F1.T19b,T19c=document.F1.T19c,T19d=document.F1.T19d,T19e=document.F1.T19e
+	T20a=document.F1.T20a,T20b=document.F1.T20b,T20c=document.F1.T20c,T20d=document.F1.T20d,T20e=document.F1.T20e
+
+	T21a=document.F1.T21a,T21b=document.F1.T21b,T21c=document.F1.T21c,T21d=document.F1.T21d,T21e=document.F1.T21e
+	T22a=document.F1.T22a,T22b=document.F1.T22b,T22c=document.F1.T22c,T22d=document.F1.T22d,T22e=document.F1.T22e
+	T23a=document.F1.T23a,T23b=document.F1.T23b,T23c=document.F1.T23c,T23d=document.F1.T23d,T23e=document.F1.T23e
+	T24a=document.F1.T24a,T24b=document.F1.T24b,T24c=document.F1.T24c,T24d=document.F1.T24d,T24e=document.F1.T24e
+	T25a=document.F1.T25a,T25b=document.F1.T25b,T25c=document.F1.T25c,T25d=document.F1.T25d,T25e=document.F1.T25e
+	T26a=document.F1.T26a,T26b=document.F1.T26b,T26c=document.F1.T26c,T26d=document.F1.T26d,T26e=document.F1.T26e
+	T27a=document.F1.T27a,T27b=document.F1.T27b,T27c=document.F1.T27c,T27d=document.F1.T27d,T27e=document.F1.T27e
+	T28a=document.F1.T28a,T28b=document.F1.T28b,T28c=document.F1.T28c,T28d=document.F1.T28d,T28e=document.F1.T28e
+	T29a=document.F1.T29a,T29b=document.F1.T29b,T29c=document.F1.T29c,T29d=document.F1.T29d,T29e=document.F1.T29e
+	T30a=document.F1.T30a,T30b=document.F1.T30b,T30c=document.F1.T30c,T30d=document.F1.T30d,T30e=document.F1.T30e
+
+	T31a=document.F1.T31a,T31b=document.F1.T31b,T31c=document.F1.T31c,T31d=document.F1.T31d,T31e=document.F1.T31e
+	T32a=document.F1.T32a,T32b=document.F1.T32b,T32c=document.F1.T32c,T32d=document.F1.T32d,T32e=document.F1.T32e
+	T33a=document.F1.T33a,T33b=document.F1.T33b,T33c=document.F1.T33c,T33d=document.F1.T33d,T33e=document.F1.T33e
+	T34a=document.F1.T34a,T34b=document.F1.T34b,T34c=document.F1.T34c,T34d=document.F1.T34d,T34e=document.F1.T34e
+	T35a=document.F1.T35a,T35b=document.F1.T35b,T35c=document.F1.T35c,T35d=document.F1.T35d,T35e=document.F1.T35e
+	T36a=document.F1.T36a,T36b=document.F1.T36b,T36c=document.F1.T36c,T36d=document.F1.T36d,T36e=document.F1.T36e
+	T37a=document.F1.T37a,T37b=document.F1.T37b,T37c=document.F1.T37c,T37d=document.F1.T37d,T37e=document.F1.T37e
+	T38a=document.F1.T38a,T38b=document.F1.T38b,T38c=document.F1.T38c,T38d=document.F1.T38d,T38e=document.F1.T38e
+	T39a=document.F1.T39a,T39b=document.F1.T39b,T39c=document.F1.T39c,T39d=document.F1.T39d,T39e=document.F1.T39e
+	T40a=document.F1.T40a,T40b=document.F1.T30b,T40c=document.F1.T40c,T40d=document.F1.T40d,T40e=document.F1.T40e
+
+	T41a=document.F1.T41a,T41b=document.F1.T41b,T41c=document.F1.T41c,T41d=document.F1.T41d,T41e=document.F1.T41e
+	T42a=document.F1.T42a,T42b=document.F1.T42b,T42c=document.F1.T42c,T42d=document.F1.T42d,T42e=document.F1.T42e
+	T43a=document.F1.T43a,T43b=document.F1.T43b,T44c=document.F1.T43c,T43d=document.F1.T43d,T43e=document.F1.T43e
+	T44a=document.F1.T44a,T44b=document.F1.T44b,T44c=document.F1.T44c,T44d=document.F1.T44d,T44e=document.F1.T44e
+	T45a=document.F1.T45a,T45b=document.F1.T45b,T45c=document.F1.T45c,T45d=document.F1.T45d,T45e=document.F1.T45e
+	T46a=document.F1.T46a,T46b=document.F1.T46b,T46c=document.F1.T46c,T46d=document.F1.T46d,T46e=document.F1.T46e
+	T47a=document.F1.T47a,T47b=document.F1.T47b,T47c=document.F1.T47c,T47d=document.F1.T47d,T47e=document.F1.T47e
+	T48a=document.F1.T48a,T48b=document.F1.T48b,T48c=document.F1.T48c,T48d=document.F1.T48d,T48e=document.F1.T48e
+	T49a=document.F1.T49a,T49b=document.F1.T49b,T49c=document.F1.T49c,T49d=document.F1.T49d,T49e=document.F1.T49e
+	T50a=document.F1.T50a,T50b=document.F1.T50b,T50c=document.F1.T50c,T50d=document.F1.T50d,T50e=document.F1.T50e
+
+	T51a=document.F1.T51a,T51b=document.F1.T51b,T51c=document.F1.T51c,T51d=document.F1.T51d,T51e=document.F1.T51e
+	T52a=document.F1.T52a,T52b=document.F1.T52b,T52c=document.F1.T52c,T52d=document.F1.T52d,T52e=document.F1.T52e
+	T53a=document.F1.T53a,T53b=document.F1.T53b,T53c=document.F1.T53c,T53d=document.F1.T53d,T53e=document.F1.T53e
+	T54a=document.F1.T54a,T54b=document.F1.T54b,T54c=document.F1.T54c,T54d=document.F1.T54d,T54e=document.F1.T54e
+	T55a=document.F1.T55a,T55b=document.F1.T55b,T55c=document.F1.T55c,T55d=document.F1.T55d,T55e=document.F1.T55e
+	T56a=document.F1.T56a,T56b=document.F1.T56b,T56c=document.F1.T56c,T56d=document.F1.T56d,T56e=document.F1.T56e
+	T57a=document.F1.T57a,T57b=document.F1.T57b,T57c=document.F1.T57c,T57d=document.F1.T57d,T57e=document.F1.T57e
+	T58a=document.F1.T58a,T58b=document.F1.T58b,T58c=document.F1.T58c,T58d=document.F1.T58d,T58e=document.F1.T58e
+	T59a=document.F1.T59a,T59b=document.F1.T59b,T59c=document.F1.T59c,T59d=document.F1.T59d,T59e=document.F1.T59e
+	T60a=document.F1.T60a,T60b=document.F1.T60b,T60c=document.F1.T60c,T60d=document.F1.T60d,T60e=document.F1.T60e
+
+	T61a=document.F1.T61a,T61b=document.F1.T61b,T61c=document.F1.T61c,T61d=document.F1.T61d,T61e=document.F1.T61e
+	T62a=document.F1.T62a,T62b=document.F1.T62b,T62c=document.F1.T62c,T62d=document.F1.T62d,T62e=document.F1.T62e
+	T63a=document.F1.T63a,T63b=document.F1.T63b,T63c=document.F1.T63c,T63d=document.F1.T63d,T63e=document.F1.T63e
+	T64a=document.F1.T64a,T64b=document.F1.T64b,T64c=document.F1.T64c,T64d=document.F1.T64d,T64e=document.F1.T64e
+	T66a=document.F1.T66a,T66b=document.F1.T66b,T66c=document.F1.T66c,T66d=document.F1.T66d,T66e=document.F1.T66e
+	T66a=document.F1.T66a,T66b=document.F1.T66b,T66c=document.F1.T66c,T66d=document.F1.T66d,T66e=document.F1.T66e
+	T67a=document.F1.T67a,T67b=document.F1.T67b,T67c=document.F1.T67c,T67d=document.F1.T67d,T67e=document.F1.T67e
+	T68a=document.F1.T68a,T68b=document.F1.T68b,T68c=document.F1.T68c,T68d=document.F1.T68d,T68e=document.F1.T68e
+	T69a=document.F1.T69a,T69b=document.F1.T69b,T69c=document.F1.T69c,T69d=document.F1.T69d,T69e=document.F1.T69e
+	T70a=document.F1.T70a,T70b=document.F1.T70b,T70c=document.F1.T70c,T70d=document.F1.T70d,T70e=document.F1.T70e
+		
+function jInitMe(){
+	// set lock
+	#server(..cInitMe())#
+}	
+		
+function jValField(fld,val){
+	// not ready to deploy at this time
+	//if (confirm('Do you want to update the SI Unit, Result and Ranges?')==true){
+	//	#server(..cValField(fld,val,))#
+	//}
+}
+
+function jUnloadMe(){
+	// unset lock
+	#server(..cUnloadMe())#
+}	
+
+function jPopOriginal(){
+	#server(..cPopOriginal())#
+}
+
+function jMoveToFailure(){
+	if (confirm("There has been an error converting to HL7- Pls inform the DEVELOPER TEAM")==true){
+		#server(..cMoveToFailure())#
+	}
+}
+
+function jSaveMe(){
+	if (confirm("Are you sure you want to save?") == true) {
+         
+     } else {
+         return false;
+     }
+     
+	#server(..cSaveMeHeader(RDate.value,RType.value))#
+	#server(..cSaveMe(0,T1a.value,T1b.value,T1c.value,T1d.value,T1e.value,T2a.value,T2b.value,T2c.value,T2d.value,T2e.value,T3a.value,T3b.value,T3c.value,T3d.value,T3e.value,T4a.value,T4b.value,T4c.value,T4d.value,T4e.value,T5a.value,T5b.value,T5c.value,T5d.value,T5e.value,T6a.value,T6b.value,T6c.value,T6d.value,T6e.value,T7a.value,T7b.value,T7c.value,T7d.value,T7e.value,T8a.value,T8b.value,T8c.value,T8d.value,T8e.value,T9a.value,T9b.value,T9c.value,T9d.value,T9e.value,T10a.value,T10b.value,T10c.value,T10d.value,T10e.value))#
+	#server(..cSaveMe(1,T11a.value,T11b.value,T11c.value,T11d.value,T11e.value,T12a.value,T12b.value,T12c.value,T12d.value,T12e.value,T13a.value,T13b.value,T13c.value,T13d.value,T13e.value,T14a.value,T14b.value,T14c.value,T14d.value,T14e.value,T15a.value,T15b.value,T15c.value,T15d.value,T15e.value,T16a.value,T16b.value,T16c.value,T16d.value,T16e.value,T17a.value,T17b.value,T17c.value,T17d.value,T17e.value,T18a.value,T18b.value,T18c.value,T18d.value,T18e.value,T19a.value,T19b.value,T19c.value,T19d.value,T19e.value,T20a.value,T20b.value,T20c.value,T20d.value,T20e.value))#
+	#server(..cSaveMe(2,T21a.value,T21b.value,T21c.value,T21d.value,T21e.value,T22a.value,T22b.value,T22c.value,T22d.value,T22e.value,T23a.value,T23b.value,T23c.value,T23d.value,T23e.value,T24a.value,T24b.value,T24c.value,T24d.value,T24e.value,T25a.value,T25b.value,T25c.value,T25d.value,T25e.value,T26a.value,T26b.value,T26c.value,T26d.value,T26e.value,T27a.value,T27b.value,T27c.value,T27d.value,T27e.value,T28a.value,T28b.value,T28c.value,T28d.value,T28e.value,T29a.value,T29b.value,T29c.value,T29d.value,T29e.value,T30a.value,T30b.value,T30c.value,T30d.value,T30e.value))#
+	#server(..cSaveMe(3,T31a.value,T31b.value,T31c.value,T31d.value,T31e.value,T32a.value,T32b.value,T32c.value,T32d.value,T32e.value,T33a.value,T33b.value,T33c.value,T33d.value,T33e.value,T34a.value,T34b.value,T34c.value,T34d.value,T34e.value,T35a.value,T35b.value,T35c.value,T35d.value,T35e.value,T36a.value,T36b.value,T36c.value,T36d.value,T36e.value,T37a.value,T37b.value,T37c.value,T37d.value,T37e.value,T38a.value,T38b.value,T38c.value,T38d.value,T38e.value,T39a.value,T39b.value,T39c.value,T39d.value,T39e.value,T40a.value,T40b.value,T40c.value,T40d.value,T40e.value))#
+	#server(..cSaveMe(4,T41a.value,T41b.value,T41c.value,T41d.value,T41e.value,T42a.value,T42b.value,T42c.value,T42d.value,T42e.value,T43a.value,T43b.value,T43c.value,T43d.value,T43e.value,T44a.value,T44b.value,T44c.value,T44d.value,T44e.value,T45a.value,T45b.value,T45c.value,T45d.value,T45e.value,T46a.value,T46b.value,T46c.value,T46d.value,T46e.value,T47a.value,T47b.value,T47c.value,T47d.value,T47e.value,T48a.value,T48b.value,T48c.value,T48d.value,T48e.value,T49a.value,T49b.value,T49c.value,T49d.value,T49e.value,T50a.value,T50b.value,T50c.value,T50d.value,T50e.value))#
+	#server(..cSaveMe(5,T51a.value,T51b.value,T51c.value,T51d.value,T51e.value,T52a.value,T52b.value,T52c.value,T52d.value,T52e.value,T53a.value,T53b.value,T53c.value,T53d.value,T53e.value,T54a.value,T54b.value,T54c.value,T54d.value,T54e.value,T55a.value,T55b.value,T55c.value,T55d.value,T55e.value,T56a.value,T56b.value,T56c.value,T56d.value,T56e.value,T57a.value,T57b.value,T57c.value,T57d.value,T57e.value,T58a.value,T58b.value,T58c.value,T58d.value,T58e.value,T59a.value,T59b.value,T59c.value,T59d.value,T59e.value,T60a.value,T60b.value,T60c.value,T60d.value,T60e.value))#
+	#server(..cSaveMe(6,T61a.value,T61b.value,T61c.value,T61d.value,T61e.value,T62a.value,T62b.value,T62c.value,T62d.value,T62e.value,T63a.value,T63b.value,T63c.value,T63d.value,T63e.value,T64a.value,T64b.value,T64c.value,T64d.value,T64e.value,T66a.value,T66b.value,T66c.value,T66d.value,T66e.value,T67a.value,T67b.value,T67c.value,T67d.value,T67e.value,T67a.value,T67b.value,T67c.value,T67d.value,T67e.value,T68a.value,T68b.value,T68c.value,T68d.value,T68e.value,T69a.value,T69b.value,T69c.value,T69d.value,T69e.value,T70a.value,T70b.value,T70c.value,T70d.value,T70e.value))#
+}
+
+</script>
+
+<script language="cache" method="cInitMe">
+	d InitMe^cReviewResults1
+</script>
+
+<script language="cache" method="cValField" arguments="d1,d2:%String">
+	d ValField^cReviewResults1
+</script>
+
+<script language="cache" method="cUnloadMe">
+	d UnloadMe^cReviewResults1
+</script>
+
+<script language="cache" method="cPopOriginal">
+	d PopOriginal^cReviewResults1
+</script>
+
+<script language="cache" method="cMoveToFailure">
+	d MoveToFailure^cReviewResults1
+</script>
+
+<script language="cache" method="cSaveMeHeader" arguments="h1,h2:%String">
+	d SaveMeHeader^cReviewResults1
+</script>
+
+<script language="cache" method="cSaveMe" arguments="ekey,d1a,d1b,d1c,d1d,d1e,d2a,d2b,d2c,d2d,d2e,d3a,d3b,d3c,d3d,d3e,d4a,d4b,d4c,d4d,d4e,d5a,d5b,d5c,d5d,d5e,d6a,d6b,d6c,d6d,d6e,d7a,d7b,d7c,d7d,d7e,d8a,d8b,d8c,d8d,d8e,d9a,d9b,d9c,d9d,d9e,d10a,d10b,d10c,d10d,d10e:%String">
+	d SaveMe^cReviewResults1
+</script>
+</html>

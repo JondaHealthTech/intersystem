@@ -1,0 +1,142 @@
+body{
+    font-family:Montserrat;
+}
+
+.lab-upload {
+    padding:1.rem 1rem;
+    text-align: center;
+    background: white;
+    border-radius: 20px;
+}
+.lab-upload h4 {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 2vw;
+    position: relative;
+    color: black;
+    margin: 2% 0 3% 0;
+}
+
+.report-table{
+    max-height: 70%;
+    overflow-y: auto;
+    position: relative;
+    z-index: 10;
+    width: -webkit-fill-available;
+    margin: 1% 1% 0 6%;
+}
+.table-border{
+    position: absolute;
+    width: calc(100% - 5vw + 4px);
+    border: none;
+    z-index: 0;
+}
+tr{
+    height: 3.3vw;
+}
+td{
+     padding: 4px !important;
+}
+td:first-child{
+    width: 37px;
+    padding-right: 4px !important;
+}
+
+img.file-icon{
+    width:35px;
+    height:35px;
+}
+.report-table .fileName{
+    color:#000000;
+    font-size:16px;
+    font-weight:400;
+}
+span.status.success {
+   color:#2AC695;
+   font-size:14px;
+}
+span.status.fail{
+    color:#E63876;
+    font-size:14px;
+}
+span#success{
+    color:#2AC695;
+}
+span#fail{
+    color:#E63876;
+}
+
+
+/* width */
+.report-table::-webkit-scrollbar {
+    width: 1.2vw;
+}
+/* Track */
+.report-table::-webkit-scrollbar-track{
+    background: #d9d9d9;
+    border-radius: 20px;
+}
+
+/* Handle */
+.report-table::-webkit-scrollbar-thumb {
+    background: #405470;
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+.report-table::-webkit-scrollbar-thumb:hover {
+    background: #384A62;
+}
+.blue-btn{
+    padding:0.5vw 1vw;
+    color:white;
+    width:200px;
+    height:40px;
+    font-size:18px;
+    background: #405470;
+    border-radius: 15px;
+    border: none;
+    margin-top: 5px;
+}
+
+modal-open .modal {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+}
+.modal .modal-dialog {
+    margin: 0 auto;
+    width: 85%;
+}
+.modal .modal-dialog .modal-content {
+    border-radius: 25px;
+}
+.modal-body {
+    padding: 3rem 0 !important;
+    border: none;
+    height: 50px;
+    overflow: hidden;
+    text-align: center;
+}
+.modal-body h2 {
+    padding: 0 6vw;
+    font-weight: 400;
+    line-height: 3.4375rem;
+    color: #405470;
+    text-align: left;
+}
+.modal-body h3 {
+    padding: 0 6vw;
+    font-weight: 700;
+    line-height: 3.4375rem;
+    color: #405470;
+    text-align: left;
+}
+.modal-img {
+    width: 100%;
+    margin-top: 2.8125rem;
+}
+.inactive {
+    display: none !important;
+}

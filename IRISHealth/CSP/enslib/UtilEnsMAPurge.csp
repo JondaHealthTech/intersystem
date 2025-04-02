@@ -1,0 +1,32 @@
+<!--
+Purge page for Maintenance utilities.
+-->
+
+<AutoPage domain="Ensemble" pagename="Purge" parentpage="UtilEnsMA.csp">
+
+<Pane name="Title" type="%CSP.Util.TitlePane">
+	<Text>Purge Management Data</Text>
+</Pane>
+
+<Pane name="Navigator" extends="UtilEnsMA.csp" />
+
+<Pane name="Detail" type="CSPX.EnsPurgePane">
+	<Text>Fill out the form and press the button to start purge:</Text>
+	<FormClass>CSPX.EnsMAPurgeForm</FormClass>
+	<Commands>
+		<Action href="UtilEnsLog.csp">
+			<Caption>Show Event Log</Caption>
+		</Action>
+		<Action href="UtilEnsMessages.csp">
+			<Caption>Show Messages</Caption>
+		</Action>
+		<Action href="UtilEnsBPList.csp?$ID1=Ens.BusinessProcess">
+			<Caption>Show Business Processes</Caption>
+		</Action>
+		<Action href="UtilEnsRuleLog.csp">
+			<Caption>Show Business Rule Log</Caption>
+		</Action>
+	</Commands>
+</Pane>
+
+</AutoPage>
