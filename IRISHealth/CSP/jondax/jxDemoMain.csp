@@ -1,0 +1,68 @@
+<html lang="en">
+    <head>
+	<script language="cache" method="OnPreHTTP" arguments="" returntype="%Boolean">
+		i $g(%session.Data("UserID"))="" s %response.Redirect="jxLockDown.csp" q 1
+		q 1
+	</script>
+	<script language="cache" runat="server">
+		s id=$g(%session.Data("UserID"))
+		d HEAD1^WSP999
+	</script>
+		<link rel="stylesheet" href="assets/styles/jxDemoMain.css">
+        
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="bg-wrapper">
+                <div class="bg3">
+                    <img src="./assets/images/bg3.png">
+                </div>
+            </div>
+            <div class="content">
+                <div class="main-field">
+                    <img class="logo mobile-active" src="./assets/images/Jonda X Logo White Pink.png" alt="Jonda Health">
+                    <h1>Transform your laboratory data</h1>
+                    <h2>Drag and drop your file below</h2>
+                    <iframe src="" name="iFrame1" id="iFrame1" style="" scrolling="no" onload="">
+					<!-- jxDemoFileUpload-->
+                 	</iframe>
+                </div>
+                    <div class="hr-group">
+                        <hr>
+                        <p class="num"></p>
+                    </div>
+            </div>
+        </div>
+           
+        <script>
+            var resizefunc = [];
+        </script>
+        <!-- jQuery  -->
+		<script language="cache" runat="server">
+			d jQueryCore^WSP999
+		</script>
+    </body>
+    <script type="text/javascript">
+        window.onload = jInit();
+    	iFrame1=document.getElementById("iFrame1");
+		window.onload = parent.resetTimer;
+  		document.onmousemove = parent.resetTimer;
+  		document.onmousedown = parent.resetTimer; // touchscreen presses
+  		document.ontouchstart = parent.resetTimer;
+  		//document.onclick = parent.resetTimer; // touchpad clicks
+  		document.onkeypress = parent.resetTimer;
+  		document.addEventListener('scroll', parent.resetTimer, true);
+  		
+        
+        function jInit() {
+			parent.resetTimer();
+			document.getElementById("iFrame1").src="jxDemoFileUpload.csp";
+			//document.getElementById("iFrame1").src="jxDemoPrgress.csp";
+		}
+    </script>
+    <script language="cache" method="cLockDown">
+		k %session.Data
+		&js<window.open("cLockDown.csp","_parent")>
+	</script>
+             
+</html>

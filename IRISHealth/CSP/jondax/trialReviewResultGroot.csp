@@ -1948,8 +1948,10 @@
 </script>
 
 <script language="cache" method="cErrorReport" arguments="rid,d1,d2,d3:%String">
+	;d FileStatusChange^cReviewResultGroot(d1,"In-Process",d3)
+	d FileStatusChange^trialReviewResult(d1,"In-Process",d3)
 	s status= $$GenerateErrorReportByRid^trialErrorReport(rid)
-   	d FileStatusChange^trialReviewResult(d1,"In-Process",d3)
+   	
 	i (status '= 0){
 		
 		&sql(SELECT Profile->CompanyName,Profile->Setting, BucketName, OrgFile 

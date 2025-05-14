@@ -49,7 +49,7 @@
     					<script language="cache" runat="server">
 	                   		s uid=%session.Data("UserID"),setting=""
 	                   		&sql(SELECT Setting INTO :setting FROM MX."User" WHERE ID=:uid)
-	                   		i (setting'=5),(setting'=6),(setting'=15) d
+	                   		i (setting'=5),(setting'=6) ,(setting'=15) d  //15 is for nan@jonda.mm
 	    					. w "<div class='nav-item upload' onclick='jPopMain(""jxS3Upload.csp"")'>",!
 	    					. w "	<img src='./assets/images/trial/smallUpload.png' alt='Data Transform'>",!
 	    					. w "	<img class='dark' src='./assets/images/trial/uploadF.png' alt='Buckets'>",!
@@ -116,8 +116,8 @@
     					<script language="cache" runat="server">
 	                   		s uid=%session.Data("UserID"),setting=""
 	                   		&sql(SELECT Setting INTO :setting FROM MX."User" WHERE ID=:uid)
-	                   		i (setting'=5),(setting'=6) d
-	                   		.;w "-->",!
+	                   		i (setting'=5),(setting'=6),(setting'=15) d
+	                   		.w "-->",!
 	                   	</script>	
     					<a class='nav-item' href='mailto:support@jonda.health'>
     						<img src='./assets/images/sNavSupport.png' alt='Support'>
@@ -157,7 +157,7 @@
             <a type="button" class="green-btn" href="mailto:partnerships@jonda.health?subject=Pricing for JondaX">Review Packages</a>
         </div>
     </div>
-    <script>
+    <script type="text/javascript">
         var resizefunc = [];
     </script>
     <!-- jQuery  -->
@@ -172,9 +172,8 @@
 </script>
 
 <script type="text/javascript">
-iFrame1=document.getElementById("iFrame1")
 let mySessionEnd;	
-iFrame1=document.getElementById("iFrame1");
+iFrame1=document.getElementById("iFrame1")
 
 window.onload = jInitMe;
 document.onmousemove = resetTimer;

@@ -1,5 +1,5 @@
 IRIS for Windows^MAC^routine output by %apiRTN^^~Format=IRIS.S~^UTF8
-%RO on 11 Apr 2025 08:43:44AM
+%RO on 14 May 2025 06:07:57AM
 AMI^MAC^^67152,16277.0901984^0
 AMI	; Artificial Machine Intelligence for Blood Results ;call from 	cShowResults.mac
 	q	; disable for now
@@ -2562,7 +2562,7 @@ A
 	
 		
 
-WSP999^MAC^^67306,25309.6582074^0
+WSP999^MAC^^67332,20963.40824^0
 WSP999	; Web-app System Routines
 INIT	
 	s Q=$c(1)
@@ -2753,6 +2753,14 @@ GetSIName(testname)	; Get SI Name for a DiagnosticTest
 	*/
 	
 	q x
+GetSINameType(testname,category)	; Get SI Name for a DiagnosticTest
+	n x
+	s x=""
+	&sql(SELECT SIName INTO :x FROM DiagnosticTest WHERE SIName=:testname AND LOWER(Type->ResultType)=LOWER(:category) AND IsNull(DeletedDate,'')='' AND IsNull(ApprovedDate,'')<>'' AND ModifiedDate<=ApprovedDate)
+	i x'="" q x
+	&sql(SELECT SIName INTO :x FROM DiagnosticTest WHERE Name=:testname AND LOWER(Type->ResultType)=LOWER(:category) AND IsNull(DeletedDate,'')='' AND IsNull(ApprovedDate,'')<>'' AND ModifiedDate<=ApprovedDate)
+	i x'=""  q x
+	q x	
 GetSIUnit(testname)	; Get SIUnit for a DiagnosticTest
 	n x
 	s x=""
@@ -9078,7 +9086,7 @@ Logout1 ;not used
 	q
 		
 
-cMain^MAC^^67282,37321.6153915^0
+cMain^MAC^^67338,30245.3581973^0
 cMain
 InitMe
 	#import MX
@@ -9095,6 +9103,10 @@ InitMe
 	
 	; Set profile image source and welcome message using JavaScript injection
 	&js<document.getElementsByClassName("profile")[0].src='#(companyLogo)#',document.getElementById("userid").innerHTML="Welcome #(r1)#">
+	
+	// Landing page after Login 
+	if d1=56 &js<iFrame1.src="jxDemoMain.csp">
+	e  &js<iFrame1.src="jxDashboard.csp">
 	q
 	
 Logout ;not used logout^cLogin
@@ -9211,7 +9223,97 @@ jScript2
 	q
 LoadSideMenu
 .
+	q	
+LoadMenu
+	s uid=%session.Data("UserID")
+	i (uid=56) d
+   		.w "<div class='nav-items active' style='overflow: auto;'>",!
+		.w "<div class='nav-item' onclick='jPopMain(""jxDemoMain.csp"")'>",!
+		.w "<img src='./assets/images/Testing_Inactive_small.png' alt='Demo'>",!
+		.w "<img class='dark' src='./assets/images/Testing_Active_small.png' alt='Demo'>",!
+		.w "<p>Demo</p>",!
+		.w "</div>",!
+		.w "<div class='nav-item' onclick='jPopMain(""cChangePassword.csp"")'>",!
+		.w "<img src='./assets/images/sNavSettings.png' alt='Change Password'>",!
+		.w "<img class='dark' src='./assets/images/sNavSettings_dark.png' alt='Change Password'>",!
+		.w "<p>Change Password</p>",!
+		.w "</div>",!
+		.w "</div>",!
+   		.w "<!--",!
+	
 	q
+MenuEnd
+	s uid=%session.Data("UserID")
+	i (uid=56) d
+		.w "--> </div>",!
+	q
+	
+ /*
+ <!--
+					
+					<div class="nav-item collapse admin" >
+						<div class="nav-admin-item" onclick="toggleAdmin(event)">
+							<img class="dark" src="./assets/images/sNavAdmin_dark.png" alt="Admin">
+							<img src="./assets/images/sNavAdmin.png" alt="Admin">
+							<div class="nav-admin">
+								<div class="nav-admin-btn" onclick="">
+									<p>Admin Settings</p>
+									<img src="./assets/images/dropDownGrey.png" alt="DropDown">
+									<img class="dark" src="./assets/images/dropDownBlack.png" alt="DropDown">
+									<img class="close-dark" src="./assets/images/dropDownCloseBlack.png" alt="DropDown">
+								</div>
+							</div>
+						</div>
+						<div class="nav-admin">
+								<div class="nav-admin-btn" onclick='window.open(""DemoDePii.csp"",""_self"")'>
+									<p>Redaction</p>
+									<img src="./assets/images/dropDownGrey.png" alt="DropDown">
+									<img class="dark" src="./assets/images/dropDownBlack.png" alt="DropDown">
+									<img class="close-dark" src="./assets/images/dropDownCloseBlack.png" alt="DropDown">
+								</div>
+							</div>
+						<div class="nav-admin-field" onclick="jPopMain('cClientTemplate1.csp')">Client Templates</div>
+						<div class="nav-admin-field" onclick="jPopMain('cErrorCode.csp')">Error Codes</div>
+						<div class="nav-admin-field" onclick="jPopMain('cUser.csp')">User Details</div>
+						<div class="nav-admin-field" onclick="jPopMain('cMenu.csp')">Menus</div>
+						<div class="nav-admin-field" onclick="window.open('cDiagnosticTestApproval.csp','_blank')">Diagnostic Test Approval<span id="DiagnosticTestApprovalCircle" class="circle">2</span></div>
+						<div class="nav-admin-field" onclick="jResetBiolytica()">Reset Biolytica's Subscription</div>
+					</div>
+					<div class="nav-item" onclick="jPopMain('cReviewResults.csp')">
+						<img src="./assets/images/sNavDT.png" alt="System Settings">
+						<img class="dark" src="./assets/images/sNavDT_dark.png" alt="Review Results">
+						<p>Review Results(Old system)</p>
+					</div>
+					
+					
+					<div class='nav-item collapse testing'>
+						<div class='nav-testing-item' onclick='toggleTesting(event)'>
+							<img class='dark' src='./assets/images/Testing_Active_small.png' alt='Testing'>
+							<img src='./assets/images/Testing_Inactive_small.png' alt='Testing'>
+							<div class='nav-testing'>
+								<div class='nav-testing-btn' onclick=''>
+									<p>Testing</p>
+									<img src='./assets/images/dropDownGrey.png' alt='DropDown'>
+									<img class='dark' src='./assets/images/dropDownBlack.png' alt='DropDown'>
+								</div>
+							</div>
+						</div>
+							<div class="nav-testing-field" onclick="jPopMain('DemoDePii.csp')">
+								Redaction
+							</div>
+							<div class="nav-testing-field" onclick="jPopMain('jxAltFileUpload.csp')">
+								Groot
+								</div>
+							<div class="nav-testing-field" onclick="jPopMain('jxAltFileUpload1.csp')">
+								Groot v1.1
+							</div>
+							<div class="nav-testing-field" onclick="jPopMain('jxAltFileUploadIND.csp')">
+								Groot v1.1 IND
+							</div>
+						
+					</div>
+					-->
+	*/		
 
 cReviewRedact^MAC^^67242,18778.6738774^0
 cReviewRedact	; For reviewer preview	; called from cReviewResultGroot.mac and trialReviewResult.mac
@@ -15198,7 +15300,7 @@ SkipTestType
 	}
 	q
 
-jxAltConvertResultTable^MAC^^67087,22028.8222011^0
+jxAltConvertResultTable^MAC^^67320,26581.4378951^0
 jxAltConvertResultTable
 InitMe
 	#import MX
@@ -15652,6 +15754,7 @@ DoNotShow
 	q	
 .
 SaveResult 
+	
 .
 	if r0'="" d
 	.s dft=$$checkDate^utilAWS(r0)
@@ -15663,6 +15766,9 @@ SaveResult
 		FROM ResultBloodTest1
 		WHERE TmpName=:tmpName)
 	&sql(UPDATE MX.ResultBloodTest1 SET ReportDate=:reportDate WHERE ID=:rID)
+	&sql(SELECT COUNT(ID) INTO :objCount FROM ResultBloodTest1_Tests WHERE ResultBloodTest1=:rID)
+	s objxcount = +objCount
+	s objxcount=objxcount+1
 	s objx=##class(ResultBloodTest1).%OpenId(rID)
 	s objx1=##class(ResultBloodTestValue).%New()
 	s objx1.TestName=r1
@@ -15671,7 +15777,7 @@ SaveResult
 	s objx1.LowRange=r4
 	s objx1.HighRange=r5
 	
-	d objx.Tests.SetAt(objx1,d0)
+	d objx.Tests.SetAt(objx1,objxcount)
 	d objx.%Save()
 	s d0=d0+1
 	q
@@ -17753,7 +17859,7 @@ LoadTemplates(d1)
 	&js<document.querySelector("tbody").innerHTML="#(temp)#">
 	q
 
-jxBGTask^MAC^^67249,9621.2471329^0
+jxBGTask^MAC^^67320,25180.3745343^0
 jxBGTask
 	/*
 	&sql(DECLARE cBGTask1 CURSOR FOR
@@ -17792,12 +17898,12 @@ jxBGTask
 	; Biolytica
 	s userid=1,(r1,r2,r3)="" &sql(SELECT RemainingOCRUnit,RemainingTransformationUnit,EndDate INTO :r1,:r2,:r3 FROM MX.Subscription WHERE Profile=:userid AND Type='Transformation' AND Subscription<>8)
 	i r3<=+$h!(r1+r2>0) d ^jxBiolytica01
-	if shutdown=1 w "Time to shutdown the server. Qutting...",! q
+	
 	
 	; Jonda Health
 	s userid=9,(r1,r2,r3)="" &sql(SELECT RemainingOCRUnit,RemainingTransformationUnit,EndDate INTO :r1,:r2,:r3 FROM MX.Subscription WHERE Profile=:userid AND Type='Transformation' AND Subscription<>8)
 	i r3<=+$h!(r1+r2>0) d ^jxBiolytica01
-	if shutdown=1 w "Time to shutdown the server. Qutting...",! q
+	
 .
 #;	; Klinik Pintar
 #;	;s userid=18,(r1,r2,r3)="" &sql(SELECT RemainingOCRUnit,RemainingTransformationUnit,EndDate INTO :r1,:r2,:r3 FROM MX.Subscription WHERE Profile=:userid AND Type='Transformation' AND Subscription<>8)
@@ -17806,38 +17912,35 @@ jxBGTask
 	; Medicia-frankie
 	s userid=27,(r1,r2,r3)="" &sql(SELECT RemainingOCRUnit,RemainingTransformationUnit,EndDate INTO :r1,:r2,:r3 FROM MX.Subscription WHERE Profile=:userid AND Type='Transformation' AND Subscription<>8)
 	i r3<=+$h!(r1+r2>0) d ^jxBiolytica01
-	if shutdown=1 w "Time to shutdown the server. Qutting...",! q
+	
 	
 	; Medicia-quan
 	s userid=29,(r1,r2,r3)="" &sql(SELECT RemainingOCRUnit,RemainingTransformationUnit,EndDate INTO :r1,:r2,:r3 FROM MX.Subscription WHERE Profile=:userid AND Type='Transformation' AND Subscription<>8)
 	i r3<=+$h!(r1+r2>0) d ^jxBiolytica01
-	if shutdown=1 w "Time to shutdown the server. Qutting...",! q
+	
 	
 	; AssistID-Wendo
 	s userid=30,(r1,r2,r3)="" &sql(SELECT RemainingOCRUnit,RemainingTransformationUnit,EndDate INTO :r1,:r2,:r3 FROM MX.Subscription WHERE Profile=:userid AND Type='Transformation' AND Subscription<>8)
 	i r3<=+$h!(r1+r2>0) d ^jxBiolytica01
-	if shutdown=1 w "Time to shutdown the server. Qutting...",! q
+	
 	
 	; Assist-muhammad.farabi
 	s userid=31,(r1,r2,r3)="" &sql(SELECT RemainingOCRUnit,RemainingTransformationUnit,EndDate INTO :r1,:r2,:r3 FROM MX.Subscription WHERE Profile=:userid AND Type='Transformation' AND Subscription<>8)
 	i r3<=+$h!(r1+r2>0) d ^jxBiolytica01
-	if shutdown=1 w "Time to shutdown the server. Qutting...",! q
+	
 .
 	; Onward Research
 	s userid=32,(r1,r2,r3)="" &sql(SELECT RemainingOCRUnit,RemainingTransformationUnit,EndDate INTO :r1,:r2,:r3 FROM MX.Subscription WHERE Profile=:userid AND Type='Transformation' AND Subscription<>8)
 	i r3<=+$h!(r1+r2>0) d ^jxBiolytica01
-	if shutdown=1 w "Time to shutdown the server. Qutting...",! q
-.
-	; Trial files processing
-	; Trial Users
-	;BeHealthcare
-#;	s userid=33,(r1,r2,r3)="" &sql(SELECT RemainingOCRUnit,RemainingTransformationUnit,EndDate INTO :r1,:r2,:r3 FROM MX.Subscription WHERE Profile=:userid AND Type='Transformation' AND Subscription<>8)
-#;	i r3<=+$h!(r1+r2>0) d ^trialBGProcessing01
-#;	
-#;	;dr Anywhere
-#;	s userid=34,(r1,r2,r3)="" &sql(SELECT RemainingOCRUnit,RemainingTransformationUnit,EndDate INTO :r1,:r2,:r3 FROM MX.Subscription WHERE Profile=:userid AND Type='Transformation' AND Subscription<>8)
-#;	i r3<=+$h!(r1+r2>0) d ^trialBGProcessing01
 	
+.
+	;Kaizen
+	s userid=55,(r1,r2,r3)="" &sql(SELECT RemainingOCRUnit,RemainingTransformationUnit,EndDate INTO :r1,:r2,:r3 FROM MX.Subscription WHERE Profile=:userid AND Type='Transformation' AND Subscription<>8)
+	i r3<=+$h!(r1+r2>0) d ^jxBiolytica01
+	
+.
+.
+.
 	; Trial files processing
 	; Trial Users
 	s userid=""
@@ -17861,7 +17964,7 @@ jxBGTask
 	
 	
 	
-		
+#;	if shutdown=1 w "Time to shutdown the server. Qutting...",! q	
 #;	for i=0:1:4 d
 #;	. d CheckShutdownTime^jxBiolytica
 #;	. if shutdown=0 w "HANG State....." h 60 ; 1min
@@ -18493,7 +18596,7 @@ CheckShutdownTime
 	}
  q	
 
-jxBiolytica01^MAC^^67304,40113.5764493^0
+jxBiolytica01^MAC^^67320,25470.6615288^0
 jxBiolytica
 	; call from ^jxBGTask
 	s devMode = 1
@@ -18773,7 +18876,7 @@ Step5ProcessFile
 		}
 		
 		; insert resultbloodtest
-		&sql(INSERT INTO ResultBloodTest (Record,Type) VALUES (:rid, 'Blood Test'))
+		;&sql(INSERT INTO ResultBloodTest (Record,Type) VALUES (:rid, 'Blood Test'))
 		
 		s ext=$zconvert(fExt,"U")
 		if (ext = "PDF"){
@@ -21648,7 +21751,7 @@ WriteStatBlock(type,val1,sumVal1,val2,sumVal2,month,index)
 	q stat
 	
 
-jxDataMappingTransformation^MAC^^67305,43269.3882917^0
+jxDataMappingTransformation^MAC^^67323,24020.8661321^0
 jxDataMappingTransformation(rid)
 	w !,"Performing Data Mapping and Calculating Score...",!
 	s row="" 
@@ -21696,7 +21799,8 @@ DataMapping
 	&sql(SELECT IsTrial INTO :trial FROM Record WHERE id=:rid)
 	if trial=1	&sql(SELECT OutputUnit INTO :bk FROM Record WHERE id=:rid) 
 	e  s trial=0 &sql(SELECT BucketName INTO :bk FROM Record WHERE id=:rid) 
-.
+	if rid["demo" s bk="jondaffr2"
+	
 	s c1="#405470"	; blue
 	s c2="#e63876"	; pink
 	s c3="#048f2a"	; green	
@@ -21770,10 +21874,10 @@ DataMappingEnd
 	;w "Total rows: ",trow,", Total item",TotalPossible,!
 	;w "Name:",NameMappingFlag,", unit:",UnitMappingFlag,", Value:",DataTransformingFlag,!,"Total:",TotalFlags,!
 	
-	&sql(INSERT INTO MX.RecordScore(Record, RowCount, ItemCount, NameFlag, UnitFlag, ValueFlag, Score) 
+	if rid'["demo" &sql(INSERT INTO MX.RecordScore(Record, RowCount, ItemCount, NameFlag, UnitFlag, ValueFlag, Score) 
 		 VALUES(:rid, :trow, :TotalPossible, :NameMappingFlag, :UnitMappingFlag, :DataTransformingFlag, :ConfPercent))
 	;w !,"Confidence Score : ",ConfPercent,!
-	k ^FormData(-1,rid)
+	if rid'["demo" k ^FormData(-1,rid)
 	q
 	
 ProcessDataMapping
@@ -21804,8 +21908,8 @@ ProcessDataMapping
 		.i trial=0 &sql(SELECT Name,UnitName INTO :tempName,:tempUnit FROM Template WHERE DiagnosticTest=:r1a AND BucketName=:bk)
 		.e  &sql(SELECT Name,UnitName INTO :tempName,:tempUnit FROM TrialTemplate WHERE DiagnosticTest=:r1a AND BucketName=:bk)
 		.i tempName'="" s r1=tempName s NameMappingFlag=NameMappingFlag +1 s ^FormData(-1,rid,trow,"transformed-name")= tempName_$c(9)_"issue"_$c(9)_c2_$c(9)_"No match-Picking closest JX match"_$c(9)_c2
-		.e  s ^FormData(-1,rid,trow,"transformed-name")= r1_$c(9)_""_$c(9)_c1_$c(9)_"No matching Template:Using original"_$c(9)_c1
-		e  s tempUnit="" s NameMappingFlag=NameMappingFlag+1 s ^FormData(-1,rid,trow,"transformed-name")= r1_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JX Name & Template:Using original"_$c(9)_c1
+		.e  s ^FormData(-1,rid,trow,"transformed-name")= r1_$c(9)_""_$c(9)_c1_$c(9)_"No matching Template.Using original"_$c(9)_c1
+		e  s tempUnit="" s NameMappingFlag=NameMappingFlag+1 s ^FormData(-1,rid,trow,"transformed-name")= r1_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JX Name & Template.Using original"_$c(9)_c1
 		
 		
 	}
@@ -21820,11 +21924,11 @@ ProcessDataMapping
 		..e  &sql(SELECT Name,UnitName INTO :tempName,:tempUnit FROM TrialTemplate WHERE DiagnosticTest=:x AND BucketName=:bk)
 		.i $zconvert(tempName,"l")=$zconvert(r1,"l") s ^FormData(-1,rid,trow,"transformed-name")= tempName_$c(9)_"converted"_$c(9)_c1_$c(9)_"Converted:Same BB"_$c(9)_c1
 		.e  s r1=x s ^FormData(-1,rid,trow,"transformed-name")= tempName_$c(9)_"converted"_$c(9)_c1_$c(9)_"Converted"_$c(9)_c3	
-		e  s ^FormData(-1,rid,trow,"transformed-name")= r1_$c(9)_""_$c(9)_c1_$c(9)_"No matching Template- Using original"_$c(9)_"c1;background-color: #e6f796;"  
+		e  s ^FormData(-1,rid,trow,"transformed-name")= r1_$c(9)_""_$c(9)_c1_$c(9)_"No matching Template.Using original"_$c(9)_"c1;background-color: #e6f796;"  
 		
 		;w "<td class='transformed-name converted' style='color:"_c1_"' title='Converted:Same BB'><input type='text' style='color:"_c1_"' autocomplete='off' onkeyup='dataChange(event)' onblur='debounceInput(event)' value='"_tempName_"'></td>" ;r1	
 		;w "<td class='transformed-name converted' style='color:"_c3_"' title='Converted'><input type='text' style='color:"_c3_"' autocomplete='off' onkeyup='dataChange(event)' onblur='debounceInput(event)' value='"_tempName_"'></td>"
-		;w "<td class='transformed-name issue' style='color:"_c2_"; ' title='No matching Template- Using original'><input type='text' style='color:"_c1_";background-color: #e6f796;' autocomplete='off' onkeyup='dataChange(event)' onblur='debounceInput(event)' value='"_r1_"'></td>"
+		;w "<td class='transformed-name issue' style='color:"_c2_"; ' title='No matching Template.Using original'><input type='text' style='color:"_c1_";background-color: #e6f796;' autocomplete='off' onkeyup='dataChange(event)' onblur='debounceInput(event)' value='"_r1_"'></td>"
 		}	
 	
 	s ^FormData(-1,rid,trow,"result")=r3x
@@ -21860,8 +21964,8 @@ ProcessDataMapping
 	s recalc=0
 	// r2 Unit
 	i tempUnit="" ,x["ERROR" d
-		. s ^FormData(-1,rid,trow,"convert-result-unit")= r2_$c(9)_""_$c(9)_c1_$c(9)_"No matching Template Unit, Using Original : "_r2x_$c(9)_c1  
-		.;w "<td class='convert-result-unit issue' style='color:"_c2_"' title='No matching Template Unit, Using Original : "_r2x_"'><div class='dropdown' style='color:"_c1_"'  onclick='openUnitSuggestions(event)' onfocus='saveToGlobals()' tabindex='-1'>"_r2_" <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div></td>" ;r2
+		. s ^FormData(-1,rid,trow,"convert-result-unit")= r2_$c(9)_""_$c(9)_c1_$c(9)_"No matching Template Unit.Using Original : "_r2x_$c(9)_c1  
+		.;w "<td class='convert-result-unit issue' style='color:"_c2_"' title='No matching Template Unit.Using Original : "_r2x_"'><div class='dropdown' style='color:"_c1_"'  onclick='openUnitSuggestions(event)' onfocus='saveToGlobals()' tabindex='-1'>"_r2_" <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div></td>" ;r2
 	i tempUnit'="" ,x["ERROR" d
 		.s UnitMappingFlag=UnitMappingFlag+1 s ^FormData(-1,rid,trow,"convert-result-unit")= r2a_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JX Unit : "_r2x_$c(9)_c2  
 		.;w "<td class='convert-result-unit issue' style='color:"_c2_"' title='No matching JX Unit : "_r2x_"'><div class='dropdown' style='color:"_c2_"'  onclick='openUnitSuggestions(event)' onfocus='saveToGlobals()' tabindex='-1'>"_r2a_" <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div></td>" ;r2
@@ -21911,8 +22015,8 @@ ProcessDataMapping
 			i r3["ERROR"  s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"convert-result-val")= $s(r3'="":r3,1:"")_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JXConversion : "_r3x_$c(9)_c2  
 			;w "<td class='convert-result-val issue' style='color:"_c2_"' title='No matching JXConversion : "_r3x_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r3'="":r3,1:"")_"'></td>"
 			e  d
-			.i tempUnit="" s ^FormData(-1,rid,trow,"convert-result-val")= $s(r3'="":r3,1:"")_$c(9)_""_$c(9)_c1_$c(9)_"No template:Using Original"_$c(9)_c1  
-			.;w "<td class='convert-result-val issue' style='color:"_c1_"' title='No template:Using Original'><input type='text' style='color:"_c1_";' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r3'="":r3,1:"")_"'></td>"
+			.i tempUnit="" s ^FormData(-1,rid,trow,"convert-result-val")= $s(r3'="":r3,1:"")_$c(9)_""_$c(9)_c1_$c(9)_"No template.Using Original"_$c(9)_c1  
+			.;w "<td class='convert-result-val issue' style='color:"_c1_"' title='No template.Using Original'><input type='text' style='color:"_c1_";' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r3'="":r3,1:"")_"'></td>"
 			.e  s ave=$$AveRes^WSP999(r1,r3,r2,"") s ^FormData(-1,rid,trow,"convert-result-val")= $s(r3'="":r3,1:"")_$c(9)_"converted"_$c(9)_c1_$c(9)_"Converted:Same Unit"_$c(9)_c1  
 			;w "<td class='convert-result-val converted' style='color:"_c1_"' title='Converted:Same Unit'><input type='text' style='color:"_c1_";' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r3'="":r3,1:"")_"'></td>"
 .
@@ -22517,6 +22621,1924 @@ EscapeHL7(SDAStr) ;; ^ to \S\, etc
 	;s SDAStr = $replace(SDAStr, $c(10), "\X0A\")
 	q SDAStr
 	
+
+jxDemo^MAC^^67334,27106.7536124^0
+jxDemo
+.
+Init
+	
+	q
+Save	
+	#import MX
+	d INIT^WSP999
+	s UserID=$g(%session.Data("UserID"))
+	s tmpname=$$ATTNAME^WSP999
+	s FName=%request.Data("FName",1)
+	s FName=$zconvert(FName,"l")
+	k ^jxAltUpload(FName)
+	k ^jxDemo(UserID)
+	k %session.Data("jxUploadRecord")
+	
+	s fext=$p(FName,".",$l(FName,".")),fext=$zconvert(fext,"l")
+	; check file extension
+	s allowedext="*pdf*heic*png*jpg*jpeg*gif*webp*"
+	;s allowedext="*bmp*pdf*heic*png*jpg*jpeg*gif*webp*hl7*xml*json*ttl*"
+	i allowedext'[("*"_fext_"*") s ^jxAltUpload(FName)=0 q
+	s dt=$zdatetime($h,3,1)
+	
+  	new bytes
+.
+    s fsize=%request.MimeData("fileupload",1).Size	
+	i +fsize=0 s ^jxAltUpload(FName)=0 q	; no file uploaded
+	
+	s stream=##class(%Stream.FileBinary).%New()
+	s x=""
+	while 1{
+		s bytes=%request.MimeData("fileupload",1).Read(.a)
+		;s bytes=%request.MimeData("fileupload",1).Read(fsize)
+		d stream.Write(bytes)
+		quit:%request.MimeData("fileupload",1).AtEnd
+		s x=x+bytes
+	}
+	d stream.%Save()
+	;s %dev="c:\intersystems\cache\jondax\jxUpload\Alt\"_FName
+	;o %dev:"wns" u %dev
+	;s status=stream.OutputToDevice()
+	;c %dev
+	; test to see if file extension matches content
+	;i fext="hl7" d IsHL7 q
+	;i fext="xml"!(fext="json")!(fext="ttl") d IsFHIR q
+	s ^jxAltUpload(FName)=tmpname
+	
+	;s ^jxAltUpload("FileName")=$p(FName,".",1)
+	s %session.Data("jxAltUploadRecord")=FName
+	s %session.Data("jxAltUploadRecord","fext")=fext
+	s %dev="C:\InterSystems\Cache\JondaX\jxdemo\ad-hoc\"_tmpname_"."_fext
+	o %dev:"wns" u %dev
+	s status=stream.OutputToDevice()
+	s ^jxDemo(UserID,"dev")= %dev
+	s ^jxDemo(UserID,"fileName")= FName
+	s ^jxDemo(UserID,"fileExt")=fext
+	s ^jxAltUpload(FName,"Uploaded")=$h
+	q
+	
+Structure	
+	s UserID=$g(%session.Data("UserID"))
+	s FName=^jxDemo(UserID,"fileName")
+	s tmpname= ^jxAltUpload(FName)
+	s fext=^jxDemo(UserID,"fileExt")
+	s %dev=^jxDemo(UserID,"dev")
+	c %dev
+	s %dev=$replace(%dev,"\","/")
+	k ^AIGEMINI("demo"_UserID)
+	k ^GEMINIError("demo"_UserID)
+	k ^FormData(-1,"demo"_UserID)
+	i fext="pdf" d PDF
+	i fext'="pdf" d IMAGE
+	i $d(^GEMINIError("demo"_UserID)) q
+	&js<removePopup1();>
+	q
+	
+DMT	
+	s UserID=$g(%session.Data("UserID"))
+	s FName=^jxDemo(UserID,"fileName")
+	s tmpname= ^jxAltUpload(FName)
+	s %dev=^jxDemo(UserID,"dev")
+	d ^jxDemoDMT("demo"_UserID)
+	&sql(INSERT INTO MX.ResultBloodTest1(OrgName,TmpName,Type) VALUES (:FName,:tmpname,'BloodTest'))
+	s rid=""
+	&sql(SELECT ID INTO :rid FROM MX.ResultBloodTest1 WHERE TmpName=:tmpname)
+	s ^jxAltUpload(FName,"ID")=rid
+	s %session.Data("jxAltUploadRecord","ID")=rid
+	d ##class(%File).Delete(%dev)
+	q
+.
+IMAGE
+	k ^jxDemo(UserID,"Done")
+    s ^jxDemo(UserID,"Done")=0
+	if (fext="jpg")!(fext="jpeg")!(fext="heic")!(fext="avif")!(fext="webp"){
+	; change format to png
+				
+		s cmd="mogrify -format png """_%dev_""""
+		s x=$zf(-1,cmd_" && exit")	
+		s ^martin1("demo test")=cmd_" :: "_x
+		d ##class(%File).Delete(%dev)
+		s %dev=$replace(%dev,fext,"png")
+		s fext = "png"
+.
+		}
+		s ^jxAltUpload("progress") =30	
+Gemini
+	j GeminiCall^jxDemoJob(%dev,"demo"_UserID,"png")
+#;	s gIndex = ##class(python.GeminiAiDemo).AiCompletion(%dev,"demo"_UserID,0, "png")
+#;	i gIndex=-429 h 5 g Gemini
+.
+	i $d(^GEMINIError("demo"_UserID)) q	
+	;s ^jxDemo(UserID,"Done")=1
+	q		
+.
+PDF
+	k ^jxDemo(UserID,"Done")
+	s ^jxDemo(UserID,"Done")=0
+	s i=0
+	s %dev1="C:\InterSystems\Cache\JondaX\jxdemo\ad-hoc\"_tmpname
+	#import MX
+	;&sql(SELECT Profile,Profile->UserID,TempFile,fExt,Profile->CompanyName,IsTrial 
+	;INTO :pid,:k1,:d2,:ext,:CompanyName,:IsTrial FROM Record WHERE ID=:rid)
+	s index=0,xIndex=0
+	// Create a new folder for the chunks/pngs
+	d ##class(%File).CreateDirectory(%dev1) 
+	
+    s pdfType=##class(python.pdfhandler).checkType(%dev)
+    ;w pdfType,!
+    // Get the total number of pages in the PDF
+	Set totalPages = ##class(python.pdfhandler).pageCount(%dev)
+    
+    if pdfType="Image-based"
+    {
+	    #;	; split PDF into per-page png
+		;s cmd="win2pdfd pdf2png """_docDir_d2_"."_ext_""" """_docDir_d2_"\"_d2_".png"" 0"
+		s cmd="win2pdfd pdf2png """_%dev_""" """_%dev1_"\"_tmpname_".png"" 0"
+		s x=$zf(-1,cmd_" && exit")
+.
+		set dir = ##class(%File).NormalizeDirectory(%dev1)
+		set file=$ZSEARCH(dir_"*.png")
+		while file'="" 
+		{
+AiCompletion001
+			;w "Index: ",index,!
+			Set index = ##class(python.GeminiAiDemo).AiCompletion(file, "demo"_UserID,index, "png")
+			;w "Return index: ",index,!
+	        if index = -429 d
+	        .s index=$s($d(xIndex):xIndex, 1:0)
+	        .h 5 g AiCompletion001
+	        else  d
+	        .s xIndex=index h 5
+.
+			set file=$ZSEARCH("")
+		}
+		d ##class(%File).RemoveDirectoryTree(%dev1)
+    }else {
+	    if totalPages>1 j RunGemini^jxDemoJob("demo"_UserID,%dev,totalPages)
+	    e  d ##class(python.GeminiAiDemo).AiCompletion(%dev, "demo"_UserID,index, "pdf") s ^jxDemo(UserID,"Done")=1
+	    }
+    ;d ##class(%File).RemoveDirectoryTree(%dev1)
+    q	
+PDF01
+	s i=0
+	s %dev1="C:\InterSystems\Cache\JondaX\jxdemo\ad-hoc\"_tmpname
+jxGemini
+	#import MX
+	&sql(SELECT Profile,Profile->UserID,TempFile,fExt,Profile->CompanyName,IsTrial 
+	INTO :pid,:k1,:d2,:ext,:CompanyName,:IsTrial FROM Record WHERE ID=:rid)
+	s index=0,xIndex=0
+	// Create a new folder for the chunks/pngs
+	d ##class(%File).CreateDirectory(%dev1) 
+	
+    s pdfType=##class(python.pdfhandler).checkType(%dev)
+    //w pdfType,!
+    // Get the total number of pages in the PDF
+	Set totalPages = ##class(python.pdfhandler).pageCount(%dev)
+    
+    if pdfType="Image-based"
+    {
+	    #;	; split PDF into per-page png
+		;s cmd="win2pdfd pdf2png """_docDir_d2_"."_ext_""" """_docDir_d2_"\"_d2_".png"" 0"
+		s cmd="win2pdfd pdf2png """_%dev_""" """_%dev1_"\"_tmpname_".png"" 0"
+		s x=$zf(-1,cmd_" && exit")
+.
+		set dir = ##class(%File).NormalizeDirectory(%dev1)
+		set file=$ZSEARCH(dir_"*.png")
+		while file'="" 
+		{
+AiCompletion
+			;w "Index: ",index,!
+			Set index = ##class(python.GeminiAiDemo).AiCompletion(file, "demo"_UserID,index, "png")
+			;w "Return index: ",index,!
+	        if index = -429 d
+	        .s index=$s($d(xIndex):xIndex, 1:0)
+	        .h 5 g AiCompletion
+	        else  d
+	        .s xIndex=index h 5
+.
+			set file=$ZSEARCH("")
+		}
+		d ##class(%File).RemoveDirectoryTree(%dev1)
+    } else{ 
+    
+.
+	    w "Page Count: ",totalPages,!
+	    If totalPages > 2 {
+	    // Split the PDF into 2-page chunks
+		    For i = 1:2:totalPages {
+		        Set startPage = i
+		        Set endPage = i + 1
+		        If endPage > totalPages {
+		            Set endPage = totalPages
+		        }
+.
+		        Set chunkPath = %dev1_"\"_tmpname_"-" _ startPage _ "-" _ endPage _ ".pdf"
+		    	Set cmd = "win2pdfd extractPages """_%dev_""" """_startPage_""" """_endPage_""" """_chunkPath_""""
+		    	// Execute the command using $ZF(-1)
+		   		Set sc = $ZF(-1, cmd)
+AiCompletion01		   		
+		        // Call the AI completion method for each chunk
+		        w "Index: ",index,!
+		        Set index = ##class(python.GeminiAiDemo).AiCompletion(chunkPath, "demo"_UserID,index, "pdf")
+		        w "Return index: ",index,!
+		        if index = -429 
+		        {	s index=$s($d(xIndex):xIndex, 1:0)
+		        	h 5 g AiCompletion01
+		        }
+		        elseif index=-400
+		        {
+		        	w "Too much data in 2-page: ",startPage,"-",endPage,!
+		        	s index=$s($d(xIndex):xIndex, 1:0)
+			        for j=startPage:1:endPage
+			        {
+AiCompletion02			w "Rechunking into 1-page pdf...",!
+				        Set chunkPath = %dev1_"\"_tmpname_"-" _ j _ "-" _ j _ ".pdf"
+						d ##class(python.pdfhandler).chunkPdf(%dev,chunkPath,j,j)
+						w "Index: ",index,!
+						h 5
+						Set index = ##class(python.GeminiAiDemo).AiCompletion(chunkPath, "demo"_UserID,index, "pdf")
+		        		w "Return index: ",index,!
+		        		if index = -429 
+					        {
+					         s index=$s($d(xIndex):xIndex, 1:0)
+					         h 5 g AiCompletion02
+					        }else {s xIndex=index h 2    }
+			        }
+		        
+			    }
+		        else { s xIndex=index h 2}
+		    	}
+		    d ##class(%File).RemoveDirectoryTree(%dev1)	
+	    }else
+	    {	
+	    	Set index = ##class(python.GeminiAiDemo).AiCompletion(%dev, "demo"_UserID,index, "pdf")
+	     }
+    }
+    Quit	
+
+jxDemoDMT^MAC^^67338,33363.4391558^0
+jxDataMappingTransformation(rid)
+	;w !,"Performing Data Mapping and Calculating Score...",!
+	s row="" 
+	d TwoSets
+	d DataMapping
+  	q
+TwoSets
+	//Complete Reference Range
+	n r1,r2,r3,r4,r5
+	s row=$o(^AIGEMINI(rid,row)) g:'$ISVALIDNUM(row) TwoSetsEnd
+	s r1=$g(^AIGEMINI(rid,row,"name"))
+	s r2=$g(^AIGEMINI(rid,row,"unit"))
+	s r3=$g(^AIGEMINI(rid,row,"value"))
+	s r4=$g(^AIGEMINI(rid,row,"loRange"))
+	s r5=$g(^AIGEMINI(rid,row,"hiRange"))
+	if row>1 
+	{	n pRow s pRow= row-1
+		s pName=$g(^AIGEMINI(rid,pRow,"name"))
+		if (r1=pName),(^AIGEMINI(rid,row,"row"_row)'= ^AIGEMINI(rid,pRow,"row"_pRow)) 
+		{	
+			i (r4="")!(r5="")
+			{	;w "no RR current row",row,!
+				s ^AIGEMINI(rid,row,"loRange")=^AIGEMINI(rid,pRow,"loRange")
+		 		s ^AIGEMINI(rid,row,"hiRange")=^AIGEMINI(rid,pRow,"hiRange")
+			}
+			elseif ($g(^AIGEMINI(rid,pRow,"loRange"))="") ! ($g(^AIGEMINI(rid,pRow,"hiRange"))="") 
+			{
+				s ^AIGEMINI(rid,pRow,"loRange")=r4
+				s ^AIGEMINI(rid,pRow,"hiRange")=r5
+			}
+		
+		}
+	}
+	g TwoSets
+TwoSetsEnd	
+	q
+	
+DataMapping
+	#import MX
+	n row,trow,c1,c2,c3,r0,r1,r1a,r2,r2a,r3,r4,r5,r6,r7,r8,r9,r10,bk,x,trial
+	n NameMappingFlag, UnitMappingFlag, DataTransformingFlag, TotalPossible, TotalFlags, ErrorPercent, ConfPercent
+	s (trow,row,bk)="" 
+	s (NameMappingFlag, UnitMappingFlag, DataTransformingFlag, TotalPossible, TotalFlags, ErrorPercent, ConfPercent) = 0
+	
+	&sql(SELECT IsTrial INTO :trial FROM Record WHERE id=:rid)
+	if trial=1	&sql(SELECT OutputUnit INTO :bk FROM Record WHERE id=:rid) 
+	e  s trial=0 &sql(SELECT BucketName INTO :bk FROM Record WHERE id=:rid) 
+	if rid["demo" s bk="jondaffr2"
+	
+	s c1="#405470"	; blue
+	s c2="#e63876"	; pink
+	s c3="#048f2a"	; green	
+	i $d(^AIGEMINI(rid)) d DataMappingA q
+	e  d DataMappingRBT q
+	q
+DataMappingA
+	
+	s language=$g(^AIGEMINI(rid,"Language"))
+	s row=$o(^AIGEMINI(rid,row)) g:'$ISVALIDNUM(row) DataMappingEnd
+	s r0=$g(^AIGEMINI(rid,row,"date")) 
+	s r1=$g(^AIGEMINI(rid,row,"name"))
+	s r1T=$g(^AIGEMINI(rid,row,"trans-name"))
+	s r2=$g(^AIGEMINI(rid,row,"unit"))
+	s r2T=$g(^AIGEMINI(rid,row,"trans-unit"))
+	s r3=$g(^AIGEMINI(rid,row,"value"))
+	s r3T=$g(^AIGEMINI(rid,row,"trans-value"))
+	s r4=$g(^AIGEMINI(rid,row,"loRange"))
+	s r5=$g(^AIGEMINI(rid,row,"hiRange"))
+	s r6=$g(^AIGEMINI(rid,row,"subcategory"))
+	s r6T=$g(^AIGEMINI(rid,row,"trans-subcategory"))
+	s r7=$g(^AIGEMINI(rid,row,"comment"))
+	s r8=$g(^AIGEMINI(rid,row,"LOINC"))
+	s specimen=$g(^AIGEMINI(rid,"Specimen"))
+	s mainCat=$g(^AIGEMINI(rid,"Category"))
+	s Language=$g(^AIGEMINI(rid,"Language"))
+.
+	s r2x=r2,r3x=r3,r4x=r4,r5x=r5
+	; test ^AIGEMINI vs ^AIGEMINI for duplicate rows
+	if row>1 
+	{	n pRow s pRow= row-1
+		s r1p=$g(^AIGEMINI(rid,pRow,"name"))
+		for i=1:1:pRow
+		{
+			if ^AIGEMINI(rid,row,"row"_row)= ^AIGEMINI(rid,i,"row"_i) g DataMappingA
+		}
+	}
+	 
+	g:r1="" DataMappingA
+	g:r3="" DataMappingA
+		
+	s trow=trow+1
+	;d CleanUp
+	d ProcessDataMapping
+	g DataMappingA	
+	
+DataMappingRBT	
+	&sql(SELECT BucketName INTO :bk FROM Record WHERE id=:rid)
+	 ; From ResultBloodTest_Tests for HL7,Json,xml,xlsx, or if no ^AICLAUDE , doesn't compare with textract
+	 &sql(DECLARE C01 CURSOR FOR
+		SELECT COUNT(element_key),element_key,Tests_TestName,Tests_SIUnit,Tests_Result,Tests_LowRange,Tests_HighRange,ResultBloodTest->ReportDate
+		INTO :rowkey,:row,:r1,:r2,:r3,:r4,:r5,:r0
+		FROM ResultBloodTest_Tests 
+		WHERE ResultBloodTest=:rbt
+	)
+	&sql(OPEN C01)
+	&sql(FETCH C01)
+	WHILE SQLCODE=0{
+		
+	g:r1="" DataMappingRBTEnd
+	g:r3="" DataMappingRBTEnd
+	s r2x=r2,r3x=r3,r4x=r4,r5x=r5	
+	s trow=trow+1
+	d CleanUp
+	d ProcessDataMapping
+DataMappingRBTEnd
+		&sql(FETCH C01) 
+		}
+		&sql(CLOSE C01)
+		d DataMappingEnd
+		q	
+		
+DataMappingEnd
+.
+	s TotalPossible = trow*5
+	s TotalFlags = NameMappingFlag + UnitMappingFlag + DataTransformingFlag
+	s ErrorPercent = (TotalFlags/TotalPossible) * 100
+	s ConfPercent = 100-ErrorPercent
+	s ConfPercent = $fn(ConfPercent,,2)
+	;w "Total rows: ",trow,", Total item",TotalPossible,!
+	;w "Name:",NameMappingFlag,", unit:",UnitMappingFlag,", Value:",DataTransformingFlag,!,"Total:",TotalFlags,!
+	
+	if rid'["demo" &sql(INSERT INTO MX.RecordScore(Record, RowCount, ItemCount, NameFlag, UnitFlag, ValueFlag, Score) 
+		 VALUES(:rid, :trow, :TotalPossible, :NameMappingFlag, :UnitMappingFlag, :DataTransformingFlag, :ConfPercent))
+	;w !,"Confidence Score : ",ConfPercent,!
+	if rid'["demo" k ^FormData(-1,rid)
+	q
+	
+ProcessDataMapping
+	u 0
+	if (Language["English")! (Language="") s r1x=r1,r6sub=r6
+	e  s r1x=r1T,r6sub=r6T
+	 
+	s CatMatch=0
+	s r6x="",r6a=""
+	i specimen'="" d
+	. &sql(SELECT ID,ResultType INTO :cat1,:cat2 FROM DiagnosticType WHERE Lower(Name)=LOWER(:specimen))
+	. i cat1'="" s r6x=cat2 s CatMatch=1 s r6a="Used the Specimen. """_r6_""""
+	. ;&js<console.log(`#(CatMatch)#`);>	
+	;/*
+	i mainCat'="",CatMatch=0 d
+	. &sql(SELECT ID,ResultType INTO :cat1,:cat2 FROM DiagnosticType WHERE Lower(Name)=LOWER(:mainCat))
+	. i cat1'="" s r6x=cat2 s CatMatch=1 s r6a="Used Main Category. """_r6_""""
+	. ;&js<console.log(`#(r6x)#`);> 
+	;*/
+	if CatMatch=0 d	
+	. &sql(SELECT ID,ResultType INTO :cat1,:cat2 FROM DiagnosticType WHERE Lower(Name)=LOWER(:r6sub))
+	. i cat1'="" s r6x=cat2 s CatMatch=1 s r6a="Used Sub Category. """_r6_""""
+	. e  s r6x="Blood Test" s CatMatch=0 s r6a="Category not found. """_r6_"""" ;&js<console.log(`#(CatMatch)#`);>
+.
+	
+	; clean up units
+		s r2=$replace(r2,"|","l")
+		s r2=$replace(r2," ","")
+		s r2=$replace(r2,"-1","-l")
+		s r2=$replace(r2,"_1","_l")
+		i $e(r2,$l(r2)-1,$l(r2))="/1" s r2=$replace(r2,"/1","/l")
+		i $e(r2,$l(r2))="_" s r2=r2_"l"
+		s r2=$replace(r2," / ","/") 
+		s x="" &sql(SELECT ID INTO :x FROM SIUnit WHERE Name=:r2 OR SIName=:r2)
+		i x="",(r2["lU")!(r2["Ul") s r2=$replace(r2,"l","I")
+		i x="",r2'="" s r2=r2_"/l"	; because of g. ; commented by DW 2024-03-14 ;uncommented by Martin 2024-03-20
+		s x1="" &sql(SELECT ID INTO :x1 FROM SIUnit WHERE Name=:r2 OR SIName=:r2) 
+		i x1="",r2'="" s r2=$replace(r2,"/l","")
+	; end clean up
+	; missing units- check textract
+	;for unit is misplaced in value eg."0.10 10e9-l" or "H 3.60 mmol/L" by Martin 2024-04-08
+	;s ^martin(row,"1")=r3_", "_r2
+	i r3[" " { 
+		for i = 1:1:$length(r3, " ") 
+		{   if $number($piece(r3, " ", i))  d
+	    	.if r2="" s r2=$piece(r3, " ", i+1)
+	    	.s r3= $piece(r3, " ", i)  
+			}
+	}
+	;s ^martin(row,"2")=r3_", "_r2
+	; clean up value and range
+		s r3=$replace(r3,"*","")
+		s r3=$replace(r3,"%","")
+		s r4=$replace(r4,"*","")
+		s r5=$replace(r5,"*","")
+		;;s r3=$replace(r3," ","")
+		;;s r4=$replace(r4," ","")
+		;;s r5=$replace(r5," ","")
+		;s r5=$replace(r5," ","")
+		i $p(r4,"-",1)'="",$p(r4,"-",2)'="" d	; cater for 1-3
+		. s r5=$p(r4,"-",2),r4=$p(r4,"-",1) s r4x=r4,r5x=r5
+		
+		i $p(r5,"-",1)'="",$p(r5,"-",2)'="" d	; cater for 1-3
+		. s r4=$p(r5,"-",1),r5=$p(r5,"-",2) s r4x=r4,r5x=r5
+		
+		; For Indo clients
+		i bk["INDO"!(bk["4321-qa-jondaffr") {
+			; Use the original from GEMINI
+			// treat "." as comma
+			;s ^martin(row,"c1")=r1_", "_r3_", "_r4_", "_r5
+			s r3=$replace(r3,".",""),r4=$replace(r4,".",""),r5=$replace(r5,".","")
+			// treat commas as "."
+			s r3=$replace(r3,",","."),r4=$replace(r4,",","."),r5=$replace(r5,",",".")
+			;s ^martin(row,"c2")=r1_", "_r3_", "_r4_", "_r5
+		}else 
+		{	s r3=$replace(r3,",","."),r4=$replace(r4,",","."),r5=$replace(r5,",",".")
+			}
+		/* Set Result as the standard
+		i bk["INDO"!(bk["4321-qa-jondaffr") {
+			if r3["." d
+			. s r4=$replace(r4,",","."),r5=$replace(r5,",",".")
+			. s r3=$replace(r3,".",""),r4=$replace(r4,".",""),r5=$replace(r5,".","")
+			if r3["," d
+			. s r4=$replace(r4,".",","),r5=$replace(r5,".",",")
+			.s r3=$replace(r3,",","."),r4=$replace(r4,",","."),r5=$replace(r5,",",".")
+		}		
+		*/
+	; end clean up
+	;cater for "<", ">" signs column placement
+	if (r4["<"),(r5="") s r5=r4 s r4=""
+	if (r4=""),(r5[">") s r4=r5 s r5=""
+	;END
+	
+	
+	
+	;w "<td class='date' onclick='jEditBox(event)' style='color:"_c1_"'>"_r0_"</td>"
+	s ^FormData(-1,rid,trow,"date")=r0
+	;w "<td class='test-name' onclick='jEditBox(event)' title='Original - "_r1_"'>"_r1x_"</td>"
+	s ^FormData(-1,rid,trow,"test-name")=r1x
+			
+	s x=$$GetSINameType^WSP999(r1x,r6x)
+		;&js<console.log(`#(r1T)#`);>
+		
+	; for biomarkers xxx#(JXName) from % to another 2024-05-15 martin
+	if x["#",r2="%" s x=$p(x," ",1)
+.
+#;	if x=""{
+#;		s xx= $g(^VectorSearch(rid,row))
+#;		i xx'="" s xx=$p(xx,$c(9),1), r6v=$p(xx,$c(9),2) ;&js<console.log(`#(xx)#`);>
+#;	}
+	s r1a=""
+	if x=""{
+		s IsMatch=0,r1a=r1
+		WHILE IsMatch=0&($l(r1a)'=0){
+			s r0="" &sql(SELECT ID INTO :r0 FROM DiagnosticTest WHERE (Name=:r1a OR SIName=:r1a) AND LOWER(Type->ResultType)=LOWER(:r6x) AND IsNull(DeletedDate,'')='' AND IsNull(ApprovedDate,'')<>'' AND ModifiedDate<=ApprovedDate)
+			i r0'=""  s IsMatch=1 &sql(SELECT SIName INTO :r1a FROM DiagnosticTest  WHERE ID=:r0)
+			i 'IsMatch s r1a=$e(r1a,1,$l(r1a)-1)
+		}
+		
+		i r1a'="" s NameMappingFlag=NameMappingFlag+1 s ^FormData(-1,rid,trow,"transformed-name")= r8_" "_r1a_$c(9)_"issue"_$c(9)_c2_$c(9)_"No match-Picking closest JX match: "_r1a_$c(9)_c2
+		e  s x=r1T s NameMappingFlag=NameMappingFlag+1 s ^FormData(-1,rid,trow,"transformed-name")= r8_" "_r1T_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching ,Using original."_$c(9)_c1
+	}
+	i x'="" {
+		;w "<td class='transformed-name converted' style='color:"_c1_"' title='Converted:Same BB.'><input type='text' style='color:"_c1_"' autocomplete='off' onkeyup='dataChange(event)' onblur='debounceInput(event)' value='"_x_"'></td>"
+		i $zconvert(x,"l")=$zconvert(r1T,"l") s ^FormData(-1,rid,trow,"transformed-name")= r8_" "_x_$c(9)_"converted"_$c(9)_c1_$c(9)_"Converted:Same BB"_$c(9)_c1
+		e  s ^FormData(-1,rid,trow,"transformed-name")=r8_" "_ x_$c(9)_"converted"_$c(9)_c3_$c(9)_"Converted"_$c(9)_c3
+		;w "<td class='transformed-name converted' style='color:"_c3_"' title='Converted.'><input type='text' style='color:"_c3_"' autocomplete='off' onkeyup='dataChange(event)' onblur='debounceInput(event)' value='"_x_"'></td>"
+	}
+#;	else {
+#;		w "<td class='transformed-name issue' style='color:"_c2_"' title='No match-Picking closest JX match: "_xx_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' onfocus='saveToGlobals()' value='"_xx_"'></td>"
+#;		if xx'="" s NameMappingFlag=NameMappingFlag+1 s ^FormData(-1,rid,trow,"transformed-name")= xx_$c(9)_"issue"_$c(9)_c2_$c(9)_"No match-Picking closest JX match: "_xx_$c(9)_c2
+#;		e  s x=r1T s NameMappingFlag=NameMappingFlag+1 s ^FormData(-1,rid,trow,"transformed-name")= r1T_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching ,Using original."_$c(9)_c1
+#;		;e  s x=r1T w "<td class='transformed-name issue' style='color:"_c2_"; ' title='No matching ,Using original.'><input type='text' style='color:"_c1_";background-color: #e6f796;' autocomplete='off' onkeyup='dataChange(event)' onblur='debounceInput(event)' value='"_r1T_"'></td>" 
+#;	}
+	//display:none;
+	;i CatMatch=1 w "<td class='category' onclick='jEditBox(event)' style='color:"_c3_";' title='"_r6a_" -> "_r6x_"'>"_r6sub_"</td>"	
+	;e  w "<td class='category' onclick='jEditBox(event)' style='color:#E63876;' title='"_r6a_" -> "_r6x_"'>"_r6sub_"</td>"
+	s ^FormData(-1,rid,trow,"category")=r6sub
+	
+	
+	if r3T="" s r3T=r3
+#;	if '$$CheckValue^jxDemoDMT(r3) w "<td class='result' onclick='jEditBox(event)' title='Original - "_r3x_"'>"_r3T_"</td>"
+#;	e  w "<td class='result' onclick='jEditBox(event)' >"_r3x_"</td>"
+	if '$$CheckValue^jxDemoDMT(r3) s ^FormData(-1,rid,trow,"result")=r3T
+	e  s ^FormData(-1,rid,trow,"result")=r3x
+	
+#;	if r2T'="" w "<td class='from-unit' onclick='jEditBox(event)' title='Translated - "_r2_"'>"_r2T_"</td>"
+#;	e  w "<td class='from-unit' onclick='jEditBox(event)' >"_r2_"</td>"
+	if r2T'="" s ^FormData(-1,rid,trow,"from-unit")=r2T
+	e  s ^FormData(-1,rid,trow,"from-unit")=r2
+	
+	s tounit=$$GetSIUnit^WSP999(x)
+	if tounit'="" s r2a=tounit
+	e  s r2a=r2
+	
+	s r2jx=$$GetJXUnit^WSP999(r2)
+	if r2jx="" s r2jx=r2
+	
+#;		if r2jx="",r2T'="" d
+#;		. s Tx=$$GetJXUnit^WSP999(r2T)
+#;		. i Tx'="" 
+#;		. s x=Tx s r2=r2T
+	; more clean up
+	i r2jx="%" d
+	. i $l($p(r3,".",1))>3 s r3=$replace(r3,".",""),r3=$e(r3,1,2)_"."_$e(r3,3,999)
+	. i $l($p(r4,".",1))>3 s r4=$replace(r4,".",""),r4=$e(r4,1,2)_"."_$e(r4,3,999)
+	. i $l($p(r5,".",1))>3 s r5=$replace(r5,".",""),r5=$e(r5,1,2)_"."_$e(r5,3,999)
+	
+	; test if original unit can be converted
+	s xx=$$U2U^jxDemoDMT(r1,r3,r2jx,r2a)
+	;s ^martin(row,"t1")=r1_", "_r3_", "_r2jx_", "_r2a
+	;i xx'["ERROR" d
+	i r6x="Blood Test" s IsUrinalysis=0 
+	e  s IsUrinalysis=1 
+	i IsUrinalysis,r2="" s r2a=r2
+	i $$CheckValue^jxDemoDMT(r3) s r3=$$U2U^jxDemoDMT(r1,r3,r2jx,r2a,IsUrinalysis)
+	i $$CheckValue^jxDemoDMT(r4) s r4=$$U2U^jxDemoDMT(r1,r4,r2jx,r2a,IsUrinalysis)
+	i $$CheckValue^jxDemoDMT(r5) s r5=$$U2U^jxDemoDMT(r1,r5,r2jx,r2a,IsUrinalysis)
+	/*
+	s ^martin(row,"t2","r3")=r1_", "_r3_", "_r2jx_", "_r2a_", "_IsUrinalysis
+	s ^martin(row,"t2","r4")=r1_", "_r4_", "_r2jx_", "_r2a_", "_IsUrinalysis
+	s ^martin(row,"t2","r5")=r1_", "_r5_", "_r2jx_", "_r2a_", "_IsUrinalysis
+	*/
+	
+	s recalc=0
+	i tounit="" d
+		. ;w "<td class='convert-result-unit' style='color:"_c2_"' title='No matching JX Unit, Using Original : "_r2x_"'><div class='dropdown' style='color:"_c1_"'  onclick='openUnitSuggestions(event)' onfocus='saveToGlobals()' tabindex='-1'>"_r2_" <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div></td>" ;r2
+		. s ^FormData(-1,rid,trow,"convert-result-unit")= r2_$c(9)_""_$c(9)_c2_$c(9)_"No matching JX Unit, Using Original : "_r2x_$c(9)_c1  
+	i tounit'="" ,xx["ERROR" d
+		. ;w "<td class='convert-result-unit issue' style='color:"_c2_"' title='No matching JX Unit : "_r2x_"'><div class='dropdown' style='color:"_c2_"'  onclick='openUnitSuggestions(event)' onfocus='saveToGlobals()' tabindex='-1'>"_r2a_" <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div></td>" ;r2
+		. s UnitMappingFlag=UnitMappingFlag+1 s ^FormData(-1,rid,trow,"convert-result-unit")= r2a_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JX Unit : "_r2x_$c(9)_c2  
+	i tounit'="",xx'["ERROR" d ;r2a=tempUnit, r2x=original r2(unit)
+		. ;i (r2a="")!($zconvert(r2a,"l")=$zconvert(r2x,"l")) w "<td class='convert-result-unit converted' style='color:"_c1_"' title='Converted:Same Unit'><div class='dropdown' style='color:"_c1_";/*border-color:"_c3_"*/'  onclick='openUnitSuggestions(event)' onfocus='saveToGlobals()' tabindex='-1'>"_r2a_" <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div></td>"
+		. ;e  s recalc=1 s r2=r2a w "<td class='convert-result-unit converted' style='color:"_c3_"' title='Converted'><div class='dropdown' style='color:"_c3_"' onclick='openUnitSuggestions(event)' tabindex='-1'>"_r2a_" <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div></td></td>" 
+		. i (r2a="")!($zconvert(r2a,"l")=$zconvert(r2x,"l")) s ^FormData(-1,rid,trow,"convert-result-unit")= r2a_$c(9)_"converted"_$c(9)_c1_$c(9)_"Converted:Same Unit"_$c(9)_c1  
+		. e  s recalc=1 s r2=r2a s ^FormData(-1,rid,trow,"convert-result-unit")= r2a_$c(9)_"converted"_$c(9)_c3_$c(9)_"Converted"_$c(9)_c3  
+		i recalc {
+			;i r3'["ERROR" s ave=$$AveRes^WSP999(r1,r3,r2,"") w "<td class='convert-result-val converted' style='color:"_c3_"' title='Converted'><input type='text' style='color:"_c1_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r3'="":r3,1:"")_"'></td>"
+			;i r3["ERROR" w "<td class='convert-result-val issue' style='color:"_c2_"' title='No matching JXConversion : "_r3x_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r3'="":r3,1:"")_"'></td>"
+			i r3'["ERROR" s ^FormData(-1,rid,trow,"convert-result-val")= $s(r3'="":r3,1:"")_$c(9)_"converted"_$c(9)_c3_$c(9)_"Converted"_$c(9)_c1  
+			e  s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"convert-result-val")= $s(r3'="":r3,1:"")_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JXConversion : "_r3x_$c(9)_c2
+			
+			;w "<td class='l-range' onclick='jEditBox(event)'>"_r4x_"</td>",!
+			;if r4["ERROR" {w "<td class='l-result-val issue' style='color:"_c2_"' title='No matching JXConversion : "_r4x_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r4'="":r4,1:"")_"'></td>"}
+			;else  {w "<td class='l-result-val converted' style='color:"_c3_"' title='Converted'><input type='text' style='color:"_c3_"' autocomplete='off' onmouseup='dataChange(event)' value='"_$s(r4'="":r4,1:"")_"'></td>",!}
+			s ^FormData(-1,rid,trow,"l-range")=r4x
+			if r4["ERROR" s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"l-result-val")= $s(r4'="":r4,1:"")_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JXConversion : "_r4x_$c(9)_c2
+			e  s ^FormData(-1,rid,trow,"l-result-val")= $s(r4'="":r4,1:"")_$c(9)_"converted"_$c(9)_c3_$c(9)_"Converted"_$c(9)_c3
+			
+			;w "<td class='u-range' onclick='jEditBox(event)'>"_r5x_"</td>",!
+			;i r5["ERROR" {w "<td class='u-result-val issue' style='color:"_c2_"' title='No matching JXConversion :"_r5x_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r5'="":r5,1:"")_"'></td>",!}
+			;else {w "<td class='u-result-val converted' style='color:"_c3_"' title='Converted'><input type='text' style='color:"_c3_"' autocomplete='off' onmouseup='dataChange(event)'  value='"_$s(r5'="":r5,1:"")_"'></td>",!}
+			s ^FormData(-1,rid,trow,"u-range")=r5x
+			if r5["ERROR" s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"u-result-val")= $s(r5'="":r5,1:"")_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JXConversion : "_r5x_$c(9)_c2
+			e  s ^FormData(-1,rid,trow,"u-result-val")= $s(r5'="":r5,1:"")_$c(9)_"converted"_$c(9)_c3_$c(9)_"Converted"_$c(9)_c3
+			
+			;w "<td class='comment'><textarea autocomplete='off' rows='5' cols='50' onkeyup=''>"_r7_"</textarea></td>",!
+			;w "<td class='row-num' style='display:none;'>"_row_"</td>"
+			;w "</tr>",!
+	
+		  }else{
+		
+			;i r3["ERROR" w "<td class='convert-result-val issue' style='color:"_c2_"' title='No matching JXConversion : "_r3x_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r3'="":r3,1:"")_"'></td>"
+			;e   w "<td class='convert-result-val' style='color:"_c1_"' title='No template:Using Original'><input type='text' style='color:"_c1_";' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r3'="":r3,1:"")_"'></td>"
+			i r3["ERROR" s ^FormData(-1,rid,trow,"convert-result-val")= $s(r3'="":r3,1:"")_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JXConversion : "_r3x_$c(9)_c2
+			e  s ^FormData(-1,rid,trow,"convert-result-val")= $s(r3'="":r3,1:"")_$c(9)_""_$c(9)_c1_$c(9)_"No template:Using Original"_$c(9)_c1  
+			
+			;w "<td class='l-range' onclick='jEditBox(event)'>"_r4x_"</td>",!
+			;if r4["ERROR" {w "<td class='l-result-val issue' style='color:"_c2_"' title='No matching JXConversion : "_r4x_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r4'="":r4,1:"")_"'></td>"}
+			;elseif (xx'["Error"){w "<td class='l-result-val ' style='color:"_c1_"' title='Converted:Same Unit'><input type='text' style='color:"_c1_"' autocomplete='off' onmouseup='dataChange(event)' value='"_$s(r4'="":r4,1:"")_"'></td>"}
+			;else { w "<td class='convert-result-val' style='color:"_c1_"' title='No template:Using Original'><input type='text' style='color:"_c1_";' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r4'="":r4,1:"")_"'></td>"}
+			s ^FormData(-1,rid,trow,"l-range")=r4x
+			if r4["ERROR" {s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"l-result-val")= $s(r4'="":r4,1:"")_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JXConversion : "_r4x_$c(9)_c2}
+			elseif (xx'["Error") {s ^FormData(-1,rid,trow,"l-result-val")= $s(r4'="":r4,1:"")_$c(9)_""_$c(9)_c1_$c(9)_"Converted:Same Unit"_$c(9)_c1}
+			else  {s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"l-result-val")= $s(r4'="":r4,1:"")_$c(9)_""_$c(9)_c1_$c(9)_"No Template:Using Original"_$c(9)_c1}
+.
+						
+			;w "<td class='u-range' onclick='jEditBox(event)'>"_r5x_"</td>",!
+			;if r5["ERROR" {w "<td class='u-result-val issue' style='color:"_c2_"' title='No matching JXConversion : "_r5x_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r5'="":r5,1:"")_"'></td>"}
+			;elseif (xx'["Error"){w "<td class='u-result-val ' style='color:"_c1_"' title='Converted:Same Unit'><input type='text' style='color:"_c1_"' autocomplete='off' onmouseup='dataChange(event)' value='"_$s(r5'="":r5,1:"")_"'></td>"}
+			;else {w "<td class='convert-result-val' style='color:"_c1_"' title='No template:Using Original'><input type='text' style='color:"_c1_";' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r5'="":r5,1:"")_"'></td>"}
+			s ^FormData(-1,rid,trow,"u-range")=r5x
+			if r5["ERROR" {s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"u-result-val")= $s(r5'="":r5,1:"")_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JXConversion : "_r5x_$c(9)_c2}
+			elseif (xx'["Error") {s ^FormData(-1,rid,trow,"u-result-val")= $s(r5'="":r5,1:"")_$c(9)_""_$c(9)_c1_$c(9)_"Converted:Same Unit"_$c(9)_c1}
+			else  {s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"u-result-val")= $s(r5'="":r5,1:"")_$c(9)_""_$c(9)_c1_$c(9)_"No Template:Using Original"_$c(9)_c1}
+.
+			
+			;w "<td class='comment'><textarea autocomplete='off' rows='5' cols='50' onkeyup=''>"_r7_"</textarea></td>",!		
+			;w "<td class='row-num' style='display:none;'>"_row_"</td>"
+			;w "</tr>",!
+		}
+	 ;d SaveResult(rid,row,r1T, x, r3T,r3, r2, r2a, r4, r5, r0, r7,r6T)	
+	 u 0
+	q	
+CleanUp
+	; clean up units
+		s r2=$replace(r2,"|","l")
+		s r2=$replace(r2," ","")
+		s r2=$replace(r2,"-1","-l")
+		s r2=$replace(r2,"_1","_l")
+		i $e(r2,$l(r2)-1,$l(r2))="/1" s r2=$replace(r2,"/1","/l")
+		i $e(r2,$l(r2))="_" s r2=r2_"l"
+		s r2=$replace(r2," / ","/") 
+	
+	; clean up value and range
+		s r3=$replace(r3,"*","")
+		s r3=$replace(r3," ","")
+		s r4=$replace(r4," ","")
+		i $p(r4,"-",1)'="",$p(r4,"-",2)'="" d	; cater for 1-3
+		. s r5=$p(r4,"-",2),r4=$p(r4,"-",1), r4x=r4,r5x=r5
+		s r5=$replace(r5," ","")
+		i $p(r5,"-",1)'="",$p(r5,"-",2)'="" d	; cater for 1-3
+		. s r4=$p(r5,"-",1),r5=$p(r5,"-",2), r4x=r4,r5x=r5
+		; For Indo clients
+		i bk["INDO"!(bk["JXTesting") {
+			; Use the original from GEMINI
+			// treat "." as comma
+			s r3=$replace(r3,".",""),r4=$replace(r4,".",""),r5=$replace(r5,".","")
+			// treat commas as "."
+			s r3=$replace(r3,",","."),r4=$replace(r4,",","."),r5=$replace(r5,",",".")
+		}else 
+		{	s r3=$replace(r3,",","."),r4=$replace(r4,",","."),r5=$replace(r5,",",".")
+			}
+		/* Set Result as the standard
+		i bk["INDO"!(bk["4321-qa-jondaffr") {
+			if r3["." d
+			. s r4=$replace(r4,",","."),r5=$replace(r5,",",".")
+			. s r3=$replace(r3,".",""),r4=$replace(r4,".",""),r5=$replace(r5,".","")
+			if r3["," d
+			. s r4=$replace(r4,".",","),r5=$replace(r5,".",",")
+			.s r3=$replace(r3,",","."),r4=$replace(r4,",","."),r5=$replace(r5,",",".")
+		}		
+		*/
+	; end clean up
+	;END
+	q
+	
+CheckValue(value)
+	; prefixs&postfixes
+	s IsNum=0
+	i '$isvalidnum(value){
+		i value["<=" s IsNum=1
+		i value[">=" s IsNum=1
+		i value["<" s IsNum=1
+		i value[">" s IsNum=1
+		
+		i $f(value,"++")'=0 ! $f(value,"--")'=0 s IsNum=0 q IsNum
+		
+		//Do not reorder this If
+		if value["+",$f(value,"+")=$l(value)+1 {s IsNum=1}
+		if value["+",$f(value,"+")=2, $l(value)'=1 { s IsNum=1}
+		else {s IsNum=0}
+		
+		if value["-"
+		{	s pos =$f(value,"-") 
+			i pos=2, $l(value)=1 {s IsNum=0 q IsNum}
+			i pos=2 {s prefix="-",value=$replace(value,"-",""),IsNum=1 }	//prefix "-"
+			elseif pos=($l(value)+1){ s IsNum=1 }  //postfix "-"
+			else 
+				{	
+					s low=$p(value,"-",1)
+					s high=$p(value,"-",2)
+					i $isvalidnum(low), $isvalidnum(high) s IsNum=1
+					}
+		}
+	}
+	else {s IsNum=1}
+ q IsNum
+ 
+TwoValue(testname,value,fromunit,tounit,IsUrine)
+	// Extract and Calculate each value and concat with "-" again
+	n num1,num2,low,high
+	s low=$p(value,"-",1)
+	s high=$p(value,"-",2)
+	s num1=$$U2U(testname,low,fromunit,tounit,IsUrine)
+	s num2=$$U2U(testname,high,fromunit,tounit,IsUrine)
+	q num1_"-"_num2 	
+U2U(testname,value,fromunit,tounit,IsUrine=0)	; calculate Unit To Unit
+	
+	n x1,x2,x3,x4,val,prefix,postfix
+	s (x1,x2,x3,x4,val,postfix,prefix)=""
+	s val="" 
+	i value="" q value
+	i fromunit="" q value
+	i tounit="" q value
+	s fromunit=$zstrip(fromunit, "<>W")
+	s tounit=$zstrip(tounit, "<>W")
+	
+	
+	; prefixs&postfixes
+	i value["<=" s prefix="<=",value=$replace(value,"<=","")
+	i value[">=" s prefix=">=",value=$replace(value,">=","")
+	i value["<" s prefix="<",value=$replace(value,"<","")
+	i value[">" s prefix=">",value=$replace(value,">","")
+	
+	i value["+",$f(value,"+")=2 s prefix="+",value=$replace(value,"+","")
+	i value["+",$f(value,"+")=$l(value)+1 s postfix="+",value=$replace(value,"+","")
+	
+	if value["-"
+	{	s pos =$f(value,"-") 
+		i pos=2 {s prefix="-",value=$replace(value,"-","")}	//prefix "-"
+		elseif pos=($l(value)+1){ s postfix="-",value=$replace(value,"-","") }  //postfix "-"
+		else 
+			{	//for two values eg. 1-5
+				s result=$$TwoValue^jxDemoDMT(testname,value,fromunit,tounit,IsUrine)
+				q result
+				}
+	}
+	i value[":" , $zconvert(fromunit,"l")["titer",fromunit=tounit q prefix_value
+	; END of prefixs&postfixes
+	i $number(value)="" q "ERROR CONVERTING"
+	; same unit
+	i $zconvert(fromunit,"l")=$zconvert(tounit,"l"),IsUrine=0 q prefix_$fn(value,,2)_postfix
+	i $zconvert(fromunit,"l")=$zconvert(tounit,"l"),IsUrine=1 q prefix_value_postfix
+	
+	;i fromunit["/",tounit["/" s val=$$prefix(value,fromunit,tounit) 
+	;if val'="" q prefix_$fn(val,,2) 
+	
+	; branch for Lipoprotein A
+	if $zconvert(testname,"l")="lipoprotein a",$zconvert(fromunit,"l")="g/l",$zconvert(tounit,"l")="nmol/l" set value=$fn(((value*100)*2.5),,2) quit prefix_value_postfix
+	if $zconvert(testname,"l")="lipoprotein a",$zconvert(fromunit,"l")="mg/dl",$zconvert(tounit,"l")="nmol/l" set value=$fn((value*2.4),,2) quit prefix_value_postfix
+	; branch for HbA1c
+	if $zconvert(testname,"l")="hba1c",$zconvert(fromunit,"l")="mmol/mol",$zconvert(tounit,"l")="%" set value=$fn(((value/10.929)+2.15),,2) q prefix_value_postfix
+	; get SI Name
+	s x1=$$GetSIName^WSP999(testname) i x1="" q ""
+	;s x1=$$GetSIName^WSP999(testname) i x1="" q ""
+	if x1["#",fromunit="%" s x1=$p(x1," ",1)
+	s testname=x1
+	if x1="Cholesterol (non HDL) Total" s testname="Cholesterol Total"
+	
+	; get SI Unit - fromunit
+	s x2=""
+	s x2=$$GetJXUnit^WSP999(fromunit)
+	i x2'="" s fromunit=x2 
+	i x2="" q "ERROR CONVERTING"
+	; get JXUnit
+	if ($E(fromunit,1,2)=10){
+		s fromunit=$$GetJXUnit^WSP999(fromunit)
+	}
+	; get JXUnit - tounit
+	s x1=""
+	s x1=$$GetJXUnit^WSP999(tounit)
+	i x1'="" s tounit=x1
+	i x1="" q "ERROR CONVERTING"
+.
+	; same unit, different prefix
+	i fromunit["/",tounit["/" s val=$$prefix^jxDemoDMT(value,fromunit,tounit) 
+	if val'="",IsUrine=0 q prefix_$fn(val,,2)_postfix
+	if val'="",IsUrine=1 q prefix_val_postfix
+	;b:$g(dw)=1
+	if testname["Calcium"  s testname="Calcium"
+	;;s testing1=testname_fromunit_tounit  ;for testing
+	; get fromunit to SIUnit conversion value
+	&sql(SELECT Value INTO :x3 FROM SIUnitConversion WHERE DiagnosticTest=:testname AND ToUnit=:fromunit)
+	&sql(SELECT Value INTO :x4 FROM SIUnitConversion WHERE DiagnosticTest=:testname AND ToUnit=:tounit)
+	;b:$g(DW)=1
+	if IsUrine=0
+	{
+		i +x4'=0 s val=$fn((value*x3/x4),,4) ;Update round off from 10 to 4, 23Nov24
+		i val'="" s val=$fn(val,,2)
+	}
+	else {
+.
+		i +x4'=0 s val=(value*x3/x4)
+		i val'="" s val=val
+	}
+	
+	i +val=0,+value'=0 q "ERROR CONVERTING"
+	q prefix_val_postfix
+prefix(value,fromUnit,toUnit)
+	s baseUnit="",baseUnit1=""
+	s (result,tPrefix,tPrefix1,fPrefix,fPrefix1)=""
+	i fromUnit["IU/" {}
+	elseif fromUnit["U/" {s fromUnit=$replace(fromUnit,"U/","IU/")}
+	i toUnit["IU/" {}
+	elseif toUnit["U/" {s toUnit=$replace(toUnit,"U/","IU/")}
+	
+	if fromUnit["/",toUnit["/" {
+		;finding upper units' prefixes
+		set i=$f(fromUnit,"/")-2, j=$f(toUnit,"/")-2
+		while i'=0,j'=0 {
+			;w $e(fromUnit,i),!,$e(toUnit,j),!
+			i $e(fromUnit,i)=$e(toUnit,j) s baseUnit=$e(fromUnit,i)_baseUnit ;w "baseUnit is: "_baseUnit,! ;w "fromUnit: "_i_","_$e(fromUnit,i)_", toUnit: "_j_","_$e(toUnit,j),!
+			e  q
+			s i=i-1, j=j-1	
+		}
+		;w "UPPER PART:",!	
+		s fPrefix=$p(fromUnit,baseUnit,"1")  ;i fPrefix'="" w "fromUnit has prefix: "_fPrefix_", pos: ",i,!
+		s tPrefix=$p(toUnit,baseUnit,"1") ;i tPrefix'="" w "toUnit has prefix: "_tPrefix_", pos: ",j,!
+		
+		;finding under units' prefixes
+		s i=$l(fromUnit),j=$l(toUnit)
+		s fIndex= $f(fromUnit, "/")-1,tIndex=$f(toUnit, "/")-1
+		;w fIndex_", "_tIndex,!
+		;w i_", "_j,!
+		
+		while i>fIndex,j>tIndex {
+			
+			;w $e(fromUnit,i),i,!,$e(toUnit,j),j,!
+			i $e(fromUnit,i)=$e(toUnit,j) s baseUnit1=$e(fromUnit,i)_baseUnit1 ;w "under baseUnit is: "_baseUnit1,! ;w "fromUnit: "_i_","_$e(fromUnit,i)_", toUnit: "_j_","_$e(toUnit,j),!
+			e  q
+			
+			s i=i-1 s j=j-1	
+		}
+		;w !,"Lower PART:",!
+		s fPrefix1=$p($p(fromUnit,"/",2),baseUnit1,"1") ;if fPrefix1'="" w "fromUnit has prefix: "_fPrefix1_", pos: ",i,!
+		s tPrefix1=$p($p(toUnit,"/",2),baseUnit1,"1") ;if tPrefix1'=""  w "toUnit has prefix: "_tPrefix1_", pos: ",j,!
+	    ;w "BaseUnit is :"_baseUnit_"/"_baseUnit1,!
+		
+		if baseUnit'="" ,baseUnit1'="" d 
+		.d prefixConversion 
+		.s result=value*FinalFactor 
+		
+	}
+	q result
+prefixConversion	
+	#import MX
+	;s (fromU,toU,fromL,toL)=1
+	;upper
+	&sql(SELECT Factor INTO :fromU FROM UnitPrefix WHERE %EXACT(Prefix)=:fPrefix)
+	&sql(SELECT Factor INTO :toU FROM UnitPrefix WHERE %EXACT(Prefix)=:tPrefix)
+	if fromU="" s fromU=1
+	if toU="" s toU=1
+	s uFactor= fromU/toU
+	;w fPrefix_" to "_tPrefix_"="_fromU_"/"_toU_"= "_uFactor,!
+	;Lower
+	&sql(SELECT Factor INTO :fromL FROM UnitPrefix WHERE %EXACT(Prefix)=:fPrefix1)
+	&sql(SELECT Factor INTO :toL FROM UnitPrefix WHERE %EXACT(Prefix)=:tPrefix1)
+	if fromL="" s fromL=1
+	if toL="" s toL=1
+	s LFactor= fromL/toL
+	;w fPrefix1_" to "_tPrefix1_"="_fromL_"/"_toL_"= "_LFactor,!
+	
+	s FinalFactor= uFactor/LFactor ;w FinalFactor,!
+	q   	
+.
+WriteTr
+	s c1="#405470"	; blue
+	s c2="#e63876"	; pink
+	s c3="#048f2a"	;green
+	
+	/// $p(r2,$c(9),1)= value, $p(r2,$c(9),2)=class, $p(r2,$c(9),3)=color, $p(r2,$c(9),4)=title, $p(r2,$c(9),5)=color
+	s row=$o(^FormData(-1,rid,row)) q:row="" 
+	s r0=^FormData(-1,rid,row,"date")
+	s r1=^FormData(-1,rid,row,"test-name")
+	s r2=^FormData(-1,rid,row,"transformed-name")
+	s r3=^FormData(-1,rid,row,"result")
+	s r4=^FormData(-1,rid,row,"from-unit")
+	s r5=^FormData(-1,rid,row,"convert-result-unit")
+	s r6=^FormData(-1,rid,row,"convert-result-val")
+	s r7=^FormData(-1,rid,row,"l-range")
+	s r8=^FormData(-1,rid,row,"l-result-val")
+	s r9=^FormData(-1,rid,row,"u-range")
+	s r10=^FormData(-1,rid,row,"u-result-val")	
+	
+	
+	w "<tr class=''>",! 
+	w "<td class='actions'><img class='duplicate-icon' src='./assets/images/duplicate.png' alt='Duplicate' onclick='duplicateRow(event)' > <img src='./assets/images/delete.png' alt='Delete' onclick='deleteRow(event)' >  <img class='add-row-icon' src='./assets/images/row.png' alt='add row' onclick='addNewRow(event)' ></td>",!
+	w "<td class='date' onclick='jEditBox(event)' style='color:"_c1_"'>"_r0_"</td>",!
+	w "<td class='test-name' onclick='jEditBox(event)'>"_$p(r1,$c(9),1)_"</td>",!
+	
+	w "<td class='transformed-name "_$p(r2,$c(9),2)_"' style='color:"_$p(r2,$c(9),3)_"' title='"_$p(r2,$c(9),4)_"'>",!
+	w "<input type='text' style='color:"_$p(r2,$c(9),5)_"' autocomplete='off' onkeyup='dataChange(event)' onfocus='saveToGlobals()' value='"_$p(r2,$c(9),1)_"'>",!
+	w "</td>",!
+	
+	w "<td class='result' onclick='jEditBox(event)'>"_r3_"</td>",!
+	w "<td class='from-unit' onclick='jEditBox(event)'>"_r4_"</td>",!
+	
+	w "<td class='convert-result-unit "_$p(r5,$c(9),2)_"' style='color:"_$p(r5,$c(9),3)_"' title='"_$p(r5,$c(9),4)_"'>",!
+	w "<div class='dropdown' style='color:"_$p(r5,$c(9),5)_"'  onclick='openUnitSuggestions(event)' onfocus='saveToGlobals()' tabindex='-1'>"_$p(r5,$c(9),1)_" <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div>",!
+	w "</td>",!
+	
+	w "<td class='convert-result-val "_$p(r6,$c(9),2)_"' style='color:"_$p(r6,$c(9),3)_"' title='"_$p(r6,$c(9),4)_"'>",!
+	w "<input type='text' style='color:"_$p(r6,$c(9),5)_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$p(r6,$c(9),1)_"'>",!
+	w "</td>",!
+	
+	w "<td class='l-range' onclick='jEditBox(event)'>"_r7_"</td>",!
+	w "<td class='l-result-val "_$p(r8,$c(9),2)_"' style='color:"_$p(r8,$c(9),3)_"' title='"_$p(r8,$c(9),4)_"'>",!
+	w "<input type='text' style='color:"_$p(r8,$c(9),5)_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$p(r8,$c(9),1)_"'>",!
+	w "</td>",!
+	
+	w "<td class='u-range' onclick='jEditBox(event)'>"_r9_"</td>",!
+	w "<td class='u-result-val "_$p(r10,$c(9),2)_"' style='color:"_$p(r10,$c(9),3)_"' title='"_$p(r10,$c(9),4)_"'>",!
+	w "<input type='text' style='color:"_$p(r10,$c(9),5)_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$p(r10,$c(9),1)_"'>",!
+	w "</td>",!
+	
+	w "<td class='comment' ><textarea autocomplete='off' rows='5' cols='50' onkeyup=''></textarea></td>",!
+	w "<td class='row-num' style='display:none;'>"_row_"</td>",!
+	w "</tr>",!
+	g WriteTr
+.
+.
+.
+#;	older version before demo
+#;	w !,"Performing Data Mapping and Calculating Score...",!
+#;	s row="" 
+#;	d TwoSets
+#;	d DataMapping
+#;  	q
+#;TwoSets
+#;	//Complete Reference Range
+#;	n r1,r2,r3,r4,r5
+#;	s row=$o(^AIGEMINI(rid,row)) g:'$ISVALIDNUM(row) TwoSetsEnd
+#;	s r1=$g(^AIGEMINI(rid,row,"name"))
+#;	s r2=$g(^AIGEMINI(rid,row,"unit"))
+#;	s r3=$g(^AIGEMINI(rid,row,"value"))
+#;	s r4=$g(^AIGEMINI(rid,row,"loRange"))
+#;	s r5=$g(^AIGEMINI(rid,row,"hiRange"))
+#;	if row>1 
+#;	{	n pRow s pRow= row-1
+#;		s pName=$g(^AIGEMINI(rid,pRow,"name"))
+#;		if (r1=pName),(^AIGEMINI(rid,row,"row"_row)'= ^AIGEMINI(rid,pRow,"row"_pRow)) 
+#;		{	
+#;			i (r4="")!(r5="")
+#;			{	;w "no RR current row",row,!
+#;				s ^AIGEMINI(rid,row,"loRange")=^AIGEMINI(rid,pRow,"loRange")
+#;		 		s ^AIGEMINI(rid,row,"hiRange")=^AIGEMINI(rid,pRow,"hiRange")
+#;			}
+#;			elseif ($g(^AIGEMINI(rid,pRow,"loRange"))="") ! ($g(^AIGEMINI(rid,pRow,"hiRange"))="") 
+#;			{
+#;				s ^AIGEMINI(rid,pRow,"loRange")=r4
+#;				s ^AIGEMINI(rid,pRow,"hiRange")=r5
+#;			}
+#;		
+#;		}
+#;	}
+#;	g TwoSets
+#;TwoSetsEnd	
+#;	q
+#;	
+#;DataMapping
+#;	#import MX
+#;	n row,trow,c1,c2,c3,r0,r1,r1a,r2,r2a,r3,r4,r5,r6,r7,r8,r9,r10,bk,x,trial
+#;	n NameMappingFlag, UnitMappingFlag, DataTransformingFlag, TotalPossible, TotalFlags, ErrorPercent, ConfPercent
+#;	s (trow,row,bk)="" 
+#;	s (NameMappingFlag, UnitMappingFlag, DataTransformingFlag, TotalPossible, TotalFlags, ErrorPercent, ConfPercent) = 0
+#;	
+#;	&sql(SELECT IsTrial INTO :trial FROM Record WHERE id=:rid)
+#;	if trial=1	&sql(SELECT OutputUnit INTO :bk FROM Record WHERE id=:rid) 
+#;	e  s trial=0 &sql(SELECT BucketName INTO :bk FROM Record WHERE id=:rid) 
+#;
+#;	s c1="#405470"	; blue
+#;	s c2="#e63876"	; pink
+#;	s c3="#048f2a"	; green	
+#;	i $d(^AIGEMINI(rid)) d DataMappingA q
+#;	e  d DataMappingRBT q
+#;	q
+#;DataMappingA
+#;	s row=$o(^AIGEMINI(rid,row)) g:'$ISVALIDNUM(row) DataMappingEnd
+#;	s r0=$g(^AIGEMINI(rid,row,"date")) 
+#;	s r1=$g(^AIGEMINI(rid,row,"name"))
+#;	s r2=$g(^AIGEMINI(rid,row,"unit"))
+#;	s r3=$g(^AIGEMINI(rid,row,"value"))
+#;	s r4=$g(^AIGEMINI(rid,row,"loRange"))
+#;	s r5=$g(^AIGEMINI(rid,row,"hiRange"))
+#;	s r6=$g(^AIGEMINI(rid,row,"category"))
+#;	s r7=$g(^AIGEMINI(rid,row,"comment"))
+#;
+#;	s r2x=r2,r3x=r3,r4x=r4,r5x=r5
+#;	
+#;	//Cater for duplicate rows, compare current row with all previous rows
+#;	if row>1 
+#;	{	n pRow s pRow= row-1
+#;		s r1p=$g(^AIGEMINI(rid,pRow,"name"))
+#;		for i=1:1:pRow
+#;		{
+#;			if ^AIGEMINI(rid,row,"row"_row)= ^AIGEMINI(rid,i,"row"_i) g DataMappingA
+#;			
+#;			}
+#;	} 
+#;	g:r1="" DataMappingA
+#;	g:r3="" DataMappingA
+#;		
+#;	s trow=trow+1
+#;	d CleanUp
+#;	d ProcessDataMapping
+#;	g DataMappingA	
+#;	
+#;DataMappingRBT	
+#;	&sql(SELECT BucketName INTO :bk FROM Record WHERE id=:rid)
+#;	 ; From ResultBloodTest_Tests for HL7,Json,xml,xlsx, or if no ^AICLAUDE , doesn't compare with textract
+#;	 &sql(DECLARE C01 CURSOR FOR
+#;		SELECT COUNT(element_key),element_key,Tests_TestName,Tests_SIUnit,Tests_Result,Tests_LowRange,Tests_HighRange,ResultBloodTest->ReportDate
+#;		INTO :rowkey,:row,:r1,:r2,:r3,:r4,:r5,:r0
+#;		FROM ResultBloodTest_Tests 
+#;		WHERE ResultBloodTest=:rbt
+#;	)
+#;	&sql(OPEN C01)
+#;	&sql(FETCH C01)
+#;	WHILE SQLCODE=0{
+#;		
+#;	g:r1="" DataMappingRBTEnd
+#;	g:r3="" DataMappingRBTEnd
+#;	s r2x=r2,r3x=r3,r4x=r4,r5x=r5	
+#;	s trow=trow+1
+#;	d CleanUp
+#;	d ProcessDataMapping
+#;DataMappingRBTEnd
+#;		&sql(FETCH C01) 
+#;		}
+#;		&sql(CLOSE C01)
+#;		d DataMappingEnd
+#;		q	
+#;		
+#;DataMappingEnd
+#;
+#;	s TotalPossible = trow*5
+#;	s TotalFlags = NameMappingFlag + UnitMappingFlag + DataTransformingFlag
+#;	s ErrorPercent = (TotalFlags/TotalPossible) * 100
+#;	s ConfPercent = 100-ErrorPercent
+#;	s ConfPercent = $fn(ConfPercent,,2)
+#;	;w "Total rows: ",trow,", Total item",TotalPossible,!
+#;	;w "Name:",NameMappingFlag,", unit:",UnitMappingFlag,", Value:",DataTransformingFlag,!,"Total:",TotalFlags,!
+#;	
+#;	&sql(INSERT INTO MX.RecordScore(Record, RowCount, ItemCount, NameFlag, UnitFlag, ValueFlag, Score) 
+#;		 VALUES(:rid, :trow, :TotalPossible, :NameMappingFlag, :UnitMappingFlag, :DataTransformingFlag, :ConfPercent))
+#;	w !,"Confidence Score : ",ConfPercent,!
+#;	k ^FormData(-1,rid)
+#;	q
+#;	
+#;ProcessDataMapping
+#;	
+#;	;w r0,r1,r2,", ",bk,!
+#;	;w "<tr class=''>" 
+#;	;w "<td class='actions'><img class='duplicate-icon' src='./assets/images/duplicate.png' alt='Duplicate' onclick='duplicateRow(event)' > <img src='./assets/images/delete.png' alt='Delete' onclick='deleteRow(event)' >  <img class='add-row-icon' src='./assets/images/row.png' alt='add row' onclick='addNewRow(event)' ></td>"
+#;	s ^FormData(-1,rid,trow,"date")=r0
+#;	s ^FormData(-1,rid,trow,"test-name")=r1
+#;	;w "<td class='date' onclick='jEditBox(event)' style='color:"_c1_"'>"_r0_"</td>"
+#;	;w "<td class='test-name' onclick='jEditBox(event)'>"_r1_"</td>"
+#;	
+#;	s x=$$GetSIName^WSP999(r1)
+#;	; for biomarkers xxx#(JXName) from % to another 2024-05-15 martin
+#;	if x["#",r2="%" s x=$p(x," ",1)
+#;	
+#;	s r1a=""
+#;	/*
+#;	if x=""{
+#;		s xx= $g(^VectorSearch(rid,row))
+#;		i xx'="" d
+#;		. s xx=$p(xx,$c(9),1), r6v=$p(xx,$c(9),2) ;&js<console.log(`#(xx)#`);>
+#;		;s NameMappingFlag=NameMappingFlag+1
+#;	}*/
+#;	/* */
+#;	i x="" {
+#;	 	s IsMatch=0,r1a=r1
+#;		WHILE IsMatch=0&($l(r1a)'=0){
+#;			s r0="" &sql(SELECT ID INTO :r0 FROM DiagnosticTest WHERE (Name=:r1a OR SIName=:r1a) AND IsNull(DeletedDate,'')='' AND IsNull(ApprovedDate,'')<>'' AND ModifiedDate<=ApprovedDate)
+#;			i r0'=""  s IsMatch=1 &sql(SELECT SIName INTO :r1a FROM DiagnosticTest  WHERE ID=:r0)
+#;			i 'IsMatch s r1a=$e(r1a,1,$l(r1a)-1)
+#;		}
+#;		
+#;		i r1a'="" d
+#;		.;s r1ax=r1a w "<td class='test-name' onclick='jEditBox(event)'>"_r1ax_"</td>"
+#;		.i trial=0 &sql(SELECT Name,UnitName INTO :tempName,:tempUnit FROM Template WHERE DiagnosticTest=:r1a AND BucketName=:bk)
+#;		.e  &sql(SELECT Name,UnitName INTO :tempName,:tempUnit FROM TrialTemplate WHERE DiagnosticTest=:r1a AND BucketName=:bk)
+#;		.i tempName'="" s r1=tempName s NameMappingFlag=NameMappingFlag +1 s ^FormData(-1,rid,trow,"transformed-name")= tempName_$c(9)_"issue"_$c(9)_c2_$c(9)_"No match-Picking closest JX match"_$c(9)_c2
+#;		.e  s ^FormData(-1,rid,trow,"transformed-name")= r1_$c(9)_""_$c(9)_c1_$c(9)_"No matching Template:Using original"_$c(9)_c1
+#;		e  s tempUnit="" s NameMappingFlag=NameMappingFlag+1 s ^FormData(-1,rid,trow,"transformed-name")= r1_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JX Name & Template:Using original"_$c(9)_c1
+#;		
+#;	}/**/
+#;	i x'="" {
+#;		;w "<td class='test-name' onclick='jEditBox(event)'>"_r1_"</td>"
+#;		i trial=0 &sql(SELECT Name,UnitName INTO :tempName,:tempUnit FROM Template WHERE DiagnosticTest=:x AND BucketName=:bk)
+#;		e  &sql(SELECT Name,UnitName INTO :tempName,:tempUnit FROM TrialTemplate WHERE DiagnosticTest=:x AND BucketName=:bk)
+#;		i tempName'="" d
+#;		.i tempName["(percent)",r2'="%" d
+#;		..s x=x_" #" ;s tempName=$replace(tempName,"(percent)","(Abs)") 
+#;		..i trial=0 &sql(SELECT Name,UnitName INTO :tempName,:tempUnit FROM Template WHERE DiagnosticTest=:x AND BucketName=:bk)
+#;		..e  &sql(SELECT Name,UnitName INTO :tempName,:tempUnit FROM TrialTemplate WHERE DiagnosticTest=:x AND BucketName=:bk)
+#;		.i $zconvert(tempName,"l")=$zconvert(r1,"l") s ^FormData(-1,rid,trow,"transformed-name")= tempName_$c(9)_"converted"_$c(9)_c1_$c(9)_"Converted:Same BB"_$c(9)_c1
+#;		.e  s r1=x s ^FormData(-1,rid,trow,"transformed-name")= tempName_$c(9)_"converted"_$c(9)_c1_$c(9)_"Converted"_$c(9)_c3	
+#;		e  s ^FormData(-1,rid,trow,"transformed-name")= r1_$c(9)_""_$c(9)_c1_$c(9)_"No matching Template- Using original"_$c(9)_"c1;background-color: #e6f796;"  
+#;		
+#;		;w "<td class='transformed-name converted' style='color:"_c1_"' title='Converted:Same BB'><input type='text' style='color:"_c1_"' autocomplete='off' onkeyup='dataChange(event)' onblur='debounceInput(event)' value='"_tempName_"'></td>" ;r1	
+#;		;w "<td class='transformed-name converted' style='color:"_c3_"' title='Converted'><input type='text' style='color:"_c3_"' autocomplete='off' onkeyup='dataChange(event)' onblur='debounceInput(event)' value='"_tempName_"'></td>"
+#;		;w "<td class='transformed-name issue' style='color:"_c2_"; ' title='No matching Template- Using original'><input type='text' style='color:"_c1_";background-color: #e6f796;' autocomplete='off' onkeyup='dataChange(event)' onblur='debounceInput(event)' value='"_r1_"'></td>"
+#;		}	
+#;	
+#;	s ^FormData(-1,rid,trow,"result")=r3x
+#;	s ^FormData(-1,rid,trow,"from-unit")=r2
+#;	if tempUnit'="" {
+#;		s x=$$GetJXUnit^WSP999(r2)
+#;		s r2a=tempUnit
+#;		i x'="" s r2=x 
+#;	 
+#;		; more clean up
+#;		i r2="%" d
+#;		. i $l($p(r3,".",1))>3 s r3=$replace(r3,".",""),r3=$e(r3,1,2)_"."_$e(r3,3,999)
+#;		. i $l($p(r4,".",1))>3 s r4=$replace(r4,".",""),r4=$e(r4,1,2)_"."_$e(r4,3,999)
+#;		. i $l($p(r5,".",1))>3 s r5=$replace(r5,".",""),r5=$e(r5,1,2)_"."_$e(r5,3,999)
+#;		; test if original unit can be converted
+#;		s x="",x=$$U2U^WSP999(r1,r3,r2,r2a)
+#;		i x["ERROR" s r2a=tempUnit 
+#;		; end more
+#;
+#;		s r3=$$U2U^WSP999(r1,r3,r2,r2a)
+#;		s r4=$$U2U^WSP999(r1,r4,r2,r2a)
+#;		s r5=$$U2U^WSP999(r1,r5,r2,r2a)
+#;	}
+#;	else
+#;	{	
+#;		s x="ERROR Converting" 
+#;		s r2a=r2,r3x=r3,r4x=r4,r5x=r5  
+#;		s r3=$fn(r3,,2)
+#;		s r4=$fn(r4,,2)
+#;		s r5=$fn(r5,,2)
+#;	}
+#;	
+#;	s recalc=0
+#;	// r2 Unit
+#;	i tempUnit="" ,x["ERROR" d
+#;		. s ^FormData(-1,rid,trow,"convert-result-unit")= r2_$c(9)_""_$c(9)_c1_$c(9)_"No matching Template Unit, Using Original : "_r2x_$c(9)_c1  
+#;		.;w "<td class='convert-result-unit issue' style='color:"_c2_"' title='No matching Template Unit, Using Original : "_r2x_"'><div class='dropdown' style='color:"_c1_"'  onclick='openUnitSuggestions(event)' onfocus='saveToGlobals()' tabindex='-1'>"_r2_" <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div></td>" ;r2
+#;	i tempUnit'="" ,x["ERROR" d
+#;		.s UnitMappingFlag=UnitMappingFlag+1 s ^FormData(-1,rid,trow,"convert-result-unit")= r2a_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JX Unit : "_r2x_$c(9)_c2  
+#;		.;w "<td class='convert-result-unit issue' style='color:"_c2_"' title='No matching JX Unit : "_r2x_"'><div class='dropdown' style='color:"_c2_"'  onclick='openUnitSuggestions(event)' onfocus='saveToGlobals()' tabindex='-1'>"_r2a_" <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div></td>" ;r2
+#;		
+#;	i tempUnit'="",x'["ERROR" d ;r2a=tempUnit, r2x=original r2(unit)
+#;		. i (r2a="")!($zconvert(r2a,"l")=$zconvert(r2x,"l")) s ^FormData(-1,rid,trow,"convert-result-unit")= r2a_$c(9)_"converted"_$c(9)_c1_$c(9)_"Converted:Same Unit"_$c(9)_c1  
+#;		.;w "<td class='convert-result-unit converted' style='color:"_c1_"' title='Converted:Same Unit'><div class='dropdown' style='color:"_c1_";/*border-color:"_c3_"*/'  onclick='openUnitSuggestions(event)' onfocus='saveToGlobals()' tabindex='-1'>"_r2a_" <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div></td>"
+#;		. e  s recalc=1 s r2=r2a s ^FormData(-1,rid,trow,"convert-result-unit")= r2a_$c(9)_"converted"_$c(9)_c3_$c(9)_"Converted"_$c(9)_c3  
+#;		.;w "<td class='convert-result-unit converted' style='color:"_c3_"' title='Converted'><div class='dropdown' style='color:"_c3_"' onclick='openUnitSuggestions(event)' tabindex='-1'>"_r2a_" <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div></td></td>" 
+#;	// END of r2 unit
+#;	
+#;	// value and RR
+#;		i recalc {
+#;			i r3'["ERROR" s ave=$$AveRes^WSP999(r1,r3,r2,"") s ^FormData(-1,rid,trow,"convert-result-val")= $s(r3'="":r3,1:"")_$c(9)_"converted"_$c(9)_c3_$c(9)_"Converted"_$c(9)_c1  
+#;			;w "<td class='convert-result-val converted' style='color:"_c3_"' title='Converted'><input type='text' style='color:"_c1_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r3'="":r3,1:"")_"'></td>"
+#;			i r3["ERROR" s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"convert-result-val")= $s(r3'="":r3,1:"")_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JXConversion : "_r3x_$c(9)_c2  
+#;			;w "<td class='convert-result-val issue' style='color:"_c2_"' title='No matching JXConversion : "_r3x_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r3'="":r3,1:"")_"'></td>"
+#;			
+#;			s ^FormData(-1,rid,trow,"l-range")=r4x
+#;			if r4["ERROR" { s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"l-result-val")= $s(r4'="":r4,1:"")_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JXConversion : "_r4x_$c(9)_c2  }
+#;			elseif (tempUnit="" ){ s ^FormData(-1,rid,trow,"l-result-val")= $s(r4'="":r4,1:"")_$c(9)_""_$c(9)_c1_$c(9)_""_$c(9)_c1  }
+#;			else  {s ^FormData(-1,rid,trow,"l-result-val")= $s(r4'="":r4,1:"")_$c(9)_"converted"_$c(9)_c3_$c(9)_"Converted"_$c(9)_c3  }	
+#;						
+#;			;w "<td class='l-range' onclick='jEditBox(event)'>"_r4x_"</td>",! ;_" "_r2x_"
+#;			;w "<td class='l-result-val issue' style='color:"_c2_"' title='No matching JXConversion : "_r4x_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r4'="":r4,1:"")_"'></td>"}
+#;			;w "<td class='l-result-val issue' style='color:"_c1_"'><input type='text' style='color:"_c1_"' autocomplete='off' onmouseup='dataChange(event)' value='"_$s(r4'="":r4,1:"")_"'></td>",!}
+#;			;w "<td class='l-result-val converted' style='color:"_c3_"' title='Converted'><input type='text' style='color:"_c3_"' autocomplete='off' onmouseup='dataChange(event)' value='"_$s(r4'="":r4,1:"")_"'></td>",!}
+#;			
+#;			
+#;			s ^FormData(-1,rid,trow,"u-range")=r5x
+#;			if r5["ERROR" { s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"u-result-val")= $s(r5'="":r5,1:"")_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JXConversion : "_r5x_$c(9)_c2  }
+#;			elseif (tempUnit="" ){ s ^FormData(-1,rid,trow,"u-result-val")= $s(r5'="":r5,1:"")_$c(9)_""_$c(9)_c1_$c(9)_""_$c(9)_c1  }
+#;			else  {s ^FormData(-1,rid,trow,"u-result-val")= $s(r5'="":r5,1:"")_$c(9)_"converted"_$c(9)_c3_$c(9)_"Converted"_$c(9)_c3  }				
+#;			/*
+#;			;w "<td class='u-range' onclick='jEditBox(event)'>"_r5x_"</td>",!  ; "_r2x_"
+#;			i r5["ERROR" {w "<td class='u-result-val issue' style='color:"_c2_"' title='No matching JXConversion :"_r5x_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r5'="":r5,1:"")_"'></td>",!}
+#;			ELSEIF (tempUnit="") {w "<td class='u-result-val issue' style='color:"_c1_"'><input type='text' style='color:"_c1_"' autocomplete='off' onmouseup='dataChange(event)'  value='"_$s(r5'="":r5,1:"")_"'></td>",!}
+#;			else {w "<td class='u-result-val converted' style='color:"_c3_"' title='Converted'><input type='text' style='color:"_c3_"' autocomplete='off' onmouseup='dataChange(event)'  value='"_$s(r5'="":r5,1:"")_"'></td>",!}
+#;			
+#;			w "<td class='comment' ><textarea autocomplete='off' rows='5' cols='50' onkeyup=''></textarea></td>",!
+#;			w "<td class='row-num' style='display:none;'>"_row_"</td>"
+#;			w "</tr>",!
+#;			*/
+#;	
+#;		  }else{
+#;		
+#;			i r3["ERROR"  s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"convert-result-val")= $s(r3'="":r3,1:"")_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JXConversion : "_r3x_$c(9)_c2  
+#;			;w "<td class='convert-result-val issue' style='color:"_c2_"' title='No matching JXConversion : "_r3x_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r3'="":r3,1:"")_"'></td>"
+#;			e  d
+#;			.i tempUnit="" s ^FormData(-1,rid,trow,"convert-result-val")= $s(r3'="":r3,1:"")_$c(9)_""_$c(9)_c1_$c(9)_"No template:Using Original"_$c(9)_c1  
+#;			.;w "<td class='convert-result-val issue' style='color:"_c1_"' title='No template:Using Original'><input type='text' style='color:"_c1_";' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r3'="":r3,1:"")_"'></td>"
+#;			.e  s ave=$$AveRes^WSP999(r1,r3,r2,"") s ^FormData(-1,rid,trow,"convert-result-val")= $s(r3'="":r3,1:"")_$c(9)_"converted"_$c(9)_c1_$c(9)_"Converted:Same Unit"_$c(9)_c1  
+#;			;w "<td class='convert-result-val converted' style='color:"_c1_"' title='Converted:Same Unit'><input type='text' style='color:"_c1_";' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r3'="":r3,1:"")_"'></td>"
+#;
+#;			
+#;			s ^FormData(-1,rid,trow,"l-range")=r4x
+#;			i r4["ERROR" {s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"l-result-val")= $s(r4'="":r4,1:"")_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JXConversion : "_r5x_$c(9)_c2  }
+#;			elseif (tempUnit="" ){ s ^FormData(-1,rid,trow,"l-result-val")= $s(r4'="":r4,1:"")_$c(9)_""_$c(9)_c1_$c(9)_""_$c(9)_c1  }
+#;			else  {s ^FormData(-1,rid,trow,"l-result-val")= $s(r4'="":r4,1:"")_$c(9)_"converted"_$c(9)_c1_$c(9)_"Converted:Same Unit"_$c(9)_c1  }					
+#;			/*			
+#;			w "<td class='l-range' onclick='jEditBox(event)'>"_r4x_"</td>",! ; "_r2x_"
+#;			if r4["ERROR" {w "<td class='l-result-val issue' style='color:"_c2_"' title='No matching JXConversion : "_r4x_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r4'="":r4,1:"")_"'></td>"}
+#;			elseif (tempUnit="" ){w "<td class='l-result-val issue' style='color:"_c1_"'><input type='text' style='color:"_c1_"' autocomplete='off' onmouseup='dataChange(event)' value='"_$s(r4'="":r4,1:"")_"'></td>",!}
+#;			else  {w "<td class='l-result-val converted' style='color:"_c1_"' title='Converted:Same Unit'><input type='text' style='color:"_c1_"' autocomplete='off' onmouseup='dataChange(event)' value='"_$s(r4'="":r4,1:"")_"'></td>",!}
+#;			;w "<td class='l-result-unit'>"_r2a_"</td>",!
+#;			*/
+#;			s ^FormData(-1,rid,trow,"u-range")=r5x
+#;			i r5["ERROR" {s DataTransformingFlag=DataTransformingFlag+1 s ^FormData(-1,rid,trow,"u-result-val")= $s(r5'="":r5,1:"")_$c(9)_"issue"_$c(9)_c2_$c(9)_"No matching JXConversion : "_r5x_$c(9)_c2  }
+#;			elseif (tempUnit="" ){ s ^FormData(-1,rid,trow,"u-result-val")= $s(r5'="":r5,1:"")_$c(9)_""_$c(9)_c1_$c(9)_""_$c(9)_c1  }
+#;			else  {s ^FormData(-1,rid,trow,"u-result-val")= $s(r5'="":r5,1:"")_$c(9)_"converted"_$c(9)_c1_$c(9)_"Converted:Same Unit"_$c(9)_c1  }				
+#;			
+#;			/*
+#;			w "<td class='u-range' onclick='jEditBox(event)'>"_r5x_"</td>",! ; "_r2x_"
+#;			i r5["ERROR" {w "<td class='u-result-val issue' style='color:"_c2_"' title='No matching JXConversion :"_r5x_"'><input type='text' style='color:"_c2_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$s(r5'="":r5,1:"")_"'></td>",!}
+#;			ELSEIF (tempUnit="") {w "<td class='u-result-val issue' style='color:"_c1_"'><input type='text' style='color:"_c1_"' autocomplete='off' onmouseup='dataChange(event)'  value='"_$s(r5'="":r5,1:"")_"'></td>",!}
+#;			else {w "<td class='u-result-val converted' style='color:"_c1_"' title='Converted:Same Unit'><input type='text' style='color:"_c1_"' autocomplete='off' onmouseup='dataChange(event)'  value='"_$s(r5'="":r5,1:"")_"'></td>",!}
+#;			
+#;			w "<td class='comment'><textarea autocomplete='off' rows='5' cols='50' onkeyup=''></textarea></td>",!
+#;			w "<td class='row-num' style='display:none;'>"_row_"</td>"
+#;			w "</tr>",!
+#;			*/
+#;		}
+#;	 q	
+#;CleanUp
+#;	; clean up units
+#;		s r2=$replace(r2,"|","l")
+#;		s r2=$replace(r2," ","")
+#;		s r2=$replace(r2,"-1","-l")
+#;		s r2=$replace(r2,"_1","_l")
+#;		i $e(r2,$l(r2)-1,$l(r2))="/1" s r2=$replace(r2,"/1","/l")
+#;		i $e(r2,$l(r2))="_" s r2=r2_"l"
+#;		s r2=$replace(r2," / ","/") 
+#;	
+#;	; clean up value and range
+#;		s r3=$replace(r3,"*","")
+#;		s r3=$replace(r3," ","")
+#;		s r4=$replace(r4," ","")
+#;		i $p(r4,"-",1)'="",$p(r4,"-",2)'="" d	; cater for 1-3
+#;		. s r5=$p(r4,"-",2),r4=$p(r4,"-",1), r4x=r4,r5x=r5
+#;		s r5=$replace(r5," ","")
+#;		i $p(r5,"-",1)'="",$p(r5,"-",2)'="" d	; cater for 1-3
+#;		. s r4=$p(r5,"-",1),r5=$p(r5,"-",2), r4x=r4,r5x=r5
+#;		; For Indo clients
+#;		i bk["INDO"!(bk["JXTesting") {
+#;			; Use the original from GEMINI
+#;			// treat "." as comma
+#;			s r3=$replace(r3,".",""),r4=$replace(r4,".",""),r5=$replace(r5,".","")
+#;			// treat commas as "."
+#;			s r3=$replace(r3,",","."),r4=$replace(r4,",","."),r5=$replace(r5,",",".")
+#;		}else 
+#;		{	s r3=$replace(r3,",","."),r4=$replace(r4,",","."),r5=$replace(r5,",",".")
+#;			}
+#;		/* Set Result as the standard
+#;		i bk["INDO"!(bk["4321-qa-jondaffr") {
+#;			if r3["." d
+#;			. s r4=$replace(r4,",","."),r5=$replace(r5,",",".")
+#;			. s r3=$replace(r3,".",""),r4=$replace(r4,".",""),r5=$replace(r5,".","")
+#;			if r3["," d
+#;			. s r4=$replace(r4,".",","),r5=$replace(r5,".",",")
+#;			.s r3=$replace(r3,",","."),r4=$replace(r4,",","."),r5=$replace(r5,",",".")
+#;		}		
+#;		*/
+#;	; end clean up
+#;	;END
+#;	q
+#;
+#;
+#;WriteTr
+#;	s c1="#405470"	; blue
+#;	s c2="#e63876"	; pink
+#;	s c3="#048f2a"	;green
+#;	
+#;	/// $p(r2,$c(9),1)= value, $p(r2,$c(9),2)=class, $p(r2,$c(9),3)=color, $p(r2,$c(9),4)=title, $p(r2,$c(9),5)=color
+#;	s row=$o(^FormData(-1,rid,row)) q:row="" 
+#;	s r0=^FormData(-1,rid,row,"date")
+#;	s r1=^FormData(-1,rid,row,"test-name")
+#;	s r2=^FormData(-1,rid,row,"transformed-name")
+#;	s r3=^FormData(-1,rid,row,"result")
+#;	s r4=^FormData(-1,rid,row,"from-unit")
+#;	s r5=^FormData(-1,rid,row,"convert-result-unit")
+#;	s r6=^FormData(-1,rid,row,"convert-result-val")
+#;	s r7=^FormData(-1,rid,row,"l-range")
+#;	s r8=^FormData(-1,rid,row,"l-result-val")
+#;	s r9=^FormData(-1,rid,row,"u-range")
+#;	s r10=^FormData(-1,rid,row,"u-result-val")	
+#;	
+#;	
+#;	w "<tr class=''>",! 
+#;	w "<td class='actions'><img class='duplicate-icon' src='./assets/images/duplicate.png' alt='Duplicate' onclick='duplicateRow(event)' > <img src='./assets/images/delete.png' alt='Delete' onclick='deleteRow(event)' >  <img class='add-row-icon' src='./assets/images/row.png' alt='add row' onclick='addNewRow(event)' ></td>",!
+#;	w "<td class='date' onclick='jEditBox(event)' style='color:"_c1_"'>"_r0_"</td>",!
+#;	w "<td class='test-name' onclick='jEditBox(event)'>"_$p(r1,$c(9),1)_"</td>",!
+#;	
+#;	w "<td class='transformed-name "_$p(r2,$c(9),2)_"' style='color:"_$p(r2,$c(9),3)_"' title='"_$p(r2,$c(9),4)_"'>",!
+#;	w "<input type='text' style='color:"_$p(r2,$c(9),5)_"' autocomplete='off' onkeyup='dataChange(event)' onfocus='saveToGlobals()' value='"_$p(r2,$c(9),1)_"'>",!
+#;	w "</td>",!
+#;	
+#;	w "<td class='result' onclick='jEditBox(event)'>"_r3_"</td>",!
+#;	w "<td class='from-unit' onclick='jEditBox(event)'>"_r4_"</td>",!
+#;	
+#;	w "<td class='convert-result-unit "_$p(r5,$c(9),2)_"' style='color:"_$p(r5,$c(9),3)_"' title='"_$p(r5,$c(9),4)_"'>",!
+#;	w "<div class='dropdown' style='color:"_$p(r5,$c(9),5)_"'  onclick='openUnitSuggestions(event)' onfocus='saveToGlobals()' tabindex='-1'>"_$p(r5,$c(9),1)_" <img src='./assets/images/dropDownDarkBlue.png' alt='Dropdown'></div>",!
+#;	w "</td>",!
+#;	
+#;	w "<td class='convert-result-val "_$p(r6,$c(9),2)_"' style='color:"_$p(r6,$c(9),3)_"' title='"_$p(r6,$c(9),4)_"'>",!
+#;	w "<input type='text' style='color:"_$p(r6,$c(9),5)_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$p(r6,$c(9),1)_"'>",!
+#;	w "</td>",!
+#;	
+#;	w "<td class='l-range' onclick='jEditBox(event)'>"_r7_"</td>",!
+#;	w "<td class='l-result-val "_$p(r8,$c(9),2)_"' style='color:"_$p(r8,$c(9),3)_"' title='"_$p(r8,$c(9),4)_"'>",!
+#;	w "<input type='text' style='color:"_$p(r8,$c(9),5)_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$p(r8,$c(9),1)_"'>",!
+#;	w "</td>",!
+#;	
+#;	w "<td class='u-range' onclick='jEditBox(event)'>"_r9_"</td>",!
+#;	w "<td class='u-result-val "_$p(r10,$c(9),2)_"' style='color:"_$p(r10,$c(9),3)_"' title='"_$p(r10,$c(9),4)_"'>",!
+#;	w "<input type='text' style='color:"_$p(r10,$c(9),5)_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$p(r10,$c(9),1)_"'>",!
+#;	w "</td>",!
+#;	
+#;	w "<td class='comment' ><textarea autocomplete='off' rows='5' cols='50' onkeyup=''></textarea></td>",!
+#;	w "<td class='row-num' style='display:none;'>"_row_"</td>",!
+#;	w "</tr>",!
+#;	g WriteTr
+#;	
+#;	
+#;	
+#;	
+
+jxDemoJob^MAC^^67334,28597.3024015^0
+jxDemoJob
+RunGemini(userId, pdfPath,pCount)
+    NEW tmpname, %dev1, i, totalPages, startPage, endPage, chunkPath, chunkCount, pid
+    s uid=$replace(userId,"demo","")
+    k ^jxDemo(uid,"Done")
+    s ^jxDemo(uid,"Done")=0
+    s totalPages=pCount
+    SET tmpname = $p(##class(%File).GetFilename(pdfPath),".pdf",1)
+    SET %dev1 = ##class(%File).GetDirectory(pdfPath)_"\"_tmpname
+    DO ##class(%File).CreateDirectory(%dev1)
+.
+    //SET totalPages = ##class(python.pdfhandler).pageCount(pdfPath)
+    IF totalPages > 1 {
+        SET chunkCount = 0
+        FOR i = 1:1:totalPages {
+            SET startPage = i
+            SET endPage = i
+            IF endPage > totalPages { SET endPage = totalPages }
+.
+            SET chunkCount = chunkCount + 1
+            SET chunkPath(chunkCount) = %dev1_"\"_tmpname_"-"_startPage_"-"_endPage_".pdf"
+            SET cmd = "win2pdfd extractPages """_pdfPath_""" """_startPage_""" """_endPage_""" """_chunkPath(chunkCount)_""""
+            SET sc = $ZF(-1, cmd)
+        }
+	    // Clear flags
+	    KILL ^GeminiDone
+.
+	    // Launch jobs
+	    FOR i = 1:1:chunkCount {
+	        JOB GeminiCall(chunkPath(i), userId_"-"_i,"pdf")
+	    }
+	        ;WRITE "Waiting for jobs to finish...",!
+.
+	    // Wait for all jobs to signal completion
+	    FOR {
+	        HANG 2
+	        SET done = 1
+	        FOR i = 1:1:chunkCount {
+	            IF '$DATA(^GeminiDone(chunkPath(i))) {
+	                SET done = 0
+	                QUIT
+	            }
+	        }
+	        IF done {
+	            ;WRITE !, "All jobs completed!"
+	            d MergeAIGemini(userId)
+	            d ##class(%File).RemoveDirectoryTree(%dev1)
+	            s ^jxDemo(uid,"Done")=1
+	            QUIT
+	        }
+	    }    
+    }
+	
+.
+    QUIT
+MergeAIGemini(baseKey)
+    NEW chunkKey, finalKey, chunkIndex, globalIndex, nextIndex
+    SET finalKey = baseKey  ; e.g., "demo16"
+    SET nextIndex = 1       ; to assign new incremental index
+.
+    ; Loop through chunked groups in order: "demo16-1", "demo16-2", etc.
+    FOR chunkNum = 1:1 {
+        SET chunkKey = baseKey_ "-" _ chunkNum
+        QUIT:'$DATA(^AIGEMINI(chunkKey))  ; exit when no more chunks
+.
+        SET globalIndex = ""
+        FOR  {
+            SET globalIndex = $ORDER(^AIGEMINI(chunkKey, globalIndex))
+            QUIT:'$ISVALIDNUM(globalIndex)
+            MERGE ^AIGEMINI(finalKey, nextIndex) = ^AIGEMINI(chunkKey, globalIndex)
+            s ^AIGEMINI(finalKey, nextIndex,"row"_nextIndex)=^AIGEMINI(chunkKey, globalIndex,"row"_globalIndex)
+            K ^AIGEMINI(chunkKey, globalIndex)
+            SET nextIndex = nextIndex + 1
+        }
+		 MERGE ^AIGEMINI(finalKey) = ^AIGEMINI(baseKey_"-1")
+        ; Optional: Clean up chunked keys
+        KILL ^AIGEMINI(chunkKey)
+    }
+.
+    ;WRITE "Merged successfully into ^AIGEMINI(", finalKey, ",*)",!
+    QUIT
+.
+GeminiCall(chunkPath, userId,type)
+    NEW index, result
+    SET index = 0
+    WRITE "Processing: ", chunkPath, !
+.
+    SET result = ##class(python.GeminiAiDemo).AiCompletion(chunkPath, userId, index, type)
+    SET ^GeminiDone(chunkPath) = result
+    s uid=$replace(userId,"demo","")
+	if type="png" s ^jxDemo(uid,"Done")=1
+    WRITE "Done: ", chunkPath, " Index: ", result, !
+    QUIT 
+
+jxDemoTable^MAC^^67333,34108.5899855^0
+jxAltConvertResultTable
+InitMe
+	#import MX
+	d INIT^WSP999
+	
+	s downloadFileType = "HL7"
+	&js<document.getElementById("file-type").innerHTML = "#(downloadFileType)#">
+	i $d(^DoNotShow("ConvertResultTable",UserID)) &js<DoNotShow=1>
+	q
+	
+PopTable
+	#import MX
+	d INIT^WSP999
+	i $g(%session.Data("jxAltConvertResultTable","Template"))="" s %session.Data("jxAltConvertResultTable","Template")="JondaX"
+	s template=%session.Data("jxAltConvertResultTable","Template")
+	s UserID=$g(%session.Data("UserID"))
+	s rid= %session.Data("jxAltUploadRecord","ID")
+	i $d(^FormData(-1,"demo"_UserID)) s row="", uid="demo"_UserID d WriteTr d jxResult2HL7(rid) 
+	q
+WriteTr
+	s c1="#405470"	; blue
+	s c2="#e63876"	; pink
+	s c3="#048f2a"	;green
+	s (TName,TValue,TUnit,THighRange,TLowRange,Comment)=""
+	/// $p(r2,$c(9),1)= value, $p(r2,$c(9),2)=class, $p(r2,$c(9),3)=color, $p(r2,$c(9),4)=title, $p(r2,$c(9),5)=color
+	s row=$o(^FormData(-1,uid,row)) q:row="" 
+	s r0=^FormData(-1,uid,row,"date")
+	s r1=^FormData(-1,uid,row,"test-name")
+	s r2=^FormData(-1,uid,row,"transformed-name")
+	s r3=^FormData(-1,uid,row,"result")
+	s r4=^FormData(-1,uid,row,"from-unit")
+	s r5=^FormData(-1,uid,row,"convert-result-unit")
+	s r6=^FormData(-1,uid,row,"convert-result-val")
+	s r7=^FormData(-1,uid,row,"l-range")
+	s r8=^FormData(-1,uid,row,"l-result-val")
+	s r9=^FormData(-1,uid,row,"u-range")
+	s r10=^FormData(-1,uid,row,"u-result-val")	
+	
+	s OName=$p(r1,$c(9),1)
+	s TName=$p(r2,$c(9),1)
+	s TValue= $p(r6,$c(9),1)
+	s TUnit=$p(r5,$c(9),1)
+	s TLowRange=$p(r8,$c(9),1)
+	s THighRange=$p(r10,$c(9),1)
+.
+	/*
+	if $p(r2,$c(9),2)["issue" s Comment=$p($p(r2,$c(9),4),".",1)
+	if $p(r5,$c(9),2)["issue"{ 
+		if Comment'="" s Comment=Comment_", " 
+		s Comment=Comment_$p($p(r5,$c(9),4),".",1)
+	}
+	*/
+	f rIndex="r2","r5" {
+    s rVal=@rIndex
+    i $p(rVal,$c(9),2)["issue" {
+        s Part=$p($p(rVal,$c(9),4),".",1)
+        i Part'="" {
+            i Comment'="" s Comment=Comment_", "
+            s Comment=Comment_Part
+        }
+    }
+	}
+	w "<tr class=''>",! 
+	;w "<td class='actions'><img class='duplicate-icon' src='./assets/images/duplicate.png' alt='Duplicate' onclick='duplicateRow(event)' > <img src='./assets/images/delete.png' alt='Delete' onclick='deleteRow(event)' >  <img class='add-row-icon' src='./assets/images/row.png' alt='add row' onclick='addNewRow(event)' ></td>",!
+	w "<td class='date' style='color:"_c1_"'>"_r0_"</td>",!
+	w "<td class='test-name' >"_OName_"</td>",!
+	
+	w "<td class='transformed-name "_$p(r2,$c(9),2)_"' style='color:"_$p(r2,$c(9),3)_"' title='"_$p(r2,$c(9),4)_"'>",!
+	w "<span style='color:"_$p(r2,$c(9),5)_"'>"_TName_"</span>",!
+	w "</td>",!
+	
+	w "<td class='result' >"_r3_"</td>",!
+	w "<td class='from-unit' >"_r4_"</td>",!
+	
+	w "<td class='convert-result-val "_$p(r6,$c(9),2)_"' style='color:"_$p(r6,$c(9),3)_"' title='"_$p(r6,$c(9),4)_"'>",!
+	w "<span style='color:"_$p(r6,$c(9),5)_"' >"_TValue_"</span>",!
+	;w "<input type='text' style='color:"_$p(r6,$c(9),5)_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$p(r6,$c(9),1)_"'>",!
+	w "</td>",!
+	
+	w "<td class='convert-result-unit "_$p(r5,$c(9),2)_"' style='color:"_$p(r5,$c(9),3)_"' title='"_$p(r5,$c(9),4)_"'>",!
+	w "<span style='color:"_$p(r5,$c(9),5)_"' >"_TUnit_"</span>",!
+	w "</td>",!
+	
+	w "<td class='l-range' >"_r7_"</td>",!
+	w "<td class='l-result-val "_$p(r8,$c(9),2)_"' style='color:"_$p(r8,$c(9),3)_"' title='"_$p(r8,$c(9),4)_"'>",!
+	w "<span style='color:"_$p(r8,$c(9),5)_"' >"_TLowRange_"</span>",!
+	;w "<input type='text' style='color:"_$p(r8,$c(9),5)_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$p(r8,$c(9),1)_"'>",!
+	w "</td>",!
+	
+	w "<td class='u-range' >"_r9_"</td>",!
+	w "<td class='u-result-val "_$p(r10,$c(9),2)_"' style='color:"_$p(r10,$c(9),3)_"' title='"_$p(r10,$c(9),4)_"'>",!
+	w "<span style='color:"_$p(r10,$c(9),5)_"' >"_THighRange_"</span>",!
+	;w "<input type='text' style='color:"_$p(r10,$c(9),5)_"' autocomplete='off' onkeyup='dataChange(event)' value='"_$p(r10,$c(9),1)_"'>",!
+	w "</td>",!
+	
+	w "<td class='comment' style='display:none;' >"
+	w "<textarea autocomplete='off' rows='3' cols='50' onkeyup=''>"_Comment_"</textarea></td>",!
+	w "</tr>",!
+	&sql(SELECT COUNT(ID) INTO :objCount FROM ResultBloodTest1_Tests WHERE ResultBloodTest1=:rid)
+	if objCount<row  d UpdateRBT(rid,TName,OName,TValue,TUnit,THighRange,TLowRange,r0, Comment)
+	g WriteTr
+	
+	
+jxResult2HL7(rid, devMode=0)
+	#import MX
+	
+	;&sql(SELECT Profile->CompanyName, Profile->Setting->ID, OrgFile, BucketName, ReportDate 
+	;INTO :CompanyName, :setting, :fileName, :bk, :reportDate FROM Record WHERE ID=:rid)
+	
+	&sql(SELECT OrgName, ReportDate INTO :fileName, :reportDate FROM ResultBloodTest1 WHERE ID=:rid)
+	
+	s bk="jondaffr2"
+	&sql(SELECT ReportDate INTO :RBTReportDate FROM ResultBloodTest1 WHERE ID=:rid)
+	if (RBTReportDate '= ""){
+		s reportDate = RBTReportDate
+	}
+	
+	;&sql(SELECT CliProfileName INTO :CliProfileName FROM Setting WHERE ID=:setting)
+.
+	n d1,key,Q
+	n d1,d2,d3,d4,d5,r1,r2,r3,r4
+.
+	/*
+	if (bk["/"){
+		s bksys = $replace(bk,"/","\")
+	} else { s bksys = bk}
+.
+	s inProcessBucket = "s3://"_bk_"/In-Process/"
+	s failureBucket = "s3://"_bk_"/Failure/"
+	s completedBucket = "s3://"_bk_"/Completed/"
+	;s outputsDir = "C:\InterSystems\Cache\JondaX\"_CompanyName_"\"_bksys_"\outputs\"
+	*/
+	s outputsDir="C:\InterSystems\Cache\CSP\jondax\jxDemo\output\"
+	
+	&sql(SELECT ID INTO :rbt From ResultBloodTest1 WHERE ID=:rid)
+	
+	i (devMode){w !,"RBT: ", rbt}
+	
+	;&js<console.log(`#(rbt)#`)>
+	
+	if ((rid = "")!(rbt="")){q 0}
+	
+	; take place holder from table.
+	; dummy
+	s emptyPlaceHolder = ""
+	s hl7msg = ##class(EnsLib.HL7.Message).%New()
+	d hl7msg.Clear()
+	
+	s MSH = ##class(EnsLib.HL7.Segment).%New()
+	s MSHstatus = MSH.SetValueAt("^~\\&",1)
+	s MSHstatus = MSH.SetValueAt("mshSendingFaciliy", 4)
+	s MSHstatus = MSH.SetValueAt("ORU^R01",8)
+	s MSHstatus = MSH.SetValueAt("2.3",11)
+	s MSHstatus = MSH.SetValueAt("MSH",0)
+	s setSegStatus = hl7msg.InsertSegmentAt(MSH, 1)
+	s PID = ##class(EnsLib.HL7.Segment).%New()
+	s PIDstatus = PID.SetValueAt("PID",0)
+	s PIDstatus = PID.SetValueAt(emptyPlaceHolder,3)
+	s PIDstatus = PID.SetValueAt(emptyPlaceHolder,5)
+	s setSegStatus = hl7msg.InsertSegmentAt(PID, 2)
+	
+	s PV1 = ##class(EnsLib.HL7.Segment).%New()
+	s PV1status = PV1.SetValueAt("PV1",0)
+	s PV1status = PV1.SetValueAt(emptyPlaceHolder,2)
+	s PV1status = PV1.SetValueAt(emptyPlaceHolder,19)
+	s setSegStatus = hl7msg.InsertSegmentAt(PV1, 3)
+	
+	s ORC = ##class(EnsLib.HL7.Segment).%New()
+	s ORCstatus = ORC.SetValueAt("ORC",0)
+	s ORCstatus = ORC.SetValueAt("1",1)
+	s ORCstatus = ORC.SetValueAt("LAB",29)
+	s setSegStatus = hl7msg.InsertSegmentAt(ORC, 4)
+.
+	s reportDateHL7 = $ZDT(reportDate,8)
+	s reportDateHL7 = reportDateHL7_"000000"
+	if (reportDate = ""){s reportDateHL7 = ""}
+	
+	s OBR = ##class(EnsLib.HL7.Segment).%New()
+	s OBRstatus = OBR.SetValueAt("OBR",0)
+	s OBRstatus = OBR.SetValueAt(emptyPlaceHolder,4)
+	s OBRstatus = OBR.SetValueAt(reportDateHL7,14)
+	s setSegStatus = hl7msg.InsertSegmentAt(OBR, 5)
+.
+	k MissingSIName
+	k MissingTemplate
+	k MissingUnitConversion
+	
+	&sql(DECLARE CRHL CURSOR FOR
+		SELECT Tests_HighRange, Tests_LowRange, Tests_Result, Tests_SIUnit, Tests_TestName, Tests_TestDate, Tests_Comment
+		INTO :d1,:d2,:d3,:d4,:d5, :d6, :d7
+		FROM ResultBloodTest1_Tests
+		WHERE ResultBloodTest1=:rbt
+	)
+	&sql(OPEN CRHL)
+	
+	&sql(FETCH CRHL)
+.
+	if SQLCODE '= 0{
+		q 0
+	}
+	s OBXIndex = 0
+	s NTEIndex=0
+	WHILE SQLCODE=0{  
+		if (d5=""){&sql(FETCH CRHL) continue}
+	
+	/*
+		&sql(SELECT SIName, SIUnit INTO :r1,:r2 FROM DiagnosticTest WHERE (Name=:d5 OR SIName=:d5) AND IsNull(DeletedDate,'')='' AND IsNull(ApprovedDate,'')<>'' AND ModifiedDate<=ApprovedDate)
+		if (r1=""){
+			s MissingSIName(d5)=""
+			
+		} else {
+			&sql(SELECT Top 1 Name, UnitName INTO :r3, :r4 FROM Template WHERE DiagnosticTest=:r1 AND BucketName=:bk AND "Setting"=:setting)
+			if (r3 = ""){
+				s MissingTemplate(r1)=""
+.
+			}elseif($d(r3) & $d(r4)){
+				s d5 = r3
+				;s d4 = r4  ;comment by Martin 29-7-2024
+				
+				
+				i (($L(d1)'=0) & ($L(d2)'=0) & ($L(d3)'=0)){
+					i (r2 '= r4){
+						
+						;s d1 = $$U2U^WSP999(r1, d1, r2, r4)
+						;s d2 = $$U2U^WSP999(r1, d2, r2, r4)
+						;s d3 = $$U2U^WSP999(r1, d3, r2, r4)
+						
+					} 
+	
+					i (($L(d1)=0) & ($L(d2)=0) & ($L(d3)=0)){
+						s MissingUnitConversion(r3_":"_r2_"->"_r4) = ""
+					}
+				}
+			}	
+			
+		
+		} */
+		
+		i ($L(d1)>0) {s d1 = $$FormatNumber^cMain(d1,2)}
+		i ($L(d2)>0) {s d2 = $$FormatNumber^cMain(d2,2)}
+		i ($L(d3)>0) {s d3 = $$FormatNumber^cMain(d3,2)}
+		
+		s OBXIndex = OBXIndex + 1
+		s OBX = ##class(EnsLib.HL7.Segment).%New()
+		s OBXstatus = OBX.SetValueAt("OBX",0)
+		s OBXstatus = OBX.SetValueAt($$EscapeHL7^jxSDAToResults(OBXIndex), 1)
+		s OBXstatus = OBX.SetValueAt("NM", 2)
+		s OBXstatus = OBX.SetValueAt($$EscapeHL7^jxSDAToResults(d5)_"^"_$$EscapeHL7^jxSDAToResults(d5),3)   ; there must be code
+		s OBXstatus = OBX.SetValueAt($$EscapeHL7^jxSDAToResults(d3), 5)
+		s d4 = $ZSTRIP(d4,"<>w")
+		s OBXstatus = OBX.SetValueAt($$EscapeHL7^jxSDAToResults(d4), 6)
+		
+		s d1 = $$EscapeHL7^jxSDAToResults(d1)
+		s d2 = $$EscapeHL7^jxSDAToResults(d2)
+		i (($L(d1)>0) & ($L(d2)>0)){
+			s OBXstatus = OBX.SetValueAt(d2_"-"_d1, 7)
+		} elseif (($L(d1) > 0) & ($L(d2)=0)){
+			s OBXstatus = OBX.SetValueAt(d1, 7)
+		} elseif (($L(d1) = 0) & ($L(d2)>0)) {
+			s OBXstatus = OBX.SetValueAt(d2, 7)
+		}
+		s OBXstatus = OBX.SetValueAt("F", 11)
+.
+		s setSegStatus = hl7msg.InsertSegmentAt(OBX, OBXIndex + (5 + NTEIndex))
+.
+		; added NTE
+		k NTE
+		s NTECount=0
+		i $l(d1)=0,$l(d2)>0 d
+		. s NTE = ##class(EnsLib.HL7.Segment).%New()
+		. s NTEstatus = NTE.SetValueAt("NTE",0)
+		. s NTEstatus = NTE.SetValueAt(1, 1)  ;$$EscapeHL7^jxSDAToResults(OBXIndex)
+		. s NTEIndex= NTEIndex+1, NTECount= NTECount + 1
+		. s NTEstatus = NTE.SetValueAt("O",2)
+		. s NTEstatus = NTE.SetValueAt("No Upper-Ref-Range",3)
+		. s setSegStatus = hl7msg.InsertSegmentAt(NTE, OBXIndex +(5+ NTEIndex))
+				
+		i $l(d1)>0,$l(d2)=0 d
+		. s NTE = ##class(EnsLib.HL7.Segment).%New()
+		. s NTEstatus = NTE.SetValueAt("NTE",0)
+		. s NTEstatus = NTE.SetValueAt(1, 1)
+		. s NTEIndex= NTEIndex+1, NTECount= NTECount + 1
+		. s NTEstatus = NTE.SetValueAt("O",2)
+		. s NTEstatus = NTE.SetValueAt("No Lower-Ref-Range",3)
+		. s setSegStatus = hl7msg.InsertSegmentAt(NTE, OBXIndex +(5+ NTEIndex))
+		
+		i $l(d7)>0 d
+		. i NTECount=0 s NTECount = 1
+		. e  s NTECount =NTECount + 1
+		. s NTE = ##class(EnsLib.HL7.Segment).%New()
+		. s NTEstatus = NTE.SetValueAt("NTE",0)
+		. s NTEstatus = NTE.SetValueAt(NTECount, 1)
+		. s NTEIndex= NTEIndex+1
+		. s NTEstatus = NTE.SetValueAt("O",2)
+		. s NTEstatus = NTE.SetValueAt($$EscapeHL7^jxSDAToResults(d7),3)
+		. s setSegStatus = hl7msg.InsertSegmentAt(NTE, OBXIndex +(5+ NTEIndex))
+		
+		; END NTE	
+	
+		
+		
+		&sql(FETCH CRHL)
+	}
+	&sql(CLOSE CRHL)
+	/* missing temp csv
+	if ( ($L($o(MissingSIName("")))>0) ! ($L($o(MissingTemplate("")))>0) ! ($L($o(MissingUnitConversion("")))>0) ){
+		if (devMode){w !,"MISSING ATTRIBUTES"}
+		;&js<console.log(`Attribute Missing!`)>
+		s dt = $zdatetime($h, 3)
+		
+		s errCode = "JX3007" ;err code for missing attributes 
+		s errData = fileName_" in "_bk_" is missing these templates. "
+		
+		if ($L($o(MissingSIName("")))>0){
+			s errData =  errData_$c(13,10)_"Missing SINames: "
+			s missingSIName = $o(MissingSIName(""))
+			while (missingSIName'=""){
+				s errData = errData_missingSIName_", "
+				k MissingSIName(missingSIName)
+				s missingSIName = $o(MissingSIName(""))
+			}
+			 
+		}
+		
+		if ($L($o(MissingTemplate("")))>0){
+			s errData =  errData_$c(13,10)_"Missing Template: "
+			s missingTemplate = $o(MissingTemplate(""))
+			while (missingTemplate'=""){
+				s errData = errData_missingTemplate_", "
+				k MissingTemplate(missingTemplate)
+				s missingTemplate = $o(MissingTemplate(""))
+			}	 
+		}
+		
+		if ($L($o(MissingUnitConversion("")))>0){
+			s errData =  errData_$c(13,10)_"Missing UnitConversion: "
+			s missingUnitConversion = $o(MissingUnitConversion(""))
+			while (missingUnitConversion'=""){
+				s errData = errData_missingUnitConversion_", "
+				k MissingUnitConversion(missingUnitConversion)
+				s missingUnitConversion = $o(MissingUnitConversion(""))
+			}	 
+		}
+		
+		if (devMode) {w !,errData}
+		
+		s errName =  $$GenerateErrorName^jxErrorReport(errCode)
+		s errLocation = "jxResult2HL7^jxResult2HL7"
+		s Stack = ""
+		
+		i ($L(errData)>0){s errData = """"_errData_""""}
+		
+		&sql(INSERT INTO MX.Error (Code, Data, Name, Location, CreatedDate, Record, BucketName) VALUES (:errCode, :errData, :errName, :errLocation, :dt, :rid, :bk))
+		
+	} */
+	;w !,hl7msg.OutputToString()
+	
+	if ##class(%File).Exists(outputsDir_$p(fileName,".",1,*-1)_"-output.hl7") d ##class(%File).Delete(outputsDir_$p(fileName,".",1,*-1)_"-output.hl7")
+	s status= hl7msg.OutputToFile(outputsDir_$p(fileName,".",1,*-1)_"-output.hl7")
+	h 1
+	i (status=1 && devMode){w !,"OUTPUT HL7 COMPLETED: ",outputsDir_$p(fileName,".",1,*-1)_"-output.hl7"}
+	
+	; uncomment this for production
+	;&sql(SELECT CLiProfileName INTO :CliProfileName FROM Setting WHERE ID=:setting)
+	;if ($L(CliProfileName)=0){q 0 }
+	
+	; This is for testing, remove in production
+	;s CliProfileName = "default"
+	
+	;s cmdflag = "/SHELL" 
+	;s status = 	$ZF(-100, cmdflag, "aws", "s3", "mv",inProcessBucket_fileName, completedBucket, "--profile", CliProfileName)
+	;s status = 	$ZF(-100, cmdflag, "aws", "s3", "mv", outputsDir_$p(fileName,".",1,*-1)_".hl7", completedBucket, "--profile", CliProfileName)
+	;d StripTables
+	if (status = 1){ q outputsDir_$p(fileName,".",1,*-1)_"-output.hl7"}
+	q 0
+	
+UpdateRBT(rid, testName,OName, testValue, testUnit, testHiRange, testLoRange, testDate, testComment)
+	#import MX
+	
+	&sql(SELECT COUNT(ID) INTO :objCount FROM ResultBloodTest1_Tests WHERE ResultBloodTest1=:rid)
+	
+		s objxcount = +objCount
+		s objxcount=objxcount+1
+		s objx=##class(MX.ResultBloodTest1).%OpenId(rid)
+		s objx1=##class(MX.ResultBloodTestValue).%New()
+		s objx1.SIName= testName
+		s objx1.TestName= OName
+		s objx1.Result=testValue
+		s testUnit = $zstrip(testUnit, ">W")
+		s objx1.SIUnit=testUnit
+		s objx1.LowRange=testLoRange
+		s objx1.HighRange=testHiRange
+		s objx1.Comment=$zstrip(testComment, "=C")
+.
+		if ($L(testDate)>0){
+			s testDate = $replace(testDate, "-","/")
+			s testDateInternal = $zdateh(testDate, 4)
+			//s objx1.TestDate = $zdate(testDateInternal, 1)
+			//s objx1.TestDate = $zdateh(testDate,6,,,,,,,-1)
+			s objx1.TestDate = $zdateh(testDate, 4)
+			
+			//database wants mm/dd/yyyy
+		}
+.
+.
+		d objx.Tests.SetAt(objx1,objxcount)
+.
+		s sts = objx.%Save()
+	
+	q	
+DoNotShow
+	#import MX
+	d INIT^WSP999
+	s ^DoNotShow("ConvertResultTable",UserID)=$h
+	q	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+ConvertResults
+	s fext="."_%session.Data("jxAltUploadRecord","fext")
+	s x=$replace(%session.Data("jxAltUploadRecord"),fext,"")
+	s orgFileName=%session.Data("jxAltUploadRecord","fext")
+	;s x="../elfieDemo/"_x
+	&js<fileName='#(x)#',formalFileExt = '#(orgFileName)#'>
+	;&js<window.open("#(x)#","_new")>
+	
+	q
+	
+.
+SaveResult 
+	
+.
+	if r0'="" d
+	.s dft=$$checkDate^utilAWS(r0)
+	.i dft'=0 s reportDate=$ZDATEH(r0,dft)
+	.e  s reportDate=""
+	s tmpName=tmp 
+	&sql(SELECT ID 
+		INTO :rID
+		FROM ResultBloodTest1
+		WHERE TmpName=:tmpName)
+	&sql(UPDATE MX.ResultBloodTest1 SET ReportDate=:reportDate WHERE ID=:rID)
+	&sql(SELECT COUNT(ID) INTO :objCount FROM ResultBloodTest1_Tests WHERE ResultBloodTest1=:rID)
+	s objxcount = +objCount
+	s objxcount=objxcount+1
+	s objx=##class(ResultBloodTest1).%OpenId(rID)
+	s objx1=##class(ResultBloodTestValue).%New()
+	s objx1.TestName=r1
+	s objx1.SIUnit=r2
+	s objx1.Result=r3
+	s objx1.LowRange=r4
+	s objx1.HighRange=r5
+	
+	d objx.Tests.SetAt(objx1,objxcount)
+	d objx.%Save()
+	s d0=d0+1
+	q
+.
 
 jxErrorReport^MAC^^67243,31964.3580622^0
 jxErrorReport
@@ -24828,7 +26850,7 @@ ErrorMail	; Notify Jonda of error
 	set status=mailserver.Send(mail)
 	q
 
-jxResult2HL7^MAC^^67297,15188.5289869^0
+jxResult2HL7^MAC^^67334,43181.6261631^0
 jxResult2HL7(rid, devMode=0)
 	#import MX
 	
@@ -25157,7 +27179,7 @@ UpdateRBT(rid, testName, testValue, testUnit, testHiRange, testLoRange, testDate
 	d objx.Tests.SetAt(objx1,objxcount)
 .
 	s sts = objx.%Save()
-	s ^test(objCount)=sts
+	
 	q	
 	
 ClearRBT(rid)
@@ -28351,7 +30373,7 @@ IsFHIR
 	
 	q
 
-jxUploadRecordBinary^MAC^^67166,36288.2177398^0
+jxUploadRecordBinary^MAC^^67332,22443.4506783^0
 jxAltUploadRecord
 InitMe
 	q
@@ -28365,10 +30387,11 @@ Save
 	s FName=$zconvert(FName,"l")
 	k ^jxAltUpload(FName)
 	k %session.Data("jxUploadRecord")
-	
+	k ^martin1
 	s fext=$p(FName,".",$l(FName,".")),fext=$zconvert(fext,"l")
 	; check file extension
-	s allowedext="*bmp*pdf*heic*png*jpg*jpeg*gif*webp*hl7*xml*json*ttl*"
+	s allowedext="*pdf*heic*png*jpg*jpeg*gif*webp*"
+	;s allowedext="*bmp*pdf*heic*png*jpg*jpeg*gif*webp*hl7*xml*json*ttl*"
 	i allowedext'[("*"_fext_"*") s ^jxAltUpload(FName)=0 q
 	s dt=$zdatetime($h,3,1)
 	
@@ -28399,101 +30422,154 @@ Save
 	;s ^jxAltUpload("FileName")=$p(FName,".",1)
 	s %session.Data("jxAltUploadRecord")=FName
 	s %session.Data("jxAltUploadRecord","fext")=fext
-	s %dev="c:\intersystems\cache\jondax\Groot\ad-hoc\"_tmpname_"."_fext
+	s %dev="C:\InterSystems\Cache\JondaX\jxdemo\ad-hoc\"_tmpname_"."_fext
 	o %dev:"wns" u %dev
 	s status=stream.OutputToDevice()
 	c %dev
 	s %dev=$replace(%dev,"\","/")
-	k ^AICLAUDE("alt"_UserID)
-	k ^ClaudeError("alt"_UserID)
+	k ^AIGEMINI("demo"_UserID)
+	k ^GEMINIError("demo"_UserID)
+	k ^FormData(-1,"demo"_UserID)
 	i fext="pdf" d PDF 
-	i fext'="pdf" d IMAGE 
-	i $d(^ClaudeError("alt"_UserID)) q
+	i fext'="pdf" d IMAGE
+	i $d(^GEMINIError("demo"_UserID)) q
+	;d ^jxDataMappingTransformation("demo"_UserID)
+	d ^jxDemoDMT("demo"_UserID)
+	s ^martin1("demoDMT")=1
 	&sql(INSERT INTO MX.ResultBloodTest1(OrgName,TmpName,Type) VALUES (:FName,:tmpname,'BloodTest'))
+	s ^martin1("RBT")=SQLCODE_FName_tmpname
 	s rid=""
 	&sql(SELECT ID INTO :rid FROM MX.ResultBloodTest1 WHERE TmpName=:tmpname)
 	s ^jxAltUpload(FName,"ID")=rid
 	s %session.Data("jxAltUploadRecord","ID")=rid
+	d ##class(%File).Delete(%dev)
 	;s %session.Data("jxTransform","rid")=rid    ;temporary for Template viewing
-	Set sc = ##class(%File).CreateDirectory("c:\intersystems\cache\csp\review\"_rid_"\")
-	s %dev1="c:\intersystems\cache\csp\review\"_rid_"\"_tmpname_"."_fext
-	o %dev1:"wns" u %dev1
-	s status=stream.OutputToDevice()
-	c %dev1
+#;	Set sc = ##class(%File).CreateDirectory("c:\intersystems\cache\csp\review\"_rid_"\")
+#;	s %dev1="c:\intersystems\cache\csp\review\"_rid_"\"_tmpname_"."_fext
+#;	o %dev1:"wns" u %dev1
+#;	s status=stream.OutputToDevice()
+#;	c %dev1
 	q
+	
 IsHL7
 	q
 IsFHIR
 	q
 .
 IMAGE
-.
-	if (fext="webp")!(fext="heic")!(fext="avif"){ ; change format to png
-		s cmd="mogrify -format png "_%dev
+	if (fext="jpg")!(fext="jpeg")!(fext="heic")!(fext="avif")!(fext="webp"){
+	; change format to png
+				
+		s cmd="mogrify -format png """_%dev_""""
 		s x=$zf(-1,cmd_" && exit")	
+		s ^martin1("demo test")=cmd_" :: "_x
 		d ##class(%File).Delete(%dev)
+		s %dev=$replace(%dev,fext,"png")
 		s fext = "png"
-		s %dev="c:\intersystems\cache\jondax\Groot\ad-hoc\"_tmpname_"."_fext	
+.
 		}
-	s csv=0
-	s csv=##class(python.textractUtils).GenerateCSVFromBinary(%dev)
-	
-	s %dev1="c:\intersystems\cache\jondax\Groot\ad-hoc\"_tmpname
-	d CleanCSV^utilAWS(%dev1_".csv")
-	d ##class(python.testClaude).AiCompletion($replace(%dev1,"\","/")_".csv",UserID)
-	i $d(^ClaudeError("alt"_UserID)) q	
+Gemini
+	s gIndex = ##class(python.GeminiAiDemo).AiCompletion(%dev,"demo"_UserID,0, "png")
+	i gIndex=-429 h 5 g Gemini
+			
+	i $d(^GEMINIError("demo"_UserID)) q	
 	q	
 PDF
 	s i=0
-	s %dev1="c:\intersystems\cache\jondax\Groot\ad-hoc\"_tmpname
+	s %dev1="C:\InterSystems\Cache\JondaX\jxdemo\ad-hoc\"_tmpname
+jxGemini
+	#import MX
+	&sql(SELECT Profile,Profile->UserID,TempFile,fExt,Profile->CompanyName,IsTrial 
+	INTO :pid,:k1,:d2,:ext,:CompanyName,:IsTrial FROM Record WHERE ID=:rid)
+	s index=0,xIndex=0
+	// Create a new folder for the chunks/pngs
+	d ##class(%File).CreateDirectory(%dev1) 
+	
+    s pdfType=##class(python.pdfhandler).checkType(%dev)
+    w pdfType,!
+    // Get the total number of pages in the PDF
+	Set totalPages = ##class(python.pdfhandler).pageCount(%dev)
+    
+    if pdfType="Image-based"
+    {
+	    #;	; split PDF into per-page png
+		;s cmd="win2pdfd pdf2png """_docDir_d2_"."_ext_""" """_docDir_d2_"\"_d2_".png"" 0"
+		s cmd="win2pdfd pdf2png """_%dev_""" """_%dev1_"\"_tmpname_".png"" 0"
+		s x=$zf(-1,cmd_" && exit")
 .
-	d ##class(%File).CreateDirectory(%dev1)  ;outputPath
-	; split PDF into per-page png
-	d ##class(python.pdfhandler).pdf2png(%dev,%dev1_"\")
-	
-	s pCount=##class(python.pdfhandler).pageCount(%dev)	
-	if pCount=1{
-		set dir = ##class(%File).NormalizeDirectory(%dev1_"\")
+		set dir = ##class(%File).NormalizeDirectory(%dev1)
 		set file=$ZSEARCH(dir_"*.png")
-		s csv=##class(python.textractUtils).GenerateCSVFromBinary(file)
-	}
-	else{
-		set dir = ##class(%File).NormalizeDirectory(%dev1_"\")
-		set file=$ZSEARCH(dir_"*.png")
-	
-		While file'="" {
-			;Write !,"File found: ", file, !		
-			s csv=0
-			s csv=##class(python.textractUtils).GenerateCSVFromBinary(file)
-	
-			Set file = $ZSEARCH("")
-			s i=i+1
-			}
-		s j=1	
-		While j'=  i{
-				;w !,"i : "_i,!
-				;s cmd= "copy /B "_%dev1_"\page_0.csv+"_%dev1_"\page_"_i_".csv "_%dev1_"\page_0.csv"
-				;s x=$zf(-1,cmd_" && exit")
-				s status= ##class(python.FileUtils).AppendFile(%dev1_"\page_0.csv",%dev1_"\page_"_j_".csv")
-				set j = j+1		
+		while file'="" 
+		{
+AiCompletion
+			w "Index: ",index,!
+			Set index = ##class(python.GeminiAiDemo).AiCompletion(file, "demo"_UserID,index, "png")
+			w "Return index: ",index,!
+	        if index = -429 d
+	        .s index=$s($d(xIndex):xIndex, 1:0)
+	        .h 5 g AiCompletion
+	        else  d
+	        .s xIndex=index h 5
+.
+			set file=$ZSEARCH("")
 		}
-	}
-	d ##class(%File).CopyFile(%dev1_"\page_0.csv", %dev1_".csv")
-	d ##class(%File).RemoveDirectoryTree(dir)
-	
-	/*
-	d ##class(python.s3Utils).uploadFile("default",%dev1_"."_fext,"jondaffr")
-	s jobId=##class(python.textractUtils).SDTD1(tmpname_"."_fext)
-	d ##class(%File).Delete(%dev1_".csv")
-	s status = ##class(python.textractUtils).GenerateCSVFromJobID(jobId, %dev1)
-	
-	*/
-	
-	d CleanCSV^utilAWS(%dev1_".csv")
-	d ##class(python.testClaude).AiCompletion($replace(%dev1,"\","/")_".csv",UserID)	
-	;i $d(^ClaudeError("alt"_UserID)) q
-	q
-	
+		d ##class(%File).RemoveDirectoryTree(%dev1)
+    } else{ 
+    
+.
+	    w "Page Count: ",totalPages,!
+	    If totalPages > 2 {
+	    // Split the PDF into 2-page chunks
+		    For i = 1:2:totalPages {
+		        Set startPage = i
+		        Set endPage = i + 1
+		        If endPage > totalPages {
+		            Set endPage = totalPages
+		        }
+.
+		        Set chunkPath = %dev1_"\"_tmpname_"-" _ startPage _ "-" _ endPage _ ".pdf"
+		    	Set cmd = "win2pdfd extractPages """_%dev_""" """_startPage_""" """_endPage_""" """_chunkPath_""""
+		    	// Execute the command using $ZF(-1)
+		   		Set sc = $ZF(-1, cmd)
+AiCompletion01		   		
+		        // Call the AI completion method for each chunk
+		        w "Index: ",index,!
+		        Set index = ##class(python.GeminiAiDemo).AiCompletion(chunkPath, "demo"_UserID,index, "pdf")
+		        w "Return index: ",index,!
+		        if index = -429 
+		        {	s index=$s($d(xIndex):xIndex, 1:0)
+		        	h 5 g AiCompletion01
+		        }
+		        elseif index=-400
+		        {
+		        	w "Too much data in 2-page: ",startPage,"-",endPage,!
+		        	s index=$s($d(xIndex):xIndex, 1:0)
+			        for j=startPage:1:endPage
+			        {
+AiCompletion02			w "Rechunking into 1-page pdf...",!
+				        Set chunkPath = %dev1_"\"_tmpname_"-" _ j _ "-" _ j _ ".pdf"
+						d ##class(python.pdfhandler).chunkPdf(%dev,chunkPath,j,j)
+						w "Index: ",index,!
+						h 5
+						Set index = ##class(python.GeminiAiDemo).AiCompletion(chunkPath, "demo"_UserID,index, "pdf")
+		        		w "Return index: ",index,!
+		        		if index = -429 
+					        {
+					         s index=$s($d(xIndex):xIndex, 1:0)
+					         h 5 g AiCompletion02
+					        }else {s xIndex=index h 2    }
+			        }
+		        
+			    }
+		        else { s xIndex=index h 2}
+		    	}
+		    d ##class(%File).RemoveDirectoryTree(%dev1)	
+	    }else
+	    {	
+	    	Set index = ##class(python.GeminiAiDemo).AiCompletion(%dev, "demo"_UserID,index, "pdf")
+	     }
+    }
+    Quit	
 .
 
 jxViewTemp^MAC^^67172,13023.049632^0
@@ -28969,7 +31045,7 @@ AiCompletion03
 		}
 		q
 
-martin11^MAC^^67296,27927.5413523^0
+martin11^MAC^^67311,59861.5112346^0
 martin11
 	s rid=4108
 	&sql(SELECT Profile, Profile->CompanyName,Profile->Setting, BucketName, OrgFile,Profile->APIURL INTO :profile, :CompanyName,:userSetting, :bk, :fileName,:url FROM MX.Record WHERE ID=:rid)
@@ -28981,7 +31057,7 @@ martin11
 	q
 .
 Binary2File
-	s rid=4111
+	s rid=4139	
 	&sql(SELECT TempFile,fExt INTO :aws1,:aws2 FROM Record WHERE ID=:rid)
 	s obj=##class(MX.Record).%OpenId(rid)
 	i obj.BinaryData.FileBinarySize()=0 q
@@ -28994,7 +31070,7 @@ Binary2File
 	
 	q
 
-martin12^MAC^^67304,30329.9346999^0
+martin12^MAC^^67311,32282.4950895^0
 martin12
 .
 Start(rid)
@@ -29347,7 +31423,23 @@ WriteTr
 	
 	
 	
-	
+.
+Replace(rec)		//replace Umlaut character in rec
+	#import MX
+	n i,Q
+	s Q=$c(9)
+	f i=1:1:$o(^UMLAUT(""),-1) s rec=$replace(rec,$p(^UMLAUT(i),Q,1),$p(^UMLAUT(i),Q,2))
+	q rec
+		
+Import	; import umlaut characters
+	s fnam="c:\intersystems\umlaut - Copy.txt"
+	s Q=$c(9)	; tab
+	k ^UMLAUT
+	o fnam:"rs"
+A	u fnam r rec
+	f i=1:1:3 s @("r"_i)=$p(rec,Q,i)
+	s ^UMLAUT(r1)=r2_Q_r3
+	g A	
 
 martin2^MAC^^67148,25218.2572037^0
 martin2
@@ -36732,7 +38824,7 @@ cleanCSV
 	
 	q			
 
-utilTemplateImport^MAC^^67247,41079.0763254^0
+utilTemplateImport^MAC^^67320,16465.0787313^0
 utilTemplateImport
 .
 Match	; Load test and unit from csv and find match in MX.DiagnosticTest
@@ -36740,8 +38832,8 @@ Match	; Load test and unit from csv and find match in MX.DiagnosticTest
 	s i=1
 	s cnt=0	
 	// %dev original "Tab" delimited file, fnam for output
-	s %dev="C:\InterSystems\Cache\JondaX\file for testing\Onward\Onward Health Research_SGH Template.txt"
-	s fnam="C:\InterSystems\Cache\JondaX\file for testing\Onward\Onward Health Research_SGH Template-matched.txt"	
+	s %dev="C:\InterSystems\Cache\JondaX\TestFiles\Kaizen Longevity\Kaizen Longevity Template 1.txt"
+	s fnam="C:\InterSystems\Cache\JondaX\TestFiles\Kaizen Longevity\Kaizen Longevity Template 1-matched.txt"	
 	s $ztrap="EndMatch^utilTemplateImport"
 	o %dev
 Match1
@@ -36782,7 +38874,7 @@ EndMatch
 		
 		// highlighting missing match
 		 ;Use current device, will output to terminal when run 
-		 ;if arr(i,"jxName")="" u 0  w i,", ",arr(i,"Name"),", ",arr(i,"Unit")," Name missing" ,!
+		 if arr(i,"jxName")="" u 0  w i,", ",arr(i,"Name"),", ",arr(i,"Unit")," Name missing" ,!
 		 if arr(i,"jxUnit")="" u 0 w i,", ",arr(i,"Name"),", ",arr(i,"Unit"),",  ",arr(i,"jxName")," Unit missing" ,!
 		}
 	c fnam
@@ -36794,8 +38886,8 @@ Import 	; Insert new template into MX.Template after matching is done,after all 
 	#Import MX
 	n bucket,setting,uid,bk,bkfd,bucket,cName,cUnit,jxName,dt,fnam,tName
 	s Q=$c(9)	;tab
-	s uid=32	; ***change UserId***
-	s tName="Onward Health Research_SGH"	; ***change Template name***
+	s uid=55	; ***change UserId***
+	s tName="Kaizen001"	; ***change Template name***
 	s count=0
 	&sql(SELECT Setting INTO :setting FROM "User" WHERE ID=:uid)
 	&sql(SELECT Buckets_Name,Buckets_Folder INTO :bk,:bkfd FROM Setting_Buckets WHERE Setting=:setting)
@@ -36803,7 +38895,7 @@ Import 	; Insert new template into MX.Template after matching is done,after all 
 	if bkfd'["-" s bucket=bk_"/"_bkfd
 	e  s bucket=bk
 	w bucket,", ",setting,!
-	s fnam="C:\InterSystems\Cache\JondaX\file for testing\Onward\Onward Health Research_SGH Template-matched.txt"
+	s fnam="C:\InterSystems\Cache\JondaX\TestFiles\Kaizen Longevity\Kaizen Longevity Template 1(final).txt"
 	s $ztrap="EndImport^utilTemplateImport"
 	o fnam
 Import1

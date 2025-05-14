@@ -32,10 +32,12 @@
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th>Upload Date/Time</th>
+								<!--	<th>Upload Date/Time</th> -->
 									<th>Process Date/Time</th>
 									<th>File Type</th>
-									<th>Transaction ID</th>
+									<th>File ID</th>
+									<th>Score</th>
+									<th>Final Score</th>
 									<th>Company Name</th>
 									<th>Report Type</th>
 									<th>Status <img id="filter-btn" src="./assets/images/filter-blue.png" alt="Filter" onclick="toggleStatusSelect(event)"></th>

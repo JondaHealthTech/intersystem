@@ -26,7 +26,12 @@
 				<h3>JondaX Admin Portal</h3>
 				<p id="userid" class="location">Data Transformation Engine</p>
 				<p class="plan"></p>
+				           
+		
                 <div class="nav-items" style="overflow: auto;">
+                	<script language="cache" runat="server">
+                		d LoadMenu^cMain
+                	</script>
 					<div class="nav-item active" onclick="window.open('cMain.csp','_self')"> 
 						<img src="./assets/images/sNavDashboard.png" alt="Dashboard">
 						<img class="dark" src="./assets/images/sNavDashboard_dark.png" alt="Dashboard">
@@ -42,6 +47,12 @@
 						<img class="dark" src="./assets/images/sNavDT_dark.png" alt="View Templates">
 						<p>View Templates</p>
 					</div>
+					
+					<div class="nav-item" onclick="jPopMain('jxDemoMain.csp')">
+						<img src="./assets/images/Testing_Inactive_small.png" alt="Demo">
+						<img class="dark" src="./assets/images/Testing_Active_small.png" alt="Demo">
+						<p>Demo</p>
+					</div>
                     <div class="nav-item collapse" >
 						<div class="nav-collapse-item" onclick="toggleCollapseSetting(event)">
 							<img class="dark" src="./assets/images/sNavSettings_dark.png" alt="Settings">
@@ -55,7 +66,7 @@
 								</div>
 							</div>
                         </div>
-						<!-- <div class="nav-collapse-field" onclick="window.open('cDiagnosticTest.csp','DiagnosticTest')">Diagnostic Test</div>-->
+						
 						<div class="nav-collapse-field" onclick="window.open('cDiagnosticTest1.csp','DiagnosticTest')">Diagnostic Test</div>
 						<div class="nav-collapse-field" onclick="window.open('cDiagnosticCategory.csp','DiagnosticCateory')">Diagnostic Category</div>
 						<div class="nav-collapse-field" onclick="window.open('cSIUnit.csp','SIUnit')">JX Unit</div>
@@ -84,40 +95,11 @@
 						. w "<div class='nav-admin-field' onclick='jPopMain(""cMenu.csp"")'>Menus</div>",!
 						. w "<div class='nav-admin-field' onclick='window.open(""cDiagnosticTestApproval.csp"",""_blank"")'>Diagnostic Test Approval<span id='DiagnosticTestApprovalCircle' class='circle'>2</span></div>",!
 						. w "<div class='nav-admin-field' onclick='window.open(""cUnitApproval.csp"",""_blank"")'>Unit Approval<span id='DiagnosticTestApprovalCircle' class='circle'>2</span></div>",!
-						. w "<div class='nav-admin-field' onclick='window.open(""cDiagnosticCategoryApproval.csp"",""_blank"")'>Category Approval<span id='DiagnosticTestApprovalCircle' class='circle'>2</span></div>",!
+						. ;w "<div class='nav-admin-field' onclick='window.open(""cDiagnosticCategoryApproval.csp"",""_blank"")'>Category Approval<span id='DiagnosticTestApprovalCircle' class='circle'>2</span></div>",!
 						. ;w "<div class='nav-admin-field' onclick='jResetBiolytica()'>Reset Biolytica Subscription</div>",!
 						. w "</div>",!
                    </script>
-               	<!--
-					<div class="nav-item collapse admin" >
-						<div class="nav-admin-item" onclick="toggleAdmin(event)">
-							<img class="dark" src="./assets/images/sNavAdmin_dark.png" alt="Admin">
-							<img src="./assets/images/sNavAdmin.png" alt="Admin">
-							<div class="nav-admin">
-								<div class="nav-admin-btn" onclick="">
-									<p>Admin Settings</p>
-									<img src="./assets/images/dropDownGrey.png" alt="DropDown">
-									<img class="dark" src="./assets/images/dropDownBlack.png" alt="DropDown">
-									<img class="close-dark" src="./assets/images/dropDownCloseBlack.png" alt="DropDown">
-								</div>
-							</div>
-						</div>
-						<div class="nav-admin">
-								<div class="nav-admin-btn" onclick='window.open(""DemoDePii.csp"",""_self"")'>
-									<p>Redaction</p>
-									<img src="./assets/images/dropDownGrey.png" alt="DropDown">
-									<img class="dark" src="./assets/images/dropDownBlack.png" alt="DropDown">
-									<img class="close-dark" src="./assets/images/dropDownCloseBlack.png" alt="DropDown">
-								</div>
-							</div>
-						<div class="nav-admin-field" onclick="jPopMain('cClientTemplate1.csp')">Client Templates</div>
-						<div class="nav-admin-field" onclick="jPopMain('cErrorCode.csp')">Error Codes</div>
-						<div class="nav-admin-field" onclick="jPopMain('cUser.csp')">User Details</div>
-						<div class="nav-admin-field" onclick="jPopMain('cMenu.csp')">Menus</div>
-						<div class="nav-admin-field" onclick="window.open('cDiagnosticTestApproval.csp','_blank')">Diagnostic Test Approval<span id="DiagnosticTestApprovalCircle" class="circle">2</span></div>
-						<div class="nav-admin-field" onclick="jResetBiolytica()">Reset Biolytica's Subscription</div>
-					</div>
-				-->
+               	
 					<div class="nav-item collapse report" >
 						<div class="nav-report-item" onclick="toggleReport(event)">
 							<img class="dark" src="./assets/images/sNavReport_dark.png" alt="Reports">
@@ -134,47 +116,17 @@
 						<div class="nav-report-field view-temp" onclick="alert('Under development')">Report 1</div>
 						<div class="nav-report-field" onclick="alert('Under development')">Report 2</div>
 					</div>
-					<!--
-					<div class="nav-item" onclick="jPopMain('cReviewResults.csp')">
-						<img src="./assets/images/sNavDT.png" alt="System Settings">
-						<img class="dark" src="./assets/images/sNavDT_dark.png" alt="Review Results">
-						<p>Review Results(Old system)</p>
-					</div>
-					-->
-					<!--
-					<div class='nav-item collapse testing'>
-						<div class='nav-testing-item' onclick='toggleTesting(event)'>
-							<img class='dark' src='./assets/images/Testing_Active_small.png' alt='Testing'>
-							<img src='./assets/images/Testing_Inactive_small.png' alt='Testing'>
-							<div class='nav-testing'>
-								<div class='nav-testing-btn' onclick=''>
-									<p>Testing</p>
-									<img src='./assets/images/dropDownGrey.png' alt='DropDown'>
-									<img class='dark' src='./assets/images/dropDownBlack.png' alt='DropDown'>
-								</div>
-							</div>
-						</div>
-							<div class="nav-testing-field" onclick="jPopMain('DemoDePii.csp')">
-								Redaction
-							</div>
-							<div class="nav-testing-field" onclick="jPopMain('jxAltFileUpload.csp')">
-								Groot
-								</div>
-							<div class="nav-testing-field" onclick="jPopMain('jxAltFileUpload1.csp')">
-								Groot v1.1
-							</div>
-							<div class="nav-testing-field" onclick="jPopMain('jxAltFileUploadIND.csp')">
-								Groot v1.1 IND
-							</div> 
-						
-					</div>
-					-->
+					
+					
 				   <div class="nav-item" onclick="jPopMain('cChangePassword.csp')">
 						<img src="./assets/images/sNavSettings.png" alt="System Settings">
 						<img class="dark" src="./assets/images/sNavSettings_dark.png" alt="Review Results">
 						<p>Change Password</p>
 					</div>
 				</div>
+				<script language="cache" runat="server">
+                		d MenuEnd^cMain
+                	</script>
 				<div class="nav-footer">
 					<div class="logout" onclick="jLogout()"><img src="./assets/images/logout.png" alt="Log Out"><p>Log Out</p></div>
 					<div class="copyright">Jonda Health © 2023</div>
@@ -184,6 +136,7 @@
 					<img class="collapseOpen" src="./assets/images/collapseOpen.png" alt="collapse" onclick="toggleSideNav()">
 				</div>
 			</div>
+			
 			<div class="main-field" id="main-field" style="vertical-align:top;padding:0px">
 				<iframe src="" name="iFrame1" id="iFrame1" style="min-height:100vh;width:100%;height:100%;border:0px;overflow:scroll" scrolling="yes">
 				
@@ -220,7 +173,7 @@ document.addEventListener('scroll', resetTimer, true);
 function resetTimer(){
 	// Resets the session timer and trigger jLockDown after 1 hour (3600000 ms) of inactivity.
 	clearTimeout(mySessionEnd);
-	mySessionEnd = setTimeout(jLockDown, 900000); // 3600000);
+	mySessionEnd = setTimeout(jLockDown, 3600000); // 3600000);
 }
 function clearTimer(){
 	// Clears the session timeout to prevent jLockDown from being triggered.
@@ -229,7 +182,7 @@ function clearTimer(){
 
 function jInitMe(){
 	#server(..cInitMe())#
-	iFrame1.src="jxDashboard.csp"	// Landing page after Login 
+	
 	resetTimer();
 }
 
@@ -267,7 +220,7 @@ checkScrollbar();
 //Temporary function to renew Biolytica subscription monthly
 function jResetBiolytica(){
 	if (confirm("Are you sure you want to reset\nBiolytica's Subscription to today?") == true) {
-		#server(..cResetBiolytica())#
+		//#server(..cResetBiolytica())#
 	}		
 }
 </script>
@@ -275,6 +228,7 @@ function jResetBiolytica(){
 
 <script language="cache" method="cInitMe">
 	d InitMe^cMain
+	
 </script>
 
 <script language="cache" method="cLogout">	//Log out by user
@@ -287,12 +241,5 @@ function jResetBiolytica(){
 	&js<window.open("cLockDown.csp","_parent")>
 </script>
 
-<script labguage="cache" method="cResetBiolytica">	//Temporary function to renew Biolytica subscription monthly
-	;s d1=$zdate($h,1,,4)
-	;s d2=$zdate($h+365,1,,4)
-	s d3=1000,d4=1000
-	;&sql(UPDATE MX.Subscription SET StartDate=:d1,EndDate=:d2,RemainingOCRUnit=:d3,RemainingTransformationUnit=:d4 WHERE ID=3)
-	;&sql(UPDATE MX.Subscription SET RemainingOCRUnit=:d3,RemainingTransformationUnit=:d4 WHERE ID=3)
-	;i SQLCODE=0 &js<alert("Subscription successfully renewed!")>
-</script>
+
 </html>

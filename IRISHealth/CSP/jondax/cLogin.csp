@@ -6,7 +6,7 @@
 	;d %response.SetHeader("Content-Security-Policy", cspHeader)
 	q 1
 	</script>
-    <!--script language="cache" runat="server">d HEAD1^CSP999</script-->
+    <script language="cache" runat="server">d HEAD1^CSP999</script>
 	<link rel="stylesheet" href="assets/styles/cLogin.css">
 </head>
 <body ><!-- onload="jInitMe()"-->

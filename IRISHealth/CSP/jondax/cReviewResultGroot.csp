@@ -116,7 +116,7 @@
                                             <th class="u-range">Upper Range</th>
                                    			<!-- colspan="2" -->	
                                             <th class="transformed-uRange">Converted Upper Range</th>
-                                            <th class="comment" style="display:none;">Comments</th>
+                                            <th class="comment" >Comments</th>  <!--style="display:none;"-->
                                             <th class="row-num" style="display:none;"></th>
                                         </tr>
                                     </thead>
@@ -973,7 +973,7 @@
         		e.target.parentElement.classList.remove("issue");
 	        }
         }
-        console.log(currentResult +"= "+e.target.value);
+        //console.log(currentResult +"= "+e.target.value);
         if(e.target.closest(".convert-result-val")!=null){
 	        if (isValidNum(e.target.value)){
 	        	e.target.parentElement.classList.remove("issue");
@@ -993,7 +993,10 @@
 	        	e.target.parentElement.classList.add("issue");
 	        }
 	    }
+	    e.target.parentElement.classList.remove("converted")
         e.target.parentElement.classList.add("edited");
+        
+		
     }
     
 	// Unit suggestion dropdown
@@ -1226,7 +1229,10 @@
     	jsonStr = jsonStr.replace(/"/g,'"');
     	
     	#server(..cSaveJson(rid, jsonStr))#;
-    	
+    	const IssueCount = document.querySelectorAll('table td.issue').length;
+    	//console.log(tableRows.length);console.log(IssueCount);
+    	#server(..cSetScore(rid, tableRows.length,IssueCount))#;
+    
     }
     
     function debounceInput(e) {
@@ -1358,7 +1364,7 @@
     	//trStr+="<td class='l-result-unit new'></td>";
     	trStr+="<td class='u-range new issue'><input class='new' type='text' autocomplete='off' onkeydown='jConvertNewResult(event)' onfocus='' value=''></td>";
     	trStr+="<td class='u-result-val'><input type='text' autocomplete='off' onkeyup='dataChange(event)' value=''></td>";
-    	trStr += "<td class='comment' display='none'><textarea autocomplete='off' rows='5' cols='50' onkeyup=''></textarea></td>";
+    	trStr += "<td class='comment' ><textarea autocomplete='off' rows='5' cols='50' onkeyup=''></textarea></td>";
     	newTr.innerHTML = trStr;
     	currentRow.parentNode.insertBefore(newTr, currentRow.nextSibling);
     	resultTable.scrollTop = resultTable.scrollHeight;
@@ -1598,7 +1604,7 @@
 		//alert(name.value+","+cInput+","+ lInput+","+uInput+",");
 		//console.log("debug>"+name.value+cInput+lInput+uInput+fromUnit+toUnit);
 		#server(..cCleanUnits(name.value,cInput,lInput,uInput,fromUnit,toUnit))#
-		console.log(unitsCal[0]+","+unitsCal[1]+","+unitsCal[2]+","+fromUnit+","+toUnit);
+		console.log(unitsCal[0]+","+unitsCal[1]+","+unitsCal[2]+","+fromUnit+","+toUnit+"xx");
 		//currentUnit.value = e.target.textContent;
 		let Tval=currentTr.querySelector(".convert-result-val");
 		let TLval=currentTr.querySelector(".l-result-val");
@@ -1636,7 +1642,16 @@
 	k %session.Data
 	&js<window.open("cLockDown.csp","_self")>
 </script>
-
+<script language="cache" method="cSetScore" arguments="d1,d2,d3:%String">
+	;&js<console.log(`#(d2)#`+", "+`#(d3)#`);>
+	s total=d2*5
+	s issue=d3
+	s score=100-((issue/total)*100)
+	s score=$fn(score,,2)
+	;&js<console.log("Score="+`#(score)#`);>
+	if score'="" &sql(UPDATE MX.RecordScore SET ReviewedScore=:score WHERE Record=:d1)
+	q
+</script>
 <script language="cache" method="cSetBox" arguments="d1,d2:%String">
 	; Set edit input box for Ctrl+click
 	s placeholder=d2
@@ -1730,14 +1745,14 @@
 </script>
 <script language="cache" method="cCleanUnits" arguments="d1,d2,d3,d4,d5,d6:%String">
 	//&js<console.log("In cCleanUNits"+`#(d3)#`+`#(d4)#`)>
-	s d2=$replace(d2," ","") 
-	s d3=$replace(d3," ","") 
-	s d4=$replace(d4," ","")
+#;	s d2=$replace(d2," ","") 
+#;	s d3=$replace(d3," ","") 
+#;	s d4=$replace(d4," ","")
 	#Import MX
 	s rid=%session.Data("jxTransform","rid")
 	&sql(SELECT BucketName INTO :bk FROM Record WHERE id=:rid)
 	
-	i bk["INDO"!(bk["JXTesting") {
+	i bk["INDO"{ ;!(bk["JXTesting") {
 		// treat "." as comma
 		s d2=$replace(d2,".",""),d3=$replace(d3,".",""),d4=$replace(d4,".","")
 		
@@ -1759,9 +1774,9 @@
 	s d4=$p(d4," ",1) s d4=$$H2C^WSP999(d4)
 	s rid=%session.Data("jxTransform","rid")
 	&sql(SELECT BucketName INTO :bk FROM Record WHERE id=:rid)
-	s ^test("1")=bk_rid
-	&js<console.log(`#(d2)#`+","+`#(d3)#`+","+`#(d4)#`+","+`#(bk)#`);>
-	i bk["INDO"!(bk["JXTesting") {
+	
+	;&js<console.log(`#(d2)#`+","+`#(d3)#`+","+`#(d4)#`);>
+	i bk["INDO" { ;!(bk["JXTesting") {
 		&js<console.log(`#(d2)#`);>
 		// treat "." as comma
 		s d2=$replace(d2,".",""),d3=$replace(d3,".",""),d4=$replace(d4,".","")

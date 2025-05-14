@@ -107,6 +107,20 @@ h2{
     transform:none;
     width: auto;
 }
+button.pink-btn {
+    font-size: 1.4vw;
+    font-weight: 700;
+    color:white;
+    background: #E63876;
+    border: none;
+    border-radius: 15px;
+    padding:0.5vw 1vw;
+}
+.pink-btn img{
+    width: 0.8vw;
+    margin-left: 0.4vw;
+}
+ 
 .back-btn{
     margin: 0 auto;
 }
@@ -147,14 +161,14 @@ thead{
 th{
     z-index: 100;
     color:white;
-    font-size: 1.3vw;
+    font-size: 1.1vw;
     font-weight: 700;
     line-height: 2.3vw !important;
     text-align: center;
     border-bottom: none !important;
 }
 td{
-    font-size: 1.3vw;
+    font-size: 1.1vw;
     font-weight: 500;
     line-height: 2.3vw !important;
     color:#405470;
