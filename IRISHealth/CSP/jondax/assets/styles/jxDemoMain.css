@@ -20,7 +20,10 @@ h1,h2{
     text-align:center;
 }
 #iFrame1 {
-    width: 65vw;
+    width: 60vw;
+    height:32vw;
+/*    width: 40vw;
+    height:32vw;*/
     max-width: 90vw;
     margin: 26 auto 2.5rem;
     display: flex;
@@ -32,7 +35,6 @@ h1,h2{
     background: white;
     border-radius: 20px;
     z-index: 10;
-    height:27vw;
     overflow: hidden;
 }
 .lab-upload {
